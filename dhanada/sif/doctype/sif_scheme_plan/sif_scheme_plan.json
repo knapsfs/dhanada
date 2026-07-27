@@ -20,8 +20,10 @@
   "period",
   "section_break_exqr",
   "nav",
-  "column_break_qkda",
   "nav_date",
+  "column_break_qkda",
+  "aum",
+  "currency",
   "column_break_buml",
   "performance",
   "section_break_enoa",
@@ -157,12 +159,26 @@
    "fieldtype": "Link",
    "label": "Performance",
    "options": "SIF Scheme Plan Performance"
+  },
+  {
+   "fieldname": "aum",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "AUM",
+   "non_negative": 1,
+   "options": "currency"
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-07-16 15:46:10.879284",
+ "modified": "2026-07-27 11:29:21.938544",
  "modified_by": "Administrator",
  "module": "SIF",
  "name": "SIF Scheme Plan",
