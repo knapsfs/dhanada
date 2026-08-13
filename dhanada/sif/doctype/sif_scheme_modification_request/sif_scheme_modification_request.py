@@ -33,8 +33,8 @@ class SIFSchemeModificationRequest(Document):
 
 		frappe.logger("sif_sync").info(f"[OUTCOME] {outcome} determined for {self.name}")
 
-		self.db_set("workflow_state", outcome)
 		self.workflow_state = outcome
+		self.db_set("workflow_state", outcome)
 
 		if outcome in ["Approved", "Partially Approved"]:
 			if not self.approved_on:

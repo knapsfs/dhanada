@@ -8,4 +8,9 @@ from frappe.model.document import Document
 class SIFScheme(Document):
 	def before_insert(self):
 		if not self.flags.from_approval:
-			frappe.throw("Direct creation of SIF Scheme is not allowed. Please use the 'SIF New Scheme Approval' workflow.", title="Approval Required")
+			frappe.throw(
+				frappe._(
+					"Direct creation of SIF Scheme is not allowed. Please use the 'SIF New Scheme Approval' workflow."
+				),
+				title=frappe._("Approval Required"),
+			)

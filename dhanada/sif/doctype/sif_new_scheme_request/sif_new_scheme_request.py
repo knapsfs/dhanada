@@ -36,8 +36,8 @@ class SIFNewSchemeRequest(Document):
 
 		frappe.logger("sif_sync").info(f"[OUTCOME] {outcome} determined for {self.name}")
 
-		self.db_set("workflow_state", outcome)
 		self.workflow_state = outcome
+		self.db_set("workflow_state", outcome)
 
 		if outcome in ["Approved", "Partially Approved"]:
 			if not self.scheme:
@@ -74,7 +74,7 @@ class SIFNewSchemeRequest(Document):
 		pass # Natively cancelled, no further action required.
 
 @frappe.whitelist()
-def create_approval_from_ui(data):
+def create_approval_from_ui(data: dict | str):
 	"""
 	Safely intercepts a UI request to create a New Scheme 
 	and converts it into a SIF New Scheme Request document.
