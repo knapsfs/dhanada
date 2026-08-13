@@ -7,12 +7,12 @@ app_license = "mit"
 
 
 add_to_apps_screen = [
-    {
-        "name": "sif",
-        "logo": "/assets/dhanada/images/SIF-Assets-Favicon.png",
-        "title": "SIF",
-        "route": "/desk/sif",
-    }
+	{
+		"name": "sif",
+		"logo": "/assets/dhanada/images/SIF-Assets-Favicon.png",
+		"title": "SIF",
+		"route": "/desk/sif",
+	}
 ]
 # Apps
 # ------------------
@@ -96,11 +96,7 @@ add_to_apps_screen = [
 
 # before_install = "dhanada.install.before_install"
 after_install = "dhanada.setup.bootstrap.after_install"
-after_migrate = [
-	"dhanada.utils.patch_crm_layout.patch_layout",
-	"dhanada.setup.bootstrap.after_migrate"
-]
-
+after_migrate = ["dhanada.utils.patch_crm_layout.patch_layout", "dhanada.setup.bootstrap.after_migrate"]
 
 
 get_desktop_icons = "dhanada.config.desktop.get_data"
@@ -167,13 +163,7 @@ get_desktop_icons = "dhanada.config.desktop.get_data"
 # Scheduled Tasks
 # ---------------
 
-scheduler_events = {
-	"cron": {
-		"0 12 * * *": [
-			"dhanada.sif.sync.scheduler.run_github_sync_pipeline"
-		]
-	}
-}
+scheduler_events = {"cron": {"0 12 * * *": ["dhanada.sif.sync.scheduler.run_github_sync_pipeline"]}}
 
 # Testing
 # -------
@@ -265,13 +255,11 @@ scheduler_events = {
 # ignore_translatable_strings_from = []
 
 fixtures = [
-        "SIF Asset Management Company",
-        "SIF Fund Manager",
-        "SIF Investment Strategy Subcategory",
-        "Workflow",
-		"Workflow State",
-        {"dt": "Custom Field", "filters": [["dt", "=", "CRM Lead"]]},
-        {"dt": "CRM Form Script", "filters": [["name", "=", "CRM Lead UI Fix"]]}
+	"SIF Asset Management Company",
+	"SIF Fund Manager",
+	"SIF Investment Strategy Subcategory",
+	"Workflow",
+	"Workflow State",
+	{"dt": "Custom Field", "filters": [["dt", "=", "CRM Lead"]]},
+	{"dt": "CRM Form Script", "filters": [["name", "=", "CRM Lead UI Fix"]]},
 ]
-
-

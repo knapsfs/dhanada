@@ -22,8 +22,10 @@ frappe.ui.form.on("SIF Scheme", {
 						if (r.message) {
 							frappe.msgprint({
 								title: __("Waiting for Approval"),
-								message: __("Your new scheme has been submitted for approval. It will be added to SIF Scheme once approved."),
-								indicator: 'blue'
+								message: __(
+									"Your new scheme has been submitted for approval. It will be added to SIF Scheme once approved."
+								),
+								indicator: "blue",
 							});
 							frappe.set_route("List", "SIF Scheme");
 						} else {
@@ -34,9 +36,9 @@ frappe.ui.form.on("SIF Scheme", {
 					error: function () {
 						frm._creating_approval = false;
 						resolve();
-					}
+					},
 				});
 			});
 		}
-	}
+	},
 });
