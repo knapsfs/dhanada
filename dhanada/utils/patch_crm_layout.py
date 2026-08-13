@@ -47,5 +47,4 @@ def patch_layout():
 	# Save back to database
 	doc.layout = json.dumps(layout)
 	doc.save(ignore_permissions=True)
-	frappe.db.commit()
 	print("Successfully injected Chatbot Context section into CRM Lead Side Panel Layout.")

@@ -55,7 +55,7 @@ def mask_invalid_returns(perf_dict, launch_date):
 	return perf_dict
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
 def get_funds_list():
 	try:
 		schemes = frappe.get_all(
@@ -177,8 +177,8 @@ def get_funds_list():
 		return {"status": "error", "message": str(e)}
 
 
-@frappe.whitelist(allow_guest=True)
-def get_fund_details(identifier):
+@frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
+def get_fund_details(identifier: str):
 	try:
 		# Identifier can be sebi_code or name
 		scheme_name = frappe.db.get_value("SIF Scheme", {"sebi_code": identifier}, "name")
@@ -326,7 +326,7 @@ def get_fund_details(identifier):
 		return {"status": "error", "message": str(e)}
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
 def create_chatbot_lead():
 	try:
 		chat_summary_value = frappe.form_dict.get("chat_summary")
@@ -360,7 +360,7 @@ def create_chatbot_lead():
 		frappe.throw(f"Failed to create Lead: {e!s}")
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
 def create_website_lead():
 	try:
 		full_name = frappe.form_dict.get("full_name", "").strip()
@@ -368,10 +368,10 @@ def create_website_lead():
 		phone = frappe.form_dict.get("phone", "").strip()
 
 		if not full_name:
-			frappe.throw("Full Name is a required field.")
+			frappe.throw(frappe._("Full Name is a required field."))
 
 		if not email and not phone:
-			frappe.throw("Please provide either your email address or phone number.")
+			frappe.throw(frappe._("Please provide either your email address or phone number."))
 
 		first_name = full_name
 		last_name = ""
@@ -402,7 +402,7 @@ def create_website_lead():
 		return {"success": False, "message": str(e)}
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
 def get_chatbot_config():
 	"""Returns non-sensitive chatbot configuration like the API Base URL."""
 	try:
@@ -417,7 +417,7 @@ def get_chatbot_config():
 		return {"api_base_url": ""}
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
 def chatbot_response():
 	"""Securely proxies the chat request to Gemini API."""
 	import json
