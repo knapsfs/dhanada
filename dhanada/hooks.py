@@ -5,6 +5,15 @@ app_description = "Investment Platform for KNAPS "
 app_email = "piyush.sawhney@knaps.in"
 app_license = "mit"
 
+
+add_to_apps_screen = [
+    {
+        "name": "sif",
+        "logo": "/assets/dhanada/images/SIF-Assets-Favicon.png",
+        "title": "SIF",
+        "route": "/desk/sif",
+    }
+]
 # Apps
 # ------------------
 
@@ -86,7 +95,16 @@ app_license = "mit"
 # ------------
 
 # before_install = "dhanada.install.before_install"
-# after_install = "dhanada.install.after_install"
+after_install = "dhanada.setup.bootstrap.after_install"
+after_migrate = [
+	"dhanada.utils.patch_crm_layout.patch_layout",
+	"dhanada.setup.bootstrap.after_migrate"
+]
+
+
+
+get_desktop_icons = "dhanada.config.desktop.get_data"
+
 
 # Uninstallation
 # ------------
@@ -149,23 +167,13 @@ app_license = "mit"
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"dhanada.tasks.all"
-# 	],
-# 	"daily": [
-# 		"dhanada.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"dhanada.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"dhanada.tasks.weekly"
-# 	],
-# 	"monthly": [
-# 		"dhanada.tasks.monthly"
-# 	],
-# }
+scheduler_events = {
+	"cron": {
+		"0 12 * * *": [
+			"dhanada.sif.sync.scheduler.run_github_sync_pipeline"
+		]
+	}
+}
 
 # Testing
 # -------
@@ -257,10 +265,13 @@ app_license = "mit"
 # ignore_translatable_strings_from = []
 
 fixtures = [
-	"SIF Asset Management Company",
-	"SIF Fund Manager",
-	"SIF Investment Stategy Subcategory",
-	"SIF Scheme",
-	"SIF Scheme Plan",
-	"SIF Scheme Plan Performance",
+        "SIF Asset Management Company",
+        "SIF Fund Manager",
+        "SIF Investment Strategy Subcategory",
+        "Workflow",
+		"Workflow State",
+        {"dt": "Custom Field", "filters": [["dt", "=", "CRM Lead"]]},
+        {"dt": "CRM Form Script", "filters": [["name", "=", "CRM Lead UI Fix"]]}
 ]
+
+

@@ -20,10 +20,8 @@
   "period",
   "section_break_exqr",
   "nav",
-  "nav_date",
   "column_break_qkda",
-  "aum",
-  "currency",
+  "nav_date",
   "column_break_buml",
   "performance",
   "section_break_enoa",
@@ -97,8 +95,7 @@
    "fieldtype": "Link",
    "label": "Scheme",
    "options": "SIF Scheme",
-   "reqd": 1,
-   "unique": 1
+   "reqd": 1
   },
   {
    "fieldname": "column_break_ibiv",
@@ -128,7 +125,7 @@
    "fieldname": "period",
    "fieldtype": "Select",
    "label": "Period",
-   "options": "\nDaily\nWeekly\nMonthly\nHalf Yearly\nAnnual"
+   "options": "\nDaily\nWeekly\nFortnightly\nMonthly\nQuarterly\nHalf Yearly\nAnnual\nPeriodic"
   },
   {
    "fieldname": "section_break_exqr",
@@ -159,26 +156,17 @@
    "fieldtype": "Link",
    "label": "Performance",
    "options": "SIF Scheme Plan Performance"
-  },
-  {
-   "fieldname": "aum",
-   "fieldtype": "Currency",
-   "in_list_view": 1,
-   "label": "AUM",
-   "non_negative": 1,
-   "options": "currency"
-  },
-  {
-   "fieldname": "currency",
-   "fieldtype": "Link",
-   "label": "Currency",
-   "options": "Currency"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2026-07-27 11:29:21.938544",
+ "links": [
+  {
+   "link_doctype": "SIF Scheme Plan Performance",
+   "link_fieldname": "scheme_plan"
+  }
+ ],
+ "modified": "2026-07-17 14:00:07.967199",
  "modified_by": "Administrator",
  "module": "SIF",
  "name": "SIF Scheme Plan",
