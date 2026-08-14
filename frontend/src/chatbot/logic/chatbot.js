@@ -88,6 +88,10 @@ const TOPIC_PATTERNS = [
 			"elss",
 		],
 	},
+	{
+		type: "sif",
+		patterns: ["sif", "specialised investment fund", "specialized investment fund"],
+	},
 	{ type: "sip", patterns: ["sip", "systematic investment"] },
 	{ type: "lumpsum", patterns: ["lumpsum", "lump sum", "one time investment"] },
 	{ type: "taxation", patterns: ["tax", "taxation", "capital gains"] },
@@ -100,10 +104,6 @@ const TOPIC_PATTERNS = [
 	{
 		type: "dhanadaServices",
 		patterns: ["dhanada", "your services", "what do you offer", "services"],
-	},
-	{
-		type: "sif",
-		patterns: ["sif", "specialised investment fund", "specialized investment fund"],
 	},
 	{ type: "mutualFunds", patterns: ["mutual fund", "mutual funds"] },
 	{
@@ -374,6 +374,52 @@ class SessionStore {
 	}
 }
 
+function formatTopicName(topic) {
+	if (!topic) return "mutual funds";
+	return topic.replace(/([A-Z])/g, " $1").toLowerCase();
+}
+
+function generateChatSummary(state) {
+	const name = state.collected.name || "A user";
+	const topicStr = formatTopicName(state.currentTopic);
+	let summary = `${name} is interested in ${topicStr}`;
+
+	const details = [];
+	if (state.profile.amount) {
+		details.push(`investing ₹${state.profile.amount.toLocaleString("en-IN")}`);
+	}
+	if (state.profile.mode) {
+		details.push(`via ${state.profile.mode}`);
+	}
+	if (state.profile.horizonYears) {
+		details.push(`for ${state.profile.horizonYears} years`);
+	}
+	if (state.profile.goal) {
+		details.push(`for their ${state.profile.goal}`);
+	}
+
+	if (details.length > 0) {
+		summary += " and wants to explore " + details.join(" ");
+	}
+	summary += ".";
+
+	if (state.profile.risk) {
+		summary += ` They prefer a ${state.profile.risk}-risk profile.`;
+	}
+
+	const contact = [];
+	if (state.collected.phone) contact.push("mobile number");
+	if (state.collected.email) contact.push("email address");
+
+	if (contact.length > 0) {
+		summary += ` They have requested advisor assistance and provided their ${contact.join(
+			" and "
+		)}.`;
+	}
+
+	return summary;
+}
+
 export class Chatbot {
 	constructor({ sessionStore = new SessionStore() } = {}) {
 		this.sessionStore = sessionStore;
@@ -474,7 +520,10 @@ export class Chatbot {
 						state.leadInterruptionTurns === 1 ||
 						state.leadInterruptionTurns % 3 === 0
 					) {
-						reply += "\n\n" + this.getLeadReminder(state);
+						const reminder = this.getLeadReminder(state);
+						if (!reply.includes(reminder)) {
+							reply += "\n\n" + reminder;
+						}
 					}
 				} else {
 					state.leadInterruptionTurns = 0;
@@ -483,9 +532,15 @@ export class Chatbot {
 			} else if (state.awaitingRecommendationDetails) {
 				extractProfile(state, cleanMessage);
 				reply = this.handleRecommendation(state);
+				if (state.leadCaptured && state.crmLeadName) {
+					this.updateLeadSummary(state).catch((e) => console.error(e));
+				}
 			} else {
 				extractProfile(state, cleanMessage);
 				reply = await this.handleIntent(state, cleanMessage);
+				if (state.leadCaptured && state.crmLeadName) {
+					this.updateLeadSummary(state).catch((e) => console.error(e));
+				}
 			}
 		}
 
@@ -545,9 +600,14 @@ export class Chatbot {
 		}
 
 		// If it's a purely informational definition or a short keyword lookup, use the local knowledge base
+		const lowerText = text.toLowerCase();
 		for (const item of TOPIC_PATTERNS) {
-			if (item.patterns.some((pattern) => text.includes(pattern))) {
-				return item.type;
+			for (const pattern of item.patterns) {
+				if (pattern.length <= 3) {
+					if (new RegExp(`\\b${pattern}\\b`, "i").test(text)) return item.type;
+				} else {
+					if (lowerText.includes(pattern)) return item.type;
+				}
 			}
 		}
 
@@ -827,9 +887,7 @@ export class Chatbot {
 	}
 
 	answerAndMaybeOffer(state, message, intent, answer) {
-		if (state.leadStep !== LEAD_STEPS.NONE && state.leadStep !== LEAD_STEPS.DONE) {
-			return `${answer}\n\n${this.getLeadReminder(state)}`;
-		}
+		// The lead reminder is now exclusively managed by processMessageInternal's interruption logic.
 
 		if (!this.shouldOfferLead(state, message, intent)) {
 			return answer;
@@ -1041,6 +1099,7 @@ export class Chatbot {
 
 		try {
 			const systemInstruction = `You are Dhanada, a friendly, professional investment assistant for Dhanada Specialized Investment Fund.
+SIF means Specialized Investment Fund in this application's Indian investment context. Never confuse SIF with SIP. If the user writes SIF, treat it as Specialized Investment Fund unless the user explicitly indicates another meaning.
 Answer questions about Mutual Funds, SIP, NAV, Tax, Risk, Asset Allocation, Retirement, Investing, Wealth Creation, Financial Planning, and General Finance.
 Default to short, conversational, and concise responses (1-3 short sentences).
 Keep responses mobile-friendly. Avoid verbose explanations, long disclaimers, unnecessary introductions, or conclusions.
@@ -1170,9 +1229,7 @@ If the user asks something completely unrelated to finance, politely steer them 
 		state.leadCaptured = true;
 		state.leadStep = LEAD_STEPS.DONE;
 
-		const chatSummary = state.history
-			.map((msg) => `${msg.role.toUpperCase()}: ${msg.text}`)
-			.join("\n");
+		const chatSummary = generateChatSummary(state);
 
 		const leadData = {
 			name: state.collected.name,
@@ -1184,7 +1241,6 @@ If the user asks something completely unrelated to finance, politely steer them 
 		};
 
 		const result = await leadManager.saveLead(leadData);
-
 		if (result.success) {
 			state.crmLeadName = result.lead_name;
 			return `Thank you, ${
@@ -1193,6 +1249,25 @@ If the user asks something completely unrelated to finance, politely steer them 
 		} else {
 			console.error("[CRM ERROR]", result.message);
 			return `Thank you! I have noted your details. An advisor will reach out to you shortly. (Internal Note: CRM saving is temporarily delayed)`;
+		}
+	}
+
+	async updateLeadSummary(state) {
+		const chatSummary = generateChatSummary(state);
+
+		const leadData = {
+			name: state.collected.name,
+			phone: state.collected.phone,
+			email: state.collected.email,
+			interest: state.currentTopic !== "unknown" ? formatTopicName(state.currentTopic) : "",
+			chat_summary: chatSummary,
+			existing_lead_name: state.crmLeadName,
+		};
+
+		try {
+			await leadManager.saveLead(leadData);
+		} catch (e) {
+			console.error("Failed to update lead summary:", e);
 		}
 	}
 }

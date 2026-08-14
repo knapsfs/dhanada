@@ -19,11 +19,11 @@ def patch_layout():
 
 	layout = json.loads(doc.layout)
 
-	# Check if chat_summary already exists anywhere in the layout
+	# Check if chat_summary_html already exists anywhere in the layout
 	field_exists = False
 	for section in layout:
 		for column in section.get("columns", []):
-			if "chat_summary" in column.get("fields", []):
+			if "chat_summary_html" in column.get("fields", []):
 				field_exists = True
 				break
 		if field_exists:

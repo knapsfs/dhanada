@@ -329,7 +329,13 @@ def get_fund_details(identifier: str):
 @frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
 def create_chatbot_lead():
 	try:
+		lead_name = frappe.form_dict.get("lead_name")
 		chat_summary_value = frappe.form_dict.get("chat_summary")
+
+		if lead_name and frappe.db.exists("CRM Lead", lead_name):
+			frappe.db.set_value("CRM Lead", lead_name, "chat_summary", chat_summary_value)
+			frappe.db.commit()
+			return {"success": True, "lead_name": lead_name, "updated": True}
 
 		first_name = frappe.form_dict.get("name", "Unknown")
 		last_name = ""
