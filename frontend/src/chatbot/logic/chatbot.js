@@ -112,11 +112,62 @@ const TOPIC_PATTERNS = [
 	},
 ];
 
+const CONTEXTUAL_QUICK_REPLIES = {
+	mutualFunds: [
+		"How do mutual funds work?",
+		"What are the different types?",
+		"What are the risks?",
+		"How do I start investing?",
+	],
+	sip: [
+		"How does SIP work?",
+		"SIP vs lump sum",
+		"What SIP amount should I choose?",
+		"Calculate SIP returns",
+	],
+	lumpsum: [
+		"SIP vs lump sum",
+		"How should I invest a lump sum?",
+		"What are the risks?",
+		"Calculate expected returns",
+	],
+	fundDetails: [
+		"Show fund details",
+		"Compare with another fund",
+		"Show latest NAV",
+		"What are the risks?",
+	],
+	nav: [
+		"What is NAV?",
+		"Show latest NAV",
+		"How is NAV calculated?",
+		"Compare fund performance",
+	],
+	taxation: [
+		"How is mutual fund taxation calculated?",
+		"What is LTCG?",
+		"What is STCG?",
+		"Show a tax example",
+	],
+	risk: [
+		"Explain low-risk options",
+		"Explain moderate-risk options",
+		"Explain high-risk options",
+		"How should I choose my risk level?",
+	],
+	recommendation: [
+		"Help me choose an investment",
+		"SIP or lump sum?",
+		"What investment horizon should I choose?",
+		"How should I diversify?",
+	],
+};
+
 const DEFAULT_QUICK_REPLIES = [
+	"Help me choose an investment",
 	"Explain SIP vs lumpsum",
 	"Compare two funds",
-	"Show sample NAV",
-	"Help me choose a fund",
+	"What is NAV?",
 ];
 
 function normalizeText(value) {
@@ -131,7 +182,12 @@ function matchesShortReply(text, phrases) {
 }
 
 function extractProfile(state, message) {
-	const text = normalizeText(message);
+	const userContext = state.history
+		.filter((msg) => msg.role === "user")
+		.slice(-2)
+		.map((msg) => msg.text)
+		.join(" ");
+	const text = normalizeText(`${userContext} ${message}`);
 	const profile = { ...state.profile };
 
 	if (text.includes("retirement")) profile.goal = "retirement";
@@ -243,12 +299,27 @@ function getQuickReplies(state) {
 		return ["Moderate risk", "5 year horizon", "Monthly SIP"];
 	}
 
-	if (state.currentTopic === "comparison") {
-		return ["Compare Horizon vs Cedar", "Compare Zenith vs Prism", "Show sample NAV"];
+	let contextTopic = state.currentTopic;
+
+	if (!contextTopic && state.history && state.history.length > 0) {
+		const lastBotMessage = state.history[state.history.length - 1];
+		if (lastBotMessage && lastBotMessage.role === "bot") {
+			const text = lastBotMessage.text.toLowerCase();
+			if (text.includes("mutual fund") || text.includes("mutual funds")) contextTopic = "mutualFunds";
+			else if (text.includes("sip") || text.includes("systematic investment")) contextTopic = "sip";
+			else if (text.includes("lump sum") || text.includes("lumpsum")) contextTopic = "lumpsum";
+			else if (text.includes("tax") || text.includes("stcg") || text.includes("ltcg") || text.includes("capital gains")) contextTopic = "taxation";
+			else if (text.includes("nav") || text.includes("net asset value")) contextTopic = "nav";
+			else if (text.includes("risk") || text.includes("riskometer") || text.includes("volatility")) contextTopic = "risk";
+		}
 	}
 
-	if (state.currentTopic === "sip") {
-		return ["How SIP works", "SIP vs lumpsum", "Best fund for SIP"];
+	if (contextTopic && CONTEXTUAL_QUICK_REPLIES[contextTopic]) {
+		return CONTEXTUAL_QUICK_REPLIES[contextTopic];
+	}
+
+	if (state.currentTopic === "comparison") {
+		return ["Compare Horizon vs Cedar", "Compare Zenith vs Prism", "Show sample NAV"];
 	}
 
 	return DEFAULT_QUICK_REPLIES;
@@ -302,7 +373,7 @@ export class Chatbot {
 	async processMessage(sessionId, message) {
 		const previousTask = this.sessionQueue.get(sessionId) || Promise.resolve();
 		const currentTask = previousTask
-			.catch(() => {})
+			.catch(() => { })
 			.then(() => this.processMessageInternal(sessionId, message));
 
 		this.sessionQueue.set(sessionId, currentTask);
@@ -787,13 +858,25 @@ export class Chatbot {
 		if (intent === "recommendation") return true;
 		if (intent === "comparison") return true;
 
-		if (state.profile.amount || state.profile.goal || state.profile.horizonYears) return true;
+		const userContext = state.history
+			.filter((msg) => msg.role === "user")
+			.slice(-2)
+			.map((msg) => msg.text.toLowerCase())
+			.join(" ");
 
-		const lowerMessage = String(message || "").toLowerCase();
+		const combinedText = `${userContext} ${String(message || "").toLowerCase()}`;
+
 		const buyingIntent =
 			/(want to invest|how to invest|start sip|choose a fund|help me choose|looking to invest)/.test(
-				lowerMessage
+				combinedText
 			);
+
+		const hasInvestmentContext = /(invest|mutual fund|mf|sip|lumpsum|recommend)/.test(combinedText);
+
+		if (state.profile.amount || state.profile.goal || state.profile.horizonYears) {
+			return buyingIntent || hasInvestmentContext;
+		}
+
 		if (buyingIntent) return true;
 
 		return false;
@@ -1043,6 +1126,14 @@ If the user asks something completely unrelated to finance, politely steer them 
 				return await this.saveCompletedLead(state);
 			}
 
+			if (
+				state.leadStep === LEAD_STEPS.ASK_OPTIONAL_EMAIL &&
+				intent === "affirmative"
+			) {
+				state.leadStep = LEAD_STEPS.EMAIL_ONLY;
+				return "Please provide your email address.";
+			}
+
 			const emailCheck = leadManager.validateEmail(message);
 			if (!emailCheck.valid) {
 				return `${emailCheck.message}\nPlease share a valid email address.`;
@@ -1087,9 +1178,8 @@ If the user asks something completely unrelated to finance, politely steer them 
 
 		if (result.success) {
 			state.crmLeadName = result.lead_name;
-			return `Thank you, ${
-				state.collected.name || ""
-			}! I have passed your details to our team. An advisor will reach out to you shortly.`;
+			return `Thank you, ${state.collected.name || ""
+				}! I have passed your details to our team. An advisor will reach out to you shortly.`;
 		} else {
 			console.error("[CRM ERROR]", result.message);
 			return `Thank you! I have noted your details. An advisor will reach out to you shortly. (Internal Note: CRM saving is temporarily delayed)`;
