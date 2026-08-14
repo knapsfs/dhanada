@@ -137,12 +137,7 @@ const CONTEXTUAL_QUICK_REPLIES = {
 		"Show latest NAV",
 		"What are the risks?",
 	],
-	nav: [
-		"What is NAV?",
-		"Show latest NAV",
-		"How is NAV calculated?",
-		"Compare fund performance",
-	],
+	nav: ["What is NAV?", "Show latest NAV", "How is NAV calculated?", "Compare fund performance"],
 	taxation: [
 		"How is mutual fund taxation calculated?",
 		"What is LTCG?",
@@ -305,12 +300,27 @@ function getQuickReplies(state) {
 		const lastBotMessage = state.history[state.history.length - 1];
 		if (lastBotMessage && lastBotMessage.role === "bot") {
 			const text = lastBotMessage.text.toLowerCase();
-			if (text.includes("mutual fund") || text.includes("mutual funds")) contextTopic = "mutualFunds";
-			else if (text.includes("sip") || text.includes("systematic investment")) contextTopic = "sip";
-			else if (text.includes("lump sum") || text.includes("lumpsum")) contextTopic = "lumpsum";
-			else if (text.includes("tax") || text.includes("stcg") || text.includes("ltcg") || text.includes("capital gains")) contextTopic = "taxation";
-			else if (text.includes("nav") || text.includes("net asset value")) contextTopic = "nav";
-			else if (text.includes("risk") || text.includes("riskometer") || text.includes("volatility")) contextTopic = "risk";
+			if (text.includes("mutual fund") || text.includes("mutual funds"))
+				contextTopic = "mutualFunds";
+			else if (text.includes("sip") || text.includes("systematic investment"))
+				contextTopic = "sip";
+			else if (text.includes("lump sum") || text.includes("lumpsum"))
+				contextTopic = "lumpsum";
+			else if (
+				text.includes("tax") ||
+				text.includes("stcg") ||
+				text.includes("ltcg") ||
+				text.includes("capital gains")
+			)
+				contextTopic = "taxation";
+			else if (text.includes("nav") || text.includes("net asset value"))
+				contextTopic = "nav";
+			else if (
+				text.includes("risk") ||
+				text.includes("riskometer") ||
+				text.includes("volatility")
+			)
+				contextTopic = "risk";
 		}
 	}
 
@@ -373,7 +383,7 @@ export class Chatbot {
 	async processMessage(sessionId, message) {
 		const previousTask = this.sessionQueue.get(sessionId) || Promise.resolve();
 		const currentTask = previousTask
-			.catch(() => { })
+			.catch(() => {})
 			.then(() => this.processMessageInternal(sessionId, message));
 
 		this.sessionQueue.set(sessionId, currentTask);
@@ -871,7 +881,9 @@ export class Chatbot {
 				combinedText
 			);
 
-		const hasInvestmentContext = /(invest|mutual fund|mf|sip|lumpsum|recommend)/.test(combinedText);
+		const hasInvestmentContext = /(invest|mutual fund|mf|sip|lumpsum|recommend)/.test(
+			combinedText
+		);
 
 		if (state.profile.amount || state.profile.goal || state.profile.horizonYears) {
 			return buyingIntent || hasInvestmentContext;
@@ -1126,10 +1138,7 @@ If the user asks something completely unrelated to finance, politely steer them 
 				return await this.saveCompletedLead(state);
 			}
 
-			if (
-				state.leadStep === LEAD_STEPS.ASK_OPTIONAL_EMAIL &&
-				intent === "affirmative"
-			) {
+			if (state.leadStep === LEAD_STEPS.ASK_OPTIONAL_EMAIL && intent === "affirmative") {
 				state.leadStep = LEAD_STEPS.EMAIL_ONLY;
 				return "Please provide your email address.";
 			}
@@ -1178,8 +1187,9 @@ If the user asks something completely unrelated to finance, politely steer them 
 
 		if (result.success) {
 			state.crmLeadName = result.lead_name;
-			return `Thank you, ${state.collected.name || ""
-				}! I have passed your details to our team. An advisor will reach out to you shortly.`;
+			return `Thank you, ${
+				state.collected.name || ""
+			}! I have passed your details to our team. An advisor will reach out to you shortly.`;
 		} else {
 			console.error("[CRM ERROR]", result.message);
 			return `Thank you! I have noted your details. An advisor will reach out to you shortly. (Internal Note: CRM saving is temporarily delayed)`;
