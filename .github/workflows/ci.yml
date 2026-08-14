@@ -88,7 +88,6 @@ jobs:
       - name: Install
         working-directory: /home/runner/frappe-bench
         run: |
-          bench get-app crm https://github.com/frappe/crm.git --branch main
           bench get-app dhanada $GITHUB_WORKSPACE
           bench setup requirements --dev
           bench new-site --db-root-password root --admin-password admin test_site
