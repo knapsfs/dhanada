@@ -33,7 +33,7 @@ export default function FinanceMythQuiz() {
             id: item.name || index,
             category: item.category || 'Finance',
             question: item.question,
-            answer: item.correct_option ? item.correct_option.toUpperCase() : 'MYTH', // 'MYTH' or 'FACT'
+            answer: item.correct_option === 1 ? 'FACT' : 'MYTH',
             explanation: item.reason
           }));
           setQuizQuestions(formatted);
