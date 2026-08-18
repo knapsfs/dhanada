@@ -94,7 +94,16 @@ export function validateName(rawName) {
 	};
 }
 
-export async function saveLead({ phone, name, email, source, interest, chat_summary, notes }) {
+export async function saveLead({
+	phone,
+	name,
+	email,
+	source,
+	interest,
+	chat_summary,
+	notes,
+	existing_lead_name,
+}) {
 	let primaryKey = null;
 
 	if (phone) {
@@ -139,6 +148,7 @@ export async function saveLead({ phone, name, email, source, interest, chat_summ
 			interest: interest || "",
 			chat_summary: chat_summary || "",
 			source: source || "Website Chatbot",
+			lead_name: existing_lead_name || "",
 		};
 		console.log("[STEP 3] Sending payload to Frappe");
 		console.log(payload);
