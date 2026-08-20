@@ -15,8 +15,6 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     volumes:
       - db-data:/var/lib/mysql
-    ports:
-      - "3306:3306"
     restart: unless-stopped
 
   redis-cache:
@@ -45,7 +43,7 @@ services:
       context: .
       dockerfile: docker/frappe/Dockerfile
       args:
-        FRAPPE_VERSION: v15
+        FRAPPE_VERSION: v16
     command:
       - bash
       - -c
@@ -72,8 +70,6 @@ services:
     volumes:
       - sites-vol:/home/frappe/frappe-bench/sites
       - ./docker/scripts:/docker/scripts
-      # Mount the local app for development
-      - ./dhanada:/home/frappe/frappe-bench/apps/dhanada
     depends_on:
       - mariadb
       - redis-cache
@@ -84,21 +80,22 @@ services:
       context: .
       dockerfile: docker/frappe/Dockerfile
       args:
-        FRAPPE_VERSION: v15
+        FRAPPE_VERSION: v16
     volumes:
       - sites-vol:/home/frappe/frappe-bench/sites
-      - assets-vol:/home/frappe/frappe-bench/sites/assets
-      - ./dhanada:/home/frappe/frappe-bench/apps/dhanada
     restart: unless-stopped
     depends_on:
       - configurator
 
-  frontend:
+  # ==========================================
+  # Frappe Nginx Frontend
+  # ==========================================
+  frappe-frontend:
     build:
       context: .
       dockerfile: docker/nginx/Dockerfile
       args:
-        FRAPPE_VERSION: v15
+        FRAPPE_VERSION: v16
     environment:
       BACKEND: backend:8000
       FRAPPE_SITE_NAME_HEADER: ${SITE_NAME}
@@ -112,35 +109,39 @@ services:
       - "8080:8080"
     volumes:
       - sites-vol:/home/frappe/frappe-bench/sites
-      - assets-vol:/home/frappe/frappe-bench/sites/assets
-      - ./dhanada:/home/frappe/frappe-bench/apps/dhanada
     restart: unless-stopped
     depends_on:
       - backend
+      - websocket
 
+  # ==========================================
+  # Frappe WebSocket
+  # ==========================================
   websocket:
     build:
       context: .
       dockerfile: docker/frappe/Dockerfile
       args:
-        FRAPPE_VERSION: v15
+        FRAPPE_VERSION: v16
     command:
       - node
       - /home/frappe/frappe-bench/apps/frappe/socketio.js
     volumes:
       - sites-vol:/home/frappe/frappe-bench/sites
-      - ./dhanada:/home/frappe/frappe-bench/apps/dhanada
     restart: unless-stopped
     depends_on:
       - configurator
       - redis-socketio
 
+  # ==========================================
+  # Background Workers
+  # ==========================================
   queue-short:
     build:
       context: .
       dockerfile: docker/frappe/Dockerfile
       args:
-        FRAPPE_VERSION: v15
+        FRAPPE_VERSION: v16
     command:
       - bench
       - worker
@@ -148,7 +149,6 @@ services:
       - short,default
     volumes:
       - sites-vol:/home/frappe/frappe-bench/sites
-      - ./dhanada:/home/frappe/frappe-bench/apps/dhanada
     restart: unless-stopped
     depends_on:
       - configurator
@@ -158,7 +158,7 @@ services:
       context: .
       dockerfile: docker/frappe/Dockerfile
       args:
-        FRAPPE_VERSION: v15
+        FRAPPE_VERSION: v16
     command:
       - bench
       - worker
@@ -166,7 +166,6 @@ services:
       - long,default,short
     volumes:
       - sites-vol:/home/frappe/frappe-bench/sites
-      - ./dhanada:/home/frappe/frappe-bench/apps/dhanada
     restart: unless-stopped
     depends_on:
       - configurator
@@ -176,44 +175,32 @@ services:
       context: .
       dockerfile: docker/frappe/Dockerfile
       args:
-        FRAPPE_VERSION: v15
+        FRAPPE_VERSION: v16
     command:
       - bench
       - schedule
     volumes:
       - sites-vol:/home/frappe/frappe-bench/sites
-      - ./dhanada:/home/frappe/frappe-bench/apps/dhanada
     restart: unless-stopped
     depends_on:
       - configurator
 
   # ==========================================
-  # Node.js Services (AI & Frontend)
+  # React Production Frontend
   # ==========================================
-  ai-backend:
-    image: node:22-alpine
-    working_dir: /app
-    command: >
-      sh -c "npm install && npm start"
-    environment:
-      - GEMINI_API_KEY=${GEMINI_API_KEY}
-    volumes:
-      - ./ai_backend:/app
-    ports:
-      - "3405:3405"
-    restart: unless-stopped
-
   react-frontend:
-    image: node:22-alpine
-    working_dir: /app
-    command: >
-      sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    build:
+      context: .
+      dockerfile: docker/react/Dockerfile
     ports:
-      - "5173:5173"
-    volumes:
-      - ./frontend:/app
+      - "5173:80"
     restart: unless-stopped
+    depends_on:
+      - backend
 
+# ==========================================
+# Persistent Volumes
+# ==========================================
 volumes:
   db-data:
   redis-cache-data:
