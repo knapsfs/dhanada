@@ -1,0 +1,43 @@
+name: Build and Deploy Dhanada
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feat/sif_scheme
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    name: Build and Push Docker Images
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Dhanada
+        uses: actions/checkout@v4
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Frappe
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/frappe/Dockerfile
+          push: true
+          tags: ghcr.io/knapsfs/dhanada-frappe:latest
+
+      - name: Build and Push Knaps Frontend
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/knaps/Dockerfile
+          push: true
+          tags: ghcr.io/knapsfs/dhanada-react:latest
