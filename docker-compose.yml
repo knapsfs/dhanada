@@ -81,6 +81,11 @@ services:
       dockerfile: docker/frappe/Dockerfile
       args:
         FRAPPE_VERSION: v16
+    command:
+      - bench
+      - serve
+      - --port
+      - "8000"
     volumes:
       - sites-vol:/home/frappe/frappe-bench/sites
     restart: unless-stopped
@@ -197,6 +202,19 @@ services:
     restart: unless-stopped
     depends_on:
       - backend
+  
+  knaps-frontend:
+    image: node:22-alpine
+    working_dir: /app
+    command: >
+      sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    ports:
+      - "5174:5173"
+    volumes:
+      - ./frontend/knaps:/app
+    restart: unless-stopped
+
+
 
 # ==========================================
 # Persistent Volumes
