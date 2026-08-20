@@ -11,6 +11,7 @@ import InvestmentSolutions from '../components/InvestmentSolutions';
 import Testimonials from '../components/Testimonials';
 import BlogSection from '../components/BlogSection';
 import FAQ from '../components/FAQ';
+import RiskProfiler from '../components/RiskProfiler/RiskProfiler';
 import CTA from '../components/CTA';
 import Footer from '../components/Footer';
 
@@ -26,6 +27,7 @@ export default function Home() {
         <FinanceMythQuiz />
         <Services />
         <WhyChooseUs />
+        <RiskProfiler />
         <HowItWorks />
         <Stats />
         <InvestmentSolutions />
@@ -39,3 +41,4 @@ export default function Home() {
     </div>
   );
 }
+
