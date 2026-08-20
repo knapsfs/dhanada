@@ -141,11 +141,11 @@ export default function FinanceMythQuiz() {
         </AnimatePresence>
 
         {/* Disclaimer */}
-        <div className="mt-20 text-center">
+        {/* <div className="mt-20 text-center">
           <p className="text-[11px] text-gray-400 max-w-4xl mx-auto leading-relaxed">
             {taxDisclaimer}
           </p>
-        </div>
+        </div> */}
       </div>
     </section>
   );
