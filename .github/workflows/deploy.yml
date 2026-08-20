@@ -2,6 +2,9 @@ name: Deploy Dhanada
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - feat/sif_scheme
 
 permissions:
   contents: read
