@@ -1,0 +1,42 @@
+name: Deploy Dhanada
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  deploy:
+    name: Deploy via Ansible
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout deployment repo
+        uses: actions/checkout@v4
+        with:
+          repository: knapsfs/deployment
+          path: deployment
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -p "${{ secrets.SERVER_PORT }}" "${{ secrets.SERVER_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Install Ansible
+        run: |
+          python3 -m pip install --upgrade pip
+          pip3 install ansible
+          ansible-galaxy collection install community.docker
+
+      - name: Run Ansible deployment
+        working-directory: deployment
+        run: |
+          ansible-playbook \
+            -i inventory/hosts \
+            deploy.yml \
+            --private-key ~/.ssh/id_ed25519
