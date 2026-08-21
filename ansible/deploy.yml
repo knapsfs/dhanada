@@ -1,0 +1,43 @@
+---
+- name: Deploy Dhanada
+  hosts: production
+  become: true
+
+  tasks:
+    - name: Create deployment directory
+      ansible.builtin.file:
+        path: /opt/dhanada
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: "0755"
+
+    - name: Sync Dhanada project from local machine
+      become: false
+      ansible.posix.synchronize:
+        src: "{{ playbook_dir }}/../"
+        dest: /opt/dhanada/
+        delete: false
+        rsync_opts:
+          - "--exclude=.git"
+          - "--exclude=.DS_Store"
+          - "--exclude=frontend/node_modules"
+          - "--exclude=frontend/knaps/node_modules"
+          - "--exclude=frontend/dist"
+          - "--exclude=__pycache__"
+          - "--exclude=.ruff_cache"
+
+    - name: Build and start Docker services
+      ansible.builtin.command:
+        cmd: docker compose up -d --build
+        chdir: /opt/dhanada
+
+    - name: Show running containers
+      ansible.builtin.command:
+        cmd: docker compose ps
+        chdir: /opt/dhanada
+      register: docker_status
+
+    - name: Display Docker status
+      ansible.builtin.debug:
+        var: docker_status.stdout_lines
