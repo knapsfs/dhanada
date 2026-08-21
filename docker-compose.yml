@@ -131,13 +131,14 @@ services:
     command:
       - node
       - /home/frappe/frappe-bench/apps/frappe/socketio.js
+    environment:
+      REDIS_SOCKETIO: redis://redis-socketio:6379
     volumes:
       - sites-vol:/home/frappe/frappe-bench/sites
     restart: unless-stopped
     depends_on:
       - configurator
       - redis-socketio
-
   # ==========================================
   # Background Workers
   # ==========================================
