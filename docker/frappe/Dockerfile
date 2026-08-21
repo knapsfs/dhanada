@@ -12,6 +12,7 @@ USER frappe
 RUN bench get-app --branch develop https://github.com/frappe/crm.git
 
 COPY --chown=frappe:frappe dhanada /home/frappe/frappe-bench/apps/dhanada
+COPY --chown=frappe:frappe dhanada/public /home/frappe/frappe-bench/sites/assets/dhanada
 
 ENV PYTHONPATH="/home/frappe/frappe-bench/apps"
 
