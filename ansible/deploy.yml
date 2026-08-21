@@ -32,6 +32,29 @@
         cmd: docker compose up -d --build
         chdir: /opt/dhanada
 
+    - name: Fix shared Frappe assets
+      ansible.builtin.command:
+        cmd: >
+          docker compose exec -T backend bash -c '
+          rm -rf /home/frappe/frappe-bench/assets/dhanada
+          rm -rf /home/frappe/frappe-bench/assets/crm
+
+          mkdir -p /home/frappe/frappe-bench/assets/dhanada/images
+          mkdir -p /home/frappe/frappe-bench/assets/crm/images
+
+          cp -f /home/frappe/frappe-bench/apps/dhanada/public/images/SIF-Assets-Favicon.png
+          /home/frappe/frappe-bench/assets/dhanada/images/
+
+          cp -f /home/frappe/frappe-bench/apps/crm/crm/public/images/logo.svg
+          /home/frappe/frappe-bench/assets/crm/images/
+          '
+        chdir: /opt/dhanada
+
+    - name: Recreate Frappe frontend
+      ansible.builtin.command:
+        cmd: docker compose up -d --force-recreate frappe-frontend
+        chdir: /opt/dhanada
+
     - name: Show running containers
       ansible.builtin.command:
         cmd: docker compose ps
