@@ -36,20 +36,20 @@
       ansible.builtin.command:
         cmd: >
           docker compose exec -T backend bash -c '
-          rm -rf /home/frappe/frappe-bench/assets/dhanada
-          rm -rf /home/frappe/frappe-bench/assets/crm
+          cd /home/frappe/frappe-bench/assets;
 
-          mkdir -p /home/frappe/frappe-bench/assets/dhanada/images
-          mkdir -p /home/frappe/frappe-bench/assets/crm/images
+          for item in *; do
+            if [ -L "$item" ]; then
+              target=$(readlink -f "$item");
 
-          cp -f /home/frappe/frappe-bench/apps/dhanada/public/images/SIF-Assets-Favicon.png
-          /home/frappe/frappe-bench/assets/dhanada/images/
-
-          cp -f /home/frappe/frappe-bench/apps/crm/crm/public/images/logo.svg
-          /home/frappe/frappe-bench/assets/crm/images/
+              if [ -d "$target" ]; then
+                rm "$item";
+                cp -a "$target" "$item";
+              fi
+            fi
+          done
           '
         chdir: /opt/dhanada
-
     - name: Recreate Frappe frontend
       ansible.builtin.command:
         cmd: docker compose up -d --force-recreate frappe-frontend
