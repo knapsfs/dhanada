@@ -71,6 +71,7 @@ services:
       - sites-vol:/home/frappe/frappe-bench/sites
       - ./docker/scripts:/docker/scripts
       - assets-vol:/home/frappe/frappe-bench/assets
+      - apps-vol:/home/frappe/frappe-bench/apps
     depends_on:
       - mariadb
       - redis-cache
@@ -90,6 +91,7 @@ services:
     volumes:
       - sites-vol:/home/frappe/frappe-bench/sites
       - assets-vol:/home/frappe/frappe-bench/assets
+      - apps-vol:/home/frappe/frappe-bench/apps
     restart: unless-stopped
     depends_on:
       - configurator
@@ -117,6 +119,7 @@ services:
     volumes:
       - sites-vol:/home/frappe/frappe-bench/sites
       - assets-vol:/home/frappe/frappe-bench/assets
+      - apps-vol:/home/frappe/frappe-bench/apps
     restart: unless-stopped
     depends_on:
       - backend
@@ -234,3 +237,4 @@ volumes:
   redis-socketio-data:
   sites-vol:
   assets-vol:
+  apps-vol:
