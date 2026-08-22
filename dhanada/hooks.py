@@ -71,6 +71,8 @@ website_route_rules = [
 	{"from_route": "/blogs", "to_route": "knaps"},
 	{"from_route": "/blogs/<path:app_path>", "to_route": "knaps"},
 	{"from_route": "/contact", "to_route": "knaps"},
+	{"from_route": "/sif", "to_route": "sif"},
+	{"from_route": "/sif/<path:app_path>", "to_route": "sif"},
 ]
 
 # application home page (will override Website Settings)
@@ -172,19 +174,9 @@ get_desktop_icons = "dhanada.config.desktop.get_data"
 # ---------------
 
 scheduler_events = {
-    "daily": [
-        "dhanada.sif.sync.scheduler.sync_nav_performance"
-    ],
-
-    "weekly": [
-        "dhanada.sif.sync.scheduler.sync_scheme_details"
-    ],
-
-    "cron": {
-        "0 12 * * *": [
-            "dhanada.sif.sync.scheduler.run_github_sync_pipeline"
-        ]
-    }
+	"daily": ["dhanada.sif.sync.scheduler.sync_nav_performance"],
+	"weekly": ["dhanada.sif.sync.scheduler.sync_scheme_details"],
+	"cron": {"0 12 * * *": ["dhanada.sif.sync.scheduler.run_github_sync_pipeline"]},
 }
 
 # Testing
