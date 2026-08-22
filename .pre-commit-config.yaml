@@ -43,7 +43,9 @@ repos:
                 .*node_modules.*|
                 .*boilerplate.*|
                 dhanada/templates/includes/.*|
-                dhanada/public/js/lib/.*
+                dhanada/public/js/lib/.*|
+                dhanada/public/sif/.*|
+                public/sif/.*
             )$
 
 
@@ -62,7 +64,9 @@ repos:
                 .*node_modules.*|
                 .*boilerplate.*|
                 dhanada/templates/includes/.*|
-                dhanada/public/js/lib/.*
+                dhanada/public/js/lib/.*|
+                dhanada/public/sif/.*|
+                public/sif/.*
             )$
 
   - repo: https://github.com/commitizen-tools/commitizen

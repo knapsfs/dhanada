@@ -10,7 +10,7 @@ def get_context(context):
 	index_path = dist_path if is_prod else dev_path
 
 	if os.path.exists(index_path):
-		with open(index_path, "r") as f:
+		with open(index_path) as f:
 			context.knaps_html = f.read()
 	else:
 		context.knaps_html = "<h1>KNAPS Frontend Not Found</h1>"
