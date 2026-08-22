@@ -39,6 +39,7 @@ repos:
         exclude: |
             (?x)^(
                 dhanada/public/dist/.*|
+                dhanada/public/knaps/.*|
                 .*node_modules.*|
                 .*boilerplate.*|
                 dhanada/templates/includes/.*|
@@ -56,6 +57,7 @@ repos:
         exclude: |
             (?x)^(
                 dhanada/public/dist/.*|
+                dhanada/public/knaps/.*|
                 cypress/.*|
                 .*node_modules.*|
                 .*boilerplate.*|
