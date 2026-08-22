@@ -64,9 +64,17 @@ required_apps = ["crm"]
 
 # Home Pages
 # ----------
+website_route_rules = [
+	{"from_route": "/", "to_route": "knaps"},
+	{"from_route": "/about", "to_route": "knaps"},
+	{"from_route": "/services", "to_route": "knaps"},
+	{"from_route": "/blogs", "to_route": "knaps"},
+	{"from_route": "/blogs/<path:app_path>", "to_route": "knaps"},
+	{"from_route": "/contact", "to_route": "knaps"},
+]
 
 # application home page (will override Website Settings)
-# home_page = "login"
+home_page = "knaps"
 
 # website user home page (by Role)
 # role_home_page = {
@@ -163,7 +171,21 @@ get_desktop_icons = "dhanada.config.desktop.get_data"
 # Scheduled Tasks
 # ---------------
 
-scheduler_events = {"cron": {"0 12 * * *": ["dhanada.sif.sync.scheduler.run_github_sync_pipeline"]}}
+scheduler_events = {
+    "daily": [
+        "dhanada.sif.sync.scheduler.sync_nav_performance"
+    ],
+
+    "weekly": [
+        "dhanada.sif.sync.scheduler.sync_scheme_details"
+    ],
+
+    "cron": {
+        "0 12 * * *": [
+            "dhanada.sif.sync.scheduler.run_github_sync_pipeline"
+        ]
+    }
+}
 
 # Testing
 # -------
