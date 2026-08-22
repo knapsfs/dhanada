@@ -1,11 +1,12 @@
 name: dhanada
 
 services:
+
   # ==========================================
-  # Core Infrastructure
+  # MariaDB
   # ==========================================
   mariadb:
-    image: mariadb:10.6
+    image: mariadb:11.8
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
@@ -17,6 +18,9 @@ services:
       - db-data:/var/lib/mysql
     restart: unless-stopped
 
+  # ==========================================
+  # Redis
+  # ==========================================
   redis-cache:
     image: redis:6.2-alpine
     volumes:
@@ -36,7 +40,7 @@ services:
     restart: unless-stopped
 
   # ==========================================
-  # Frappe Services
+  # Frappe Configurator
   # ==========================================
   configurator:
     build:
@@ -44,6 +48,7 @@ services:
       dockerfile: docker/frappe/Dockerfile
       args:
         FRAPPE_VERSION: v16
+
     command:
       - bash
       - -c
@@ -56,6 +61,7 @@ services:
         bench set-config -g redis_socketio "redis://$$REDIS_SOCKETIO";
         bench set-config -gp socketio_port $$SOCKETIO_PORT;
         /docker/scripts/init-site.sh
+
     environment:
       DB_HOST: mariadb
       DB_PORT: "3306"
@@ -67,37 +73,66 @@ services:
       DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       SITE_NAME: ${SITE_NAME}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+
     volumes:
       - sites-vol:/home/frappe/frappe-bench/sites
-      - ./docker/scripts:/docker/scripts
       - assets-vol:/home/frappe/frappe-bench/assets
       - apps-vol:/home/frappe/frappe-bench/apps
+      - ./docker/scripts:/docker/scripts
+
     depends_on:
       - mariadb
       - redis-cache
       - redis-queue
 
+  # ==========================================
+  # Frappe Backend
+  # ==========================================
   backend:
     build:
       context: .
       dockerfile: docker/frappe/Dockerfile
       args:
         FRAPPE_VERSION: v16
+
     command:
       - bench
       - serve
       - --port
       - "8000"
+
     volumes:
       - sites-vol:/home/frappe/frappe-bench/sites
       - assets-vol:/home/frappe/frappe-bench/assets
       - apps-vol:/home/frappe/frappe-bench/apps
+
     restart: unless-stopped
+
     depends_on:
       - configurator
 
   # ==========================================
-  # Frappe Nginx Frontend
+  # SIF React Frontend
+  # Internal service - exposed through /sif
+  # ==========================================
+  react-frontend:
+    build:
+      context: .
+      dockerfile: docker/react/Dockerfile
+
+    restart: unless-stopped
+
+    expose:
+      - "80"
+
+    networks:
+      - default
+
+    depends_on:
+      - backend
+
+  # ==========================================
+  # Frappe Nginx
   # ==========================================
   frappe-frontend:
     build:
@@ -105,6 +140,7 @@ services:
       dockerfile: docker/nginx/Dockerfile
       args:
         FRAPPE_VERSION: v16
+
     environment:
       BACKEND: backend:8000
       FRAPPE_SITE_NAME_HEADER: ${SITE_NAME}
@@ -114,19 +150,52 @@ services:
       UPSTREAM_REAL_IP_RECURSIVE: "off"
       PROXY_READ_TIMEOUT: 120
       CLIENT_MAX_BODY_SIZE: 50m
-    ports:
-      - "8080:8080"
+
+    labels:
+
+      # ----------------------------------------
+      # Main Frappe application
+      # ----------------------------------------
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-public"
+
+      - "traefik.http.routers.frappe.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.frappe.entrypoints=web"
+      - "traefik.http.routers.frappe.priority=1"
+      - "traefik.http.routers.frappe.service=frappe"
+
+      - "traefik.http.services.frappe.loadbalancer.server.port=8080"
+
+      # ----------------------------------------
+      # SIF
+      # ----------------------------------------
+      - "traefik.http.routers.sif.rule=PathPrefix(`/sif`)"
+      - "traefik.http.routers.sif.entrypoints=web"
+      - "traefik.http.routers.sif.priority=100"
+      - "traefik.http.routers.sif.service=sif"
+      - "traefik.http.middlewares.sif-strip.stripprefix.prefixes=/sif"
+      - "traefik.http.routers.sif.middlewares=sif-strip"
+
+      - "traefik.http.services.sif.loadbalancer.server.port=80"
+
+    networks:
+      - default
+      - traefik-public
+
     volumes:
       - sites-vol:/home/frappe/frappe-bench/sites
       - assets-vol:/home/frappe/frappe-bench/assets
       - apps-vol:/home/frappe/frappe-bench/apps
+
     restart: unless-stopped
+
     depends_on:
       - backend
       - websocket
+      - react-frontend
 
   # ==========================================
-  # Frappe WebSocket
+  # WebSocket
   # ==========================================
   websocket:
     build:
@@ -134,20 +203,27 @@ services:
       dockerfile: docker/frappe/Dockerfile
       args:
         FRAPPE_VERSION: v16
+
     command:
       - node
       - /home/frappe/frappe-bench/apps/frappe/socketio.js
+
     environment:
       REDIS_SOCKETIO: redis://redis-socketio:6379
+
     volumes:
       - sites-vol:/home/frappe/frappe-bench/sites
       - assets-vol:/home/frappe/frappe-bench/assets
+      - apps-vol:/home/frappe/frappe-bench/apps
+
     restart: unless-stopped
+
     depends_on:
       - configurator
       - redis-socketio
+
   # ==========================================
-  # Background Workers
+  # Workers
   # ==========================================
   queue-short:
     build:
@@ -155,15 +231,20 @@ services:
       dockerfile: docker/frappe/Dockerfile
       args:
         FRAPPE_VERSION: v16
+
     command:
       - bench
       - worker
       - --queue
       - short,default
+
     volumes:
       - sites-vol:/home/frappe/frappe-bench/sites
       - assets-vol:/home/frappe/frappe-bench/assets
+      - apps-vol:/home/frappe/frappe-bench/apps
+
     restart: unless-stopped
+
     depends_on:
       - configurator
 
@@ -173,15 +254,20 @@ services:
       dockerfile: docker/frappe/Dockerfile
       args:
         FRAPPE_VERSION: v16
+
     command:
       - bench
       - worker
       - --queue
       - long,default,short
+
     volumes:
       - sites-vol:/home/frappe/frappe-bench/sites
       - assets-vol:/home/frappe/frappe-bench/assets
+      - apps-vol:/home/frappe/frappe-bench/apps
+
     restart: unless-stopped
+
     depends_on:
       - configurator
 
@@ -191,44 +277,24 @@ services:
       dockerfile: docker/frappe/Dockerfile
       args:
         FRAPPE_VERSION: v16
+
     command:
       - bench
       - schedule
+
     volumes:
       - sites-vol:/home/frappe/frappe-bench/sites
       - assets-vol:/home/frappe/frappe-bench/assets
+      - apps-vol:/home/frappe/frappe-bench/apps
+
     restart: unless-stopped
+
     depends_on:
       - configurator
 
-  # ==========================================
-  # React Production Frontend
-  # ==========================================
-  react-frontend:
-    build:
-      context: .
-      dockerfile: docker/react/Dockerfile
-    ports:
-      - "5173:80"
-    restart: unless-stopped
-    depends_on:
-      - backend
-  
-  knaps-frontend:
-    image: node:22-alpine
-    working_dir: /app
-    command: >
-      sh -c "npm install && npm run dev -- --host 0.0.0.0"
-    ports:
-      - "5174:5173"
-    volumes:
-      - ./frontend/knaps:/app
-    restart: unless-stopped
-
-
 
 # ==========================================
-# Persistent Volumes
+# Volumes
 # ==========================================
 volumes:
   db-data:
@@ -238,3 +304,12 @@ volumes:
   sites-vol:
   assets-vol:
   apps-vol:
+
+
+# ==========================================
+# Networks
+# ==========================================
+networks:
+  traefik-public:
+    external: true
+    name: traefik-public
