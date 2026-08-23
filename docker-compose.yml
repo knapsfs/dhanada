@@ -124,7 +124,21 @@ services:
 
     expose:
       - "80"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-public"
+      - "traefik.http.routers.sif.rule=Host(`94.249.213.202`) && PathPrefix(`/sif`)"
+      - "traefik.http.routers.sif.entrypoints=web"
 
+      - "traefik.http.routers.sif.priority=100"
+
+      - "traefik.http.routers.sif.service=sif"
+
+      - "traefik.http.middlewares.sif-strip.stripprefix.prefixes=/sif"
+
+      - "traefik.http.routers.sif.middlewares=sif-strip"
+
+      - "traefik.http.services.sif.loadbalancer.server.port=80"
     networks:
       - default
 
@@ -166,17 +180,7 @@ services:
 
       - "traefik.http.services.frappe.loadbalancer.server.port=8080"
 
-      # ----------------------------------------
-      # SIF
-      # ----------------------------------------
-      - "traefik.http.routers.sif.rule=PathPrefix(`/sif`)"
-      - "traefik.http.routers.sif.entrypoints=web"
-      - "traefik.http.routers.sif.priority=100"
-      - "traefik.http.routers.sif.service=sif"
-      - "traefik.http.middlewares.sif-strip.stripprefix.prefixes=/sif"
-      - "traefik.http.routers.sif.middlewares=sif-strip"
-
-      - "traefik.http.services.sif.loadbalancer.server.port=80"
+      
 
     networks:
       - default
