@@ -134,10 +134,18 @@ services:
       CLIENT_MAX_BODY_SIZE: 50m
 
 
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-public"
+      - "traefik.http.routers.frappe.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.frappe.entrypoints=web"
+      - "traefik.http.routers.frappe.priority=1"
+      - "traefik.http.routers.frappe.service=frappe"
+      - "traefik.http.services.frappe.loadbalancer.server.port=8080"
+
     networks:
       - default
-    ports:
-      - "8080:8080"
+      - traefik-public
 
     volumes:
       - sites-vol:/home/frappe/frappe-bench/sites
@@ -265,7 +273,7 @@ volumes:
 # ==========================================
 # Networks
 # ==========================================
-# networks:
-#   traefik-public:
-#     external: true
-#     name: traefik-public
+networks:
+  traefik-public:
+    external: true
+    name: traefik-public
