@@ -78,6 +78,9 @@ website_route_rules = [
 # application home page (will override Website Settings)
 home_page = "knaps"
 
+# redirect system users to desk after login
+get_website_user_home_page = "dhanada.utils.login.get_home_page"
+
 # website user home page (by Role)
 # role_home_page = {
 # 	"Role": "home_page"

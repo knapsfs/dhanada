@@ -17,7 +17,7 @@ function App() {
   console.log("App Rendered");
   return (
     <LeadModalProvider>
-      <BrowserRouter basename="/sif">
+      <BrowserRouter>
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home />} />

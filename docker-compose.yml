@@ -111,39 +111,7 @@ services:
     depends_on:
       - configurator
 
-  # ==========================================
-  # SIF React Frontend
-  # Internal service - exposed through /sif
-  # ==========================================
-  react-frontend:
-    build:
-      context: .
-      dockerfile: docker/react/Dockerfile
 
-    restart: unless-stopped
-
-    expose:
-      - "80"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=traefik-public"
-      - "traefik.http.routers.sif.rule=Host(`94.249.213.202`) && PathPrefix(`/sif`)"
-      - "traefik.http.routers.sif.entrypoints=web"
-
-      - "traefik.http.routers.sif.priority=100"
-
-      - "traefik.http.routers.sif.service=sif"
-
-      - "traefik.http.middlewares.sif-strip.stripprefix.prefixes=/sif"
-
-      - "traefik.http.routers.sif.middlewares=sif-strip"
-
-      - "traefik.http.services.sif.loadbalancer.server.port=80"
-    networks:
-      - default
-
-    depends_on:
-      - backend
 
   # ==========================================
   # Frappe Nginx
@@ -165,26 +133,11 @@ services:
       PROXY_READ_TIMEOUT: 120
       CLIENT_MAX_BODY_SIZE: 50m
 
-    labels:
-
-      # ----------------------------------------
-      # Main Frappe application
-      # ----------------------------------------
-      - "traefik.enable=true"
-      - "traefik.docker.network=traefik-public"
-
-      - "traefik.http.routers.frappe.rule=PathPrefix(`/`)"
-      - "traefik.http.routers.frappe.entrypoints=web"
-      - "traefik.http.routers.frappe.priority=1"
-      - "traefik.http.routers.frappe.service=frappe"
-
-      - "traefik.http.services.frappe.loadbalancer.server.port=8080"
-
-      
 
     networks:
       - default
-      - traefik-public
+    ports:
+      - "8080:8080"
 
     volumes:
       - sites-vol:/home/frappe/frappe-bench/sites
@@ -196,7 +149,6 @@ services:
     depends_on:
       - backend
       - websocket
-      - react-frontend
 
   # ==========================================
   # WebSocket
@@ -313,7 +265,7 @@ volumes:
 # ==========================================
 # Networks
 # ==========================================
-networks:
-  traefik-public:
-    external: true
-    name: traefik-public
+# networks:
+#   traefik-public:
+#     external: true
+#     name: traefik-public

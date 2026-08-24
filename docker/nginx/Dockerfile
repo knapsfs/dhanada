@@ -1,4 +1,4 @@
-ARG FRAPPE_VERSION=v15
+ARG FRAPPE_VERSION=v16
 FROM frappe/erpnext:${FRAPPE_VERSION}
 
 # The official frappe/erpnext image (v15+) is a unified image that also contains Nginx.
