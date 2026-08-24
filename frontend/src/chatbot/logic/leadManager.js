@@ -176,6 +176,7 @@ export async function saveLead({
 			headers: {
 				"Content-Type": "application/json",
 			},
+			credentials: "omit",
 			body: JSON.stringify(payload),
 		});
 

@@ -326,7 +326,7 @@ def get_fund_details(identifier: str):
 		return {"status": "error", "message": str(e)}
 
 
-@frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
+@frappe.whitelist(allow_guest=True, methods=["POST"])
 def create_chatbot_lead():
 	try:
 		lead_name = frappe.form_dict.get("lead_name")
@@ -366,7 +366,7 @@ def create_chatbot_lead():
 		frappe.throw(f"Failed to create Lead: {e!s}")
 
 
-@frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
+@frappe.whitelist(allow_guest=True, methods=["POST"])
 def create_website_lead():
 	try:
 		full_name = frappe.form_dict.get("full_name", "").strip()
@@ -423,7 +423,7 @@ def get_chatbot_config():
 		return {"api_base_url": ""}
 
 
-@frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
+@frappe.whitelist(allow_guest=True, methods=["POST"])
 def chatbot_response():
 	"""Securely proxies the chat request to Gemini API."""
 	import json

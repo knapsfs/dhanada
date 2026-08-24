@@ -41,6 +41,7 @@ export default function LeadCaptureModal({ isOpen, onClose }) {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
+        credentials: "omit",
         body: JSON.stringify(formData)
       });
 
