@@ -38,7 +38,7 @@ export default function InvestmentPhilosophy() {
   return (
     <section id="philosophy" className="py-20 bg-[#f7f9fc]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        
+
         {/* Top Grid */}
         <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
           {/* Left */}
@@ -62,7 +62,7 @@ export default function InvestmentPhilosophy() {
               Our SEBI-registered advisors combine quantitative analysis with deep fundamental research to identify funds that can withstand market volatility and deliver consistent alpha over your investment horizon.
             </p>
             <div className="flex gap-8">
-              {[['₹100 Cr+', 'AUM'], ['18.5%', 'Avg CAGR'], ['92%', 'Client Retention']].map(([val, lbl]) => (
+              {[['₹100 Cr+', 'AUM'], ['92%', 'Client Retention']].map(([val, lbl]) => (
                 <div key={lbl}>
                   <p className="text-3xl font-bold text-[#032e92]">{val}</p>
                   <p className="text-sm text-gray-500 font-medium">{lbl}</p>
@@ -82,7 +82,7 @@ export default function InvestmentPhilosophy() {
               <div className="mb-6">
                 <p className="text-blue-200 text-sm font-medium mb-2">Portfolio Performance vs Index</p>
                 <div className="flex items-end gap-1 h-32 bg-white/5 rounded-2xl p-4">
-                  {[30,45,35,60,50,80,70,95,85,110,100,130].map((h, i) => (
+                  {[30, 45, 35, 60, 50, 80, 70, 95, 85, 110, 100, 130].map((h, i) => (
                     <div key={i} className="flex-1 flex flex-col gap-1 h-full justify-end">
                       <motion.div
                         initial={{ height: 0 }}

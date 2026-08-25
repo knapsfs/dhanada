@@ -50,7 +50,7 @@ export default function Home() {
         <WhyChoose />
         {!loading && funds.length > 0 && <FundMarketplace fundsData={funds} />}
         <InvestmentPhilosophy />
-        <InvestmentProcess />
+        {/* <InvestmentProcess /> */}
         <Comparison />
         <TrustSection />
         <Testimonials />

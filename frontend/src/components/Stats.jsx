@@ -8,9 +8,9 @@ import {
 
 const statItems = [
   { icon: faMoneyBillTrendUp, prefix: '₹', value: 100, suffix: ' Cr+', label: 'Assets Under Management', color: 'from-blue-500 to-indigo-600', bg: 'bg-blue-50' },
-  { icon: faUsers, prefix: '', value: 5000, suffix: '+', label: 'Happy Investors', color: 'from-green-500 to-emerald-600', bg: 'bg-green-50' },
-  { icon: faBriefcase, prefix: '', value: 150, suffix: '+', label: 'Investment Products', color: 'from-amber-500 to-orange-600', bg: 'bg-amber-50' },
-  { icon: faUserTie, prefix: '', value: 25, suffix: '+', label: 'Expert Advisors', color: 'from-purple-500 to-violet-600', bg: 'bg-purple-50' },
+  { icon: faUsers, prefix: '', value: 1000, suffix: '+', label: 'Happy Investors', color: 'from-green-500 to-emerald-600', bg: 'bg-green-50' },
+  { icon: faBriefcase, prefix: '', value: 25, suffix: '+', label: 'SIF Investment Schemes', color: 'from-amber-500 to-orange-600', bg: 'bg-amber-50' },
+  { icon: faUserTie, prefix: '', value: 1997, suffix: '', label: 'Reg. Since', color: 'from-purple-500 to-violet-600', bg: 'bg-purple-50' },
 ]
 
 function AnimatedNumber({ value, duration = 2000, inView }) {
@@ -37,6 +37,23 @@ export default function Stats() {
   return (
     <section className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <motion.div
+          ref={ref}
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7 }}
+          className="text-center mb-12">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-[#eef4ff] text-[#032e92] text-sm font-semibold mb-4">
+            📊Trusted SIF Distributor
+          </span>
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            Your trusted partner in <span className="gradient-text">SIF investments</span>
+          </h2>
+          <p className="text-gray-500 font-medium max-w-xl mx-auto">
+            We help you understand SIF investments and choose the right opportunities with simple and transparent guidance.
+          </p>
+        </motion.div>
+
         <div ref={ref} className="grid grid-cols-2 lg:grid-cols-4 gap-6">
           {statItems.map((stat, i) => (
             <motion.div
@@ -45,7 +62,7 @@ export default function Stats() {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: i * 0.1, duration: 0.6 }}
               className={`${stat.bg} rounded-3xl p-6 border border-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group text-center`}>
-              
+
               <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${stat.color} flex items-center justify-center mb-4 mx-auto shadow-lg group-hover:scale-110 transition-transform`}>
                 <FontAwesomeIcon icon={stat.icon} className="text-white text-xl" />
               </div>

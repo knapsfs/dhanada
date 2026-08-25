@@ -27,7 +27,7 @@ export default function Footer() {
       {/* Top Section */}
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
         <div className="grid lg:grid-cols-6 gap-10">
-          
+
           {/* Brand Column */}
           <div className="lg:col-span-2">
             {/* Logo */}
@@ -43,7 +43,7 @@ export default function Footer() {
             </div>
 
             <p className="text-blue-200 text-sm font-medium leading-relaxed mb-6">
-              India's most trusted investment platform offering curated mutual funds, expert advisory, and AI-powered portfolio management since 2019.
+              A dedicated platform for exploring Specialized Investment Funds, with clear scheme information, detailed comparisons, and investor-focused insights to help you make informed decisions.
             </p>
 
             {/* Certifications */}

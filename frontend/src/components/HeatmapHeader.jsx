@@ -10,13 +10,13 @@ export default function HeatmapHeader({ timeFilter, setTimeFilter }) {
   return (
     <div className="bg-[#032e92] text-white rounded-t-3xl p-6 lg:p-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
       <div>
-        <motion.h2 
+        <motion.h2
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           className="text-2xl lg:text-3xl font-bold mb-2 font-serif">
-          Performance Heatmap
+          SIF Performance Heatmap
         </motion.h2>
-        <motion.p 
+        <motion.p
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1 }}
@@ -25,7 +25,7 @@ export default function HeatmapHeader({ timeFilter, setTimeFilter }) {
         </motion.p>
       </div>
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         className="flex p-1 bg-white/10 rounded-xl border border-white/20">
@@ -33,11 +33,10 @@ export default function HeatmapHeader({ timeFilter, setTimeFilter }) {
           <button
             key={tab.value}
             onClick={() => setTimeFilter(tab.value)}
-            className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-300 ${
-              timeFilter === tab.value
+            className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-300 ${timeFilter === tab.value
                 ? 'bg-white text-[#032e92] shadow-md'
                 : 'text-blue-100 hover:text-white hover:bg-white/10'
-            }`}>
+              }`}>
             {tab.label}
           </button>
         ))}

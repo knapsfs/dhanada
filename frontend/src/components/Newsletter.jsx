@@ -27,7 +27,7 @@ export default function Newsletter() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
           className="relative overflow-hidden rounded-3xl">
-          
+
           {/* Background */}
           <div className="absolute inset-0 bg-gradient-to-br from-[#032e92] via-[#0a4fd4] to-[#021d63]" />
           <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-[#c10000]/10 blur-3xl" />
@@ -52,15 +52,15 @@ export default function Newsletter() {
             </div>
 
             <h2 className="text-4xl font-bold text-white mb-4">
-              Stay Ahead of the Market
+              Is SIF Right for Your Portfolio?
             </h2>
             <p className="text-blue-200 font-medium mb-8 max-w-lg mx-auto">
-              Get weekly market insights, fund performance reports, and exclusive investment tips delivered straight to your inbox. Join 5,000+ investors.
+              Understand SIF strategies, eligibility, investment requirements, risks and potential benefits before you invest.
             </p>
 
             {/* Benefits */}
             <div className="flex flex-wrap items-center justify-center gap-6 mb-10">
-              {['Weekly market insights', 'Exclusive fund reports', 'Expert investment tips', 'No spam, ever'].map(b => (
+              {['Understand SIF strategies', 'Check minimum investment requirements', 'Compare SIF with MF, PMS & AIF', 'Invest with greater clarity'].map(b => (
                 <div key={b} className="flex items-center gap-2 text-blue-100 text-sm font-medium">
                   <FontAwesomeIcon icon={faCircleCheck} className="text-green-400 text-xs" />
                   {b}
@@ -80,7 +80,7 @@ export default function Newsletter() {
               <button
                 type="submit"
                 className="btn-ripple flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#c10000] hover:bg-[#9d0000] text-white font-semibold shadow-xl shadow-red-900/30 transition-all duration-200 hover:-translate-y-0.5 whitespace-nowrap">
-                Subscribe Now
+                Explore SIF
                 <FontAwesomeIcon icon={faArrowRight} />
               </button>
             </form>

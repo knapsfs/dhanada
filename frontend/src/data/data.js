@@ -233,27 +233,37 @@ export const stats = [
 
 // Comparison Data
 export const comparisonData = {
-	headers: ["Feature", "Mutual Funds", "Stocks", "Fixed Deposit", "Bonds", "Alt. Funds", "ETF"],
+	headers: ["Feature", "MF", "SIF", "PMS", "AIF"],
 	rows: [
 		{
-			feature: "Min. Investment",
-			values: ["₹500", "₹1,000+", "₹10,000", "₹1,000", "₹5,000", "₹500"],
+			feature: "Minimum Investment",
+			values: ["Varies by scheme", "₹10 Lakhs*", "₹50 Lakhs", "₹1 Crore"],
 		},
-		{ feature: "Liquidity", values: ["High", "High", "Low", "Medium", "Low", "High"] },
+		{ 
+			feature: "Liquidity", 
+			values: ["Generally High", "Strategy-dependent", "Medium", "Generally Low"] 
+		},
 		{
 			feature: "Risk Level",
-			values: ["Moderate", "High", "Very Low", "Low", "High", "Moderate"],
+			values: ["Varies by scheme", "Moderate to High*", "High", "High to Very High"],
 		},
 		{
-			feature: "Expected Returns",
-			values: ["12-18%", "15-25%", "6-7%", "7-9%", "15-30%", "12-15%"],
+			feature: "Return Potential",
+			values: ["Market-linked", "Market-linked", "Market-linked", "Market-linked"],
 		},
-		{ feature: "Tax Efficiency", values: ["High", "Medium", "Low", "Medium", "Low", "High"] },
-		{ feature: "Professional Mgmt", values: ["✓", "✗", "✗", "✓", "✓", "✓"] },
+		{ 
+			feature: "Professional Management", 
+			values: ["Yes", "Yes", "Yes", "Yes"] 
+		},
 		{
 			feature: "Diversification",
-			values: ["Excellent", "Manual", "None", "Limited", "Good", "Good"],
+			values: ["Generally High", "Strategy-dependent", "Portfolio-dependent", "Fund-dependent"],
 		},
-		{ feature: "SEBI Regulated", values: ["✓", "✓", "✓", "✓", "✓", "✓"] },
+		{ 
+			feature: "SEBI Regulated", 
+			values: ["Yes", "Yes", "Yes", "Yes"] 
+		},
 	],
 };
+
+

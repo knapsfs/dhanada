@@ -70,17 +70,17 @@ export default function Testimonials() {
                   </p>
 
                   {/* Returns Badge */}
-                  <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-xl px-3 py-2 w-fit mb-5">
+                  {/* <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-xl px-3 py-2 w-fit mb-5">
                     <FontAwesomeIcon icon={faArrowTrendUp} className="text-green-600 text-xs" />
                     <span className="text-xs font-bold text-green-700">+{t.returns} Returns</span>
                     <span className="text-xs text-gray-400 font-medium">on {t.invested}</span>
-                  </div>
+                  </div> */}
 
                   {/* Investor Info */}
                   <div className="flex items-center gap-3">
-                    <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${avatarColors[i % avatarColors.length]} flex items-center justify-center text-white font-bold text-sm shadow-lg`}>
+                    {/* <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${avatarColors[i % avatarColors.length]} flex items-center justify-center text-white font-bold text-sm shadow-lg`}>
                       {t.avatar}
-                    </div>
+                    </div> */}
                     <div>
                       <p className="font-bold text-gray-900 text-sm">{t.name}</p>
                       <p className="text-gray-400 text-xs font-medium">{t.profession}</p>
@@ -88,7 +88,7 @@ export default function Testimonials() {
                   </div>
 
                   {/* Bottom accent on hover */}
-                  <div className="h-1 w-0 group-hover:w-full bg-gradient-to-r from-[#032e92] to-[#c10000] rounded-full mt-5 transition-all duration-500" />
+                  {/* <div className="h-1 w-0 group-hover:w-full bg-gradient-to-r from-[#032e92] to-[#c10000] rounded-full mt-5 transition-all duration-500" /> */}
                 </div>
               </SwiperSlide>
             ))}

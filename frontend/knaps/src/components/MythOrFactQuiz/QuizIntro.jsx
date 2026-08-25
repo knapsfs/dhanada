@@ -12,7 +12,7 @@ export default function QuizIntro({ onStart }) {
     >
       {/* Text Content - Left Side */}
       <div className="w-full md:w-1/2 text-center md:text-left order-2 md:order-1 flex flex-col items-center md:items-start">
-        <div className="inline-block px-4 py-2 rounded-full bg-white text-[#032e92] font-bold text-[11px] mb-6 uppercase tracking-[0.2em] shadow-sm border border-blue-50">
+        <div className="inline-block px-4 py-2 rounded-full border border-[#032e92]/20 text-[#032e92] bg-[#eef5ff] font-semibold text-sm mb-6 tracking-wide">
           Finance, Simplified
         </div>
 

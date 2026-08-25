@@ -25,16 +25,34 @@ export default function FeaturedFund({ fund }) {
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div
           ref={ref}
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7 }}
+          className="text-center mb-12">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-[#eef4ff] text-[#032e92] text-sm font-semibold mb-4">
+            📌 SIF Scheme
+          </span>
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            Featured <span className="gradient-text"> SIF Scheme</span>
+          </h2>
+          {/* <p className="text-gray-500 font-medium max-w-xl mx-auto">
+            We help you understand SIF investments and choose the right opportunities with simple and transparent guidance.
+          </p> */}
+          <p>Explore our featured SIF scheme and learn more about its key features, investment approach, and potential benefits.
+          </p>
+        </motion.div>
+        <motion.div
+          ref={ref}
           initial={{ opacity: 0, y: 40 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
           className="relative overflow-hidden rounded-3xl cursor-pointer"
           onClick={handleFundClick}>
-          
+
           {/* Gradient background */}
           <div className="absolute inset-0 animated-gradient opacity-90 bg-[#032e92]" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#021d63]/80 to-[#c10000]/60" />
-          
+
           {/* Decorative circles */}
           <div className="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-white/5 blur-2xl" />
           <div className="absolute -left-10 -bottom-10 w-60 h-60 rounded-full bg-white/5 blur-2xl" />
@@ -104,10 +122,9 @@ export default function FeaturedFund({ fund }) {
                       <p className="text-blue-200 text-xs font-medium">{item.label}</p>
                     </div>
                     <p className="text-white font-bold text-base">{item.value}</p>
-                    <p className={`text-xs font-medium ${
-                      item.positive === true ? 'text-green-400' :
+                    <p className={`text-xs font-medium ${item.positive === true ? 'text-green-400' :
                       item.positive === false ? 'text-red-400' : 'text-blue-200'
-                    }`}>{item.change}</p>
+                      }`}>{item.change}</p>
                   </div>
                 ))}
               </div>

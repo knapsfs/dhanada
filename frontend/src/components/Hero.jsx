@@ -91,19 +91,17 @@ export default function Hero() {
               transition={{ duration: 0.7 }}
               className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-sm text-blue-100 font-medium mb-6">
               <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-              SEBI Registered Investment Platform
+              SEBI Registered SIF Distributor
             </motion.div>
 
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.1 }}
-              className="text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight mb-6">
-              Invest <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-orange-400">Smarter.</span>
-              <br />
-              Grow Wealth
-              <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-cyan-300">Confidently.</span>
+              className="text-5xl lg:text-5xl xl:text-5xl font-bold text-white leading-tight mb-6">
+              Specialized Investment Funds (SIF) Designed for
+              {/* <br /> */}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-cyan-300"> Smarter Investment Choices.</span>
             </motion.h1>
 
             <motion.p
@@ -111,7 +109,7 @@ export default function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               className="text-blue-100 text-lg font-medium leading-relaxed mb-8 max-w-lg">
-              India's most trusted investment platform offering curated mutual funds, expert advisory, and AI-powered portfolio management. Start your wealth creation journey today.
+              Explore Specialized Investment Funds (SIF) in India, offering eligible investors access to focused investment strategies and greater flexibility within a SEBI-regulated framework.
             </motion.p>
 
             <motion.div
@@ -122,7 +120,7 @@ export default function Hero() {
               <button onClick={openLeadModal}
                 className="btn-ripple flex items-center gap-2 px-8 py-4 rounded-full bg-[#c10000] hover:bg-[#9d0000] text-white font-semibold shadow-xl shadow-red-900/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
                 <FontAwesomeIcon icon={faCircleArrowRight} />
-                Start Investing
+                Invest Now
               </button>
               <a href="#top-funds"
                 className="flex items-center gap-2 px-8 py-4 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white font-semibold transition-all duration-300 hover:-translate-y-1">
@@ -166,19 +164,33 @@ export default function Hero() {
                 </div>
 
                 {/* Chart visualization */}
-                <div className="bg-white/10 rounded-2xl p-4 mb-4">
-                  <div className="flex items-end gap-2 h-24 justify-around">
-                    {[40, 55, 45, 70, 60, 85, 75, 95, 80, 100, 88, 110].map((h, i) => (
-                      <div key={i} className="flex flex-col items-center gap-1 flex-1">
-                        <motion.div
-                          initial={{ height: 0 }}
-                          animate={{ height: `${h}%` }}
-                          transition={{ delay: 0.5 + i * 0.05, duration: 0.6 }}
-                          className={`w-full rounded-t-sm ${i === 11 ? 'bg-amber-400' : 'bg-white/40'}`}
-                          style={{ height: `${h}%` }}
-                        />
-                      </div>
-                    ))}
+                <div className="bg-white/10 rounded-2xl p-4 mb-4 relative overflow-hidden">
+                  <div className="h-28 w-full flex items-end">
+                    <svg viewBox="0 0 400 100" className="w-full h-full" preserveAspectRatio="none">
+                      <defs>
+                        <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#4ade80" stopOpacity="0.4" />
+                          <stop offset="100%" stopColor="#4ade80" stopOpacity="0.0" />
+                        </linearGradient>
+                      </defs>
+                      <motion.path
+                        initial={{ pathLength: 0, opacity: 0 }}
+                        animate={{ pathLength: 1, opacity: 1 }}
+                        transition={{ duration: 1.5, ease: "easeInOut", delay: 0.5 }}
+                        d="M0,80 C40,75 80,85 120,60 C160,35 200,55 240,30 C280,5 320,25 360,10 C380,2 390,5 400,0"
+                        fill="none"
+                        stroke="#4ade80"
+                        strokeWidth="4"
+                        strokeLinecap="round"
+                      />
+                      <motion.path
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 1, delay: 1.5 }}
+                        d="M0,80 C40,75 80,85 120,60 C160,35 200,55 240,30 C280,5 320,25 360,10 C380,2 390,5 400,0 L400,100 L0,100 Z"
+                        fill="url(#chartGradient)"
+                      />
+                    </svg>
                   </div>
                   <div className="flex justify-between mt-2 text-[10px] text-blue-200">
                     <span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
@@ -239,3 +251,4 @@ export default function Hero() {
     </section>
   )
 }
+

@@ -62,13 +62,13 @@ export default function About() {
               About Knaps
             </div>
 
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1a1a1a] mb-6 leading-tight">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1a1a1a] mb-10 leading-tight">
               Helping You Make <span className="text-[#032e92]">Better</span> Financial Decisions
             </h2>
 
-            <p className="text-lg text-[#6b7280] mb-10 leading-relaxed">
+            {/* <p className="text-lg text-[#6b7280] mb-10 leading-relaxed">
               We believe that true wealth management goes beyond just investing. It's about understanding your life goals, risk appetite, and providing a holistic approach to secure your financial future.
-            </p>
+            </p> */}
 
             <div className="grid sm:grid-cols-2 gap-8 mb-10">
               {features.map((feature, idx) => (

@@ -33,10 +33,10 @@ export default function Comparison() {
             ⚖️ Smart Comparison
           </span>
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            Why Mutual Funds <span className="gradient-text">Win Every Time</span>
+            Why SIF <span className="gradient-text">Stands Out</span>
           </h2>
           <p className="text-gray-500 font-medium max-w-xl mx-auto">
-            Compare investment options side by side and see why mutual funds consistently outperform alternatives.
+            Compare investment options side by side and see understand how SIF differs from Mutual Funds, PMS and AIFs.
           </p>
         </motion.div>
 
@@ -53,14 +53,12 @@ export default function Comparison() {
                 <th className="bg-gray-50 px-6 py-5 text-left text-sm font-semibold text-gray-400 w-40">Feature</th>
                 {comparisonData.headers.slice(1).map((header, i) => (
                   <th key={header}
-                    className={`px-5 py-5 text-center text-sm font-bold ${
-                      i === 0
-                        ? 'bg-[#032e92] text-white rounded-t-2xl shadow-lg'
-                        : 'bg-gray-50 text-gray-700'
-                    }`}>
-                    {i === 0 && (
+                    className={`px-5 py-5 text-center text-sm font-bold ${i === 1 ? 'bg-[#032e92] text-white rounded-t-2xl shadow-lg'
+                      : 'bg-gray-50 text-gray-700'
+                      }`}>
+                    {/* {i === 1 && (
                       <span className="block text-[10px] text-blue-200 font-medium mb-0.5">⭐ Recommended</span>
-                    )}
+                    )} */}
                     {header}
                   </th>
                 ))}
@@ -69,9 +67,8 @@ export default function Comparison() {
             <tbody>
               {comparisonData.rows.map((row, ri) => (
                 <tr key={ri}
-                  className={`border-b border-[#e8edf7] transition-colors hover:bg-[#f7f9fc] ${
-                    ri % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'
-                  }`}>
+                  className={`border-b border-[#e8edf7] transition-colors hover:bg-[#f7f9fc] ${ri % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'
+                    }`}>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
                       <FontAwesomeIcon icon={faCircleInfo} className="text-gray-300 text-xs" />
@@ -79,21 +76,19 @@ export default function Comparison() {
                     </div>
                   </td>
                   {row.values.map((val, vi) => (
-                    <td key={vi} className={`px-5 py-4 text-center ${
-                      vi === 0 ? 'bg-[#032e92]/5 border-x border-[#032e92]/10' : ''
-                    }`}>
-                      {val === '✓' ? (
+                    <td key={vi} className={`px-5 py-4 text-center ${vi === 1 ? 'bg-[#032e92]/5 border-x border-[#032e92]/10' : ''
+                      }`}>
+                      {val === 'Yes' ? (
                         <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-100">
                           <FontAwesomeIcon icon={faCircleCheck} className="text-green-600 text-xs" />
                         </span>
-                      ) : val === '✗' ? (
+                      ) : val === 'No' ? (
                         <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-100">
                           <FontAwesomeIcon icon={faXmark} className="text-red-500 text-xs" />
                         </span>
                       ) : (
-                        <span className={`text-sm font-semibold ${
-                          vi === 0 ? 'text-[#032e92]' : 'text-gray-600'
-                        }`}>{val}</span>
+                        <span className={`text-sm font-semibold ${vi === 1 ? 'text-[#032e92]' : 'text-gray-600'
+                          }`}>{val}</span>
                       )}
                     </td>
                   ))}
@@ -102,7 +97,18 @@ export default function Comparison() {
             </tbody>
           </table>
         </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ delay: 0.4, duration: 0.7 }}
+          className="mt-6 text-sm text-gray-500 bg-white p-4 rounded-xl border border-gray-100 shadow-sm"
+        >
+          <span className="font-bold text-[#032e92]">SIF Note :</span> ₹10 lakh aggregate minimum investment across the SIF's investment strategies at the PAN level; this requirement does not apply to accredited investors. Risk level is also strategy-dependent.
+        </motion.div>
       </div>
     </section>
   )
 }
+
+
