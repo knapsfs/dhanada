@@ -8,7 +8,6 @@ async function generateContentWithFallback(params) {
 	const response = await fetch("/api/method/dhanada.api.chatbot_response", {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
-		credentials: "omit",
 		body: JSON.stringify({
 			conversation_history: params.contents,
 			system_instruction: params.systemInstruction,

@@ -12,9 +12,4 @@ export default defineConfig({
 			},
 		},
 	},
-	build: {
-		outDir: "../dhanada/public/sif",
-		emptyOutDir: true,
-	},
-	base: "/assets/dhanada/sif/",
 });
