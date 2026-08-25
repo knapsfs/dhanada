@@ -20,6 +20,7 @@
         delete: false
         rsync_opts:
           - "--exclude=.git"
+          - "--exclude=.env"
           - "--exclude=.DS_Store"
           - "--exclude=frontend/node_modules"
           - "--exclude=frontend/knaps/node_modules"
@@ -27,10 +28,27 @@
           - "--exclude=__pycache__"
           - "--exclude=.ruff_cache"
 
-    - name: Build and start Docker services
+    - name: Build Docker images
       ansible.builtin.command:
-        cmd: docker compose up -d --build
+        cmd: docker compose build
         chdir: /opt/dhanada
+
+    - name: Start Docker services
+      ansible.builtin.command:
+        cmd: docker compose up -d
+        chdir: /opt/dhanada
+
+    - name: Update Dhanada application volume
+      ansible.builtin.command:
+        cmd: >
+          docker run --rm
+          -v dhanada_apps-vol:/target
+          -v /opt/dhanada/dhanada:/source:ro
+          alpine sh -c '
+          rm -rf /target/dhanada &&
+          mkdir -p /target/dhanada &&
+          cp -a /source/. /target/dhanada/
+          '
 
     - name: Fix shared Frappe assets
       ansible.builtin.command:
@@ -50,9 +68,17 @@
           done
           '
         chdir: /opt/dhanada
-    - name: Recreate Frappe frontend
+
+    - name: Restart application services
       ansible.builtin.command:
-        cmd: docker compose up -d --force-recreate frappe-frontend
+        cmd: >
+          docker compose restart
+          backend
+          websocket
+          queue-short
+          queue-long
+          scheduler
+          frappe-frontend
         chdir: /opt/dhanada
 
     - name: Show running containers
