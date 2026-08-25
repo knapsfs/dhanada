@@ -26,18 +26,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and Push Frappe
+      - name: Build and Push Dhanada
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: docker/frappe/Dockerfile
+          file: Dockerfile
           push: true
-          tags: ghcr.io/knapsfs/dhanada-frappe:latest
-
-      - name: Build and Push Knaps Frontend
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: docker/knaps/Dockerfile
-          push: true
-          tags: ghcr.io/knapsfs/dhanada-react:latest
+          tags: ghcr.io/knapsfs/dhanada:latest

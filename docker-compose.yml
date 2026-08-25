@@ -45,7 +45,7 @@ services:
   configurator:
     build:
       context: .
-      dockerfile: docker/frappe/Dockerfile
+      dockerfile: Dockerfile
       args:
         FRAPPE_VERSION: v16
 
@@ -91,7 +91,7 @@ services:
   backend:
     build:
       context: .
-      dockerfile: docker/frappe/Dockerfile
+      dockerfile: Dockerfile
       args:
         FRAPPE_VERSION: v16
 
@@ -119,9 +119,12 @@ services:
   frappe-frontend:
     build:
       context: .
-      dockerfile: docker/nginx/Dockerfile
+      dockerfile: Dockerfile
       args:
         FRAPPE_VERSION: v16
+
+    command:
+      - nginx-entrypoint.sh
 
     environment:
       BACKEND: backend:8000
@@ -164,7 +167,7 @@ services:
   websocket:
     build:
       context: .
-      dockerfile: docker/frappe/Dockerfile
+      dockerfile: Dockerfile
       args:
         FRAPPE_VERSION: v16
 
@@ -192,7 +195,7 @@ services:
   queue-short:
     build:
       context: .
-      dockerfile: docker/frappe/Dockerfile
+      dockerfile: Dockerfile
       args:
         FRAPPE_VERSION: v16
 
@@ -215,7 +218,7 @@ services:
   queue-long:
     build:
       context: .
-      dockerfile: docker/frappe/Dockerfile
+      dockerfile: Dockerfile
       args:
         FRAPPE_VERSION: v16
 
@@ -238,7 +241,7 @@ services:
   scheduler:
     build:
       context: .
-      dockerfile: docker/frappe/Dockerfile
+      dockerfile: Dockerfile
       args:
         FRAPPE_VERSION: v16
 
