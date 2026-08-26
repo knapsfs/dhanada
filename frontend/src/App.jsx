@@ -7,6 +7,7 @@ import SipCalculator from './pages/SipCalculator'
 import SwpCalculator from './pages/SwpCalculator'
 import LumpsumCalculator from './pages/LumpsumCalculator'
 import StepUpSipCalculator from './pages/StepUpSipCalculator'
+import FutureValueCalculatorPage from './pages/FutureValueCalculatorPage'
 import RetirementCalculator from './pages/RetirementCalculator'
 import ScrollToTop from './components/ScrollToTop'
 import ChatbotWidget from './chatbot/components/ChatbotWidget'
@@ -17,7 +18,7 @@ function App() {
   console.log("App Rendered");
   return (
     <LeadModalProvider>
-      <BrowserRouter>
+      <BrowserRouter basename="/sif">
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -28,6 +29,7 @@ function App() {
           <Route path="/calculators/swp" element={<SwpCalculator />} />
           <Route path="/calculators/lumpsum" element={<LumpsumCalculator />} />
           <Route path="/calculators/step-up-sip" element={<StepUpSipCalculator />} />
+          <Route path="/calculators/future-value" element={<FutureValueCalculatorPage />} />
           <Route path="/calculators/retirement" element={<RetirementCalculator />} />
         </Routes>
         <ChatbotWidget />
@@ -37,3 +39,4 @@ function App() {
 }
 
 export default App
+

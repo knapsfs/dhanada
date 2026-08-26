@@ -100,6 +100,8 @@ services:
       - serve
       - --port
       - "8000"
+    environment:
+      PYTHONPATH: /home/frappe/frappe-bench/apps/dhanada:/home/frappe/frappe-bench/apps
 
     volumes:
       - sites-vol:/home/frappe/frappe-bench/sites

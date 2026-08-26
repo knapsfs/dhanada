@@ -26,6 +26,7 @@ const navLinks = [
       { label: 'SWP Calculator', href: '/calculators/swp' },
       { label: 'Lumpsum Calculator', href: '/calculators/lumpsum' },
       { label: 'Retirement Calculator', href: '/calculators/retirement' },
+      { label: 'Future Value Calculator', href: '/calculators/future-value' },
     ]
   },
   { label: 'Blog', href: '/#blog' },
@@ -153,3 +154,4 @@ export default function Navbar() {
     </header>
   )
 }
+
