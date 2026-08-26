@@ -135,6 +135,8 @@ services:
       UPSTREAM_REAL_IP_RECURSIVE: "off"
       PROXY_READ_TIMEOUT: 120
       CLIENT_MAX_BODY_SIZE: 50m
+    ports:
+      - "8080:8080"
 
 
     labels:

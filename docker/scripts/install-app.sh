@@ -19,8 +19,12 @@ if ! grep -qxF "${APP_NAME}" sites/apps.txt; then
     echo "${APP_NAME}" >> sites/apps.txt
 fi
 
-echo "Installing ${APP_NAME} on site ${SITE_NAME}..."
+echo "Checking if ${APP_NAME} is already installed on site ${SITE_NAME}..."
 
-bench --site "${SITE_NAME}" install-app "${APP_NAME}"
-
-echo "${APP_NAME} installation completed successfully."
+if bench --site "${SITE_NAME}" list-apps | grep -qw "${APP_NAME}"; then
+    echo "${APP_NAME} is already installed on site ${SITE_NAME}. Skipping installation."
+else
+    echo "Installing ${APP_NAME} on site ${SITE_NAME}..."
+    bench --site "${SITE_NAME}" install-app "${APP_NAME}"
+    echo "${APP_NAME} installation completed successfully."
+fi
