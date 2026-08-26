@@ -1,7 +1,7 @@
 import React from 'react';
 import { formatIndianCurrency } from './calculatorUtils';
 
-export default function AdvancedTVM({ advancedMode, setAdvancedMode, initialInvestment, recurringInvestment, results, paymentTiming }) {
+export default function AdvancedTVM({ calcMode, advancedMode, setAdvancedMode, initialInvestment, recurringInvestment, targetFutureValue, results, paymentTiming }) {
   if (!advancedMode) {
     return (
       <div className="flex justify-center mt-8">
@@ -14,6 +14,9 @@ export default function AdvancedTVM({ advancedMode, setAdvancedMode, initialInve
       </div>
     );
   }
+
+  const pmtValue = calcMode === 'pmt' ? results.requiredPmt : recurringInvestment;
+  const fvValue = calcMode === 'pmt' ? targetFutureValue : results.futureValue;
 
   return (
     <div className="mt-8 border-t border-[#e8edf7] pt-8">
@@ -36,11 +39,11 @@ export default function AdvancedTVM({ advancedMode, setAdvancedMode, initialInve
             </tr>
             <tr className="hover:bg-gray-50 transition-colors">
               <th className="px-6 py-4 font-semibold text-gray-600 bg-gray-50/50">Payment (PMT)</th>
-              <td className="px-6 py-4 font-bold text-gray-900">{formatIndianCurrency(recurringInvestment)}</td>
+              <td className={`px-6 py-4 font-bold ${calcMode === 'pmt' ? 'text-[#032e92]' : 'text-gray-900'}`}>{formatIndianCurrency(pmtValue)}</td>
             </tr>
             <tr className="hover:bg-gray-50 transition-colors">
               <th className="px-6 py-4 font-semibold text-gray-600 bg-gray-50/50">Future Value (FV)</th>
-              <td className="px-6 py-4 font-bold text-[#032e92]">{formatIndianCurrency(results.futureValue)}</td>
+              <td className={`px-6 py-4 font-bold ${calcMode === 'fv' ? 'text-[#032e92]' : 'text-gray-900'}`}>{formatIndianCurrency(fvValue)}</td>
             </tr>
             <tr className="hover:bg-gray-50 transition-colors">
               <th className="px-6 py-4 font-semibold text-gray-600 bg-gray-50/50">Periodic Rate (r)</th>

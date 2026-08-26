@@ -74,7 +74,7 @@ export default function Funds() {
   const filteredFunds = useMemo(() => {
     let result = [...fundsData]
 
-    if (filters.assetClass) result = result.filter(f => f.assetClass === filters.assetClass)
+    if (filters.assetClass) result = result.filter(f => f.investmentStrategy === filters.assetClass)
     if (filters.category) result = result.filter(f => f.category === filters.category)
     if (filters.risk && filters.risk !== 'All') {
       const targetRisk = parseInt(filters.risk.replace('Risk Level ', ''), 10)

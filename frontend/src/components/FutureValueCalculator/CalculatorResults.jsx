@@ -1,9 +1,12 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { formatIndianCurrency } from './calculatorUtils';
 
-export default function CalculatorResults({ results }) {
-  const { futureValue, totalInvested, potentialGrowth } = results;
+export default function CalculatorResults({ calcMode, results }) {
+  const { futureValue, totalInvested, potentialGrowth, requiredPmt } = results;
+
+  const isReverse = calcMode === 'pmt';
+  const mainTitle = isReverse ? 'Required Monthly Investment' : 'Potential Future Value';
+  const mainValue = isReverse ? requiredPmt : futureValue;
 
   return (
     <div className="flex flex-col gap-6">
@@ -11,10 +14,10 @@ export default function CalculatorResults({ results }) {
         <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl -mr-20 -mt-20"></div>
         
         <p className="text-blue-200 text-sm font-semibold uppercase tracking-wider mb-2 relative z-10">
-          Potential Future Value
+          {mainTitle}
         </p>
         <div className="text-4xl lg:text-5xl font-bold mb-8 relative z-10">
-          {formatIndianCurrency(futureValue)}
+          {formatIndianCurrency(mainValue)}
         </div>
 
         <div className="grid grid-cols-2 gap-4 relative z-10">

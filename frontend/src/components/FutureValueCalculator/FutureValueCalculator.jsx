@@ -1,61 +1,71 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalculator } from '@fortawesome/free-solid-svg-icons';
 
-import FrequencyToggle from './FrequencyToggle';
+import ModeToggle from './ModeToggle';
 import CalculatorInputs from './CalculatorInputs';
 import CalculatorResults from './CalculatorResults';
 import GrowthChart from './GrowthChart';
 import AdvancedTVM from './AdvancedTVM';
 import CalculatorDisclaimer from './CalculatorDisclaimer';
-import { calculateFutureValue, generateChartData } from './calculatorUtils';
+import { calculateFutureValue, calculateRequiredInvestment, generateChartData } from './calculatorUtils';
 
 export default function FutureValueCalculator() {
-  const [frequency, setFrequency] = useState('monthly');
+  const [calcMode, setCalcMode] = useState('fv'); // 'fv' or 'pmt'
+  
+  // Hardcode frequency to monthly for simplicity in this reverse calculator mode
+  const frequency = 'monthly';
+  
   const [initialInvestment, setInitialInvestment] = useState(100000);
-  const [recurringInvestment, setRecurringInvestment] = useState(25000);
+  const [recurringInvestment, setRecurringInvestment] = useState(25000); // For FV mode
+  const [targetFutureValue, setTargetFutureValue] = useState(10000000); // For PMT mode (1 Cr)
+  
   const [annualReturn, setAnnualReturn] = useState(12);
   const [years, setYears] = useState(15);
   const [paymentTiming, setPaymentTiming] = useState('end');
   const [advancedMode, setAdvancedMode] = useState(false);
 
-  // Convert recurring investment when frequency changes
-  const handleConvertInvestment = (newFrequency) => {
-    if (newFrequency === 'annual') {
-      setRecurringInvestment(prev => prev * 12);
-    } else {
-      setRecurringInvestment(prev => Math.round(prev / 12));
-    }
-  };
-
   const resetDefaults = () => {
-    setFrequency('monthly');
     setInitialInvestment(100000);
     setRecurringInvestment(25000);
+    setTargetFutureValue(10000000);
     setAnnualReturn(12);
     setYears(15);
     setPaymentTiming('end');
     setAdvancedMode(false);
   };
 
-  const results = useMemo(() => calculateFutureValue({
-    pv: initialInvestment,
-    pmt: recurringInvestment,
-    annualRate: annualReturn,
-    years: years,
-    frequency: frequency,
-    timing: paymentTiming
-  }), [initialInvestment, recurringInvestment, annualReturn, years, frequency, paymentTiming]);
+  const results = useMemo(() => {
+    if (calcMode === 'fv') {
+      return calculateFutureValue({
+        pv: initialInvestment,
+        pmt: recurringInvestment,
+        annualRate: annualReturn,
+        years: years,
+        frequency: frequency,
+        timing: paymentTiming
+      });
+    } else {
+      return calculateRequiredInvestment({
+        targetFv: targetFutureValue,
+        pv: initialInvestment,
+        annualRate: annualReturn,
+        years: years,
+        frequency: frequency,
+        timing: paymentTiming
+      });
+    }
+  }, [calcMode, initialInvestment, recurringInvestment, targetFutureValue, annualReturn, years, paymentTiming]);
 
   const chartData = useMemo(() => generateChartData({
+    calcMode,
+    targetFv: targetFutureValue,
     pv: initialInvestment,
     pmt: recurringInvestment,
     annualRate: annualReturn,
     years: years,
     frequency: frequency,
     timing: paymentTiming
-  }), [initialInvestment, recurringInvestment, annualReturn, years, frequency, paymentTiming]);
+  }), [calcMode, initialInvestment, recurringInvestment, targetFutureValue, annualReturn, years, paymentTiming]);
 
   return (
     <section className="bg-[#f7f9fc] py-20" id="future-value-calculator">
@@ -70,7 +80,7 @@ export default function FutureValueCalculator() {
             Future Value Calculator
           </h2>
           <p className="text-gray-500 font-medium max-w-xl mx-auto">
-            See how your investments could potentially grow over time with the power of compounding. Adjust the amount, return and investment period to explore different scenarios.
+            Calculate your potential future wealth, or discover exactly how much you need to invest every month to reach a specific financial goal.
           </p>
         </div>
 
@@ -81,10 +91,9 @@ export default function FutureValueCalculator() {
           transition={{ duration: 0.7 }}
           className="bg-white rounded-[2rem] shadow-xl shadow-blue-900/5 border border-[#e8edf7] p-6 lg:p-10"
         >
-          <FrequencyToggle 
-            frequency={frequency} 
-            setFrequency={setFrequency} 
-            convertInvestment={handleConvertInvestment} 
+          <ModeToggle 
+            calcMode={calcMode} 
+            setCalcMode={setCalcMode} 
           />
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
@@ -92,42 +101,46 @@ export default function FutureValueCalculator() {
             {/* Left Column: Inputs */}
             <div className="lg:col-span-5">
               <CalculatorInputs 
+                calcMode={calcMode}
                 initialInvestment={initialInvestment}
                 setInitialInvestment={setInitialInvestment}
                 recurringInvestment={recurringInvestment}
                 setRecurringInvestment={setRecurringInvestment}
+                targetFutureValue={targetFutureValue}
+                setTargetFutureValue={setTargetFutureValue}
                 annualReturn={annualReturn}
                 setAnnualReturn={setAnnualReturn}
                 years={years}
                 setYears={setYears}
                 paymentTiming={paymentTiming}
                 setPaymentTiming={setPaymentTiming}
-                frequency={frequency}
                 resetDefaults={resetDefaults}
               />
             </div>
 
             {/* Right Column: Results & Chart */}
             <div className="lg:col-span-7 flex flex-col">
-              <CalculatorResults results={results} />
+              <CalculatorResults calcMode={calcMode} results={results} />
               
               <GrowthChart chartData={chartData} />
               
               <AdvancedTVM 
+                calcMode={calcMode}
                 advancedMode={advancedMode}
                 setAdvancedMode={setAdvancedMode}
                 initialInvestment={initialInvestment}
                 recurringInvestment={recurringInvestment}
+                targetFutureValue={targetFutureValue}
                 results={results}
                 paymentTiming={paymentTiming}
               />
 
               <CalculatorDisclaimer 
                 initialInvestment={initialInvestment}
-                recurringInvestment={recurringInvestment}
+                recurringInvestment={calcMode === 'fv' ? recurringInvestment : results.requiredPmt}
                 annualReturn={annualReturn}
                 years={years}
-                frequency={frequency}
+                frequency="monthly"
               />
             </div>
 

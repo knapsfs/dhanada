@@ -53,18 +53,15 @@ function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onCh
 }
 
 export default function CalculatorInputs({ 
+  calcMode,
   initialInvestment, setInitialInvestment,
   recurringInvestment, setRecurringInvestment,
+  targetFutureValue, setTargetFutureValue,
   annualReturn, setAnnualReturn,
   years, setYears,
   paymentTiming, setPaymentTiming,
-  frequency,
   resetDefaults
 }) {
-  const recurringLabel = frequency === 'monthly' ? 'Monthly Investment' : 'Annual Investment';
-  const recurringMax = frequency === 'monthly' ? 500000 : 6000000;
-  const recurringStep = frequency === 'monthly' ? 1000 : 10000;
-
   return (
     <div className="flex flex-col">
       <div className="flex justify-between items-center mb-6">
@@ -78,6 +75,20 @@ export default function CalculatorInputs({
         </button>
       </div>
 
+      {calcMode === 'pmt' && (
+        <InputField
+          id="target-future-value"
+          label="Target Future Value"
+          prefix="₹"
+          value={targetFutureValue}
+          min={100000}
+          max={100000000}
+          step={100000}
+          onChange={setTargetFutureValue}
+          hint="The amount you want to achieve at the end of the investment period."
+        />
+      )}
+
       <InputField
         id="initial-investment"
         label="Initial Investment"
@@ -90,17 +101,19 @@ export default function CalculatorInputs({
         hint="The amount you invest at the beginning."
       />
 
-      <InputField
-        id="recurring-investment"
-        label={recurringLabel}
-        prefix="₹"
-        value={recurringInvestment}
-        min={0}
-        max={recurringMax}
-        step={recurringStep}
-        onChange={setRecurringInvestment}
-        hint={`The amount you invest every ${frequency === 'monthly' ? 'month' : 'year'}.`}
-      />
+      {calcMode === 'fv' && (
+        <InputField
+          id="recurring-investment"
+          label="Monthly Investment"
+          prefix="₹"
+          value={recurringInvestment}
+          min={0}
+          max={500000}
+          step={1000}
+          onChange={setRecurringInvestment}
+          hint="The amount you invest every month."
+        />
+      )}
 
       <InputField
         id="annual-return"
@@ -143,7 +156,7 @@ export default function CalculatorInputs({
               onChange={() => setPaymentTiming('beginning')}
               className="accent-[#032e92] w-4 h-4 cursor-pointer"
             />
-            Beginning of period
+            Beginning of month
           </label>
           <label className="flex items-center gap-2 cursor-pointer text-sm font-semibold text-gray-700">
             <input 
@@ -154,7 +167,7 @@ export default function CalculatorInputs({
               onChange={() => setPaymentTiming('end')}
               className="accent-[#032e92] w-4 h-4 cursor-pointer"
             />
-            End of period
+            End of month
           </label>
         </div>
       </div>
