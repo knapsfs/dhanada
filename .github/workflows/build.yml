@@ -8,28 +8,27 @@ on:
 
 permissions:
   contents: read
-  packages: write
 
 jobs:
   build:
-    name: Build and Push Docker Images
+    name: Build and Push Docker Image
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Dhanada
         uses: actions/checkout@v4
 
-      - name: Login to GHCR
+      - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and Push Dhanada
         uses: docker/build-push-action@v6
         with:
           context: .
           file: Dockerfile
+          platforms: linux/amd64
           push: true
-          tags: ghcr.io/knapsfs/dhanada:latest
+          tags: knapsdocker/dhanada:latest
