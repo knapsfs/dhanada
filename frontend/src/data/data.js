@@ -239,9 +239,9 @@ export const comparisonData = {
 			feature: "Minimum Investment",
 			values: ["Varies by scheme", "₹10 Lakhs*", "₹50 Lakhs", "₹1 Crore"],
 		},
-		{ 
-			feature: "Liquidity", 
-			values: ["Generally High", "Strategy-dependent", "Medium", "Generally Low"] 
+		{
+			feature: "Liquidity",
+			values: ["Generally High", "Strategy-dependent", "Medium", "Generally Low"],
 		},
 		{
 			feature: "Risk Level",
@@ -251,19 +251,22 @@ export const comparisonData = {
 			feature: "Return Potential",
 			values: ["Market-linked", "Market-linked", "Market-linked", "Market-linked"],
 		},
-		{ 
-			feature: "Professional Management", 
-			values: ["Yes", "Yes", "Yes", "Yes"] 
+		{
+			feature: "Professional Management",
+			values: ["Yes", "Yes", "Yes", "Yes"],
 		},
 		{
 			feature: "Diversification",
-			values: ["Generally High", "Strategy-dependent", "Portfolio-dependent", "Fund-dependent"],
+			values: [
+				"Generally High",
+				"Strategy-dependent",
+				"Portfolio-dependent",
+				"Fund-dependent",
+			],
 		},
-		{ 
-			feature: "SEBI Regulated", 
-			values: ["Yes", "Yes", "Yes", "Yes"] 
+		{
+			feature: "SEBI Regulated",
+			values: ["Yes", "Yes", "Yes", "Yes"],
 		},
 	],
 };
-
-
