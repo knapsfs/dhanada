@@ -44,3 +44,8 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: knapsdocker/dhanada:${{ steps.version.outputs.version }}
+
+      - name: Create Git tag
+        run: |
+          git tag "v${{ steps.version.outputs.version }}"
+          git push origin "v${{ steps.version.outputs.version }}"
