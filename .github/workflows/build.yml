@@ -47,5 +47,11 @@ jobs:
 
       - name: Create Git tag
         run: |
-          git tag "v${{ steps.version.outputs.version }}"
-          git push origin "v${{ steps.version.outputs.version }}"
+          TAG="${{ steps.version.outputs.version_tag }}"
+
+          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists. Skipping."
+          else
+            git tag "$TAG"
+            git push origin "$TAG"
+          fi
