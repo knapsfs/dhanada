@@ -44,14 +44,10 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: knapsdocker/dhanada:${{ steps.version.outputs.version }}
-
-      - name: Create Git tag
+          no-cache: true
+          
+      - name: Verify KNAPS assets
         run: |
-          TAG="${{ steps.version.outputs.version_tag }}"
-
-          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null 2>&1; then
-            echo "Tag $TAG already exists. Skipping."
-          else
-            git tag "$TAG"
-            git push origin "$TAG"
-          fi
+          docker pull knapsdocker/dhanada:${{ steps.version.outputs.version }}
+          docker run --rm knapsdocker/dhanada:${{ steps.version.outputs.version }} \
+            find /home/frappe/frappe-bench/apps/dhanada/public/knaps -maxdepth 3 -type f
