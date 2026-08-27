@@ -34,8 +34,7 @@ COPY --chown=frappe:frappe . /home/frappe/frappe-bench/apps/dhanada
 
 # Install Dhanada as a Python package
 
-RUN cd /home/frappe/frappe-bench/apps/dhanada && pip install -e .
-
+RUN cd /home/frappe/frappe-bench/apps/dhanada && /home/frappe/frappe-bench/env/bin/pip install -e .
 # Copy the built assets securely from the Node build stage
 # The vite configs output to <repo-root>/dhanada/public, so they reside at /app/dhanada/public in the builder
 COPY --chown=frappe:frappe --from=frontend-builder /app/dhanada/public /home/frappe/frappe-bench/sites/assets/dhanada
