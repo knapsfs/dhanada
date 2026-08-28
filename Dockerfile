@@ -43,6 +43,7 @@ COPY --chown=frappe:frappe --from=frontend-builder /app/dhanada/public /home/fra
 RUN python3 -c "from pathlib import Path; p=Path('/home/frappe/frappe-bench/sites/apps.txt'); names=p.read_text().splitlines(); names=[n for n in names if n]; names.append('dhanada') if 'dhanada' not in names else None; p.write_text('\n'.join(names) + '\n')"
 
 # Retain existing entrypoint logic
+COPY docker/frappe/nginx-template.conf /templates/nginx/frappe.conf.template
 COPY docker/frappe/entrypoint.sh /usr/local/bin/entrypoint.sh
 
 USER root
