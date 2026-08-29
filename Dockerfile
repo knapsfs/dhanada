@@ -46,19 +46,6 @@ RUN python3 -c "from pathlib import Path; p=Path('/home/frappe/frappe-bench/site
 # Build bundled assets
 RUN bench build --production
 
-# Copy complete public assets into image-level assets directory
-RUN mkdir -p /home/frappe/frappe-bench/assets/frappe \
-    /home/frappe/frappe-bench/assets/erpnext \
-    /home/frappe/frappe-bench/assets/crm \
-    /home/frappe/frappe-bench/assets/dhanada \
-    && cp -a /home/frappe/frappe-bench/apps/frappe/frappe/public/. \
-        /home/frappe/frappe-bench/assets/frappe/ \
-    && cp -a /home/frappe/frappe-bench/apps/erpnext/erpnext/public/. \
-        /home/frappe/frappe-bench/assets/erpnext/ \
-    && cp -a /home/frappe/frappe-bench/apps/crm/crm/public/. \
-        /home/frappe/frappe-bench/assets/crm/ \
-    && cp -a /home/frappe/frappe-bench/apps/dhanada/public/. \
-        /home/frappe/frappe-bench/assets/dhanada/
 
 
 
