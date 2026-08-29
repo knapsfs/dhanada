@@ -40,7 +40,27 @@ RUN cd /home/frappe/frappe-bench/apps/dhanada && /home/frappe/frappe-bench/env/b
 COPY --chown=frappe:frappe --from=frontend-builder /app/dhanada/public /home/frappe/frappe-bench/apps/dhanada/public
 
 
+
 RUN python3 -c "from pathlib import Path; p=Path('/home/frappe/frappe-bench/sites/apps.txt'); names=p.read_text().splitlines(); names=[n for n in names if n]; names.append('dhanada') if 'dhanada' not in names else None; p.write_text('\n'.join(names) + '\n')"
+
+# Build bundled assets
+RUN bench build --production
+
+# Copy complete public assets into image-level assets directory
+RUN mkdir -p /home/frappe/frappe-bench/assets/frappe \
+    /home/frappe/frappe-bench/assets/erpnext \
+    /home/frappe/frappe-bench/assets/crm \
+    /home/frappe/frappe-bench/assets/dhanada \
+    && cp -a /home/frappe/frappe-bench/apps/frappe/frappe/public/. \
+        /home/frappe/frappe-bench/assets/frappe/ \
+    && cp -a /home/frappe/frappe-bench/apps/erpnext/erpnext/public/. \
+        /home/frappe/frappe-bench/assets/erpnext/ \
+    && cp -a /home/frappe/frappe-bench/apps/crm/crm/public/. \
+        /home/frappe/frappe-bench/assets/crm/ \
+    && cp -a /home/frappe/frappe-bench/apps/dhanada/public/. \
+        /home/frappe/frappe-bench/assets/dhanada/
+
+
 
 # Retain existing entrypoint logic
 COPY docker/frappe/nginx-template.conf /templates/nginx/frappe.conf.template
