@@ -31,9 +31,9 @@ export default function PerformanceChart({ selectedFunds }) {
 
   // Chart Colors (Brand matching)
   const colors = [
-    { border: '#032e92', bg: 'rgba(3, 46, 146, 0.1)' },
-    { border: '#c10000', bg: 'rgba(193, 0, 0, 0.1)' },
-    { border: '#16A34A', bg: 'rgba(22, 163, 74, 0.1)' }
+    { border: '#7e22ce', bg: 'rgba(126, 34, 206, 0.1)' },
+    { border: '#d97706', bg: 'rgba(217, 119, 6, 0.1)' },
+    { border: '#78350f', bg: 'rgba(120, 53, 15, 0.1)' }
   ];
 
   // Dummy labels (X-axis dates)
@@ -110,7 +110,7 @@ export default function PerformanceChart({ selectedFunds }) {
     }
   };
 
-  const tabs = ['1M', '3M', '6M', '1Y', '3Y', '5Y', 'Since Launch'];
+  const tabs = ['1M', '3M', '6M', '1Y', 'Since Inception'];
 
   return (
     <div className="bg-white rounded-3xl border border-[#e8edf7] shadow-xl shadow-blue-900/5 mb-12 overflow-hidden">
@@ -153,3 +153,5 @@ export default function PerformanceChart({ selectedFunds }) {
     </div>
   );
 }
+
+

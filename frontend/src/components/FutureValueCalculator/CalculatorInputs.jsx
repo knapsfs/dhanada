@@ -52,7 +52,7 @@ function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onCh
   );
 }
 
-export default function CalculatorInputs({ 
+export default function CalculatorInputs({
   calcMode,
   initialInvestment, setInitialInvestment,
   recurringInvestment, setRecurringInvestment,
@@ -65,8 +65,8 @@ export default function CalculatorInputs({
   return (
     <div className="flex flex-col">
       <div className="flex justify-between items-center mb-6">
-        <h3 className="font-bold text-gray-800 text-lg">Input Details</h3>
-        <button 
+        <h3 className="font-bold text-gray-800 text-lg">Your Investment Details</h3>
+        <button
           onClick={resetDefaults}
           className="text-xs font-semibold text-[#032e92] bg-[#eef4ff] px-3 py-1.5 rounded-full hover:bg-blue-100 transition-colors flex items-center gap-1.5"
         >
@@ -89,22 +89,24 @@ export default function CalculatorInputs({
         />
       )}
 
-      <InputField
-        id="initial-investment"
-        label="Initial Investment"
-        prefix="₹"
-        value={initialInvestment}
-        min={0}
-        max={10000000}
-        step={10000}
-        onChange={setInitialInvestment}
-        hint="The amount you invest at the beginning."
-      />
+      {calcMode === 'fv' && (
+        <InputField
+          id="initial-investment"
+          label="Starting Amount"
+          prefix="₹"
+          value={initialInvestment}
+          min={0}
+          max={10000000}
+          step={10000}
+          onChange={setInitialInvestment}
+          hint="The amount you invest at the beginning."
+        />
+      )}
 
       {calcMode === 'fv' && (
         <InputField
           id="recurring-investment"
-          label="Monthly Investment"
+          label="Monthly Amount"
           prefix="₹"
           value={recurringInvestment}
           min={0}
@@ -117,7 +119,7 @@ export default function CalculatorInputs({
 
       <InputField
         id="annual-return"
-        label="Expected Annual Return"
+        label="Expected Growth Per Year"
         suffix="%"
         value={annualReturn}
         min={0}
@@ -132,7 +134,7 @@ export default function CalculatorInputs({
 
       <InputField
         id="investment-period"
-        label="Investment Period"
+        label="How Long You'll Invest"
         suffix=" Years"
         value={years}
         min={1}
@@ -141,36 +143,6 @@ export default function CalculatorInputs({
         onChange={setYears}
         hint="How long do you plan to stay invested?"
       />
-
-      <div className="flex flex-col gap-2 mt-2">
-        <label className="text-xs font-bold text-gray-500 uppercase tracking-wide">
-          When is the investment made?
-        </label>
-        <div className="flex gap-4">
-          <label className="flex items-center gap-2 cursor-pointer text-sm font-semibold text-gray-700">
-            <input 
-              type="radio" 
-              name="paymentTiming" 
-              value="beginning" 
-              checked={paymentTiming === 'beginning'}
-              onChange={() => setPaymentTiming('beginning')}
-              className="accent-[#032e92] w-4 h-4 cursor-pointer"
-            />
-            Beginning of month
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer text-sm font-semibold text-gray-700">
-            <input 
-              type="radio" 
-              name="paymentTiming" 
-              value="end" 
-              checked={paymentTiming === 'end'}
-              onChange={() => setPaymentTiming('end')}
-              className="accent-[#032e92] w-4 h-4 cursor-pointer"
-            />
-            End of month
-          </label>
-        </div>
-      </div>
     </div>
   );
 }

@@ -25,7 +25,7 @@ function mapToPremiumFormat(apiFund, isBasicList = false) {
   const plans = apiFund.plans || [];
   const selectedPlan = apiFund.defaultPlan || (plans.length > 0 ? plans[0] : {});
   const perf = selectedPlan?.performance_data || {};
-  
+
   // Safe returns object
   const returns = {
     oneWeek: perf['1_week'] ? Number(perf['1_week']).toFixed(2) : 'N/A',
@@ -128,7 +128,7 @@ export default function CompareFunds() {
   const [allFunds, setAllFunds] = useState([]);
   const [selectedFunds, setSelectedFunds] = useState([null, null, null]);
   const [activeCategory, setActiveCategory] = useState(null);
-  
+
   // Load funds list on mount
   useEffect(() => {
     fetchFundsList().then(data => {
@@ -144,15 +144,15 @@ export default function CompareFunds() {
     const compareIds = searchParams.getAll('compare');
     const newSelected = [null, null, null];
     let hasChanges = false;
-    
+
     // We only take the first 3
     const idsToFetch = compareIds.slice(0, 3);
-    
+
     const loadDetails = async () => {
       for (let i = 0; i < 3; i++) {
         const id = idsToFetch[i];
         const currentFund = selectedFunds[i];
-        
+
         if (id) {
           if (!currentFund || currentFund.id !== id) {
             try {
@@ -171,14 +171,14 @@ export default function CompareFunds() {
           hasChanges = true;
         }
       }
-      
+
       if (hasChanges) {
         setSelectedFunds(newSelected);
       }
     };
-    
+
     loadDetails();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams.toString()]);
 
   useEffect(() => {
@@ -189,15 +189,15 @@ export default function CompareFunds() {
   const handleFundSelect = useCallback((index, id) => {
     const compareIds = searchParams.getAll('compare');
     const newIds = [...compareIds];
-    
+
     // ensure array is size 3
-    while(newIds.length < 3) newIds.push('');
-    
+    while (newIds.length < 3) newIds.push('');
+
     newIds[index] = id || '';
-    
+
     // clean up empty slots at the end or middle
     const finalIds = newIds.filter(Boolean);
-    
+
     if (finalIds.length === 0) {
       setSearchParams({});
     } else {
@@ -216,71 +216,71 @@ export default function CompareFunds() {
   }, []);
 
   return (
-      <div className="min-h-screen bg-[#f7f9fc] font-sans">
-        
-        <Navbar />
-        
-        <main>
-          <CompareHero />
+    <div className="min-h-screen bg-[#f7f9fc] font-sans">
 
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 -mt-16 lg:-mt-24 relative z-20">
-            
-            <FundSelector 
-              selectedFunds={selectedFunds} 
-              onFundSelect={handleFundSelect} 
-              onReset={handleReset}
-              availableFunds={allFunds} 
-            />
+      <Navbar />
 
-            {hasFundsToCompare ? (
-              <div className="animate-in fade-in duration-500">
-                <SelectedFundSummary selectedFunds={selectedFunds} />
-                <ComparisonTable selectedFunds={selectedFunds} />
-                <PerformanceChart selectedFunds={selectedFunds} />
-                <ReturnsCards selectedFunds={selectedFunds} />
-                
-                <div className="grid lg:grid-cols-2 gap-6 mb-12">
-                  <div className="lg:col-span-2">
-                    <RiskComparison selectedFunds={selectedFunds} />
-                  </div>
+      <main>
+        <CompareHero />
+
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 -mt-16 lg:-mt-24 relative z-20">
+
+          <FundSelector
+            selectedFunds={selectedFunds}
+            onFundSelect={handleFundSelect}
+            onReset={handleReset}
+            availableFunds={allFunds}
+          />
+
+          {hasFundsToCompare ? (
+            <div className="animate-in fade-in duration-500">
+              {/* <SelectedFundSummary selectedFunds={selectedFunds} /> */}
+              <ComparisonTable selectedFunds={selectedFunds} />
+              <PerformanceChart selectedFunds={selectedFunds} />
+              <ReturnsCards selectedFunds={selectedFunds} />
+
+              <div className="grid lg:grid-cols-2 gap-6 mb-12">
+                <div className="lg:col-span-2">
+                  <RiskComparison selectedFunds={selectedFunds} />
                 </div>
+              </div>
 
-                <PortfolioComparison selectedFunds={selectedFunds} />
-                {/* TODO:
+              <PortfolioComparison selectedFunds={selectedFunds} />
+              {/* TODO:
                     Re-enable Sector Allocation comparison once Frappe provides complete
                     sector allocation data for all Specialized Investment Funds.
                 <SectorAllocation selectedFunds={selectedFunds} /> 
                 */}
-                {/* TODO:
+              {/* TODO:
                     Re-enable Top 10 Holdings once portfolio holdings
                     become available from the Frappe backend.
                 <TopHoldingsTable selectedFunds={selectedFunds} />
                 */}
-                {/* TODO:
+              {/* TODO:
                     Re-enable Pros & Cons once dynamic analysis
                     is generated from actual scheme data or AI insights.
                 <ProsConsSection selectedFunds={selectedFunds} />
                 */}
-                <AIRecommendation selectedFunds={selectedFunds} />
+              {/* <AIRecommendation selectedFunds={selectedFunds} /> */}
+            </div>
+          ) : (
+            <div className="py-20 text-center">
+              <div className="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span className="text-4xl opacity-50">📊</span>
               </div>
-            ) : (
-              <div className="py-20 text-center">
-                <div className="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <span className="text-4xl opacity-50">📊</span>
-                </div>
-                <h3 className="text-2xl font-bold text-[#1e293b] font-serif mb-2">No Funds Selected</h3>
-                <p className="text-[#64748b] text-sm max-w-md mx-auto">Please search and select up to 3 funds from the dropdowns above to begin your side-by-side comparison.</p>
-              </div>
-            )}
-            
-            <CompareRelatedFunds selectedCategory={activeCategory} allFundsList={allFunds} />
-            
-          </div>
-          
-          <Newsletter />
-        </main>
+              <h3 className="text-2xl font-bold text-[#1e293b] font-serif mb-2">No Funds Selected</h3>
+              <p className="text-[#64748b] text-sm max-w-md mx-auto">Please search and select up to 3 funds from the dropdowns above to begin your side-by-side comparison.</p>
+            </div>
+          )}
 
-        <Footer />
-      </div>
+          {/* <CompareRelatedFunds selectedCategory={activeCategory} allFundsList={allFunds} /> */}
+
+        </div>
+
+        <Newsletter />
+      </main>
+
+      <Footer />
+    </div>
   );
 }

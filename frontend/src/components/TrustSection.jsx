@@ -136,7 +136,7 @@ export default function TrustSection() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.5, duration: 0.6 }}
           className="mt-12 flex flex-wrap items-center justify-center gap-6">
-          {['SEBI Registered', 'AMFI Compliant', 'ISO 27001', 'PCI DSS Level 1'].map((cert) => (
+          {['AMFI Registered'].map((cert) => (
             <div key={cert} className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#f7f9fc] border border-[#e8edf7] text-sm font-semibold text-gray-600">
               <FontAwesomeIcon icon={faCircleCheck} className="text-green-500" />
               {cert}

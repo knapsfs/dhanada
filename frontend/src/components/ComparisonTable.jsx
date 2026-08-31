@@ -44,20 +44,20 @@ export default function ComparisonTable({ selectedFunds }) {
 
   return (
     <div className="bg-white rounded-3xl border border-[#e8edf7] shadow-xl shadow-blue-900/5 mb-12 overflow-hidden">
-      <div className="p-6 lg:p-8 border-b border-[#e8edf7] flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <h2 className="text-2xl font-bold text-[#1e293b] font-serif">Parameter Comparison</h2>
-        <p className="text-[#64748b] text-xs font-semibold uppercase tracking-wide">Use this table for side-by-side screening before final shortlisting.</p>
+      <div className="p-4 lg:p-8 border-b border-[#e8edf7] flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <h2 className="text-xl lg:text-2xl font-bold text-[#1e293b] font-serif">Parameter Comparison</h2>
+        <p className="text-[#64748b] text-[10px] lg:text-xs font-semibold uppercase tracking-wide">Use this table for side-by-side screening before final shortlisting.</p>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full text-left min-w-[800px]">
+      <div className="overflow-x-auto w-full no-scrollbar">
+        <table className="w-full text-left min-w-max md:min-w-[800px]">
           <thead>
             <tr className="bg-[#f7f9fc]">
-              <th className="p-6 text-xs font-bold text-[#1e293b] uppercase tracking-wider w-1/4 sticky left-0 bg-[#f7f9fc] z-10 shadow-[1px_0_0_0_#e8edf7]">
+              <th className="p-4 lg:p-6 text-[10px] lg:text-xs font-bold text-[#1e293b] uppercase tracking-wider min-w-[130px] lg:w-1/4 sticky left-0 bg-[#f7f9fc] z-20 shadow-[1px_0_0_0_#e8edf7]">
                 Parameter
               </th>
               {activeFunds.map((fund, i) => (
-                <th key={i} className="p-6 text-xs font-bold text-[#032e92] uppercase tracking-wider w-1/4 border-l border-[#e8edf7]">
+                <th key={i} className="p-4 lg:p-6 text-[11px] lg:text-xs font-bold text-[#032e92] uppercase tracking-wider min-w-[150px] lg:w-1/4 border-l border-[#e8edf7]">
                   {fund.name}
                 </th>
               ))}
@@ -68,11 +68,11 @@ export default function ComparisonTable({ selectedFunds }) {
               const bestIndex = (param.type === 'lowest' || param.type === 'highest') ? getBestIndex(param.field, param.type) : -1;
 
               return (
-                <tr key={index} className="hover:bg-[#f7f9fc]/50 transition-colors">
-                  <td className="p-6 text-sm font-semibold text-[#64748b] sticky left-0 bg-white z-10 shadow-[1px_0_0_0_#e8edf7] group-hover:bg-[#f7f9fc]/50">
+                <tr key={index} className="hover:bg-[#f7f9fc]/50 transition-colors group">
+                  <td className="p-4 lg:p-6 text-xs lg:text-sm font-semibold text-[#64748b] sticky left-0 bg-white z-10 shadow-[1px_0_0_0_#e8edf7] group-hover:bg-[#f7f9fc]/50 transition-colors">
                     {param.label}
                     {(param.type === 'lowest' || param.type === 'highest') && (
-                      <span className="block text-[10px] text-gray-400 mt-1 uppercase">({param.type} is better)</span>
+                      <span className="block text-[9px] lg:text-[10px] text-gray-400 mt-1 uppercase">({param.type} is better)</span>
                     )}
                   </td>
                   
@@ -85,7 +85,7 @@ export default function ComparisonTable({ selectedFunds }) {
                     const isBest = i === bestIndex;
 
                     return (
-                      <td key={i} className={`p-6 border-l border-[#e8edf7] text-sm font-medium ${
+                      <td key={i} className={`p-4 lg:p-6 border-l border-[#e8edf7] text-xs lg:text-sm font-medium ${
                         isBest ? 'bg-green-50/50' : ''
                       }`}>
                         <div className="flex items-center gap-2">
@@ -94,7 +94,7 @@ export default function ComparisonTable({ selectedFunds }) {
                             {val !== undefined && val !== null ? val : '-'}
                             {param.suffix && val ? param.suffix : ''}
                           </span>
-                          {isBest && <FontAwesomeIcon icon={faCheckCircle} className="text-green-500 text-xs" />}
+                          {isBest && <FontAwesomeIcon icon={faCheckCircle} className="text-green-500 text-[10px] lg:text-xs" />}
                         </div>
                       </td>
                     );

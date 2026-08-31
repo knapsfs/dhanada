@@ -117,7 +117,7 @@ export default function GrowthChart({ chartData }) {
         ticks: {
           color: '#9ca3af',
           font: { size: 11, weight: 'bold' },
-          callback: function(value) {
+          callback: function (value) {
             if (value >= 10000000) return '₹' + (value / 10000000).toFixed(1) + ' Cr';
             if (value >= 100000) return '₹' + (value / 100000).toFixed(0) + ' L';
             if (value >= 1000) return '₹' + (value / 1000).toFixed(0) + ' k';

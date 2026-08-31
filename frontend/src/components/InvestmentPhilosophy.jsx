@@ -111,7 +111,7 @@ export default function InvestmentPhilosophy() {
             {/* Floating badge */}
             <div className="absolute -bottom-4 -left-4 bg-white rounded-2xl px-5 py-3 shadow-xl border border-[#e8edf7]">
               <p className="text-xs text-gray-400 font-medium">Certified By</p>
-              <p className="font-bold text-[#032e92]">SEBI & AMFI ✓</p>
+              <p className="font-bold text-[#032e92]">AMFI Registered </p>
             </div>
           </motion.div>
         </div>

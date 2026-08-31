@@ -66,11 +66,17 @@ export default function FundSelector({ selectedFunds, onFundSelect, onReset, ava
 
   // Helper to get filtered options for a specific slot
   const getOptionsForSlot = (index) => {
-    // If there's an allowed category and this slot is empty (or we want to change it)
+    const selectedIds = selectedFunds
+      .filter((fund, i) => i !== index && fund !== null)
+      .map(fund => fund.id);
+
+    let filteredOptions = options;
+
     if (allowedCategory) {
-      return options.filter(opt => opt.category === allowedCategory);
+      filteredOptions = filteredOptions.filter(opt => opt.category === allowedCategory);
     }
-    return options;
+
+    return filteredOptions.filter(opt => !selectedIds.includes(opt.value));
   };
 
   return (
@@ -123,3 +129,4 @@ export default function FundSelector({ selectedFunds, onFundSelect, onReset, ava
     </div>
   );
 }
+

@@ -18,7 +18,7 @@ function App() {
   console.log("App Rendered");
   return (
     <LeadModalProvider>
-      <BrowserRouter basename="/sif">
+      <BrowserRouter basename={import.meta.env.DEV ? "/" : "/sif"}>
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home />} />

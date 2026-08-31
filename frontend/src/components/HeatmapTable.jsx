@@ -9,8 +9,6 @@ const allPeriods = [
   { key: 'returns6M', label: '6M' },
   { key: 'returnsYTD', label: 'YTD' },
   { key: 'returns1Y', label: '1Y' },
-  { key: 'returns3Y', label: '3Y' },
-  { key: 'returns5Y', label: '5Y' },
 ];
 
 const getColor = (val) => {
@@ -51,22 +49,22 @@ export default function HeatmapTable({ funds, timeFilter, activeSubCategoryLabel
   // Determine periods to show based on timeFilter
   let displayPeriods = allPeriods;
   if (timeFilter === 'Short Term') {
-    displayPeriods = allPeriods.slice(0, 5); // 1W to YTD
+    displayPeriods = allPeriods.slice(0, 4); // 1W to 6M
   } else if (timeFilter === 'Long Term') {
-    displayPeriods = allPeriods.slice(5); // 1Y to 5Y
+    displayPeriods = allPeriods.slice(4); // YTD, 1Y
   }
 
   return (
     <div className="flex-1 w-full bg-white relative">
       <div className="overflow-x-auto w-full no-scrollbar pb-4 border-b border-[#e8edf7]">
-        <table className="w-full min-w-[700px] border-collapse">
+        <table className="w-full min-w-[500px] sm:min-w-[700px] border-collapse">
           <thead>
             <tr>
-              <th className="sticky left-0 bg-white z-20 py-4 px-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wide border-b border-[#e8edf7] min-w-[280px] lg:min-w-[400px]">
+              <th className="sticky left-0 bg-white z-20 py-4 px-2 sm:px-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wide border-b border-[#e8edf7] min-w-[140px] sm:min-w-[280px] lg:min-w-[400px]">
                 Fund Name
               </th>
               {displayPeriods.map((p) => (
-                <th key={p.key} className="py-4 px-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wide border-b border-[#e8edf7] min-w-[90px]">
+                <th key={p.key} className="py-4 px-1 sm:px-3 text-center text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-wide border-b border-[#e8edf7] min-w-[60px] sm:min-w-[90px]">
                   {p.label}
                 </th>
               ))}
@@ -81,14 +79,14 @@ export default function HeatmapTable({ funds, timeFilter, activeSubCategoryLabel
                 transition={{ duration: 0.3, delay: index * 0.05 }}
                 className="group border-b border-[#e8edf7] last:border-0 hover:bg-[#f7f9fc] transition-colors"
               >
-                <td className="sticky left-0 bg-white group-hover:bg-[#f7f9fc] z-10 py-3 px-4 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-[#eef4ff] text-[#032e92] font-bold text-xs flex items-center justify-center flex-shrink-0">
+                <td className="sticky left-0 bg-white group-hover:bg-[#f7f9fc] z-10 py-3 px-2 sm:px-4 transition-colors">
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-[#eef4ff] text-[#032e92] font-bold text-[10px] sm:text-xs flex items-center justify-center flex-shrink-0">
                       {fund.name.charAt(0).toUpperCase()}
                     </div>
-                    <div className="flex flex-col overflow-hidden max-w-[220px] lg:max-w-[400px]">
-                      <p className="font-bold text-sm text-gray-900 truncate" title={fund.name}>{fund.name}</p>
-                      <p className="text-xs text-gray-400 font-medium truncate">{fund.amc}</p>
+                    <div className="flex flex-col overflow-hidden max-w-[100px] sm:max-w-[220px] lg:max-w-[400px]">
+                      <p className="font-bold text-[11px] sm:text-sm text-gray-900 truncate" title={fund.name}>{fund.name}</p>
+                      <p className="text-[9px] sm:text-xs text-gray-400 font-medium truncate">{fund.amc}</p>
                     </div>
                   </div>
                 </td>
@@ -100,7 +98,7 @@ export default function HeatmapTable({ funds, timeFilter, activeSubCategoryLabel
                         whileHover={{ scale: 1.05, zIndex: 10 }}
                         onMouseMove={(e) => handleMouseMove(e, fund, p.label, val)}
                         onMouseLeave={handleMouseLeave}
-                        className={`w-full h-12 rounded-lg flex items-center justify-center font-bold text-[11px] lg:text-xs cursor-pointer shadow-sm transition-shadow hover:shadow-md border border-black/5 ${getColor(val)}`}
+                        className={`w-full h-10 sm:h-12 rounded-lg flex items-center justify-center font-bold text-[10px] sm:text-[11px] lg:text-xs cursor-pointer shadow-sm transition-shadow hover:shadow-md border border-black/5 ${getColor(val)}`}
                       >
                         {val == null ? 'N/A' : `${val > 0 ? '+' : ''}${val}%`}
                       </motion.div>
@@ -111,7 +109,7 @@ export default function HeatmapTable({ funds, timeFilter, activeSubCategoryLabel
             ))}
             {funds.length === 0 && (
               <tr>
-                <td colSpan={displayPeriods.length + 1} className="py-12 text-center text-gray-500 font-medium">
+                <td colSpan={displayPeriods.length + 1} className="py-12 text-center text-gray-500 font-medium text-xs sm:text-sm">
                   No funds available in this category.
                 </td>
               </tr>

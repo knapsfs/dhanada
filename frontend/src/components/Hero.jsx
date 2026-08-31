@@ -91,7 +91,7 @@ export default function Hero() {
               transition={{ duration: 0.7 }}
               className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-sm text-blue-100 font-medium mb-6">
               <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-              SEBI Registered SIF Distributor
+              AMFI Registered SIF Distributor
             </motion.div>
 
             <motion.h1

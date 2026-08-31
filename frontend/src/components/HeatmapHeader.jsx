@@ -28,7 +28,7 @@ export default function HeatmapHeader({ timeFilter, setTimeFilter }) {
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="flex p-1 bg-white/10 rounded-xl border border-white/20">
+        className="flex flex-wrap sm:flex-nowrap p-1 bg-white/10 rounded-xl border border-white/20">
         {tabs.map((tab) => (
           <button
             key={tab.value}

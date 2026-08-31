@@ -10,14 +10,7 @@ import { useLeadModal } from '../context/LeadModalContext'
 
 const navLinks = [
   { label: 'Home', href: '/' },
-  {
-    label: 'Funds', href: '/funds', dropdown: [
-      { label: 'All Funds', href: '/funds' },
-      { label: 'Top Performing', href: '/#top-funds' },
-      { label: 'Fund Marketplace', href: '/#marketplace' },
-      { label: 'Featured Fund', href: '/#featured' },
-    ]
-  },
+  { label: 'Funds', href: '/funds' },
   { label: 'Compare', href: '/compare' },
   {
     label: 'Calculators', href: '/calculators/sip', dropdown: [
@@ -29,7 +22,7 @@ const navLinks = [
       { label: 'Future Value Calculator', href: '/calculators/future-value' },
     ]
   },
-  { label: 'Blog', href: '/#blog' },
+  { label: 'Blogs', href: '/#blog' },
 ]
 
 export default function Navbar() {
@@ -102,18 +95,18 @@ export default function Navbar() {
 
           {/* Right Actions */}
           <div className="hidden lg:flex items-center gap-3">
-            <button className={`w-9 h-9 rounded-full flex items-center justify-center transition-all hover:bg-[#eef4ff] hover:text-[#032e92] ${scrolled ? 'text-gray-600' : 'text-gray-700'}`}>
+            {/* <button className={`w-9 h-9 rounded-full flex items-center justify-center transition-all hover:bg-[#eef4ff] hover:text-[#032e92] ${scrolled ? 'text-gray-600' : 'text-gray-700'}`}>
               <FontAwesomeIcon icon={faMagnifyingGlass} className="text-sm" />
             </button>
             <button className={`w-9 h-9 rounded-full flex items-center justify-center transition-all hover:bg-[#eef4ff] hover:text-[#032e92] ${scrolled ? 'text-gray-600' : 'text-gray-700'}`}>
               <FontAwesomeIcon icon={faBell} className="text-sm" />
-            </button>
-            <a href="#login" className={`px-5 py-2 rounded-full text-sm font-semibold border-2 transition-all duration-200 hover:shadow-md ${scrolled
+            </button> */}
+            {/* <a href="#login" className={`px-5 py-2 rounded-full text-sm font-semibold border-2 transition-all duration-200 hover:shadow-md ${scrolled
               ? 'border-[#032e92] text-[#032e92] hover:bg-[#032e92] hover:text-white'
               : 'border-[#032e92] text-[#032e92] hover:bg-[#032e92] hover:text-white bg-white/80'
               }`}>
               Login
-            </a>
+            </a> */}
             <button onClick={openLeadModal} className="btn-ripple px-5 py-2 rounded-full text-sm font-semibold bg-[#032e92] text-white hover:bg-[#021d63] shadow-lg shadow-blue-900/30 transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5">
               Invest Now
             </button>
@@ -143,7 +136,7 @@ export default function Navbar() {
                   </Link>
                 ))}
                 <div className="pt-3 flex gap-3">
-                  <a href="#login" className="flex-1 text-center py-2.5 rounded-xl border-2 border-[#032e92] text-[#032e92] text-sm font-semibold">Login</a>
+                  {/* <a href="#login" className="flex-1 text-center py-2.5 rounded-xl border-2 border-[#032e92] text-[#032e92] text-sm font-semibold">Login</a> */}
                   <button onClick={() => { setMobileOpen(false); openLeadModal(); }} className="flex-1 text-center py-2.5 rounded-xl bg-[#032e92] text-white text-sm font-semibold">Invest Now</button>
                 </div>
               </div>
@@ -154,4 +147,5 @@ export default function Navbar() {
     </header>
   )
 }
+
 

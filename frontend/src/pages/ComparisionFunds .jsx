@@ -40,14 +40,14 @@ export default function CompareFunds() {
           <title>Compare Funds | SIF Platform</title>
           <meta name="description" content="Compare Specialized Investment Funds side-by-side to evaluate performance, risk, and portfolio allocation." />
         </Helmet>
-        
+
         <Navbar />
-        
+
         <main>
           <CompareHero />
 
           <div className="max-w-7xl mx-auto px-6 lg:px-8 -mt-10 relative z-20">
-            
+
             <ErrorBoundary><FundSelector selectedFunds={selectedFunds} setSelectedFunds={setSelectedFunds} /></ErrorBoundary>
 
             {hasFundsToCompare ? (
@@ -56,7 +56,7 @@ export default function CompareFunds() {
                 <ErrorBoundary><ComparisonTable selectedFunds={selectedFunds} /></ErrorBoundary>
                 <ErrorBoundary><PerformanceChart selectedFunds={selectedFunds} /></ErrorBoundary>
                 <ErrorBoundary><ReturnsCards selectedFunds={selectedFunds} /></ErrorBoundary>
-                
+
                 <div className="grid lg:grid-cols-2 gap-6 mb-12">
                   <div className="lg:col-span-2">
                     <ErrorBoundary><RiskComparison selectedFunds={selectedFunds} /></ErrorBoundary>
@@ -78,9 +78,9 @@ export default function CompareFunds() {
                 <p className="text-[#64748b] text-sm max-w-md mx-auto">Please search and select up to 3 funds from the dropdowns above to begin your side-by-side comparison.</p>
               </div>
             )}
-            
+
           </div>
-          
+
           <Newsletter />
         </main>
 

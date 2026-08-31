@@ -10,19 +10,20 @@ export default function ReturnsCards({ selectedFunds }) {
   if (activeFunds.length === 0) return null;
 
   const periods = [
-    { label: '1 Year Return', key: 'oneYear' },
-    { label: '3 Year CAGR', key: 'threeYear' },
-    { label: '5 Year CAGR', key: 'fiveYear' },
-    { label: 'Since Launch', key: 'sinceLaunch' }
+    { label: '1M Return', key: 'oneMonth' },
+    { label: '3M Return', key: 'threeMonth' },
+    { label: '6M Return', key: 'sixMonth' },
+    { label: '1Y Return', key: 'oneYear' },
+    { label: 'Since Inception', key: 'sinceLaunch' }
   ];
 
-  const colors = ['#032e92', '#c10000', '#16A34A'];
+  const colors = ['#7e22ce', '#d97706', '#78350f'];
 
   return (
     <div className="mb-12" ref={ref}>
       <h3 className="text-xl font-bold text-[#1e293b] font-serif mb-6">Returns Comparison</h3>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
         {periods.map((period, index) => (
           <div key={index} className="bg-white rounded-3xl p-6 border border-[#e8edf7] shadow-lg shadow-blue-900/5 group hover:border-[#032e92]/30 transition-colors">
             <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-4 pb-4 border-b border-[#e8edf7] group-hover:border-[#032e92]/20 transition-colors">
@@ -66,3 +67,4 @@ export default function ReturnsCards({ selectedFunds }) {
     </div>
   );
 }
+
