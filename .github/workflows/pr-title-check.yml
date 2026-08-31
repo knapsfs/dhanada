@@ -1,9 +1,6 @@
 name: PR Title Check
 
 on:
-  push:
-    branches:
-      - feat/sif_scheme
   pull_request_target:
     types: [opened, edited, synchronize, reopened]
 
