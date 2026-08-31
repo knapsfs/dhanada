@@ -25,8 +25,8 @@ jobs:
         uses: paulhatch/semantic-version@v5.4.0
         with:
           tag_prefix: "v"
-          major_pattern: "(MAJOR)"
-          minor_pattern: "(MINOR)"
+          major_pattern: "/!:|BREAKING CHANGE:/"
+          minor_pattern: "/feat(\\(.+\\))?:/"
           version_format: "${major}.${minor}.${patch}"
           change_path: "."
 
@@ -51,3 +51,15 @@ jobs:
           docker pull knapsdocker/dhanada:${{ steps.version.outputs.version }}
           docker run --rm knapsdocker/dhanada:${{ steps.version.outputs.version }} \
             find /home/frappe/frappe-bench/apps/dhanada/public/knaps -maxdepth 3 -type f
+
+      - name: Create and Push Git Tag
+        run: |
+          TAG_NAME="v${{ steps.version.outputs.version }}"
+          if git ls-remote --tags origin | grep -q "refs/tags/$TAG_NAME"; then
+            echo "Tag $TAG_NAME already exists, skipping tag creation."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git tag "$TAG_NAME"
+            git push origin "$TAG_NAME"
+          fi
