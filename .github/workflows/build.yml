@@ -63,3 +63,11 @@ jobs:
             git tag "$TAG_NAME"
             git push origin "$TAG_NAME"
           fi
+
+      - name: Trigger Deployment
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.DEPLOY_REPO_TOKEN }}
+          repository: knapsfs/deployment
+          event-type: deploy-dhanada
+          client-payload: '{"image_version": "${{ steps.version.outputs.version }}"}'
