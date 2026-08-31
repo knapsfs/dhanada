@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faArrowRight, faChartPie, faShieldHalved, faCoins,
-  faArrowTrendUp, faStar, faArrowUpRightFromSquare, faBuildingColumns
+  faArrowTrendUp, faStar, faArrowUpRightFromSquare, faBuildingColumns,
+  faCalendarDays
 } from '@fortawesome/free-solid-svg-icons'
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons'
 import { getRiskLevelConfig } from '../utils/risk'
@@ -79,9 +80,9 @@ export default function FundCard({ fund, index, isGrid }) {
               <p className="text-xs font-bold text-gray-800">{fund.aum || 'N/A'}</p>
             </div>
             <div className="bg-[#f7f9fc] rounded-xl p-2.5 text-center">
-              <FontAwesomeIcon icon={faCoins} className="text-amber-500 text-xs mb-1" />
-              <p className="text-[10px] text-gray-400 font-medium">Min. SIP</p>
-              <p className="text-xs font-bold text-gray-800">{fund.minInvestment != null ? `₹${fund.minInvestment.toLocaleString()}` : 'N/A'}</p>
+              <FontAwesomeIcon icon={faCalendarDays} className="text-amber-500 text-xs mb-1" />
+              <p className="text-[10px] text-gray-400 font-medium">Inception Date</p>
+              <p className="text-xs font-bold text-gray-800">{fund.launchDate || fund.inceptionDate || 'N/A'}</p>
             </div>
             <div className="bg-[#f7f9fc] rounded-xl p-2.5 text-center">
               <FontAwesomeIcon icon={faShieldHalved} className="text-gray-400 text-xs mb-1" />
@@ -150,7 +151,7 @@ export default function FundCard({ fund, index, isGrid }) {
                   <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${assetCls}`}>{fund.assetClass}</span>
                   <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#eef4ff] text-[#032e92]">{fund.category}</span>
                   {fund.isNew && (
-                    <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700 border border-green-200">🆕 New</span>
+                    <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700 border border-green-200">✨ New</span>
                   )}
                 </div>
               </div>
@@ -184,14 +185,14 @@ export default function FundCard({ fund, index, isGrid }) {
               </div>
             </div>
 
-            {/* Min Investment */}
+            {/* Inception Date */}
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-white border border-[#e8edf7] flex items-center justify-center flex-shrink-0">
-                <FontAwesomeIcon icon={faCoins} className="text-amber-500 text-xs" />
+                <FontAwesomeIcon icon={faCalendarDays} className="text-amber-500 text-xs" />
               </div>
               <div>
-                <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wide">Min. SIP</p>
-                <p className="text-sm font-bold text-gray-800">{fund.minInvestment != null ? `₹${fund.minInvestment.toLocaleString()}` : 'N/A'}</p>
+                <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wide">Inception Date</p>
+                <p className="text-sm font-bold text-gray-800">{fund.launchDate || fund.inceptionDate || 'N/A'}</p>
               </div>
             </div>
 
@@ -205,7 +206,6 @@ export default function FundCard({ fund, index, isGrid }) {
                 <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${risk.bg} ${risk.text} ${risk.border}`}>{risk.level !== 'N/A' ? `Level ${risk.level}` : 'N/A'}</span>
               </div>
             </div>
-
 
             {/* Expense Ratio */}
             <div className="flex items-center gap-2">

@@ -11,6 +11,7 @@ export default function CalculatorNav() {
     { name: 'SWP Calculator', path: '/calculators/swp' },
     { name: 'Lumpsum Calculator', path: '/calculators/lumpsum' },
     { name: 'Retirement Calculator', path: '/calculators/retirement' },
+    { name: 'Future Value', path: '/calculators/future-value' },
   ];
 
   return (

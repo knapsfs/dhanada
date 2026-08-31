@@ -6,6 +6,7 @@ import {
   faChartLine
 } from '@fortawesome/free-solid-svg-icons'
 import { motion, AnimatePresence } from 'framer-motion'
+import knapsLogo from '../assets/knaps-logo.png'
 import { useLeadModal } from '../context/LeadModalContext'
 
 const navLinks = [
@@ -29,6 +30,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState(null)
+  const [mobileDropdownOpen, setMobileDropdownOpen] = useState(null)
   const location = useLocation()
   const { openLeadModal } = useLeadModal()
 
@@ -38,20 +40,21 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  const toggleMobileDropdown = (label) => {
+    if (mobileDropdownOpen === label) {
+      setMobileDropdownOpen(null)
+    } else {
+      setMobileDropdownOpen(label)
+    }
+  }
+
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-white shadow-lg shadow-blue-900/10' : 'bg-white'}`}>
       <nav className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#032e92] to-[#0a4fd4] flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-              <FontAwesomeIcon icon={faChartLine} className="text-white text-sm" />
-            </div>
-            <div>
-              <span className="text-xl font-bold text-[#032e92]">SIF</span>
-              <span className="text-xl font-bold text-[#c10000]">invest</span>
-              <p className={`text-[9px] font-medium tracking-wider uppercase leading-none ${scrolled ? 'text-gray-400' : 'text-gray-300'}`}>Smart Investment Fund</p>
-            </div>
+          <Link to="/" className="flex items-center group">
+            <img src={knapsLogo} alt="Knaps" className="h-10 md:h-12 w-auto object-contain group-hover:scale-105 transition-transform" />
           </Link>
 
           {/* Desktop Nav */}
@@ -95,18 +98,6 @@ export default function Navbar() {
 
           {/* Right Actions */}
           <div className="hidden lg:flex items-center gap-3">
-            {/* <button className={`w-9 h-9 rounded-full flex items-center justify-center transition-all hover:bg-[#eef4ff] hover:text-[#032e92] ${scrolled ? 'text-gray-600' : 'text-gray-700'}`}>
-              <FontAwesomeIcon icon={faMagnifyingGlass} className="text-sm" />
-            </button>
-            <button className={`w-9 h-9 rounded-full flex items-center justify-center transition-all hover:bg-[#eef4ff] hover:text-[#032e92] ${scrolled ? 'text-gray-600' : 'text-gray-700'}`}>
-              <FontAwesomeIcon icon={faBell} className="text-sm" />
-            </button> */}
-            {/* <a href="#login" className={`px-5 py-2 rounded-full text-sm font-semibold border-2 transition-all duration-200 hover:shadow-md ${scrolled
-              ? 'border-[#032e92] text-[#032e92] hover:bg-[#032e92] hover:text-white'
-              : 'border-[#032e92] text-[#032e92] hover:bg-[#032e92] hover:text-white bg-white/80'
-              }`}>
-              Login
-            </a> */}
             <button onClick={openLeadModal} className="btn-ripple px-5 py-2 rounded-full text-sm font-semibold bg-[#032e92] text-white hover:bg-[#021d63] shadow-lg shadow-blue-900/30 transition-all duration-200 hover:shadow-xl hover:-translate-y-0.5">
               Invest Now
             </button>
@@ -129,14 +120,46 @@ export default function Navbar() {
               className="lg:hidden bg-white rounded-2xl mb-4 shadow-xl border border-gray-100 overflow-hidden">
               <div className="p-4 space-y-1">
                 {navLinks.map((link) => (
-                  <Link key={link.label} to={link.href}
-                    onClick={() => setMobileOpen(false)}
-                    className="block px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-[#eef4ff] hover:text-[#032e92] transition-colors">
-                    {link.label}
-                  </Link>
+                  <div key={link.label}>
+                    {link.dropdown ? (
+                      <div>
+                        <button 
+                          onClick={() => toggleMobileDropdown(link.label)}
+                          className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-[#eef4ff] hover:text-[#032e92] transition-colors">
+                          {link.label}
+                          <FontAwesomeIcon icon={faChevronDown} className={`text-[10px] transition-transform duration-200 ${mobileDropdownOpen === link.label ? 'rotate-180' : ''}`} />
+                        </button>
+                        <AnimatePresence>
+                          {mobileDropdownOpen === link.label && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              className="overflow-hidden"
+                            >
+                              <div className="pl-4 py-1 space-y-1 bg-gray-50/50 rounded-xl mt-1">
+                                {link.dropdown.map(item => (
+                                  <Link key={item.label} to={item.href}
+                                    onClick={() => setMobileOpen(false)}
+                                    className="block px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-[#eef4ff] hover:text-[#032e92] transition-colors">
+                                    {item.label}
+                                  </Link>
+                                ))}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    ) : (
+                      <Link to={link.href}
+                        onClick={() => setMobileOpen(false)}
+                        className="block px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-[#eef4ff] hover:text-[#032e92] transition-colors">
+                        {link.label}
+                      </Link>
+                    )}
+                  </div>
                 ))}
                 <div className="pt-3 flex gap-3">
-                  {/* <a href="#login" className="flex-1 text-center py-2.5 rounded-xl border-2 border-[#032e92] text-[#032e92] text-sm font-semibold">Login</a> */}
                   <button onClick={() => { setMobileOpen(false); openLeadModal(); }} className="flex-1 text-center py-2.5 rounded-xl bg-[#032e92] text-white text-sm font-semibold">Invest Now</button>
                 </div>
               </div>
@@ -147,5 +170,4 @@ export default function Navbar() {
     </header>
   )
 }
-
 
