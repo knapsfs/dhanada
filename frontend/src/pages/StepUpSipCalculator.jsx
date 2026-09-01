@@ -13,8 +13,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 
 // Step Up SIP Calculation
-function calculateStepUpSip(monthlyInvestment, stepUp, stepUpType = 'percentage', annualReturn, duration, isInflationAdjusted = false) {
+function calculateStepUpSip(monthlyInvestment, stepUp, stepUpType = 'percentage', annualReturn, duration, isInflationAdjusted = false, inflationRate = 5) {
   const i = (annualReturn / 12) / 100
+  const infRate = Number(inflationRate) / 100
   let totalInvested = 0
   let futureValue = 0
 
@@ -24,7 +25,7 @@ function calculateStepUpSip(monthlyInvestment, stepUp, stepUpType = 'percentage'
     if (stepUpType === 'amount') {
       py = monthlyInvestment + (y - 1) * stepUp
     } else {
-      py = monthlyInvestment * Math.pow(1 + stepUp / 100, y - 1)
+      py = monthlyInvestment * Math.pow(1 + Math.min(stepUp, 100) / 100, y - 1)
     }
 
     totalInvested += py * 12
@@ -42,7 +43,7 @@ function calculateStepUpSip(monthlyInvestment, stepUp, stepUpType = 'percentage'
   }
 
   if (isInflationAdjusted && duration > 0) {
-    futureValue = futureValue / Math.pow(1 + 0.05, duration)
+    futureValue = futureValue / Math.pow(1 + infRate, duration)
   }
 
   const wealthGained = Math.max(0, futureValue - totalInvested)
@@ -54,10 +55,11 @@ function calculateStepUpSip(monthlyInvestment, stepUp, stepUpType = 'percentage'
   }
 }
 
-function calculateYearlyData(monthlyInvestment, stepUp, stepUpType = 'percentage', annualReturn, duration, isInflationAdjusted = false) {
+function calculateYearlyData(monthlyInvestment, stepUp, stepUpType = 'percentage', annualReturn, duration, isInflationAdjusted = false, inflationRate = 5) {
   const i = (annualReturn / 12) / 100
+  const infRate = Number(inflationRate) / 100
   const yearlyData = []
-
+  
   let cumulativeInvested = 0
 
   for (let k = 1; k <= duration; k++) {
@@ -66,7 +68,7 @@ function calculateYearlyData(monthlyInvestment, stepUp, stepUpType = 'percentage
     if (stepUpType === 'amount') {
       currentYearSip = monthlyInvestment + (k - 1) * stepUp
     } else {
-      currentYearSip = monthlyInvestment * Math.pow(1 + stepUp / 100, k - 1)
+      currentYearSip = monthlyInvestment * Math.pow(1 + Math.min(stepUp, 100) / 100, k - 1)
     }
 
     cumulativeInvested += currentYearSip * 12
@@ -78,7 +80,7 @@ function calculateYearlyData(monthlyInvestment, stepUp, stepUpType = 'percentage
       if (stepUpType === 'amount') {
         py = monthlyInvestment + (y - 1) * stepUp
       } else {
-        py = monthlyInvestment * Math.pow(1 + stepUp / 100, y - 1)
+        py = monthlyInvestment * Math.pow(1 + Math.min(stepUp, 100) / 100, y - 1)
       }
 
       const months_left = 12 * (k - y)
@@ -92,7 +94,7 @@ function calculateYearlyData(monthlyInvestment, stepUp, stepUpType = 'percentage
     }
 
     if (isInflationAdjusted) {
-      endOfYearValue = endOfYearValue / Math.pow(1 + 0.05, k)
+      endOfYearValue = endOfYearValue / Math.pow(1 + infRate, k)
     }
 
     const gain = Math.max(0, endOfYearValue - cumulativeInvested)
@@ -112,7 +114,8 @@ function calculateYearlyData(monthlyInvestment, stepUp, stepUpType = 'percentage
 const DEFAULT_INPUTS = {
   monthlyInvestment: 25000,
   stepUpType: 'percentage',
-  stepUp: 10,
+  stepUpPct: 10,
+  stepUpAmt: 2000,
   annualReturn: 12,
   duration: 10,
 }
@@ -140,20 +143,25 @@ function Disclaimer() {
 export default function StepUpSipCalculator() {
   const [inputs, setInputs] = useState(DEFAULT_INPUTS)
   const [isInflationAdjusted, setIsInflationAdjusted] = useState(false)
+  const [inflationRate, setInflationRate] = useState(5)
 
   const numMonthly = inputs.monthlyInvestment === '' ? 0 : Number(inputs.monthlyInvestment)
-  const numStepUp = inputs.stepUp === '' ? 0 : Number(inputs.stepUp)
   const numReturn = inputs.annualReturn === '' ? 0 : Number(inputs.annualReturn)
   const numDuration = inputs.duration === '' ? 0 : Number(inputs.duration)
+  const numInflation = inflationRate === '' ? 0 : Number(inflationRate)
+
+  const activeStepUp = inputs.stepUpType === 'amount'
+    ? (inputs.stepUpAmt === '' ? 0 : Math.max(0, Number(inputs.stepUpAmt)))
+    : (inputs.stepUpPct === '' ? 0 : Math.min(100, Math.max(0, Number(inputs.stepUpPct))))
 
   const results = useMemo(
-    () => calculateStepUpSip(numMonthly, numStepUp, inputs.stepUpType, numReturn, numDuration, isInflationAdjusted),
-    [numMonthly, numStepUp, inputs.stepUpType, numReturn, numDuration, isInflationAdjusted]
+    () => calculateStepUpSip(numMonthly, activeStepUp, inputs.stepUpType, numReturn, numDuration, isInflationAdjusted, numInflation),
+    [numMonthly, activeStepUp, inputs.stepUpType, numReturn, numDuration, isInflationAdjusted, numInflation]
   )
 
   const yearlyData = useMemo(
-    () => calculateYearlyData(numMonthly, numStepUp, inputs.stepUpType, numReturn, numDuration, isInflationAdjusted),
-    [numMonthly, numStepUp, inputs.stepUpType, numReturn, numDuration, isInflationAdjusted]
+    () => calculateYearlyData(numMonthly, activeStepUp, inputs.stepUpType, numReturn, numDuration, isInflationAdjusted, numInflation),
+    [numMonthly, activeStepUp, inputs.stepUpType, numReturn, numDuration, isInflationAdjusted, numInflation]
   )
 
   return (
@@ -165,15 +173,19 @@ export default function StepUpSipCalculator() {
         <StepUpSipHero />
 
         {/* Calculator Form */}
-        <StepUpSipCalculatorForm
-          inputs={inputs}
-          setInputs={setInputs}
-          isInflationAdjusted={isInflationAdjusted}
-          setIsInflationAdjusted={setIsInflationAdjusted}
+        <StepUpSipCalculatorForm 
+          inputs={inputs} 
+          setInputs={setInputs} 
         />
 
-        {/* Summary Cards */}
-        <StepUpSipSummaryCards results={results} />
+        {/* Summary Cards with Inflation Control in Estimated Value card */}
+        <StepUpSipSummaryCards 
+          results={results}
+          isInflationAdjusted={isInflationAdjusted}
+          setIsInflationAdjusted={setIsInflationAdjusted}
+          inflationRate={inflationRate}
+          setInflationRate={setInflationRate}
+        />
 
         {/* Growth Chart */}
         <StepUpSipGrowthChart yearlyData={yearlyData} results={results} />

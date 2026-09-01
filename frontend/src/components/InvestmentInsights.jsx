@@ -34,7 +34,7 @@ function doublingYears(rate) {
 
 export default function InvestmentInsights({ inputs, results }) {
   const { ref, inView } = useInView({ triggerOnce: true })
-
+  
   const sipAmount = inputs.sipAmount === '' ? 0 : Number(inputs.sipAmount)
   const annualReturn = inputs.annualReturn === '' ? 0 : Number(inputs.annualReturn)
   const duration = inputs.duration === '' ? 0 : Number(inputs.duration)
@@ -56,7 +56,7 @@ export default function InvestmentInsights({ inputs, results }) {
       color: 'text-[#032e92]',
       bg: 'bg-[#eef4ff]',
       title: 'Doubling Rule',
-      text: annualReturn > 0
+      text: annualReturn > 0 
         ? `At ${annualReturn}% annual return, your investment doubles approximately every ${doubling} years (Rule of 72).`
         : `Enter expected annual return to see doubling timeline.`,
     },

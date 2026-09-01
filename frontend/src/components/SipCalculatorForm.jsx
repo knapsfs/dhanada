@@ -54,7 +54,7 @@ function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onCh
   )
 }
 
-export default function SipCalculatorForm({ inputs, setInputs, isInflationAdjusted, setIsInflationAdjusted }) {
+export default function SipCalculatorForm({ inputs, setInputs }) {
   const handleChange = (key, val) => setInputs(prev => ({ ...prev, [key]: val }))
 
   return (
@@ -66,36 +66,14 @@ export default function SipCalculatorForm({ inputs, setInputs, isInflationAdjust
           transition={{ duration: 0.6 }}
           className="bg-white rounded-3xl shadow-xl shadow-blue-900/8 border border-[#e8edf7] p-6 lg:p-8">
 
-          {/* Header with Title and Inflation Adjusted Toggle */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-[#e8edf7]">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-[#eef4ff] flex items-center justify-center">
-                <FontAwesomeIcon icon={faCalculator} className="text-[#032e92] text-sm" />
-              </div>
-              <div>
-                <h2 className="font-bold text-gray-800 text-lg">SIP Calculator</h2>
-                <p className="text-xs text-gray-400 font-medium">Results update instantly as you type</p>
-              </div>
+          {/* Header with Title */}
+          <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[#e8edf7]">
+            <div className="w-10 h-10 rounded-2xl bg-[#eef4ff] flex items-center justify-center">
+              <FontAwesomeIcon icon={faCalculator} className="text-[#032e92] text-sm" />
             </div>
-
-            {/* Inflation Adjusted Toggle */}
-            <div className="flex items-center gap-2.5 bg-[#f7f9fc] px-4 py-2 rounded-2xl border border-[#e8edf7] self-start sm:self-auto">
-              <span className="text-xs font-semibold text-gray-600">Inflation-Adjusted @5% p.a.</span>
-              <button
-                type="button"
-                role="switch"
-                aria-checked={isInflationAdjusted}
-                onClick={() => setIsInflationAdjusted(!isInflationAdjusted)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus:outline-none cursor-pointer ${
-                  isInflationAdjusted ? 'bg-[#ff5722]' : 'bg-gray-200 hover:bg-gray-300'
-                }`}
-              >
-                <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 shadow-md ${
-                    isInflationAdjusted ? 'translate-x-6' : 'translate-x-1'
-                  }`}
-                />
-              </button>
+            <div>
+              <h2 className="font-bold text-gray-800 text-lg">SIP Calculator</h2>
+              <p className="text-xs text-gray-400 font-medium">Results update instantly as you type</p>
             </div>
           </div>
 

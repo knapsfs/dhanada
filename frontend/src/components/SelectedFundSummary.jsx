@@ -8,11 +8,10 @@ export default function SelectedFundSummary({ selectedFunds }) {
 
   return (
     <div className="mb-12">
-      <div className={`grid gap-6 ${
-        activeFunds.length === 1 ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 
-        activeFunds.length === 2 ? 'grid-cols-1 md:grid-cols-2' : 
-        'grid-cols-1 md:grid-cols-3'
-      }`}>
+      <div className={`grid gap-6 ${activeFunds.length === 1 ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' :
+        activeFunds.length === 2 ? 'grid-cols-1 md:grid-cols-2' :
+          'grid-cols-1 md:grid-cols-3'
+        }`}>
         {activeFunds.map((fund, index) => (
           <motion.div
             key={`${fund.id}-${index}`}
@@ -24,7 +23,7 @@ export default function SelectedFundSummary({ selectedFunds }) {
             <div className="flex-1">
               <h3 className="text-lg font-bold text-[#1e293b] leading-snug mb-1">{fund.name}</h3>
               <p className="text-[#64748b] text-xs font-semibold mb-6 uppercase tracking-wide">{fund.category}</p>
-              
+
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="bg-[#f7f9fc] rounded-xl p-3 border border-[#e8edf7]">
                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">NAV</p>
@@ -44,18 +43,17 @@ export default function SelectedFundSummary({ selectedFunds }) {
                 </div>
               </div>
             </div>
-            
+
             <div className="mt-auto pt-6 border-t border-[#e8edf7] flex items-center justify-between">
-              <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${
-                fund.risk === 'Low' ? 'bg-green-100 text-green-700' :
+              <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${fund.risk === 'Low' ? 'bg-green-100 text-green-700' :
                 fund.risk === 'Moderate' ? 'bg-blue-100 text-blue-700' :
-                fund.risk === 'High' ? 'bg-yellow-100 text-yellow-700' :
-                'bg-red-100 text-red-700'
-              }`}>
+                  fund.risk === 'High' ? 'bg-yellow-100 text-yellow-700' :
+                    'bg-red-100 text-red-700'
+                }`}>
                 {fund.risk}
               </span>
-              <Link 
-                to={`/funds/${encodeURIComponent(fund.id || fund.scheme_code || fund.name)}`} 
+              <Link
+                to={`/funds/${encodeURIComponent(fund.id || fund.scheme_code || fund.name)}`}
                 className="text-[#032e92] text-sm font-bold hover:text-[#c10000] transition-colors"
               >
                 View Details

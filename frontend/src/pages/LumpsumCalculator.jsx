@@ -13,14 +13,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 
 // Lumpsum Calculation
-function calculateLumpsum(totalInvestment, annualReturn, duration, isInflationAdjusted = false) {
+function calculateLumpsum(totalInvestment, annualReturn, duration, isInflationAdjusted = false, inflationRate = 5) {
   const r = annualReturn / 100
   const n = duration
+  const infRate = Number(inflationRate) / 100
 
   let futureValue = totalInvestment * Math.pow(1 + r, n)
 
   if (isInflationAdjusted && duration > 0) {
-    futureValue = futureValue / Math.pow(1 + 0.05, duration)
+    futureValue = futureValue / Math.pow(1 + infRate, duration)
   }
 
   const wealthGained = Math.max(0, futureValue - totalInvestment)
@@ -32,15 +33,16 @@ function calculateLumpsum(totalInvestment, annualReturn, duration, isInflationAd
   }
 }
 
-function calculateYearlyData(totalInvestment, annualReturn, duration, isInflationAdjusted = false) {
+function calculateYearlyData(totalInvestment, annualReturn, duration, isInflationAdjusted = false, inflationRate = 5) {
   const r = annualReturn / 100
-
+  const infRate = Number(inflationRate) / 100
+  
   return Array.from({ length: duration }, (_, i) => {
     const year = i + 1
     let value = totalInvestment * Math.pow(1 + r, year)
-
+    
     if (isInflationAdjusted) {
-      value = value / Math.pow(1 + 0.05, year)
+      value = value / Math.pow(1 + infRate, year)
     }
 
     const gain = Math.max(0, value - totalInvestment)
@@ -83,19 +85,21 @@ function Disclaimer() {
 export default function LumpsumCalculator() {
   const [inputs, setInputs] = useState(DEFAULT_INPUTS)
   const [isInflationAdjusted, setIsInflationAdjusted] = useState(false)
+  const [inflationRate, setInflationRate] = useState(5)
 
   const numInvestment = inputs.totalInvestment === '' ? 0 : Number(inputs.totalInvestment)
   const numReturn = inputs.annualReturn === '' ? 0 : Number(inputs.annualReturn)
   const numDuration = inputs.duration === '' ? 0 : Number(inputs.duration)
+  const numInflation = inflationRate === '' ? 0 : Number(inflationRate)
 
   const results = useMemo(
-    () => calculateLumpsum(numInvestment, numReturn, numDuration, isInflationAdjusted),
-    [numInvestment, numReturn, numDuration, isInflationAdjusted]
+    () => calculateLumpsum(numInvestment, numReturn, numDuration, isInflationAdjusted, numInflation),
+    [numInvestment, numReturn, numDuration, isInflationAdjusted, numInflation]
   )
 
   const yearlyData = useMemo(
-    () => calculateYearlyData(numInvestment, numReturn, numDuration, isInflationAdjusted),
-    [numInvestment, numReturn, numDuration, isInflationAdjusted]
+    () => calculateYearlyData(numInvestment, numReturn, numDuration, isInflationAdjusted, numInflation),
+    [numInvestment, numReturn, numDuration, isInflationAdjusted, numInflation]
   )
 
   return (
@@ -107,15 +111,19 @@ export default function LumpsumCalculator() {
         <LumpsumHero />
 
         {/* Calculator Form */}
-        <LumpsumCalculatorForm
-          inputs={inputs}
-          setInputs={setInputs}
-          isInflationAdjusted={isInflationAdjusted}
-          setIsInflationAdjusted={setIsInflationAdjusted}
+        <LumpsumCalculatorForm 
+          inputs={inputs} 
+          setInputs={setInputs} 
         />
 
-        {/* Summary Cards */}
-        <LumpsumSummaryCards results={results} />
+        {/* Summary Cards with Inflation Control in Estimated Value card */}
+        <LumpsumSummaryCards 
+          results={results}
+          isInflationAdjusted={isInflationAdjusted}
+          setIsInflationAdjusted={setIsInflationAdjusted}
+          inflationRate={inflationRate}
+          setInflationRate={setInflationRate}
+        />
 
         {/* Growth Chart */}
         <LumpsumGrowthChart yearlyData={yearlyData} results={results} />

@@ -54,8 +54,10 @@ function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onCh
   )
 }
 
-export default function StepUpSipCalculatorForm({ inputs, setInputs, isInflationAdjusted, setIsInflationAdjusted }) {
+export default function StepUpSipCalculatorForm({ inputs, setInputs }) {
   const handleChange = (key, val) => setInputs(prev => ({ ...prev, [key]: val }))
+
+  const isPct = inputs.stepUpType !== 'amount'
 
   return (
     <section className="bg-[#f7f9fc] pb-6">
@@ -66,36 +68,14 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs, isInflation
           transition={{ duration: 0.6 }}
           className="bg-white rounded-3xl shadow-xl shadow-blue-900/8 border border-[#e8edf7] p-6 lg:p-8">
 
-          {/* Header with Title and Inflation Adjusted Toggle */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-[#e8edf7]">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-[#eef4ff] flex items-center justify-center">
-                <FontAwesomeIcon icon={faCalculator} className="text-[#032e92] text-sm" />
-              </div>
-              <div>
-                <h2 className="font-bold text-gray-800 text-lg">Step Up SIP Calculator</h2>
-                <p className="text-xs text-gray-400 font-medium">Results update instantly as you type</p>
-              </div>
+          {/* Header with Title */}
+          <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[#e8edf7]">
+            <div className="w-10 h-10 rounded-2xl bg-[#eef4ff] flex items-center justify-center">
+              <FontAwesomeIcon icon={faCalculator} className="text-[#032e92] text-sm" />
             </div>
-
-            {/* Inflation Adjusted Toggle */}
-            <div className="flex items-center gap-2.5 bg-[#f7f9fc] px-4 py-2 rounded-2xl border border-[#e8edf7] self-start sm:self-auto">
-              <span className="text-xs font-semibold text-gray-600">Inflation-Adjusted @5% p.a.</span>
-              <button
-                type="button"
-                role="switch"
-                aria-checked={isInflationAdjusted}
-                onClick={() => setIsInflationAdjusted(!isInflationAdjusted)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus:outline-none cursor-pointer ${
-                  isInflationAdjusted ? 'bg-[#ff5722]' : 'bg-gray-200 hover:bg-gray-300'
-                }`}
-              >
-                <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 shadow-md ${
-                    isInflationAdjusted ? 'translate-x-6' : 'translate-x-1'
-                  }`}
-                />
-              </button>
+            <div>
+              <h2 className="font-bold text-gray-800 text-lg">Step Up SIP Calculator</h2>
+              <p className="text-xs text-gray-400 font-medium">Results update instantly as you type</p>
             </div>
           </div>
 
@@ -113,87 +93,121 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs, isInflation
               hint="Initial monthly SIP amount"
             />
 
-            {/* Annual Step Up Field with % vs ₹ Toggle */}
+            {/* Annual Step Up - Split Two-Part Input (Percentage & Amount) */}
             <div className="flex flex-col gap-1.5">
-              <div className="flex items-center justify-between">
-                <label htmlFor="step-up" className="text-xs font-bold text-gray-500 uppercase tracking-wide flex items-center gap-1.5">
-                  Annual Step Up
-                  <span title="Increase your SIP every year by a fixed percentage or amount" className="cursor-help">
-                    <FontAwesomeIcon icon={faCircleInfo} className="text-gray-300 text-xs" />
-                  </span>
-                </label>
+              <label className="text-xs font-bold text-gray-500 uppercase tracking-wide flex items-center gap-1.5">
+                Annual Step Up
+                <span title="Increase your SIP every year by percentage or fixed amount" className="cursor-help">
+                  <FontAwesomeIcon icon={faCircleInfo} className="text-gray-300 text-xs" />
+                </span>
+              </label>
 
-                {/* Step Up Mode Toggle Buttons */}
-                <div className="inline-flex rounded-lg p-0.5 bg-[#eef4ff] border border-blue-100">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (inputs.stepUpType !== 'percentage') {
-                        setInputs(prev => ({ ...prev, stepUpType: 'percentage', stepUp: 10 }))
+              {/* Divided Input Container */}
+              <div className="grid grid-cols-2 gap-1.5 bg-[#f7f9fc] p-1 rounded-xl border-2 border-[#e8edf7]">
+                
+                {/* 1. Percentage Half */}
+                <div
+                  onClick={() => {
+                    if (!isPct) {
+                      setInputs(prev => ({ ...prev, stepUpType: 'percentage' }))
+                    }
+                  }}
+                  className={`relative flex items-center rounded-lg px-2.5 py-2 transition-all cursor-pointer ${
+                    isPct
+                      ? 'bg-white shadow-sm border border-[#032e92]/30 ring-2 ring-[#032e92]/10'
+                      : 'bg-transparent opacity-40 hover:opacity-75'
+                  }`}
+                >
+                  <input
+                    id="step-up-pct"
+                    type="number"
+                    min={1}
+                    max={50}
+                    step={1}
+                    value={inputs.stepUpPct === '' ? '' : (inputs.stepUpPct ?? 10)}
+                    onChange={(e) => {
+                      const val = e.target.value
+                      setInputs(prev => ({
+                        ...prev,
+                        stepUpType: 'percentage',
+                        stepUpPct: val === '' ? '' : Number(val)
+                      }))
+                    }}
+                    onFocus={() => {
+                      if (!isPct) {
+                        setInputs(prev => ({ ...prev, stepUpType: 'percentage' }))
                       }
                     }}
-                    className={`px-2.5 py-0.5 rounded-md text-[11px] font-bold transition-all ${
-                      inputs.stepUpType !== 'amount'
-                        ? 'bg-[#032e92] text-white shadow-sm'
-                        : 'text-gray-500 hover:text-[#032e92]'
-                    }`}
-                  >
-                    %
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (inputs.stepUpType !== 'amount') {
-                        setInputs(prev => ({ ...prev, stepUpType: 'amount', stepUp: 2000 }))
+                    className="w-full bg-transparent text-gray-800 font-bold text-sm sm:text-base focus:outline-none pr-4 cursor-pointer"
+                    placeholder="10"
+                  />
+                  <span className="absolute right-2 text-xs font-bold text-gray-500 pointer-events-none">%</span>
+                </div>
+
+                {/* 2. Amount Half */}
+                <div
+                  onClick={() => {
+                    if (isPct) {
+                      setInputs(prev => ({ ...prev, stepUpType: 'amount' }))
+                    }
+                  }}
+                  className={`relative flex items-center rounded-lg px-2.5 py-2 transition-all cursor-pointer ${
+                    !isPct
+                      ? 'bg-white shadow-sm border border-[#032e92]/30 ring-2 ring-[#032e92]/10'
+                      : 'bg-transparent opacity-40 hover:opacity-75'
+                  }`}
+                >
+                  <span className="absolute left-2 text-xs font-bold text-gray-500 pointer-events-none">₹</span>
+                  <input
+                    id="step-up-amt"
+                    type="number"
+                    min={500}
+                    max={100000}
+                    step={500}
+                    value={inputs.stepUpAmt === '' ? '' : (inputs.stepUpAmt ?? 2000)}
+                    onChange={(e) => {
+                      const val = e.target.value
+                      setInputs(prev => ({
+                        ...prev,
+                        stepUpType: 'amount',
+                        stepUpAmt: val === '' ? '' : Number(val)
+                      }))
+                    }}
+                    onFocus={() => {
+                      if (isPct) {
+                        setInputs(prev => ({ ...prev, stepUpType: 'amount' }))
                       }
                     }}
-                    className={`px-2.5 py-0.5 rounded-md text-[11px] font-bold transition-all ${
-                      inputs.stepUpType === 'amount'
-                        ? 'bg-[#032e92] text-white shadow-sm'
-                        : 'text-gray-500 hover:text-[#032e92]'
-                    }`}
-                  >
-                    ₹
-                  </button>
+                    className="w-full bg-transparent text-gray-800 font-bold text-sm sm:text-base focus:outline-none pl-3.5 cursor-pointer"
+                    placeholder="2000"
+                  />
                 </div>
               </div>
 
-              <div className="relative flex items-center">
-                {inputs.stepUpType === 'amount' && (
-                  <span className="absolute left-3.5 text-sm font-bold text-gray-500 pointer-events-none z-10">₹</span>
-                )}
-                <input
-                  id="step-up"
-                  type="number"
-                  value={inputs.stepUp === '' || inputs.stepUp === null || inputs.stepUp === undefined ? '' : inputs.stepUp}
-                  min={inputs.stepUpType === 'amount' ? 500 : 1}
-                  max={inputs.stepUpType === 'amount' ? 100000 : 50}
-                  step={inputs.stepUpType === 'amount' ? 500 : 1}
-                  onChange={e => {
-                    const val = e.target.value
-                    handleChange('stepUp', val === '' ? '' : Number(val))
-                  }}
-                  className={`w-full py-3.5 rounded-xl border-2 border-[#e8edf7] bg-[#f7f9fc] text-gray-800 font-bold text-base focus:outline-none focus:border-[#032e92] focus:ring-4 focus:ring-[#032e92]/8 transition-all placeholder-gray-400 ${
-                    inputs.stepUpType === 'amount' ? 'pl-8 pr-4' : 'pl-4 pr-12'
-                  }`}
-                  placeholder=""
-                />
-                {inputs.stepUpType !== 'amount' && (
-                  <span className="absolute right-3.5 text-sm font-bold text-gray-500 pointer-events-none">%</span>
-                )}
-              </div>
+              {/* Dynamic Range Slider */}
               <input
                 type="range"
-                min={inputs.stepUpType === 'amount' ? 500 : 1}
-                max={inputs.stepUpType === 'amount' ? 100000 : 50}
-                step={inputs.stepUpType === 'amount' ? 500 : 1}
-                value={inputs.stepUp === '' ? (inputs.stepUpType === 'amount' ? 500 : 1) : inputs.stepUp}
-                onChange={e => handleChange('stepUp', Number(e.target.value))}
+                min={isPct ? 1 : 500}
+                max={isPct ? 50 : 100000}
+                step={isPct ? 1 : 500}
+                value={
+                  isPct
+                    ? (inputs.stepUpPct === '' ? 1 : (inputs.stepUpPct ?? 10))
+                    : (inputs.stepUpAmt === '' ? 500 : (inputs.stepUpAmt ?? 2000))
+                }
+                onChange={e => {
+                  const val = Number(e.target.value)
+                  if (isPct) {
+                    setInputs(prev => ({ ...prev, stepUpPct: val }))
+                  } else {
+                    setInputs(prev => ({ ...prev, stepUpAmt: val }))
+                  }
+                }}
                 className="w-full h-1.5 rounded-full accent-[#032e92] cursor-pointer mt-1"
               />
               <div className="flex justify-between text-[10px] text-gray-400 font-medium">
-                <span>{inputs.stepUpType === 'amount' ? '₹500' : '1%'}</span>
-                <span>{inputs.stepUpType === 'amount' ? '₹1,00,000' : '50%'}</span>
+                <span>{isPct ? '1%' : '₹500'}</span>
+                <span>{isPct ? '50%' : '₹1,00,000'}</span>
               </div>
             </div>
 

@@ -24,9 +24,9 @@ export default function FutureValueCalculator() {
   // Default to end of month internally without showing it to user
   const paymentTiming = 'end';
 
-  // Inflation adjusted toggle state (fixed at 5% rate as required)
+  // Adjustable inflation rate state (defaults to 5%)
   const [isInflationAdjusted, setIsInflationAdjusted] = useState(false);
-  const inflationRate = 5;
+  const [inflationRate, setInflationRate] = useState(5);
 
   const resetDefaults = () => {
     setInitialInvestment(100000);
@@ -35,6 +35,7 @@ export default function FutureValueCalculator() {
     setAnnualReturn(12);
     setYears(15);
     setIsInflationAdjusted(false);
+    setInflationRate(5);
   };
 
   const results = useMemo(() => {
@@ -43,6 +44,7 @@ export default function FutureValueCalculator() {
     const numTarget = targetFutureValue === '' ? 0 : Number(targetFutureValue);
     const numAnnual = annualReturn === '' ? 0 : Number(annualReturn);
     const numYears = years === '' ? 0 : Number(years);
+    const numInflation = inflationRate === '' ? 0 : Number(inflationRate);
 
     // Determine the actual initial investment based on mode
     const activeInitialInvestment = calcMode === 'fv' ? numInitial : 0;
@@ -56,7 +58,7 @@ export default function FutureValueCalculator() {
         frequency: frequency,
         timing: paymentTiming,
         isInflationAdjusted,
-        inflationRate
+        inflationRate: numInflation
       });
     } else {
       return calculateRequiredInvestment({
@@ -67,10 +69,10 @@ export default function FutureValueCalculator() {
         frequency: frequency,
         timing: paymentTiming,
         isInflationAdjusted,
-        inflationRate
+        inflationRate: numInflation
       });
     }
-  }, [calcMode, initialInvestment, recurringInvestment, targetFutureValue, annualReturn, years, paymentTiming, isInflationAdjusted]);
+  }, [calcMode, initialInvestment, recurringInvestment, targetFutureValue, annualReturn, years, paymentTiming, isInflationAdjusted, inflationRate]);
 
   const chartData = useMemo(() => {
     const numInitial = initialInvestment === '' ? 0 : Number(initialInvestment);
@@ -78,6 +80,7 @@ export default function FutureValueCalculator() {
     const numTarget = targetFutureValue === '' ? 0 : Number(targetFutureValue);
     const numAnnual = annualReturn === '' ? 0 : Number(annualReturn);
     const numYears = years === '' ? 0 : Number(years);
+    const numInflation = inflationRate === '' ? 0 : Number(inflationRate);
 
     const activeInitialInvestment = calcMode === 'fv' ? numInitial : 0;
     return generateChartData({
@@ -90,9 +93,9 @@ export default function FutureValueCalculator() {
       frequency: frequency,
       timing: paymentTiming,
       isInflationAdjusted,
-      inflationRate
+      inflationRate: numInflation
     });
-  }, [calcMode, initialInvestment, recurringInvestment, targetFutureValue, annualReturn, years, paymentTiming, isInflationAdjusted]);
+  }, [calcMode, initialInvestment, recurringInvestment, targetFutureValue, annualReturn, years, paymentTiming, isInflationAdjusted, inflationRate]);
 
   return (
     <div className="bg-[#f7f9fc] w-full" id="future-value-calculator">
@@ -178,6 +181,8 @@ export default function FutureValueCalculator() {
                   results={results}
                   isInflationAdjusted={isInflationAdjusted}
                   setIsInflationAdjusted={setIsInflationAdjusted}
+                  inflationRate={inflationRate}
+                  setInflationRate={setInflationRate}
                 />
 
                 <GrowthChart chartData={chartData} />

@@ -16,7 +16,7 @@ import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 // Standard Monthly SIP Calculation
 // i = annual_rate / 12 / 100
 // FV = P * [ (1 + i)^n - 1 ] / i
-function calculateSIP(sipAmount, annualReturn, duration, isInflationAdjusted = false) {
+function calculateSIP(sipAmount, annualReturn, duration, isInflationAdjusted = false, inflationRate = 5) {
   const i = (annualReturn / 12) / 100
   const n = duration * 12
   const totalInvested = sipAmount * n
@@ -28,14 +28,15 @@ function calculateSIP(sipAmount, annualReturn, duration, isInflationAdjusted = f
     futureValue = sipAmount * ((Math.pow(1 + i, n) - 1) / i)
   }
 
+  const infRate = Number(inflationRate) / 100
   if (isInflationAdjusted && duration > 0) {
-    futureValue = futureValue / Math.pow(1 + 0.05, duration)
+    futureValue = futureValue / Math.pow(1 + infRate, duration)
   }
 
   const wealthGained = Math.max(0, futureValue - totalInvested)
   const absoluteReturn = totalInvested > 0 ? (wealthGained / totalInvested) * 100 : 0
-  const expectedReturn = isInflationAdjusted
-    ? ((1 + annualReturn / 100) / 1.05 - 1) * 100
+  const expectedReturn = isInflationAdjusted 
+    ? ((1 + annualReturn / 100) / (1 + infRate) - 1) * 100 
     : annualReturn
 
   return {
@@ -48,8 +49,9 @@ function calculateSIP(sipAmount, annualReturn, duration, isInflationAdjusted = f
   }
 }
 
-function calculateYearlyData(sipAmount, annualReturn, duration, isInflationAdjusted = false) {
+function calculateYearlyData(sipAmount, annualReturn, duration, isInflationAdjusted = false, inflationRate = 5) {
   const i = (annualReturn / 12) / 100
+  const infRate = Number(inflationRate) / 100
   return Array.from({ length: duration }, (_, idx) => {
     const year = idx + 1
     const n = year * 12
@@ -61,16 +63,16 @@ function calculateYearlyData(sipAmount, annualReturn, duration, isInflationAdjus
       fv = sipAmount * ((Math.pow(1 + i, n) - 1) / i)
     }
     if (isInflationAdjusted) {
-      fv = fv / Math.pow(1 + 0.05, year)
+      fv = fv / Math.pow(1 + infRate, year)
     }
     const gain = Math.max(0, fv - invested)
     const returnPct = invested > 0 ? (gain / invested) * 100 : 0
-    return {
-      year,
-      invested: Math.round(invested),
-      value: Math.round(fv),
-      gain: Math.round(gain),
-      returnPct
+    return { 
+      year, 
+      invested: Math.round(invested), 
+      value: Math.round(fv), 
+      gain: Math.round(gain), 
+      returnPct 
     }
   })
 }
@@ -104,19 +106,21 @@ function Disclaimer() {
 export default function SipCalculator() {
   const [inputs, setInputs] = useState(DEFAULT_INPUTS)
   const [isInflationAdjusted, setIsInflationAdjusted] = useState(false)
+  const [inflationRate, setInflationRate] = useState(5)
 
   const numSip = inputs.sipAmount === '' ? 0 : Number(inputs.sipAmount)
   const numReturn = inputs.annualReturn === '' ? 0 : Number(inputs.annualReturn)
   const numDuration = inputs.duration === '' ? 0 : Number(inputs.duration)
+  const numInflation = inflationRate === '' ? 0 : Number(inflationRate)
 
   const results = useMemo(
-    () => calculateSIP(numSip, numReturn, numDuration, isInflationAdjusted),
-    [numSip, numReturn, numDuration, isInflationAdjusted]
+    () => calculateSIP(numSip, numReturn, numDuration, isInflationAdjusted, numInflation),
+    [numSip, numReturn, numDuration, isInflationAdjusted, numInflation]
   )
 
   const yearlyData = useMemo(
-    () => calculateYearlyData(numSip, numReturn, numDuration, isInflationAdjusted),
-    [numSip, numReturn, numDuration, isInflationAdjusted]
+    () => calculateYearlyData(numSip, numReturn, numDuration, isInflationAdjusted, numInflation),
+    [numSip, numReturn, numDuration, isInflationAdjusted, numInflation]
   )
 
   return (
@@ -128,15 +132,19 @@ export default function SipCalculator() {
         <SipHero />
 
         {/* Calculator Form */}
-        <SipCalculatorForm
-          inputs={inputs}
-          setInputs={setInputs}
-          isInflationAdjusted={isInflationAdjusted}
-          setIsInflationAdjusted={setIsInflationAdjusted}
+        <SipCalculatorForm 
+          inputs={inputs} 
+          setInputs={setInputs} 
         />
 
-        {/* Summary Cards */}
-        <SipSummaryCards results={results} />
+        {/* Summary Cards with Inflation Control in Estimated Value card */}
+        <SipSummaryCards 
+          results={results}
+          isInflationAdjusted={isInflationAdjusted}
+          setIsInflationAdjusted={setIsInflationAdjusted}
+          inflationRate={inflationRate}
+          setInflationRate={setInflationRate}
+        />
 
         {/* Growth Chart */}
         <SipGrowthChart yearlyData={yearlyData} inputs={inputs} results={results} />
