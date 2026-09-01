@@ -67,8 +67,8 @@ const cards = [
     decimals: 0,
   },
   {
-    key: 'absoluteReturn',
-    label: 'Absolute Return',
+    key: 'expectedReturn',
+    label: 'Expected Return',
     icon: faPercent,
     color: 'text-amber-600',
     bg: 'bg-amber-50',

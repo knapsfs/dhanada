@@ -2,7 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleInfo, faRotateRight } from '@fortawesome/free-solid-svg-icons';
 
-function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onChange, hint }) {
+function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onChange, hint, placeholder = '' }) {
   return (
     <div className="flex flex-col gap-1.5 mb-6">
       <label htmlFor={id} className="text-xs font-bold text-gray-500 uppercase tracking-wide flex items-center gap-1.5">
@@ -20,16 +20,16 @@ function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onCh
         <input
           id={id}
           type="number"
-          value={value === 0 && id === 'initial-investment' ? '' : value}
+          value={value === '' || value === null || value === undefined ? '' : value}
           min={min}
           max={max}
           step={step}
           onChange={e => {
-            const val = e.target.value === '' ? 0 : Number(e.target.value);
-            onChange(val);
+            const val = e.target.value;
+            onChange(val === '' ? '' : Number(val));
           }}
           className={`w-full py-3.5 rounded-xl border-2 border-[#e8edf7] bg-[#f7f9fc] text-gray-800 font-bold text-base focus:outline-none focus:border-[#032e92] focus:ring-4 focus:ring-[#032e92]/8 transition-all placeholder-gray-400 ${prefix ? 'pl-8 pr-4' : suffix ? 'pl-4 pr-12' : 'px-4'}`}
-          placeholder={id === 'initial-investment' ? '0' : ''}
+          placeholder={placeholder}
         />
         {suffix && (
           <span className="absolute right-3.5 text-sm font-bold text-gray-500 pointer-events-none">{suffix}</span>
@@ -40,7 +40,7 @@ function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onCh
         min={min}
         max={max}
         step={step}
-        value={value}
+        value={value === '' || value === null || value === undefined ? min : value}
         onChange={e => onChange(Number(e.target.value))}
         className="w-full h-1.5 rounded-full accent-[#032e92] cursor-pointer mt-1"
       />
@@ -78,7 +78,7 @@ export default function CalculatorInputs({
       {calcMode === 'pmt' && (
         <InputField
           id="target-future-value"
-          label="Target Future Value"
+          label="How Much Money Do You Need?"
           prefix="₹"
           value={targetFutureValue}
           min={100000}
@@ -118,8 +118,20 @@ export default function CalculatorInputs({
       )}
 
       <InputField
+        id="investment-period"
+        label="When Will You Need the Money?"
+        suffix=" Years"
+        value={years}
+        min={1}
+        max={40}
+        step={1}
+        onChange={setYears}
+        hint="How long do you plan to stay invested?"
+      />
+
+      <InputField
         id="annual-return"
-        label="Expected Growth Per Year"
+        label="How Much Could Your Money Grow Each Year?"
         suffix="%"
         value={annualReturn}
         min={0}
@@ -131,18 +143,6 @@ export default function CalculatorInputs({
       <p className="text-[10px] text-gray-400 italic -mt-4 mb-6 leading-tight">
         * Illustrative assumption only. Actual investment returns may vary and are not guaranteed.
       </p>
-
-      <InputField
-        id="investment-period"
-        label="How Long You'll Invest"
-        suffix=" Years"
-        value={years}
-        min={1}
-        max={40}
-        step={1}
-        onChange={setYears}
-        hint="How long do you plan to stay invested?"
-      />
     </div>
   );
 }

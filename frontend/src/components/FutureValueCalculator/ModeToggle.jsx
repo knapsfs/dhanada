@@ -18,7 +18,7 @@ export default function ModeToggle({ calcMode, setCalcMode }) {
           }`}
       >
         {/* Calculate Future Value */}
-        See How Much You'll Have
+        Calculate your Future Wealth
       </button>
       <button
         onClick={() => handleToggle('pmt')}

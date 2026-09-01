@@ -8,7 +8,7 @@ import logo from '../assets/knaps-logo.png';
 const navLinks = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
-  { label: 'SIF', href: '/#sif' },
+  { label: 'SIF', href: '/sif' },
   { label: 'Mutual Fund', href: '/funds' },
   { label: 'PMS', href: '/#pms' },
   { label: 'AIF', href: '/#aif' },

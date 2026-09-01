@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck, faCircleInfo, faXmark, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 export default function FundSelector({ selectedFunds, onFundSelect, onReset, availableFunds = [] }) {
-  
+
   // Create options for react-select
   const options = useMemo(() => {
     return availableFunds.map(fund => ({
@@ -97,7 +97,7 @@ export default function FundSelector({ selectedFunds, onFundSelect, onReset, ava
         {[0, 1, 2].map(index => {
           const currentFund = selectedFunds[index];
           const value = currentFund ? { value: currentFund.id, label: currentFund.name, category: currentFund.category } : null;
-          
+
           return (
             <div key={index} className="relative">
               <label className="block text-xs font-bold text-gray-400 uppercase tracking-wide mb-2 ml-1">
@@ -119,12 +119,12 @@ export default function FundSelector({ selectedFunds, onFundSelect, onReset, ava
       </div>
 
       <div className="flex items-center gap-4">
-        <button className="bg-gradient-to-r from-[#032e92] to-[#0a4fd4] text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-blue-900/20 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300">
-          Compare
-        </button>
-        <button onClick={handleReset} className="bg-white text-[#1e293b] border border-[#e8edf7] px-8 py-3 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+        <button onClick={handleReset} className="bg-gradient-to-r from-[#032e92] to-[#0a4fd4] text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-blue-900/20 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300">
           Reset
         </button>
+        {/* <button onClick={handleReset} className="bg-white text-[#1e293b] border border-[#e8edf7] px-8 py-3 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+          Reset
+        </button> */}
       </div>
     </div>
   );

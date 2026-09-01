@@ -7,22 +7,26 @@ import CalculatorResults from './CalculatorResults';
 import GrowthChart from './GrowthChart';
 import CalculatorDisclaimer from './CalculatorDisclaimer';
 import { calculateFutureValue, calculateRequiredInvestment, generateChartData } from './calculatorUtils';
-import CalculatorNav from '../CalculatorNav'; // assuming CalculatorNav is in components
+import CalculatorNav from '../CalculatorNav';
 
 export default function FutureValueCalculator() {
   const [calcMode, setCalcMode] = useState('fv'); // 'fv' or 'pmt'
-  
+
   // Hardcode frequency to monthly for simplicity in this reverse calculator mode
   const frequency = 'monthly';
-  
+
   const [initialInvestment, setInitialInvestment] = useState(100000);
   const [recurringInvestment, setRecurringInvestment] = useState(25000); // For FV mode
   const [targetFutureValue, setTargetFutureValue] = useState(10000000); // For PMT mode (1 Cr)
-  
+
   const [annualReturn, setAnnualReturn] = useState(12);
   const [years, setYears] = useState(15);
   // Default to end of month internally without showing it to user
   const paymentTiming = 'end';
+
+  // Inflation adjusted toggle state (fixed at 5% rate as required)
+  const [isInflationAdjusted, setIsInflationAdjusted] = useState(false);
+  const inflationRate = 5;
 
   const resetDefaults = () => {
     setInitialInvestment(100000);
@@ -30,51 +34,70 @@ export default function FutureValueCalculator() {
     setTargetFutureValue(10000000);
     setAnnualReturn(12);
     setYears(15);
+    setIsInflationAdjusted(false);
   };
 
   const results = useMemo(() => {
+    const numInitial = initialInvestment === '' ? 0 : Number(initialInvestment);
+    const numRecurring = recurringInvestment === '' ? 0 : Number(recurringInvestment);
+    const numTarget = targetFutureValue === '' ? 0 : Number(targetFutureValue);
+    const numAnnual = annualReturn === '' ? 0 : Number(annualReturn);
+    const numYears = years === '' ? 0 : Number(years);
+
     // Determine the actual initial investment based on mode
-    const activeInitialInvestment = calcMode === 'fv' ? initialInvestment : 0;
-    
+    const activeInitialInvestment = calcMode === 'fv' ? numInitial : 0;
+
     if (calcMode === 'fv') {
       return calculateFutureValue({
         pv: activeInitialInvestment,
-        pmt: recurringInvestment,
-        annualRate: annualReturn,
-        years: years,
+        pmt: numRecurring,
+        annualRate: numAnnual,
+        years: numYears,
         frequency: frequency,
-        timing: paymentTiming
+        timing: paymentTiming,
+        isInflationAdjusted,
+        inflationRate
       });
     } else {
       return calculateRequiredInvestment({
-        targetFv: targetFutureValue,
+        targetFv: numTarget,
         pv: activeInitialInvestment,
-        annualRate: annualReturn,
-        years: years,
+        annualRate: numAnnual,
+        years: numYears,
         frequency: frequency,
-        timing: paymentTiming
+        timing: paymentTiming,
+        isInflationAdjusted,
+        inflationRate
       });
     }
-  }, [calcMode, initialInvestment, recurringInvestment, targetFutureValue, annualReturn, years, paymentTiming]);
+  }, [calcMode, initialInvestment, recurringInvestment, targetFutureValue, annualReturn, years, paymentTiming, isInflationAdjusted]);
 
   const chartData = useMemo(() => {
-    const activeInitialInvestment = calcMode === 'fv' ? initialInvestment : 0;
+    const numInitial = initialInvestment === '' ? 0 : Number(initialInvestment);
+    const numRecurring = recurringInvestment === '' ? 0 : Number(recurringInvestment);
+    const numTarget = targetFutureValue === '' ? 0 : Number(targetFutureValue);
+    const numAnnual = annualReturn === '' ? 0 : Number(annualReturn);
+    const numYears = years === '' ? 0 : Number(years);
+
+    const activeInitialInvestment = calcMode === 'fv' ? numInitial : 0;
     return generateChartData({
       calcMode,
-      targetFv: targetFutureValue,
+      targetFv: numTarget,
       pv: activeInitialInvestment,
-      pmt: recurringInvestment,
-      annualRate: annualReturn,
-      years: years,
+      pmt: numRecurring,
+      annualRate: numAnnual,
+      years: numYears,
       frequency: frequency,
-      timing: paymentTiming
+      timing: paymentTiming,
+      isInflationAdjusted,
+      inflationRate
     });
-  }, [calcMode, initialInvestment, recurringInvestment, targetFutureValue, annualReturn, years, paymentTiming]);
+  }, [calcMode, initialInvestment, recurringInvestment, targetFutureValue, annualReturn, years, paymentTiming, isInflationAdjusted]);
 
   return (
     <div className="bg-[#f7f9fc] w-full" id="future-value-calculator">
-      
-      {/* Hero Section similar to SipHero */}
+
+      {/* Hero Section */}
       <section className="pt-24 pb-6 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full bg-gradient-to-br from-[#eef4ff] to-[#dbeafe] blur-3xl opacity-40 -translate-y-1/2 translate-x-1/3 pointer-events-none" />
 
@@ -96,7 +119,7 @@ export default function FutureValueCalculator() {
                 className="text-3xl lg:text-4xl font-bold text-white leading-tight mb-3">
                 Future Value{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-orange-400">
-                  Calculator
+                  Calculator & Goal Planner
                 </span>
               </motion.h1>
 
@@ -123,16 +146,16 @@ export default function FutureValueCalculator() {
             transition={{ duration: 0.7 }}
             className="bg-white rounded-[2rem] shadow-xl shadow-blue-900/5 border border-[#e8edf7] p-6 lg:p-10 mt-6"
           >
-            <ModeToggle 
-              calcMode={calcMode} 
-              setCalcMode={setCalcMode} 
+            <ModeToggle
+              calcMode={calcMode}
+              setCalcMode={setCalcMode}
             />
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
-              
+
               {/* Left Column: Inputs */}
               <div className="lg:col-span-5 flex flex-col">
-                <CalculatorInputs 
+                <CalculatorInputs
                   calcMode={calcMode}
                   initialInvestment={initialInvestment}
                   setInitialInvestment={setInitialInvestment}
@@ -150,20 +173,25 @@ export default function FutureValueCalculator() {
 
               {/* Right Column: Results & Chart */}
               <div className="lg:col-span-7 flex flex-col">
-                <CalculatorResults calcMode={calcMode} results={results} />
-                
+                <CalculatorResults
+                  calcMode={calcMode}
+                  results={results}
+                  isInflationAdjusted={isInflationAdjusted}
+                  setIsInflationAdjusted={setIsInflationAdjusted}
+                />
+
                 <GrowthChart chartData={chartData} />
               </div>
 
             </div>
-            
+
             {/* Footer Area: Half on left, half on right */}
             <div className="mt-12 pt-8 border-t border-[#e8edf7]">
-              <CalculatorDisclaimer 
-                initialInvestment={calcMode === 'fv' ? initialInvestment : 0}
-                recurringInvestment={calcMode === 'fv' ? recurringInvestment : results.requiredPmt}
-                annualReturn={annualReturn}
-                years={years}
+              <CalculatorDisclaimer
+                initialInvestment={calcMode === 'fv' ? (initialInvestment === '' ? 0 : Number(initialInvestment)) : 0}
+                recurringInvestment={calcMode === 'fv' ? (recurringInvestment === '' ? 0 : Number(recurringInvestment)) : results.requiredPmt}
+                annualReturn={annualReturn === '' ? 0 : Number(annualReturn)}
+                years={years === '' ? 0 : Number(years)}
                 frequency="monthly"
               />
             </div>

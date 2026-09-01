@@ -272,9 +272,6 @@ scheduler_events = {
 # ignore_translatable_strings_from = []
 
 fixtures = [
-	"SIF Asset Management Company",
-	"SIF Fund Manager",
-	"SIF Investment Strategy Subcategory",
 	"Workflow",
 	"Workflow State",
 	{"dt": "Custom Field", "filters": [["dt", "=", "CRM Lead"]]},

@@ -35,7 +35,7 @@ function CountUpNumber({ target, prefix = '', suffix = '', inView, decimals = 0 
 const cards = [
   {
     key: 'totalInvested',
-    label: 'Invested amount',
+    label: 'Invested Amount',
     icon: faWallet,
     color: 'text-[#032e92]',
     bg: 'bg-[#eef4ff]',
@@ -46,7 +46,7 @@ const cards = [
   },
   {
     key: 'wealthGained',
-    label: 'Est. returns',
+    label: 'Est. Returns',
     icon: faArrowTrendUp,
     color: 'text-green-600',
     bg: 'bg-green-50',
@@ -57,7 +57,7 @@ const cards = [
   },
   {
     key: 'futureValue',
-    label: 'Total value',
+    label: 'Total Value',
     icon: faChartPie,
     color: 'text-purple-600',
     bg: 'bg-purple-50',

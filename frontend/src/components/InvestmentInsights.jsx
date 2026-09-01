@@ -3,10 +3,11 @@ import { useInView } from 'react-intersection-observer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faLightbulb, faArrowTrendUp, faCoins, faCircleCheck,
-  faPiggyBank, faBullseye, faPercent, faCircleInfo
+  faPiggyBank, faBullseye, faPercent
 } from '@fortawesome/free-solid-svg-icons'
 
 const fmt = (n) => {
+  if (n == null || isNaN(n)) return '₹0'
   if (n >= 10000000) return `₹${(n / 10000000).toFixed(2)} Cr`
   if (n >= 100000) return `₹${(n / 100000).toFixed(2)} L`
   return `₹${Math.round(n).toLocaleString('en-IN')}`
@@ -14,6 +15,7 @@ const fmt = (n) => {
 
 // How many months to reach 1 Crore
 function monthsToTarget(monthly, monthlyRate, target) {
+  if (!monthly || monthly <= 0) return null
   if (monthlyRate === 0) return target / monthly
   let months = 1
   while (months < 1200) {
@@ -24,21 +26,29 @@ function monthsToTarget(monthly, monthlyRate, target) {
   return null
 }
 
-// Rule of 72 — approximate doubling years
+// Rule of 72 - approximate doubling years
 function doublingYears(rate) {
+  if (!rate || rate <= 0) return 'N/A'
   return (72 / rate).toFixed(1)
 }
 
-export default function InvestmentInsights({ inputs, results, yearlyData }) {
+export default function InvestmentInsights({ inputs, results }) {
   const { ref, inView } = useInView({ triggerOnce: true })
-  const { sipAmount, annualReturn, duration } = inputs
-  const { totalInvested, wealthGained, futureValue, absoluteReturn } = results
+
+  const sipAmount = inputs.sipAmount === '' ? 0 : Number(inputs.sipAmount)
+  const annualReturn = inputs.annualReturn === '' ? 0 : Number(inputs.annualReturn)
+  const duration = inputs.duration === '' ? 0 : Number(inputs.duration)
+
+  const totalInvested = results.totalInvested || 0
+  const wealthGained = results.wealthGained || 0
+  const futureValue = results.futureValue || 0
+  const absoluteReturn = results.absoluteReturn != null ? results.absoluteReturn : (totalInvested > 0 ? (wealthGained / totalInvested) * 100 : 0)
 
   const monthlyRate = annualReturn / 12 / 100
   const doubling = doublingYears(annualReturn)
   const monthsFor1Cr = monthsToTarget(sipAmount, monthlyRate, 10000000)
-  const for1Cr = monthsFor1Cr ? `${(monthsFor1Cr / 12).toFixed(1)} years (₹${(sipAmount * monthsFor1Cr).toLocaleString('en-IN')} invested)` : 'More than 100 years'
-  const avgAnnualGrowth = Math.pow(futureValue / (totalInvested || 1), 1 / duration) - 1
+  const for1Cr = monthsFor1Cr ? `${(monthsFor1Cr / 12).toFixed(1)} years (₹${Math.round(sipAmount * monthsFor1Cr).toLocaleString('en-IN')} invested)` : 'More than 100 years'
+  const avgAnnualGrowth = duration > 0 && totalInvested > 0 ? (Math.pow(futureValue / totalInvested, 1 / duration) - 1) : 0
 
   const insights = [
     {
@@ -46,14 +56,16 @@ export default function InvestmentInsights({ inputs, results, yearlyData }) {
       color: 'text-[#032e92]',
       bg: 'bg-[#eef4ff]',
       title: 'Doubling Rule',
-      text: `At ${annualReturn}% annual return, your investment doubles approximately every ${doubling} years (Rule of 72).`,
+      text: annualReturn > 0
+        ? `At ${annualReturn}% annual return, your investment doubles approximately every ${doubling} years (Rule of 72).`
+        : `Enter expected annual return to see doubling timeline.`,
     },
     {
       icon: faArrowTrendUp,
       color: 'text-green-600',
       bg: 'bg-green-50',
       title: 'Wealth Created',
-      text: `You earn ${fmt(wealthGained)} as net profit on total investment of ${fmt(totalInvested)} — that's a ${absoluteReturn.toFixed(1)}% absolute gain.`,
+      text: `You earn ${fmt(wealthGained)} as net profit on total investment of ${fmt(totalInvested)} - that's a ${absoluteReturn.toFixed(1)}% absolute gain.`,
     },
     {
       icon: faPercent,
@@ -76,7 +88,7 @@ export default function InvestmentInsights({ inputs, results, yearlyData }) {
       color: 'text-teal-600',
       bg: 'bg-teal-50',
       title: 'Compounding Power',
-      text: `${duration > 10 ? `Over ${duration} years, compounding generates ${(wealthGained / totalInvested * 100).toFixed(0)}% extra returns above your invested capital.` : `Extend your investment horizon beyond 10 years to harness the full power of compounding.`}`,
+      text: `${duration > 10 && totalInvested > 0 ? `Over ${duration} years, compounding generates ${(wealthGained / totalInvested * 100).toFixed(0)}% extra returns above your invested capital.` : `Extend your investment horizon beyond 10 years to harness the full power of compounding.`}`,
     },
     {
       icon: faCoins,

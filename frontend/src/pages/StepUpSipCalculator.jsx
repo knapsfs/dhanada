@@ -12,62 +12,97 @@ import Newsletter from '../components/Newsletter'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 
-// ─── Step Up SIP Calculation ──────────────────────────────────────────────────
-function calculateStepUpSip(monthlyInvestment, stepUpPercent, annualReturn, duration) {
-  const r_eff = Math.pow(1 + annualReturn / 100, 1 / 12) - 1
+// Step Up SIP Calculation
+function calculateStepUpSip(monthlyInvestment, stepUp, stepUpType = 'percentage', annualReturn, duration, isInflationAdjusted = false) {
+  const i = (annualReturn / 12) / 100
   let totalInvested = 0
   let futureValue = 0
 
   for (let y = 1; y <= duration; y++) {
-    // Current year's monthly investment
-    const py = monthlyInvestment * Math.pow(1 + stepUpPercent / 100, y - 1)
-    
-    // Total invested in this year
+    // Calculate monthly investment for year y
+    let py = monthlyInvestment
+    if (stepUpType === 'amount') {
+      py = monthlyInvestment + (y - 1) * stepUp
+    } else {
+      py = monthlyInvestment * Math.pow(1 + stepUp / 100, y - 1)
+    }
+
     totalInvested += py * 12
 
-    // Future value of this year's contributions at the end of the investment duration
+    // Future value of year y's contributions compounded to duration
     const months_left = 12 * (duration - y)
-    const fvy = py * ((Math.pow(1 + r_eff, 12) - 1) / r_eff) * (1 + r_eff) * Math.pow(1 + r_eff, months_left)
-    
+    let fvy = 0
+    if (i === 0) {
+      fvy = py * 12
+    } else {
+      fvy = py * ((Math.pow(1 + i, 12) - 1) / i) * Math.pow(1 + i, months_left)
+    }
+
     futureValue += fvy
   }
 
-  const wealthGained = futureValue - totalInvested
+  if (isInflationAdjusted && duration > 0) {
+    futureValue = futureValue / Math.pow(1 + 0.05, duration)
+  }
+
+  const wealthGained = Math.max(0, futureValue - totalInvested)
 
   return {
-    totalInvested,
-    wealthGained,
-    futureValue
+    totalInvested: Math.round(totalInvested),
+    wealthGained: Math.round(wealthGained),
+    futureValue: Math.round(futureValue)
   }
 }
 
-function calculateYearlyData(monthlyInvestment, stepUpPercent, annualReturn, duration) {
-  const r_eff = Math.pow(1 + annualReturn / 100, 1 / 12) - 1
+function calculateYearlyData(monthlyInvestment, stepUp, stepUpType = 'percentage', annualReturn, duration, isInflationAdjusted = false) {
+  const i = (annualReturn / 12) / 100
   const yearlyData = []
-  
+
   let cumulativeInvested = 0
-  let cumulativeValue = 0
 
-  for (let y = 1; y <= duration; y++) {
-    const py = monthlyInvestment * Math.pow(1 + stepUpPercent / 100, y - 1)
-    const yearInvested = py * 12
-    cumulativeInvested += yearInvested
+  for (let k = 1; k <= duration; k++) {
+    // Current year monthly SIP
+    let currentYearSip = monthlyInvestment
+    if (stepUpType === 'amount') {
+      currentYearSip = monthlyInvestment + (k - 1) * stepUp
+    } else {
+      currentYearSip = monthlyInvestment * Math.pow(1 + stepUp / 100, k - 1)
+    }
 
-    // Previous balance grows for 12 months
-    cumulativeValue = cumulativeValue * Math.pow(1 + r_eff, 12)
-    
-    // New contributions for this year compound for up to 12 months
-    const yearValue = py * ((Math.pow(1 + r_eff, 12) - 1) / r_eff) * (1 + r_eff)
-    cumulativeValue += yearValue
+    cumulativeInvested += currentYearSip * 12
 
-    const gain = cumulativeValue - cumulativeInvested
+    // Calculate value at end of year k
+    let endOfYearValue = 0
+    for (let y = 1; y <= k; y++) {
+      let py = monthlyInvestment
+      if (stepUpType === 'amount') {
+        py = monthlyInvestment + (y - 1) * stepUp
+      } else {
+        py = monthlyInvestment * Math.pow(1 + stepUp / 100, y - 1)
+      }
+
+      const months_left = 12 * (k - y)
+      let fvy = 0
+      if (i === 0) {
+        fvy = py * 12
+      } else {
+        fvy = py * ((Math.pow(1 + i, 12) - 1) / i) * Math.pow(1 + i, months_left)
+      }
+      endOfYearValue += fvy
+    }
+
+    if (isInflationAdjusted) {
+      endOfYearValue = endOfYearValue / Math.pow(1 + 0.05, k)
+    }
+
+    const gain = Math.max(0, endOfYearValue - cumulativeInvested)
 
     yearlyData.push({
-      year: y,
-      monthlySip: py,
-      invested: cumulativeInvested,
-      value: cumulativeValue,
-      gain: Math.max(0, gain)
+      year: k,
+      monthlySip: Math.round(currentYearSip),
+      invested: Math.round(cumulativeInvested),
+      value: Math.round(endOfYearValue),
+      gain: Math.round(gain)
     })
   }
 
@@ -76,12 +111,13 @@ function calculateYearlyData(monthlyInvestment, stepUpPercent, annualReturn, dur
 
 const DEFAULT_INPUTS = {
   monthlyInvestment: 25000,
+  stepUpType: 'percentage',
   stepUp: 10,
   annualReturn: 12,
   duration: 10,
 }
 
-// ─── Disclaimer ────────────────────────────────────────────────────────────────
+// Disclaimer
 function Disclaimer() {
   return (
     <section className="bg-[#f7f9fc] pb-8">
@@ -100,20 +136,24 @@ function Disclaimer() {
   )
 }
 
-// ─── Main Page ──────────────────────────────────────────────────────────────────
+// Main Page
 export default function StepUpSipCalculator() {
   const [inputs, setInputs] = useState(DEFAULT_INPUTS)
+  const [isInflationAdjusted, setIsInflationAdjusted] = useState(false)
 
-
+  const numMonthly = inputs.monthlyInvestment === '' ? 0 : Number(inputs.monthlyInvestment)
+  const numStepUp = inputs.stepUp === '' ? 0 : Number(inputs.stepUp)
+  const numReturn = inputs.annualReturn === '' ? 0 : Number(inputs.annualReturn)
+  const numDuration = inputs.duration === '' ? 0 : Number(inputs.duration)
 
   const results = useMemo(
-    () => calculateStepUpSip(inputs.monthlyInvestment, inputs.stepUp, inputs.annualReturn, inputs.duration),
-    [inputs.monthlyInvestment, inputs.stepUp, inputs.annualReturn, inputs.duration]
+    () => calculateStepUpSip(numMonthly, numStepUp, inputs.stepUpType, numReturn, numDuration, isInflationAdjusted),
+    [numMonthly, numStepUp, inputs.stepUpType, numReturn, numDuration, isInflationAdjusted]
   )
 
   const yearlyData = useMemo(
-    () => calculateYearlyData(inputs.monthlyInvestment, inputs.stepUp, inputs.annualReturn, inputs.duration),
-    [inputs.monthlyInvestment, inputs.stepUp, inputs.annualReturn, inputs.duration]
+    () => calculateYearlyData(numMonthly, numStepUp, inputs.stepUpType, numReturn, numDuration, isInflationAdjusted),
+    [numMonthly, numStepUp, inputs.stepUpType, numReturn, numDuration, isInflationAdjusted]
   )
 
   return (
@@ -125,7 +165,12 @@ export default function StepUpSipCalculator() {
         <StepUpSipHero />
 
         {/* Calculator Form */}
-        <StepUpSipCalculatorForm inputs={inputs} setInputs={setInputs} />
+        <StepUpSipCalculatorForm
+          inputs={inputs}
+          setInputs={setInputs}
+          isInflationAdjusted={isInflationAdjusted}
+          setIsInflationAdjusted={setIsInflationAdjusted}
+        />
 
         {/* Summary Cards */}
         <StepUpSipSummaryCards results={results} />
@@ -133,7 +178,7 @@ export default function StepUpSipCalculator() {
         {/* Growth Chart */}
         <StepUpSipGrowthChart yearlyData={yearlyData} results={results} />
 
-        {/* Projection Table — full width */}
+        {/* Projection Table - full width */}
         <StepUpSipProjectionTable yearlyData={yearlyData} />
 
         {/* Recommended Funds */}

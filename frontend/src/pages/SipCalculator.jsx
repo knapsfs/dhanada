@@ -13,48 +13,65 @@ import Newsletter from '../components/Newsletter'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 
-// ─── SIP Calculation ─────────────────────────────────────────────────────────
-// Uses effective monthly rate: (1 + annual_rate)^(1/12) - 1
-// This matches standard Indian financial calculator results (e.g. Groww, ClearTax)
-function getEffectiveMonthlyRate(annualReturn) {
-  // Convert annual effective rate to effective monthly rate
-  return Math.pow(1 + annualReturn / 100, 1 / 12) - 1
-}
-
-function calculateSIP(sipAmount, annualReturn, duration) {
-  const r = getEffectiveMonthlyRate(annualReturn)
+// Standard Monthly SIP Calculation
+// i = annual_rate / 12 / 100
+// FV = P * [ (1 + i)^n - 1 ] / i
+function calculateSIP(sipAmount, annualReturn, duration, isInflationAdjusted = false) {
+  const i = (annualReturn / 12) / 100
   const n = duration * 12
   const totalInvested = sipAmount * n
 
-  let futureValue
-  if (r === 0) {
+  let futureValue = 0
+  if (i === 0) {
     futureValue = totalInvested
   } else {
-    // Annuity due (beginning of period): FV = P × [(1+r)^n - 1]/r × (1+r)
-    futureValue = sipAmount * ((Math.pow(1 + r, n) - 1) / r) * (1 + r)
+    futureValue = sipAmount * ((Math.pow(1 + i, n) - 1) / i)
   }
 
-  const wealthGained = futureValue - totalInvested
-  const absoluteReturn = totalInvested > 0 ? (wealthGained / totalInvested) * 100 : 0
+  if (isInflationAdjusted && duration > 0) {
+    futureValue = futureValue / Math.pow(1 + 0.05, duration)
+  }
 
-  return { futureValue, totalInvested, wealthGained, absoluteReturn }
+  const wealthGained = Math.max(0, futureValue - totalInvested)
+  const absoluteReturn = totalInvested > 0 ? (wealthGained / totalInvested) * 100 : 0
+  const expectedReturn = isInflationAdjusted
+    ? ((1 + annualReturn / 100) / 1.05 - 1) * 100
+    : annualReturn
+
+  return {
+    futureValue: Math.round(futureValue),
+    totalInvested: Math.round(totalInvested),
+    wealthGained: Math.round(wealthGained),
+    absoluteReturn,
+    expectedReturn,
+    cagr: expectedReturn
+  }
 }
 
-function calculateYearlyData(sipAmount, annualReturn, duration) {
-  const r = getEffectiveMonthlyRate(annualReturn)
-  return Array.from({ length: duration }, (_, i) => {
-    const year = i + 1
+function calculateYearlyData(sipAmount, annualReturn, duration, isInflationAdjusted = false) {
+  const i = (annualReturn / 12) / 100
+  return Array.from({ length: duration }, (_, idx) => {
+    const year = idx + 1
     const n = year * 12
     const invested = sipAmount * n
-    let fv
-    if (r === 0) {
+    let fv = 0
+    if (i === 0) {
       fv = invested
     } else {
-      fv = sipAmount * ((Math.pow(1 + r, n) - 1) / r) * (1 + r)
+      fv = sipAmount * ((Math.pow(1 + i, n) - 1) / i)
     }
-    const gain = fv - invested
+    if (isInflationAdjusted) {
+      fv = fv / Math.pow(1 + 0.05, year)
+    }
+    const gain = Math.max(0, fv - invested)
     const returnPct = invested > 0 ? (gain / invested) * 100 : 0
-    return { year, invested, value: fv, gain, returnPct }
+    return {
+      year,
+      invested: Math.round(invested),
+      value: Math.round(fv),
+      gain: Math.round(gain),
+      returnPct
+    }
   })
 }
 
@@ -64,7 +81,7 @@ const DEFAULT_INPUTS = {
   duration: 10,
 }
 
-// ─── Disclaimer ────────────────────────────────────────────────────────────────
+// Disclaimer
 function Disclaimer() {
   return (
     <section className="bg-[#f7f9fc] pb-8">
@@ -83,20 +100,23 @@ function Disclaimer() {
   )
 }
 
-// ─── Main Page ──────────────────────────────────────────────────────────────────
+// Main Page
 export default function SipCalculator() {
   const [inputs, setInputs] = useState(DEFAULT_INPUTS)
+  const [isInflationAdjusted, setIsInflationAdjusted] = useState(false)
 
-
+  const numSip = inputs.sipAmount === '' ? 0 : Number(inputs.sipAmount)
+  const numReturn = inputs.annualReturn === '' ? 0 : Number(inputs.annualReturn)
+  const numDuration = inputs.duration === '' ? 0 : Number(inputs.duration)
 
   const results = useMemo(
-    () => calculateSIP(inputs.sipAmount, inputs.annualReturn, inputs.duration),
-    [inputs.sipAmount, inputs.annualReturn, inputs.duration]
+    () => calculateSIP(numSip, numReturn, numDuration, isInflationAdjusted),
+    [numSip, numReturn, numDuration, isInflationAdjusted]
   )
 
   const yearlyData = useMemo(
-    () => calculateYearlyData(inputs.sipAmount, inputs.annualReturn, inputs.duration),
-    [inputs.sipAmount, inputs.annualReturn, inputs.duration]
+    () => calculateYearlyData(numSip, numReturn, numDuration, isInflationAdjusted),
+    [numSip, numReturn, numDuration, isInflationAdjusted]
   )
 
   return (
@@ -108,7 +128,12 @@ export default function SipCalculator() {
         <SipHero />
 
         {/* Calculator Form */}
-        <SipCalculatorForm inputs={inputs} setInputs={setInputs} />
+        <SipCalculatorForm
+          inputs={inputs}
+          setInputs={setInputs}
+          isInflationAdjusted={isInflationAdjusted}
+          setIsInflationAdjusted={setIsInflationAdjusted}
+        />
 
         {/* Summary Cards */}
         <SipSummaryCards results={results} />
@@ -116,7 +141,7 @@ export default function SipCalculator() {
         {/* Growth Chart */}
         <SipGrowthChart yearlyData={yearlyData} inputs={inputs} results={results} />
 
-        {/* Projection Table — full width */}
+        {/* Projection Table - full width */}
         <SipProjectionTable yearlyData={yearlyData} />
 
         {/* Insights */}

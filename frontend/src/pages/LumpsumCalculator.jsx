@@ -12,34 +12,44 @@ import Newsletter from '../components/Newsletter'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 
-// ─── Lumpsum Calculation ──────────────────────────────────────────────────────
-function calculateLumpsum(totalInvestment, annualReturn, duration) {
+// Lumpsum Calculation
+function calculateLumpsum(totalInvestment, annualReturn, duration, isInflationAdjusted = false) {
   const r = annualReturn / 100
   const n = duration
 
-  const futureValue = totalInvestment * Math.pow(1 + r, n)
-  const wealthGained = futureValue - totalInvestment
+  let futureValue = totalInvestment * Math.pow(1 + r, n)
+
+  if (isInflationAdjusted && duration > 0) {
+    futureValue = futureValue / Math.pow(1 + 0.05, duration)
+  }
+
+  const wealthGained = Math.max(0, futureValue - totalInvestment)
 
   return {
-    totalInvested: totalInvestment,
-    wealthGained,
-    futureValue
+    totalInvested: Math.round(totalInvestment),
+    wealthGained: Math.round(wealthGained),
+    futureValue: Math.round(futureValue)
   }
 }
 
-function calculateYearlyData(totalInvestment, annualReturn, duration) {
+function calculateYearlyData(totalInvestment, annualReturn, duration, isInflationAdjusted = false) {
   const r = annualReturn / 100
-  
+
   return Array.from({ length: duration }, (_, i) => {
     const year = i + 1
-    const value = totalInvestment * Math.pow(1 + r, year)
-    const gain = value - totalInvestment
+    let value = totalInvestment * Math.pow(1 + r, year)
+
+    if (isInflationAdjusted) {
+      value = value / Math.pow(1 + 0.05, year)
+    }
+
+    const gain = Math.max(0, value - totalInvestment)
 
     return {
       year,
-      invested: totalInvestment,
-      value,
-      gain
+      invested: Math.round(totalInvestment),
+      value: Math.round(value),
+      gain: Math.round(gain)
     }
   })
 }
@@ -50,7 +60,7 @@ const DEFAULT_INPUTS = {
   duration: 10,
 }
 
-// ─── Disclaimer ────────────────────────────────────────────────────────────────
+// Disclaimer
 function Disclaimer() {
   return (
     <section className="bg-[#f7f9fc] pb-8">
@@ -69,20 +79,23 @@ function Disclaimer() {
   )
 }
 
-// ─── Main Page ──────────────────────────────────────────────────────────────────
+// Main Page
 export default function LumpsumCalculator() {
   const [inputs, setInputs] = useState(DEFAULT_INPUTS)
+  const [isInflationAdjusted, setIsInflationAdjusted] = useState(false)
 
-
+  const numInvestment = inputs.totalInvestment === '' ? 0 : Number(inputs.totalInvestment)
+  const numReturn = inputs.annualReturn === '' ? 0 : Number(inputs.annualReturn)
+  const numDuration = inputs.duration === '' ? 0 : Number(inputs.duration)
 
   const results = useMemo(
-    () => calculateLumpsum(inputs.totalInvestment, inputs.annualReturn, inputs.duration),
-    [inputs.totalInvestment, inputs.annualReturn, inputs.duration]
+    () => calculateLumpsum(numInvestment, numReturn, numDuration, isInflationAdjusted),
+    [numInvestment, numReturn, numDuration, isInflationAdjusted]
   )
 
   const yearlyData = useMemo(
-    () => calculateYearlyData(inputs.totalInvestment, inputs.annualReturn, inputs.duration),
-    [inputs.totalInvestment, inputs.annualReturn, inputs.duration]
+    () => calculateYearlyData(numInvestment, numReturn, numDuration, isInflationAdjusted),
+    [numInvestment, numReturn, numDuration, isInflationAdjusted]
   )
 
   return (
@@ -94,7 +107,12 @@ export default function LumpsumCalculator() {
         <LumpsumHero />
 
         {/* Calculator Form */}
-        <LumpsumCalculatorForm inputs={inputs} setInputs={setInputs} />
+        <LumpsumCalculatorForm
+          inputs={inputs}
+          setInputs={setInputs}
+          isInflationAdjusted={isInflationAdjusted}
+          setIsInflationAdjusted={setIsInflationAdjusted}
+        />
 
         {/* Summary Cards */}
         <LumpsumSummaryCards results={results} />
@@ -102,7 +120,7 @@ export default function LumpsumCalculator() {
         {/* Growth Chart */}
         <LumpsumGrowthChart yearlyData={yearlyData} results={results} />
 
-        {/* Projection Table — full width */}
+        {/* Projection Table - full width */}
         <LumpsumProjectionTable yearlyData={yearlyData} />
 
         {/* Recommended Funds */}

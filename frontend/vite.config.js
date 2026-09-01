@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
 	plugins: [react(), tailwindcss()],
 	server: {
 		proxy: {
@@ -16,5 +16,5 @@ export default defineConfig({
 		outDir: "../dhanada/public/sif",
 		emptyOutDir: true,
 	},
-	base: "/assets/dhanada/sif/",
-});
+	base: command === "serve" ? "/" : "/assets/dhanada/sif/",
+}));
