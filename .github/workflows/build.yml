@@ -22,13 +22,44 @@ jobs:
 
       - name: Determine version
         id: version
-        uses: paulhatch/semantic-version@v5.4.0
-        with:
-          tag_prefix: "v"
-          major_pattern: "/!:|BREAKING CHANGE:/"
-          minor_pattern: "/feat(\\(.+\\))?:/"
-          version_format: "${major}.${minor}.${patch}"
-          change_path: "."
+        run: |
+          git fetch origin --tags || true
+          
+          LATEST_TAG=$(git tag --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
+          if [ -z "$LATEST_TAG" ]; then
+            LATEST_TAG="v0.0.0"
+          fi
+          
+          VERSION="${LATEST_TAG#v}"
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+          
+          SUBJECT=$(git log -1 --pretty=%s)
+          echo "Commit subject: $SUBJECT"
+          
+          REGEX_MAJOR="^feat(\([^)]+\))?!:"
+          REGEX_MINOR="^feat(\([^)]+\))?:"
+          REGEX_PATCH="^fix(\([^)]+\))?:"
+          
+          if [[ "$SUBJECT" =~ $REGEX_MAJOR ]]; then
+            echo "Type: feat! (MAJOR increment)"
+            MAJOR=$((MAJOR + 1))
+            MINOR=0
+            PATCH=0
+          elif [[ "$SUBJECT" =~ $REGEX_MINOR ]]; then
+            echo "Type: feat (MINOR increment)"
+            MINOR=$((MINOR + 1))
+            PATCH=0
+          elif [[ "$SUBJECT" =~ $REGEX_PATCH ]]; then
+            echo "Type: fix (PATCH increment)"
+            PATCH=$((PATCH + 1))
+          else
+            echo "::error::Unrecognized commit type in subject: '$SUBJECT'. Commit message must start with feat:, fix:, or feat!: (with optional scope)."
+            exit 1
+          fi
+          
+          NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
+          echo "Calculated version: $NEW_VERSION"
+          echo "version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
