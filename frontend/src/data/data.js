@@ -270,6 +270,3 @@ export const comparisonData = {
 		},
 	],
 };
-
-
-
