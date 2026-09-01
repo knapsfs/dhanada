@@ -24,16 +24,24 @@ ChartJS.register(
   Legend
 );
 
+const fmt = (value) => {
+  if (value >= 10000000) return `₹${(value / 10000000).toFixed(2)} Cr`;
+  if (value >= 100000) return `₹${(value / 100000).toFixed(2)} L`;
+  if (value >= 1000) return `₹${(value / 1000).toFixed(0)} k`;
+  return `₹${Math.round(value).toLocaleString('en-IN')}`;
+};
+
 export default function GrowthChart({ chartData }) {
   const data = useMemo(() => {
     return {
       labels: chartData.labels,
       datasets: [
         {
-          fill: false,
+          fill: true,
           label: 'Total Invested',
           data: chartData.investedData,
           borderColor: '#94a3b8',
+          backgroundColor: 'rgba(148,163,184,0.08)',
           borderWidth: 2,
           borderDash: [5, 4],
           pointRadius: 4,
@@ -41,7 +49,7 @@ export default function GrowthChart({ chartData }) {
           pointBackgroundColor: '#94a3b8',
           pointBorderColor: '#ffffff',
           pointBorderWidth: 1.5,
-          tension: 0.2,
+          tension: 0.4,
         },
         {
           fill: true,
@@ -52,8 +60,8 @@ export default function GrowthChart({ chartData }) {
           backgroundColor: (context) => {
             const ctx = context.chart.ctx;
             const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-            gradient.addColorStop(0, 'rgba(3, 46, 146, 0.25)');
-            gradient.addColorStop(1, 'rgba(3, 46, 146, 0.02)');
+            gradient.addColorStop(0, 'rgba(3, 46, 146, 0.22)');
+            gradient.addColorStop(1, 'rgba(3, 46, 146, 0.01)');
             return gradient;
           },
           pointRadius: 4.5,
@@ -61,7 +69,7 @@ export default function GrowthChart({ chartData }) {
           pointBackgroundColor: '#032e92',
           pointBorderColor: '#ffffff',
           pointBorderWidth: 1.5,
-          tension: 0.2,
+          tension: 0.4,
         },
       ],
     };
@@ -113,7 +121,6 @@ export default function GrowthChart({ chartData }) {
         ticks: {
           color: '#94a3b8',
           font: { size: 11, weight: '600' },
-          maxTicksLimit: 10
         }
       },
       y: {
@@ -125,10 +132,7 @@ export default function GrowthChart({ chartData }) {
           color: '#94a3b8',
           font: { size: 11, weight: '600' },
           callback: function (value) {
-            if (value >= 10000000) return '₹' + (value / 10000000).toFixed(1) + ' Cr';
-            if (value >= 100000) return '₹' + (value / 100000).toFixed(0) + ' L';
-            if (value >= 1000) return '₹' + (value / 1000).toFixed(0) + ' k';
-            return '₹' + value;
+            return fmt(value);
           }
         }
       }

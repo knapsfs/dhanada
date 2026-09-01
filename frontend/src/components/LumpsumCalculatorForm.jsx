@@ -4,6 +4,24 @@ import {
   faCalculator, faCircleInfo
 } from '@fortawesome/free-solid-svg-icons'
 
+const formatIndianNumber = (val) => {
+  if (val === '' || val === null || val === undefined) return ''
+  const str = String(val)
+  if (str.includes('.')) {
+    const [intPart, decPart] = str.split('.')
+    const num = Number(intPart)
+    return (isNaN(num) ? intPart : num.toLocaleString('en-IN')) + '.' + decPart
+  }
+  const num = Number(str)
+  return isNaN(num) ? str : num.toLocaleString('en-IN')
+}
+
+const parseRawNumber = (rawStr) => {
+  if (!rawStr) return ''
+  const cleaned = rawStr.replace(/,/g, '').replace(/[^0-9.]/g, '')
+  return cleaned
+}
+
 function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onChange, hint, placeholder = '' }) {
   return (
     <div className="flex flex-col gap-1.5">
@@ -21,14 +39,17 @@ function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onCh
         )}
         <input
           id={id}
-          type="number"
-          value={value === '' || value === null || value === undefined ? '' : value}
-          min={min}
-          max={max}
-          step={step}
+          type="text"
+          inputMode="decimal"
+          value={formatIndianNumber(value)}
           onChange={e => {
-            const val = e.target.value
-            onChange(val === '' ? '' : Number(val))
+            const raw = parseRawNumber(e.target.value)
+            if (raw === '') {
+              onChange('')
+            } else {
+              const num = Number(raw)
+              onChange(isNaN(num) ? raw : num)
+            }
           }}
           className={`w-full py-3.5 rounded-xl border-2 border-[#e8edf7] bg-[#f7f9fc] text-gray-800 font-bold text-base focus:outline-none focus:border-[#032e92] focus:ring-4 focus:ring-[#032e92]/8 transition-all placeholder-gray-400 ${
             prefix ? 'pl-8 pr-4' : suffix ? 'pl-4 pr-12' : 'px-4'
@@ -49,8 +70,8 @@ function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onCh
         className="w-full h-1.5 rounded-full accent-[#032e92] cursor-pointer mt-1"
       />
       <div className="flex justify-between text-[10px] text-gray-400 font-medium">
-        <span>{prefix}{min?.toLocaleString()}{suffix}</span>
-        <span>{prefix}{max?.toLocaleString()}{suffix}</span>
+        <span>{prefix}{min?.toLocaleString('en-IN')}{suffix}</span>
+        <span>{prefix}{max?.toLocaleString('en-IN')}{suffix}</span>
       </div>
     </div>
   )

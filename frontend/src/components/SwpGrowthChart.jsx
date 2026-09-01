@@ -6,11 +6,11 @@ import { faChartLine } from '@fortawesome/free-solid-svg-icons'
 import {
   Chart as ChartJS,
   CategoryScale, LinearScale, PointElement, LineElement,
-  Filler, Tooltip, Legend, BarElement, BarController
+  Filler, Tooltip, Legend
 } from 'chart.js'
-import { Line, Chart } from 'react-chartjs-2'
+import { Line } from 'react-chartjs-2'
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, BarController, Filler, Tooltip, Legend)
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, Tooltip, Legend)
 
 const fmt = (n) => {
   if (n >= 10000000) return `₹${(n / 10000000).toFixed(2)} Cr`
@@ -23,13 +23,25 @@ export default function SwpGrowthChart({ yearlyData, results }) {
 
   const labels = yearlyData.map(d => `Y${d.year}`)
   const remainingArr = yearlyData.map(d => Math.round(d.closingBalance))
-  const withdrawalArr = yearlyData.map(d => Math.round(d.totalWithdrawals))
+  const cumulativeWithdrawalsArr = yearlyData.map(d => Math.round(d.cumulativeWithdrawals ?? (d.totalWithdrawals * d.year)))
 
   const data = {
     labels,
     datasets: [
       {
-        type: 'line',
+        label: 'Total Withdrawn',
+        data: cumulativeWithdrawalsArr,
+        borderColor: '#94a3b8',
+        backgroundColor: 'rgba(148,163,184,0.08)',
+        borderWidth: 2,
+        borderDash: [5, 4],
+        fill: true,
+        tension: 0.4,
+        pointRadius: 4,
+        pointBackgroundColor: '#94a3b8',
+        pointHoverRadius: 6,
+      },
+      {
         label: 'Remaining Balance',
         data: remainingArr,
         borderColor: '#032e92',
@@ -49,16 +61,6 @@ export default function SwpGrowthChart({ yearlyData, results }) {
         pointBackgroundColor: '#032e92',
         pointHoverRadius: 7,
         pointHoverBackgroundColor: '#032e92',
-        yAxisID: 'y',
-      },
-      {
-        type: 'bar',
-        label: 'Total Withdrawn',
-        data: withdrawalArr,
-        backgroundColor: '#9333ea', // Purple-600
-        borderRadius: 4,
-        barThickness: 10,
-        yAxisID: 'y1',
       },
     ],
   }
@@ -68,84 +70,74 @@ export default function SwpGrowthChart({ yearlyData, results }) {
     maintainAspectRatio: false,
     interaction: { mode: 'index', intersect: false },
     plugins: {
-      legend: {
-        position: 'top',
-        labels: {
-          usePointStyle: true,
-          pointStyle: 'circle',
-          font: { family: 'Poppins', size: 12, weight: '600' },
-          padding: 24,
-          color: '#64748b',
-        },
-      },
+      legend: { display: false },
       tooltip: {
         backgroundColor: '#fff',
-        borderColor: '#e8edf7',
-        borderWidth: 1,
         titleColor: '#1e293b',
-        bodyColor: '#64748b',
-        bodyFont: { family: 'Poppins', size: 12 },
-        titleFont: { family: 'Poppins', size: 12, weight: '700' },
-        padding: 14,
+        bodyColor: '#475569',
+        borderColor: '#e2e8f0',
+        borderWidth: 1,
+        padding: 12,
+        boxPadding: 4,
+        cornerRadius: 12,
         callbacks: {
-          label: ctx => ` ${ctx.dataset.label}: ${fmt(ctx.raw)}`,
+          label: (ctx) => ` ${ctx.dataset.label}: ${fmt(ctx.parsed.y)}`,
         },
       },
     },
     scales: {
       x: {
         grid: { display: false },
-        ticks: { font: { family: 'Poppins', size: 11 }, color: '#94a3b8' },
-        border: { display: false },
+        ticks: { color: '#94a3b8', font: { size: 11, weight: '600' } },
       },
       y: {
-        position: 'left',
         grid: { color: '#f1f5f9' },
         ticks: {
-          font: { family: 'Poppins', size: 11 },
           color: '#94a3b8',
-          callback: v => fmt(v),
+          font: { size: 11, weight: '600' },
+          callback: (v) => fmt(v),
         },
-        border: { display: false, dash: [4, 4] },
-      },
-      y1: {
-        position: 'right',
-        grid: { display: false },
-        ticks: {
-          font: { family: 'Poppins', size: 11 },
-          color: '#c084fc', // purple-400
-          callback: v => fmt(v),
-        },
-        border: { display: false },
       },
     },
   }
 
   return (
-    <section className="bg-[#f7f9fc] pb-6">
+    <section ref={ref} className="bg-[#f7f9fc] pb-6">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="bg-white rounded-3xl border border-[#e8edf7] shadow-lg shadow-blue-900/5 p-6 lg:p-8">
+          className="bg-white rounded-3xl border border-[#e8edf7] shadow-xl shadow-blue-900/5 p-6 lg:p-8">
 
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-green-50 flex items-center justify-center">
-                <FontAwesomeIcon icon={faChartLine} className="text-green-600 text-sm" />
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-[#eef4ff] flex items-center justify-center">
+                <FontAwesomeIcon icon={faChartLine} className="text-[#032e92] text-sm" />
               </div>
-              <h2 className="text-lg font-bold text-gray-900">SWP Balance Projection</h2>
+              <div>
+                <h3 className="font-bold text-gray-800 text-lg">SWP Balance Projection</h3>
+                <p className="text-xs text-gray-400 font-medium">Year-by-year breakdown of your total withdrawals vs remaining balance</p>
+              </div>
             </div>
-            <div className="text-right">
-              <p className="text-xs text-gray-400 font-medium">Final Value</p>
-              <p className="text-lg font-bold text-[#032e92]">{fmt(results.finalValue || 0)}</p>
+
+            {/* Custom Legend */}
+            <div className="flex items-center gap-4 text-xs font-semibold text-gray-500">
+              <div className="flex items-center gap-1.5">
+                <span className="w-3 h-0.5 bg-[#94a3b8] inline-block border-dashed"></span>
+                Total Withdrawn
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-3 h-3 rounded-full bg-[#032e92] inline-block"></span>
+                Remaining Balance
+              </div>
             </div>
           </div>
 
-          <div className="h-72 md:h-96">
-            {inView && <Chart type="bar" data={data} options={options} />}
+          {/* Chart Canvas */}
+          <div className="h-72 lg:h-88">
+            <Line data={data} options={options} />
           </div>
         </motion.div>
       </div>

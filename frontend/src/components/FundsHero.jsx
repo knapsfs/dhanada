@@ -58,7 +58,7 @@ export default function FundsHero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.6 }}
                 className="text-blue-100 font-medium leading-relaxed max-w-md">
-                Compare investment opportunities and choose the right fund for your financial goals. Start with as little as ₹500.
+                Compare investment opportunities and choose the right fund for your financial goals.
               </motion.p>
             </div>
 

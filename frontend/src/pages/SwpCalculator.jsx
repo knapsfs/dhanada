@@ -12,7 +12,7 @@ import Newsletter from '../components/Newsletter'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 
-// ─── SWP Calculation ─────────────────────────────────────────────────────────
+// SWP Calculation
 // Uses effective monthly rate: (1 + annual_rate)^(1/12) - 1
 function getEffectiveMonthlyRate(annualReturn) {
   return Math.pow(1 + annualReturn / 100, 1 / 12) - 1
@@ -35,9 +35,9 @@ function calculateSWP(totalInvestment, withdrawalPerMonth, annualReturn, duratio
   const totalWithdrawal = withdrawalPerMonth * n
 
   return {
-    totalInvestment,
-    totalWithdrawal,
-    finalValue: Math.max(0, finalValue), // Don't show negative final value
+    totalInvestment: Math.round(totalInvestment),
+    totalWithdrawal: Math.round(totalWithdrawal),
+    finalValue: Math.round(Math.max(0, finalValue)), // Don't show negative final value
   }
 }
 
@@ -52,29 +52,43 @@ function calculateYearlyData(totalInvestment, withdrawalPerMonth, annualReturn, 
   }
 
   const yearlyData = []
+  let cumulativeWithdrawals = 0
+
   for (let year = 1; year <= duration; year++) {
     const openingBalance = year === 1 ? totalInvestment : Math.max(0, getFV((year - 1) * 12))
     
     // If opening balance is 0, the fund is depleted
-    if (openingBalance <= 0) break
+    if (openingBalance <= 0) {
+      yearlyData.push({
+        year,
+        openingBalance: 0,
+        totalWithdrawals: 0,
+        cumulativeWithdrawals: Math.round(cumulativeWithdrawals),
+        interestEarned: 0,
+        closingBalance: 0
+      })
+      continue
+    }
 
     let closingBalance = getFV(year * 12)
-    
     let actualWithdrawal = withdrawalPerMonth * 12
+
     if (closingBalance < 0) {
       // Adjust last year's withdrawal if fund depletes
-      actualWithdrawal = openingBalance + (openingBalance * Math.pow(1 + r, 12) - openingBalance)
+      actualWithdrawal = Math.max(0, openingBalance + (openingBalance * Math.pow(1 + r, 12) - openingBalance))
       closingBalance = 0
     }
 
-    const interestEarned = closingBalance - openingBalance + actualWithdrawal
+    cumulativeWithdrawals += actualWithdrawal
+    const interestEarned = Math.max(0, closingBalance - openingBalance + actualWithdrawal)
 
     yearlyData.push({
       year,
-      openingBalance,
-      totalWithdrawals: actualWithdrawal,
-      interestEarned: Math.max(0, interestEarned), // Prevent weird negative precision errors
-      closingBalance: Math.max(0, closingBalance)
+      openingBalance: Math.round(openingBalance),
+      totalWithdrawals: Math.round(actualWithdrawal),
+      cumulativeWithdrawals: Math.round(cumulativeWithdrawals),
+      interestEarned: Math.round(interestEarned),
+      closingBalance: Math.round(Math.max(0, closingBalance))
     })
   }
 
@@ -88,7 +102,7 @@ const DEFAULT_INPUTS = {
   duration: 5,
 }
 
-// ─── Disclaimer ────────────────────────────────────────────────────────────────
+// Disclaimer
 function Disclaimer() {
   return (
     <section className="bg-[#f7f9fc] pb-8">
@@ -107,20 +121,23 @@ function Disclaimer() {
   )
 }
 
-// ─── Main Page ──────────────────────────────────────────────────────────────────
+// Main Page
 export default function SwpCalculator() {
   const [inputs, setInputs] = useState(DEFAULT_INPUTS)
 
-
+  const numInvestment = inputs.totalInvestment === '' ? 0 : Number(inputs.totalInvestment)
+  const numWithdrawal = inputs.withdrawalPerMonth === '' ? 0 : Number(inputs.withdrawalPerMonth)
+  const numReturn = inputs.annualReturn === '' ? 0 : Number(inputs.annualReturn)
+  const numDuration = inputs.duration === '' ? 0 : Number(inputs.duration)
 
   const results = useMemo(
-    () => calculateSWP(inputs.totalInvestment, inputs.withdrawalPerMonth, inputs.annualReturn, inputs.duration),
-    [inputs.totalInvestment, inputs.withdrawalPerMonth, inputs.annualReturn, inputs.duration]
+    () => calculateSWP(numInvestment, numWithdrawal, numReturn, numDuration),
+    [numInvestment, numWithdrawal, numReturn, numDuration]
   )
 
   const yearlyData = useMemo(
-    () => calculateYearlyData(inputs.totalInvestment, inputs.withdrawalPerMonth, inputs.annualReturn, inputs.duration),
-    [inputs.totalInvestment, inputs.withdrawalPerMonth, inputs.annualReturn, inputs.duration]
+    () => calculateYearlyData(numInvestment, numWithdrawal, numReturn, numDuration),
+    [numInvestment, numWithdrawal, numReturn, numDuration]
   )
 
   return (
@@ -140,7 +157,7 @@ export default function SwpCalculator() {
         {/* Growth Chart */}
         <SwpGrowthChart yearlyData={yearlyData} results={results} />
 
-        {/* Projection Table — full width */}
+        {/* Projection Table - full width */}
         <SwpProjectionTable yearlyData={yearlyData} />
 
         {/* Recommended Funds */}

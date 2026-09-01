@@ -23,11 +23,14 @@ export default function SwpProjectionTable({ yearlyData }) {
           className="bg-white rounded-3xl border border-[#e8edf7] shadow-lg shadow-blue-900/5 overflow-hidden">
 
           {/* Header */}
-          <div className="flex items-center gap-2 px-6 py-5 border-b border-[#e8edf7]">
-            <div className="w-8 h-8 rounded-xl bg-[#eef4ff] flex items-center justify-center">
+          <div className="flex items-center gap-3 px-6 py-5 border-b border-[#e8edf7]">
+            <div className="w-10 h-10 rounded-2xl bg-[#eef4ff] flex items-center justify-center">
               <FontAwesomeIcon icon={faChartColumn} className="text-[#032e92] text-sm" />
             </div>
-            <h2 className="text-lg font-bold text-gray-900">Yearly Withdrawal Breakdown</h2>
+            <div>
+              <h2 className="text-lg font-bold text-gray-900">Yearly Withdrawal Breakdown</h2>
+              <p className="text-xs text-gray-400 font-medium">Year-on-year schedule of balance, payouts, and interest</p>
+            </div>
           </div>
 
           {/* Scrollable table */}
@@ -35,8 +38,8 @@ export default function SwpProjectionTable({ yearlyData }) {
             <table className="w-full text-sm min-w-[620px]">
               <thead className="sticky top-0 z-10">
                 <tr className="bg-[#f7f9fc] border-b border-[#e8edf7]">
-                  {['Year', 'Opening Balance', 'Total Withdrawn', 'Interest Earned', 'Closing Balance'].map(h => (
-                    <th key={h} className="px-5 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wide whitespace-nowrap">{h}</th>
+                  {['Year', 'Opening Balance', 'Annual Withdrawn', 'Cumulative Withdrawn', 'Interest Earned', 'Closing Balance'].map(h => (
+                    <th key={h} className="px-5 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wide whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -49,20 +52,15 @@ export default function SwpProjectionTable({ yearlyData }) {
                     transition={{ delay: Math.min(i * 0.04, 0.5), duration: 0.4 }}
                     className="hover:bg-[#f7f9fc] transition-colors group">
                     <td className="px-5 py-3.5">
-                      <div className="flex items-center gap-2">
-                        <span className="w-7 h-7 rounded-lg bg-[#eef4ff] text-[#032e92] text-xs font-bold flex items-center justify-center">
-                          {row.year}
-                        </span>
-                      </div>
+                      <span className="w-7 h-7 rounded-lg bg-[#eef4ff] text-[#032e92] text-xs font-bold flex items-center justify-center">
+                        {row.year}
+                      </span>
                     </td>
                     <td className="px-5 py-3.5 font-semibold text-gray-700">{fmt(row.openingBalance)}</td>
                     <td className="px-5 py-3.5 font-bold text-purple-600">{fmt(row.totalWithdrawals)}</td>
-                    <td className="px-5 py-3.5">
-                      <span className="font-bold text-green-600">{fmt(row.interestEarned)}</span>
-                    </td>
-                    <td className="px-5 py-3.5">
-                      <span className="font-bold text-[#032e92]">{fmt(Math.max(0, row.closingBalance))}</span>
-                    </td>
+                    <td className="px-5 py-3.5 font-semibold text-gray-600">{fmt(row.cumulativeWithdrawals ?? (row.totalWithdrawals * row.year))}</td>
+                    <td className="px-5 py-3.5 font-semibold text-green-600">+{fmt(row.interestEarned)}</td>
+                    <td className="px-5 py-3.5 font-bold text-[#032e92]">{fmt(row.closingBalance)}</td>
                   </motion.tr>
                 ))}
               </tbody>

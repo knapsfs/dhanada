@@ -4,6 +4,24 @@ import {
   faCalculator, faCircleInfo
 } from '@fortawesome/free-solid-svg-icons'
 
+const formatIndianNumber = (val) => {
+  if (val === '' || val === null || val === undefined) return ''
+  const str = String(val)
+  if (str.includes('.')) {
+    const [intPart, decPart] = str.split('.')
+    const num = Number(intPart)
+    return (isNaN(num) ? intPart : num.toLocaleString('en-IN')) + '.' + decPart
+  }
+  const num = Number(str)
+  return isNaN(num) ? str : num.toLocaleString('en-IN')
+}
+
+const parseRawNumber = (rawStr) => {
+  if (!rawStr) return ''
+  const cleaned = rawStr.replace(/,/g, '').replace(/[^0-9.]/g, '')
+  return cleaned
+}
+
 function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onChange, hint, placeholder = '' }) {
   return (
     <div className="flex flex-col gap-1.5">
@@ -21,16 +39,21 @@ function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onCh
         )}
         <input
           id={id}
-          type="number"
-          value={value === '' || value === null || value === undefined ? '' : value}
-          min={min}
-          max={max}
-          step={step}
+          type="text"
+          inputMode="decimal"
+          value={formatIndianNumber(value)}
           onChange={e => {
-            const val = e.target.value;
-            onChange(val === '' ? '' : Number(val));
+            const raw = parseRawNumber(e.target.value)
+            if (raw === '') {
+              onChange('')
+            } else {
+              const num = Number(raw)
+              onChange(isNaN(num) ? raw : num)
+            }
           }}
-          className={`w-full py-3.5 rounded-xl border-2 border-[#e8edf7] bg-[#f7f9fc] text-gray-800 font-bold text-base focus:outline-none focus:border-[#032e92] focus:ring-4 focus:ring-[#032e92]/8 transition-all placeholder-gray-400 ${prefix ? 'pl-8 pr-4' : suffix ? 'pl-4 pr-12' : 'px-4'}`}
+          className={`w-full py-3.5 rounded-xl border-2 border-[#e8edf7] bg-[#f7f9fc] text-gray-800 font-bold text-base focus:outline-none focus:border-[#032e92] focus:ring-4 focus:ring-[#032e92]/8 transition-all placeholder-gray-400 ${
+            prefix ? 'pl-8 pr-4' : suffix ? 'pl-4 pr-12' : 'px-4'
+          }`}
           placeholder={placeholder}
         />
         {suffix && (
@@ -47,8 +70,8 @@ function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onCh
         className="w-full h-1.5 rounded-full accent-[#032e92] cursor-pointer mt-1"
       />
       <div className="flex justify-between text-[10px] text-gray-400 font-medium">
-        <span>{prefix}{min?.toLocaleString()}{suffix}</span>
-        <span>{prefix}{max?.toLocaleString()}{suffix}</span>
+        <span>{prefix}{min?.toLocaleString('en-IN')}{suffix}</span>
+        <span>{prefix}{max?.toLocaleString('en-IN')}{suffix}</span>
       </div>
     </div>
   )
@@ -120,17 +143,15 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs }) {
                 >
                   <input
                     id="step-up-pct"
-                    type="number"
-                    min={1}
-                    max={50}
-                    step={1}
-                    value={inputs.stepUpPct === '' ? '' : (inputs.stepUpPct ?? 10)}
+                    type="text"
+                    inputMode="decimal"
+                    value={formatIndianNumber(inputs.stepUpPct === '' ? '' : (inputs.stepUpPct ?? 10))}
                     onChange={(e) => {
-                      const val = e.target.value
+                      const raw = parseRawNumber(e.target.value)
                       setInputs(prev => ({
                         ...prev,
                         stepUpType: 'percentage',
-                        stepUpPct: val === '' ? '' : Number(val)
+                        stepUpPct: raw === '' ? '' : Number(raw)
                       }))
                     }}
                     onFocus={() => {
@@ -160,17 +181,15 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs }) {
                   <span className="absolute left-2 text-xs font-bold text-gray-500 pointer-events-none">₹</span>
                   <input
                     id="step-up-amt"
-                    type="number"
-                    min={500}
-                    max={100000}
-                    step={500}
-                    value={inputs.stepUpAmt === '' ? '' : (inputs.stepUpAmt ?? 2000)}
+                    type="text"
+                    inputMode="decimal"
+                    value={formatIndianNumber(inputs.stepUpAmt === '' ? '' : (inputs.stepUpAmt ?? 2000))}
                     onChange={(e) => {
-                      const val = e.target.value
+                      const raw = parseRawNumber(e.target.value)
                       setInputs(prev => ({
                         ...prev,
                         stepUpType: 'amount',
-                        stepUpAmt: val === '' ? '' : Number(val)
+                        stepUpAmt: raw === '' ? '' : Number(raw)
                       }))
                     }}
                     onFocus={() => {
@@ -179,7 +198,7 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs }) {
                       }
                     }}
                     className="w-full bg-transparent text-gray-800 font-bold text-sm sm:text-base focus:outline-none pl-3.5 cursor-pointer"
-                    placeholder="2000"
+                    placeholder="2,000"
                   />
                 </div>
               </div>

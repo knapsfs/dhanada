@@ -9,7 +9,7 @@ import {
 
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import FundSummaryCard from '../components/FundSummaryCard'
+// FundSummaryCard removed
 import FundTabs from '../components/FundTabs'
 import OverviewSection from '../components/OverviewSection'
 import ObjectiveSection from '../components/ObjectiveSection'
@@ -43,34 +43,34 @@ function FloatingActions() {
     { icon: faComments, label: 'Support', color: 'bg-green-600' },
   ]
 
-  return (
-    <div className="fixed right-5 bottom-6 z-50 flex flex-col items-center gap-3">
-      {actions.map((a) => (
-        <motion.button
-          key={a.label}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          title={a.label}
-          className={`w-12 h-12 ${a.color} text-white rounded-2xl shadow-xl shadow-black/20 flex items-center justify-center`}>
-          <FontAwesomeIcon icon={a.icon} className="text-sm" />
-        </motion.button>
-      ))}
-      <AnimatePresence>
-        {showTop && (
-          <motion.button
-            initial={{ opacity: 0, scale: 0.7 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.7 }}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="w-12 h-12 bg-white border-2 border-[#032e92] text-[#032e92] rounded-2xl shadow-xl flex items-center justify-center">
-            <FontAwesomeIcon icon={faChevronUp} className="text-sm" />
-          </motion.button>
-        )}
-      </AnimatePresence>
-    </div>
-  )
+  // return (
+  //   <div className="fixed right-5 bottom-6 z-50 flex flex-col items-center gap-3">
+  //     {actions.map((a) => (
+  //       <motion.button
+  //         key={a.label}
+  //         whileHover={{ scale: 1.1 }}
+  //         whileTap={{ scale: 0.9 }}
+  //         title={a.label}
+  //         className={`w-12 h-12 ${a.color} text-white rounded-2xl shadow-xl shadow-black/20 flex items-center justify-center`}>
+  //         <FontAwesomeIcon icon={a.icon} className="text-sm" />
+  //       </motion.button>
+  //     ))}
+  //     <AnimatePresence>
+  //       {showTop && (
+  //         <motion.button
+  //           initial={{ opacity: 0, scale: 0.7 }}
+  //           animate={{ opacity: 1, scale: 1 }}
+  //           exit={{ opacity: 0, scale: 0.7 }}
+  //           whileHover={{ scale: 1.1 }}
+  //           whileTap={{ scale: 0.9 }}
+  //           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+  //           className="w-12 h-12 bg-white border-2 border-[#032e92] text-[#032e92] rounded-2xl shadow-xl flex items-center justify-center">
+  //           <FontAwesomeIcon icon={faChevronUp} className="text-sm" />
+  //         </motion.button>
+  //       )}
+  //     </AnimatePresence>
+  //   </div>
+  // )
 }
 
 function generatePerformanceTable(perfData) {
@@ -104,7 +104,7 @@ function generatePerformanceTable(perfData) {
 export default function FundDetails() {
   const { id } = useParams()
   const [apiFund, setApiFund] = useState(null)
-  
+
   // Plan Selection State
   const [selectedType, setSelectedType] = useState('')
   const [selectedOption, setSelectedOption] = useState('')
@@ -123,7 +123,7 @@ export default function FundDetails() {
         const data = await fetchFundDetails(decodedId)
         if (data) {
           setApiFund(data)
-          
+
           // Initialize selector with default plan
           if (data.defaultPlan) {
             setSelectedType(data.defaultPlan.type || '')
@@ -148,7 +148,7 @@ export default function FundDetails() {
   // Derive available options based on current selections
   const availablePlans = apiFund?.plans || []
   const availableTypes = [...new Set(availablePlans.map(p => p.type).filter(Boolean))]
-  
+
   const filteredByType = availablePlans.filter(p => !selectedType || p.type === selectedType)
   const availableOptions = [...new Set(filteredByType.map(p => p.option).filter(Boolean))]
 
@@ -174,10 +174,10 @@ export default function FundDetails() {
   // Construct UI Fund Object based on selected plan
   const fund = useMemo(() => {
     if (!apiFund) return null;
-    
+
     const perfData = selectedPlan.performance_data || {};
     const returnsTable = generatePerformanceTable(perfData);
-    
+
     return {
       id: apiFund.id,
       name: apiFund.name || 'Unknown Fund',
@@ -190,19 +190,19 @@ export default function FundDetails() {
       benchmark: apiFund.benchmarkTier1 || 'N/A',
       launchDate: apiFund.launchDate || 'N/A',
       fundSize: apiFund.fundSize ? `₹${apiFund.fundSize} Cr` : 'N/A',
-      
+
       // Selected Plan specific data
       nav: selectedPlan.nav != null ? `₹${selectedPlan.nav}` : 'N/A',
       navDate: selectedPlan.nav_date || 'N/A',
       isin: selectedPlan.isin || 'N/A',
       sifCode: selectedPlan.sif_code || 'N/A',
       rtaCode: selectedPlan.rta_code || 'N/A',
-      
+
       faceValue: apiFund.faceValue || 'N/A',
       registrar: apiFund.registrar || 'N/A',
       custodian: apiFund.custodian || 'N/A',
       auditor: apiFund.auditor || 'N/A',
-      
+
       navChange: 'N/A',
       navChangePct: 'N/A',
       returns: {
@@ -246,11 +246,11 @@ export default function FundDetails() {
         value: a.max != null ? a.max : 0,
         color: '#032e92'
       })),
-      
+
       // Fallbacks for child charts that crash if these are missing
       sectors: [],
       holdings: [],
-      
+
       performanceData: null,
       performanceTable: returnsTable,
       relatedFunds: [],
@@ -332,41 +332,32 @@ export default function FundDetails() {
       <main className="max-w-7xl mx-auto px-6 lg:px-8 py-8">
         {/* Plan Selector Bar Removed per user request */}
 
-        <div className="flex flex-col lg:flex-row gap-8 items-start">
+        <div className="w-full space-y-6">
+          <OverviewSection fund={fund} />
+          <ObjectiveSection fund={fund} />
+          <FundInformation fund={fund} />
+          <PerformanceSection
+            fund={fund}
+            planSelectorProps={{
+              availableTypes, availableOptions, availableSubOptions, availablePeriods,
+              selectedType, selectedOption, selectedSubOption, selectedPeriod,
+              setSelectedType, setSelectedOption, setSelectedSubOption, setSelectedPeriod
+            }}
+          />
 
-          {/* Sticky Left Sidebar */}
-          <div className="w-full lg:w-72 xl:w-80 flex-shrink-0 lg:sticky lg:top-32 order-first lg:order-none">
-            <FundSummaryCard fund={fund} />
-          </div>
+          <Riskometer fund={fund} />
 
-          {/* Right Content */}
-          <div className="flex-1 min-w-0 space-y-6">
-            <OverviewSection fund={fund} />
-            <ObjectiveSection fund={fund} />
-            <FundInformation fund={fund} />
-            <PerformanceSection 
-              fund={fund} 
-              planSelectorProps={{
-                availableTypes, availableOptions, availableSubOptions, availablePeriods,
-                selectedType, selectedOption, selectedSubOption, selectedPeriod,
-                setSelectedType, setSelectedOption, setSelectedSubOption, setSelectedPeriod
-              }} 
-            />
-            
-            <Riskometer fund={fund} />
+          {/* Holdings section */}
+          <section id="holdings" className="scroll-mt-32 space-y-5">
+            <div className="grid md:grid-cols-2 gap-5">
+              <AllocationChart fund={fund} />
+              <SectorChart fund={fund} />
+            </div>
+            <HoldingsTable fund={fund} />
+          </section>
 
-            {/* Holdings section */}
-            <section id="holdings" className="scroll-mt-32 space-y-5">
-              <div className="grid md:grid-cols-2 gap-5">
-                <AllocationChart fund={fund} />
-                <SectorChart fund={fund} />
-              </div>
-              <HoldingsTable fund={fund} />
-            </section>
-
-            <FundManager fund={fund} />
-            <DocumentsSection fund={fund} />
-          </div>
+          <FundManager fund={fund} />
+          <DocumentsSection fund={fund} />
         </div>
       </main>
 

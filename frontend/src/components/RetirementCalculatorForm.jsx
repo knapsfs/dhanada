@@ -1,10 +1,28 @@
 import { motion } from 'framer-motion'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faCalculator, faArrowRotateRight, faCircleInfo, faCheckCircle, faCircle
+  faCalculator, faCircleInfo, faCheckCircle, faCircle
 } from '@fortawesome/free-solid-svg-icons'
 
-function InputField({ id, label, value, min, max, step = 1, onChange, hint, prefix }) {
+const formatIndianNumber = (val) => {
+  if (val === '' || val === null || val === undefined) return ''
+  const str = String(val)
+  if (str.includes('.')) {
+    const [intPart, decPart] = str.split('.')
+    const num = Number(intPart)
+    return (isNaN(num) ? intPart : num.toLocaleString('en-IN')) + '.' + decPart
+  }
+  const num = Number(str)
+  return isNaN(num) ? str : num.toLocaleString('en-IN')
+}
+
+const parseRawNumber = (rawStr) => {
+  if (!rawStr) return ''
+  const cleaned = rawStr.replace(/,/g, '').replace(/[^0-9.]/g, '')
+  return cleaned
+}
+
+function InputField({ id, label, value, min, max, step = 1, onChange, hint, prefix, suffix, placeholder = '' }) {
   return (
     <div className="flex flex-col gap-1.5 mb-6">
       <label htmlFor={id} className="text-xs font-bold text-gray-500 uppercase tracking-wide flex items-center gap-1.5">
@@ -21,24 +39,40 @@ function InputField({ id, label, value, min, max, step = 1, onChange, hint, pref
         )}
         <input
           id={id}
-          type="number"
-          value={value}
-          min={min}
-          max={max}
-          step={step}
-          onChange={e => onChange(Number(e.target.value))}
-          className={`w-full py-3.5 rounded-xl border-2 border-[#e8edf7] bg-[#f7f9fc] text-gray-800 font-bold text-base focus:outline-none focus:border-[#032e92] focus:ring-4 focus:ring-[#032e92]/8 transition-all ${prefix ? 'pl-8 pr-4' : 'px-4'}`}
+          type="text"
+          inputMode="decimal"
+          value={formatIndianNumber(value)}
+          onChange={e => {
+            const raw = parseRawNumber(e.target.value)
+            if (raw === '') {
+              onChange('')
+            } else {
+              const num = Number(raw)
+              onChange(isNaN(num) ? raw : num)
+            }
+          }}
+          className={`w-full py-3.5 rounded-xl border-2 border-[#e8edf7] bg-[#f7f9fc] text-gray-800 font-bold text-base focus:outline-none focus:border-[#032e92] focus:ring-4 focus:ring-[#032e92]/8 transition-all placeholder-gray-400 ${
+            prefix ? 'pl-8 pr-4' : suffix ? 'pl-4 pr-12' : 'px-4'
+          }`}
+          placeholder={placeholder}
         />
+        {suffix && (
+          <span className="absolute right-3.5 text-sm font-bold text-gray-500 pointer-events-none">{suffix}</span>
+        )}
       </div>
       <input
         type="range"
         min={min}
         max={max}
         step={step}
-        value={value}
+        value={value === '' || value === null || value === undefined ? min : value}
         onChange={e => onChange(Number(e.target.value))}
         className="w-full h-1.5 rounded-full accent-[#032e92] cursor-pointer mt-1"
       />
+      <div className="flex justify-between text-[10px] text-gray-400 font-medium">
+        <span>{prefix}{min?.toLocaleString('en-IN')}{suffix}</span>
+        <span>{prefix}{max?.toLocaleString('en-IN')}{suffix}</span>
+      </div>
     </div>
   )
 }
@@ -55,8 +89,11 @@ function RadioGroup({ label, options, selected, onChange }) {
           return (
             <button
               key={opt.value}
+              type="button"
               onClick={() => onChange(opt.value)}
-              className={`flex items-center gap-3 w-full text-left p-3.5 rounded-xl border-2 transition-all ${isSelected ? 'border-[#032e92] bg-[#eef4ff]' : 'border-[#e8edf7] hover:border-[#032e92]/30 bg-white'}`}>
+              className={`flex items-center gap-3 w-full text-left p-3.5 rounded-xl border-2 transition-all cursor-pointer ${
+                isSelected ? 'border-[#032e92] bg-[#eef4ff]' : 'border-[#e8edf7] hover:border-[#032e92]/30 bg-white'
+              }`}>
               <FontAwesomeIcon 
                 icon={isSelected ? faCheckCircle : faCircle} 
                 className={isSelected ? 'text-[#032e92]' : 'text-gray-300'} 
