@@ -60,7 +60,7 @@ services:
         bench set-config -g redis_queue "redis://$$REDIS_QUEUE";
         bench set-config -g redis_socketio "redis://$$REDIS_SOCKETIO";
         bench set-config -gp socketio_port $$SOCKETIO_PORT;
-        /home/frappe/frappe-bench/apps/dhanada/docker/scripts/init-site.sh
+        /docker/scripts/init-site.sh
 
     environment:
       DB_HOST: mariadb
