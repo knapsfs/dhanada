@@ -25,6 +25,18 @@ const navLinks = [
       { label: 'Retirement Planning', href: '/services#retirement' },
     ],
   },
+  {
+    label: 'Calculators',
+    href: '/calculators/sip',
+    dropdown: [
+      { label: 'SIP Calculator', href: '/calculators/sip' },
+      { label: 'Step Up SIP', href: '/calculators/step-up-sip' },
+      { label: 'SWP Calculator', href: '/calculators/swp' },
+      { label: 'Lumpsum Calculator', href: '/calculators/lumpsum' },
+      { label: 'Retirement Calculator', href: '/calculators/retirement' },
+      { label: 'Future Value', href: '/calculators/future-value' },
+    ],
+  },
   { label: 'Blogs', href: '/blogs' },
   { label: 'Contact Us', href: '/contact' },
 ];
@@ -43,60 +55,99 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-lg shadow-blue-900/5' : 'bg-white shadow-lg shadow-blue-900/5'
-        }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled ? 'bg-white shadow-lg shadow-blue-900/5' : 'bg-white shadow-lg shadow-blue-900/5'
+      }`}
     >
       {/* Top Banner */}
       <div className="bg-[#000080] py-1.5 w-full overflow-hidden flex">
-        <motion.div
-          animate={{ x: [0, "-50%"] }}
-          transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
-          className="flex whitespace-nowrap min-w-max"
-        >
-          {/* Double content for seamless looping */}
-          {[1, 2].map((item) => (
-            <div key={item} className="flex items-center">
-              <p className="text-white text-[11px] md:text-sm font-medium tracking-wide">
-                AMFI Registered Mutual Fund Distributor (ARN-16538)
-              </p>
-              {/* Spacer so it spans across the screen before the next one comes */}
-              <span className="inline-block w-[100vw]"></span>
-            </div>
-          ))}
-        </motion.div>
+        <div className="flex whitespace-nowrap animate-marquee">
+          <span className="text-white text-xs font-semibold uppercase tracking-wider flex items-center gap-2 mx-6">
+            <FontAwesomeIcon icon={faChartLine} className="text-[#a3e635]" />
+            Smart Investing, Confident Living – AMFI Registered Mutual Fund Distributor
+          </span>
+          <span className="text-white text-xs font-semibold uppercase tracking-wider flex items-center gap-2 mx-6">
+            <FontAwesomeIcon icon={faChartLine} className="text-[#a3e635]" />
+            Grow Your Wealth with Expert Guidance
+          </span>
+          <span className="text-white text-xs font-semibold uppercase tracking-wider flex items-center gap-2 mx-6">
+            <FontAwesomeIcon icon={faChartLine} className="text-[#a3e635]" />
+            Over 500+ Cr AUM Managed
+          </span>
+        </div>
+        <div className="flex whitespace-nowrap animate-marquee2" aria-hidden="true">
+          <span className="text-white text-xs font-semibold uppercase tracking-wider flex items-center gap-2 mx-6">
+            <FontAwesomeIcon icon={faChartLine} className="text-[#a3e635]" />
+            Smart Investing, Confident Living – AMFI Registered Mutual Fund Distributor
+          </span>
+          <span className="text-white text-xs font-semibold uppercase tracking-wider flex items-center gap-2 mx-6">
+            <FontAwesomeIcon icon={faChartLine} className="text-[#a3e635]" />
+            Grow Your Wealth with Expert Guidance
+          </span>
+          <span className="text-white text-xs font-semibold uppercase tracking-wider flex items-center gap-2 mx-6">
+            <FontAwesomeIcon icon={faChartLine} className="text-[#a3e635]" />
+            Over 500+ Cr AUM Managed
+          </span>
+        </div>
       </div>
 
-      <nav className={`max-w-7xl mx-auto px-6 lg:px-8 transition-all duration-300 py-3`}>
-        <div className="flex items-center justify-between">
+      <nav className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center group z-50">
-            <img src={logo} alt="Knaps" className="h-14 md:h-14 w-auto group-hover:scale-105 transition-transform" />
+          <Link to="/" className="flex items-center gap-3 group">
+            <img
+              src={logo}
+              alt="KNAPS Financial Services"
+              className="h-10 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+            />
           </Link>
 
-          {/* Desktop Nav */}
+          {/* Desktop Navigation Links */}
           <ul className="hidden xl:flex items-center gap-1">
             {navLinks.map((link) => (
               <li
                 key={link.label}
-                className="relative group"
+                className="relative"
                 onMouseEnter={() => link.dropdown && setActiveDropdown(link.label)}
                 onMouseLeave={() => setActiveDropdown(null)}
               >
-                <Link
-                  to={link.href}
-                  className={`flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-[15px] font-medium transition-all duration-200 relative overflow-hidden ${location.pathname === link.href ? 'text-[#032e92] font-semibold' : scrolled ? 'text-gray-700 hover:text-[#032e92]' : 'text-gray-800 hover:text-[#032e92]'
+                {link.href.startsWith('http') ? (
+                  <a
+                    href={link.href}
+                    className={`relative flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-[14px] 2xl:text-[15px] font-medium transition-all duration-300 group ${
+                      activeDropdown === link.label
+                        ? 'text-[#032e92] bg-[#eef5ff]'
+                        : 'text-gray-700 hover:text-[#032e92] hover:bg-[#eef5ff]/60'
                     }`}
-                >
-                  {link.label}
-                  {link.dropdown && (
-                    <FontAwesomeIcon
-                      icon={faChevronDown}
-                      className={`text-[10px] transition-transform duration-300 ${activeDropdown === link.label ? 'rotate-180 text-[#032e92]' : ''}`}
-                    />
-                  )}
-                  {/* Animated underline */}
-                  <span className={`absolute bottom-1 left-4 right-4 h-0.5 bg-[#c10000] transform origin-left scale-x-0 transition-transform duration-300 ease-out ${activeDropdown === link.label || location.pathname === link.href ? 'scale-x-100' : 'group-hover:scale-x-100'}`}></span>
-                </Link>
+                  >
+                    {link.label}
+                    {link.dropdown && (
+                      <FontAwesomeIcon
+                        icon={faChevronDown}
+                        className={`text-[10px] transition-transform duration-300 ${activeDropdown === link.label ? 'rotate-180 text-[#032e92]' : ''}`}
+                      />
+                    )}
+                  </a>
+                ) : (
+                  <Link
+                    to={link.href}
+                    className={`relative flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-[14px] 2xl:text-[15px] font-medium transition-all duration-300 group ${
+                      activeDropdown === link.label || location.pathname === link.href
+                        ? 'text-[#032e92] bg-[#eef5ff]'
+                        : 'text-gray-700 hover:text-[#032e92] hover:bg-[#eef5ff]/60'
+                    }`}
+                  >
+                    {link.label}
+                    {link.dropdown && (
+                      <FontAwesomeIcon
+                        icon={faChevronDown}
+                        className={`text-[10px] transition-transform duration-300 ${activeDropdown === link.label ? 'rotate-180 text-[#032e92]' : ''}`}
+                      />
+                    )}
+                    {/* Animated underline */}
+                    <span className={`absolute bottom-1 left-3.5 right-3.5 h-0.5 bg-[#c10000] transform origin-left scale-x-0 transition-transform duration-300 ease-out ${activeDropdown === link.label || location.pathname === link.href ? 'scale-x-100' : 'group-hover:scale-x-100'}`}></span>
+                  </Link>
+                )}
 
                 {/* Desktop Dropdown */}
                 {link.dropdown && (
@@ -107,16 +158,26 @@ export default function Navbar() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
                         transition={{ duration: 0.2, ease: "easeOut" }}
-                        className="absolute top-full left-0 mt-2 w-64 bg-white rounded-2xl shadow-xl shadow-blue-900/10 border border-gray-100 py-3 overflow-hidden origin-top-left"
+                        className="absolute top-full left-0 mt-2 w-60 bg-white rounded-2xl shadow-xl shadow-blue-900/10 border border-gray-100 py-3 overflow-hidden origin-top-left"
                       >
                         {link.dropdown.map((item) => (
-                          <Link
-                            key={item.label}
-                            to={item.href}
-                            className="block px-5 py-2.5 text-[14px] text-gray-600 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors font-medium hover:pl-6 duration-300"
-                          >
-                            {item.label}
-                          </Link>
+                          item.href.startsWith('http') ? (
+                            <a
+                              key={item.label}
+                              href={item.href}
+                              className="block px-5 py-2.5 text-[14px] text-gray-600 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors font-medium hover:pl-6 duration-300"
+                            >
+                              {item.label}
+                            </a>
+                          ) : (
+                            <Link
+                              key={item.label}
+                              to={item.href}
+                              className="block px-5 py-2.5 text-[14px] text-gray-600 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors font-medium hover:pl-6 duration-300"
+                            >
+                              {item.label}
+                            </Link>
+                          )
                         ))}
                       </motion.div>
                     )}
@@ -183,24 +244,45 @@ export default function Navbar() {
                           {link.label}
                         </div>
                         {link.dropdown.map((item) => (
-                          <Link
-                            key={item.label}
-                            to={item.href}
-                            onClick={() => setMobileOpen(false)}
-                            className="block px-4 py-2.5 ml-4 rounded-xl text-[15px] font-medium text-gray-700 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors"
-                          >
-                            {item.label}
-                          </Link>
+                          item.href.startsWith('http') ? (
+                            <a
+                              key={item.label}
+                              href={item.href}
+                              onClick={() => setMobileOpen(false)}
+                              className="block px-4 py-2.5 ml-4 rounded-xl text-[15px] font-medium text-gray-700 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors"
+                            >
+                              {item.label}
+                            </a>
+                          ) : (
+                            <Link
+                              key={item.label}
+                              to={item.href}
+                              onClick={() => setMobileOpen(false)}
+                              className="block px-4 py-2.5 ml-4 rounded-xl text-[15px] font-medium text-gray-700 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors"
+                            >
+                              {item.label}
+                            </Link>
+                          )
                         ))}
                       </div>
                     ) : (
-                      <Link
-                        to={link.href}
-                        onClick={() => setMobileOpen(false)}
-                        className="block px-4 py-3 rounded-xl text-[15px] font-medium text-gray-800 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors"
-                      >
-                        {link.label}
-                      </Link>
+                      link.href.startsWith('http') ? (
+                        <a
+                          href={link.href}
+                          onClick={() => setMobileOpen(false)}
+                          className="block px-4 py-3 rounded-xl text-[15px] font-medium text-gray-800 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors"
+                        >
+                          {link.label}
+                        </a>
+                      ) : (
+                        <Link
+                          to={link.href}
+                          onClick={() => setMobileOpen(false)}
+                          className="block px-4 py-3 rounded-xl text-[15px] font-medium text-gray-800 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors"
+                        >
+                          {link.label}
+                        </Link>
+                      )
                     )}
                   </div>
                 ))}
