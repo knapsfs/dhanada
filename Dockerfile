@@ -46,6 +46,9 @@ RUN python3 -c "from pathlib import Path; p=Path('/home/frappe/frappe-bench/site
 # Build bundled assets
 RUN bench build --production
 
+# Move assets to top-level assets/ directory for sync with compose file
+RUN rm -rf /home/frappe/frappe-bench/assets/* && \
+    cp -a /home/frappe/frappe-bench/sites/assets/. /home/frappe/frappe-bench/assets/
 
 
 
