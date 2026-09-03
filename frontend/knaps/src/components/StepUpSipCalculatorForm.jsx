@@ -82,6 +82,35 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs }) {
 
   const isPct = inputs.stepUpType !== 'amount'
 
+  // Values display: when percentage is active, amount displays 0. When amount is active, percentage displays 0.
+  const displayPct = isPct
+    ? (inputs.stepUpPct === '' ? '' : (inputs.stepUpPct ?? inputs.stepUp ?? 10))
+    : 0
+
+  const displayAmt = !isPct
+    ? (inputs.stepUpAmt === '' ? '' : (inputs.stepUpAmt ?? inputs.stepUp ?? 2000))
+    : 0
+
+  const handleSelectPct = () => {
+    if (!isPct) {
+      setInputs(prev => ({
+        ...prev,
+        stepUpType: 'percentage',
+        stepUpPct: prev.stepUpPct === '' ? '' : (prev.stepUpPct || 10)
+      }))
+    }
+  }
+
+  const handleSelectAmt = () => {
+    if (isPct) {
+      setInputs(prev => ({
+        ...prev,
+        stepUpType: 'amount',
+        stepUpAmt: prev.stepUpAmt === '' ? '' : (prev.stepUpAmt || 2000)
+      }))
+    }
+  }
+
   return (
     <section className="bg-[#f7f9fc] pb-6">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -89,8 +118,8 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="bg-white rounded-3xl shadow-xl shadow-blue-900/8 border border-[#e8edf7] p-6 lg:p-8">
-
+          className="bg-white rounded-3xl shadow-xl shadow-blue-900/8 border border-[#e8edf7] p-6 lg:p-8"
+        >
           {/* Header with Title */}
           <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[#e8edf7]">
             <div className="w-10 h-10 rounded-2xl bg-[#eef4ff] flex items-center justify-center">
@@ -130,11 +159,7 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs }) {
                 
                 {/* 1. Percentage Half */}
                 <div
-                  onClick={() => {
-                    if (!isPct) {
-                      setInputs(prev => ({ ...prev, stepUpType: 'percentage' }))
-                    }
-                  }}
+                  onClick={handleSelectPct}
                   className={`relative flex items-center rounded-lg px-2.5 py-2 transition-all cursor-pointer ${
                     isPct
                       ? 'bg-white shadow-sm border border-[#032e92]/30 ring-2 ring-[#032e92]/10'
@@ -145,7 +170,7 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs }) {
                     id="step-up-pct"
                     type="text"
                     inputMode="decimal"
-                    value={formatIndianNumber(inputs.stepUpPct === '' ? '' : (inputs.stepUpPct ?? 10))}
+                    value={formatIndianNumber(displayPct)}
                     onChange={(e) => {
                       const raw = parseRawNumber(e.target.value)
                       setInputs(prev => ({
@@ -154,11 +179,7 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs }) {
                         stepUpPct: raw === '' ? '' : Number(raw)
                       }))
                     }}
-                    onFocus={() => {
-                      if (!isPct) {
-                        setInputs(prev => ({ ...prev, stepUpType: 'percentage' }))
-                      }
-                    }}
+                    onFocus={handleSelectPct}
                     className="w-full bg-transparent text-gray-800 font-bold text-sm sm:text-base focus:outline-none pr-4 cursor-pointer"
                     placeholder="10"
                   />
@@ -167,11 +188,7 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs }) {
 
                 {/* 2. Amount Half */}
                 <div
-                  onClick={() => {
-                    if (isPct) {
-                      setInputs(prev => ({ ...prev, stepUpType: 'amount' }))
-                    }
-                  }}
+                  onClick={handleSelectAmt}
                   className={`relative flex items-center rounded-lg px-2.5 py-2 transition-all cursor-pointer ${
                     !isPct
                       ? 'bg-white shadow-sm border border-[#032e92]/30 ring-2 ring-[#032e92]/10'
@@ -183,7 +200,7 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs }) {
                     id="step-up-amt"
                     type="text"
                     inputMode="decimal"
-                    value={formatIndianNumber(inputs.stepUpAmt === '' ? '' : (inputs.stepUpAmt ?? 2000))}
+                    value={formatIndianNumber(displayAmt)}
                     onChange={(e) => {
                       const raw = parseRawNumber(e.target.value)
                       setInputs(prev => ({
@@ -192,11 +209,7 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs }) {
                         stepUpAmt: raw === '' ? '' : Number(raw)
                       }))
                     }}
-                    onFocus={() => {
-                      if (isPct) {
-                        setInputs(prev => ({ ...prev, stepUpType: 'amount' }))
-                      }
-                    }}
+                    onFocus={handleSelectAmt}
                     className="w-full bg-transparent text-gray-800 font-bold text-sm sm:text-base focus:outline-none pl-3.5 cursor-pointer"
                     placeholder="2,000"
                   />
@@ -211,8 +224,8 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs }) {
                 step={isPct ? 1 : 500}
                 value={
                   isPct
-                    ? (inputs.stepUpPct === '' ? 1 : (inputs.stepUpPct ?? 10))
-                    : (inputs.stepUpAmt === '' ? 500 : (inputs.stepUpAmt ?? 2000))
+                    ? (inputs.stepUpPct === '' ? 1 : (inputs.stepUpPct ?? inputs.stepUp ?? 10))
+                    : (inputs.stepUpAmt === '' ? 500 : (inputs.stepUpAmt ?? inputs.stepUp ?? 2000))
                 }
                 onChange={e => {
                   const val = Number(e.target.value)

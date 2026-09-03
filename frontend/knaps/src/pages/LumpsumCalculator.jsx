@@ -7,7 +7,6 @@ import LumpsumSummaryCards from '../components/LumpsumSummaryCards'
 import LumpsumGrowthChart from '../components/LumpsumGrowthChart'
 import LumpsumProjectionTable from '../components/LumpsumProjectionTable'
 import LumpsumFAQ from '../components/LumpsumFAQ'
-import Newsletter from '../components/Newsletter'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 
@@ -17,18 +16,22 @@ function calculateLumpsum(totalInvestment, annualReturn, duration, isInflationAd
   const n = duration
   const infRate = Number(inflationRate) / 100
 
-  let futureValue = totalInvestment * Math.pow(1 + r, n)
+  const nominalFutureValue = totalInvestment * Math.pow(1 + r, n)
+  let inflationAdjustedValue = nominalFutureValue
 
-  if (isInflationAdjusted && duration > 0) {
-    futureValue = futureValue / Math.pow(1 + infRate, duration)
+  if (duration > 0) {
+    inflationAdjustedValue = nominalFutureValue / Math.pow(1 + infRate, duration)
   }
 
+  const futureValue = isInflationAdjusted ? inflationAdjustedValue : nominalFutureValue
   const wealthGained = Math.max(0, futureValue - totalInvestment)
 
   return {
     totalInvested: Math.round(totalInvestment),
     wealthGained: Math.round(wealthGained),
-    futureValue: Math.round(futureValue)
+    futureValue: Math.round(futureValue),
+    nominalFutureValue: Math.round(nominalFutureValue),
+    inflationAdjustedValue: Math.round(inflationAdjustedValue)
   }
 }
 
@@ -70,7 +73,9 @@ function Disclaimer() {
           <FontAwesomeIcon icon={faCircleInfo} className="text-gray-400 text-base flex-shrink-0 mt-0.5" />
           <div>
             <p className="text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wide">Disclaimer</p>
-            <p className="text-xs text-gray-500 font-medium leading-relaxed">The calculations provided are illustrative in nature and based on mathematical compounding and your inputs. Actual investment returns are subject to market risks and will depend on fund performance, asset allocation, and market conditions. Please consult a qualified financial advisor before making investment decisions.</p>
+            <p className="text-xs text-gray-500 font-medium leading-relaxed">
+              The calculations provided are illustrative in nature and based on mathematical compounding and your inputs. Actual investment returns are subject to market risks and will depend on fund performance, asset allocation, and market conditions. Please consult a qualified financial advisor before making investment decisions.
+            </p>
           </div>
         </div>
       </div>
@@ -125,7 +130,7 @@ export default function LumpsumCalculator() {
         {/* Growth Chart */}
         <LumpsumGrowthChart yearlyData={yearlyData} results={results} />
 
-        {/* Projection Table - full width */}
+        {/* Projection Table */}
         <LumpsumProjectionTable yearlyData={yearlyData} />
 
         {/* Disclaimer */}
@@ -133,9 +138,6 @@ export default function LumpsumCalculator() {
 
         {/* FAQ */}
         <LumpsumFAQ />
-
-        {/* Newsletter */}
-        {/* <Newsletter /> */}
       </main>
 
       <Footer />
