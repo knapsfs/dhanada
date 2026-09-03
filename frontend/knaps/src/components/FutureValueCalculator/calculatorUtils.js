@@ -41,18 +41,19 @@ export const calculateFutureValue = ({
 	}
 
 	const totalInvested = pv + pmt * n;
-
-	let finalFv = fv;
-	if (isInflationAdjusted && years > 0) {
-		const infRate = inflationRate / 100;
-		finalFv = fv / Math.pow(1 + infRate, years);
+	const infRate = Number(inflationRate) / 100;
+	let inflationAdjustedValue = fv;
+	if (years > 0) {
+		inflationAdjustedValue = fv / Math.pow(1 + infRate, years);
 	}
 
+	const finalFv = isInflationAdjusted ? inflationAdjustedValue : fv;
 	const potentialGrowth = Math.max(0, finalFv - totalInvested);
 
 	return {
 		futureValue: Math.round(finalFv),
 		nominalFutureValue: Math.round(fv),
+		inflationAdjustedValue: Math.round(inflationAdjustedValue),
 		totalInvested: Math.round(totalInvested),
 		potentialGrowth: Math.round(potentialGrowth),
 		periodicRate: r,
@@ -79,7 +80,7 @@ export const calculateRequiredInvestment = ({
 	// If targetFv is adjusted for inflation (target in today's money), future target needed will be targetFv * (1 + i)^years
 	let effectiveTargetFv = targetFv;
 	if (isInflationAdjusted && years > 0) {
-		const infRate = inflationRate / 100;
+		const infRate = Number(inflationRate) / 100;
 		effectiveTargetFv = targetFv * Math.pow(1 + infRate, years);
 	}
 
@@ -120,10 +121,11 @@ export const calculateRequiredInvestment = ({
 
 	return {
 		requiredPmt: roundedPmt,
-		futureValue: calcData.futureValue,
-		nominalFutureValue: calcData.nominalFutureValue,
 		totalInvested: Math.round(totalInvested),
 		potentialGrowth: calcData.potentialGrowth,
+		futureValue: calcData.futureValue,
+		nominalFutureValue: calcData.nominalFutureValue,
+		inflationAdjustedValue: calcData.inflationAdjustedValue,
 		periodicRate: r,
 		periods: n,
 		frequency,
@@ -133,9 +135,9 @@ export const calculateRequiredInvestment = ({
 
 export const generateChartData = ({
 	calcMode,
-	targetFv,
 	pv,
 	pmt,
+	targetFv,
 	annualRate,
 	years,
 	frequency,
@@ -146,51 +148,62 @@ export const generateChartData = ({
 	const labels = [];
 	const investedData = [];
 	const growthData = [];
-	const fvData = [];
 
-	// If we are in calculate PMT mode, first solve for PMT so the chart builds up correctly
-	let actualPmt = pmt;
-	if (calcMode === "pmt") {
-		const req = calculateRequiredInvestment({
-			targetFv,
-			pv,
-			annualRate,
-			years,
-			frequency,
-			timing,
-			isInflationAdjusted,
-			inflationRate,
-		});
-		actualPmt = req.requiredPmt;
-	}
+	const effectivePmt =
+		calcMode === "pmt"
+			? calculateRequiredInvestment({
+					targetFv,
+					pv,
+					annualRate,
+					years,
+					frequency,
+					timing,
+					isInflationAdjusted,
+					inflationRate,
+			  }).requiredPmt
+			: pmt;
 
-	const numYears = Math.max(1, Math.round(years));
+	const isMonthly = frequency === "monthly";
+	const infRate = Number(inflationRate) / 100;
 
-	// Create yearly data points for the chart matching Y1, Y2, Y3 format
-	for (let y = 1; y <= numYears; y++) {
-		labels.push(`Y${y}`);
+	for (let y = 0; y <= years; y++) {
+		labels.push(`Year ${y}`);
 
-		// Calculate values at this specific year
-		const dataAtYear = calculateFutureValue({
-			pv,
-			pmt: actualPmt,
-			annualRate,
-			years: y,
-			frequency,
-			timing,
-			isInflationAdjusted,
-			inflationRate,
-		});
+		if (y === 0) {
+			investedData.push(pv);
+			growthData.push(pv);
+			continue;
+		}
 
-		investedData.push(dataAtYear.totalInvested);
-		growthData.push(dataAtYear.potentialGrowth);
-		fvData.push(dataAtYear.futureValue);
+		const n = isMonthly ? y * 12 : y;
+		const r = isMonthly ? annualRate / 100 / 12 : annualRate / 100;
+
+		let fv = 0;
+		if (r === 0) {
+			fv = pv + effectivePmt * n;
+		} else {
+			const fvPv = pv * Math.pow(1 + r, n);
+			let fvPmt = effectivePmt * ((Math.pow(1 + r, n) - 1) / r);
+			if (timing === "beginning") {
+				fvPmt = fvPmt * (1 + r);
+			}
+			fv = fvPv + fvPmt;
+		}
+
+		let finalFv = fv;
+		if (isInflationAdjusted) {
+			finalFv = fv / Math.pow(1 + infRate, y);
+		}
+
+		const totalInvested = pv + effectivePmt * n;
+
+		investedData.push(Math.round(totalInvested));
+		growthData.push(Math.round(finalFv));
 	}
 
 	return {
 		labels,
 		investedData,
 		growthData,
-		fvData,
 	};
 };

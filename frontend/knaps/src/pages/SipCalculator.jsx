@@ -8,7 +8,6 @@ import SipGrowthChart from '../components/SipGrowthChart'
 import SipProjectionTable from '../components/SipProjectionTable'
 import InvestmentInsights from '../components/InvestmentInsights'
 import SipFAQ from '../components/SipFAQ'
-import Newsletter from '../components/Newsletter'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 
@@ -20,18 +19,20 @@ function calculateSIP(sipAmount, annualReturn, duration, isInflationAdjusted = f
   const n = duration * 12
   const totalInvested = sipAmount * n
 
-  let futureValue = 0
+  let nominalFutureValue = 0
   if (i === 0) {
-    futureValue = totalInvested
+    nominalFutureValue = totalInvested
   } else {
-    futureValue = sipAmount * ((Math.pow(1 + i, n) - 1) / i)
+    nominalFutureValue = sipAmount * ((Math.pow(1 + i, n) - 1) / i)
   }
 
   const infRate = Number(inflationRate) / 100
-  if (isInflationAdjusted && duration > 0) {
-    futureValue = futureValue / Math.pow(1 + infRate, duration)
+  let inflationAdjustedValue = nominalFutureValue
+  if (duration > 0) {
+    inflationAdjustedValue = nominalFutureValue / Math.pow(1 + infRate, duration)
   }
 
+  const futureValue = isInflationAdjusted ? inflationAdjustedValue : nominalFutureValue
   const wealthGained = Math.max(0, futureValue - totalInvested)
   const absoluteReturn = totalInvested > 0 ? (wealthGained / totalInvested) * 100 : 0
   const expectedReturn = isInflationAdjusted
@@ -40,6 +41,8 @@ function calculateSIP(sipAmount, annualReturn, duration, isInflationAdjusted = f
 
   return {
     futureValue: Math.round(futureValue),
+    nominalFutureValue: Math.round(nominalFutureValue),
+    inflationAdjustedValue: Math.round(inflationAdjustedValue),
     totalInvested: Math.round(totalInvested),
     wealthGained: Math.round(wealthGained),
     absoluteReturn,
@@ -91,7 +94,9 @@ function Disclaimer() {
           <FontAwesomeIcon icon={faCircleInfo} className="text-gray-400 text-base flex-shrink-0 mt-0.5" />
           <div>
             <p className="text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wide">Disclaimer</p>
-            <p className="text-xs text-gray-500 font-medium leading-relaxed">The calculations provided are illustrative in nature and based on mathematical compounding and your inputs. Actual investment returns are subject to market risks and will depend on fund performance, asset allocation, and market conditions. Please consult a qualified financial advisor before making investment decisions.</p>
+            <p className="text-xs text-gray-500 font-medium leading-relaxed">
+              The calculations provided are illustrative in nature and based on mathematical compounding and your inputs. Actual investment returns are subject to market risks and will depend on fund performance, asset allocation, and market conditions. Please consult a qualified financial advisor before making investment decisions.
+            </p>
           </div>
         </div>
       </div>
@@ -159,9 +164,6 @@ export default function SipCalculator() {
 
         {/* FAQ */}
         <SipFAQ />
-
-        {/* Newsletter */}
-        {/* <Newsletter /> */}
       </main>
 
       <Footer />
