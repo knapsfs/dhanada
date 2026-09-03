@@ -46,6 +46,12 @@ RUN python3 -c "from pathlib import Path; p=Path('/home/frappe/frappe-bench/site
 # Build bundled assets
 RUN bench build --production
 
+# Resolve relative symlinks in sites/assets to actual physical files
+RUN mkdir /tmp/assets && \
+    cp -aL /home/frappe/frappe-bench/sites/assets/. /tmp/assets/ && \
+    rm -rf /home/frappe/frappe-bench/sites/assets && \
+    mv /tmp/assets /home/frappe/frappe-bench/sites/assets
+
 
 
 # Retain existing entrypoint logic
