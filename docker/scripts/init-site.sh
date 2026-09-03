@@ -26,7 +26,4 @@ echo "Installing Dhanada app..."
 echo "Running migrations..."
 bench --site ${SITE_NAME} migrate
 
-echo "Building assets..."
-bench build
-
 echo "Initialization complete!"
