@@ -43,12 +43,14 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
-        <Stats />
-        {!loading && featuredFund && <FeaturedFund fund={featuredFund} />}
-        {!loading && funds.length > 0 && <TopFunds fundsData={funds} />}
-        {!loading && funds.length > 0 && <HeatmapSection fundsData={funds} />}
         <WhyChoose />
         {!loading && funds.length > 0 && <FundMarketplace fundsData={funds} />}
+        {/* <Stats /> */}
+        {/* {!loading && featuredFund && <FeaturedFund fund={featuredFund} />} */}
+        {!loading && funds.length > 0 && <TopFunds fundsData={funds} />}
+        {!loading && funds.length > 0 && <HeatmapSection fundsData={funds} />}
+
+
         <InvestmentPhilosophy />
         {/* <InvestmentProcess /> */}
         <Comparison />

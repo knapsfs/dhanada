@@ -1,71 +1,16 @@
-import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faCircleArrowRight, faCirclePlay, faArrowTrendUp, faChartPie,
-  faCoins, faChartLine
+  faCircleArrowRight, faChartLine
 } from '@fortawesome/free-solid-svg-icons'
-import { useInView } from 'react-intersection-observer'
-import { stats } from '../data/data'
 import { useLeadModal } from '../context/LeadModalContext'
+import heroImg from '../assets/knaps-hero.png'
 
-const floatingCards = [
-  {
-    icon: faArrowTrendUp,
-    color: 'from-green-400 to-emerald-500',
-    label: 'Portfolio Growth',
-    value: '+28.4%',
-    sub: 'This Year',
-  },
-  {
-    icon: faChartPie,
-    color: 'from-blue-400 to-indigo-500',
-    label: 'Asset Allocation',
-    value: '6 Funds',
-    sub: 'Diversified',
-  },
-  {
-    icon: faCoins,
-    color: 'from-amber-400 to-orange-500',
-    label: 'Monthly SIP',
-    value: '₹12,500',
-    sub: 'Active',
-  },
+const heroHighlights = [
+  'Advanced investment strategies',
+  'SEBI-regulated framework',
+  'Start with just Rs. 10lakh',
 ]
-
-function AnimatedNumber({ value, duration = 2000, inView }) {
-  const [count, setCount] = useState(0)
-  useEffect(() => {
-    if (!inView) return
-    const end = value
-    const step = Math.ceil(end / (duration / 16))
-    let current = 0
-    const timer = setInterval(() => {
-      current = Math.min(current + step, end)
-      setCount(current)
-      if (current >= end) clearInterval(timer)
-    }, 16)
-    return () => clearInterval(timer)
-  }, [inView, value, duration])
-  return <span>{count.toLocaleString()}</span>
-}
-
-const StatCard = ({ prefix, value, suffix, label, delay }) => {
-  const { ref, inView } = useInView({ triggerOnce: true })
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 20 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ delay, duration: 0.6 }}
-      className="glass rounded-2xl px-5 py-4 text-center border border-white/20">
-      <div className="text-2xl font-bold text-white">
-        {prefix}<AnimatedNumber value={value} inView={inView} />{suffix}
-      </div>
-      <p className="text-blue-200 text-xs font-medium mt-1">{label}</p>
-    </motion.div>
-  )
-}
 
 export default function Hero() {
   const { openLeadModal } = useLeadModal()
@@ -80,7 +25,7 @@ export default function Hero() {
       <div className="absolute bottom-20 left-10 w-72 h-72 rounded-full bg-white/5 blur-3xl" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#032e92]/30 blur-3xl" />
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-20">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-24 lg:pb-28">
         <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[80vh]">
 
           {/* Left Column */}
@@ -99,156 +44,89 @@ export default function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.1 }}
               className="text-5xl lg:text-5xl xl:text-5xl font-bold text-white leading-tight mb-6">
-              Specialized Investment Funds (SIF) Designed for
-              {/* <br /> */}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-cyan-300"> Smarter Investment Choices.</span>
+              Specialized Investment Funds (SIF) for
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-cyan-300"> Smarter Investments.</span>
             </motion.h1>
 
-            <motion.p
+            {/* Feature Checkpoints List */}
+            <motion.ul
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-blue-100 text-lg font-medium leading-relaxed mb-8 max-w-lg">
-              Explore Specialized Investment Funds (SIF) in India, offering eligible investors access to focused investment strategies and greater flexibility within a SEBI-regulated framework.
-            </motion.p>
+              className="space-y-3.5 mb-8 text-white font-medium text-lg sm:text-xl"
+            >
+              {heroHighlights.map((text, idx) => (
+                <li key={idx} className="flex items-center gap-3">
+                  <svg
+                    className="w-6 h-6 text-cyan-300 flex-shrink-0"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2.5}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>{text}</span>
+                </li>
+              ))}
+            </motion.ul>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
               className="flex flex-wrap gap-4 mb-12">
-              <button onClick={openLeadModal}
-                className="btn-ripple flex items-center gap-2 px-8 py-4 rounded-full bg-[#c10000] hover:bg-[#9d0000] text-white font-semibold shadow-xl shadow-red-900/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
+              <button
+                onClick={openLeadModal}
+                className="btn-ripple flex items-center gap-2 px-8 py-4 rounded-full bg-[#c10000] hover:bg-[#9d0000] text-white font-semibold shadow-xl shadow-red-900/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl cursor-pointer"
+              >
                 <FontAwesomeIcon icon={faCircleArrowRight} />
                 Invest Now
               </button>
-              <a href="#top-funds"
-                className="flex items-center gap-2 px-8 py-4 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white font-semibold transition-all duration-300 hover:-translate-y-1">
+              <a
+                href="#top-funds"
+                className="flex items-center gap-2 px-8 py-4 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white font-semibold transition-all duration-300 hover:-translate-y-1"
+              >
                 <FontAwesomeIcon icon={faChartLine} />
                 Explore Funds
               </a>
-
             </motion.div>
-
-            {/* Stats Grid */}
-            {/* <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {stats.map((stat, i) => (
-                <StatCard key={i} {...stat} delay={0.4 + i * 0.1} />
-              ))}
-            </div> */}
           </div>
 
-          {/* Right Column - Dashboard */}
-          <div className="relative hidden lg:block">
+          {/* Right Column - Hero Image */}
+          <div className="relative hidden lg:flex items-center justify-center">
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1, delay: 0.3 }}
-              className="relative">
-
-              {/* Main Dashboard Card */}
-              <div className="glass rounded-3xl p-6 border border-white/20 shadow-2xl float-anim">
-                {/* Header */}
-                <div className="flex items-center justify-between mb-6">
-                  <div>
-                    <p className="text-blue-200 text-xs font-medium">Portfolio Value</p>
-                    <p className="text-white text-3xl font-bold">₹14,82,340</p>
-                    <div className="flex items-center gap-1 mt-1">
-                      <FontAwesomeIcon icon={faArrowTrendUp} className="text-green-400 text-xs" />
-                      <span className="text-green-400 text-sm font-semibold">+₹2,14,560 (16.9%)</span>
-                    </div>
-                  </div>
-                  <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center">
-                    <FontAwesomeIcon icon={faChartPie} className="text-white text-lg" />
-                  </div>
-                </div>
-
-                {/* Chart visualization */}
-                <div className="bg-white/10 rounded-2xl p-4 mb-4 relative overflow-hidden">
-                  <div className="h-28 w-full flex items-end">
-                    <svg viewBox="0 0 400 100" className="w-full h-full" preserveAspectRatio="none">
-                      <defs>
-                        <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#4ade80" stopOpacity="0.4" />
-                          <stop offset="100%" stopColor="#4ade80" stopOpacity="0.0" />
-                        </linearGradient>
-                      </defs>
-                      <motion.path
-                        initial={{ pathLength: 0, opacity: 0 }}
-                        animate={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 1.5, ease: "easeInOut", delay: 0.5 }}
-                        d="M0,80 C40,75 80,85 120,60 C160,35 200,55 240,30 C280,5 320,25 360,10 C380,2 390,5 400,0"
-                        fill="none"
-                        stroke="#4ade80"
-                        strokeWidth="4"
-                        strokeLinecap="round"
-                      />
-                      <motion.path
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 1, delay: 1.5 }}
-                        d="M0,80 C40,75 80,85 120,60 C160,35 200,55 240,30 C280,5 320,25 360,10 C380,2 390,5 400,0 L400,100 L0,100 Z"
-                        fill="url(#chartGradient)"
-                      />
-                    </svg>
-                  </div>
-                  <div className="flex justify-between mt-2 text-[10px] text-blue-200">
-                    <span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
-                    <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span>
-                    <span>Jun</span><span className="text-amber-400 font-bold">Jul</span>
-                  </div>
-                </div>
-
-                {/* Fund List */}
-                <div className="space-y-3">
-                  {[
-                    { name: 'Blue Chip Growth', alloc: 40, color: 'bg-blue-400', ret: '+28.4%' },
-                    { name: 'Mid Cap Momentum', alloc: 30, color: 'bg-emerald-400', ret: '+35.6%' },
-                    { name: 'Balanced Advantage', alloc: 30, color: 'bg-amber-400', ret: '+18.2%' },
-                  ].map((fund) => (
-                    <div key={fund.name} className="flex items-center gap-3">
-                      <div className={`w-2 h-2 rounded-full ${fund.color}`} />
-                      <span className="text-white text-xs font-medium flex-1">{fund.name}</span>
-                      <div className="bg-white/10 rounded-full px-2 py-0.5">
-                        <span className="text-[10px] text-blue-200">{fund.alloc}%</span>
-                      </div>
-                      <span className="text-green-400 text-xs font-bold">{fund.ret}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Floating Mini Cards */}
-              {floatingCards.map((card, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.7 + i * 0.2 }}
-                  className={`absolute glass rounded-2xl px-4 py-3 border border-white/20 shadow-xl float-anim ${i === 0 ? '-right-8 top-12' :
-                    i === 1 ? '-left-8 bottom-24' :
-                      '-right-6 bottom-16'
-                    }`}>
-                  <div className={`w-8 h-8 rounded-xl bg-gradient-to-br ${card.color} flex items-center justify-center mb-2`}>
-                    <FontAwesomeIcon icon={card.icon} className="text-white text-xs" />
-                  </div>
-                  <p className="text-blue-200 text-[10px]">{card.label}</p>
-                  <p className="text-white text-sm font-bold">{card.value}</p>
-                  <p className="text-green-400 text-[10px]">{card.sub}</p>
-                </motion.div>
-              ))}
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="relative w-full max-w-lg xl:max-w-xl mx-auto flex items-center justify-center"
+            >
+              <img
+                src={heroImg}
+                alt="KNAPS Specialized Investment Funds"
+                className="w-full h-auto object-contain max-h-[620px] drop-shadow-2xl hover:scale-105 transition-transform duration-500"
+              />
             </motion.div>
           </div>
+
         </div>
       </div>
 
-      {/* Wave bottom */}
-      <div className="absolute bottom-0 left-0 right-0">
-        <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0 80L48 69.3C96 58.7 192 37.3 288 32C384 26.7 480 37.3 576 42.7C672 48 768 48 864 42.7C960 37.3 1056 26.7 1152 26.7C1248 26.7 1344 37.3 1392 42.7L1440 48V80H1392C1344 80 1248 80 1152 80C1056 80 960 80 864 80C768 80 672 80 576 80C480 80 384 80 288 80C192 80 96 80 48 80H0Z" fill="#ffffff" />
+      {/* Smooth Organic Wave bottom */}
+      <div className="absolute -bottom-1 left-0 right-0 w-full overflow-hidden leading-none pointer-events-none z-10">
+        <svg
+          viewBox="0 0 1440 90"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="relative block w-full h-[45px] sm:h-[65px] lg:h-[85px]"
+          preserveAspectRatio="none"
+        >
+          <path
+            d="M0,45 C280,85 480,15 760,50 C1040,85 1240,15 1440,40 V92 H0 Z"
+            fill="#ffffff"
+          />
         </svg>
       </div>
     </section>
   )
 }
-

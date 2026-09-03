@@ -8,7 +8,14 @@ import logo from '../assets/knaps-logo.png';
 const navLinks = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
-  { label: 'SIF', href: 'https://dev.knaps.app/sif' },
+  {
+    label: 'SIF',
+    href: 'https://dev.knaps.app/sif',
+    dropdown: [
+      { label: 'All Funds', href: 'https://dev.knaps.app/funds' },
+      { label: 'Compare', href: 'https://dev.knaps.app/compare' },
+    ],
+  },
   { label: 'Mutual Fund', href: '/funds' },
   { label: 'PMS', href: '/#pms' },
   { label: 'AIF', href: '/#aif' },
@@ -55,16 +62,15 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-white shadow-lg shadow-blue-900/5' : 'bg-white shadow-lg shadow-blue-900/5'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-lg shadow-blue-900/5' : 'bg-white shadow-lg shadow-blue-900/5'
+        }`}
     >
       {/* Top Banner */}
       <div className="bg-[#000080] py-1.5 w-full overflow-hidden flex">
         <div className="flex whitespace-nowrap animate-marquee">
           <span className="text-white text-xs font-semibold uppercase tracking-wider flex items-center gap-2 mx-6">
             <FontAwesomeIcon icon={faChartLine} className="text-[#a3e635]" />
-            Smart Investing, Confident Living – AMFI Registered Mutual Fund Distributor
+            Smart Investing, Confident Living - AMFI Registered Mutual Fund Distributor
           </span>
           <span className="text-white text-xs font-semibold uppercase tracking-wider flex items-center gap-2 mx-6">
             <FontAwesomeIcon icon={faChartLine} className="text-[#a3e635]" />
@@ -78,7 +84,7 @@ export default function Navbar() {
         <div className="flex whitespace-nowrap animate-marquee2" aria-hidden="true">
           <span className="text-white text-xs font-semibold uppercase tracking-wider flex items-center gap-2 mx-6">
             <FontAwesomeIcon icon={faChartLine} className="text-[#a3e635]" />
-            Smart Investing, Confident Living – AMFI Registered Mutual Fund Distributor
+            Smart Investing, Confident Living - AMFI Registered Mutual Fund Distributor
           </span>
           <span className="text-white text-xs font-semibold uppercase tracking-wider flex items-center gap-2 mx-6">
             <FontAwesomeIcon icon={faChartLine} className="text-[#a3e635]" />
@@ -114,38 +120,43 @@ export default function Navbar() {
                 {link.href.startsWith('http') ? (
                   <a
                     href={link.href}
-                    className={`relative flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-[14px] 2xl:text-[15px] font-medium transition-all duration-300 group ${
-                      activeDropdown === link.label
+                    className={`relative flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-[14px] 2xl:text-[15px] font-medium transition-all duration-300 group ${activeDropdown === link.label
                         ? 'text-[#032e92] bg-[#eef5ff]'
                         : 'text-gray-700 hover:text-[#032e92] hover:bg-[#eef5ff]/60'
-                    }`}
+                      }`}
                   >
                     {link.label}
                     {link.dropdown && (
                       <FontAwesomeIcon
                         icon={faChevronDown}
-                        className={`text-[10px] transition-transform duration-300 ${activeDropdown === link.label ? 'rotate-180 text-[#032e92]' : ''}`}
+                        className={`text-[10px] transition-transform duration-300 ${activeDropdown === link.label ? 'rotate-180 text-[#032e92]' : ''
+                          }`}
                       />
                     )}
                   </a>
                 ) : (
                   <Link
                     to={link.href}
-                    className={`relative flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-[14px] 2xl:text-[15px] font-medium transition-all duration-300 group ${
-                      activeDropdown === link.label || location.pathname === link.href
+                    className={`relative flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-[14px] 2xl:text-[15px] font-medium transition-all duration-300 group ${activeDropdown === link.label || location.pathname === link.href
                         ? 'text-[#032e92] bg-[#eef5ff]'
                         : 'text-gray-700 hover:text-[#032e92] hover:bg-[#eef5ff]/60'
-                    }`}
+                      }`}
                   >
                     {link.label}
                     {link.dropdown && (
                       <FontAwesomeIcon
                         icon={faChevronDown}
-                        className={`text-[10px] transition-transform duration-300 ${activeDropdown === link.label ? 'rotate-180 text-[#032e92]' : ''}`}
+                        className={`text-[10px] transition-transform duration-300 ${activeDropdown === link.label ? 'rotate-180 text-[#032e92]' : ''
+                          }`}
                       />
                     )}
                     {/* Animated underline */}
-                    <span className={`absolute bottom-1 left-3.5 right-3.5 h-0.5 bg-[#c10000] transform origin-left scale-x-0 transition-transform duration-300 ease-out ${activeDropdown === link.label || location.pathname === link.href ? 'scale-x-100' : 'group-hover:scale-x-100'}`}></span>
+                    <span
+                      className={`absolute bottom-1 left-3.5 right-3.5 h-0.5 bg-[#c10000] transform origin-left scale-x-0 transition-transform duration-300 ease-out ${activeDropdown === link.label || location.pathname === link.href
+                          ? 'scale-x-100'
+                          : 'group-hover:scale-x-100'
+                        }`}
+                    ></span>
                   </Link>
                 )}
 
@@ -288,26 +299,26 @@ export default function Navbar() {
                 ))}
                 <div className="pt-5 mt-2 border-t border-gray-100 flex flex-col gap-2">
                   <div className="px-4 py-2 text-sm font-bold text-gray-400 uppercase tracking-wider">
-                    Login
+                    Access Portal
                   </div>
                   <Link
                     to="/#login-investor"
                     onClick={() => setMobileOpen(false)}
-                    className="flex justify-center w-full py-3.5 rounded-xl bg-[#032e92] text-white text-[15px] font-semibold hover:bg-[#021d63] transition-colors shadow-lg shadow-blue-900/20"
+                    className="block px-4 py-2.5 ml-4 rounded-xl text-[15px] font-medium text-gray-700 hover:bg-[#eef5ff] hover:text-[#032e92]"
                   >
                     Investor Login
                   </Link>
                   <Link
                     to="/#login-admin"
                     onClick={() => setMobileOpen(false)}
-                    className="flex justify-center w-full py-3.5 rounded-xl border-2 border-[#032e92] text-[#032e92] text-[15px] font-semibold hover:bg-[#eef5ff] transition-colors"
+                    className="block px-4 py-2.5 ml-4 rounded-xl text-[15px] font-medium text-gray-700 hover:bg-[#eef5ff] hover:text-[#032e92]"
                   >
                     Admin Login
                   </Link>
                   <Link
                     to="/#login-employee"
                     onClick={() => setMobileOpen(false)}
-                    className="flex justify-center w-full py-3.5 rounded-xl border-2 border-[#032e92] text-[#032e92] text-[15px] font-semibold hover:bg-[#eef5ff] transition-colors"
+                    className="block px-4 py-2.5 ml-4 rounded-xl text-[15px] font-medium text-gray-700 hover:bg-[#eef5ff] hover:text-[#032e92]"
                   >
                     Employee Login
                   </Link>
