@@ -26,4 +26,7 @@ echo "Installing Dhanada app..."
 echo "Running migrations..."
 bench --site ${SITE_NAME} migrate
 
+echo "Clearing cache..."
+bench --site ${SITE_NAME} clear-cache
+
 echo "Initialization complete!"
