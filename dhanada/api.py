@@ -410,14 +410,21 @@ def create_website_lead():
 
 @frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
 def get_chatbot_config():
-	"""Returns non-sensitive chatbot configuration like the API Base URL."""
+	"""Returns non-sensitive chatbot configuration like the API Base URL and CSRF token."""
 	try:
+		config = {"api_base_url": "", "csrf_token": ""}
+
+		# Provide CSRF token for the frontend to make POST requests
+		if hasattr(frappe.local, "session") and frappe.local.session:
+			config["csrf_token"] = frappe.sessions.get_csrf_token()
+
 		# Check if the doctype exists in case it hasn't been migrated yet
 		if not frappe.db.exists("DocType", "Chatbot AI Credentials"):
-			return {"api_base_url": ""}
+			return config
 
 		api_base_url = frappe.db.get_single_value("Chatbot AI Credentials", "api_base_url")
-		return {"api_base_url": api_base_url or ""}
+		config["api_base_url"] = api_base_url or ""
+		return config
 	except Exception as e:
 		frappe.log_error(message=str(e), title="Chatbot Config Error")
 		return {"api_base_url": ""}

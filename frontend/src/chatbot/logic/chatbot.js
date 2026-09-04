@@ -4,10 +4,42 @@ import * as leadManager from "./leadManager.js";
 // Gemini client initialization is entirely handled server-side now.
 let aiClient = null;
 
+let cachedCsrfToken = null;
+
+async function getCsrfToken() {
+	if (cachedCsrfToken !== null) return cachedCsrfToken;
+
+	// First check if it's injected in the window (e.g. Frappe Web Pages)
+	if (typeof window !== "undefined" && window.frappe && window.frappe.csrf_token) {
+		cachedCsrfToken = window.frappe.csrf_token;
+		return cachedCsrfToken;
+	}
+
+	// Fallback for decoupled Vite app: fetch from our config endpoint
+	try {
+		const res = await fetch("/api/method/dhanada.api.get_chatbot_config");
+		if (res.ok) {
+			const data = await res.json();
+			cachedCsrfToken = data.message?.csrf_token || "";
+		} else {
+			cachedCsrfToken = "";
+		}
+	} catch (e) {
+		console.warn("Failed to fetch CSRF token", e);
+		cachedCsrfToken = "";
+	}
+	return cachedCsrfToken;
+}
+
 async function generateContentWithFallback(params) {
+	const csrfToken = await getCsrfToken();
+
 	const response = await fetch("/api/method/dhanada.api.chatbot_response", {
 		method: "POST",
-		headers: { "Content-Type": "application/json" },
+		headers: {
+			"Content-Type": "application/json",
+			"X-Frappe-CSRF-Token": csrfToken,
+		},
 		body: JSON.stringify({
 			conversation_history: params.contents,
 			system_instruction: params.systemInstruction,
