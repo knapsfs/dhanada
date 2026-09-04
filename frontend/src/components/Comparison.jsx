@@ -4,18 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck, faXmark, faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 import { comparisonData } from '../data/data'
 
-const positives = ['✓']
-const negatives = ['✗']
-
-const columnColors = [
-  'bg-[#032e92] text-white', // Mutual Funds - highlighted
-  '',
-  '',
-  '',
-  '',
-  '',
-]
-
 export default function Comparison() {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 })
 
@@ -36,7 +24,7 @@ export default function Comparison() {
             Why SIF <span className="gradient-text">Stands Out</span>
           </h2>
           <p className="text-gray-500 font-medium max-w-xl mx-auto">
-            Compare investment options side by side and see understand how SIF differs from Mutual Funds, PMS and AIFs.
+            Compare investment options side by side and understand how SIF differs from Mutual Funds, PMS and AIFs.
           </p>
         </motion.div>
 
@@ -51,47 +39,55 @@ export default function Comparison() {
             <thead>
               <tr className="border-b border-[#e8edf7]">
                 <th className="bg-gray-50 px-6 py-5 text-left text-sm font-semibold text-gray-400 w-40">Feature</th>
-                {comparisonData.headers.slice(1).map((header, i) => (
-                  <th key={header}
-                    className={`px-5 py-5 text-center text-sm font-bold ${i === 1 ? 'bg-[#032e92] text-white rounded-t-2xl shadow-lg'
-                      : 'bg-gray-50 text-gray-700'
+                {comparisonData.headers.slice(1).map((header) => {
+                  const isSIF = header === 'SIF';
+                  return (
+                    <th key={header}
+                      className={`px-5 py-5 text-center text-sm font-bold ${
+                        isSIF
+                          ? 'bg-[#032e92] text-white rounded-t-2xl shadow-lg'
+                          : 'bg-gray-50 text-gray-700'
                       }`}>
-                    {/* {i === 1 && (
-                      <span className="block text-[10px] text-blue-200 font-medium mb-0.5">⭐ Recommended</span>
-                    )} */}
-                    {header}
-                  </th>
-                ))}
+                      {header}
+                    </th>
+                  );
+                })}
               </tr>
             </thead>
             <tbody>
               {comparisonData.rows.map((row, ri) => (
                 <tr key={ri}
-                  className={`border-b border-[#e8edf7] transition-colors hover:bg-[#f7f9fc] ${ri % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'
-                    }`}>
+                  className={`border-b border-[#e8edf7] transition-colors hover:bg-[#f7f9fc] ${
+                    ri % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'
+                  }`}>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
                       <FontAwesomeIcon icon={faCircleInfo} className="text-gray-300 text-xs" />
                       <span className="text-sm font-semibold text-gray-600">{row.feature}</span>
                     </div>
                   </td>
-                  {row.values.map((val, vi) => (
-                    <td key={vi} className={`px-5 py-4 text-center ${vi === 1 ? 'bg-[#032e92]/5 border-x border-[#032e92]/10' : ''
+                  {row.values.map((val, vi) => {
+                    const isSIF = comparisonData.headers.slice(1)[vi] === 'SIF';
+                    return (
+                      <td key={vi} className={`px-5 py-4 text-center ${
+                        isSIF ? 'bg-[#032e92]/5 border-x border-[#032e92]/10' : ''
                       }`}>
-                      {val === 'Yes' ? (
-                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-100">
-                          <FontAwesomeIcon icon={faCircleCheck} className="text-green-600 text-xs" />
-                        </span>
-                      ) : val === 'No' ? (
-                        <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-100">
-                          <FontAwesomeIcon icon={faXmark} className="text-red-500 text-xs" />
-                        </span>
-                      ) : (
-                        <span className={`text-sm font-semibold ${vi === 1 ? 'text-[#032e92]' : 'text-gray-600'
+                        {val === 'Yes' ? (
+                          <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-100">
+                            <FontAwesomeIcon icon={faCircleCheck} className="text-green-600 text-xs" />
+                          </span>
+                        ) : val === 'No' ? (
+                          <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-100">
+                            <FontAwesomeIcon icon={faXmark} className="text-red-500 text-xs" />
+                          </span>
+                        ) : (
+                          <span className={`text-sm font-semibold ${
+                            isSIF ? 'text-[#032e92]' : 'text-gray-600'
                           }`}>{val}</span>
-                      )}
-                    </td>
-                  ))}
+                        )}
+                      </td>
+                    );
+                  })}
                 </tr>
               ))}
             </tbody>
@@ -110,5 +106,3 @@ export default function Comparison() {
     </section>
   )
 }
-
-

@@ -36,11 +36,11 @@ export default function FAQ() {
 
             {/* Support Card */}
             <div className="bg-gradient-to-br from-[#032e92] to-[#0a4fd4] rounded-3xl p-7 text-white">
-              <p className="text-2xl font-bold mb-2">Still have questions?</p>
-              <p className="text-blue-200 font-medium mb-5 text-sm">Our investment experts are ready to help you.</p>
+              <p className="text-2xl font-bold mb-2">You might have questions about SIF?</p>
+              <p className="text-blue-200 font-medium mb-5 text-sm"> Here are the answers to the questions you may have before you invest in an SIF.</p>
               <div className="flex gap-3">
-                <a href="#chat" className="flex-1 text-center py-3 rounded-2xl bg-white text-[#032e92] text-sm font-bold hover:bg-blue-50 transition-colors">
-                  Consult Now
+                <a href="tel:+919990243143" className="flex-1 text-center py-3 rounded-2xl bg-white text-[#032e92] text-sm font-bold hover:bg-blue-50 transition-colors">
+                  Talk to Us
                 </a>
                 {/* <a href="tel:1800-123-4567" className="flex-1 text-center py-3 rounded-2xl bg-white/10 border border-white/20 text-white text-sm font-bold hover:bg-white/20 transition-colors">
                   Call Us

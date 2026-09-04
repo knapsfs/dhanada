@@ -57,7 +57,7 @@ export default function Home() {
         <TrustSection />
         <Testimonials />
         <FAQ />
-        <Blog />
+        {/* <Blog /> */}
         <Newsletter />
       </main>
       <Footer />
