@@ -81,6 +81,16 @@
           frappe-frontend
         chdir: /opt/dhanada
 
+    - name: Clear Frappe caches
+      ansible.builtin.command:
+        cmd: >
+          docker compose exec -T backend bash -c '
+          cd /home/frappe/frappe-bench &&
+          bench --site dev.knaps.app clear-cache &&
+          bench --site dev.knaps.app clear-website-cache
+          '
+        chdir: /opt/dhanada
+
     - name: Show running containers
       ansible.builtin.command:
         cmd: docker compose ps
