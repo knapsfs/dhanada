@@ -1161,10 +1161,11 @@ If the user asks something completely unrelated to finance, politely steer them 
 
 	async continueLeadFlow(state, message, intent) {
 		if (state.leadStep === LEAD_STEPS.CHOOSE_SHARE) {
-			if (message.includes("both") || message.includes("Both")) {
+			const lowerMessage = message.toLowerCase();
+			if (lowerMessage.includes("both")) {
 				state.leadStep = LEAD_STEPS.PHONE_THEN_EMAIL_MODE_1;
 				return "Great! Could you share your mobile number first?";
-			} else if (message.includes("mail") || message.includes("Email")) {
+			} else if (lowerMessage.includes("mail")) {
 				state.leadStep = LEAD_STEPS.EMAIL_ONLY;
 				return "Great! Could you share your email address?";
 			} else {
@@ -1183,22 +1184,35 @@ If the user asks something completely unrelated to finance, politely steer them 
 			return `Nice to meet you, ${state.collected.name}! To help our advisor connect with you, what would you like to share?`;
 		}
 
+		if (state.leadStep === LEAD_STEPS.ASK_OPTIONAL_PHONE) {
+			if (intent === "negative" || message.toLowerCase().trim() === "skip") {
+				return await this.saveCompletedLead(state);
+			}
+			if (intent === "affirmative") {
+				state.leadStep = LEAD_STEPS.PHONE_ONLY;
+				return "Great! Please share your 10-digit mobile number.";
+			}
+		}
+
+		if (state.leadStep === LEAD_STEPS.ASK_OPTIONAL_EMAIL) {
+			if (intent === "negative" || message.toLowerCase().trim() === "skip") {
+				return await this.saveCompletedLead(state);
+			}
+			if (intent === "affirmative") {
+				state.leadStep = LEAD_STEPS.EMAIL_ONLY;
+				return "Great! Please share your email address.";
+			}
+		}
+
 		if (
 			state.leadStep === LEAD_STEPS.PHONE_ONLY ||
 			state.leadStep === LEAD_STEPS.PHONE_THEN_EMAIL_MODE_1 ||
 			state.leadStep === LEAD_STEPS.PHONE_THEN_EMAIL_MODE_2 ||
 			state.leadStep === LEAD_STEPS.ASK_OPTIONAL_PHONE
 		) {
-			if (
-				state.leadStep === LEAD_STEPS.ASK_OPTIONAL_PHONE &&
-				(intent === "negative" || message.toLowerCase().trim() === "skip")
-			) {
-				return await this.saveCompletedLead(state);
-			}
-
 			const phoneCheck = leadManager.validatePhone(message);
 			if (!phoneCheck.valid) {
-				return `${phoneCheck.message}\nPlease share your 10-digit mobile number.`;
+				return `${phoneCheck.message}`;
 			}
 			state.collected.phone = phoneCheck.value;
 
@@ -1206,11 +1220,15 @@ If the user asks something completely unrelated to finance, politely steer them 
 				state.leadStep === LEAD_STEPS.PHONE_THEN_EMAIL_MODE_1 ||
 				state.leadStep === LEAD_STEPS.PHONE_THEN_EMAIL_MODE_2
 			) {
-				state.leadStep = LEAD_STEPS.ASK_OPTIONAL_EMAIL;
+				state.leadStep = LEAD_STEPS.EMAIL_ONLY;
 				return "Thank you. Could you also share your email address?";
 			}
 
-			if (state.leadStep === LEAD_STEPS.PHONE_ONLY && !state.collected.email) {
+			if (
+				(state.leadStep === LEAD_STEPS.PHONE_ONLY ||
+					state.leadStep === LEAD_STEPS.ASK_OPTIONAL_PHONE) &&
+				!state.collected.email
+			) {
 				state.leadStep = LEAD_STEPS.ASK_OPTIONAL_EMAIL;
 				return "Thank you. Would you also like to share your email address?";
 			}
@@ -1222,25 +1240,17 @@ If the user asks something completely unrelated to finance, politely steer them 
 			state.leadStep === LEAD_STEPS.EMAIL_ONLY ||
 			state.leadStep === LEAD_STEPS.ASK_OPTIONAL_EMAIL
 		) {
-			if (
-				state.leadStep === LEAD_STEPS.ASK_OPTIONAL_EMAIL &&
-				(intent === "negative" || message.toLowerCase().trim() === "skip")
-			) {
-				return await this.saveCompletedLead(state);
-			}
-
-			if (state.leadStep === LEAD_STEPS.ASK_OPTIONAL_EMAIL && intent === "affirmative") {
-				state.leadStep = LEAD_STEPS.EMAIL_ONLY;
-				return "Please provide your email address.";
-			}
-
 			const emailCheck = leadManager.validateEmail(message);
 			if (!emailCheck.valid) {
-				return `${emailCheck.message}\nPlease share a valid email address.`;
+				return `${emailCheck.message}`;
 			}
 			state.collected.email = emailCheck.value;
 
-			if (state.leadStep === LEAD_STEPS.EMAIL_ONLY && !state.collected.phone) {
+			if (
+				(state.leadStep === LEAD_STEPS.EMAIL_ONLY ||
+					state.leadStep === LEAD_STEPS.ASK_OPTIONAL_EMAIL) &&
+				!state.collected.phone
+			) {
 				state.leadStep = LEAD_STEPS.ASK_OPTIONAL_PHONE;
 				return "Thank you. Would you also like to share your mobile number?";
 			}
@@ -1258,9 +1268,6 @@ If the user asks something completely unrelated to finance, politely steer them 
 			return "I need either a phone number or an email to connect you with an advisor. Let me know if you change your mind.";
 		}
 
-		state.leadCaptured = true;
-		state.leadStep = LEAD_STEPS.DONE;
-
 		const chatSummary = generateChatSummary(state);
 
 		const leadData = {
@@ -1274,13 +1281,16 @@ If the user asks something completely unrelated to finance, politely steer them 
 
 		const result = await leadManager.saveLead(leadData);
 		if (result.success) {
+			state.leadCaptured = true;
+			state.leadStep = LEAD_STEPS.DONE;
 			state.crmLeadName = result.lead_name;
 			return `Thank you, ${
 				state.collected.name || ""
 			}! I have passed your details to our team. An advisor will reach out to you shortly.`;
 		} else {
 			console.error("[CRM ERROR]", result.message);
-			return `Thank you! I have noted your details. An advisor will reach out to you shortly. (Internal Note: CRM saving is temporarily delayed)`;
+			state.leadStep = LEAD_STEPS.NONE;
+			return `We're sorry, there was a temporary issue saving your details to our system. Please try providing your details again later, or contact us directly.`;
 		}
 	}
 

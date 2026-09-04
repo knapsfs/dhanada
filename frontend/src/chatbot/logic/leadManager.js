@@ -154,11 +154,16 @@ export async function saveLead({
 		console.log(payload);
 
 		let apiBaseUrl = "";
+		let csrfToken =
+			typeof window !== "undefined" && window.frappe ? window.frappe.csrf_token : "";
 		try {
 			const confRes = await fetch("/api/method/dhanada.api.get_chatbot_config");
 			if (confRes.ok) {
 				const confData = await confRes.json();
 				apiBaseUrl = confData.message?.api_base_url || "";
+				if (!csrfToken) {
+					csrfToken = confData.message?.csrf_token || "";
+				}
 			}
 		} catch (e) {
 			console.warn("Failed to fetch chatbot config", e);
@@ -175,6 +180,7 @@ export async function saveLead({
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
+				"X-Frappe-CSRF-Token": csrfToken,
 			},
 			body: JSON.stringify(payload),
 		});
