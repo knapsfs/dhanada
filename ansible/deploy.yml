@@ -1,0 +1,92 @@
+---
+- name: Deploy Dhanada
+  hosts: production
+  become: true
+
+  tasks:
+    - name: Create deployment directory
+      ansible.builtin.file:
+        path: /opt/dhanada
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: "0755"
+
+    - name: Sync Dhanada project from local machine
+      become: false
+      ansible.posix.synchronize:
+        src: "{{ playbook_dir }}/../"
+        dest: /opt/dhanada/
+        delete: false
+        rsync_opts:
+          - "--exclude=.git"
+          - "--exclude=.env"
+          - "--exclude=.DS_Store"
+          - "--exclude=frontend/node_modules"
+          - "--exclude=frontend/knaps/node_modules"
+          - "--exclude=frontend/dist"
+          - "--exclude=__pycache__"
+          - "--exclude=.ruff_cache"
+
+    - name: Build Docker images
+      ansible.builtin.command:
+        cmd: docker compose build
+        chdir: /opt/dhanada
+
+    - name: Start Docker services
+      ansible.builtin.command:
+        cmd: docker compose up -d
+        chdir: /opt/dhanada
+
+    - name: Update Dhanada application volume
+      ansible.builtin.command:
+        cmd: >
+          docker run --rm
+          -v dhanada_apps-vol:/target
+          -v /opt/dhanada/dhanada:/source:ro
+          alpine sh -c '
+          rm -rf /target/dhanada &&
+          mkdir -p /target/dhanada &&
+          cp -a /source/. /target/dhanada/
+          '
+
+    - name: Fix shared Frappe assets
+      ansible.builtin.command:
+        cmd: >
+          docker compose exec -T backend bash -c '
+          cd /home/frappe/frappe-bench/assets;
+
+          for item in *; do
+            if [ -L "$item" ]; then
+              target=$(readlink -f "$item");
+
+              if [ -d "$target" ]; then
+                rm "$item";
+                cp -a "$target" "$item";
+              fi
+            fi
+          done
+          '
+        chdir: /opt/dhanada
+
+    - name: Restart application services
+      ansible.builtin.command:
+        cmd: >
+          docker compose restart
+          backend
+          websocket
+          queue-short
+          queue-long
+          scheduler
+          frappe-frontend
+        chdir: /opt/dhanada
+
+    - name: Show running containers
+      ansible.builtin.command:
+        cmd: docker compose ps
+        chdir: /opt/dhanada
+      register: docker_status
+
+    - name: Display Docker status
+      ansible.builtin.debug:
+        var: docker_status.stdout_lines

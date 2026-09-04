@@ -1,0 +1,286 @@
+name: dhanada
+
+services:
+
+  # ==========================================
+  # MariaDB
+  # ==========================================
+  mariadb:
+    image: mariadb:11.8
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --skip-character-set-client-handshake
+      - --skip-innodb-read-only-compressed
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - db-data:/var/lib/mysql
+    restart: unless-stopped
+
+  # ==========================================
+  # Redis
+  # ==========================================
+  redis-cache:
+    image: redis:6.2-alpine
+    volumes:
+      - redis-cache-data:/data
+    restart: unless-stopped
+
+  redis-queue:
+    image: redis:6.2-alpine
+    volumes:
+      - redis-queue-data:/data
+    restart: unless-stopped
+
+  redis-socketio:
+    image: redis:6.2-alpine
+    volumes:
+      - redis-socketio-data:/data
+    restart: unless-stopped
+
+  # ==========================================
+  # Frappe Configurator
+  # ==========================================
+  configurator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        FRAPPE_VERSION: v16
+
+    command:
+      - bash
+      - -c
+      - >
+        ls -1 apps > sites/apps.txt;
+        bench set-config -g db_host $$DB_HOST;
+        bench set-config -gp db_port $$DB_PORT;
+        bench set-config -g redis_cache "redis://$$REDIS_CACHE";
+        bench set-config -g redis_queue "redis://$$REDIS_QUEUE";
+        bench set-config -g redis_socketio "redis://$$REDIS_SOCKETIO";
+        bench set-config -gp socketio_port $$SOCKETIO_PORT;
+        /docker/scripts/init-site.sh
+
+    environment:
+      DB_HOST: mariadb
+      DB_PORT: "3306"
+      REDIS_CACHE: redis-cache:6379
+      REDIS_QUEUE: redis-queue:6379
+      REDIS_SOCKETIO: redis-socketio:6379
+      SOCKETIO_PORT: "9000"
+      DB_ROOT_USER: root
+      DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      SITE_NAME: ${SITE_NAME}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+
+    volumes:
+      - sites-vol:/home/frappe/frappe-bench/sites
+      - assets-vol:/home/frappe/frappe-bench/assets
+      - apps-vol:/home/frappe/frappe-bench/apps
+      - ./docker/scripts:/docker/scripts
+
+    depends_on:
+      - mariadb
+      - redis-cache
+      - redis-queue
+
+  # ==========================================
+  # Frappe Backend
+  # ==========================================
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        FRAPPE_VERSION: v16
+
+    command:
+      - bench
+      - serve
+      - --port
+      - "8000"
+    environment:
+      PYTHONPATH: /home/frappe/frappe-bench/apps/dhanada:/home/frappe/frappe-bench/apps
+
+    volumes:
+      - sites-vol:/home/frappe/frappe-bench/sites
+      - assets-vol:/home/frappe/frappe-bench/assets
+      - apps-vol:/home/frappe/frappe-bench/apps
+
+    restart: unless-stopped
+
+    depends_on:
+      - configurator
+
+
+
+  # ==========================================
+  # Frappe Nginx
+  # ==========================================
+  frappe-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        FRAPPE_VERSION: v16
+
+    command:
+      - nginx-entrypoint.sh
+
+    environment:
+      BACKEND: backend:8000
+      FRAPPE_SITE_NAME_HEADER: ${SITE_NAME}
+      SOCKETIO: websocket:9000
+      UPSTREAM_REAL_IP_ADDRESS: 127.0.0.1
+      UPSTREAM_REAL_IP_HEADER: X-Forwarded-For
+      UPSTREAM_REAL_IP_RECURSIVE: "off"
+      PROXY_READ_TIMEOUT: 120
+      CLIENT_MAX_BODY_SIZE: 50m
+    ports:
+      - "8080:8080"
+
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-public"
+      - "traefik.http.routers.frappe.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.frappe.entrypoints=web"
+      - "traefik.http.routers.frappe.priority=1"
+      - "traefik.http.routers.frappe.service=frappe"
+      - "traefik.http.services.frappe.loadbalancer.server.port=8080"
+
+    networks:
+      - default
+      - traefik-public
+
+    volumes:
+      - sites-vol:/home/frappe/frappe-bench/sites
+      - assets-vol:/home/frappe/frappe-bench/assets
+      - apps-vol:/home/frappe/frappe-bench/apps
+
+    restart: unless-stopped
+
+    depends_on:
+      - backend
+      - websocket
+
+  # ==========================================
+  # WebSocket
+  # ==========================================
+  websocket:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        FRAPPE_VERSION: v16
+
+    command:
+      - node
+      - /home/frappe/frappe-bench/apps/frappe/socketio.js
+
+    environment:
+      REDIS_SOCKETIO: redis://redis-socketio:6379
+
+    volumes:
+      - sites-vol:/home/frappe/frappe-bench/sites
+      - assets-vol:/home/frappe/frappe-bench/assets
+      - apps-vol:/home/frappe/frappe-bench/apps
+
+    restart: unless-stopped
+
+    depends_on:
+      - configurator
+      - redis-socketio
+
+  # ==========================================
+  # Workers
+  # ==========================================
+  queue-short:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        FRAPPE_VERSION: v16
+
+    command:
+      - bench
+      - worker
+      - --queue
+      - short,default
+
+    volumes:
+      - sites-vol:/home/frappe/frappe-bench/sites
+      - assets-vol:/home/frappe/frappe-bench/assets
+      - apps-vol:/home/frappe/frappe-bench/apps
+
+    restart: unless-stopped
+
+    depends_on:
+      - configurator
+
+  queue-long:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        FRAPPE_VERSION: v16
+
+    command:
+      - bench
+      - worker
+      - --queue
+      - long,default,short
+
+    volumes:
+      - sites-vol:/home/frappe/frappe-bench/sites
+      - assets-vol:/home/frappe/frappe-bench/assets
+      - apps-vol:/home/frappe/frappe-bench/apps
+
+    restart: unless-stopped
+
+    depends_on:
+      - configurator
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        FRAPPE_VERSION: v16
+
+    command:
+      - bench
+      - schedule
+
+    volumes:
+      - sites-vol:/home/frappe/frappe-bench/sites
+      - assets-vol:/home/frappe/frappe-bench/assets
+      - apps-vol:/home/frappe/frappe-bench/apps
+
+    restart: unless-stopped
+
+    depends_on:
+      - configurator
+
+
+# ==========================================
+# Volumes
+# ==========================================
+volumes:
+  db-data:
+  redis-cache-data:
+  redis-queue-data:
+  redis-socketio-data:
+  sites-vol:
+  assets-vol:
+  apps-vol:
+
+
+# ==========================================
+# Networks
+# ==========================================
+networks:
+  traefik-public:
+    external: true
+    name: traefik-public

@@ -1,0 +1,152 @@
+import React from 'react';
+import { formatIndianCurrency } from './calculatorUtils';
+
+export default function CalculatorResults({
+  calcMode,
+  results,
+  isInflationAdjusted,
+  setIsInflationAdjusted,
+  inflationRate,
+  setInflationRate
+}) {
+  const { futureValue, totalInvested, potentialGrowth, requiredPmt } = results;
+
+  const isReverse = calcMode === 'pmt';
+  const mainTitle = isReverse ? 'Required Monthly Investment' : 'You Could Have';
+  const mainValue = isReverse ? requiredPmt : futureValue;
+
+  const handleStepUp = (e) => {
+    e.stopPropagation();
+    setInflationRate((prev) => {
+      const current = prev === '' ? 0 : Number(prev);
+      return Math.min(30, +(current + 0.5).toFixed(1));
+    });
+  };
+
+  const handleStepDown = (e) => {
+    e.stopPropagation();
+    setInflationRate((prev) => {
+      const current = prev === '' ? 0 : Number(prev);
+      return Math.max(0, +(current - 0.5).toFixed(1));
+    });
+  };
+
+  return (
+    <div className="flex flex-col gap-6">
+      <div className="bg-gradient-to-br from-[#032e92] to-[#0a4fd4] rounded-3xl p-6 lg:p-8 text-white shadow-xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none"></div>
+
+        {/* Top Header with Title, Value, and Inline Inflation Adjusted Toggle */}
+        <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4 mb-8 relative z-10">
+          <div>
+            <p className="text-blue-200 text-xs sm:text-sm font-semibold uppercase tracking-wider mb-2">
+              {mainTitle}
+            </p>
+            <div className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">
+              {formatIndianCurrency(mainValue)}
+            </div>
+          </div>
+
+          {/* Inline Inflation Adjusted Control */}
+          <div className="flex items-center flex-wrap gap-2.5 justify-start lg:justify-end pt-1">
+            <div className="flex items-center gap-1.5 text-white text-xs sm:text-sm font-medium">
+              <span>Inflation</span>
+
+              {/* Only shown when Toggle is ON */}
+              {isInflationAdjusted && (
+                <div className="flex items-center gap-1.5 animate-fadeIn">
+                  <span>@</span>
+                  <div className="inline-flex items-center bg-white/15 hover:bg-white/20 focus-within:bg-white/25 focus-within:ring-2 focus-within:ring-white/40 border border-white/30 rounded-lg px-0.5 py-0.5 transition-all">
+                    <input
+                      type="number"
+                      value={inflationRate === '' ? '' : inflationRate}
+                      min={0}
+                      max={30}
+                      step={0.5}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (val === '') {
+                          setInflationRate('');
+                        } else {
+                          const num = Number(val);
+                          setInflationRate(Math.max(0, Math.min(30, num)));
+                        }
+                      }}
+                      className="w-7 sm:w-8 bg-transparent text-white font-bold text-center text-xs sm:text-sm focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none p-0"
+                      title="Click to type custom inflation rate"
+                    />
+                    <span className="text-blue-100 text-xs font-bold mr-1.5">%</span>
+
+                    {/* Micro Up/Down Arrows */}
+                    <div className="flex flex-col justify-center -space-y-1 text-[8px] text-blue-200">
+                      <button
+                        type="button"
+                        onClick={handleStepUp}
+                        className="hover:text-white transition-colors leading-none p-0.5 cursor-pointer active:scale-125"
+                        title="Increase inflation rate by 0.5%"
+                      >
+                        ▲
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleStepDown}
+                        className="hover:text-white transition-colors leading-none p-0.5 cursor-pointer active:scale-125"
+                        title="Decrease inflation rate by 0.5%"
+                      >
+                        ▼
+                      </button>
+                    </div>
+                  </div>
+                  <span>p.a.</span>
+                </div>
+              )}
+            </div>
+
+            {/* Toggle Switch */}
+            <button
+              type="button"
+              role="switch"
+              aria-checked={isInflationAdjusted}
+              onClick={() => setIsInflationAdjusted(!isInflationAdjusted)}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus:outline-none cursor-pointer flex-shrink-0 ${isInflationAdjusted ? 'bg-[#ff5722]' : 'bg-white/20 hover:bg-white/30'
+                }`}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 shadow-md ${isInflationAdjusted ? 'translate-x-6' : 'translate-x-1'
+                  }`}
+              />
+            </button>
+          </div>
+        </div>
+
+        {/* Stats 2-column Grid */}
+        <div className="grid grid-cols-2 gap-4 relative z-10">
+          <div className="bg-white/10 rounded-2xl p-4 backdrop-blur-sm border border-white/10">
+            <p className="text-blue-200 text-xs font-semibold mb-1">Your Money Put In</p>
+            <p className="text-lg lg:text-xl font-bold">
+              {formatIndianCurrency(totalInvested)}
+            </p>
+          </div>
+          <div className="bg-white/10 rounded-2xl p-4 backdrop-blur-sm border border-white/10">
+            <p className="text-blue-200 text-xs font-semibold mb-1">Money You Could Earn</p>
+            <p className="text-lg lg:text-xl font-bold">
+              {formatIndianCurrency(potentialGrowth)}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Chart Legend Indicator */}
+      <div className="flex items-center justify-center gap-6 text-xs font-semibold text-gray-500">
+        <div className="flex items-center gap-2">
+          <span className="inline-block w-3 h-3 rounded-full bg-[#94a3b8]"></span>
+          Your Money
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="inline-block w-3 h-3 rounded-full bg-[#032e92]"></span>
+          Potential Future Value
+        </div>
+      </div>
+    </div>
+  );
+}
