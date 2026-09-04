@@ -26,23 +26,23 @@ function AnimatedNumber({ value, inView }) {
 const trustCards = [
   {
     icon: faUsers,
-    title: 'Specialized Approach',
+    title: 'Advanced Strategies',
     value: 5000,
     suffix: '+',
     prefix: '',
-    subtitle: 'Focused Strategies',
-    description: 'Access investment approaches designed for investors seeking more specialized portfolio solutions.',
+    // subtitle: 'Focused Strategies',
+    description: 'Strategies built around specific investment approaches and risk-management techniques, such as long-short equity, equity hedging, and asset allocation.',
     color: 'from-blue-500 to-indigo-600',
     bg: 'from-blue-50 to-indigo-50',
   },
   {
     icon: faAward,
-    title: 'Investment Threshold',
+    title: 'High Flexibility',
     value: 25,
     suffix: '+',
     prefix: '',
-    subtitle: '₹10 Lakh',
-    description: 'The aggregate minimum investment threshold for non-accredited investors across SIF strategies at the PAN level.',
+    // subtitle: '₹10 Lakh',
+    description: 'Permitted SIF strategies give fund managers more flexibility to respond to changing market conditions and take long-short positions to manage risk and returns.',
     color: 'from-amber-500 to-orange-600',
     bg: 'from-amber-50 to-orange-50',
   },
@@ -52,19 +52,19 @@ const trustCards = [
     value: 50,
     suffix: '+',
     prefix: '',
-    subtitle: 'Regulated Framework',
-    description: 'SIFs operate within the SEBI-regulated mutual fund framework, with defined investment and disclosure requirements.',
+    // subtitle: 'Regulated Framework',
+    description: 'SIF combines specialized strategies with professional management within a SEBI-regulated framework with defined investment limits, risk controls, and disclosures.',
     color: 'from-green-500 to-emerald-600',
     bg: 'from-green-50 to-emerald-50',
   },
   {
     icon: faCircleCheck,
-    title: 'Portfolio Flexibility',
+    title: 'Bridging the Gap',
     value: 99,
     suffix: '%',
     prefix: '',
-    subtitle: 'Advanced Strategies',
-    description: 'Depending on the SIF investment strategy, permitted derivatives and long-short approaches can be used within the regulatory framework.',
+    // subtitle: 'Advanced Strategies',
+    description: 'SIF brings the specialized investment approach of PMS within the mutual fund structure, offering investors a middle ground between conventional MFs and PMS.',
     color: 'from-purple-500 to-violet-600',
     bg: 'from-purple-50 to-violet-50',
   },
@@ -130,19 +130,8 @@ export default function TrustSection() {
           ))}
         </div>
 
-        {/* Certification Logos */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.5, duration: 0.6 }}
-          className="mt-12 flex flex-wrap items-center justify-center gap-6">
-          {['AMFI Registered'].map((cert) => (
-            <div key={cert} className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#f7f9fc] border border-[#e8edf7] text-sm font-semibold text-gray-600">
-              <FontAwesomeIcon icon={faCircleCheck} className="text-green-500" />
-              {cert}
-            </div>
-          ))}
-        </motion.div>
+
+
       </div>
     </section>
   )

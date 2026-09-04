@@ -1,12 +1,10 @@
 import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import HeatmapHeader from './HeatmapHeader';
-import CategoryTabs from './CategoryTabs';
-import SubCategoryTabs from './SubCategoryTabs';
 import HeatmapTable from './HeatmapTable';
 
 export default function HeatmapSection({ fundsData = [] }) {
-  const [timeFilter, setTimeFilter] = useState('All'); 
+  const [timeFilter, setTimeFilter] = useState('12M'); 
   const [activeCategory, setActiveCategory] = useState('');
   const [activeSubCategory, setActiveSubCategory] = useState('');
 
@@ -80,23 +78,55 @@ export default function HeatmapSection({ fundsData = [] }) {
         >
           <HeatmapHeader timeFilter={timeFilter} setTimeFilter={setTimeFilter} />
 
-          <div className="flex flex-col p-4 lg:p-8 gap-6 bg-white w-full">
-            {/* Top Bar - Parent Categories */}
-            <CategoryTabs 
-              categories={groupedData.map(g => ({ id: g.id, label: g.label }))}
-              activeCategory={activeCategory} 
-              setActiveCategory={handleCategoryChange} 
-            />
+          <div className="flex flex-col p-4 sm:p-6 lg:p-8 gap-6 bg-white w-full">
+            {/* Top Filter Bar with 2 sections: Asset Class and Category */}
+            <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6 lg:gap-10 pb-2 w-full">
+              {/* 1. ASSET CLASS */}
+              <div className="flex flex-col gap-2.5 flex-shrink-0">
+                <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+                  Asset Class
+                </span>
+                <div className="flex flex-wrap items-center gap-2">
+                  {groupedData.map((cat) => (
+                    <button
+                      key={cat.id}
+                      onClick={() => handleCategoryChange(cat.id)}
+                      className={`px-5 py-2 rounded-full text-xs sm:text-sm font-bold transition-all duration-200 ${
+                        activeCategory === cat.id
+                          ? 'bg-[#032e92] text-white shadow-md shadow-blue-900/20'
+                          : 'text-gray-500 hover:text-[#032e92] font-semibold'
+                      }`}
+                    >
+                      {cat.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-            {/* Sub Categories Pills */}
-            {currentCategoryData && currentCategoryData.subCategories.length > 0 && (
-              <SubCategoryTabs 
-                subCategories={currentCategoryData.subCategories}
-                activeSubCategoryId={activeSubCategory}
-                setActiveSubCategoryId={setActiveSubCategory}
-                parentCategoryLabel={currentCategoryData.label}
-              />
-            )}
+              {/* 2. CATEGORY (Sub-Categories) */}
+              {currentCategoryData && currentCategoryData.subCategories.length > 0 && (
+                <div className="flex flex-col gap-2.5 lg:border-l lg:border-gray-100 lg:pl-10 flex-1">
+                  <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+                    Category
+                  </span>
+                  <div className="flex flex-wrap items-center gap-2">
+                    {currentCategoryData.subCategories.map((sub) => (
+                      <button
+                        key={sub.id}
+                        onClick={() => setActiveSubCategory(sub.id)}
+                        className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 ${
+                          activeSubCategory === sub.id
+                            ? 'bg-[#032e92] text-white shadow-md shadow-blue-900/20'
+                            : 'bg-white border border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50'
+                        }`}
+                      >
+                        {sub.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* Center Content - Table */}
             <div className="w-full overflow-hidden bg-white pt-2 border-t border-[#e8edf7]">

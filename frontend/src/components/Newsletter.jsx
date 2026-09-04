@@ -1,22 +1,18 @@
-import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowRight, faCircleCheck, faBell } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRight, faPhone } from '@fortawesome/free-solid-svg-icons'
+import { useLeadModal } from '../context/LeadModalContext'
 
 export default function Newsletter() {
-  const [email, setEmail] = useState('')
-  const [subscribed, setSubscribed] = useState(false)
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.2 })
+  const { openLeadModal } = useLeadModal()
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    if (email) {
-      setSubscribed(true)
-      setEmail('')
-      setTimeout(() => setSubscribed(false), 4000)
-    }
-  }
+  const stats = [
+    { value: '50,000+', label: 'Investors' },
+    { value: '23,000Cr+', label: 'AUM' },
+    { value: '30', label: 'Active SIFs' },
+  ]
 
   return (
     <section id="newsletter" className="py-20 bg-white">
@@ -46,55 +42,55 @@ export default function Newsletter() {
           </div>
 
           <div className="relative py-16 px-8 lg:px-16 text-center">
-            {/* Icon */}
-            <div className="inline-flex w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 items-center justify-center mb-6 mx-auto">
-              <FontAwesomeIcon icon={faBell} className="text-white text-2xl" />
-            </div>
-
             <h2 className="text-4xl font-bold text-white mb-4">
-              Is SIF Right for Your Portfolio?
+              Start Investing in SIF
             </h2>
-            <p className="text-blue-200 font-medium mb-8 max-w-lg mx-auto">
-              Understand SIF strategies, eligibility, investment requirements, risks and potential benefits before you invest.
+            <p className="text-blue-200 font-medium mb-10 max-w-xl mx-auto text-base leading-relaxed">
+              Discuss your investment objectives and learn more about Specialised Investment Fund (SIF) strategies.
             </p>
 
-            {/* Benefits */}
-            <div className="flex flex-wrap items-center justify-center gap-6 mb-10">
-              {['Understand SIF strategies', 'Check minimum investment requirements', 'Compare SIF with MF, PMS & AIF', 'Invest with greater clarity'].map(b => (
-                <div key={b} className="flex items-center gap-2 text-blue-100 text-sm font-medium">
-                  <FontAwesomeIcon icon={faCircleCheck} className="text-green-400 text-xs" />
-                  {b}
-                </div>
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto mb-10">
+              {stats.map((item, idx) => (
+                <motion.div
+                  key={item.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={inView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: 0.2 + idx * 0.1, duration: 0.6 }}
+                  className="py-6 px-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-center hover:bg-white/15 transition-all duration-300 shadow-lg shadow-black/5"
+                >
+                  <div className="text-3xl lg:text-4xl font-bold text-white mb-1">
+                    {item.value}
+                  </div>
+                  <p className="text-blue-200 text-sm font-medium">{item.label}</p>
+                </motion.div>
               ))}
             </div>
 
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email address"
-                className="flex-1 px-6 py-4 rounded-full bg-white/10 backdrop-blur-sm border border-white/30 text-white placeholder-blue-200 font-medium text-sm focus:outline-none focus:border-white focus:bg-white/20 transition-all"
-                required />
+            {/* CTA Buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.5, duration: 0.6 }}
+              className="flex flex-col sm:flex-row items-center justify-center gap-4"
+            >
               <button
-                type="submit"
-                className="btn-ripple flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#c10000] hover:bg-[#9d0000] text-white font-semibold shadow-xl shadow-red-900/30 transition-all duration-200 hover:-translate-y-0.5 whitespace-nowrap">
-                Explore SIF
-                <FontAwesomeIcon icon={faArrowRight} />
+                onClick={() => openLeadModal()}
+                className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white text-[#032e92] text-sm font-semibold shadow-xl shadow-black/10 hover:bg-blue-50 hover:shadow-2xl transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <span>Invest Now</span>
+                <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
               </button>
-            </form>
 
-            {/* Success message */}
-            {subscribed && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-4 flex items-center justify-center gap-2 text-green-400 font-semibold">
-                <FontAwesomeIcon icon={faCircleCheck} />
-                You're subscribed! Check your inbox for a welcome email.
-              </motion.div>
-            )}
+              <a
+                href="tel:+919990243143"
+                className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm font-semibold border border-white/30 backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2.5"
+              >
+                <FontAwesomeIcon icon={faPhone} className="text-xs text-green-400" />
+                <span>Call us - +91-9990243143</span>
+              </a>
+            </motion.div>
+
           </div>
         </motion.div>
       </div>

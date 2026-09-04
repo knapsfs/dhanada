@@ -156,33 +156,48 @@ export const testimonials = [
 export const faqs = [
 	{
 		id: 1,
-		question: "How do I start investing with SIF?",
-		answer: "Starting is simple! Create your account, complete the KYC process online (takes just 5 minutes), browse our curated fund selection, and make your first investment with as little as ₹500. Our advisors are available 24/7 to guide you.",
+		question: "What is a Specialised Investment Fund (SIF)?",
+		answer: "A SIF is a SEBI-regulated investment product for investors seeking more specialised strategies than traditional mutual funds, giving fund managers greater flexibility to use tools such as derivatives and limited short positions within defined regulatory limits",
 	},
 	{
 		id: 2,
-		question: "Is my investment safe on the SIF platform?",
-		answer: "Absolutely. Your investments are held with SEBI-registered custodians and AMCs. We use bank-grade 256-bit SSL encryption, two-factor authentication, and are regulated by SEBI and AMFI. Your money is never held by SIF directly.",
+		question: "Are SIF investments risky?",
+		answer: "SIFs offer strategies across different risk levels, from low to high. You can choose funds based on your investment objective and risk appetite. In general, SIFs may carry slightly higher risk than traditional mutual funds due to their greater flexibility in portfolio management.",
 	},
 	{
 		id: 3,
-		question: "What is the minimum investment amount?",
-		answer: "You can start investing with as little as ₹500 per month via SIP (Systematic Investment Plan) or ₹1,000 as a lump sum investment. Some specialized funds may have higher minimums.",
+		question: "How is an SIF different from a mutual fund?",
+		answer: "SIFs offer more specialised strategies and greater flexibility in portfolio management than traditional mutual funds. They can also use strategies involving derivatives and limited short positions.",
 	},
 	{
 		id: 4,
-		question: "Can I withdraw my investments anytime?",
-		answer: "Yes, most mutual funds allow you to redeem your investments anytime. For equity funds, proceeds are credited within 3 business days (T+3). Liquid and debt funds are typically credited within 1-2 business days.",
+		question: "How is an SIF different from PMS?",
+		answer: "SIF is a pooled investment product where investors invest in a common strategy. PMS manages a separate portfolio for each investor based on their individual investment mandate. SIF bridges the gap between a traditional mutual fund and PMS.",
 	},
 	{
 		id: 5,
-		question: "What are the tax implications of mutual fund investments?",
-		answer: "Equity mutual funds held for more than 12 months are taxed at 10% (LTCG above ₹1 lakh). Debt funds held for 36+ months attract 20% LTCG with indexation. ELSS funds offer tax deductions up to ₹1.5 lakh under Section 80C.",
+		question: "How do I start investing with SIF?",
+		answer: "Starting is simple. Just click on “Invest Now” and fill in your details. Our team will get in touch with you and guide you through the next steps to get started with SIF.",
 	},
 	{
 		id: 6,
-		question: "How are your fund recommendations personalized?",
-		answer: "Our AI-powered risk profiling engine analyzes your income, goals, time horizon, and risk appetite to recommend the most suitable funds. Our SEBI-certified advisors then validate these recommendations for your specific financial situation.",
+		question: "What documents do I need to invest in an SIF?",
+		answer: "You generally need PAN, Aadhaar/valid KYC documents, bank details, and a completed application form. Additional documents may be required depending on the investor type and SIF requirements.",
+	},
+	{
+		id: 7,
+		question: "What is the minimum investment required for an SIF?",
+		answer: "The minimum investment for SIF is ₹10 lakh. This amount can be invested across different SIF strategies.",
+	},
+	{
+		id: 8,
+		question: "Can I withdraw my investments anytime?",
+		answer: "Yes, you can withdraw your SIF investment, subject to the terms of the specific strategy. Withdrawals before the applicable 3–5 year period may attract an exit load or other charges. Please refer to the respective PPM for details.",
+	},
+	{
+		id: 9,
+		question: "What are the tax implications of mutual fund investments?",
+		answer: "Most cases, SIFs follow mutual-fund taxation. For equity-oriented SIFs, short-term capital gains are taxed at 20%, while long-term capital gains are taxed at 12.5% on gains above ₹1.25 lakh. Other SIF strategies may have different tax treatment depending on their underlying investments. ",
 	},
 ];
 
@@ -233,37 +248,38 @@ export const stats = [
 
 // Comparison Data
 export const comparisonData = {
-	headers: ["Feature", "MF", "SIF", "PMS", "AIF"],
+	headers: ["Feature", "SIF", "MF", "PMS", "AIF"],
 	rows: [
 		{
 			feature: "Minimum Investment",
-			values: ["Varies by scheme", "₹10 Lakhs*", "₹50 Lakhs", "₹1 Crore"],
+			values: ["₹10 Lakhs*", "₹100", "₹50 Lakhs", "₹1 Crore"],
 		},
 		{
 			feature: "Liquidity",
-			values: ["Generally High", "Strategy-dependent", "Medium", "Generally Low"],
+			values: ["High*", "High", "Medium", "Generally Low"],
 		},
 		{
 			feature: "Risk Level",
-			values: ["Varies by scheme", "Moderate to High*", "High", "High to Very High"],
+			values: ["Moderate to High", "Varies by Scheme", "High", "High to Very High"],
 		},
 		{
-			feature: "Return Potential",
+			feature: "Returns",
 			values: ["Market-linked", "Market-linked", "Market-linked", "Market-linked"],
+		},
+		{
+			feature: "Diversification",
+			values: [
+				"High",
+				"High",
+				"Low",
+				"Fund Dependent",
+			],
 		},
 		{
 			feature: "Professional Management",
 			values: ["Yes", "Yes", "Yes", "Yes"],
 		},
-		{
-			feature: "Diversification",
-			values: [
-				"Generally High",
-				"Strategy-dependent",
-				"Portfolio-dependent",
-				"Fund-dependent",
-			],
-		},
+
 		{
 			feature: "SEBI Regulated",
 			values: ["Yes", "Yes", "Yes", "Yes"],

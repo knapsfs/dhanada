@@ -144,16 +144,22 @@ body {
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
+  height: 4px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f7f9fc;
+  background: #f1f5f9;
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb {
   background: #032e92;
-  border-radius: 3px;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #021d63;
 }
 
 /* Accordion */
