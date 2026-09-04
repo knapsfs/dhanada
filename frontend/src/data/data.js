@@ -268,12 +268,7 @@ export const comparisonData = {
 		},
 		{
 			feature: "Diversification",
-			values: [
-				"High",
-				"High",
-				"Low",
-				"Fund Dependent",
-			],
+			values: ["High", "High", "Low", "Fund Dependent"],
 		},
 		{
 			feature: "Professional Management",
