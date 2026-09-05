@@ -88,7 +88,7 @@ services:
     restart: unless-stopped
     depends_on:
       configurator:
-        condition: service_started
+        condition: service_completed_successfully
       asset-syncer:
         condition: service_completed_successfully
   frappe-frontend:
@@ -151,7 +151,7 @@ services:
     restart: unless-stopped
     depends_on:
       configurator:
-        condition: service_started
+        condition: service_completed_successfully
       redis-socketio:
         condition: service_started
       asset-syncer:
@@ -174,7 +174,7 @@ services:
     restart: unless-stopped
     depends_on:
       configurator:
-        condition: service_started
+        condition: service_completed_successfully
       asset-syncer:
         condition: service_completed_successfully
   queue-long:
@@ -195,7 +195,7 @@ services:
     restart: unless-stopped
     depends_on:
       configurator:
-        condition: service_started
+        condition: service_completed_successfully
       asset-syncer:
         condition: service_completed_successfully
   scheduler:
@@ -214,7 +214,7 @@ services:
     restart: unless-stopped
     depends_on:
       configurator:
-        condition: service_started
+        condition: service_completed_successfully
       asset-syncer:
         condition: service_completed_successfully
   asset-syncer:
@@ -226,7 +226,7 @@ services:
     command:
     - bash
     - -c
-    - "echo \"Syncing pre-built assets from image to anonymous volume...\"; if command\
+    - "echo \"Building production assets...\"; bench build --production; echo \"Syncing pre-built assets from image to anonymous volume...\"; if command\
       \ -v rsync &> /dev/null; then rsync -a --delete /home/frappe/frappe-bench/sites/assets/\
       \ /mnt/assets_vol/; else rm -rf /mnt/assets_vol/*; cp -a /home/frappe/frappe-bench/sites/assets/.\
       \ /mnt/assets_vol/; fi; echo \"Validating asset sync...\"; python3 -c \"\nimport\
