@@ -1,0 +1,254 @@
+name: dhanada
+services:
+  mariadb:
+    image: mariadb:11.8
+    command:
+    - --character-set-server=utf8mb4
+    - --collation-server=utf8mb4_unicode_ci
+    - --skip-character-set-client-handshake
+    - --skip-innodb-read-only-compressed
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+    - db-data:/var/lib/mysql
+    restart: unless-stopped
+  redis-cache:
+    image: redis:6.2-alpine
+    volumes:
+    - redis-cache-data:/data
+    restart: unless-stopped
+  redis-queue:
+    image: redis:6.2-alpine
+    volumes:
+    - redis-queue-data:/data
+    restart: unless-stopped
+  redis-socketio:
+    image: redis:6.2-alpine
+    volumes:
+    - redis-socketio-data:/data
+    restart: unless-stopped
+  configurator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        FRAPPE_VERSION: v16
+    command:
+    - bash
+    - -c
+    - 'ls -1 apps > sites/apps.txt; bench set-config -g db_host $$DB_HOST; bench set-config
+      -gp db_port $$DB_PORT; bench set-config -g redis_cache "redis://$$REDIS_CACHE";
+      bench set-config -g redis_queue "redis://$$REDIS_QUEUE"; bench set-config -g
+      redis_socketio "redis://$$REDIS_SOCKETIO"; bench set-config -gp socketio_port
+      $$SOCKETIO_PORT; /docker/scripts/init-site.sh
+
+      '
+    environment:
+      DB_HOST: mariadb
+      DB_PORT: '3306'
+      REDIS_CACHE: redis-cache:6379
+      REDIS_QUEUE: redis-queue:6379
+      REDIS_SOCKETIO: redis-socketio:6379
+      SOCKETIO_PORT: '9000'
+      DB_ROOT_USER: root
+      DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      SITE_NAME: ${SITE_NAME}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+    volumes:
+    - sites-vol:/home/frappe/frappe-bench/sites
+    - assets-vol:/home/frappe/frappe-bench/sites/assets
+    - apps-vol:/home/frappe/frappe-bench/apps
+    - ./docker/scripts:/docker/scripts
+    depends_on:
+      mariadb:
+        condition: service_started
+      redis-cache:
+        condition: service_started
+      redis-queue:
+        condition: service_started
+      asset-syncer:
+        condition: service_completed_successfully
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        FRAPPE_VERSION: v16
+    command:
+    - bench
+    - serve
+    - --port
+    - '8000'
+    environment:
+      PYTHONPATH: /home/frappe/frappe-bench/apps/dhanada:/home/frappe/frappe-bench/apps
+    volumes:
+    - sites-vol:/home/frappe/frappe-bench/sites
+    - assets-vol:/home/frappe/frappe-bench/sites/assets
+    - apps-vol:/home/frappe/frappe-bench/apps
+    restart: unless-stopped
+    depends_on:
+      configurator:
+        condition: service_completed_successfully
+      asset-syncer:
+        condition: service_completed_successfully
+  frappe-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        FRAPPE_VERSION: v16
+    command:
+    - nginx-entrypoint.sh
+    environment:
+      BACKEND: backend:8000
+      FRAPPE_SITE_NAME_HEADER: ${SITE_NAME}
+      SOCKETIO: websocket:9000
+      UPSTREAM_REAL_IP_ADDRESS: 127.0.0.1
+      UPSTREAM_REAL_IP_HEADER: X-Forwarded-For
+      UPSTREAM_REAL_IP_RECURSIVE: 'off'
+      PROXY_READ_TIMEOUT: 120
+      CLIENT_MAX_BODY_SIZE: 50m
+    ports:
+    - 8080:8080
+    labels:
+    - traefik.enable=true
+    - traefik.docker.network=traefik-public
+    - traefik.http.routers.frappe.rule=PathPrefix(`/`)
+    - traefik.http.routers.frappe.entrypoints=web
+    - traefik.http.routers.frappe.priority=1
+    - traefik.http.routers.frappe.service=frappe
+    - traefik.http.services.frappe.loadbalancer.server.port=8080
+    networks:
+    - default
+    - traefik-public
+    volumes:
+    - sites-vol:/home/frappe/frappe-bench/sites
+    - assets-vol:/home/frappe/frappe-bench/sites/assets
+    - apps-vol:/home/frappe/frappe-bench/apps
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_started
+      websocket:
+        condition: service_started
+      asset-syncer:
+        condition: service_completed_successfully
+  websocket:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        FRAPPE_VERSION: v16
+    command:
+    - node
+    - /home/frappe/frappe-bench/apps/frappe/socketio.js
+    environment:
+      REDIS_SOCKETIO: redis://redis-socketio:6379
+    volumes:
+    - sites-vol:/home/frappe/frappe-bench/sites
+    - assets-vol:/home/frappe/frappe-bench/sites/assets
+    - apps-vol:/home/frappe/frappe-bench/apps
+    restart: unless-stopped
+    depends_on:
+      configurator:
+        condition: service_completed_successfully
+      redis-socketio:
+        condition: service_started
+      asset-syncer:
+        condition: service_completed_successfully
+  queue-short:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        FRAPPE_VERSION: v16
+    command:
+    - bench
+    - worker
+    - --queue
+    - short,default
+    volumes:
+    - sites-vol:/home/frappe/frappe-bench/sites
+    - assets-vol:/home/frappe/frappe-bench/sites/assets
+    - apps-vol:/home/frappe/frappe-bench/apps
+    restart: unless-stopped
+    depends_on:
+      configurator:
+        condition: service_completed_successfully
+      asset-syncer:
+        condition: service_completed_successfully
+  queue-long:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        FRAPPE_VERSION: v16
+    command:
+    - bench
+    - worker
+    - --queue
+    - long,default,short
+    volumes:
+    - sites-vol:/home/frappe/frappe-bench/sites
+    - assets-vol:/home/frappe/frappe-bench/sites/assets
+    - apps-vol:/home/frappe/frappe-bench/apps
+    restart: unless-stopped
+    depends_on:
+      configurator:
+        condition: service_completed_successfully
+      asset-syncer:
+        condition: service_completed_successfully
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        FRAPPE_VERSION: v16
+    command:
+    - bench
+    - schedule
+    volumes:
+    - sites-vol:/home/frappe/frappe-bench/sites
+    - assets-vol:/home/frappe/frappe-bench/sites/assets
+    - apps-vol:/home/frappe/frappe-bench/apps
+    restart: unless-stopped
+    depends_on:
+      configurator:
+        condition: service_completed_successfully
+      asset-syncer:
+        condition: service_completed_successfully
+  asset-syncer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        FRAPPE_VERSION: v16
+    command:
+    - bash
+    - -c
+    - "echo \"Building production assets...\"; bench build --production; echo \"Syncing pre-built assets from image to anonymous volume...\"; if command\
+      \ -v rsync &> /dev/null; then rsync -a --delete /home/frappe/frappe-bench/sites/assets/\
+      \ /mnt/assets_vol/; else rm -rf /mnt/assets_vol/*; cp -a /home/frappe/frappe-bench/sites/assets/.\
+      \ /mnt/assets_vol/; fi; echo \"Validating asset sync...\"; python3 -c \"\nimport\
+      \ json, os, sys\nimage_assets_path = '/home/frappe/frappe-bench/sites/assets'\n\
+      volume_assets_path = '/mnt/assets_vol'\nwith open(f'{image_assets_path}/assets.json')\
+      \ as f:\n    assets = json.load(f)\nmissing = 0\nfor k, v in assets.items():\n\
+      \    file_path = f'{volume_assets_path}' + v.replace('/assets/', '/')\n    if\
+      \ not os.path.exists(file_path):\n        print(f'ERROR: Asset {v} referenced\
+      \ in assets.json not found at {file_path}!')\n        missing += 1\nif missing\
+      \ > 0:\n    print(f'Asset validation failed! {missing} missing files.')\n  \
+      \  sys.exit(1)\nprint('Asset validation passed successfully.')\n\""
+    volumes:
+    - assets-vol:/mnt/assets_vol
+volumes:
+  db-data: null
+  redis-cache-data: null
+  redis-queue-data: null
+  redis-socketio-data: null
+  sites-vol: null
+  assets-vol: null
+  apps-vol: null
+networks:
+  traefik-public:
+    external: true
+    name: traefik-public
