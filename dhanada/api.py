@@ -453,6 +453,7 @@ def chatbot_response():
 			payload = json.loads(frappe.request.data)
 			contents = payload.get("conversation_history", [])
 			system_instruction = payload.get("system_instruction", "")
+			is_json = payload.get("is_json", False)
 		except Exception:
 			return {"success": False, "message": "Invalid JSON payload"}
 
@@ -464,6 +465,9 @@ def chatbot_response():
 
 		if system_instruction:
 			gemini_payload["systemInstruction"] = {"parts": [{"text": system_instruction}]}
+
+		if is_json:
+			gemini_payload["generationConfig"] = {"responseMimeType": "application/json"}
 
 		# 4. Fallback loop over models
 		models = ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-3.1-flash-lite"]

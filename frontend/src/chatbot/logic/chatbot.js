@@ -43,6 +43,7 @@ async function generateContentWithFallback(params) {
 		body: JSON.stringify({
 			conversation_history: params.contents,
 			system_instruction: params.systemInstruction,
+			is_json: params.isJson || false,
 		}),
 	});
 
@@ -53,9 +54,86 @@ async function generateContentWithFallback(params) {
 	const data = await response.json();
 
 	if (data.message && data.message.success) {
+		if (params.isJson) {
+			try {
+				// The backend returns a raw JSON string from Gemini
+				const parsed = JSON.parse(data.message.message);
+				return {
+					text: parsed.message || "",
+					suggestions: Array.isArray(parsed.suggestions) ? parsed.suggestions : [],
+					leadOpportunity: parsed.leadOpportunity || {
+						isAppropriateNow: false,
+						offerMessage: null,
+					},
+				};
+			} catch (e) {
+				console.warn("Failed to parse Gemini JSON:", e);
+				return {
+					text: data.message.message,
+					suggestions: [],
+					leadOpportunity: { isAppropriateNow: false, offerMessage: null },
+				};
+			}
+		}
 		return { text: data.message.message };
 	} else {
 		throw new Error(data.message?.message || "Gemini processing failed on server");
+	}
+}
+
+async function analyzeContextForSuggestionsAndLeads(state, latestBotReply) {
+	try {
+		const systemInstruction = `You are an AI assistant evaluating the current conversational context. 
+Your task is to generate highly relevant quick-reply suggestions for the user, and evaluate if this is an appropriate time to offer an advisor connection.
+
+Respond in valid JSON format ONLY, exactly matching this schema:
+{
+  "suggestions": ["suggestion 1", "suggestion 2"],
+  "leadOpportunity": {
+    "isAppropriateNow": boolean,
+    "offerMessage": "string or null"
+  }
+}
+
+Rules for suggestions:
+1. Suggestions MUST directly correspond to the assistant's immediately preceding response.
+2. If the assistant asked a question, suggestions MUST be realistic answers to it.
+3. Keep suggestions concise, unique, and actionable. Generate 1 to 4 options (do not pad to 4). If no natural replies exist, return [].
+
+Rules for leadOpportunity:
+1. Set isAppropriateNow = true ONLY IF the user demonstrates strong financial intent (discussing amounts, goals, specific investments) OR if the conversation has had 2-3 meaningful informational exchanges and a soft offer feels natural.
+2. Set isAppropriateNow = false if this is the very first turn, or if the user is asking simple definitions (e.g. 'What is NAV?').
+3. If true, provide a contextual offerMessage (e.g. 'If you'd like, I can connect you with our advisor to discuss how you could utilise your ₹10 lakh effectively.').`;
+
+		const contents = state.history.map((msg) => ({
+			role: msg.role === "user" ? "user" : "model",
+			parts: [{ text: msg.text }],
+		}));
+
+		contents.push({
+			role: "model",
+			parts: [{ text: latestBotReply }],
+		});
+
+		const response = await generateContentWithFallback({
+			systemInstruction,
+			contents,
+			isJson: true,
+		});
+
+		return {
+			suggestions: response.suggestions || [],
+			leadOpportunity: response.leadOpportunity || {
+				isAppropriateNow: false,
+				offerMessage: null,
+			},
+		};
+	} catch (e) {
+		console.warn("Failed to generate dynamic suggestions/lead", e);
+		return {
+			suggestions: [],
+			leadOpportunity: { isAppropriateNow: false, offerMessage: null },
+		};
 	}
 }
 
@@ -93,8 +171,16 @@ const AFFIRMATIVE = [
 	"go ahead",
 	"sounds good",
 	"yes please",
+	"connect with an advisor",
 ];
-const NEGATIVE = ["no", "not now", "no thanks", "maybe later", "not interested"];
+const NEGATIVE = [
+	"no",
+	"not now",
+	"no thanks",
+	"maybe later",
+	"not interested",
+	"continue chatting",
+];
 
 const TOPIC_PATTERNS = [
 	{
@@ -298,7 +384,7 @@ function chooseOffer(state) {
 
 function getQuickReplies(state) {
 	if (state.leadStep === LEAD_STEPS.PENDING_OFFER) {
-		return ["✅ Yes", "❌ Not now"];
+		return ["Connect with an advisor", "Continue chatting"];
 	}
 
 	if (state.leadStep === LEAD_STEPS.CHOOSE_SHARE) {
@@ -504,9 +590,9 @@ export class Chatbot {
 		if (state.leadStep !== LEAD_STEPS.NONE && state.leadStep !== LEAD_STEPS.DONE) {
 			if (state.leadStep === LEAD_STEPS.PENDING_OFFER && intent === "negative") {
 				state.leadStep = LEAD_STEPS.NONE;
+				// Reset so the LLM can naturally offer it again much later, but the conversation history will prevent it from spamming immediately.
 				state.advisorOffered = false;
-				state.helpfulTurns = -2;
-				reply = "No problem! I am here if you have more questions.";
+				reply = "Alright! What else would you like to know about investing?";
 			} else if (state.leadStep === LEAD_STEPS.PENDING_OFFER && intent === "affirmative") {
 				if (!state.collected.name) {
 					state.leadStep = LEAD_STEPS.NAME;
@@ -586,11 +672,59 @@ export class Chatbot {
 			state.history = state.history.slice(-40);
 		}
 
+		let quickReplies = [];
+		let leadOpportunity = null;
+
+		if (state.leadStep !== LEAD_STEPS.NONE && state.leadStep !== LEAD_STEPS.DONE) {
+			quickReplies = getQuickReplies(state);
+		} else {
+			if (state.latestSuggestions) {
+				quickReplies = state.latestSuggestions;
+				leadOpportunity = state.latestLeadOpportunity;
+				state.latestSuggestions = null;
+				state.latestLeadOpportunity = null;
+			} else {
+				// Local rule-based responses
+				const analysis = await analyzeContextForSuggestionsAndLeads(state, reply);
+				quickReplies = analysis.suggestions;
+				leadOpportunity = analysis.leadOpportunity;
+			}
+
+			// If Gemini completely failed to provide suggestions, keep them as []
+			if (!Array.isArray(quickReplies)) {
+				quickReplies = [];
+			}
+
+			// Process proactive lead opportunity
+			if (
+				!state.advisorOffered &&
+				!state.leadCaptured &&
+				leadOpportunity &&
+				leadOpportunity.isAppropriateNow &&
+				leadOpportunity.offerMessage
+			) {
+				reply = `${reply}\n\n${leadOpportunity.offerMessage}`;
+
+				// Update history to include the appended offer text
+				if (
+					state.history.length > 0 &&
+					state.history[state.history.length - 1].role === "bot"
+				) {
+					state.history[state.history.length - 1].text = reply;
+				}
+
+				state.advisorOffered = true; // Prevents spamming offers
+				state.lastOfferTurn = state.turnCount;
+				state.leadStep = LEAD_STEPS.PENDING_OFFER;
+				quickReplies = getQuickReplies(state);
+			}
+		}
+
 		return {
 			reply,
 			history: state.history,
 			state: this.publicState(state),
-			quickReplies: getQuickReplies(state),
+			quickReplies: quickReplies,
 		};
 	}
 
@@ -760,143 +894,83 @@ export class Chatbot {
 
 			case "comparison":
 				state.currentTopic = "comparison";
-				return this.answerAndMaybeOffer(
-					state,
-					message,
-					intent,
-					this.handleComparison(message)
-				);
+				return this.handleComparison(message);
 
 			case "nav":
 				state.currentTopic = "nav";
-				return this.answerAndMaybeOffer(state, message, intent, this.handleNAV(message));
+				return this.handleNAV(message);
 
 			case "performance":
 				state.currentTopic = "performance";
-				return this.answerAndMaybeOffer(
-					state,
-					message,
-					intent,
-					this.handlePerformance(message)
-				);
+				return this.handlePerformance(message);
 
 			case "marketNews":
 				state.currentTopic = "marketNews";
-				return this.answerAndMaybeOffer(state, message, intent, this.handleMarketNews());
+				return this.handleMarketNews();
 
 			case "fundDetails":
 				state.currentTopic = "fundDetails";
-				return this.answerAndMaybeOffer(
-					state,
-					message,
-					intent,
-					this.handleFundDetails(message)
-				);
+				return this.handleFundDetails(message);
 
 			case "amc":
 				state.currentTopic = "amc";
-				return this.answerAndMaybeOffer(state, message, intent, this.handleAMC(message));
+				return this.handleAMC(message);
 
 			case "risk":
 				state.currentTopic = "risk";
-				return this.answerAndMaybeOffer(state, message, intent, this.handleRisk(message));
+				return this.handleRisk(message);
 
 			case "category":
 				state.currentTopic = "category";
-				return this.answerAndMaybeOffer(
-					state,
-					message,
-					intent,
-					this.handleCategory(message)
-				);
+				return this.handleCategory(message);
 
 			case "sip":
 				state.currentTopic = "sip";
-				return this.answerAndMaybeOffer(state, message, intent, this.handleGuide("sip"));
+				return this.handleGuide("sip");
 
 			case "lumpsum":
 				state.currentTopic = "lumpsum";
-				return this.answerAndMaybeOffer(
-					state,
-					message,
-					intent,
-					this.handleGuide("lumpsum")
-				);
+				return this.handleGuide("lumpsum");
 
 			case "taxation":
 				state.currentTopic = "taxation";
-				return this.answerAndMaybeOffer(
-					state,
-					message,
-					intent,
-					this.handleGuide("taxation")
-				);
+				return this.handleGuide("taxation");
 
 			case "assetAllocation":
 				state.currentTopic = "assetAllocation";
-				return this.answerAndMaybeOffer(
-					state,
-					message,
-					intent,
-					this.handleGuide("assetAllocation")
-				);
+				return this.handleGuide("assetAllocation");
 
 			case "portfolio":
 				state.currentTopic = "portfolio";
-				return this.answerAndMaybeOffer(
-					state,
-					message,
-					intent,
-					this.handleGuide("portfolio")
-				);
+				return this.handleGuide("portfolio");
 
 			case "exitLoad":
 				state.currentTopic = "exitLoad";
-				return this.answerAndMaybeOffer(
-					state,
-					message,
-					intent,
-					this.handleGuide("exitLoad")
-				);
+				return this.handleGuide("exitLoad");
 
 			case "expenseRatio":
 				state.currentTopic = "expenseRatio";
-				return this.answerAndMaybeOffer(
-					state,
-					message,
-					intent,
-					this.handleGuide("expenseRatio")
-				);
+				return this.handleGuide("expenseRatio");
 
 			case "kyc":
 				state.currentTopic = "kyc";
-				return this.answerAndMaybeOffer(state, message, intent, this.handleGuide("kyc"));
+				return this.handleGuide("kyc");
 
 			case "distributors":
 				state.currentTopic = "distributors";
-				return this.answerAndMaybeOffer(
-					state,
-					message,
-					intent,
-					this.handleDistributors(message)
-				);
+				return this.handleDistributors(message);
 
 			case "dhanadaServices":
 				state.currentTopic = "dhanadaServices";
-				return this.answerAndMaybeOffer(state, message, intent, this.handleServices());
+				return this.handleServices();
 
 			case "sif":
 				state.currentTopic = "sif";
-				return this.answerAndMaybeOffer(state, message, intent, this.handleGuide("sif"));
+				return this.handleGuide("sif");
 
 			case "mutualFunds":
 				state.currentTopic = "mutualFunds";
-				return this.answerAndMaybeOffer(
-					state,
-					message,
-					intent,
-					this.handleGuide("mutualFunds")
-				);
+				return this.handleGuide("mutualFunds");
 
 			case "advisorRequest":
 				state.currentTopic = "dhanadaServices";
@@ -916,72 +990,6 @@ export class Chatbot {
 			default:
 				return await this.handleUnknown(state, message);
 		}
-	}
-
-	answerAndMaybeOffer(state, message, intent, answer) {
-		// The lead reminder is now exclusively managed by processMessageInternal's interruption logic.
-
-		if (!this.shouldOfferLead(state, message, intent)) {
-			return answer;
-		}
-
-		state.advisorOffered = true;
-		state.lastOfferTurn = state.turnCount;
-		state.leadStep = LEAD_STEPS.PENDING_OFFER;
-
-		let leadQuestion = "Would you like me to connect you with one of our investment advisors?";
-
-		if (intent === "recommendation" || intent === "comparison") {
-			leadQuestion =
-				"I can also help you narrow down suitable options for your specific goals. Would you like an advisor to contact you?";
-		} else if (state.profile.amount || state.profile.mode === "sip") {
-			const amountStr = state.profile.amount
-				? ` ₹${state.profile.amount.toLocaleString("en-IN")}`
-				: "";
-			const modeStr = state.profile.mode === "sip" ? " SIP" : " investment";
-			leadQuestion = `If you're planning to start a${amountStr}${modeStr}, I can help you understand which option may suit your goals. Would you like an advisor to assist you?`;
-		} else if (state.currentTopic === "sif") {
-			leadQuestion =
-				"If you're considering investing in a SIF, I can help you understand which option may suit your goals. Would you like an advisor to contact you?";
-		}
-
-		return `${answer}\n\n${leadQuestion}`;
-	}
-
-	shouldOfferLead(state, message, intent) {
-		if (state.leadCaptured) return false;
-		if (state.advisorOffered) return false;
-		if (state.collected.phone && state.collected.email) return false;
-		if (state.leadStep !== LEAD_STEPS.NONE && state.leadStep !== LEAD_STEPS.DONE) return false;
-
-		if (intent === "advisorRequest") return true;
-		if (intent === "recommendation") return true;
-		if (intent === "comparison") return true;
-
-		const userContext = state.history
-			.filter((msg) => msg.role === "user")
-			.slice(-2)
-			.map((msg) => msg.text.toLowerCase())
-			.join(" ");
-
-		const combinedText = `${userContext} ${String(message || "").toLowerCase()}`;
-
-		const buyingIntent =
-			/(want to invest|how to invest|start sip|choose a fund|help me choose|looking to invest)/.test(
-				combinedText
-			);
-
-		const hasInvestmentContext = /(invest|mutual fund|mf|sip|lumpsum|recommend)/.test(
-			combinedText
-		);
-
-		if (state.profile.amount || state.profile.goal || state.profile.horizonYears) {
-			return buyingIntent || hasInvestmentContext;
-		}
-
-		if (buyingIntent) return true;
-
-		return false;
 	}
 
 	handleGuide(key) {
@@ -1113,12 +1121,7 @@ export class Chatbot {
 
 		state.awaitingRecommendationDetails = false;
 		const result = knowledgeService.getRecommendation(profile);
-		return this.answerAndMaybeOffer(
-			state,
-			"recommendation",
-			"recommendation",
-			formatRecommendation(result, profile)
-		);
+		return formatRecommendation(result, profile);
 	}
 
 	async handleUnknown(state, message) {
@@ -1139,7 +1142,27 @@ Do not repeat information already given earlier in the conversation.
 Use bullet points only when genuinely helpful.
 ONLY provide a longer, detailed response if the user explicitly asks to "Explain in detail", "Tell me more", "Complete comparison", or "Detailed analysis".
 NEVER mention AI, Gemini, or that you are a large language model.
-If the user asks something completely unrelated to finance, politely steer them back.`;
+If the user asks something completely unrelated to finance, politely steer them back.
+
+IMPORTANT: You must respond in valid JSON format exactly matching this schema:
+{
+  "message": "your conversational response here",
+  "suggestions": ["suggestion 1", "suggestion 2"],
+  "leadOpportunity": {
+    "isAppropriateNow": boolean,
+    "offerMessage": "string or null"
+  }
+}
+
+Rules for suggestions:
+1. Suggestions MUST directly correspond to your IMMEDIATELY PRECEDING response. 
+2. If you ask a question, suggestions MUST be realistic answers to it.
+3. Keep suggestions concise, unique, and actionable. Generate 1 to 4 options. If no natural replies exist, return [].
+
+Rules for leadOpportunity:
+1. Set isAppropriateNow = true ONLY IF the user demonstrates strong financial intent (discussing amounts, goals, specific investments) OR if the conversation has had 2-3 meaningful informational exchanges and a soft offer feels natural.
+2. Set isAppropriateNow = false if this is the very first turn, or if the user is asking simple definitions.
+3. If true, provide a contextual offerMessage (e.g. 'If you'd like, I can connect you with our advisor to discuss how you could utilise your ₹10 lakh effectively.').`;
 
 			const contents = state.history.map((msg) => ({
 				role: msg.role === "user" ? "user" : "model",
@@ -1149,13 +1172,18 @@ If the user asks something completely unrelated to finance, politely steer them 
 			const response = await generateContentWithFallback({
 				systemInstruction,
 				contents,
+				isJson: true,
 			});
 
-			return this.answerAndMaybeOffer(state, message, "unknown", response.text);
+			state.latestSuggestions = response.suggestions;
+			state.latestLeadOpportunity = response.leadOpportunity;
+			return response.text || "";
 		} catch (error) {
 			console.error("[GEMINI ERROR]:", error.message);
 			const fallbackReply = "I'm having trouble connecting right now, but " + localFallback;
-			return this.answerAndMaybeOffer(state, message, "unknown", fallbackReply);
+			state.latestSuggestions = [];
+			state.latestLeadOpportunity = null;
+			return fallbackReply;
 		}
 	}
 

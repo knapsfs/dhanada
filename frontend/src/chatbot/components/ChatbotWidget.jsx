@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../assets/style.css';
-import chatbotIconUrl from '../assets/chatbot-icon.svg';
 import { Chatbot } from '../logic/chatbot.js';
 
 const chatbotInstance = new Chatbot();
@@ -26,8 +25,8 @@ export default function ChatbotWidget() {
   const [sessionId, setSessionId] = useState(() => {
     let id = localStorage.getItem(STORAGE_KEYS.sessionId);
     if (!id) {
-      id = (typeof crypto !== 'undefined' && crypto.randomUUID) 
-        ? crypto.randomUUID() 
+      id = (typeof crypto !== 'undefined' && crypto.randomUUID)
+        ? crypto.randomUUID()
         : 'sess-' + Math.random().toString(36).substring(2, 15);
       localStorage.setItem(STORAGE_KEYS.sessionId, id);
     }
@@ -183,24 +182,24 @@ export default function ChatbotWidget() {
         type="button"
         aria-controls="chatWidget"
         aria-expanded={isOpen}
-        aria-label="Open Dhanada chatbot"
+        aria-label="Open Dhanada Chat"
         onClick={() => setIsOpen(true)}
       >
-        <span className="widget-launcher-ring"></span>
-        <img src={chatbotIconUrl} alt="" className="widget-launcher-icon" />
-        <span className="widget-launcher-text">
-          <strong>Dhanada Chat</strong>
-          <small>Ask anything</small>
-        </span>
+        <div className="morph-container">
+          <div className="morph-part extra"></div>
+          <div className="morph-part stem"></div>
+          <div className="morph-part arm-top"></div>
+          <div className="morph-part arm-bot"></div>
+        </div>
       </button >
 
       <section id="chatWidget" className={`chat-widget ${isOpen ? 'is-open' : ''}`} aria-hidden={!isOpen}>
         <header className="chat-widget-header">
           <div className="widget-brand">
-            <img src={chatbotIconUrl} alt="Dhanada bot icon" className="widget-brand-icon" />
+            <img src={`${import.meta.env.BASE_URL}favicon.svg`} alt="Knaps bot icon" className="widget-brand-icon" />
             <div>
-              <p className="widget-brand-kicker">Dhanada</p>
-              <h2>Investment Assistant</h2>
+              <p className="widget-brand-kicker">Knaps</p>
+              <h2>Assistant</h2>
             </div>
           </div>
 
@@ -240,10 +239,10 @@ export default function ChatbotWidget() {
                 {msg.quickReplies && msg.quickReplies.length > 0 && (
                   <div className="quick-replies-container">
                     {msg.quickReplies.map((qr, qrIdx) => (
-                      <button 
-                        key={qrIdx} 
+                      <button
+                        key={qrIdx}
                         type="button"
-                        className="quick-reply-btn" 
+                        className="quick-reply-btn"
                         onClick={() => handleSend(qr)}
                         disabled={isBusy}
                       >

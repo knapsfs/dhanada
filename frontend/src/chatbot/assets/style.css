@@ -33,63 +33,95 @@ body {
   ====================================================
 */
 .widget-launcher {
+  --launcher-bg: var(--color-blue-900);
   position: fixed;
   right: 24px;
   bottom: 24px;
   z-index: 999998;
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 12px 20px 12px 12px;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
   border: none;
-  border-radius: 999px;
-  background: var(--color-blue-900);
-  color: var(--color-white);
-  box-shadow: var(--shadow-lg);
+  border-radius: 50%;
+  background-color: var(--launcher-bg);
+  box-shadow: 0 4px 12px rgba(0, 51, 102, 0.25);
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  animation: floatLauncher 3s ease-in-out infinite;
+}
+
+@keyframes floatLauncher {
+  0% { transform: translateY(0); box-shadow: 0 4px 12px rgba(0, 51, 102, 0.25); }
+  50% { transform: translateY(-6px); box-shadow: 0 8px 20px rgba(0, 51, 102, 0.35); }
+  100% { transform: translateY(0); box-shadow: 0 4px 12px rgba(0, 51, 102, 0.25); }
 }
 
 .widget-launcher:hover,
 .widget-launcher:focus-visible {
-  background-color: #004080; /* Slightly brighten */
-  transform: translateY(-2px);
+  --launcher-bg: #004080;
+  transform: scale(1.08) !important;
+  animation-play-state: paused;
+  box-shadow: 0 0 16px rgba(0, 51, 102, 0.5), 0 0 0 4px rgba(0, 51, 102, 0.1);
 }
 
 .widget-launcher.is-open {
   opacity: 0;
   pointer-events: none;
-  transform: translateY(14px);
+  transform: translateY(14px) scale(0.9) !important;
+  animation: none;
 }
 
-.widget-launcher-ring {
-  display: none; 
+/* Chatbot Morphing Icon */
+.morph-container {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  pointer-events: none;
+  transition: filter 0.3s ease;
 }
 
-.widget-launcher-icon {
-  width: 48px;
-  height: 48px;
-  flex-shrink: 0;
-  filter: brightness(0) invert(1);
+.widget-launcher:hover .morph-container {
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.5));
 }
 
-.widget-launcher-text {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
-  text-align: left;
+.morph-part {
+  position: absolute;
+  background-color: #ff4d4d;
+  border-radius: 3px;
+  animation-duration: 8s;
+  animation-iteration-count: infinite;
+  animation-timing-function: cubic-bezier(0.68, -0.55, 0.26, 1.55);
 }
 
-.widget-launcher-text strong {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--color-white);
+.morph-part.stem { animation-name: morphStem; z-index: 1; }
+.morph-part.arm-top { animation-name: morphArmTop; transform-origin: bottom left; z-index: 2; }
+.morph-part.arm-bot { animation-name: morphArmBot; transform-origin: top left; z-index: 2; }
+.morph-part.extra { animation-name: morphExtra; z-index: 0; border-radius: 2px; }
+
+@keyframes morphStem {
+  0%, 40% { width: 6px; height: 30px; left: 7px; top: 1px; border-radius: 3px; }
+  50%, 90% { width: 32px; height: 24px; left: 0px; top: 4px; border-radius: 8px; }
+  100% { width: 6px; height: 30px; left: 7px; top: 1px; border-radius: 3px; }
 }
 
-.widget-launcher-text small {
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 0.78rem;
+@keyframes morphArmTop {
+  0%, 40% { width: 6px; height: 18px; left: 13px; top: 0px; transform: rotate(40deg); border-radius: 3px; background-color: #ff4d4d; }
+  50%, 90% { width: 6px; height: 6px; left: 8px; top: 10px; transform: rotate(0deg); border-radius: 50%; background-color: var(--launcher-bg); }
+  100% { width: 6px; height: 18px; left: 13px; top: 0px; transform: rotate(40deg); border-radius: 3px; background-color: #ff4d4d; }
+}
+
+@keyframes morphArmBot {
+  0%, 40% { width: 6px; height: 18px; left: 13px; top: 16px; transform: rotate(-40deg); border-radius: 3px; background-color: #ff4d4d; }
+  50%, 90% { width: 6px; height: 6px; left: 18px; top: 10px; transform: rotate(0deg); border-radius: 50%; background-color: var(--launcher-bg); }
+  100% { width: 6px; height: 18px; left: 13px; top: 16px; transform: rotate(-40deg); border-radius: 3px; background-color: #ff4d4d; }
+}
+
+@keyframes morphExtra {
+  0%, 40% { width: 6px; height: 6px; left: 16px; top: 16px; transform: rotate(0deg) scale(0); opacity: 0; }
+  50%, 90% { width: 10px; height: 10px; left: 18px; top: 22px; transform: rotate(45deg) scale(1); opacity: 1; }
+  100% { width: 6px; height: 6px; left: 16px; top: 16px; transform: rotate(0deg) scale(0); opacity: 0; }
 }
 
 /* 
@@ -143,7 +175,7 @@ body {
 .widget-brand-icon {
   width: 40px;
   height: 40px;
-  filter: brightness(0) invert(1);
+  object-fit: contain;
 }
 
 .widget-brand h2 {
