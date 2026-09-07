@@ -53,10 +53,11 @@ export default function ChatbotWidget() {
   const [healthStatus, setHealthStatus] = useState('Connecting...');
   const [healthOk, setHealthOk] = useState(false);
   const [isInverted, setIsInverted] = useState(false);
-  const isInvertedRef = useRef(false);
-
-  const historyRef = useRef(null);
   const inputRef = useRef(null);
+  const historyRef = useRef(null);
+  const lastMessageRef = useRef(null);
+  const launcherRef = useRef(null);
+  const isInvertedRef = useRef(false);
 
   useEffect(() => {
     console.log("ChatbotWidget Mounted");
@@ -142,8 +143,20 @@ export default function ChatbotWidget() {
   }, [isOpen]);
 
   useEffect(() => {
-    if (historyRef.current) {
-      historyRef.current.scrollTop = historyRef.current.scrollHeight;
+    if (historyRef.current && lastMessageRef.current) {
+      const container = historyRef.current;
+      const lastMsg = lastMessageRef.current;
+      
+      const childRect = lastMsg.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+      const relativeTop = childRect.top - containerRect.top + container.scrollTop;
+      
+      const targetScrollTop = relativeTop - 20; // 20px padding
+      
+      container.scrollTo({
+        top: targetScrollTop,
+        behavior: 'smooth'
+      });
     }
   }, [messages, isTyping, suggestions]);
 
@@ -300,8 +313,14 @@ export default function ChatbotWidget() {
         </div>
 
         <div id="chatHistory" className="chat-history" aria-live="polite" ref={historyRef}>
-          {messages.map((msg, idx) => (
-            <div key={idx} className={`message-row ${msg.role}`}>
+          {messages.map((msg, idx) => {
+            const isLastMessage = idx === messages.length - 1 && !isTyping;
+            return (
+            <div 
+              key={idx} 
+              className={`message-row ${msg.role}`}
+              ref={isLastMessage ? lastMessageRef : null}
+            >
               <div className={`message ${msg.role}`}>
                 {msg.role === 'bot' && (
                   <div className="message-meta">
@@ -327,11 +346,12 @@ export default function ChatbotWidget() {
                 )}
               </div>
             </div >
-          ))
+            );
+          })
           }
           {
             isTyping && (
-              <div className="message-row bot">
+              <div className="message-row bot" ref={lastMessageRef}>
                 <div className="message bot">
                   <div className="message-meta">
                     <span className="message-avatar">R</span>

@@ -11,6 +11,7 @@ import FutureValueCalculatorPage from './pages/FutureValueCalculatorPage'
 import RetirementCalculator from './pages/RetirementCalculator'
 import ScrollToTop from './components/ScrollToTop'
 import ChatbotWidget from './chatbot/components/ChatbotWidget'
+import FloatingGameBox from './components/FloatingGameBox'
 import { LeadModalProvider } from './context/LeadModalContext'
 import './index.css'
 
@@ -32,6 +33,7 @@ function App() {
           <Route path="/calculators/future-value" element={<FutureValueCalculatorPage />} />
           <Route path="/calculators/retirement" element={<RetirementCalculator />} />
         </Routes>
+        <FloatingGameBox />
         <ChatbotWidget />
       </BrowserRouter>
     </LeadModalProvider>
