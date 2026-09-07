@@ -369,7 +369,8 @@ function formatRecommendation(result, profile) {
 	const fundLines = result.suggestions
 		.map(
 			(fund) =>
-				`• ${fund.name} - ${fund.category}, ${fund.risk
+				`• ${fund.name} - ${fund.category}, ${
+					fund.risk
 				} risk, suitable for ${fund.suitableFor.toLowerCase()}`
 		)
 		.join("\n");
@@ -548,7 +549,7 @@ export class Chatbot {
 	async processMessage(sessionId, message) {
 		const previousTask = this.sessionQueue.get(sessionId) || Promise.resolve();
 		const currentTask = previousTask
-			.catch(() => { })
+			.catch(() => {})
 			.then(() => this.processMessageInternal(sessionId, message));
 
 		this.sessionQueue.set(sessionId, currentTask);
@@ -1324,8 +1325,9 @@ Rules for leadOpportunity:
 			state.leadCaptured = true;
 			state.leadStep = LEAD_STEPS.DONE;
 			state.crmLeadName = result.lead_name;
-			return `Thank you, ${state.collected.name || ""
-				}! I have passed your details to our team. An advisor will reach out to you shortly.`;
+			return `Thank you, ${
+				state.collected.name || ""
+			}! I have passed your details to our team. An advisor will reach out to you shortly.`;
 		} else {
 			console.error("[CRM ERROR]", result.message);
 			state.leadStep = LEAD_STEPS.NONE;
