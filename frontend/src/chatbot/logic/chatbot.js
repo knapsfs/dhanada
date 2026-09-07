@@ -101,9 +101,11 @@ Rules for suggestions:
 3. Keep suggestions concise, unique, and actionable. Generate 1 to 4 options (do not pad to 4). If no natural replies exist, return [].
 
 Rules for leadOpportunity:
-1. Set isAppropriateNow = true ONLY IF the user demonstrates strong financial intent (discussing amounts, goals, specific investments) OR if the conversation has had 2-3 meaningful informational exchanges and a soft offer feels natural.
-2. Set isAppropriateNow = false if this is the very first turn, or if the user is asking simple definitions (e.g. 'What is NAV?').
-3. If true, provide a contextual offerMessage (e.g. 'If you'd like, I can connect you with our advisor to discuss how you could utilise your ₹10 lakh effectively.').`;
+1. Do NOT use the presence of a financial amount (e.g., ₹, lakhs, crores) as a reason to offer an advisor.
+2. Set isAppropriateNow = true ONLY IF the CURRENT conversation context naturally creates a useful opportunity for personalized advisory assistance (e.g., portfolio construction, asset allocation, retirement planning, tax planning, wealth preservation, choosing between multiple options).
+3. Set isAppropriateNow = false if the user is asking simple factual questions (like NAV, SIP definition, etc.) or just continuing conversation.
+4. Evaluate ONLY the LATEST intent/question. Do NOT reuse an old reason or previous context to justify a new offer. The offer MUST feel natural and relevant to what the user is discussing RIGHT NOW.
+5. If true, provide a unique contextual offerMessage. Do not reuse generic boilerplate.`;
 
 		const contents = state.history.map((msg) => ({
 			role: msg.role === "user" ? "user" : "model",
@@ -565,6 +567,9 @@ export class Chatbot {
 		const state = this.sessionStore.get(sessionId);
 		const cleanMessage = String(message || "").trim();
 
+		state.leadEvaluationCooldown =
+			state.leadEvaluationCooldown === undefined ? 3 : state.leadEvaluationCooldown;
+
 		// 1. Scan for explicit financial entity
 		const explicitEntity = this.extractExplicitEntity(cleanMessage);
 
@@ -576,6 +581,10 @@ export class Chatbot {
 		}
 
 		state.turnCount += 1;
+		if (state.leadEvaluationCooldown > 0) {
+			state.leadEvaluationCooldown -= 1;
+		}
+
 		state.history.push({
 			role: "user",
 			text: cleanMessage,
@@ -592,6 +601,7 @@ export class Chatbot {
 				state.leadStep = LEAD_STEPS.NONE;
 				// Reset so the LLM can naturally offer it again much later, but the conversation history will prevent it from spamming immediately.
 				state.advisorOffered = false;
+				state.leadEvaluationCooldown = 4;
 				reply = "Alright! What else would you like to know about investing?";
 			} else if (state.leadStep === LEAD_STEPS.PENDING_OFFER && intent === "affirmative") {
 				if (!state.collected.name) {
@@ -699,6 +709,7 @@ export class Chatbot {
 			if (
 				!state.advisorOffered &&
 				!state.leadCaptured &&
+				state.leadEvaluationCooldown <= 0 &&
 				leadOpportunity &&
 				leadOpportunity.isAppropriateNow &&
 				leadOpportunity.offerMessage
@@ -877,7 +888,7 @@ export class Chatbot {
 
 		switch (intent) {
 			case "greeting":
-				return "Hi! I am Dhanada, your investment assistant. How can I help you today?";
+				return "Hi! I am Riddhi, your investment assistant. How can I help you today?";
 
 			case "thanks":
 				return "Happy to help 😊";
@@ -1133,7 +1144,7 @@ export class Chatbot {
 			"I can help with SIP, mutual funds, risk, tax, and more. What would you like to know?";
 
 		try {
-			const systemInstruction = `You are Dhanada, a friendly, professional investment assistant for Dhanada Specialized Investment Fund.
+			const systemInstruction = `You are Riddhi, a friendly, professional investment assistant for Dhanada Specialized Investment Fund.
 SIF means Specialized Investment Fund in this application's Indian investment context. Never confuse SIF with SIP. If the user writes SIF, treat it as Specialized Investment Fund unless the user explicitly indicates another meaning.
 Answer questions about Mutual Funds, SIP, NAV, Tax, Risk, Asset Allocation, Retirement, Investing, Wealth Creation, Financial Planning, and General Finance.
 Default to short, conversational, and concise responses (1-3 short sentences).
@@ -1160,9 +1171,11 @@ Rules for suggestions:
 3. Keep suggestions concise, unique, and actionable. Generate 1 to 4 options. If no natural replies exist, return [].
 
 Rules for leadOpportunity:
-1. Set isAppropriateNow = true ONLY IF the user demonstrates strong financial intent (discussing amounts, goals, specific investments) OR if the conversation has had 2-3 meaningful informational exchanges and a soft offer feels natural.
-2. Set isAppropriateNow = false if this is the very first turn, or if the user is asking simple definitions.
-3. If true, provide a contextual offerMessage (e.g. 'If you'd like, I can connect you with our advisor to discuss how you could utilise your ₹10 lakh effectively.').`;
+1. Do NOT use the presence of a financial amount (e.g., ₹, lakhs, crores) as a reason to offer an advisor.
+2. Set isAppropriateNow = true ONLY IF the CURRENT conversation context naturally creates a useful opportunity for personalized advisory assistance (e.g., portfolio construction, asset allocation, retirement planning, tax planning, wealth preservation, choosing between multiple options).
+3. Set isAppropriateNow = false if the user is asking simple factual questions (like NAV, SIP definition, etc.) or just continuing conversation.
+4. Evaluate ONLY the LATEST intent/question. Do NOT reuse an old reason or previous context to justify a new offer. The offer MUST feel natural and relevant to what the user is discussing RIGHT NOW.
+5. If true, provide a unique contextual offerMessage. Do not reuse generic boilerplate.`;
 
 			const contents = state.history.map((msg) => ({
 				role: msg.role === "user" ? "user" : "model",

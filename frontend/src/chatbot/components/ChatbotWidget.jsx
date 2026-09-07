@@ -18,7 +18,7 @@ const DEFAULT_SUGGESTIONS = [
   'Suggest a fund for 5 years',
 ];
 
-const WELCOME_MESSAGE = 'Hello. I am your Dhanada investment assistant.\nI can explain funds, SIP, risk, tax, KYC, NAV, and sample recommendations.';
+const WELCOME_MESSAGE = 'Hello! I am Riddhi, your investment assistant. How can I help you today?';
 
 export default function ChatbotWidget() {
   const [isOpen, setIsOpen] = useState(() => localStorage.getItem(STORAGE_KEYS.widgetOpen) === 'true');
@@ -50,14 +50,88 @@ export default function ChatbotWidget() {
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [isBusy, setIsBusy] = useState(false);
-  const [healthStatus, setHealthStatus] = useState('Checking');
+  const [healthStatus, setHealthStatus] = useState('Connecting...');
   const [healthOk, setHealthOk] = useState(false);
+  const [isInverted, setIsInverted] = useState(false);
+  const isInvertedRef = useRef(false);
 
   const historyRef = useRef(null);
   const inputRef = useRef(null);
 
   useEffect(() => {
     console.log("ChatbotWidget Mounted");
+  }, []);
+
+  useEffect(() => {
+    let ticking = false;
+    const updateIconColor = () => {
+      const launcher = document.getElementById('widgetLauncher');
+      if (!launcher) return;
+
+      const rect = launcher.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2;
+
+      const prevPointerEvents = launcher.style.pointerEvents;
+      launcher.style.pointerEvents = 'none';
+
+      const elements = document.elementsFromPoint(x, y);
+      launcher.style.pointerEvents = prevPointerEvents;
+
+      let isDarkBackground = false;
+
+      for (const el of elements) {
+        if (el.closest('.widget-launcher') || el.closest('.chat-widget')) continue;
+
+        const computedStyle = window.getComputedStyle(el);
+        const bgColor = computedStyle.backgroundColor;
+        const bgImage = computedStyle.backgroundImage;
+
+        if (bgImage && bgImage.includes('gradient')) {
+          isDarkBackground = true;
+          break;
+        }
+
+        if (bgColor !== 'transparent' && bgColor !== 'rgba(0, 0, 0, 0)') {
+          const rgbMatch = bgColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+          if (rgbMatch) {
+            const r = parseInt(rgbMatch[1], 10);
+            const g = parseInt(rgbMatch[2], 10);
+            const b = parseInt(rgbMatch[3], 10);
+
+            const isWhiteOrLight = (r > 240 && g > 240 && b > 240);
+            if (!isWhiteOrLight) {
+              isDarkBackground = true;
+            }
+            break;
+          }
+        }
+      }
+
+      if (isDarkBackground !== isInvertedRef.current) {
+        isInvertedRef.current = isDarkBackground;
+        setIsInverted(isDarkBackground);
+      }
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          updateIconColor();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    setTimeout(updateIconColor, 100);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
   }, []);
 
   useEffect(() => {
@@ -178,11 +252,11 @@ export default function ChatbotWidget() {
     <>
       <button
         id="widgetLauncher"
-        className={`widget-launcher ${isOpen ? 'is-open' : ''}`}
+        className={`widget-launcher ${isOpen ? 'is-open' : ''} ${isInverted ? 'inverted' : ''}`}
         type="button"
         aria-controls="chatWidget"
         aria-expanded={isOpen}
-        aria-label="Open Dhanada Chat"
+        aria-label="Open Riddhi Chat"
         onClick={() => setIsOpen(true)}
       >
         <div className="morph-container">
@@ -213,9 +287,9 @@ export default function ChatbotWidget() {
           </div>
         </header >
 
-        <div className="widget-intro">
+        {/* <div className="widget-intro">
           <p>Ask about SIP, funds, tax, NAV, risk, KYC, and recommendations.</p>
-        </div>
+        </div> */}
 
         <div id="suggestionBar" className="suggestion-bar" aria-label="Quick prompts">
           {suggestions.map((s, idx) => (
@@ -231,8 +305,8 @@ export default function ChatbotWidget() {
               <div className={`message ${msg.role}`}>
                 {msg.role === 'bot' && (
                   <div className="message-meta">
-                    <span className="message-avatar">D</span>
-                    <span>Dhanada</span>
+                    <span className="message-avatar">R</span>
+                    <span>Riddhi</span>
                   </div>
                 )}
                 <div>{msg.text}</div>
@@ -260,8 +334,8 @@ export default function ChatbotWidget() {
               <div className="message-row bot">
                 <div className="message bot">
                   <div className="message-meta">
-                    <span className="message-avatar">D</span>
-                    <span>Dhanada</span>
+                    <span className="message-avatar">R</span>
+                    <span>Riddhi</span>
                   </div>
                   <div className="typing-dots">
                     <span></span><span></span><span></span>
