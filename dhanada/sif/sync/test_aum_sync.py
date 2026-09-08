@@ -8,7 +8,6 @@ from dhanada.sif.sync.models import NavUpdate, SchemePlan, SyncDataset
 
 
 class TestSIFAUMSync(unittest.TestCase):
-
 	def setUp(self):
 		self.mapper = DataMapper(isin_sif_map={})
 
@@ -111,9 +110,7 @@ class TestSIFAUMSync(unittest.TestCase):
 	@patch("frappe.db.commit")
 	@patch("frappe.get_doc")
 	@patch("frappe.get_all")
-	def test_importer_missing_aum_does_not_overwrite_existing(
-		self, mock_get_all, mock_get_doc, mock_commit
-	):
+	def test_importer_missing_aum_does_not_overwrite_existing(self, mock_get_all, mock_get_doc, mock_commit):
 		"""Test that a blank/None AUM update does not overwrite an existing valid AUM."""
 		mock_get_all.return_value = ["INF754K30136"]
 		mock_plan = MagicMock()
