@@ -1,7 +1,7 @@
-import re
 import hashlib
+import re
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 from .logger import log_warning
 from .models import (
@@ -20,7 +20,7 @@ from .validator import DataValidator
 
 
 class DataMapper:
-	def __init__(self, isin_sif_map: Optional[dict[str, str]] = None):
+	def __init__(self, isin_sif_map: dict[str, str] | None = None):
 		self.validator = DataValidator()
 		self.unmapped_fields_log = set()
 		self.isin_sif_map = isin_sif_map
@@ -29,6 +29,7 @@ class DataMapper:
 		if self.isin_sif_map is None:
 			try:
 				from .github_client import GitHubClient
+
 				self.isin_sif_map = GitHubClient().fetch_amfi_isin_mapping()
 			except Exception as e:
 				log_warning(f"Could not load AMFI ISIN mapping: {e}")
