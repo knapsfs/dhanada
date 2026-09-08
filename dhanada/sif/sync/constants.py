@@ -21,3 +21,5 @@ EDITABLE_FIELDS = [
 	"factsheet_url",
 	"monthly_portfolio_disclosure_url",
 ]
+
+AMFI_SIF_NAV_URL = "https://portal.amfiindia.com/spages/SIF_NAVAll.txt"

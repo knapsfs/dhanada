@@ -386,7 +386,12 @@ class DataImporter:
 				"SIF Scheme Plan", filters={"sif_code": nav_update.sif_code}, pluck="name"
 			)
 			if not matching_plans:
-				log_warning(f"Skipping NAV update for sif_code {nav_update.sif_code} - Scheme Plan not found")
+				log_warning(
+					f"Skipping NAV update for sif_code '{nav_update.sif_code}' (date={nav_update.nav_date}, "
+					f"nav={nav_update.nav}): No SIF Scheme Plan found with this sif_code. "
+					f"This code may be missing from the scheme detail JSONs (amfi_code not set), "
+					f"or the scheme itself has not yet been synced."
+				)
 				self.stats["skipped"] += 1
 				return
 

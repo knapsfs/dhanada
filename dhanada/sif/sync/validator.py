@@ -32,18 +32,31 @@ class DataValidator:
 	def validate_amfi_scheme_details(self, raw_scheme: dict[str, Any]) -> bool:
 		sebi_code = raw_scheme.get("sebi_code")
 		if not sebi_code:
-			self.log_error("SchemeDetails", "Unknown", "Missing 'sebi_code'")
-			return False
+			# Warn but allow through — mapper will generate a deterministic TEMP_ code
+			# so that plans, NAV codes, and performance can still be linked correctly.
+			self.log_error(
+				"SchemeDetails",
+				raw_scheme.get("fund_name", "Unknown"),
+				"Missing 'sebi_code' — a TEMP_ fallback code will be generated",
+			)
 
 		required_fields = ["fund_name", "category", "fund_type"]
 		for field in required_fields:
 			if not raw_scheme.get(field):
-				self.log_error("SchemeDetails", str(sebi_code), f"Missing required field: {field}")
+				self.log_error(
+					"SchemeDetails",
+					str(sebi_code or raw_scheme.get("fund_name", "Unknown")),
+					f"Missing required field: {field}",
+				)
 				return False
 
 		# Nested plans exist?
 		if "plans" not in raw_scheme or not isinstance(raw_scheme["plans"], dict):
-			self.log_error("SchemeDetails", str(sebi_code), "Missing or invalid 'plans' dictionary")
+			self.log_error(
+				"SchemeDetails",
+				str(sebi_code or raw_scheme.get("fund_name", "Unknown")),
+				"Missing or invalid 'plans' dictionary",
+			)
 			return False
 
 		return True

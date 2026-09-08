@@ -1,4 +1,5 @@
 import re
+import hashlib
 from datetime import datetime
 from typing import Any, Optional
 
@@ -19,9 +20,20 @@ from .validator import DataValidator
 
 
 class DataMapper:
-	def __init__(self):
+	def __init__(self, isin_sif_map: Optional[dict[str, str]] = None):
 		self.validator = DataValidator()
 		self.unmapped_fields_log = set()
+		self.isin_sif_map = isin_sif_map
+
+	def _get_isin_sif_map(self) -> dict[str, str]:
+		if self.isin_sif_map is None:
+			try:
+				from .github_client import GitHubClient
+				self.isin_sif_map = GitHubClient().fetch_amfi_isin_mapping()
+			except Exception as e:
+				log_warning(f"Could not load AMFI ISIN mapping: {e}")
+				self.isin_sif_map = {}
+		return self.isin_sif_map
 
 	def _parse_date(self, date_str: str) -> datetime.date | None:
 		if not date_str:
@@ -91,6 +103,13 @@ class DataMapper:
 		elif "hybrid" in desc or ("equity" in desc and "debt" in desc):
 			return "Hybrid"
 		return "Equity"  # Fallback
+
+	def _extract_sif_code_from_name(self, name: str) -> str | None:
+		r"""Extracts the first SIF-\d+ code embedded in a plan name string."""
+		if not name:
+			return None
+		match = re.search(r"\bSIF-\d+\b", name)
+		return match.group(0) if match else None
 
 	def _parse_flat_plan(self, node: dict, sebi_code: str, dataset: SyncDataset):
 		if not isinstance(node, dict) or "isin_code" not in node:
@@ -276,6 +295,26 @@ class DataMapper:
 		if not isin:
 			return
 
+		# 1. Prefer explicit amfi_code
+		sif_code = node.get("amfi_code")
+
+		# 2. Try extracting from plan name if present
+		if not sif_code:
+			sif_code = self._extract_sif_code_from_name(node.get("name", ""))
+			if sif_code:
+				log_warning(
+					f"Plan {isin}: amfi_code was null; extracted sif_code '{sif_code}' from plan name."
+				)
+
+		# 3. Fallback to authoritative AMFI feed ISIN -> SIF mapping
+		if not sif_code:
+			isin_map = self._get_isin_sif_map()
+			sif_code = isin_map.get(isin)
+			if sif_code:
+				log_warning(
+					f"Plan {isin}: amfi_code was null; resolved sif_code '{sif_code}' from AMFI SIF feed."
+				)
+
 		# Map time_period to Frappe Select options
 		period_val = node.get("time_period")
 		frappe_period = None
@@ -300,7 +339,7 @@ class DataMapper:
 				option=p_opt,
 				sub_option=p_sub,
 				period=frappe_period,
-				sif_code=node.get("amfi_code"),
+				sif_code=sif_code,
 				rta_code=node.get("rta_code"),
 			)
 		)
@@ -314,6 +353,19 @@ class DataMapper:
 		# 1. Scheme Details
 		for raw_scheme in raw_data.get("scheme_details", []):
 			if self.validator.validate_amfi_scheme_details(raw_scheme):
+				# Generate a deterministic TEMP_ code when sebi_code is absent
+				sebi_code = raw_scheme.get("sebi_code")
+				if not sebi_code:
+					raw_key = (raw_scheme.get("fund_name") or raw_scheme.get("sif_name") or "UNKNOWN").upper()
+					hash_suffix = hashlib.md5(raw_key.encode()).hexdigest()[:8].upper()
+					sebi_code = f"TEMP_{hash_suffix}"
+					log_warning(
+						f"Scheme '{raw_scheme.get('fund_name')}' has no sebi_code; "
+						f"assigned temporary code '{sebi_code}' for import."
+					)
+					# Patch the raw_scheme so downstream code uses the TEMP_ code
+					raw_scheme = dict(raw_scheme, sebi_code=sebi_code)
+
 				# Derive fields
 				scheme_type = self._derive_scheme_type(raw_scheme.get("fund_type", ""))
 				investment_strategy = self._derive_investment_strategy(
@@ -405,7 +457,7 @@ class DataMapper:
 				)
 
 				# Extract plans
-				self._extract_plans(raw_scheme.get("plans", {}), raw_scheme.get("sebi_code"), dataset)
+				self._extract_plans(raw_scheme.get("plans", {}), sebi_code, dataset)
 
 		# 2. NAV Daily
 		for raw_nav in raw_data.get("nav_daily", []):
