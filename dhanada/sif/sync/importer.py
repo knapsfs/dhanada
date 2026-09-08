@@ -303,11 +303,13 @@ class DataImporter:
 					doc.period = plan.period
 					doc.sif_code = plan.sif_code
 					doc.rta_code = plan.rta_code
-					# Do not overwrite nav and nav_date if None (to preserve NAV syncs)
+					# Do not overwrite nav, nav_date, and aum if None (to preserve NAV syncs)
 					if plan.nav is not None:
 						doc.nav = plan.nav
 					if plan.nav_date is not None:
 						doc.nav_date = plan.nav_date
+					if getattr(plan, "aum", None) is not None:
+						doc.aum = plan.aum
 					doc.save(ignore_permissions=True)
 				self.stats["updated"] += 1
 			else:
@@ -325,6 +327,8 @@ class DataImporter:
 						doc.nav = plan.nav
 					if plan.nav_date is not None:
 						doc.nav_date = plan.nav_date
+					if getattr(plan, "aum", None) is not None:
+						doc.aum = plan.aum
 					doc.insert(ignore_permissions=True)
 				self.stats["created"] += 1
 
@@ -401,6 +405,11 @@ class DataImporter:
 					if not doc.nav_date or str(nav_update.nav_date) >= str(doc.nav_date):
 						doc.nav = nav_update.nav
 						doc.nav_date = nav_update.nav_date
+						if nav_update.aum is not None:
+							doc.aum = nav_update.aum
+						doc.save(ignore_permissions=True)
+					elif nav_update.aum is not None and not doc.aum:
+						doc.aum = nav_update.aum
 						doc.save(ignore_permissions=True)
 				self.stats["updated"] += 1
 

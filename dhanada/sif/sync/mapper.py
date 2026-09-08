@@ -69,11 +69,11 @@ class DataMapper:
 		return 1000000.0
 
 	def _parse_float(self, val: Any) -> float | None:
-		if val is None or str(val).strip() in ("", "None", "null"):
+		if val is None or str(val).strip() in ("", "None", "null", "-", "NA", "N/A"):
 			return None
 		try:
-			return float(val)
-		except ValueError:
+			return float(str(val).replace(",", "").strip())
+		except (ValueError, TypeError):
 			return None
 
 	def extract_numeric_risk(self, val: Any) -> int | None:
@@ -468,6 +468,7 @@ class DataMapper:
 						sif_code=raw_nav.get("sif_code"),
 						nav_date=self._parse_date(raw_nav.get("nav_date")),  # type: ignore
 						nav=self._parse_float(raw_nav.get("nav")) or 0.0,
+						aum=self._parse_float(raw_nav.get("AUM") or raw_nav.get("aum")),
 					)
 				)
 

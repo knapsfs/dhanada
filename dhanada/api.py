@@ -84,13 +84,14 @@ def get_funds_list():
 			plans = frappe.get_all(
 				"SIF Scheme Plan",
 				filters={"scheme": s.name},
-				fields=["name", "type", "option", "sub_option", "nav", "nav_date", "performance"],
+				fields=["name", "type", "option", "sub_option", "nav", "nav_date", "aum", "performance"],
 			)
 
 			best_plan = get_default_plan(plans)
 
 			plan_nav = None
 			nav_date = None
+			plan_aum = None
 			returns_1w = None
 			returns_1m = None
 			returns_3m = None
@@ -103,6 +104,7 @@ def get_funds_list():
 			if best_plan:
 				plan_nav = best_plan.nav if best_plan.nav_date else None
 				nav_date = best_plan.nav_date
+				plan_aum = best_plan.get("aum")
 
 				if best_plan.performance:
 					perf = frappe.db.get_value(
@@ -163,8 +165,7 @@ def get_funds_list():
 					"returns5Y": returns_5y,
 					"exitLoad": s.exit_load,
 					"launchDate": launch_date,
-					# Fields that don't exist in backend, kept null
-					"aum": None,
+					"aum": plan_aum,
 					"expenseRatio": None,
 					"rating": None,
 					"isNew": False,
@@ -214,6 +215,7 @@ def get_fund_details(identifier: str):
 				"rta_code",
 				"nav",
 				"nav_date",
+				"aum",
 				"performance",
 			],
 		)
