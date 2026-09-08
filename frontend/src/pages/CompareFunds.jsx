@@ -115,6 +115,8 @@ function mapToPremiumFormat(apiFund, isBasicList = false) {
     sectors: apiFund.sectors || [],
     holdings: apiFund.holdings || apiFund.topHoldings || [],
     topHoldings: apiFund.topHoldings || apiFund.holdings || [],
+    historicalNav: selectedPlan?.historical_nav || [],
+    historical_nav: selectedPlan?.historical_nav || [],
     manager: apiFund.manager || (apiFund.managers && apiFund.managers[0]) || { name: 'Unknown Manager', experience: 'N/A', qualification: 'N/A', fundsManaged: 'N/A', linkedin: '#' },
     managers: apiFund.managers || [],
     pros: apiFund.pros || ["Strong long-term performance"],

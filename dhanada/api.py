@@ -1,3 +1,8 @@
+import json
+import os
+import csv
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 import frappe
 from frappe.utils import cstr, date_diff, flt, getdate, nowdate
 
@@ -22,22 +27,62 @@ def get_default_plan(plans):
 	return sorted(plans, key=lambda p: (score(p), p.name or ""), reverse=True)[0]
 
 
-def mask_invalid_returns(perf_dict, launch_date):
+def mask_invalid_returns(perf_dict, launch_date, historical_nav=None):
 	"""
-	MariaDB defaults Float to 0.0. If a fund is too young for a period,
-	convert 0.0 to None so the frontend displays N/A.
+	MariaDB defaults Float to 0.0. If a fund has insufficient historical coverage for a period,
+	convert 0.0 to None so the frontend displays N/A and does not show false filters.
 	"""
-	if not perf_dict or not launch_date:
+	if not perf_dict:
 		return perf_dict
 
-	age_days = date_diff(nowdate(), getdate(launch_date))
+	# If historical_nav is present, determine actual horizon coverage
+	if historical_nav and len(historical_nav) >= 2:
+		try:
+			def parse_dt(s):
+				for fmt in ("%d-%b-%Y", "%Y-%m-%d", "%d/%m/%Y"):
+					try:
+						return datetime.strptime(s, fmt).date()
+					except ValueError:
+						pass
+				return None
 
+			dates = sorted([parse_dt(r.get("date", "")) for r in historical_nav if r.get("date")])
+			dates = [d for d in dates if d is not None]
+			if len(dates) >= 2:
+				first_date = dates[0]
+				latest_date = dates[-1]
+
+				horizons = {
+					"1_day": len(dates) >= 2,
+					"1_week": first_date <= (latest_date - relativedelta(days=7)),
+					"1_month": first_date <= (latest_date - relativedelta(months=1)),
+					"3_months": first_date <= (latest_date - relativedelta(months=3)),
+					"6_months": first_date <= (latest_date - relativedelta(months=6)),
+					"year_to_date": first_date <= datetime(latest_date.year, 1, 1).date(),
+					"1_year": first_date <= (latest_date - relativedelta(years=1)),
+					"2_years": first_date <= (latest_date - relativedelta(years=2)),
+					"3_years": first_date <= (latest_date - relativedelta(years=3)),
+					"5_years": first_date <= (latest_date - relativedelta(years=5)),
+					"10_years": first_date <= (latest_date - relativedelta(years=10)),
+					"since_inception": len(dates) >= 2,
+				}
+
+				for key, is_available in horizons.items():
+					if key in perf_dict and not is_available:
+						perf_dict[key] = None
+
+				return perf_dict
+		except Exception:
+			pass
+
+	# Fallback to age_days if historical_nav is not available
+	age_days = date_diff(nowdate(), getdate(launch_date)) if launch_date else None
 	thresholds = {
 		"1_day": 1,
 		"1_week": 7,
 		"1_month": 30,
-		"3_months": 90,
-		"6_months": 180,
+		"3_months": 92,
+		"6_months": 182,
 		"1_year": 365,
 		"2_years": 730,
 		"3_years": 1095,
@@ -45,14 +90,50 @@ def mask_invalid_returns(perf_dict, launch_date):
 		"10_years": 3650,
 	}
 
-	for key, min_days in thresholds.items():
-		if key in perf_dict:
-			# If the fund is younger than the period and value is exactly 0.0, it's missing data.
-			# Even if it's not 0.0, theoretically it shouldn't exist, but we only mask 0.0 to be safe.
-			if age_days < min_days and flt(perf_dict[key]) == 0.0:
+	if age_days is not None:
+		for key, min_days in thresholds.items():
+			if key in perf_dict and age_days < min_days:
 				perf_dict[key] = None
 
 	return perf_dict
+
+
+def get_performance_for_sif(sif_code: str):
+	if not sif_code:
+		return None
+	safe_code = sif_code.strip().replace("-", "_").lower()
+	possible_paths = [
+		frappe.get_site_path(
+			os.path.join(
+				"..", "..", "AMFI_Fetcher", "data", "sif", "scheme", "performance", f"{safe_code}.json"
+			)
+		),
+		f"/Users/smritisoni/Desktop/My_SIF/AMFI_Fetcher/data/sif/scheme/performance/{safe_code}.json",
+	]
+	for path in possible_paths:
+		if os.path.exists(path):
+			try:
+				with open(path, "r", encoding="utf-8") as f:
+					data = json.load(f)
+					returns = data.get("returns", {})
+					return {
+						"1_day": returns.get("1_day"),
+						"1_week": returns.get("1_week"),
+						"1_month": returns.get("1_month"),
+						"3_months": returns.get("3_month"),
+						"6_months": returns.get("6_month"),
+						"year_to_date": returns.get("year_to_date"),
+						"1_year": returns.get("1_year"),
+						"2_years": returns.get("2_year"),
+						"3_years": returns.get("3_year"),
+						"5_years": returns.get("5_year"),
+						"since_inception": returns.get("since_launch"),
+						"performance_date": data.get("last_updated"),
+					}
+			except Exception as e:
+				frappe.log_error(f"Failed to read performance JSON {path}: {e}")
+	return None
+
 
 
 @frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
@@ -178,6 +259,86 @@ def get_funds_list():
 		return {"status": "error", "message": str(e)}
 
 
+def get_historical_nav_for_sif(sif_code: str) -> list[dict]:
+	"""
+	Loads historical NAV time-series records for a given SIF code.
+	Checks local AMFI_Fetcher directory and fallback paths.
+	Returns list of dicts: [{'date': '14-Oct-2025', 'nav': 10.0149}, ...]
+	"""
+	import csv
+	import os
+
+	if not sif_code:
+		return []
+
+	safe_code = str(sif_code).strip().lower().replace("-", "_")
+
+	# Check potential local locations for AMFI_Fetcher historical CSVs
+	possible_paths = [
+		os.path.abspath(
+			os.path.join(
+				frappe.get_app_path("dhanada"),
+				"..",
+				"..",
+				"..",
+				"AMFI_Fetcher",
+				"data",
+				"sif",
+				"scheme",
+				"nav",
+				"historical",
+				f"{safe_code}.csv",
+			)
+		),
+		os.path.abspath(
+			os.path.join(
+				frappe.get_site_path(),
+				"..",
+				"..",
+				"AMFI_Fetcher",
+				"data",
+				"sif",
+				"scheme",
+				"nav",
+				"historical",
+				f"{safe_code}.csv",
+			)
+		),
+		f"/Users/smritisoni/Desktop/My_SIF/AMFI_Fetcher/data/sif/scheme/nav/historical/{safe_code}.csv",
+	]
+
+	for path in possible_paths:
+		if os.path.exists(path):
+			records = []
+			try:
+				with open(path, "r", encoding="utf-8") as f:
+					reader = csv.DictReader(f)
+					for r in reader:
+						nav_str = r.get("nav", "").strip()
+						date_str = r.get("nav_date", "").strip()
+						if not nav_str or not date_str:
+							continue
+						try:
+							nav_val = float(nav_str.replace(",", ""))
+							records.append({"date": date_str, "nav": nav_val})
+						except (ValueError, TypeError):
+							continue
+				return records
+			except Exception as e:
+				frappe.log_error(f"Failed to read historical CSV {path}: {e}", title="Historical NAV Read Error")
+
+	return []
+
+
+@frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
+def get_historical_nav(sif_code: str):
+	try:
+		data = get_historical_nav_for_sif(sif_code)
+		return {"status": "success", "data": data}
+	except Exception as e:
+		return {"status": "error", "message": str(e)}
+
+
 @frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
 def get_fund_details(identifier: str):
 	try:
@@ -225,6 +386,11 @@ def get_fund_details(identifier: str):
 			if not p.nav_date:
 				p.nav = None
 
+			if p.sif_code:
+				p["historical_nav"] = get_historical_nav_for_sif(p.sif_code)
+			else:
+				p["historical_nav"] = []
+
 			if p.performance:
 				perf = frappe.db.get_value(
 					"SIF Scheme Plan Performance",
@@ -244,9 +410,12 @@ def get_fund_details(identifier: str):
 					],
 					as_dict=True,
 				)
-				p["performance_data"] = mask_invalid_returns(perf, launch_date)
+				p["performance_data"] = mask_invalid_returns(
+					perf, launch_date, historical_nav=p.get("historical_nav")
+				)
 			else:
 				p["performance_data"] = None
+
 
 		# Managers
 		managers = []

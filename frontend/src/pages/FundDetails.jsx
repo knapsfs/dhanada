@@ -26,80 +26,7 @@ import Newsletter from '../components/Newsletter'
 import PlanSelector from '../components/PlanSelector'
 
 import { fetchFundDetails } from '../api/funds'
-
-// Floating Action Button
-function FloatingActions() {
-  const [showTop, setShowTop] = useState(false)
-
-  useEffect(() => {
-    const fn = () => setShowTop(window.scrollY > 400)
-    window.addEventListener('scroll', fn)
-    return () => window.removeEventListener('scroll', fn)
-  }, [])
-
-  const actions = [
-    { icon: faScaleBalanced, label: 'Compare', color: 'bg-[#032e92]' },
-    { icon: faCalculator, label: 'Calculator', color: 'bg-purple-600' },
-    { icon: faComments, label: 'Support', color: 'bg-green-600' },
-  ]
-
-  // return (
-  //   <div className="fixed right-5 bottom-6 z-50 flex flex-col items-center gap-3">
-  //     {actions.map((a) => (
-  //       <motion.button
-  //         key={a.label}
-  //         whileHover={{ scale: 1.1 }}
-  //         whileTap={{ scale: 0.9 }}
-  //         title={a.label}
-  //         className={`w-12 h-12 ${a.color} text-white rounded-2xl shadow-xl shadow-black/20 flex items-center justify-center`}>
-  //         <FontAwesomeIcon icon={a.icon} className="text-sm" />
-  //       </motion.button>
-  //     ))}
-  //     <AnimatePresence>
-  //       {showTop && (
-  //         <motion.button
-  //           initial={{ opacity: 0, scale: 0.7 }}
-  //           animate={{ opacity: 1, scale: 1 }}
-  //           exit={{ opacity: 0, scale: 0.7 }}
-  //           whileHover={{ scale: 1.1 }}
-  //           whileTap={{ scale: 0.9 }}
-  //           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-  //           className="w-12 h-12 bg-white border-2 border-[#032e92] text-[#032e92] rounded-2xl shadow-xl flex items-center justify-center">
-  //           <FontAwesomeIcon icon={faChevronUp} className="text-sm" />
-  //         </motion.button>
-  //       )}
-  //     </AnimatePresence>
-  //   </div>
-  // )
-}
-
-function generatePerformanceTable(perfData) {
-  if (!perfData) return [];
-  const returnsTable = [];
-  const mapPerf = (key, label) => {
-    if (perfData[key] != null) {
-      returnsTable.push({
-        period: label,
-        fund: `${perfData[key]}%`,
-        benchmark: 'N/A',
-        category: 'N/A',
-        diff: 'N/A',
-        positive: perfData[key] >= 0
-      });
-    }
-  };
-  mapPerf('1_day', '1 Day');
-  mapPerf('1_week', '1 Week');
-  mapPerf('1_month', '1 Month');
-  mapPerf('3_months', '3 Months');
-  mapPerf('6_months', '6 Months');
-  mapPerf('year_to_date', 'YTD');
-  mapPerf('1_year', '1 Year');
-  mapPerf('3_years', '3 Years');
-  mapPerf('5_years', '5 Years');
-  mapPerf('since_inception', 'Since Inception');
-  return returnsTable;
-}
+import { generatePerformanceTable } from '../utils/performance'
 
 export default function FundDetails() {
   const { id } = useParams()
@@ -176,7 +103,8 @@ export default function FundDetails() {
     if (!apiFund) return null;
 
     const perfData = selectedPlan.performance_data || {};
-    const returnsTable = generatePerformanceTable(perfData);
+    const historicalNav = selectedPlan.historical_nav || [];
+    const returnsTable = generatePerformanceTable(perfData, historicalNav);
 
     return {
       id: apiFund.id,
@@ -197,6 +125,8 @@ export default function FundDetails() {
       isin: selectedPlan.isin || 'N/A',
       sifCode: selectedPlan.sif_code || 'N/A',
       rtaCode: selectedPlan.rta_code || 'N/A',
+      historicalNav: historicalNav,
+      historical_nav: historicalNav,
 
       faceValue: apiFund.faceValue || 'N/A',
       registrar: apiFund.registrar || 'N/A',
@@ -251,13 +181,14 @@ export default function FundDetails() {
       sectors: [],
       holdings: [],
 
-      performanceData: null,
+      performanceData: perfData,
       performanceTable: returnsTable,
       relatedFunds: [],
       faqs: [],
       documents: apiFund.documents || {}
     };
   }, [apiFund, selectedPlan]);
+
 
   if (loading) {
     return (
