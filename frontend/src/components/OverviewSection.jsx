@@ -42,6 +42,7 @@ export default function OverviewSection({ fund }) {
     { label: 'Fund Size (AUM)', value: fund.fundSize },
     { label: 'Expense Ratio', value: formatPct(fund.expenseRatio) },
     { label: 'NAV', value: fund.nav },
+    { label: 'NAV Date', value: fund.navDate },
     { label: 'Min. SIP Amount', value: fund.minimumSIP },
     { label: 'Min. Lumpsum', value: fund.minimumLumpsum },
     { label: 'Exit Load', value: fund.exitLoad },

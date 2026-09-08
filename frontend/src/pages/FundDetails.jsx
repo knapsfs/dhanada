@@ -152,6 +152,21 @@ export default function FundDetails() {
     const historicalNav = selectedPlan.historical_nav || [];
     const returnsTable = generatePerformanceTable(perfData, historicalNav);
 
+    // Selected plan AUM or fallback to top-level fund AUM
+    const rawAum = selectedPlan.aum != null ? selectedPlan.aum : (apiFund.aum != null ? apiFund.aum : apiFund.fundSize);
+    let formattedAum = 'N/A';
+    if (rawAum != null && rawAum !== '' && rawAum !== 'N/A') {
+      if (typeof rawAum === 'number' || !isNaN(Number(rawAum))) {
+        const num = Number(rawAum);
+        formattedAum = `₹${num.toLocaleString('en-IN', { maximumFractionDigits: 2 })} Cr`;
+      } else if (typeof rawAum === 'string') {
+        formattedAum = rawAum.includes('Cr') ? rawAum : `₹${rawAum} Cr`;
+      }
+    }
+
+    const rawNavDate = selectedPlan.nav_date || apiFund.navDate || apiFund.nav_date;
+    const formattedNavDate = rawNavDate || 'N/A';
+
     return {
       id: apiFund.id,
       name: apiFund.name || 'Unknown Fund',
@@ -163,11 +178,12 @@ export default function FundDetails() {
       schemeType: apiFund.schemeType || 'N/A',
       benchmark: apiFund.benchmarkTier1 || 'N/A',
       launchDate: apiFund.launchDate || 'N/A',
-      fundSize: apiFund.fundSize ? `₹${apiFund.fundSize} Cr` : 'N/A',
+      aum: rawAum != null && rawAum !== '' ? rawAum : 'N/A',
+      fundSize: formattedAum,
 
       // Selected Plan specific data
-      nav: selectedPlan.nav != null ? `₹${selectedPlan.nav}` : 'N/A',
-      navDate: selectedPlan.nav_date || 'N/A',
+      nav: selectedPlan.nav != null ? `₹${selectedPlan.nav}` : (apiFund.nav != null ? `₹${apiFund.nav}` : 'N/A'),
+      navDate: formattedNavDate,
       isin: selectedPlan.isin || 'N/A',
       sifCode: selectedPlan.sif_code || 'N/A',
       rtaCode: selectedPlan.rta_code || 'N/A',

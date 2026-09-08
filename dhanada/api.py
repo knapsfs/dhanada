@@ -115,6 +115,53 @@ def _get_safe_scheme_data_file(data_type: str, safe_code: str, extension: str) -
 	return None
 
 
+def _fetch_scheme_data_from_github(data_type: str, safe_code: str, extension: str) -> str | None:
+	"""
+	Fallback to fetch scheme data from GitHub if local mount is unavailable.
+	Validates safe_code strictly against allowlist.
+	"""
+	if not safe_code or not re.match(r"^[a-z0-9_]+$", safe_code):
+		return None
+
+	sub_rel = ALLOWED_SCHEME_DATA_SUBDIRS.get(data_type)
+	if not sub_rel:
+		return None
+
+	cache_key = f"sif_gh_data_{data_type}_{safe_code}"
+	try:
+		cached = frappe.cache.get_value(cache_key)
+		if cached:
+			return cached
+	except Exception:
+		pass
+
+	repo_url = frappe.conf.get("sif_sync_github_repo_url", "https://github.com/Satyam4755/AMFI_Fetcher")
+	branch = frappe.conf.get("sif_sync_github_branch", "main")
+
+	clean_repo = repo_url.rstrip("/").replace("https://github.com/", "")
+	if not re.match(r"^[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+$", clean_repo):
+		clean_repo = "Satyam4755/AMFI_Fetcher"
+
+	clean_sub = sub_rel.replace(os.sep, "/")
+	clean_ext = extension.lstrip(".")
+	url = f"https://raw.githubusercontent.com/{clean_repo}/{branch}/data/sif/scheme/{clean_sub}/{safe_code}.{clean_ext}"
+
+	try:
+		import requests
+
+		resp = requests.get(url, timeout=(3.0, 5.0))
+		if resp.status_code == 200 and resp.text:
+			try:
+				frappe.cache.set_value(cache_key, resp.text, expires_in_sec=3600)
+			except Exception:
+				pass
+			return resp.text
+	except Exception:
+		pass
+
+	return None
+
+
 def get_default_plan(plans):
 	if not plans:
 		return None
@@ -211,14 +258,24 @@ def get_performance_for_sif(sif_code: str):
 	if not sif_code:
 		return None
 	safe_code = str(sif_code).strip().replace("-", "_").lower()
+	if not re.match(r"^[a-z0-9_]+$", safe_code):
+		return None
+
+	content = None
 	path = _get_safe_scheme_data_file("performance", safe_code, "json")
-	if not path:
+	if path:
+		try:
+			content = frappe.read_file(path)
+		except Exception as e:
+			frappe.log_error(f"Failed to read performance JSON {path}: {e}")
+
+	if not content:
+		content = _fetch_scheme_data_from_github("performance", safe_code, "json")
+
+	if not content:
 		return None
 
 	try:
-		content = frappe.read_file(path)
-		if not content:
-			return None
 		data = json.loads(content)
 		returns = data.get("returns", {})
 		return {
@@ -236,7 +293,7 @@ def get_performance_for_sif(sif_code: str):
 			"performance_date": data.get("last_updated"),
 		}
 	except Exception as e:
-		frappe.log_error(f"Failed to read performance JSON {path}: {e}")
+		frappe.log_error(f"Failed to parse performance JSON: {e}")
 	return None
 
 
@@ -373,15 +430,25 @@ def get_historical_nav_for_sif(sif_code: str) -> list[dict]:
 		return []
 
 	safe_code = str(sif_code).strip().lower().replace("-", "_")
+	if not re.match(r"^[a-z0-9_]+$", safe_code):
+		return []
+
+	content = None
 	path = _get_safe_scheme_data_file("historical_nav", safe_code, "csv")
-	if not path:
+	if path:
+		try:
+			content = frappe.read_file(path)
+		except Exception as e:
+			frappe.log_error(f"Failed to read historical CSV {path}: {e}", title="Historical NAV Read Error")
+
+	if not content:
+		content = _fetch_scheme_data_from_github("historical_nav", safe_code, "csv")
+
+	if not content:
 		return []
 
 	records = []
 	try:
-		content = frappe.read_file(path)
-		if not content:
-			return []
 		reader = csv.DictReader(io.StringIO(content))
 		for r in reader:
 			nav_str = r.get("nav", "").strip()
@@ -395,7 +462,7 @@ def get_historical_nav_for_sif(sif_code: str) -> list[dict]:
 				continue
 		return records
 	except Exception as e:
-		frappe.log_error(f"Failed to read historical CSV {path}: {e}", title="Historical NAV Read Error")
+		frappe.log_error(f"Failed to parse historical CSV: {e}", title="Historical NAV Read Error")
 
 	return []
 
@@ -553,8 +620,11 @@ def get_fund_details(identifier: str):
 			"allocations": allocations,
 			"plans": plans,
 			"defaultPlan": best_plan,
-			# Null fields for gaps
-			"fundSize": None,
+			"aum": best_plan.get("aum") if best_plan else None,
+			"fundSize": best_plan.get("aum") if best_plan else None,
+			"nav": best_plan.get("nav") if best_plan else None,
+			"navDate": best_plan.get("nav_date") if best_plan else None,
+			"nav_date": best_plan.get("nav_date") if best_plan else None,
 			"expenseRatio": None,
 			"metrics": None,
 		}

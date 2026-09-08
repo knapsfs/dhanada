@@ -47,6 +47,8 @@ export default function FundInformation({ fund }) {
       color: 'text-green-600',
       bg: 'bg-green-50',
       items: [
+        { label: 'NAV', value: fund.nav },
+        { label: 'NAV Date', value: fund.navDate },
         { label: 'Minimum SIP', value: fund.minimumSIP },
         { label: 'Minimum Lumpsum', value: fund.minimumLumpsum },
         { label: 'Expense Ratio', value: expRatio },
