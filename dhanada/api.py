@@ -1,9 +1,10 @@
+import csv
 import json
 import os
-import csv
 from datetime import datetime
-from dateutil.relativedelta import relativedelta
+
 import frappe
+from dateutil.relativedelta import relativedelta
 from frappe.utils import cstr, date_diff, flt, getdate, nowdate
 
 
@@ -38,6 +39,7 @@ def mask_invalid_returns(perf_dict, launch_date, historical_nav=None):
 	# If historical_nav is present, determine actual horizon coverage
 	if historical_nav and len(historical_nav) >= 2:
 		try:
+
 			def parse_dt(s):
 				for fmt in ("%d-%b-%Y", "%Y-%m-%d", "%d/%m/%Y"):
 					try:
@@ -113,7 +115,7 @@ def get_performance_for_sif(sif_code: str):
 	for path in possible_paths:
 		if os.path.exists(path):
 			try:
-				with open(path, "r", encoding="utf-8") as f:
+				with open(path, encoding="utf-8") as f:
 					data = json.load(f)
 					returns = data.get("returns", {})
 					return {
@@ -133,7 +135,6 @@ def get_performance_for_sif(sif_code: str):
 			except Exception as e:
 				frappe.log_error(f"Failed to read performance JSON {path}: {e}")
 	return None
-
 
 
 @frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
@@ -265,9 +266,6 @@ def get_historical_nav_for_sif(sif_code: str) -> list[dict]:
 	Checks local AMFI_Fetcher directory and fallback paths.
 	Returns list of dicts: [{'date': '14-Oct-2025', 'nav': 10.0149}, ...]
 	"""
-	import csv
-	import os
-
 	if not sif_code:
 		return []
 
@@ -311,7 +309,7 @@ def get_historical_nav_for_sif(sif_code: str) -> list[dict]:
 		if os.path.exists(path):
 			records = []
 			try:
-				with open(path, "r", encoding="utf-8") as f:
+				with open(path, encoding="utf-8") as f:
 					reader = csv.DictReader(f)
 					for r in reader:
 						nav_str = r.get("nav", "").strip()
@@ -325,7 +323,9 @@ def get_historical_nav_for_sif(sif_code: str) -> list[dict]:
 							continue
 				return records
 			except Exception as e:
-				frappe.log_error(f"Failed to read historical CSV {path}: {e}", title="Historical NAV Read Error")
+				frappe.log_error(
+					f"Failed to read historical CSV {path}: {e}", title="Historical NAV Read Error"
+				)
 
 	return []
 
@@ -415,7 +415,6 @@ def get_fund_details(identifier: str):
 				)
 			else:
 				p["performance_data"] = None
-
 
 		# Managers
 		managers = []
