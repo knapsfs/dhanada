@@ -11,10 +11,6 @@ const navLinks = [
   {
     label: 'SIF',
     href: 'https://dev.knaps.app/sif',
-    dropdown: [
-      { label: 'All Funds', href: 'https://dev.knaps.app/funds' },
-      { label: 'Compare', href: 'https://dev.knaps.app/compare' },
-    ],
   },
   { label: 'Mutual Fund', href: '/funds' },
   { label: 'PMS', href: '/#pms' },
@@ -121,8 +117,8 @@ export default function Navbar() {
                   <a
                     href={link.href}
                     className={`relative flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-[14px] 2xl:text-[15px] font-medium transition-all duration-300 group ${activeDropdown === link.label
-                        ? 'text-[#032e92] bg-[#eef5ff]'
-                        : 'text-gray-700 hover:text-[#032e92] hover:bg-[#eef5ff]/60'
+                      ? 'text-[#032e92] bg-[#eef5ff]'
+                      : 'text-gray-700 hover:text-[#032e92] hover:bg-[#eef5ff]/60'
                       }`}
                   >
                     {link.label}
@@ -138,8 +134,8 @@ export default function Navbar() {
                   <Link
                     to={link.href}
                     className={`relative flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-[14px] 2xl:text-[15px] font-medium transition-all duration-300 group ${activeDropdown === link.label || location.pathname === link.href
-                        ? 'text-[#032e92] bg-[#eef5ff]'
-                        : 'text-gray-700 hover:text-[#032e92] hover:bg-[#eef5ff]/60'
+                      ? 'text-[#032e92] bg-[#eef5ff]'
+                      : 'text-gray-700 hover:text-[#032e92] hover:bg-[#eef5ff]/60'
                       }`}
                   >
                     {link.label}
@@ -153,8 +149,8 @@ export default function Navbar() {
                     {/* Animated underline */}
                     <span
                       className={`absolute bottom-1 left-3.5 right-3.5 h-0.5 bg-[#c10000] transform origin-left scale-x-0 transition-transform duration-300 ease-out ${activeDropdown === link.label || location.pathname === link.href
-                          ? 'scale-x-100'
-                          : 'group-hover:scale-x-100'
+                        ? 'scale-x-100'
+                        : 'group-hover:scale-x-100'
                         }`}
                     ></span>
                   </Link>

@@ -8,10 +8,7 @@ FROM node:22-alpine AS frontend-builder
 WORKDIR /app
 COPY . .
 
-# Build SIF
-RUN cd frontend && npm ci && npm run build
-
-# Build KNAPS
+# Build KNAPS (Unified Frontend)
 RUN cd frontend/knaps && npm ci && npm run build
 
 # ==========================================

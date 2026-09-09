@@ -73,8 +73,8 @@ website_route_rules = [
 	{"from_route": "/calculators", "to_route": "knaps"},
 	{"from_route": "/calculators/<path:app_path>", "to_route": "knaps"},
 	{"from_route": "/contact", "to_route": "knaps"},
-	{"from_route": "/sif", "to_route": "sif"},
-	{"from_route": "/sif/<path:app_path>", "to_route": "sif"},
+	{"from_route": "/sif", "to_route": "knaps"},
+	{"from_route": "/sif/<path:app_path>", "to_route": "knaps"},
 ]
 
 # application home page (will override Website Settings)
