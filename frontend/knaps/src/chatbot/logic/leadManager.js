@@ -103,6 +103,8 @@ export async function saveLead({
 	chat_summary,
 	notes,
 	existing_lead_name,
+	conversation_id,
+	visitor_id,
 }) {
 	let primaryKey = null;
 
@@ -149,6 +151,8 @@ export async function saveLead({
 			chat_summary: chat_summary || "",
 			source: source || "Website Chatbot",
 			lead_name: existing_lead_name || "",
+			conversation_id: conversation_id || "",
+			visitor_id: visitor_id || "",
 		};
 		console.log("[STEP 3] Sending payload to Frappe");
 		console.log(payload);
