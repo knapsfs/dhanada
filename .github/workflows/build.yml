@@ -1,0 +1,96 @@
+name: Build and Deploy Dhanada
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feat/sif_scheme
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Dhanada
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine version
+        id: version
+        run: |
+          git fetch origin --tags || true
+          
+          LATEST_TAG=$(git tag --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
+          if [ -z "$LATEST_TAG" ]; then
+            LATEST_TAG="v0.0.0"
+          fi
+          
+          VERSION="${LATEST_TAG#v}"
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+          
+          SUBJECT=$(git log -1 --pretty=%s)
+          echo "Commit subject: $SUBJECT"
+          
+          REGEX_MAJOR="^feat(\([^)]+\))?!:"
+          REGEX_MINOR="^feat(\([^)]+\))?:"
+          REGEX_PATCH="^fix(\([^)]+\))?:"
+          
+          if [[ "$SUBJECT" =~ $REGEX_MAJOR ]]; then
+            echo "Type: feat! (MAJOR increment)"
+            MAJOR=$((MAJOR + 1))
+            MINOR=0
+            PATCH=0
+          elif [[ "$SUBJECT" =~ $REGEX_MINOR ]]; then
+            echo "Type: feat (MINOR increment)"
+            MINOR=$((MINOR + 1))
+            PATCH=0
+          elif [[ "$SUBJECT" =~ $REGEX_PATCH ]]; then
+            echo "Type: fix (PATCH increment)"
+            PATCH=$((PATCH + 1))
+          else
+            echo "::error::Unrecognized commit type in subject: '$SUBJECT'. Commit message must start with feat:, fix:, or feat!: (with optional scope)."
+            exit 1
+          fi
+          
+          NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
+          echo "Calculated version: $NEW_VERSION"
+          echo "version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and Push Dhanada
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: knapsdocker/dhanada:${{ steps.version.outputs.version }}
+          no-cache: true
+          
+      - name: Verify KNAPS assets
+        run: |
+          docker pull knapsdocker/dhanada:${{ steps.version.outputs.version }}
+          docker run --rm knapsdocker/dhanada:${{ steps.version.outputs.version }} \
+            find /home/frappe/frappe-bench/apps/dhanada/public/knaps -maxdepth 3 -type f
+
+      - name: Create and Push Git Tag
+        run: |
+          TAG_NAME="v${{ steps.version.outputs.version }}"
+          if git ls-remote --tags origin | grep -q "refs/tags/$TAG_NAME"; then
+            echo "Tag $TAG_NAME already exists, skipping tag creation."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git tag "$TAG_NAME"
+            git push origin "$TAG_NAME"
+          fi

@@ -39,10 +39,13 @@ repos:
         exclude: |
             (?x)^(
                 dhanada/public/dist/.*|
+                dhanada/public/knaps/.*|
                 .*node_modules.*|
                 .*boilerplate.*|
                 dhanada/templates/includes/.*|
-                dhanada/public/js/lib/.*
+                dhanada/public/js/lib/.*|
+                dhanada/public/sif/.*|
+                public/sif/.*
             )$
 
 
@@ -56,11 +59,14 @@ repos:
         exclude: |
             (?x)^(
                 dhanada/public/dist/.*|
+                dhanada/public/knaps/.*|
                 cypress/.*|
                 .*node_modules.*|
                 .*boilerplate.*|
                 dhanada/templates/includes/.*|
-                dhanada/public/js/lib/.*
+                dhanada/public/js/lib/.*|
+                dhanada/public/sif/.*|
+                public/sif/.*
             )$
 
   - repo: https://github.com/commitizen-tools/commitizen
