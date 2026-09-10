@@ -13,7 +13,7 @@ export default function HeatmapSection({ fundsData = [] }) {
     const dataMap = {};
     fundsData.forEach(fund => {
       // Use schemeType as parent, category as sub-category
-      const st = fund.schemeType || fund.scheme_type || "Open Ended";
+      const st = fund.schemeType || "Open Ended";
       if (!fund.category) return;
       
       const ac = st;
