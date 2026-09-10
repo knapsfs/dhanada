@@ -16,75 +16,32 @@ export default function Hero() {
   const { openLeadModal } = useLeadModal()
 
   return (
-    <section id="home" className="relative min-h-screen overflow-hidden">
-      {/* Continuous Subtle Animated Blue Gradient Background */}
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        animate={{
-          background: [
-            'linear-gradient(135deg, #021d63 0%, #032e92 50%, #0a4fd4 100%)',
-            'linear-gradient(135deg, #011640 0%, #0c389c 45%, #1d4ed8 100%)',
-            'linear-gradient(135deg, #021a54 0%, #032e92 55%, #0284c7 100%)',
-            'linear-gradient(135deg, #052473 0%, #0f44b8 50%, #1e40af 100%)',
-            'linear-gradient(135deg, #021d63 0%, #032e92 50%, #0a4fd4 100%)',
-          ],
-        }}
-        transition={{
-          duration: 12,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-      />
+    <section id="home" className="relative min-h-screen overflow-hidden sif-hero-gradient">
+      {/* Dynamic Animated Ambient Light Layers */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {/* Top-Right Glowing Cyan & Blue Orb */}
+        <div className="hero-orb-1 absolute -top-24 -right-24 w-[600px] h-[600px] rounded-full bg-gradient-to-br from-cyan-400/40 via-blue-500/30 to-transparent blur-[90px]" />
 
-      {/* Floating Animated Gradient Orbs for Depth */}
-      <motion.div
-        animate={{
-          x: [0, 45, -30, 0],
-          y: [0, -35, 25, 0],
-          scale: [1, 1.15, 0.95, 1],
-          opacity: [0.35, 0.6, 0.35],
-        }}
-        transition={{
-          duration: 14,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-        className="absolute -top-20 -right-20 w-[550px] h-[550px] rounded-full bg-gradient-to-br from-blue-400/25 to-cyan-400/20 blur-3xl pointer-events-none"
-      />
+        {/* Bottom-Left Radiant Cobalt & Royal Blue Orb */}
+        <div className="hero-orb-2 absolute -bottom-32 -left-28 w-[650px] h-[650px] rounded-full bg-gradient-to-tr from-blue-600/45 via-indigo-500/35 to-cyan-300/20 blur-[100px]" />
 
-      <motion.div
-        animate={{
-          x: [0, -50, 35, 0],
-          y: [0, 45, -25, 0],
-          scale: [1, 1.2, 0.9, 1],
-          opacity: [0.3, 0.55, 0.3],
-        }}
-        transition={{
-          duration: 16,
-          repeat: Infinity,
-          ease: 'easeInOut',
-          delay: 2,
-        }}
-        className="absolute -bottom-24 -left-20 w-[600px] h-[600px] rounded-full bg-gradient-to-tr from-[#1e40af]/35 to-[#0284c7]/25 blur-3xl pointer-events-none"
-      />
+        {/* Center Pulsating Electric Shimmer */}
+        <div className="hero-orb-3 absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[500px] rounded-full bg-gradient-to-r from-blue-500/25 via-cyan-400/30 to-blue-700/20 blur-[110px]" />
 
-      <motion.div
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.15, 0.3, 0.15],
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-[#0ea5e9]/15 blur-3xl pointer-events-none"
-      />
+        {/* Subtle Brand Accent Warm Glow */}
+        <div className="absolute top-1/4 right-1/4 w-80 h-80 rounded-full bg-[#c10000]/15 blur-[95px]" />
 
-      {/* Subtle Red Accent Ambient Glow matching brand */}
-      <div className="absolute top-20 right-20 w-96 h-96 rounded-full bg-[#c10000]/10 blur-3xl pointer-events-none" />
+        {/* Subtle Luxury Mesh Grid Overlay for Texture */}
+        <div 
+          className="absolute inset-0 opacity-[0.07] mix-blend-overlay pointer-events-none"
+          style={{
+            backgroundImage: `radial-gradient(rgba(255, 255, 255, 0.4) 1px, transparent 1px)`,
+            backgroundSize: '32px 32px'
+          }}
+        />
+      </div>
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-24 lg:pb-28">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-42 pb-24 lg:pb-28 z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[80vh]">
 
           {/* Left Column */}
@@ -95,7 +52,7 @@ export default function Hero() {
               transition={{ duration: 0.8, delay: 0.1 }}
               className="text-5xl lg:text-5xl xl:text-5xl font-bold text-white leading-tight mb-6">
               Specialized Investment Funds with
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-cyan-300"> Advanced Derivative Strategies.</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-100 via-cyan-200 to-blue-200"> Advanced Derivative Strategies.</span>
             </motion.h1>
 
             {/* Feature Checkpoints List */}

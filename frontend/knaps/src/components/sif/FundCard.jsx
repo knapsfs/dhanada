@@ -1,3 +1,4 @@
+import { formatAum, formatNav } from '../../utils/formatters'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -67,7 +68,7 @@ export default function FundCard({ fund, index, isGrid }) {
 
               <div className="text-right">
                 <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wide">NAV</p>
-                <span className="text-xs font-bold text-[#032e92]">{fund.nav != null ? `₹${fund.nav}` : 'N/A'}</span>
+                <span className="text-xs font-bold text-[#032e92]">{fund.nav != null ? formatNav(fund.nav) : 'N/A'}</span>
               </div>
             </div>
           </div>
@@ -77,7 +78,7 @@ export default function FundCard({ fund, index, isGrid }) {
             <div className="bg-[#f7f9fc] rounded-xl p-2.5 text-center">
               <FontAwesomeIcon icon={faChartPie} className="text-[#032e92] text-xs mb-1" />
               <p className="text-[10px] text-gray-400 font-medium">AUM</p>
-              <p className="text-xs font-bold text-gray-800">{fund.aum || 'N/A'}</p>
+              <p className="text-xs font-bold text-gray-800">{fund.aum ? formatAum(fund.aum) : 'N/A'}</p>
             </div>
             <div className="bg-[#f7f9fc] rounded-xl p-2.5 text-center">
               <FontAwesomeIcon icon={faCalendarDays} className="text-amber-500 text-xs mb-1" />
@@ -181,7 +182,7 @@ export default function FundCard({ fund, index, isGrid }) {
               </div>
               <div>
                 <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wide">AUM</p>
-                <p className="text-sm font-bold text-gray-800">{fund.aum || 'N/A'}</p>
+                <p className="text-sm font-bold text-gray-800">{fund.aum ? formatAum(fund.aum) : 'N/A'}</p>
               </div>
             </div>
 
@@ -225,7 +226,7 @@ export default function FundCard({ fund, index, isGrid }) {
               </div>
               <div>
                 <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wide">NAV</p>
-                <p className="text-sm font-bold text-[#032e92]">{fund.nav != null ? `₹${fund.nav}` : 'N/A'}</p>
+                <p className="text-sm font-bold text-[#032e92]">{fund.nav != null ? formatNav(fund.nav) : 'N/A'}</p>
               </div>
             </div>
           </div>

@@ -28,7 +28,7 @@ function AnimatedNumber({ value, duration = 2000, inView }) {
     }, 16)
     return () => clearInterval(timer)
   }, [inView, value, duration])
-  return <span>{count.toLocaleString()}</span>
+  return <span>{count.toLocaleString('en-IN')}</span>
 }
 
 export default function Stats() {

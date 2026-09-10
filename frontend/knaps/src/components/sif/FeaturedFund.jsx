@@ -111,7 +111,7 @@ export default function FeaturedFund({ fund }) {
                 {[
                   { label: 'NAV', value: fund.nav != null ? `₹${fund.nav}` : 'N/A', change: fund.navDate || '', positive: true },
                   { label: 'AUM', value: fund.aum != null ? fund.aum : 'N/A', change: fund.category, positive: null },
-                  { label: 'Min. Investment', value: fund.minInvestment != null ? `₹${fund.minInvestment.toLocaleString()}` : 'N/A', change: 'SIP / Lump Sum', positive: null },
+                  { label: 'Min. Investment', value: fund.minInvestment != null ? `₹${fund.minInvestment.toLocaleString('en-IN')}` : 'N/A', change: 'SIP / Lump Sum', positive: null },
                   { label: 'Risk Level', value: getRiskLevelConfig(fund.riskLevel).level !== 'N/A' ? `Level ${getRiskLevelConfig(fund.riskLevel).level}` : 'N/A', change: '', positive: null },
                   { label: 'Exit Load', value: fund.exitLoad || 'N/A', change: '', positive: null },
                   { label: 'Expense Ratio', value: fund.expenseRatio != null ? `${fund.expenseRatio}%` : 'N/A', change: 'Direct Plan', positive: true },

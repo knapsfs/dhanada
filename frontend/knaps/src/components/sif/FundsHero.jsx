@@ -4,7 +4,7 @@ import { faChartLine, faArrowTrendUp, faShieldHalved } from '@fortawesome/free-s
 
 export default function FundsHero({ totalFunds = 33 }) {
   return (
-    <section className="pt-24 pb-6 bg-[#f7f9fc]">
+    <section className="pt-24 pb-6 bg-[#ffffff]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

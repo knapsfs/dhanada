@@ -1,10 +1,20 @@
+import { formatAum, formatNav } from '../../utils/formatters'
 import { useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSort, faSortUp, faSortDown, faSearch } from '@fortawesome/free-solid-svg-icons'
+import {
+  faSort,
+  faSortUp,
+  faSortDown,
+  faSearch,
+  faChevronDown,
+  faChevronUp
+} from '@fortawesome/free-solid-svg-icons'
 import { getRiskLevelConfig } from '../../utils/risk'
 import { useLeadModal } from '../../context/LeadModalContext'
+
+const INITIAL_VISIBLE_COUNT = 5
 
 export default function FundsTable({
   funds = [],
@@ -19,6 +29,7 @@ export default function FundsTable({
   })
   const [selectedReturnPeriod, setSelectedReturnPeriod] = useState('3M') // '1M', '3M', '1Y', 'YTD'
   const [sortConfig, setSortConfig] = useState({ key: 'returns3M', direction: 'desc' })
+  const [isExpanded, setIsExpanded] = useState(false)
 
   // Unique categories for header dropdown
   const categories = useMemo(() => {
@@ -83,8 +94,7 @@ export default function FundsTable({
         (f.name && f.name.toLowerCase().includes(q)) ||
         (f.amc && f.amc.toLowerCase().includes(q)) ||
         (f.category && f.category.toLowerCase().includes(q)) ||
-        ((f.schemeType) &&
-          String(f.schemeType).toLowerCase().includes(q))
+        (f.schemeType && String(f.schemeType).toLowerCase().includes(q))
       )
     }
 
@@ -147,6 +157,12 @@ export default function FundsTable({
 
     return list
   }, [funds, filters, sortConfig])
+
+  // Visible funds based on expand/collapse state
+  const displayedFunds = useMemo(() => {
+    if (isExpanded) return processedFunds
+    return processedFunds.slice(0, INITIAL_VISIBLE_COUNT)
+  }, [processedFunds, isExpanded])
 
   const renderSortIcon = (key) => {
     if (sortConfig.key !== key) {
@@ -212,296 +228,318 @@ export default function FundsTable({
   const dropdownClassName = "w-full px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-700 bg-white focus:outline-none focus:border-[#032e92] cursor-pointer shadow-xs transition-colors"
 
   return (
-    <div className="bg-white rounded-3xl border border-[#e8edf7] shadow-xl shadow-blue-900/5 overflow-hidden">
+    <div className="flex flex-col gap-6">
 
-      {/* Table Container */}
-      <div className="overflow-x-auto w-full">
-        <table className="w-full text-left min-w-[950px] border-collapse">
-          <thead>
-            {/* Main Header / Top Filter Row */}
-            <tr className="bg-white border-b border-[#e8edf7]">
+      {/* Table Card */}
+      <div className="bg-white rounded-3xl border border-[#e8edf7] shadow-xl shadow-blue-900/5 overflow-hidden">
 
-              {/* 1. FUND / AMC + Search */}
-              <th className="py-4 px-4 sm:px-6 align-top min-w-[260px] max-w-[340px]">
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
-                      FUND/AMC
-                    </span>
-                    {categories.length > 0 && (
-                      <select
-                        value={filters.category || 'All'}
-                        onChange={(e) => setFilters(prev => ({ ...prev, category: e.target.value }))}
-                        className="text-[11px] font-medium text-gray-500 bg-transparent border-0 focus:outline-none cursor-pointer hover:text-[#032e92]"
-                        title="Filter by Fund Category"
-                      >
-                        <option value="All">All Categories</option>
-                        {categories.map(cat => (
-                          <option key={cat} value={cat}>{cat}</option>
-                        ))}
-                      </select>
-                    )}
+        {/* Table Container */}
+        <div className="overflow-x-auto w-full">
+          <table className="w-full text-left min-w-[950px] border-collapse">
+            <thead>
+              {/* Main Header / Top Filter Row */}
+              <tr className="bg-white border-b border-[#e8edf7]">
+
+                {/* 1. FUND / AMC + Search */}
+                <th className="py-4 px-4 sm:px-6 align-top min-w-[260px] max-w-[340px]">
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                        FUND/AMC
+                      </span>
+                      {categories.length > 0 && (
+                        <select
+                          value={filters.category || 'All'}
+                          onChange={(e) => setFilters(prev => ({ ...prev, category: e.target.value }))}
+                          className="text-[11px] font-medium text-gray-500 bg-transparent border-0 focus:outline-none cursor-pointer hover:text-[#032e92]"
+                          title="Filter by Fund Category"
+                        >
+                          <option value="All">All Categories</option>
+                          {categories.map(cat => (
+                            <option key={cat} value={cat}>{cat}</option>
+                          ))}
+                        </select>
+                      )}
+                    </div>
+                    <div className="relative">
+                      <FontAwesomeIcon icon={faSearch} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300 text-xs" />
+                      <input
+                        type="text"
+                        placeholder="Search Fund/ Strategy"
+                        value={filters.search || ''}
+                        onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
+                        className="w-full pl-8 pr-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-800 placeholder-gray-400 bg-white focus:outline-none focus:border-[#032e92] transition-colors"
+                      />
+                    </div>
                   </div>
-                  <div className="relative">
-                    <FontAwesomeIcon icon={faSearch} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300 text-xs" />
-                    <input
-                      type="text"
-                      placeholder="Search Fund/ Strategy"
-                      value={filters.search || ''}
-                      onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-                      className="w-full pl-8 pr-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-800 placeholder-gray-400 bg-white focus:outline-none focus:border-[#032e92] transition-colors"
-                    />
+                </th>
+
+                {/* 2. Scheme Type + Dropdown */}
+                <th className="py-4 px-3 align-top min-w-[140px]">
+                  <div className="flex flex-col gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleSort('schemeType')}
+                      className="flex items-center gap-1 text-[11px] font-bold text-gray-500 uppercase tracking-wider group cursor-pointer"
+                    >
+                      <span>Scheme Type</span>
+                      {renderSortIcon('schemeType')}
+                    </button>
+                    <select
+                      value={filters.schemeType || 'All'}
+                      onChange={(e) => setFilters(prev => ({ ...prev, schemeType: e.target.value }))}
+                      className={dropdownClassName}
+                    >
+                      <option value="All">All Types</option>
+                      {schemeTypes.map(st => (
+                        <option key={st} value={st}>{st}</option>
+                      ))}
+                    </select>
                   </div>
-                </div>
-              </th>
+                </th>
 
-              {/* 2. Scheme Type + Dropdown */}
-              <th className="py-4 px-3 align-top min-w-[140px]">
-                <div className="flex flex-col gap-2">
-                  <button
-                    type="button"
-                    onClick={() => handleSort('schemeType')}
-                    className="flex items-center gap-1 text-[11px] font-bold text-gray-500 uppercase tracking-wider group cursor-pointer"
-                  >
-                    <span>Scheme Type</span>
-                    {renderSortIcon('schemeType')}
-                  </button>
-                  <select
-                    value={filters.schemeType || 'All'}
-                    onChange={(e) => setFilters(prev => ({ ...prev, schemeType: e.target.value }))}
-                    className={dropdownClassName}
-                  >
-                    <option value="All">All Types</option>
-                    {schemeTypes.map(st => (
-                      <option key={st} value={st}>{st}</option>
-                    ))}
-                  </select>
-                </div>
-              </th>
+                {/* 3. Risk Band + Dropdown */}
+                <th className="py-4 px-3 align-top min-w-[140px]">
+                  <div className="flex flex-col gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleSort('riskLevel')}
+                      className="flex items-center gap-1 text-[11px] font-bold text-gray-500 uppercase tracking-wider group cursor-pointer"
+                    >
+                      <span>Risk Band</span>
+                      {renderSortIcon('riskLevel')}
+                    </button>
+                    <select
+                      value={filters.risk || 'All'}
+                      onChange={(e) => setFilters(prev => ({ ...prev, risk: e.target.value }))}
+                      className={dropdownClassName}
+                    >
+                      <option value="All">All Risk</option>
+                      <option value="Level 1">Level 1</option>
+                      <option value="Level 2">Level 2</option>
+                      <option value="Level 3">Level 3</option>
+                      <option value="Level 4">Level 4</option>
+                      <option value="Level 5">Level 5</option>
+                    </select>
+                  </div>
+                </th>
 
-              {/* 3. Risk Band + Dropdown */}
-              <th className="py-4 px-3 align-top min-w-[140px]">
-                <div className="flex flex-col gap-2">
-                  <button
-                    type="button"
-                    onClick={() => handleSort('riskLevel')}
-                    className="flex items-center gap-1 text-[11px] font-bold text-gray-500 uppercase tracking-wider group cursor-pointer"
-                  >
-                    <span>Risk Band</span>
-                    {renderSortIcon('riskLevel')}
-                  </button>
-                  <select
-                    value={filters.risk || 'All'}
-                    onChange={(e) => setFilters(prev => ({ ...prev, risk: e.target.value }))}
-                    className={dropdownClassName}
-                  >
-                    <option value="All">All Risk</option>
-                    <option value="Level 1">Level 1</option>
-                    <option value="Level 2">Level 2</option>
-                    <option value="Level 3">Level 3</option>
-                    <option value="Level 4">Level 4</option>
-                    <option value="Level 5">Level 5</option>
-                  </select>
-                </div>
-              </th>
+                {/* 4. NAV + Sort */}
+                <th className="py-4 px-3 align-top text-center min-w-[120px]">
+                  <div className="flex flex-col gap-2 items-center">
+                    <button
+                      type="button"
+                      onClick={() => handleSort('nav')}
+                      className="flex items-center gap-1 text-[11px] font-bold text-gray-500 uppercase tracking-wider group cursor-pointer"
+                    >
+                      <span>NAV</span>
+                      {renderSortIcon('nav')}
+                    </button>
+                  </div>
+                </th>
 
-              {/* 4. NAV + Sort */}
-              <th className="py-4 px-3 align-top text-center min-w-[120px]">
-                <div className="flex flex-col gap-2 items-center">
-                  <button
-                    type="button"
-                    onClick={() => handleSort('nav')}
-                    className="flex items-center gap-1 text-[11px] font-bold text-gray-500 uppercase tracking-wider group cursor-pointer"
-                  >
-                    <span>NAV</span>
-                    {renderSortIcon('nav')}
-                  </button>
-                </div>
-              </th>
+                {/* 5. Return Dropdown (Return 1M, Return 3M, Return 1Y, Return YTD) + Sort */}
+                <th className="py-4 px-3 align-top min-w-[150px]">
+                  <div className="flex flex-col gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleSort(
+                        selectedReturnPeriod === '1M' ? 'returns1M' :
+                          selectedReturnPeriod === '3M' ? 'returns3M' :
+                            selectedReturnPeriod === '1Y' ? 'returns1Y' : 'returnsYTD'
+                      )}
+                      className="flex items-center gap-1 text-[11px] font-bold text-gray-500 uppercase tracking-wider group cursor-pointer"
+                    >
+                      <span>Return</span>
+                      {renderSortIcon(
+                        selectedReturnPeriod === '1M' ? 'returns1M' :
+                          selectedReturnPeriod === '3M' ? 'returns3M' :
+                            selectedReturnPeriod === '1Y' ? 'returns1Y' : 'returnsYTD'
+                      )}
+                    </button>
+                    <select
+                      value={selectedReturnPeriod}
+                      onChange={(e) => handleReturnPeriodChange(e.target.value)}
+                      className={dropdownClassName}
+                    >
+                      <option value="1M">Return 1M</option>
+                      <option value="3M">Return 3M</option>
+                      <option value="1Y">Return 1Y</option>
+                      <option value="YTD">Return YTD</option>
+                    </select>
+                  </div>
+                </th>
 
-              {/* 5. Return Dropdown (Return 1M, Return 3M, Return 1Y, Return YTD) + Sort */}
-              <th className="py-4 px-3 align-top min-w-[150px]">
-                <div className="flex flex-col gap-2">
-                  <button
-                    type="button"
-                    onClick={() => handleSort(
-                      selectedReturnPeriod === '1M' ? 'returns1M' :
-                        selectedReturnPeriod === '3M' ? 'returns3M' :
-                          selectedReturnPeriod === '1Y' ? 'returns1Y' : 'returnsYTD'
-                    )}
-                    className="flex items-center gap-1 text-[11px] font-bold text-gray-500 uppercase tracking-wider group cursor-pointer"
-                  >
-                    <span>Return</span>
-                    {renderSortIcon(
-                      selectedReturnPeriod === '1M' ? 'returns1M' :
-                        selectedReturnPeriod === '3M' ? 'returns3M' :
-                          selectedReturnPeriod === '1Y' ? 'returns1Y' : 'returnsYTD'
-                    )}
-                  </button>
-                  <select
-                    value={selectedReturnPeriod}
-                    onChange={(e) => handleReturnPeriodChange(e.target.value)}
-                    className={dropdownClassName}
-                  >
-                    <option value="1M">Return 1M</option>
-                    <option value="3M">Return 3M</option>
-                    <option value="1Y">Return 1Y</option>
-                    <option value="YTD">Return YTD</option>
-                  </select>
-                </div>
-              </th>
+                {/* 6. AUM + Sort */}
+                <th className="py-4 px-3 align-top text-center min-w-[110px]">
+                  <div className="flex flex-col gap-2 items-center">
+                    <button
+                      type="button"
+                      onClick={() => handleSort('aum')}
+                      className="flex items-center gap-1 text-[11px] font-bold text-gray-500 uppercase tracking-wider group cursor-pointer"
+                    >
+                      <span>AUM</span>
+                      {renderSortIcon('aum')}
+                    </button>
+                  </div>
+                </th>
 
-              {/* 6. AUM + Sort */}
-              <th className="py-4 px-3 align-top text-center min-w-[110px]">
-                <div className="flex flex-col gap-2 items-center">
-                  <button
-                    type="button"
-                    onClick={() => handleSort('aum')}
-                    className="flex items-center gap-1 text-[11px] font-bold text-gray-500 uppercase tracking-wider group cursor-pointer"
-                  >
-                    <span>AUM</span>
-                    {renderSortIcon('aum')}
-                  </button>
-                </div>
-              </th>
+                {/* 7. Action */}
+                <th className="py-4 px-4 sm:px-6 align-top text-center min-w-[170px]">
+                  <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider block">
+                    Action
+                  </span>
+                </th>
 
-              {/* 7. Action */}
-              <th className="py-4 px-4 sm:px-6 align-top text-center min-w-[170px]">
-                <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider block">
-                  Action
-                </span>
-              </th>
+              </tr>
+            </thead>
 
-            </tr>
-          </thead>
+            {/* Table Body */}
+            <tbody className="divide-y divide-[#e8edf7]">
+              {loading ? (
+                Array.from({ length: 5 }).map((_, idx) => (
+                  <tr key={idx} className="animate-pulse">
+                    <td className="p-4"><div className="h-10 bg-gray-100 rounded-xl" /></td>
+                    <td className="p-4"><div className="h-6 bg-gray-100 rounded-full" /></td>
+                    <td className="p-4"><div className="h-6 bg-gray-100 rounded-full" /></td>
+                    <td className="p-4"><div className="h-6 bg-gray-100 rounded-lg" /></td>
+                    <td className="p-4"><div className="h-6 bg-gray-100 rounded-lg" /></td>
+                    <td className="p-4"><div className="h-6 bg-gray-100 rounded-lg" /></td>
+                    <td className="p-4"><div className="h-8 bg-gray-100 rounded-xl" /></td>
+                  </tr>
+                ))
+              ) : displayedFunds.length > 0 ? (
+                displayedFunds.map((fund, idx) => {
+                  const riskConfig = getRiskLevelConfig(fund.riskLevel)
+                  const aumVal = fund.aum ? formatAum(fund.aum) : `₹${(500 + ((idx * 150) % 700)).toLocaleString('en-IN')} Cr`
+                  const returnVal = getActiveReturn(fund, selectedReturnPeriod)
+                  const isNavUp = idx % 2 === 1 || (returnVal >= 0)
+                  const schemeTypeVal = fund.schemeType || 'Open Ended'
+                  const fundCode = fund.id || fund.sebi_code || fund.name
 
-          {/* Table Body */}
-          <tbody className="divide-y divide-[#e8edf7]">
-            {loading ? (
-              Array.from({ length: 5 }).map((_, idx) => (
-                <tr key={idx} className="animate-pulse">
-                  <td className="p-4"><div className="h-10 bg-gray-100 rounded-xl" /></td>
-                  <td className="p-4"><div className="h-6 bg-gray-100 rounded-full" /></td>
-                  <td className="p-4"><div className="h-6 bg-gray-100 rounded-full" /></td>
-                  <td className="p-4"><div className="h-6 bg-gray-100 rounded-lg" /></td>
-                  <td className="p-4"><div className="h-6 bg-gray-100 rounded-lg" /></td>
-                  <td className="p-4"><div className="h-6 bg-gray-100 rounded-lg" /></td>
-                  <td className="p-4"><div className="h-8 bg-gray-100 rounded-xl" /></td>
-                </tr>
-              ))
-            ) : processedFunds.length > 0 ? (
-              processedFunds.map((fund, idx) => {
-                const riskConfig = getRiskLevelConfig(fund.riskLevel)
-                const aumVal = fund.aum || `${500 + (idx * 150 % 700)}cr`
-                const returnVal = getActiveReturn(fund, selectedReturnPeriod)
-                const isNavUp = idx % 2 === 1 || (returnVal >= 0)
-                const schemeTypeVal = fund.schemeType || 'Open Ended'
-                const fundCode = fund.id || fund.sebi_code || fund.name
+                  return (
+                    <motion.tr
+                      key={fund.id || idx}
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.25, delay: Math.min(idx * 0.02, 0.3) }}
+                      className="hover:bg-[#f8faff] transition-colors group"
+                    >
+                      {/* 1. FUND / AMC */}
+                      <td className="py-4 px-4 sm:px-6">
+                        <div className="flex items-center gap-3">
+                          {renderLogo(fund)}
+                          <div className="flex flex-col min-w-0">
+                            <Link
+                              to={`/sif/${encodeURIComponent(fundCode)}`}
+                              className="font-bold text-sm text-gray-900 group-hover:text-[#032e92] transition-colors line-clamp-1"
+                              title={fund.name}
+                            >
+                              {fund.name}
+                            </Link>
+                            <p className="text-xs text-gray-400 font-medium truncate mt-0.5">
+                              {fund.amc || 'SIF Fund'}
+                            </p>
+                            {fund.category && (
+                              <span className="inline-block self-start bg-[#e8edf7] text-gray-700 text-[10px] font-semibold px-2.5 py-0.5 rounded-full mt-1">
+                                {fund.category}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </td>
 
-                return (
-                  <motion.tr
-                    key={fund.id || idx}
-                    initial={{ opacity: 0, y: 6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.25, delay: idx * 0.03 }}
-                    className="hover:bg-[#f8faff] transition-colors group"
-                  >
-                    {/* 1. FUND / AMC */}
-                    <td className="py-4 px-4 sm:px-6">
-                      <div className="flex items-center gap-3">
-                        {renderLogo(fund)}
-                        <div className="flex flex-col min-w-0">
+                      {/* 2. Scheme Type */}
+                      <td className="py-4 px-3">
+                        <span className="text-xs sm:text-sm font-semibold text-emerald-700">
+                          {schemeTypeVal}
+                        </span>
+                      </td>
+
+                      {/* 3. Risk Band */}
+                      <td className="py-4 px-3">
+                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${riskConfig.bg} ${riskConfig.text} ${riskConfig.border}`}>
+                          <span className="w-1.5 h-1.5 rounded-full bg-current" />
+                          {riskConfig.level !== 'N/A' ? `Level ${riskConfig.level}` : 'NA'}
+                        </span>
+                      </td>
+
+                      {/* 4. NAV */}
+                      <td className="py-4 px-3 text-center">
+                        <div className="flex flex-col items-center">
+                          <span className={`text-[10px] font-bold leading-tight ${isNavUp ? 'text-emerald-600' : 'text-red-500'}`}>
+                            {isNavUp ? '^ 1.1%' : 'v 1.1%'}
+                          </span>
+                          <span className="text-xs sm:text-sm font-bold text-gray-900 leading-tight mt-0.5">
+                            {fund.nav != null ? formatNav(fund.nav) : (idx === 0 ? '₹11.2776' : idx === 1 ? '₹11.1244' : '₹10.7764')}
+                          </span>
+                        </div>
+                      </td>
+
+                      {/* 5. Selected Return (1M / 3M / 1Y / YTD) */}
+                      <td className="py-4 px-3 text-center">
+                        <span className="text-xs sm:text-sm font-bold text-emerald-600">
+                          {typeof returnVal === 'number' ? `${returnVal > 0 ? '' : ''}${returnVal}%` : returnVal}
+                        </span>
+                      </td>
+
+                      {/* 6. AUM */}
+                      <td className="py-4 px-3 text-center">
+                        <span className="text-xs sm:text-sm font-bold text-emerald-700">
+                          {aumVal}
+                        </span>
+                      </td>
+
+                      {/* 7. Actions */}
+                      <td className="py-4 px-4 sm:px-6 text-center">
+                        <div className="flex items-center justify-center gap-2">
+                          <button
+                            onClick={openLeadModal}
+                            className="px-4 py-2 rounded-xl bg-[#032e92] text-white text-xs font-bold hover:bg-[#021d63] shadow-md shadow-blue-900/20 transition-all duration-200 cursor-pointer"
+                          >
+                            Invest
+                          </button>
                           <Link
                             to={`/sif/${encodeURIComponent(fundCode)}`}
-                            className="font-bold text-sm text-gray-900 group-hover:text-[#032e92] transition-colors line-clamp-1"
-                            title={fund.name}
+                            className="px-4 py-2 rounded-xl bg-[#cbd5e1] hover:bg-gray-300 text-gray-700 text-xs font-bold transition-colors cursor-pointer"
                           >
-                            {fund.name}
+                            Details
                           </Link>
-                          <p className="text-xs text-gray-400 font-medium truncate mt-0.5">
-                            {fund.amc || 'SIF Fund'}
-                          </p>
-                          {fund.category && (
-                            <span className="inline-block self-start bg-[#e8edf7] text-gray-700 text-[10px] font-semibold px-2.5 py-0.5 rounded-full mt-1">
-                              {fund.category}
-                            </span>
-                          )}
                         </div>
-                      </div>
-                    </td>
+                      </td>
 
-                    {/* 2. Scheme Type */}
-                    <td className="py-4 px-3">
-                      <span className="text-xs sm:text-sm font-semibold text-emerald-700">
-                        {schemeTypeVal}
-                      </span>
-                    </td>
+                    </motion.tr>
+                  )
+                })
+              ) : (
+                <tr>
+                  <td colSpan={7} className="py-16 text-center text-gray-500 font-medium">
+                    No funds found matching your criteria.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
 
-                    {/* 3. Risk Band */}
-                    <td className="py-4 px-3">
-                      <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${riskConfig.bg} ${riskConfig.text} ${riskConfig.border}`}>
-                        <span className="w-1.5 h-1.5 rounded-full bg-current" />
-                        {riskConfig.level !== 'N/A' ? `Level ${riskConfig.level}` : 'NA'}
-                      </span>
-                    </td>
-
-                    {/* 4. NAV */}
-                    <td className="py-4 px-3 text-center">
-                      <div className="flex flex-col items-center">
-                        <span className={`text-[10px] font-bold leading-tight ${isNavUp ? 'text-emerald-600' : 'text-red-500'}`}>
-                          {isNavUp ? '^ 1.1%' : 'v 1.1%'}
-                        </span>
-                        <span className="text-xs sm:text-sm font-bold text-gray-900 leading-tight mt-0.5">
-                          {fund.nav != null ? `Rs ${fund.nav}` : (idx === 0 ? 'Rs 11.2776' : idx === 1 ? 'Rs 11.1244' : 'Rs 10.7764')}
-                        </span>
-                      </div>
-                    </td>
-
-                    {/* 5. Selected Return (1M / 3M / 1Y / YTD) */}
-                    <td className="py-4 px-3 text-center">
-                      <span className="text-xs sm:text-sm font-bold text-emerald-600">
-                        {typeof returnVal === 'number' ? `${returnVal > 0 ? '' : ''}${returnVal}%` : returnVal}
-                      </span>
-                    </td>
-
-                    {/* 6. AUM */}
-                    <td className="py-4 px-3 text-center">
-                      <span className="text-xs sm:text-sm font-bold text-emerald-700">
-                        {aumVal}
-                      </span>
-                    </td>
-
-                    {/* 7. Actions */}
-                    <td className="py-4 px-4 sm:px-6 text-center">
-                      <div className="flex items-center justify-center gap-2">
-                        <button
-                          onClick={openLeadModal}
-                          className="px-4 py-2 rounded-xl bg-[#032e92] text-white text-xs font-bold hover:bg-[#021d63] shadow-md shadow-blue-900/20 transition-all duration-200 cursor-pointer"
-                        >
-                          Invest
-                        </button>
-                        <Link
-                          to={`/sif/${encodeURIComponent(fundCode)}`}
-                          className="px-4 py-2 rounded-xl bg-[#cbd5e1] hover:bg-gray-300 text-gray-700 text-xs font-bold transition-colors cursor-pointer"
-                        >
-                          Details
-                        </Link>
-                      </div>
-                    </td>
-
-                  </motion.tr>
-                )
-              })
-            ) : (
-              <tr>
-                <td colSpan={7} className="py-16 text-center text-gray-500 font-medium">
-                  No funds found matching your criteria.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
       </div>
+
+      {/* View All / Expand Button below the 5 funds */}
+      {!loading && processedFunds.length > INITIAL_VISIBLE_COUNT && (
+        <div className="flex justify-center items-center pt-2">
+          <button
+            type="button"
+            onClick={() => setIsExpanded(prev => !prev)}
+            className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full bg-[#032e92] hover:bg-[#021d63] text-white font-bold text-sm shadow-lg shadow-blue-900/20 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 cursor-pointer group"
+          >
+            <span>{isExpanded ? 'Show Less' : `View All Funds`}</span>
+            <FontAwesomeIcon
+              icon={isExpanded ? faChevronUp : faChevronDown}
+              className="text-xs text-blue-200 group-hover:text-white transition-transform duration-300"
+            />
+          </button>
+        </div>
+      )}
 
     </div>
   )

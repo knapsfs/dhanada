@@ -75,7 +75,7 @@ export default function SifHome() {
         <section id="funds-directory">
           <FundsHero totalFunds={fundsData.length || 33} />
 
-          <div className="py-6 sm:py-10 bg-[#f7f9fc]">
+          <div className="py-6 sm:py-10 bg-[#ffffff]">
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
               {error ? (
                 <div className="bg-red-50 border border-red-200 text-red-600 rounded-2xl p-6 text-center flex flex-col items-center justify-center min-h-[300px]">

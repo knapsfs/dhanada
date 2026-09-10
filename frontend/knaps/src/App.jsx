@@ -1,3 +1,4 @@
+import MysteryBoxWidget from './components/MysteryBox/MysteryBoxWidget';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import AboutUs from './pages/AboutUs';
@@ -52,6 +53,7 @@ function App() {
             <Route path="/calculators/retirement" element={<RetirementCalculator />} />
             <Route path="/calculators/future-value" element={<FutureValueCalculatorPage />} />
           </Routes>
+          <MysteryBoxWidget />
           <ChatbotWidget />
         </LeadModalProvider>
       </BrowserRouter>
