@@ -255,21 +255,26 @@ export const comparisonData = {
 			values: ["₹10 Lakhs*", "₹100", "₹50 Lakhs", "₹1 Crore"],
 		},
 		{
+			feature: "Long-Short Strategies",
+			values: ["Yes, in eligible strategies*", "Generally No", "Yes", "Yes, depending on category"],
+		},
+		{
+			feature: "Unhedged Short Exposure",
+			values: ["Up to 25%", "No", "Yes, subject to applicant rules", "yes, mainly cat III"],
+		},
+		{
+			feature: "Portfolio Customisation",
+			values: ["No", "No", "Yes", "No"],
+		},
+		{
 			feature: "Liquidity",
-			values: ["High*", "High", "Medium", "Generally Low"],
+			values: ["Moderate-High", "High", "Depends on agreement", "Low"],
 		},
 		{
-			feature: "Risk Level",
-			values: ["Moderate to High", "Varies by Scheme", "High", "High to Very High"],
+			feature: "Investor Profile",
+			values: ["Investors with ₹10L+ capital and a higher risk appetite", "Retail Investors", "HNIs who want personalised portfolio", "HNIs who want to invest in alternate assets"],
 		},
-		{
-			feature: "Returns",
-			values: ["Market-linked", "Market-linked", "Market-linked", "Market-linked"],
-		},
-		{
-			feature: "Diversification",
-			values: ["High", "High", "Low", "Fund Dependent"],
-		},
+
 		{
 			feature: "Professional Management",
 			values: ["Yes", "Yes", "Yes", "Yes"],

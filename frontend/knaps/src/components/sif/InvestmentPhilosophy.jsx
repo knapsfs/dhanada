@@ -30,7 +30,7 @@ export default function InvestmentPhilosophy() {
 
             {/* Paragraph 1 */}
             <p className="text-gray-500 font-normal leading-relaxed text-sm sm:text-base mb-5">
-              Every investment decision should start with a clear goal. What am I investing for? How much do I need? And how long can I stay invested? The answers should guide my investment choices, not market rumours, a friend’s advice or the fear of missing out.
+              Every investment decision should start with a clear goal. What am I investing for? How much do I need? And how long can I stay invested? The answers should guide one’s investment choices, not market rumours, a friend’s advice or the fear of missing out.
             </p>
 
             {/* Paragraph 2 */}

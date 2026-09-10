@@ -7,9 +7,9 @@ import { useLeadModal } from '../../context/LeadModalContext'
 import heroImg from '../../assets/sif/knaps-hero.png'
 
 const heroHighlights = [
-  'Advanced investment strategies',
-  'SEBI-regulated framework',
-  'Start with just Rs. 10lakh',
+  '₹10 Lakh Minimum Investment',
+  'Long-Short Derivative Strategies',
+  'Flexible Equity & Debt Exposure',
 ]
 
 export default function Hero() {
@@ -30,22 +30,22 @@ export default function Hero() {
 
           {/* Left Column */}
           <div>
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7 }}
               className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-sm text-blue-100 font-medium mb-6">
               <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
               AMFI Registered SIF Distributor
-            </motion.div>
+            </motion.div> */}
 
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.1 }}
               className="text-5xl lg:text-5xl xl:text-5xl font-bold text-white leading-tight mb-6">
-              Specialized Investment Funds (SIF) for
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-cyan-300"> Smarter Investments.</span>
+              Specialized Investment Funds with
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-cyan-300"> Advanced Derivative Strategies.</span>
             </motion.h1>
 
             {/* Feature Checkpoints List */}
@@ -104,7 +104,7 @@ export default function Hero() {
               <img
                 src={heroImg}
                 alt="KNAPS Specialized Investment Funds"
-                className="w-full h-auto object-contain max-h-[620px] drop-shadow-2xl hover:scale-105 transition-transform duration-500"
+                className="w-full h-auto object-contain max-h-[800px] drop-shadow-2xl hover:scale-105 transition-transform duration-500"
               />
             </motion.div>
           </div>

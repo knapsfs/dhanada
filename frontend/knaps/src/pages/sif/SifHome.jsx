@@ -175,157 +175,159 @@ export default function SifHome() {
 
   return (
     <div className="min-h-screen bg-[#f7f9fc] font-sans text-gray-900">
-        <Navbar />
+      <Navbar />
 
-        <main>
-          {/* 1. SIF Hero */}
-          <Hero />
+      <main>
+        {/* 1. SIF Hero */}
+        <Hero />
 
-          {/* 2. Why Choose SIF */}
-          <WhyChoose />
+        {/* 2. Why Choose SIF */}
+        {/* <WhyChoose /> */}
 
-          {/* 3. Fund Marketplace */}
-          {!loading && fundsData.length > 0 && <FundMarketplace fundsData={fundsData} />}
+        {/* 3. Fund Marketplace */}
+        {/* {!loading && fundsData.length > 0 && <FundMarketplace fundsData={fundsData} />} */}
 
-          {/* 4. Compare Top SIF Schemes (with integrated FundSelector directly below tabs) */}
-          {!loading && fundsData.length > 0 && (
-            <TopFunds
-              fundsData={fundsData}
-              selectedFunds={selectedFunds}
-              onFundSelect={handleFundSelect}
-              onReset={handleResetSelector}
-            />
-          )}
 
-          {/* 5. Performance Heatmap */}
-          {!loading && fundsData.length > 0 && <HeatmapSection fundsData={fundsData} />}
+        {/* 7. Complete SIF Fund Directory */}
+        <section id="funds-directory">
+          <FundsHero />
+          <FundFilters
+            filters={filters}
+            setFilters={setFilters}
+            onClear={clearFilters}
+            amcList={amcList}
+            fundsData={fundsData}
+          />
+          <ActiveFilters filters={filters} setFilters={setFilters} />
 
-          {/* 7. Complete SIF Fund Directory */}
-          <section id="funds-directory">
-            <FundsHero />
-            <FundFilters
-              filters={filters}
-              setFilters={setFilters}
-              onClear={clearFilters}
-              amcList={amcList}
-              fundsData={fundsData}
-            />
-            <ActiveFilters filters={filters} setFilters={setFilters} />
+          <div className="py-6 bg-[#f7f9fc]">
+            <div className="max-w-7xl mx-auto px-6 lg:px-8">
+              {error ? (
+                <div className="bg-red-50 border border-red-200 text-red-600 rounded-2xl p-6 text-center flex flex-col items-center justify-center min-h-[300px]">
+                  <FontAwesomeIcon icon={faCircleExclamation} className="text-4xl mb-4 text-red-400" />
+                  <h3 className="text-lg font-bold mb-2">Error Loading Funds</h3>
+                  <p className="text-sm font-medium">{error}</p>
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="mt-4 px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg text-sm font-bold transition-colors"
+                  >
+                    Try Again
+                  </button>
+                </div>
+              ) : (
+                <>
+                  {/* Result header bar */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
+                    className="flex items-center justify-between mb-6 bg-white rounded-2xl border border-[#e8edf7] px-5 py-3.5 shadow-sm"
+                  >
+                    <div className="flex items-center gap-2">
+                      <FontAwesomeIcon icon={faFilter} className="text-[#032e92] text-sm" />
+                      <span className="text-sm font-semibold text-gray-700">
+                        Showing{' '}
+                        <span className="text-[#032e92] font-bold">{filteredFunds.length}</span>
+                        {' '}Fund{filteredFunds.length !== 1 ? 's' : ''}
+                        {filteredFunds.length !== fundsData.length && (
+                          <span className="text-gray-400 font-medium"> of {fundsData.length} total</span>
+                        )}
+                      </span>
+                    </div>
 
-            <div className="py-6 bg-[#f7f9fc]">
-              <div className="max-w-7xl mx-auto px-6 lg:px-8">
-                {error ? (
-                  <div className="bg-red-50 border border-red-200 text-red-600 rounded-2xl p-6 text-center flex flex-col items-center justify-center min-h-[300px]">
-                    <FontAwesomeIcon icon={faCircleExclamation} className="text-4xl mb-4 text-red-400" />
-                    <h3 className="text-lg font-bold mb-2">Error Loading Funds</h3>
-                    <p className="text-sm font-medium">{error}</p>
-                    <button
-                      onClick={() => window.location.reload()}
-                      className="mt-4 px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg text-sm font-bold transition-colors"
-                    >
-                      Try Again
-                    </button>
-                  </div>
-                ) : (
-                  <>
-                    {/* Result header bar */}
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4 }}
-                      className="flex items-center justify-between mb-6 bg-white rounded-2xl border border-[#e8edf7] px-5 py-3.5 shadow-sm"
-                    >
-                      <div className="flex items-center gap-2">
-                        <FontAwesomeIcon icon={faFilter} className="text-[#032e92] text-sm" />
-                        <span className="text-sm font-semibold text-gray-700">
-                          Showing{' '}
-                          <span className="text-[#032e92] font-bold">{filteredFunds.length}</span>
-                          {' '}Fund{filteredFunds.length !== 1 ? 's' : ''}
-                          {filteredFunds.length !== fundsData.length && (
-                            <span className="text-gray-400 font-medium"> of {fundsData.length} total</span>
-                          )}
-                        </span>
-                      </div>
-
-                      {/* View Toggle */}
-                      <div className="flex items-center gap-1 bg-[#f7f9fc] border border-[#e8edf7] rounded-xl p-1">
-                        <button
-                          onClick={() => setIsGrid(false)}
-                          title="List View"
-                          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
-                            !isGrid
-                              ? 'bg-[#032e92] text-white shadow-md shadow-blue-900/20'
-                              : 'text-gray-500 hover:text-[#032e92]'
+                    {/* View Toggle */}
+                    <div className="flex items-center gap-1 bg-[#f7f9fc] border border-[#e8edf7] rounded-xl p-1">
+                      <button
+                        onClick={() => setIsGrid(false)}
+                        title="List View"
+                        className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${!isGrid
+                          ? 'bg-[#032e92] text-white shadow-md shadow-blue-900/20'
+                          : 'text-gray-500 hover:text-[#032e92]'
                           }`}
-                        >
-                          <FontAwesomeIcon icon={faList} />
-                          <span className="hidden sm:inline">List</span>
-                        </button>
-                        <button
-                          onClick={() => setIsGrid(true)}
-                          title="Grid View"
-                          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
-                            isGrid
-                              ? 'bg-[#032e92] text-white shadow-md shadow-blue-900/20'
-                              : 'text-gray-500 hover:text-[#032e92]'
+                      >
+                        <FontAwesomeIcon icon={faList} />
+                        <span className="hidden sm:inline">List</span>
+                      </button>
+                      <button
+                        onClick={() => setIsGrid(true)}
+                        title="Grid View"
+                        className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${isGrid
+                          ? 'bg-[#032e92] text-white shadow-md shadow-blue-900/20'
+                          : 'text-gray-500 hover:text-[#032e92]'
                           }`}
-                        >
-                          <FontAwesomeIcon icon={faTableCellsLarge} />
-                          <span className="hidden sm:inline">Grid</span>
-                        </button>
-                      </div>
-                    </motion.div>
+                      >
+                        <FontAwesomeIcon icon={faTableCellsLarge} />
+                        <span className="hidden sm:inline">Grid</span>
+                      </button>
+                    </div>
+                  </motion.div>
 
-                    {/* Fund Cards */}
-                    <FundGrid
-                      funds={loading ? [] : paginatedFunds}
-                      isGrid={isGrid}
-                      loading={loading}
+                  {/* Fund Cards */}
+                  <FundGrid
+                    funds={loading ? [] : paginatedFunds}
+                    isGrid={isGrid}
+                    loading={loading}
+                  />
+
+                  {/* Pagination */}
+                  {!loading && filteredFunds.length > 0 && (
+                    <Pagination
+                      currentPage={currentPage}
+                      totalPages={totalPages}
+                      onPageChange={(page) => {
+                        setCurrentPage(page)
+                        window.scrollTo({ top: 400, behavior: 'smooth' })
+                      }}
                     />
+                  )}
 
-                    {/* Pagination */}
-                    {!loading && filteredFunds.length > 0 && (
-                      <Pagination
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        onPageChange={(page) => {
-                          setCurrentPage(page)
-                          window.scrollTo({ top: 400, behavior: 'smooth' })
-                        }}
-                      />
-                    )}
-
-                    {!loading && filteredFunds.length === 0 && (
-                      <div className="text-center py-12 text-gray-500 font-medium">
-                        No funds match your current filters.
-                      </div>
-                    )}
-                  </>
-                )}
-              </div>
+                  {!loading && filteredFunds.length === 0 && (
+                    <div className="text-center py-12 text-gray-500 font-medium">
+                      No funds match your current filters.
+                    </div>
+                  )}
+                </>
+              )}
             </div>
-          </section>
+          </div>
+        </section>
 
-          {/* 8. Investment Philosophy */}
-          <InvestmentPhilosophy />
 
-          {/* 9. SIF vs Traditional Instruments Comparison */}
-          <Comparison />
+        {/* 4. Compare Top SIF Schemes (with integrated FundSelector directly below tabs) */}
+        {!loading && fundsData.length > 0 && (
+          <TopFunds
+            fundsData={fundsData}
+            selectedFunds={selectedFunds}
+            onFundSelect={handleFundSelect}
+            onReset={handleResetSelector}
+          />
+        )}
 
-          {/* 10. Trust & Security */}
-          <TrustSection />
+        {/* 5. Performance Heatmap */}
+        {!loading && fundsData.length > 0 && <HeatmapSection fundsData={fundsData} />}
 
-          {/* 11. Testimonials */}
-          <Testimonials />
 
-          {/* 12. Frequently Asked Questions */}
-          <FAQ />
 
-          {/* 13. Newsletter */}
-          <Newsletter />
-        </main>
+        {/* 8. Investment Philosophy */}
+        <InvestmentPhilosophy />
 
-        <Footer />
-      </div>
+        {/* 9. SIF vs Traditional Instruments Comparison */}
+        <Comparison />
+
+        {/* 10. Trust & Security */}
+        <TrustSection />
+
+        {/* 11. Testimonials */}
+        <Testimonials />
+
+        {/* 12. Frequently Asked Questions */}
+        <FAQ />
+
+        {/* 13. Newsletter */}
+        <Newsletter />
+      </main>
+
+      <Footer />
+    </div>
   )
 }
