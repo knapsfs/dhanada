@@ -17,28 +17,78 @@ export default function Hero() {
 
   return (
     <section id="home" className="relative min-h-screen overflow-hidden">
-      {/* Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#021d63] via-[#032e92] to-[#0a4fd4]" />
+      {/* Continuous Subtle Animated Blue Gradient Background */}
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        animate={{
+          background: [
+            'linear-gradient(135deg, #021d63 0%, #032e92 50%, #0a4fd4 100%)',
+            'linear-gradient(135deg, #011640 0%, #0c389c 45%, #1d4ed8 100%)',
+            'linear-gradient(135deg, #021a54 0%, #032e92 55%, #0284c7 100%)',
+            'linear-gradient(135deg, #052473 0%, #0f44b8 50%, #1e40af 100%)',
+            'linear-gradient(135deg, #021d63 0%, #032e92 50%, #0a4fd4 100%)',
+          ],
+        }}
+        transition={{
+          duration: 12,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+      />
 
-      {/* Animated circles */}
-      <div className="absolute top-20 right-20 w-96 h-96 rounded-full bg-[#c10000]/10 blur-3xl animate-pulse" />
-      <div className="absolute bottom-20 left-10 w-72 h-72 rounded-full bg-white/5 blur-3xl" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#032e92]/30 blur-3xl" />
+      {/* Floating Animated Gradient Orbs for Depth */}
+      <motion.div
+        animate={{
+          x: [0, 45, -30, 0],
+          y: [0, -35, 25, 0],
+          scale: [1, 1.15, 0.95, 1],
+          opacity: [0.35, 0.6, 0.35],
+        }}
+        transition={{
+          duration: 14,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+        className="absolute -top-20 -right-20 w-[550px] h-[550px] rounded-full bg-gradient-to-br from-blue-400/25 to-cyan-400/20 blur-3xl pointer-events-none"
+      />
+
+      <motion.div
+        animate={{
+          x: [0, -50, 35, 0],
+          y: [0, 45, -25, 0],
+          scale: [1, 1.2, 0.9, 1],
+          opacity: [0.3, 0.55, 0.3],
+        }}
+        transition={{
+          duration: 16,
+          repeat: Infinity,
+          ease: 'easeInOut',
+          delay: 2,
+        }}
+        className="absolute -bottom-24 -left-20 w-[600px] h-[600px] rounded-full bg-gradient-to-tr from-[#1e40af]/35 to-[#0284c7]/25 blur-3xl pointer-events-none"
+      />
+
+      <motion.div
+        animate={{
+          scale: [1, 1.2, 1],
+          opacity: [0.15, 0.3, 0.15],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-[#0ea5e9]/15 blur-3xl pointer-events-none"
+      />
+
+      {/* Subtle Red Accent Ambient Glow matching brand */}
+      <div className="absolute top-20 right-20 w-96 h-96 rounded-full bg-[#c10000]/10 blur-3xl pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-24 lg:pb-28">
         <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[80vh]">
 
           {/* Left Column */}
           <div>
-            {/* <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7 }}
-              className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-sm text-blue-100 font-medium mb-6">
-              <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-              AMFI Registered SIF Distributor
-            </motion.div> */}
-
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}

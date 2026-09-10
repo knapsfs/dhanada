@@ -392,6 +392,8 @@ def get_funds_list():
 					"amc": amc_name,
 					"category": cat_name,
 					"assetClass": s.scheme_type,
+					"schemeType": s.scheme_type,
+					"scheme_type": s.scheme_type,
 					"investmentStrategy": s.investment_strategy,
 					"risk": s.risk_band,
 					"minInvestment": s.minimum_subscription,
