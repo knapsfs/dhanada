@@ -64,7 +64,6 @@ def setup_crm_form_scripts():
 			doc.script = script_content
 			doc.enabled = 1
 			doc.save(ignore_permissions=True)
-			frappe.db.commit()
 	else:
 		doc = frappe.new_doc("CRM Form Script")
 		doc.name = "CRM Lead UI Fix"
@@ -74,7 +73,6 @@ def setup_crm_form_scripts():
 		doc.is_standard = 0
 		doc.script = script_content
 		doc.insert(ignore_permissions=True)
-		frappe.db.commit()
 
 
 def setup_crm_lead_custom_fields():
@@ -162,7 +160,6 @@ def patch_crm_lead_data_layout():
 
 			doc.layout = json.dumps(layout)
 			doc.save(ignore_permissions=True)
-			frappe.db.commit()
 
 
 def cleanup_crm_side_panel_layout():
@@ -206,4 +203,3 @@ def cleanup_crm_side_panel_layout():
 	if modified:
 		doc.layout = json.dumps(new_layout)
 		doc.save(ignore_permissions=True)
-		frappe.db.commit()
