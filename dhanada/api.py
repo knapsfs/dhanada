@@ -640,11 +640,43 @@ def get_fund_details(identifier: str):
 def create_chatbot_lead():
 	try:
 		lead_name = frappe.form_dict.get("lead_name")
-		chat_summary_value = frappe.form_dict.get("chat_summary")
+		chat_summary_value = frappe.form_dict.get("chat_summary") or ""
+		conversation_id = frappe.form_dict.get("conversation_id")
+		visitor_id = frappe.form_dict.get("visitor_id")
+
+		# If conversation_id is given, retrieve latest context from the actual conversation
+		conversation_context = ""
+		if conversation_id and frappe.db.exists("Chatbot Conversation", conversation_id):
+			conv_doc = frappe.get_doc("Chatbot Conversation", conversation_id)
+			conversation_context = conv_doc.chat_context or ""
+
+		final_context = conversation_context or chat_summary_value
 
 		if lead_name and frappe.db.exists("CRM Lead", lead_name):
-			frappe.db.set_value("CRM Lead", lead_name, "chat_summary", chat_summary_value)
-			frappe.db.commit()
+			lead_updates = {}
+			if frappe.db.has_column("CRM Lead", "chat_summary"):
+				lead_updates["chat_summary"] = final_context
+			if frappe.db.has_column("CRM Lead", "custom_chat_context"):
+				lead_updates["custom_chat_context"] = final_context
+			if conversation_id and frappe.db.has_column("CRM Lead", "custom_conversation"):
+				lead_updates["custom_conversation"] = conversation_id
+
+			if lead_updates:
+				frappe.db.set_value("CRM Lead", lead_name, lead_updates)
+				frappe.db.commit()
+
+			if conversation_id:
+				try:
+					from dhanada.sif.conversation_service import associate_lead
+
+					associate_lead(
+						conversation_id=conversation_id,
+						lead_id=lead_name,
+						visitor_id=visitor_id,
+					)
+				except Exception:
+					frappe.log_error(title="Chatbot Lead Association Error", message=frappe.get_traceback())
+
 			return {"success": True, "lead_name": lead_name, "updated": True}
 
 		first_name = frappe.form_dict.get("name", "Unknown")
@@ -662,18 +694,40 @@ def create_chatbot_lead():
 			"email": frappe.form_dict.get("email"),
 			"mobile_no": frappe.form_dict.get("mobile"),
 			"interest": frappe.form_dict.get("interest"),
-			"chat_summary": chat_summary_value,
 			"source": frappe.form_dict.get("source", "Website Chatbot"),
 		}
+
+		if frappe.db.has_column("CRM Lead", "chat_summary"):
+			doc_data["chat_summary"] = final_context
+		if frappe.db.has_column("CRM Lead", "custom_chat_context"):
+			doc_data["custom_chat_context"] = final_context
+		if conversation_id and frappe.db.has_column("CRM Lead", "custom_conversation"):
+			doc_data["custom_conversation"] = conversation_id
 
 		lead = frappe.get_doc(doc_data)
 		lead.insert(ignore_permissions=True)
 		frappe.db.commit()
 
+		if conversation_id:
+			try:
+				from dhanada.sif.conversation_service import associate_lead
+
+				associate_lead(
+					conversation_id=conversation_id,
+					lead_id=lead.name,
+					user_name=frappe.form_dict.get("name"),
+					email=frappe.form_dict.get("email"),
+					phone=frappe.form_dict.get("mobile"),
+					visitor_id=visitor_id,
+				)
+			except Exception:
+				frappe.log_error(title="Chatbot Lead Association Error", message=frappe.get_traceback())
+
 		return {"success": True, "lead_name": lead.name}
 	except Exception as e:
 		frappe.log_error(message=frappe.get_traceback(), title="Chatbot Lead Creation Failed")
 		frappe.throw(f"Failed to create Lead: {e!s}")
+
 
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])  # nosemgrep: guest-whitelisted-method
