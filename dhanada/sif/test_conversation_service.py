@@ -128,12 +128,18 @@ class TestConversationService(IntegrationTestCase):
 		self.assertEqual(len(conv["transcript"]), 1)
 
 		# 1. Update context via service
-		res = update_chat_context(conv_id, "User is interested in SIF investments and wants to invest ₹1,00,000.")
-		self.assertEqual(res["chat_context"], "User is interested in SIF investments and wants to invest ₹1,00,000.")
+		res = update_chat_context(
+			conv_id, "User is interested in SIF investments and wants to invest ₹1,00,000."
+		)
+		self.assertEqual(
+			res["chat_context"], "User is interested in SIF investments and wants to invest ₹1,00,000."
+		)
 
 		# 2. Confirm persistence in database
 		doc = get_conversation_doc(conv_id)
-		self.assertEqual(doc.chat_context, "User is interested in SIF investments and wants to invest ₹1,00,000.")
+		self.assertEqual(
+			doc.chat_context, "User is interested in SIF investments and wants to invest ₹1,00,000."
+		)
 		# Ensure transcript is not overwritten or changed
 		self.assertEqual(len(doc.get_transcript_list()), 1)
 
@@ -307,7 +313,9 @@ class TestConversationService(IntegrationTestCase):
 		self.assertEqual(transcript[0]["User"], "Hi, what is SIF?")
 		self.assertEqual(transcript[0]["Assistant"], "SIF is Specialized Investment Fund.")
 		self.assertEqual(transcript[1]["User"], "I want to invest ₹10 Lakhs for 5 years.")
-		self.assertEqual(transcript[1]["Assistant"], "For ₹10 Lakhs over 5 years, we recommend our growth strategies.")
+		self.assertEqual(
+			transcript[1]["Assistant"], "For ₹10 Lakhs over 5 years, we recommend our growth strategies."
+		)
 
 	def test_security_cross_user_isolation(self):
 		# 1. User A (Victim) starts conversation
@@ -810,7 +818,9 @@ class TestConversationService(IntegrationTestCase):
 			initial_message="What is a SIF?",
 			chat_context="SIF Inquirer inquired about Specialized Investment Funds (SIF).",
 		)
-		self.assertEqual(conv_sif["chat_context"], "SIF Inquirer inquired about Specialized Investment Funds (SIF).")
+		self.assertEqual(
+			conv_sif["chat_context"], "SIF Inquirer inquired about Specialized Investment Funds (SIF)."
+		)
 		self.assertNotIn("Dhanada", conv_sif["chat_context"])
 
 		# 3. Clean up
@@ -835,7 +845,9 @@ class TestConversationService(IntegrationTestCase):
 		self.assertEqual(conv["chat_context"], "Rajesh Sharma wants to invest ₹4,00,00,000 in SIF.")
 
 		# Update context upon further conversation
-		updated = update_chat_context(conv_id, "Rajesh Sharma wants to invest ₹4,00,00,000 in SIF (retirement planning for 7 years).")
+		updated = update_chat_context(
+			conv_id, "Rajesh Sharma wants to invest ₹4,00,00,000 in SIF (retirement planning for 7 years)."
+		)
 		self.assertEqual(
 			updated["chat_context"],
 			"Rajesh Sharma wants to invest ₹4,00,00,000 in SIF (retirement planning for 7 years).",
@@ -959,10 +971,3 @@ class TestConversationService(IntegrationTestCase):
 
 		frappe.delete_doc("Chatbot Conversation", conv_id, ignore_permissions=True)
 		frappe.db.commit()
-
-
-
-
-
-
-

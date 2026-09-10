@@ -135,7 +135,11 @@ Rules for leadOpportunity:
 			isJson: true,
 		});
 
-		if (response.contextSummary && typeof response.contextSummary === "string" && response.contextSummary.trim()) {
+		if (
+			response.contextSummary &&
+			typeof response.contextSummary === "string" &&
+			response.contextSummary.trim()
+		) {
 			state.aiContextSummary = response.contextSummary.trim();
 		}
 
@@ -170,9 +174,12 @@ const LEAD_STEPS = {
 };
 
 export function isGreeting(message) {
-	const clean = normalizeText(message).replace(/[^a-z0-9\s]+/g, " ").trim();
+	const clean = normalizeText(message)
+		.replace(/[^a-z0-9\s]+/g, " ")
+		.trim();
 	if (!clean) return false;
-	const greetingRegex = /^(h+i+|h+e+y+|h+e+l+l+o+|h+e+y+a+|howdy|hola|namaste|greetings|good\s+(morning|afternoon|evening|day))$/i;
+	const greetingRegex =
+		/^(h+i+|h+e+y+|h+e+l+l+o+|h+e+y+a+|howdy|hola|namaste|greetings|good\s+(morning|afternoon|evening|day))$/i;
 	return greetingRegex.test(clean);
 }
 
@@ -394,7 +401,8 @@ function formatRecommendation(result, profile) {
 	const fundLines = result.suggestions
 		.map(
 			(fund) =>
-				`• ${fund.name} - ${fund.category}, ${fund.risk
+				`• ${fund.name} - ${fund.category}, ${
+					fund.risk
 				} risk, suitable for ${fund.suitableFor.toLowerCase()}`
 		)
 		.join("\n");
@@ -526,24 +534,48 @@ function formatTopicName(topic) {
 
 function formatFinancialEntity(raw) {
 	if (!raw) return "";
-	const trimmed = raw.trim().replace(/^(?:the|an|a)\s+/i, "").replace(/[?.!]+$/, "").trim();
+	const trimmed = raw
+		.trim()
+		.replace(/^(?:the|an|a)\s+/i, "")
+		.replace(/[?.!]+$/, "")
+		.trim();
 	const lower = trimmed.toLowerCase();
-	if (lower === "sif" || lower === "sifs" || lower === "specialized investment fund" || lower === "specialized investment funds") {
+	if (
+		lower === "sif" ||
+		lower === "sifs" ||
+		lower === "specialized investment fund" ||
+		lower === "specialized investment funds"
+	) {
 		return "Specialized Investment Funds (SIF)";
 	}
 	if (lower === "mf" || lower === "mfs" || lower === "mutual fund" || lower === "mutual funds") {
 		return "Mutual Funds (MF)";
 	}
-	if (lower === "aif" || lower === "aifs" || lower === "alternative investment fund" || lower === "alternative investment funds") {
+	if (
+		lower === "aif" ||
+		lower === "aifs" ||
+		lower === "alternative investment fund" ||
+		lower === "alternative investment funds"
+	) {
 		return "Alternative Investment Funds (AIF)";
 	}
-	if (lower === "sip" || lower === "sips" || lower === "systematic investment plan" || lower === "systematic investment plans") {
+	if (
+		lower === "sip" ||
+		lower === "sips" ||
+		lower === "systematic investment plan" ||
+		lower === "systematic investment plans"
+	) {
 		return "Systematic Investment Plans (SIP)";
 	}
 	if (lower === "pms" || lower === "portfolio management services") {
 		return "Portfolio Management Services (PMS)";
 	}
-	if (lower === "fd" || lower === "fds" || lower === "fixed deposit" || lower === "fixed deposits") {
+	if (
+		lower === "fd" ||
+		lower === "fds" ||
+		lower === "fixed deposit" ||
+		lower === "fixed deposits"
+	) {
 		return "Fixed Deposits (FD)";
 	}
 	if (lower === "etf" || lower === "etfs") {
@@ -666,7 +698,11 @@ export function generateChatSummary(state) {
 	const name = state.collected?.name || "User";
 
 	// 1. If AI generated a context summary based on actual conversation, use it
-	if (state.aiContextSummary && typeof state.aiContextSummary === "string" && state.aiContextSummary.trim()) {
+	if (
+		state.aiContextSummary &&
+		typeof state.aiContextSummary === "string" &&
+		state.aiContextSummary.trim()
+	) {
 		let summary = state.aiContextSummary.trim();
 		summary = summary.replace(/dhanada/gi, "Investment");
 		return summary;
@@ -683,7 +719,9 @@ export function generateChatSummary(state) {
 	}
 
 	// 3. Filter out lead-capture, greetings, and trivial messages
-	const meaningfulMessages = rawUserMessages.filter((msg) => !isLeadCaptureOrTrivialMessage(msg, state));
+	const meaningfulMessages = rawUserMessages.filter(
+		(msg) => !isLeadCaptureOrTrivialMessage(msg, state)
+	);
 
 	// If no meaningful messages remain, it was a greeting / trivial session
 	if (meaningfulMessages.length === 0) {
@@ -740,22 +778,38 @@ export function generateChatSummary(state) {
 		overallAmount = `₹${Number(state.profile.amount).toLocaleString("en-IN")}`;
 	}
 
+	const overallVehicles = extractVehiclesFromText(combinedMeaningful);
+	let overallVehicleText = "";
+	if (overallVehicles.length > 2) {
+		overallVehicleText =
+			overallVehicles.slice(0, -1).join(", ") +
+			" and " +
+			overallVehicles[overallVehicles.length - 1];
+	} else if (overallVehicles.length === 2) {
+		overallVehicleText = `${overallVehicles[0]} and ${overallVehicles[1]}`;
+	} else if (overallVehicles.length === 1) {
+		overallVehicleText = overallVehicles[0];
+	}
+
 	for (const msg of meaningfulMessages) {
 		const msgAmount = extractAmountFromText(msg) || overallAmount;
 		const msgVehicles = extractVehiclesFromText(msg);
 		let msgVehicleText = "";
 		if (msgVehicles.length > 2) {
 			msgVehicleText =
-				msgVehicles.slice(0, -1).join(", ") + " and " + msgVehicles[msgVehicles.length - 1];
+				msgVehicles.slice(0, -1).join(", ") +
+				" and " +
+				msgVehicles[msgVehicles.length - 1];
 		} else if (msgVehicles.length === 2) {
 			msgVehicleText = `${msgVehicles[0]} and ${msgVehicles[1]}`;
 		} else if (msgVehicles.length === 1) {
 			msgVehicleText = msgVehicles[0];
 		}
 
-		const hasInvest = /\b(invest|investment|allocate|allocation|put|deposit|buy|start|grow|have|bank|portfolio)\b/i.test(
-			msg
-		);
+		const hasInvest =
+			/\b(invest|investment|allocate|allocation|put|deposit|buy|start|grow|have|bank|portfolio)\b/i.test(
+				msg
+			);
 
 		if (hasInvest && msgAmount && msgVehicleText) {
 			const genericIntent = `wants to invest ${msgAmount}`;
@@ -766,8 +820,8 @@ export function generateChatSummary(state) {
 			const invIntent = `wants to invest ${msgAmount} in ${msgVehicleText}`;
 			if (!intents.includes(invIntent)) intents.push(invIntent);
 		} else if (hasInvest && msgAmount && !msgVehicleText) {
-			const alreadyHasSpecific = intents.some(
-				(it) => it.startsWith(`wants to invest ${msgAmount} in`)
+			const alreadyHasSpecific = intents.some((it) =>
+				it.startsWith(`wants to invest ${msgAmount} in`)
 			);
 			if (!alreadyHasSpecific) {
 				const invIntent = `wants to invest ${msgAmount}`;
@@ -805,8 +859,14 @@ export function generateChatSummary(state) {
 			intents.push("inquired about KYC requirements");
 		} else if (/\b(nav|net asset value)\b/i.test(lowerCombined)) {
 			intents.push("inquired about NAV");
-		} else if (vehicleText) {
-			intents.push(`is interested in ${vehicleText === "SIF" ? "Specialized Investment Funds (SIF)" : vehicleText}`);
+		} else if (overallVehicleText) {
+			intents.push(
+				`is interested in ${
+					overallVehicleText === "SIF"
+						? "Specialized Investment Funds (SIF)"
+						: overallVehicleText
+				}`
+			);
 		}
 	}
 
@@ -817,11 +877,14 @@ export function generateChatSummary(state) {
 	} else if (intents.length === 2) {
 		summary = `${name} ${intents[0]} and ${intents[1]}.`;
 	} else if (intents.length > 2) {
-		summary = `${name} ${intents.slice(0, -1).join(", ")}, and ${intents[intents.length - 1]}.`;
+		summary = `${name} ${intents.slice(0, -1).join(", ")}, and ${
+			intents[intents.length - 1]
+		}.`;
 	} else {
 		const latestSubstantive = meaningfulMessages[meaningfulMessages.length - 1];
 		const cleanSnippet = latestSubstantive.replace(/[?.!]+$/, "").trim();
-		const snippet = cleanSnippet.length > 60 ? cleanSnippet.substring(0, 57) + "..." : cleanSnippet;
+		const snippet =
+			cleanSnippet.length > 60 ? cleanSnippet.substring(0, 57) + "..." : cleanSnippet;
 		summary = `${name} inquired about "${snippet}".`;
 	}
 
@@ -856,7 +919,7 @@ export class Chatbot {
 	async processMessage(sessionId, message, options = {}) {
 		const previousTask = this.sessionQueue.get(sessionId) || Promise.resolve();
 		const currentTask = previousTask
-			.catch(() => { })
+			.catch(() => {})
 			.then(() => this.processMessageInternal(sessionId, message, options));
 
 		this.sessionQueue.set(sessionId, currentTask);
@@ -1457,8 +1520,7 @@ export class Chatbot {
 			return "Please share your risk level and horizon so I can make a good suggestion 😊";
 		}
 
-		const localFallback =
-			"Till then you can contact to our advisor at +91 9990243143 ";
+		const localFallback = "Till then you can contact to our advisor at +91 9990243143 ";
 
 		try {
 			const systemInstruction = `You are Riddhi, a friendly, professional investment assistant.
@@ -1519,7 +1581,11 @@ Rules for leadOpportunity:
 				isJson: true,
 			});
 
-			if (response.contextSummary && typeof response.contextSummary === "string" && response.contextSummary.trim()) {
+			if (
+				response.contextSummary &&
+				typeof response.contextSummary === "string" &&
+				response.contextSummary.trim()
+			) {
 				state.aiContextSummary = response.contextSummary.trim();
 			}
 
@@ -1528,7 +1594,10 @@ Rules for leadOpportunity:
 			return response.text || "";
 		} catch (error) {
 			console.error("[GEMINI ERROR]:", error.message);
-			const fallbackReply = "I'm facing a lots of requests at this time.... " + localFallback + "we'll get back to you soon";
+			const fallbackReply =
+				"I'm facing a lots of requests at this time.... " +
+				localFallback +
+				"we'll get back to you soon";
 			state.latestSuggestions = [];
 			state.latestLeadOpportunity = null;
 			return fallbackReply;
@@ -1666,8 +1735,9 @@ Rules for leadOpportunity:
 			state.leadCaptured = true;
 			state.leadStep = LEAD_STEPS.DONE;
 			state.crmLeadName = result.lead_name;
-			return `Thank you, ${state.collected.name || ""
-				}! I have passed your details to our team. An advisor will reach out to you shortly.`;
+			return `Thank you, ${
+				state.collected.name || ""
+			}! I have passed your details to our team. An advisor will reach out to you shortly.`;
 		} else {
 			console.error("[CRM ERROR]", result.message);
 			state.leadStep = LEAD_STEPS.NONE;

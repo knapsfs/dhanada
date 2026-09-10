@@ -45,7 +45,7 @@ def setup_crm_form_scripts():
 		"        if (conv && typeof conv === 'string' && conv.trim()) {\n"
 		"            const trimmed = conv.trim();\n"
 		"            const url = `/desk/chatbot-conversation/${trimmed}`;\n"
-		"            const html = `<a href=\"${url}\" class=\"text-sm text-blue-600 hover:text-blue-800 underline font-medium inline-flex items-center gap-1\" style=\"color: #2563eb; text-decoration: underline;\">Open Conversation ↗</a>`;\n"
+		'            const html = `<a href="${url}" class="text-sm text-blue-600 hover:text-blue-800 underline font-medium inline-flex items-center gap-1" style="color: #2563eb; text-decoration: underline;">Open Conversation ↗</a>`;\n'
 		"            this.setFieldProperty('custom_conversation', 'fieldtype', 'HTML');\n"
 		"            this.setFieldProperty('custom_conversation', 'options', html);\n"
 		"            this.setFieldHtml('custom_conversation', html);\n"
@@ -192,7 +192,8 @@ def cleanup_crm_side_panel_layout():
 			filtered_fields = [
 				f
 				for f in col.get("fields", [])
-				if f not in ("chat_summary_html", "chat_summary", "custom_chat_context", "custom_conversation")
+				if f
+				not in ("chat_summary_html", "chat_summary", "custom_chat_context", "custom_conversation")
 			]
 			if len(filtered_fields) != len(col.get("fields", [])):
 				modified = True

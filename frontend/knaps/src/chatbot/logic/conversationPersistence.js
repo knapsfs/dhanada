@@ -96,11 +96,7 @@ export async function saveChatMessage({
 	}
 }
 
-export async function updateChatContext({
-	conversationId,
-	visitorId,
-	chatContext,
-}) {
+export async function updateChatContext({ conversationId, visitorId, chatContext }) {
 	if (!conversationId || !chatContext) {
 		return { success: false, message: "Missing conversationId or chatContext" };
 	}
@@ -127,7 +123,10 @@ export async function updateChatContext({
 
 		if (!response.ok) {
 			const errorText = await response.text();
-			console.warn(`[ChatbotPersistence] Context update HTTP ${response.status}:`, errorText);
+			console.warn(
+				`[ChatbotPersistence] Context update HTTP ${response.status}:`,
+				errorText
+			);
 			return { success: false, error: `HTTP ${response.status}` };
 		}
 

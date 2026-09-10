@@ -256,7 +256,12 @@ export const comparisonData = {
 		},
 		{
 			feature: "Long-Short Strategies",
-			values: ["Yes, in eligible strategies*", "Generally No", "Yes", "Yes, depending on category"],
+			values: [
+				"Yes, in eligible strategies*",
+				"Generally No",
+				"Yes",
+				"Yes, depending on category",
+			],
 		},
 		{
 			feature: "Unhedged Short Exposure",
@@ -272,7 +277,12 @@ export const comparisonData = {
 		},
 		{
 			feature: "Investor Profile",
-			values: ["Investors with ₹10L+ capital and a higher risk appetite", "Retail Investors", "HNIs who want personalised portfolio", "HNIs who want to invest in alternate assets"],
+			values: [
+				"Investors with ₹10L+ capital and a higher risk appetite",
+				"Retail Investors",
+				"HNIs who want personalised portfolio",
+				"HNIs who want to invest in alternate assets",
+			],
 		},
 
 		{

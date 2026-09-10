@@ -296,7 +296,6 @@ def associate_lead_to_conversation() -> dict:
 		return {"success": False, "message": str(e)}
 
 
-
 @frappe.whitelist(allow_guest=True, methods=["POST"])  # nosemgrep: guest-whitelisted-method
 def save_chat_message() -> dict:
 	"""
@@ -322,7 +321,6 @@ def save_chat_message() -> dict:
 	raw_visitor_id = payload.get("visitor_id") or payload.get("visitorId")
 	role = payload.get("role", "user")
 	raw_message = payload.get("message") or payload.get("text") or ""
-	timestamp = payload.get("timestamp") or payload.get("at")
 	chat_context = payload.get("chat_context") or payload.get("chatContext")
 	user_name = payload.get("user_name") or payload.get("userName")
 	email = payload.get("email")

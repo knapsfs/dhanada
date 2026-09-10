@@ -66,11 +66,7 @@ class ChatbotConversation(Document):
 			raise ValueError("Message content cannot be empty")
 
 		clean_message = str(message).strip()
-		normalized_role = (
-			"User"
-			if role.lower() in ("user", "user_message")
-			else "Assistant"
-		)
+		normalized_role = "User" if role.lower() in ("user", "user_message") else "Assistant"
 
 		transcript = self.get_transcript_list()
 

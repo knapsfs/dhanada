@@ -728,7 +728,6 @@ def create_chatbot_lead():
 		frappe.throw(f"Failed to create Lead: {e!s}")
 
 
-
 @frappe.whitelist(allow_guest=True, methods=["POST"])  # nosemgrep: guest-whitelisted-method
 def create_website_lead():
 	try:

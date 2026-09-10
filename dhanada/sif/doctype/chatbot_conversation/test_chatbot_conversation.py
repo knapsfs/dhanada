@@ -153,4 +153,3 @@ class TestChatbotConversation(IntegrationTestCase):
 
 		with self.assertRaises(frappe.DoesNotExistError):
 			associate_lead("NON-EXISTENT-CHAT-ID", user_name="John")
-
