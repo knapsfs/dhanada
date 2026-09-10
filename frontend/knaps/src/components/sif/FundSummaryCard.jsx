@@ -54,7 +54,7 @@ export default function FundSummaryCard({ fund }) {
 
         {/* Badges */}
         <div className="flex flex-wrap gap-1.5 relative">
-          <span className="bg-white/15 border border-white/20 px-2.5 py-0.5 rounded-full text-xs font-semibold text-white">{fund.assetClass}</span>
+          <span className="bg-white/15 border border-white/20 px-2.5 py-0.5 rounded-full text-xs font-semibold text-white">{fund.schemeType}</span>
           <span className="bg-white/15 border border-white/20 px-2.5 py-0.5 rounded-full text-xs font-semibold text-white">{fund.category}</span>
           <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold border ${risk.bg} ${risk.text} ${risk.border}`}>{risk.level !== 'N/A' ? `Risk Level ${risk.level}` : 'N/A'}</span>
         </div>

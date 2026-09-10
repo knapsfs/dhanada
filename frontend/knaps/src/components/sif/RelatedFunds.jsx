@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { getRiskLevelConfig } from '../../utils/risk'
 import { useLeadModal } from '../../context/LeadModalContext'
 
-const assetClassColors = {
+const schemeTypeColors = {
   'Equity': 'bg-blue-100 text-blue-700 border-blue-200',
   'Debt': 'bg-purple-100 text-purple-700 border-purple-200',
   'Hybrid': 'bg-orange-100 text-orange-700 border-orange-200',
@@ -74,8 +74,8 @@ export default function RelatedFunds({ funds = [] }) {
                 <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${getRiskLevelConfig(fund.riskLevel).bg} ${getRiskLevelConfig(fund.riskLevel).text} ${getRiskLevelConfig(fund.riskLevel).border}`}>
                   {getRiskLevelConfig(fund.riskLevel).level !== 'N/A' ? `Level ${getRiskLevelConfig(fund.riskLevel).level}` : 'N/A'}
                 </span>
-                <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${assetClassColors[fund.assetClass] || 'bg-gray-100 text-gray-700 border-gray-200'}`}>
-                  {fund.assetClass || 'Unknown'}
+                <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${schemeTypeColors[fund.schemeType] || 'bg-gray-100 text-gray-700 border-gray-200'}`}>
+                  {fund.schemeType || 'Unknown'}
                 </span>
               </div>
 

@@ -7,45 +7,52 @@ import { useLeadModal } from '../../context/LeadModalContext'
 import heroImg from '../../assets/sif/knaps-hero.png'
 
 const heroHighlights = [
-  'Advanced investment strategies',
-  'SEBI-regulated framework',
-  'Start with just Rs. 10lakh',
+  '₹10 Lakh Minimum Investment',
+  'Long-Short Derivative Strategies',
+  'Flexible Equity & Debt Exposure',
 ]
 
 export default function Hero() {
   const { openLeadModal } = useLeadModal()
 
   return (
-    <section id="home" className="relative min-h-screen overflow-hidden">
-      {/* Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#021d63] via-[#032e92] to-[#0a4fd4]" />
+    <section id="home" className="relative min-h-screen overflow-hidden sif-hero-gradient">
+      {/* Dynamic Animated Ambient Light Layers */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {/* Top-Right Glowing Cyan & Blue Orb */}
+        <div className="hero-orb-1 absolute -top-24 -right-24 w-[600px] h-[600px] rounded-full bg-gradient-to-br from-cyan-400/40 via-blue-500/30 to-transparent blur-[90px]" />
 
-      {/* Animated circles */}
-      <div className="absolute top-20 right-20 w-96 h-96 rounded-full bg-[#c10000]/10 blur-3xl animate-pulse" />
-      <div className="absolute bottom-20 left-10 w-72 h-72 rounded-full bg-white/5 blur-3xl" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#032e92]/30 blur-3xl" />
+        {/* Bottom-Left Radiant Cobalt & Royal Blue Orb */}
+        <div className="hero-orb-2 absolute -bottom-32 -left-28 w-[650px] h-[650px] rounded-full bg-gradient-to-tr from-blue-600/45 via-indigo-500/35 to-cyan-300/20 blur-[100px]" />
 
-      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-24 lg:pb-28">
+        {/* Center Pulsating Electric Shimmer */}
+        <div className="hero-orb-3 absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[500px] rounded-full bg-gradient-to-r from-blue-500/25 via-cyan-400/30 to-blue-700/20 blur-[110px]" />
+
+        {/* Subtle Brand Accent Warm Glow */}
+        <div className="absolute top-1/4 right-1/4 w-80 h-80 rounded-full bg-[#c10000]/15 blur-[95px]" />
+
+        {/* Subtle Luxury Mesh Grid Overlay for Texture */}
+        <div 
+          className="absolute inset-0 opacity-[0.07] mix-blend-overlay pointer-events-none"
+          style={{
+            backgroundImage: `radial-gradient(rgba(255, 255, 255, 0.4) 1px, transparent 1px)`,
+            backgroundSize: '32px 32px'
+          }}
+        />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-42 pb-24 lg:pb-28 z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[80vh]">
 
           {/* Left Column */}
           <div>
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7 }}
-              className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-sm text-blue-100 font-medium mb-6">
-              <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-              AMFI Registered SIF Distributor
-            </motion.div>
-
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.1 }}
               className="text-5xl lg:text-5xl xl:text-5xl font-bold text-white leading-tight mb-6">
-              Specialized Investment Funds (SIF) for
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-cyan-300"> Smarter Investments.</span>
+              Specialized Investment Funds with
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-100 via-cyan-200 to-blue-200"> Advanced Derivative Strategies.</span>
             </motion.h1>
 
             {/* Feature Checkpoints List */}
@@ -104,7 +111,7 @@ export default function Hero() {
               <img
                 src={heroImg}
                 alt="KNAPS Specialized Investment Funds"
-                className="w-full h-auto object-contain max-h-[620px] drop-shadow-2xl hover:scale-105 transition-transform duration-500"
+                className="w-full h-auto object-contain max-h-[800px] drop-shadow-2xl hover:scale-105 transition-transform duration-500"
               />
             </motion.div>
           </div>

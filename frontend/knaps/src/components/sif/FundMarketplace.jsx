@@ -108,7 +108,7 @@ export default function FundMarketplace({ fundsData = [] }) {
                 <div className="flex items-center justify-between text-xs mb-4">
                   <div>
                     <p className="text-gray-400 font-medium">Min. Investment</p>
-                    <p className="font-bold text-gray-800">{fund.minInvestment != null ? `₹${fund.minInvestment.toLocaleString()}` : 'N/A'}</p>
+                    <p className="font-bold text-gray-800">{fund.minInvestment != null ? `₹${fund.minInvestment.toLocaleString('en-IN')}` : 'N/A'}</p>
                   </div>
                   <div>
                     <p className="text-gray-400 font-medium">AUM</p>

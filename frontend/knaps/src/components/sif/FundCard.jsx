@@ -1,3 +1,4 @@
+import { formatAum, formatNav } from '../../utils/formatters'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -10,7 +11,7 @@ import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons'
 import { getRiskLevelConfig } from '../../utils/risk'
 import { useLeadModal } from '../../context/LeadModalContext'
 
-const assetClassColors = {
+const schemeTypeColors = {
   'Equity': 'bg-blue-100 text-blue-700',
   'Debt': 'bg-purple-100 text-purple-700',
   'Hybrid': 'bg-amber-100 text-amber-700',
@@ -20,7 +21,7 @@ const assetClassColors = {
 
 export default function FundCard({ fund, index, isGrid }) {
   const risk = getRiskLevelConfig(fund.riskLevel)
-  const assetCls = assetClassColors[fund.assetClass] || 'bg-gray-100 text-gray-700'
+  const schemeTypeCls = schemeTypeColors[fund.schemeType] || 'bg-gray-100 text-gray-700'
   const { openLeadModal } = useLeadModal()
 
   if (isGrid) {
@@ -49,7 +50,7 @@ export default function FundCard({ fund, index, isGrid }) {
 
           {/* Badges */}
           <div className="flex flex-wrap gap-1.5 mb-4">
-            <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${assetCls}`}>{fund.assetClass}</span>
+            <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${schemeTypeCls}`}>{fund.schemeType}</span>
             <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-[#eef4ff] text-[#032e92]">{fund.category}</span>
             {fund.isNew && <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">New</span>}
           </div>
@@ -67,7 +68,7 @@ export default function FundCard({ fund, index, isGrid }) {
 
               <div className="text-right">
                 <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wide">NAV</p>
-                <span className="text-xs font-bold text-[#032e92]">{fund.nav != null ? `₹${fund.nav}` : 'N/A'}</span>
+                <span className="text-xs font-bold text-[#032e92]">{fund.nav != null ? formatNav(fund.nav) : 'N/A'}</span>
               </div>
             </div>
           </div>
@@ -77,7 +78,7 @@ export default function FundCard({ fund, index, isGrid }) {
             <div className="bg-[#f7f9fc] rounded-xl p-2.5 text-center">
               <FontAwesomeIcon icon={faChartPie} className="text-[#032e92] text-xs mb-1" />
               <p className="text-[10px] text-gray-400 font-medium">AUM</p>
-              <p className="text-xs font-bold text-gray-800">{fund.aum || 'N/A'}</p>
+              <p className="text-xs font-bold text-gray-800">{fund.aum ? formatAum(fund.aum) : 'N/A'}</p>
             </div>
             <div className="bg-[#f7f9fc] rounded-xl p-2.5 text-center">
               <FontAwesomeIcon icon={faCalendarDays} className="text-amber-500 text-xs mb-1" />
@@ -148,7 +149,7 @@ export default function FundCard({ fund, index, isGrid }) {
                 </div>
                 {/* Badges */}
                 <div className="flex flex-wrap gap-1.5 mt-2">
-                  <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${assetCls}`}>{fund.assetClass}</span>
+                  <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${schemeTypeCls}`}>{fund.schemeType}</span>
                   <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#eef4ff] text-[#032e92]">{fund.category}</span>
                   {fund.isNew && (
                     <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700 border border-green-200">✨ New</span>
@@ -181,7 +182,7 @@ export default function FundCard({ fund, index, isGrid }) {
               </div>
               <div>
                 <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wide">AUM</p>
-                <p className="text-sm font-bold text-gray-800">{fund.aum || 'N/A'}</p>
+                <p className="text-sm font-bold text-gray-800">{fund.aum ? formatAum(fund.aum) : 'N/A'}</p>
               </div>
             </div>
 
@@ -225,7 +226,7 @@ export default function FundCard({ fund, index, isGrid }) {
               </div>
               <div>
                 <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wide">NAV</p>
-                <p className="text-sm font-bold text-[#032e92]">{fund.nav != null ? `₹${fund.nav}` : 'N/A'}</p>
+                <p className="text-sm font-bold text-[#032e92]">{fund.nav != null ? formatNav(fund.nav) : 'N/A'}</p>
               </div>
             </div>
           </div>

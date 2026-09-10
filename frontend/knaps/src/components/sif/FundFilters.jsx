@@ -12,14 +12,14 @@ const sortOptions = [
 ]
 
 export default function FundFilters({ filters, setFilters, onClear, amcList = [], fundsData = [] }) {
-  const [activeTab, setActiveTab] = useState('assetClass')
+  const [activeTab, setActiveTab] = useState('schemeType')
 
   const handleChange = (key, val) => {
     setFilters(prev => ({ ...prev, [key]: val === 'All' ? '' : val }))
   }
 
-  // Use investmentStrategy for the UI "Asset Class" based on user requirements
-  const dynamicAssetClasses = ['All', ...Array.from(new Set(fundsData.map(f => f.investmentStrategy).filter(Boolean))).sort()];
+  // Use investmentStrategy for the UI "Scheme Type" based on user requirements
+  const dynamicSchemeTypes = ['All', ...Array.from(new Set(fundsData.map(f => f.investmentStrategy).filter(Boolean))).sort()];
   const dynamicCategories = ['All', ...Array.from(new Set(fundsData.map(f => f.category).filter(Boolean))).sort()];
   const dynamicRiskLevels = useMemo(() => {
     const risks = new Set()
@@ -32,7 +32,7 @@ export default function FundFilters({ filters, setFilters, onClear, amcList = []
   }, [fundsData])
 
   const tabs = [
-    { id: 'assetClass', label: 'Asset Class', options: dynamicAssetClasses },
+    { id: 'schemeType', label: 'Scheme Type', options: dynamicSchemeTypes },
     { id: 'category', label: 'Fund Category', options: dynamicCategories },
     { id: 'risk', label: 'Risk Level', options: dynamicRiskLevels },
   ]

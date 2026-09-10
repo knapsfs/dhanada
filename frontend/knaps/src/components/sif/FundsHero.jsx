@@ -2,85 +2,90 @@ import { motion } from 'framer-motion'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChartLine, faArrowTrendUp, faShieldHalved } from '@fortawesome/free-solid-svg-icons'
 
-export default function FundsHero() {
+export default function FundsHero({ totalFunds = 33 }) {
   return (
-    <section className="pt-28 pb-10 bg-[#f7f9fc] relative overflow-hidden">
-      {/* Decorative background shapes */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-[#eef4ff] to-[#dbeafe] blur-3xl opacity-70 -translate-y-1/2 translate-x-1/4 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-80 h-80 rounded-full bg-gradient-to-br from-[#eef4ff] blur-3xl opacity-50 translate-y-1/3 -translate-x-1/4 pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
+    <section className="pt-24 pb-6 bg-[#ffffff]">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#032e92] via-[#0a4fd4] to-[#021d63] p-10 lg:p-14 shadow-2xl shadow-blue-900/30">
+          transition={{ duration: 0.6 }}
+          className="bg-gradient-to-br from-[#eef4ff] to-[#dbeafe] rounded-[2.5rem] p-6 lg:p-10 shadow-xl shadow-blue-900/5 border border-[#e8edf7] relative overflow-hidden"
+        >
+          {/* Decorative Elements */}
+          <div className="absolute top-0 right-0 w-80 h-80 bg-white/50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-200/40 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 pointer-events-none" />
 
-          {/* Inner decorative circles */}
-          <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-white/5 pointer-events-none" />
-          <div className="absolute -bottom-12 -left-12 w-48 h-48 rounded-full bg-[#c10000]/10 pointer-events-none" />
-          <div className="absolute top-1/2 right-1/4 w-32 h-32 rounded-full bg-white/5 pointer-events-none" />
+          <div className="relative z-10 grid lg:grid-cols-12 gap-8 items-center">
 
-          {/* Floating animated dot grid */}
-          <div className="absolute top-6 right-6 grid grid-cols-5 gap-2 opacity-20 pointer-events-none">
-            {Array.from({ length: 25 }).map((_, i) => (
-              <motion.div
-                key={i}
-                className="w-1.5 h-1.5 rounded-full bg-white"
-                animate={{ opacity: [0.3, 1, 0.3] }}
-                transition={{ duration: 2, delay: i * 0.08, repeat: Infinity }}
-              />
-            ))}
-          </div>
-
-          <div className="relative grid lg:grid-cols-2 gap-10 items-center">
-            {/* Left */}
-            <div>
+            {/* Left Content */}
+            <div className="lg:col-span-7">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2, duration: 0.6 }}
-                className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2 text-sm text-blue-100 font-medium mb-5">
-                <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                33 Live SIF Schemes Available
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="inline-flex items-center gap-2 bg-white/70 border border-blue-200 rounded-full px-3 py-1 text-[10px] lg:text-xs text-[#032e92] font-bold uppercase tracking-wide mb-4 shadow-xs"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-[#032e92] animate-pulse" />
+                Live SIF Schemes
               </motion.div>
 
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.7 }}
-                className="text-4xl lg:text-5xl font-bold text-white leading-tight mb-4">
-                Live SIF<span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-orange-400"> Schemes</span>
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="text-3xl lg:text-4xl font-bold text-[#1e293b] leading-tight mb-4 font-serif"
+              >
+                Explore Specialized <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#032e92] to-[#c10000]">
+                  Investment Funds
+                </span>
               </motion.h1>
 
               <motion.p
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.6 }}
-                className="text-blue-100 font-medium leading-relaxed max-w-md">
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="text-[#64748b] text-sm lg:text-base font-medium leading-relaxed max-w-md"
+              >
                 Compare investment opportunities and choose the right fund for your financial goals.
               </motion.p>
             </div>
 
-            {/* Right - Quick Stats */}
+            {/* Right - 3 Stat Cards in Royal Blue matching Reference */}
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4, duration: 0.7 }}
-              className="grid grid-cols-3 gap-4">
-              {[
-                { icon: faChartLine, label: 'Min. Investment', value: '10 Lakh', color: 'from-green-400 to-emerald-500' },
-                { icon: faArrowTrendUp, label: 'Active SIF Schemes', value: '33', color: 'from-amber-400 to-orange-500' },
-                { icon: faShieldHalved, label: 'Total AUM', value: '23,345 Cr', color: 'from-blue-300 to-cyan-400' },
-              ].map((stat, i) => (
-                <div key={i} className="glass rounded-2xl p-5 border border-white/20 text-center">
-                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center mx-auto mb-3`}>
-                    <FontAwesomeIcon icon={stat.icon} className="text-white text-sm" />
-                  </div>
-                  <p className="text-white text-xl font-bold">{stat.value}</p>
-                  <p className="text-blue-200 text-xs font-medium mt-1">{stat.label}</p>
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="lg:col-span-5 grid grid-cols-3 gap-3 sm:gap-4"
+            >
+              {/* Min Investment */}
+              <div className="bg-[#1d4ed8] rounded-2xl p-4 sm:p-5 text-center shadow-lg shadow-blue-900/15 border border-white/20 hover:scale-105 transition-transform duration-200">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#10b981] text-white flex items-center justify-center mx-auto mb-2 sm:mb-3 shadow-md">
+                  <FontAwesomeIcon icon={faChartLine} className="text-xs sm:text-sm" />
                 </div>
-              ))}
+                <p className="text-white text-base sm:text-xl font-extrabold mb-0.5 leading-tight">10 Lakh</p>
+                <p className="text-blue-100 text-[10px] sm:text-xs font-semibold leading-tight">Min. Investment</p>
+              </div>
+
+              {/* Active Schemes */}
+              <div className="bg-[#1d4ed8] rounded-2xl p-4 sm:p-5 text-center shadow-lg shadow-blue-900/15 border border-white/20 hover:scale-105 transition-transform duration-200">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#f97316] text-white flex items-center justify-center mx-auto mb-2 sm:mb-3 shadow-md">
+                  <FontAwesomeIcon icon={faArrowTrendUp} className="text-xs sm:text-sm" />
+                </div>
+                <p className="text-white text-base sm:text-xl font-extrabold mb-0.5 leading-tight">{totalFunds || '33'}</p>
+                <p className="text-blue-100 text-[10px] sm:text-xs font-semibold leading-tight">Active SIF Schemes</p>
+              </div>
+
+              {/* Total AUM */}
+              <div className="bg-[#1d4ed8] rounded-2xl p-4 sm:p-5 text-center shadow-lg shadow-blue-900/15 border border-white/20 hover:scale-105 transition-transform duration-200">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#06b6d4] text-white flex items-center justify-center mx-auto mb-2 sm:mb-3 shadow-md">
+                  <FontAwesomeIcon icon={faShieldHalved} className="text-xs sm:text-sm" />
+                </div>
+                <p className="text-white text-base sm:text-xl font-extrabold mb-0.5 leading-tight">23,345 Cr</p>
+                <p className="text-blue-100 text-[10px] sm:text-xs font-semibold leading-tight">Total AUM</p>
+              </div>
+
             </motion.div>
           </div>
         </motion.div>

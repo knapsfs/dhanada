@@ -10,7 +10,7 @@ const navLinks = [
   { label: 'About', href: '/about' },
   {
     label: 'SIF',
-    href: 'https://dev.knaps.app/sif',
+    href: '/sif',
   },
   { label: 'Mutual Fund', href: '/funds' },
   { label: 'PMS', href: '/#pms' },

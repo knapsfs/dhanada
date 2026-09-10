@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faLinkedinIn, faInstagram, faXTwitter } from '@fortawesome/free-brands-svg-icons';
-import { faChartLine, faArrowRight, faLocationDot, faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faLocationDot, faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import logo from '../assets/knaps-logo.png';
 
 export default function Footer() {
@@ -14,7 +14,7 @@ export default function Footer() {
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-12 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-10 mb-16">
 
           {/* Company Info - Takes 2 columns */}
           <div className="lg:col-span-2">
@@ -42,7 +42,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Services */}
+          {/* Products */}
           <div>
             <h4 className="text-white font-bold mb-6">Products</h4>
             <ul className="space-y-4">
@@ -52,17 +52,6 @@ export default function Footer() {
               <li><Link to="/sif" className="text-gray-400 hover:text-white text-sm transition-colors">AIF</Link></li>
             </ul>
           </div>
-
-          {/* Quick Links */}
-          {/* <div className="lg:col-span-1">
-            <h4 className="text-white font-bold mb-6">Quick Links</h4>
-            <ul className="space-y-4">
-              <li><Link to="/" className="text-gray-400 hover:text-white text-sm transition-colors">Home</Link></li>
-              <li><Link to="/#about" className="text-gray-400 hover:text-white text-sm transition-colors">About Us</Link></li>
-              <li><Link to="/#blogs" className="text-gray-400 hover:text-white text-sm transition-colors">Blogs</Link></li>
-              <li><Link to="/#contact" className="text-gray-400 hover:text-white text-sm transition-colors">Contact Us</Link></li>
-            </ul>
-          </div> */}
 
           {/* Resources */}
           <div>
@@ -75,39 +64,36 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Contact & Newsletter */}
-          <div className="lg:col-span-2">
+          {/* Calculators - Right to Resources */}
+          <div>
+            <h4 className="text-white font-bold mb-6">Calculators</h4>
+            <ul className="space-y-3.5">
+              <li><Link to="/calculators/sip" className="text-gray-400 hover:text-white text-sm transition-colors">SIP Calculator</Link></li>
+              <li><Link to="/calculators/step-up-sip" className="text-gray-400 hover:text-white text-sm transition-colors">Step-Up SIP</Link></li>
+              <li><Link to="/calculators/swp" className="text-gray-400 hover:text-white text-sm transition-colors">SWP Calculator</Link></li>
+              <li><Link to="/calculators/lumpsum" className="text-gray-400 hover:text-white text-sm transition-colors">Lumpsum Calculator</Link></li>
+              <li><Link to="/calculators/retirement" className="text-gray-400 hover:text-white text-sm transition-colors">Retirement</Link></li>
+              <li><Link to="/calculators/future-value" className="text-gray-400 hover:text-white text-sm transition-colors">Future Value</Link></li>
+            </ul>
+          </div>
+
+          {/* Contact Us */}
+          <div>
             <h4 className="text-white font-bold mb-6">Contact Us</h4>
             <ul className="space-y-4 mb-10">
               <li className="flex items-start gap-3">
-                <FontAwesomeIcon icon={faLocationDot} className="text-[#99a1af] mt-1" />
-                <span className="text-gray-400 text-sm">G-6, Vardhman Plaza, LSC, Mayur Vihar Phase - 2, New Delhi - 110091</span>
+                <FontAwesomeIcon icon={faLocationDot} className="text-[#99a1af] mt-1 flex-shrink-0" />
+                <span className="text-gray-400 text-sm">DG-206A, DLF Galleria, Plot No 1B, Mayur Vihar Phase - 1, East Delhi, Delhi - 110091</span>
               </li>
               <li className="flex items-center gap-3">
-                <FontAwesomeIcon icon={faPhone} className="text-[#99a1af]" />
+                <FontAwesomeIcon icon={faPhone} className="text-[#99a1af] flex-shrink-0" />
                 <a href="tel:+919990243143" className="text-gray-400 hover:text-white text-sm transition-colors">(+91) 9990243143</a>
               </li>
               <li className="flex items-center gap-3">
-                <FontAwesomeIcon icon={faEnvelope} className="text-[#99a1af]" />
+                <FontAwesomeIcon icon={faEnvelope} className="text-[#99a1af] flex-shrink-0" />
                 <a href="mailto:connect@knaps.in" className="text-gray-400 hover:text-white text-sm transition-colors">connect@knaps.in</a>
               </li>
             </ul>
-
-            {/* <h4 className="text-white font-bold mb-6">Newsletter</h4> */}
-            {/* <p className="text-gray-400 text-sm mb-4">Subscribe to our weekly insights and market updates.</p> */}
-            {/* <form className="relative">
-              <input
-                type="email"
-                placeholder="Email address"
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[#032e92] transition-colors"
-              />
-              <button
-                type="button"
-                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-[#032e92] text-white flex items-center justify-center hover:bg-[#021d63] transition-colors"
-              >
-                <FontAwesomeIcon icon={faArrowRight} className="text-sm" />
-              </button>
-            </form> */}
           </div>
 
         </div>

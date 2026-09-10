@@ -11,7 +11,7 @@ const riskColors = {
 
 export default function ActiveFilters({ filters, setFilters }) {
   const activeItems = [
-    filters.assetClass && { key: 'assetClass', label: filters.assetClass },
+    filters.schemeType && { key: 'schemeType', label: filters.schemeType },
     filters.category && { key: 'category', label: filters.category },
     filters.risk && { key: 'risk', label: `${filters.risk} Risk`, style: riskColors[filters.risk] },
     filters.amc && { key: 'amc', label: filters.amc },

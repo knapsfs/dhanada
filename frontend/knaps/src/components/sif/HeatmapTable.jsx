@@ -2,20 +2,21 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import HeatmapTooltip from './HeatmapTooltip';
 
+// Descending order (Recent to Old)
 const monthsConfig = [
-  { key: 'sep_25', label: "SEPT '25", date: '2025-09-01' },
-  { key: 'oct_25', label: "OCT '25", date: '2025-10-01' },
-  { key: 'nov_25', label: "NOV '25", date: '2025-11-01' },
-  { key: 'dec_25', label: "DEC '25", date: '2025-12-01' },
-  { key: 'jan_26', label: "JAN '26", date: '2026-01-01' },
-  { key: 'feb_26', label: "FEB '26", date: '2026-02-01' },
-  { key: 'mar_26', label: "MAR '26", date: '2026-03-01' },
-  { key: 'apr_26', label: "APR '26", date: '2026-04-01' },
-  { key: 'may_26', label: "MAY '26", date: '2026-05-01' },
-  { key: 'jun_26', label: "JUN '26", date: '2026-06-01' },
-  { key: 'jul_26', label: "JUL '26", date: '2026-07-01' },
-  { key: 'aug_26', label: "AUG '26", date: '2026-08-01' },
   { key: 'sep_26', label: "SEPT '26", date: '2026-09-01' },
+  { key: 'aug_26', label: "AUG '26", date: '2026-08-01' },
+  { key: 'jul_26', label: "JUL '26", date: '2026-07-01' },
+  { key: 'jun_26', label: "JUN '26", date: '2026-06-01' },
+  { key: 'may_26', label: "MAY '26", date: '2026-05-01' },
+  { key: 'apr_26', label: "APR '26", date: '2026-04-01' },
+  { key: 'mar_26', label: "MAR '26", date: '2026-03-01' },
+  { key: 'feb_26', label: "FEB '26", date: '2026-02-01' },
+  { key: 'jan_26', label: "JAN '26", date: '2026-01-01' },
+  { key: 'dec_25', label: "DEC '25", date: '2025-12-01' },
+  { key: 'nov_25', label: "NOV '25", date: '2025-11-01' },
+  { key: 'oct_25', label: "OCT '25", date: '2025-10-01' },
+  { key: 'sep_25', label: "SEPT '25", date: '2025-09-01' },
 ];
 
 const getCellColor = (val) => {
@@ -71,14 +72,17 @@ function getFundMonthlyReturn(fund, month, mIndex) {
   // Generate deterministic realistic monthly returns if backend does not provide historical month breakdown
   const seed = (fund.name || fund.id || '').split('').reduce((acc, c, i) => acc + c.charCodeAt(0) * (i + 1), 0);
   
+  // Chronological index (0 for oldest sep_25 to 12 for most recent sep_26)
+  const chronoIndex = (monthsConfig.length - 1) - mIndex;
+
   // Staggered launch offset for realistic N/L display
   const launchOffset = fund.launchDate ? 0 : (seed % 9);
-  if (mIndex < launchOffset) {
+  if (chronoIndex < launchOffset) {
     return 'N/L';
   }
 
   const baseReturn = fund.returns1M != null ? parseFloat(fund.returns1M) : (seed % 4 - 1);
-  const wave = Math.sin(seed * 19.3 + mIndex * 37.7) * 2.8;
+  const wave = Math.sin(seed * 19.3 + chronoIndex * 37.7) * 2.8;
   const result = (baseReturn * 0.35 + wave).toFixed(2);
   return parseFloat(result);
 }
@@ -104,14 +108,14 @@ export default function HeatmapTable({ funds = [], timeFilter = '12M', activeSub
     setTooltipData(null);
   };
 
-  // Determine periods to show based on timeFilter
+  // Determine periods to show based on timeFilter (Recent months first)
   let displayMonths = monthsConfig;
   if (timeFilter === '3M') {
-    displayMonths = monthsConfig.slice(-4); // Last 4 months (e.g. Jun, Jul, Aug, Sept '26)
+    displayMonths = monthsConfig.slice(0, 4); // Most recent 4 months (SEPT '26, AUG '26, JUL '26, JUN '26)
   } else if (timeFilter === '6M') {
-    displayMonths = monthsConfig.slice(-7); // Last 7 months (e.g. Mar to Sept '26)
+    displayMonths = monthsConfig.slice(0, 7); // Most recent 7 months (SEPT '26 to MAR '26)
   } else if (timeFilter === '12M' || timeFilter === 'All') {
-    displayMonths = monthsConfig; // All 13 months
+    displayMonths = monthsConfig; // All 13 months descending
   }
 
   return (

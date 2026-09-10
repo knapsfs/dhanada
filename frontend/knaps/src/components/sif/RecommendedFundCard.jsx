@@ -1,3 +1,4 @@
+import { formatAum } from '../../utils/formatters'
 import { motion } from 'framer-motion'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -49,7 +50,7 @@ export default function RecommendedFundCard({ fund, index }) {
         <div className="hidden md:grid grid-cols-3 gap-4 flex-shrink-0">
           <div className="text-center">
             <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wide">AUM</p>
-            <p className="text-sm font-bold text-gray-800">{fund.aum != null ? fund.aum : 'N/A'}</p>
+            <p className="text-sm font-bold text-gray-800">{fund.aum != null ? formatAum(fund.aum) : 'N/A'}</p>
           </div>
           <div className="text-center">
             <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wide">3Y Return</p>
@@ -78,7 +79,7 @@ export default function RecommendedFundCard({ fund, index }) {
       {/* Mobile metrics */}
       <div className="md:hidden mt-3 pt-3 border-t border-[#e8edf7] grid grid-cols-3 gap-2">
         {[
-          { label: 'AUM', val: fund.aum != null ? fund.aum : 'N/A' },
+          { label: 'AUM', val: fund.aum != null ? formatAum(fund.aum) : 'N/A' },
           { label: '3Y Return', val: fund.returns3Y != null ? `${fund.returns3Y}%` : 'N/A', green: true },
           { label: 'Exp. Ratio', val: fund.expenseRatio != null ? `${fund.expenseRatio}%` : 'N/A' },
         ].map(m => (

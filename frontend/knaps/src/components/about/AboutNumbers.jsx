@@ -9,7 +9,7 @@ function AnimatedCounter({ value, duration = 2.5, prefix = '', suffix = '' }) {
   useEffect(() => {
     const controls = animate(count, value, { duration });
     const unsubscribe = rounded.on("change", (latest) => {
-      setDisplay(prefix + latest.toLocaleString() + suffix);
+      setDisplay(prefix + latest.toLocaleString('en-IN') + suffix);
     });
     return () => {
       controls.stop();
