@@ -10,9 +10,44 @@ import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
+from .constants import AMFI_SIF_NAV_URL
 from .logger import log_error, log_warning
 
 logger = logging.getLogger("sif_sync")
+
+
+def parse_amfi_sif_nav_text(text: str) -> dict[str, str]:
+	"""
+	Parses AMFI SIF_NAVAll.txt text into an ISIN -> SIF code dictionary.
+	Field 0: SIF code (e.g. SIF-01)
+	Field 1: ISIN Div Payout / ISIN Growth
+	Field 2: ISIN Div Reinvestment
+	"""
+	isin_to_sif: dict[str, str] = {}
+	if not text:
+		return isin_to_sif
+
+	for line in text.splitlines():
+		line = line.strip()
+		if not line or ";" not in line:
+			continue
+		parts = [p.strip() for p in line.split(";")]
+		if len(parts) < 3:
+			continue
+		sif_code = parts[0]
+		if sif_code.lower() in ("scheme code", "code") or not re.match(r"^SIF-\d+$", sif_code, re.IGNORECASE):
+			continue
+
+		isin1 = parts[1]
+		isin2 = parts[2]
+
+		if isin1 and isin1 != "-" and isin1.upper() != "NAN":
+			isin_to_sif[isin1] = sif_code
+		if isin2 and isin2 != "-" and isin2.upper() != "NAN":
+			isin_to_sif[isin2] = sif_code
+
+	return isin_to_sif
+
 
 class GitHubClient:
     def __init__(self):
@@ -196,6 +231,24 @@ class GitHubClient:
 
         logger.info(f"Successfully parsed {len(parsed_performance)} performance files. Skipped {skipped}.")
         return parsed_performance
+
+    # 4. AMFI ISIN -> SIF CODE DISCOVERY
+    def fetch_amfi_isin_mapping(self) -> dict[str, str]:
+        """
+        Fetches the authoritative AMFI SIF_NAVAll.txt feed and returns an ISIN -> SIF code mapping.
+        """
+        url = frappe.conf.get("sif_amfi_nav_url", AMFI_SIF_NAV_URL)
+        logger.info(f"Fetching authoritative AMFI SIF NAV feed for ISIN mapping from: {url}")
+        try:
+            response = self.dl_session.get(url, timeout=(5.0, 30.0))
+            response.raise_for_status()
+            text = response.content.decode("utf-8", errors="ignore")
+            mapping = parse_amfi_sif_nav_text(text)
+            logger.info(f"Successfully parsed {len(mapping)} ISIN -> SIF mappings from AMFI feed.")
+            return mapping
+        except Exception as e:
+            log_warning(f"Failed to fetch or parse AMFI SIF NAV feed from {url}: {e}")
+            return {}
 
     # 6. BACKWARD COMPATIBILITY
     def fetch_json(self, path: str) -> dict[str, Any]:

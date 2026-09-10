@@ -1,5 +1,165 @@
+import csv
+import io
+import json
+import os
+import re
+from datetime import datetime
+
 import frappe
+from dateutil.relativedelta import relativedelta
 from frappe.utils import cstr, date_diff, flt, getdate, nowdate
+
+ALLOWED_SCHEME_DATA_SUBDIRS = {
+	"performance": "performance",
+	"historical_nav": os.path.join("nav", "historical"),
+}
+
+
+def _get_candidate_scheme_base_dirs() -> list[str]:
+	"""
+	Returns a list of candidate base directory paths for AMFI_Fetcher scheme data.
+	Supports site config overrides, environment variables, dynamic app/site relative paths,
+	and standard container paths without hardcoding developer-specific paths.
+	"""
+	candidates = []
+
+	# 1. Configured path via site config / common site config
+	for key in ("sif_data_path", "amfi_fetcher_path", "amfi_fetcher_data_path"):
+		try:
+			conf_path = frappe.conf.get(key)
+			if conf_path and isinstance(conf_path, str):
+				candidates.append(conf_path)
+		except Exception:
+			pass
+
+	# 2. Configured path via environment variables
+	for env_key in ("SIF_DATA_PATH", "AMFI_FETCHER_DATA_PATH", "AMFI_FETCHER_PATH"):
+		env_path = os.environ.get(env_key)
+		if env_path:
+			candidates.append(env_path)
+
+	# 3. Dynamic App-relative paths (works across local bench, dev server, containerized app)
+	try:
+		app_path = frappe.get_app_path("dhanada")
+		candidates.extend(
+			[
+				os.path.join(app_path, "..", "..", "..", "..", "AMFI_Fetcher", "data", "sif", "scheme"),
+				os.path.join(app_path, "..", "..", "..", "AMFI_Fetcher", "data", "sif", "scheme"),
+				os.path.join(app_path, "..", "..", "AMFI_Fetcher", "data", "sif", "scheme"),
+				os.path.join(app_path, "..", "..", "..", "..", "data", "sif", "scheme"),
+				os.path.join(app_path, "..", "..", "..", "data", "sif", "scheme"),
+				os.path.join(app_path, "data", "sif", "scheme"),
+			]
+		)
+	except Exception:
+		pass
+
+	# 4. Dynamic Site-relative paths (works with custom site volumes and multi-tenant setups)
+	try:
+		site_path = frappe.get_site_path()
+		candidates.extend(
+			[
+				os.path.join(site_path, "..", "..", "..", "AMFI_Fetcher", "data", "sif", "scheme"),
+				os.path.join(site_path, "..", "..", "AMFI_Fetcher", "data", "sif", "scheme"),
+				os.path.join(site_path, "..", "AMFI_Fetcher", "data", "sif", "scheme"),
+				os.path.join(site_path, "AMFI_Fetcher", "data", "sif", "scheme"),
+				os.path.join(site_path, "data", "sif", "scheme"),
+				os.path.join(site_path, "private", "data", "sif", "scheme"),
+				os.path.join(site_path, "public", "data", "sif", "scheme"),
+			]
+		)
+	except Exception:
+		pass
+
+	# 5. Standard Frappe Linux / Docker container paths
+	candidates.extend(
+		[
+			"/home/frappe/frappe-bench/AMFI_Fetcher/data/sif/scheme",
+			"/home/frappe/frappe-bench/sites/data/sif/scheme",
+			"/home/frappe/AMFI_Fetcher/data/sif/scheme",
+		]
+	)
+
+	return candidates
+
+
+def _get_safe_scheme_data_file(data_type: str, safe_code: str, extension: str) -> str | None:
+	"""
+	Safely resolves the file path for scheme data (performance JSON or historical NAV CSV).
+	Ensures strict path confinement within AMFI_Fetcher data directory to prevent path traversal.
+	"""
+	if not safe_code or not re.match(r"^[a-z0-9_]+$", safe_code):
+		return None
+
+	sub_rel = ALLOWED_SCHEME_DATA_SUBDIRS.get(data_type)
+	if not sub_rel:
+		return None
+
+	filename = f"{safe_code}.{extension.lstrip('.')}"
+	base_candidates = _get_candidate_scheme_base_dirs()
+
+	for base_candidate in base_candidates:
+		try:
+			allowed_dir = os.path.realpath(os.path.abspath(os.path.join(base_candidate, sub_rel)))
+			target_path = os.path.realpath(os.path.abspath(os.path.join(allowed_dir, filename)))
+
+			if (
+				os.path.commonpath([allowed_dir, target_path]) == allowed_dir
+				and target_path.startswith(allowed_dir + os.sep)
+				and os.path.isfile(target_path)
+			):
+				return target_path
+		except Exception:
+			continue
+
+	return None
+
+
+def _fetch_scheme_data_from_github(data_type: str, safe_code: str, extension: str) -> str | None:
+	"""
+	Fallback to fetch scheme data from GitHub if local mount is unavailable.
+	Validates safe_code strictly against allowlist.
+	"""
+	if not safe_code or not re.match(r"^[a-z0-9_]+$", safe_code):
+		return None
+
+	sub_rel = ALLOWED_SCHEME_DATA_SUBDIRS.get(data_type)
+	if not sub_rel:
+		return None
+
+	cache_key = f"sif_gh_data_{data_type}_{safe_code}"
+	try:
+		cached = frappe.cache.get_value(cache_key)
+		if cached:
+			return cached
+	except Exception:
+		pass
+
+	repo_url = frappe.conf.get("sif_sync_github_repo_url", "https://github.com/Satyam4755/AMFI_Fetcher")
+	branch = frappe.conf.get("sif_sync_github_branch", "main")
+
+	clean_repo = repo_url.rstrip("/").replace("https://github.com/", "")
+	if not re.match(r"^[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+$", clean_repo):
+		clean_repo = "Satyam4755/AMFI_Fetcher"
+
+	clean_sub = sub_rel.replace(os.sep, "/")
+	clean_ext = extension.lstrip(".")
+	url = f"https://raw.githubusercontent.com/{clean_repo}/{branch}/data/sif/scheme/{clean_sub}/{safe_code}.{clean_ext}"
+
+	try:
+		import requests
+
+		resp = requests.get(url, timeout=(3.0, 5.0))
+		if resp.status_code == 200 and resp.text:
+			try:
+				frappe.cache.set_value(cache_key, resp.text, expires_in_sec=3600)
+			except Exception:
+				pass
+			return resp.text
+	except Exception:
+		pass
+
+	return None
 
 
 def get_default_plan(plans):
@@ -22,22 +182,63 @@ def get_default_plan(plans):
 	return sorted(plans, key=lambda p: (score(p), p.name or ""), reverse=True)[0]
 
 
-def mask_invalid_returns(perf_dict, launch_date):
+def mask_invalid_returns(perf_dict, launch_date, historical_nav=None):
 	"""
-	MariaDB defaults Float to 0.0. If a fund is too young for a period,
-	convert 0.0 to None so the frontend displays N/A.
+	MariaDB defaults Float to 0.0. If a fund has insufficient historical coverage for a period,
+	convert 0.0 to None so the frontend displays N/A and does not show false filters.
 	"""
-	if not perf_dict or not launch_date:
+	if not perf_dict:
 		return perf_dict
 
-	age_days = date_diff(nowdate(), getdate(launch_date))
+	# If historical_nav is present, determine actual horizon coverage
+	if historical_nav and len(historical_nav) >= 2:
+		try:
 
+			def parse_dt(s):
+				for fmt in ("%d-%b-%Y", "%Y-%m-%d", "%d/%m/%Y"):
+					try:
+						return datetime.strptime(s, fmt).date()
+					except ValueError:
+						pass
+				return None
+
+			dates = sorted([parse_dt(r.get("date", "")) for r in historical_nav if r.get("date")])
+			dates = [d for d in dates if d is not None]
+			if len(dates) >= 2:
+				first_date = dates[0]
+				latest_date = dates[-1]
+
+				horizons = {
+					"1_day": len(dates) >= 2,
+					"1_week": first_date <= (latest_date - relativedelta(days=7)),
+					"1_month": first_date <= (latest_date - relativedelta(months=1)),
+					"3_months": first_date <= (latest_date - relativedelta(months=3)),
+					"6_months": first_date <= (latest_date - relativedelta(months=6)),
+					"year_to_date": first_date <= datetime(latest_date.year, 1, 1).date(),
+					"1_year": first_date <= (latest_date - relativedelta(years=1)),
+					"2_years": first_date <= (latest_date - relativedelta(years=2)),
+					"3_years": first_date <= (latest_date - relativedelta(years=3)),
+					"5_years": first_date <= (latest_date - relativedelta(years=5)),
+					"10_years": first_date <= (latest_date - relativedelta(years=10)),
+					"since_inception": len(dates) >= 2,
+				}
+
+				for key, is_available in horizons.items():
+					if key in perf_dict and not is_available:
+						perf_dict[key] = None
+
+				return perf_dict
+		except Exception:
+			pass
+
+	# Fallback to age_days if historical_nav is not available
+	age_days = date_diff(nowdate(), getdate(launch_date)) if launch_date else None
 	thresholds = {
 		"1_day": 1,
 		"1_week": 7,
 		"1_month": 30,
-		"3_months": 90,
-		"6_months": 180,
+		"3_months": 92,
+		"6_months": 182,
 		"1_year": 365,
 		"2_years": 730,
 		"3_years": 1095,
@@ -45,14 +246,55 @@ def mask_invalid_returns(perf_dict, launch_date):
 		"10_years": 3650,
 	}
 
-	for key, min_days in thresholds.items():
-		if key in perf_dict:
-			# If the fund is younger than the period and value is exactly 0.0, it's missing data.
-			# Even if it's not 0.0, theoretically it shouldn't exist, but we only mask 0.0 to be safe.
-			if age_days < min_days and flt(perf_dict[key]) == 0.0:
+	if age_days is not None:
+		for key, min_days in thresholds.items():
+			if key in perf_dict and age_days < min_days:
 				perf_dict[key] = None
 
 	return perf_dict
+
+
+def get_performance_for_sif(sif_code: str):
+	if not sif_code:
+		return None
+	safe_code = str(sif_code).strip().replace("-", "_").lower()
+	if not re.match(r"^[a-z0-9_]+$", safe_code):
+		return None
+
+	content = None
+	path = _get_safe_scheme_data_file("performance", safe_code, "json")
+	if path:
+		try:
+			content = frappe.read_file(path)
+		except Exception as e:
+			frappe.log_error(f"Failed to read performance JSON {path}: {e}")
+
+	if not content:
+		content = _fetch_scheme_data_from_github("performance", safe_code, "json")
+
+	if not content:
+		return None
+
+	try:
+		data = json.loads(content)
+		returns = data.get("returns", {})
+		return {
+			"1_day": returns.get("1_day"),
+			"1_week": returns.get("1_week"),
+			"1_month": returns.get("1_month"),
+			"3_months": returns.get("3_month"),
+			"6_months": returns.get("6_month"),
+			"year_to_date": returns.get("year_to_date"),
+			"1_year": returns.get("1_year"),
+			"2_years": returns.get("2_year"),
+			"3_years": returns.get("3_year"),
+			"5_years": returns.get("5_year"),
+			"since_inception": returns.get("since_launch"),
+			"performance_date": data.get("last_updated"),
+		}
+	except Exception as e:
+		frappe.log_error(f"Failed to parse performance JSON: {e}")
+	return None
 
 
 @frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
@@ -84,13 +326,14 @@ def get_funds_list():
 			plans = frappe.get_all(
 				"SIF Scheme Plan",
 				filters={"scheme": s.name},
-				fields=["name", "type", "option", "sub_option", "nav", "nav_date", "performance"],
+				fields=["name", "type", "option", "sub_option", "nav", "nav_date", "aum", "performance"],
 			)
 
 			best_plan = get_default_plan(plans)
 
 			plan_nav = None
 			nav_date = None
+			plan_aum = None
 			returns_1w = None
 			returns_1m = None
 			returns_3m = None
@@ -103,6 +346,7 @@ def get_funds_list():
 			if best_plan:
 				plan_nav = best_plan.nav if best_plan.nav_date else None
 				nav_date = best_plan.nav_date
+				plan_aum = best_plan.get("aum")
 
 				if best_plan.performance:
 					perf = frappe.db.get_value(
@@ -163,8 +407,7 @@ def get_funds_list():
 					"returns5Y": returns_5y,
 					"exitLoad": s.exit_load,
 					"launchDate": launch_date,
-					# Fields that don't exist in backend, kept null
-					"aum": None,
+					"aum": plan_aum,
 					"expenseRatio": None,
 					"rating": None,
 					"isNew": False,
@@ -174,6 +417,62 @@ def get_funds_list():
 		return {"status": "success", "data": result}
 	except Exception as e:
 		frappe.log_error(title="get_funds_list API Error", message=frappe.get_traceback())
+		return {"status": "error", "message": str(e)}
+
+
+def get_historical_nav_for_sif(sif_code: str) -> list[dict]:
+	"""
+	Loads historical NAV time-series records for a given SIF code.
+	Checks local AMFI_Fetcher directory and fallback paths.
+	Returns list of dicts: [{'date': '14-Oct-2025', 'nav': 10.0149}, ...]
+	"""
+	if not sif_code:
+		return []
+
+	safe_code = str(sif_code).strip().lower().replace("-", "_")
+	if not re.match(r"^[a-z0-9_]+$", safe_code):
+		return []
+
+	content = None
+	path = _get_safe_scheme_data_file("historical_nav", safe_code, "csv")
+	if path:
+		try:
+			content = frappe.read_file(path)
+		except Exception as e:
+			frappe.log_error(f"Failed to read historical CSV {path}: {e}", title="Historical NAV Read Error")
+
+	if not content:
+		content = _fetch_scheme_data_from_github("historical_nav", safe_code, "csv")
+
+	if not content:
+		return []
+
+	records = []
+	try:
+		reader = csv.DictReader(io.StringIO(content))
+		for r in reader:
+			nav_str = r.get("nav", "").strip()
+			date_str = r.get("nav_date", "").strip()
+			if not nav_str or not date_str:
+				continue
+			try:
+				nav_val = float(nav_str.replace(",", ""))
+				records.append({"date": date_str, "nav": nav_val})
+			except (ValueError, TypeError):
+				continue
+		return records
+	except Exception as e:
+		frappe.log_error(f"Failed to parse historical CSV: {e}", title="Historical NAV Read Error")
+
+	return []
+
+
+@frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
+def get_historical_nav(sif_code: str):
+	try:
+		data = get_historical_nav_for_sif(sif_code)
+		return {"status": "success", "data": data}
+	except Exception as e:
 		return {"status": "error", "message": str(e)}
 
 
@@ -214,6 +513,7 @@ def get_fund_details(identifier: str):
 				"rta_code",
 				"nav",
 				"nav_date",
+				"aum",
 				"performance",
 			],
 		)
@@ -222,6 +522,11 @@ def get_fund_details(identifier: str):
 			# Fix False Zero NAV: if there is no nav_date, the nav 0.0 is a default artifact and should be None.
 			if not p.nav_date:
 				p.nav = None
+
+			if p.sif_code:
+				p["historical_nav"] = get_historical_nav_for_sif(p.sif_code)
+			else:
+				p["historical_nav"] = []
 
 			if p.performance:
 				perf = frappe.db.get_value(
@@ -242,7 +547,9 @@ def get_fund_details(identifier: str):
 					],
 					as_dict=True,
 				)
-				p["performance_data"] = mask_invalid_returns(perf, launch_date)
+				p["performance_data"] = mask_invalid_returns(
+					perf, launch_date, historical_nav=p.get("historical_nav")
+				)
 			else:
 				p["performance_data"] = None
 
@@ -313,8 +620,11 @@ def get_fund_details(identifier: str):
 			"allocations": allocations,
 			"plans": plans,
 			"defaultPlan": best_plan,
-			# Null fields for gaps
-			"fundSize": None,
+			"aum": best_plan.get("aum") if best_plan else None,
+			"fundSize": best_plan.get("aum") if best_plan else None,
+			"nav": best_plan.get("nav") if best_plan else None,
+			"navDate": best_plan.get("nav_date") if best_plan else None,
+			"nav_date": best_plan.get("nav_date") if best_plan else None,
 			"expenseRatio": None,
 			"metrics": None,
 		}
@@ -326,7 +636,7 @@ def get_fund_details(identifier: str):
 		return {"status": "error", "message": str(e)}
 
 
-@frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
+@frappe.whitelist(allow_guest=True, methods=["POST"])  # nosemgrep: guest-whitelisted-method
 def create_chatbot_lead():
 	try:
 		lead_name = frappe.form_dict.get("lead_name")
@@ -366,7 +676,7 @@ def create_chatbot_lead():
 		frappe.throw(f"Failed to create Lead: {e!s}")
 
 
-@frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
+@frappe.whitelist(allow_guest=True, methods=["POST"])  # nosemgrep: guest-whitelisted-method
 def create_website_lead():
 	try:
 		full_name = frappe.form_dict.get("full_name", "").strip()
@@ -410,20 +720,27 @@ def create_website_lead():
 
 @frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
 def get_chatbot_config():
-	"""Returns non-sensitive chatbot configuration like the API Base URL."""
+	"""Returns non-sensitive chatbot configuration like the API Base URL and CSRF token."""
 	try:
+		config = {"api_base_url": "", "csrf_token": ""}
+
+		# Provide CSRF token for the frontend to make POST requests
+		if hasattr(frappe.local, "session") and frappe.local.session:
+			config["csrf_token"] = frappe.sessions.get_csrf_token()
+
 		# Check if the doctype exists in case it hasn't been migrated yet
 		if not frappe.db.exists("DocType", "Chatbot AI Credentials"):
-			return {"api_base_url": ""}
+			return config
 
 		api_base_url = frappe.db.get_single_value("Chatbot AI Credentials", "api_base_url")
-		return {"api_base_url": api_base_url or ""}
+		config["api_base_url"] = api_base_url or ""
+		return config
 	except Exception as e:
 		frappe.log_error(message=str(e), title="Chatbot Config Error")
 		return {"api_base_url": ""}
 
 
-@frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
+@frappe.whitelist(allow_guest=True, methods=["POST"])  # nosemgrep: guest-whitelisted-method
 def chatbot_response():
 	"""Securely proxies the chat request to Gemini API."""
 	import json
@@ -446,6 +763,7 @@ def chatbot_response():
 			payload = json.loads(frappe.request.data)
 			contents = payload.get("conversation_history", [])
 			system_instruction = payload.get("system_instruction", "")
+			is_json = payload.get("is_json", False)
 		except Exception:
 			return {"success": False, "message": "Invalid JSON payload"}
 
@@ -457,6 +775,9 @@ def chatbot_response():
 
 		if system_instruction:
 			gemini_payload["systemInstruction"] = {"parts": [{"text": system_instruction}]}
+
+		if is_json:
+			gemini_payload["generationConfig"] = {"responseMimeType": "application/json"}
 
 		# 4. Fallback loop over models
 		models = ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-3.1-flash-lite"]

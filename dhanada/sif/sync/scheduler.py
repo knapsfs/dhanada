@@ -65,6 +65,7 @@ def sync_scheme_details(dry_run: bool = False):
 		# 1. Fetch data
 		frappe.logger("sif_sync").info("Starting to fetch scheme details from GitHub...")
 		scheme_data = client.fetch_scheme_details()
+		isin_map = client.fetch_amfi_isin_mapping()
 		frappe.logger("sif_sync").info(
 			f"Finished fetching scheme details. Received {len(scheme_data)} records."
 		)
@@ -73,7 +74,7 @@ def sync_scheme_details(dry_run: bool = False):
 
 		# 2. Map data
 		frappe.logger("sif_sync").info("Starting data mapping...")
-		mapper = DataMapper()
+		mapper = DataMapper(isin_sif_map=isin_map)
 		dataset = mapper.map_dataset(raw_data)
 		validation_errors = mapper.validator.errors
 		frappe.logger("sif_sync").info(

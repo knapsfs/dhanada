@@ -90,6 +90,7 @@ class SchemePlan:
 	rta_code: str | None = None
 	nav: float | None = None
 	nav_date: date | None = None
+	aum: float | None = None
 
 
 @dataclass
@@ -97,6 +98,7 @@ class NavUpdate:
 	sif_code: str
 	nav_date: date
 	nav: float
+	aum: float | None = None
 
 
 @dataclass

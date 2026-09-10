@@ -64,9 +64,24 @@ required_apps = ["crm"]
 
 # Home Pages
 # ----------
+website_route_rules = [
+	{"from_route": "/", "to_route": "knaps"},
+	{"from_route": "/about", "to_route": "knaps"},
+	{"from_route": "/services", "to_route": "knaps"},
+	{"from_route": "/blogs", "to_route": "knaps"},
+	{"from_route": "/blogs/<path:app_path>", "to_route": "knaps"},
+	{"from_route": "/calculators", "to_route": "knaps"},
+	{"from_route": "/calculators/<path:app_path>", "to_route": "knaps"},
+	{"from_route": "/contact", "to_route": "knaps"},
+	{"from_route": "/sif", "to_route": "knaps"},
+	{"from_route": "/sif/<path:app_path>", "to_route": "knaps"},
+]
 
 # application home page (will override Website Settings)
-# home_page = "login"
+home_page = "knaps"
+
+# redirect system users to desk after login
+get_website_user_home_page = "dhanada.utils.login.get_home_page"
 
 # website user home page (by Role)
 # role_home_page = {
@@ -163,7 +178,11 @@ get_desktop_icons = "dhanada.config.desktop.get_data"
 # Scheduled Tasks
 # ---------------
 
-scheduler_events = {"cron": {"0 12 * * *": ["dhanada.sif.sync.scheduler.run_github_sync_pipeline"]}}
+scheduler_events = {
+	"daily": ["dhanada.sif.sync.scheduler.sync_nav_performance"],
+	"weekly": ["dhanada.sif.sync.scheduler.sync_scheme_details"],
+	"cron": {"0 12 * * *": ["dhanada.sif.sync.scheduler.run_github_sync_pipeline"]},
+}
 
 # Testing
 # -------
@@ -255,9 +274,6 @@ scheduler_events = {"cron": {"0 12 * * *": ["dhanada.sif.sync.scheduler.run_gith
 # ignore_translatable_strings_from = []
 
 fixtures = [
-	"SIF Asset Management Company",
-	"SIF Fund Manager",
-	"SIF Investment Strategy Subcategory",
 	"Workflow",
 	"Workflow State",
 	{"dt": "Custom Field", "filters": [["dt", "=", "CRM Lead"]]},

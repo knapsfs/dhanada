@@ -22,6 +22,8 @@
   "nav",
   "column_break_qkda",
   "nav_date",
+  "column_break_aum",
+  "aum",
   "column_break_buml",
   "performance",
   "section_break_enoa",
@@ -89,6 +91,18 @@
    "fieldtype": "Date",
    "in_list_view": 1,
    "label": "NAV Date"
+  },
+  {
+   "fieldname": "column_break_aum",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "aum",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "AUM",
+   "non_negative": 1,
+   "precision": "2"
   },
   {
    "fieldname": "scheme",
