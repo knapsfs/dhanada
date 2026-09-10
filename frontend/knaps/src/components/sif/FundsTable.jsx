@@ -33,7 +33,7 @@ export default function FundsTable({
   const schemeTypes = useMemo(() => {
     const set = new Set()
     funds.forEach(f => {
-      const type = f.schemeType || f.scheme_type || f.assetClass
+      const type = f.schemeType || f.scheme_type
       if (type && type.trim() !== '') {
         set.add(type.trim())
       }
@@ -83,8 +83,8 @@ export default function FundsTable({
         (f.name && f.name.toLowerCase().includes(q)) ||
         (f.amc && f.amc.toLowerCase().includes(q)) ||
         (f.category && f.category.toLowerCase().includes(q)) ||
-        ((f.schemeType || f.scheme_type || f.assetClass) &&
-          String(f.schemeType || f.scheme_type || f.assetClass).toLowerCase().includes(q))
+        ((f.schemeType || f.scheme_type) &&
+          String(f.schemeType || f.scheme_type).toLowerCase().includes(q))
       )
     }
 
@@ -96,7 +96,7 @@ export default function FundsTable({
     // Scheme Type filter
     if (filters.schemeType && filters.schemeType !== 'All') {
       list = list.filter(f => {
-        const st = String(f.schemeType || f.scheme_type || f.assetClass || '').trim().toLowerCase()
+        const st = String(f.schemeType || f.scheme_type || '').trim().toLowerCase()
         return st === filters.schemeType.trim().toLowerCase()
       })
     }
@@ -124,9 +124,9 @@ export default function FundsTable({
             : (b.name || '').localeCompare(a.name || '')
         }
 
-        if (sortConfig.key === 'schemeType' || sortConfig.key === 'assetClass') {
-          const aType = String(a.schemeType || a.scheme_type || a.assetClass || '')
-          const bType = String(b.schemeType || b.scheme_type || b.assetClass || '')
+        if (sortConfig.key === 'schemeType') {
+          const aType = String(a.schemeType || a.scheme_type || '')
+          const bType = String(b.schemeType || b.scheme_type || '')
           return sortConfig.direction === 'asc'
             ? aType.localeCompare(bType)
             : bType.localeCompare(aType)
@@ -395,7 +395,7 @@ export default function FundsTable({
                 const aumVal = fund.aum || `${500 + (idx * 150 % 700)}cr`
                 const returnVal = getActiveReturn(fund, selectedReturnPeriod)
                 const isNavUp = idx % 2 === 1 || (returnVal >= 0)
-                const schemeTypeVal = fund.schemeType || fund.scheme_type || fund.assetClass || 'Open Ended'
+                const schemeTypeVal = fund.schemeType || fund.scheme_type || 'Open Ended'
                 const fundCode = fund.id || fund.sebi_code || fund.name
 
                 return (

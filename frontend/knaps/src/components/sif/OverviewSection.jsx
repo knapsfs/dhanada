@@ -35,7 +35,6 @@ export default function OverviewSection({ fund }) {
   const details = [
     { label: 'Scheme Type', value: fund.schemeType },
     { label: 'Category', value: fund.category },
-    { label: 'Asset Class', value: fund.assetClass },
     { label: 'Benchmark', value: fund.benchmark },
     { label: 'Fund House', value: fund.amc },
     { label: 'Launch Date', value: fund.launchDate },

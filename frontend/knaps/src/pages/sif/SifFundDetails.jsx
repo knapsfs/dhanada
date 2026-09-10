@@ -177,7 +177,7 @@ export default function SifFundDetails() {
       logoColor: 'from-blue-600 to-indigo-700',
       amc: apiFund.amc || 'Unknown AMC',
       category: apiFund.category || 'N/A',
-      assetClass: apiFund.assetClass || 'N/A',
+      
       schemeType: apiFund.schemeType || 'N/A',
       benchmark: apiFund.benchmarkTier1 || 'N/A',
       launchDate: apiFund.launchDate || 'N/A',
@@ -316,7 +316,7 @@ export default function SifFundDetails() {
               </div>
               <div>
                 <h1 className="text-xl lg:text-2xl font-bold text-white leading-tight">{fund.name}</h1>
-                <p className="text-blue-200 text-sm font-medium mt-1">{fund.amc} • {fund.category} • {fund.assetClass}</p>
+                <p className="text-blue-200 text-sm font-medium mt-1">{fund.amc} • {fund.category} • {fund.schemeType}</p>
               </div>
             </motion.div>
           </div>

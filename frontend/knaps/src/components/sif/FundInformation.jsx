@@ -23,7 +23,6 @@ export default function FundInformation({ fund }) {
       items: [
         { label: 'Scheme Name', value: fund.name },
         { label: 'Category', value: fund.category },
-        { label: 'Asset Class', value: fund.assetClass },
         { label: 'Scheme Type', value: fund.schemeType },
         { label: 'Benchmark', value: fund.benchmark },
         { label: 'Investment Type', value: fund.investmentType },

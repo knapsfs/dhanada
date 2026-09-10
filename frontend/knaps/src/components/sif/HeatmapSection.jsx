@@ -12,11 +12,11 @@ export default function HeatmapSection({ fundsData = [] }) {
   const groupedData = useMemo(() => {
     const dataMap = {};
     fundsData.forEach(fund => {
-      // Use assetClass as parent, category as sub-category
-      // Skip funds without proper taxonomy
-      if (!fund.assetClass || !fund.category) return;
+      // Use schemeType as parent, category as sub-category
+      const st = fund.schemeType || fund.scheme_type || "Open Ended";
+      if (!fund.category) return;
       
-      const ac = fund.assetClass;
+      const ac = st;
       const cat = fund.category;
 
       if (!dataMap[ac]) {
@@ -81,10 +81,10 @@ export default function HeatmapSection({ fundsData = [] }) {
           <div className="flex flex-col p-4 sm:p-6 lg:p-8 gap-6 bg-white w-full">
             {/* Top Filter Bar with 2 sections: Asset Class and Category */}
             <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6 lg:gap-10 pb-2 w-full">
-              {/* 1. ASSET CLASS */}
+              {/* 1. SCHEME TYPE */}
               <div className="flex flex-col gap-2.5 flex-shrink-0">
                 <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
-                  Asset Class
+                  Scheme Type
                 </span>
                 <div className="flex flex-wrap items-center gap-2">
                   {groupedData.map((cat) => (

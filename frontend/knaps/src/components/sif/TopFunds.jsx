@@ -31,7 +31,7 @@ export default function TopFunds({
   const availableFundsForSelector = useMemo(() => {
     if (activeTab === 'All') return fundsData
     return fundsData.filter(f => {
-      const textToSearch = `${f.assetClass || ''} ${f.category || ''} ${f.investmentStrategy || ''}`.toLowerCase()
+      const textToSearch = `${f.schemeType || ''} ${f.category || ''} ${f.investmentStrategy || ''}`.toLowerCase()
       return textToSearch.includes(activeTab.toLowerCase())
     })
   }, [activeTab, fundsData])
