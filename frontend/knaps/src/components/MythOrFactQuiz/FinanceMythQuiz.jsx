@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { taxDisclaimer } from './quizQuestions';
 import QuizIntro from './QuizIntro';
 import QuizQuestion from './QuizQuestion';
 import QuizResults from './QuizResults';
 
-export default function FinanceMythQuiz() {
+export default function FinanceMythQuiz({ isModal = false, onClose }) {
   const [quizQuestions, setQuizQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -20,15 +19,12 @@ export default function FinanceMythQuiz() {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        // Fetch from Frappe Doctype API
-        // Adjust the URL if you have a specific custom API endpoint
         const response = await fetch('/api/resource/Myth Fact?fields=["*"]');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
         if (data && data.data) {
-          // Map Frappe fields to our component's expected structure
           const formatted = data.data.map((item, index) => ({
             id: item.name || index,
             category: item.category || 'Finance',
@@ -56,7 +52,7 @@ export default function FinanceMythQuiz() {
   };
 
   const handleAnswer = (answerType) => {
-    if (selectedAnswer) return; // Prevent double answering
+    if (selectedAnswer) return;
 
     setSelectedAnswer(answerType);
     setShowFeedback(true);
@@ -88,65 +84,67 @@ export default function FinanceMythQuiz() {
 
   if (loading) {
     return (
-      <section className="py-24 bg-[#f8fafc] relative overflow-hidden border-t border-b border-gray-100 flex justify-center items-center min-h-[500px]">
+      <div className={`flex justify-center items-center ${isModal ? 'py-12' : 'py-24 bg-[#f8fafc] min-h-[400px]'}`}>
         <div className="w-10 h-10 border-4 border-[#032e92]/30 border-t-[#032e92] rounded-full animate-spin"></div>
-      </section>
+      </div>
     );
   }
 
   if (error || quizQuestions.length === 0) {
     return (
-      <section className="py-24 bg-[#f8fafc] relative overflow-hidden border-t border-b border-gray-100 flex justify-center items-center min-h-[500px]">
-        <p className="text-gray-500 font-medium">Please add questions to the myth_fact Doctype in the backend to start the quiz.</p>
-      </section>
+      <div className={`flex justify-center items-center text-center ${isModal ? 'py-8' : 'py-24 bg-[#f8fafc] min-h-[400px]'}`}>
+        <p className="text-gray-500 font-medium text-sm">Please add questions to the myth_fact Doctype in the backend to start the quiz.</p>
+      </div>
     );
+  }
+
+  const content = (
+    <div className={`w-full max-w-4xl mx-auto ${isModal ? 'py-1' : 'max-w-7xl px-6 lg:px-8 relative z-10'}`}>
+      <AnimatePresence mode="wait">
+        {!quizStarted && !quizFinished && (
+          <motion.div key="intro" className="w-full">
+            <QuizIntro onStart={handleStart} isModal={isModal} />
+          </motion.div>
+        )}
+
+        {quizStarted && !quizFinished && quizQuestions.length > 0 && (
+          <motion.div key="question" className="w-full">
+            <QuizQuestion
+              question={quizQuestions[currentQuestion]}
+              currentIdx={currentQuestion}
+              total={quizQuestions.length}
+              onAnswer={handleAnswer}
+              selectedAnswer={selectedAnswer}
+              showFeedback={showFeedback}
+              onNext={handleNext}
+              isModal={isModal}
+            />
+          </motion.div>
+        )}
+
+        {quizFinished && (
+          <motion.div key="results" className="w-full">
+            <QuizResults
+              score={score}
+              total={quizQuestions.length}
+              onRetake={handleRetake}
+              isModal={isModal}
+              onClose={onClose}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+
+  if (isModal) {
+    return content;
   }
 
   return (
     <section className="py-24 bg-[#f8fafc] relative overflow-hidden border-t border-b border-gray-100">
-      {/* Background elements */}
       <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #032e92 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
-
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-        <AnimatePresence mode="wait">
-          {!quizStarted && !quizFinished && (
-            <motion.div key="intro" className="w-full">
-              <QuizIntro onStart={handleStart} />
-            </motion.div>
-          )}
-
-          {quizStarted && !quizFinished && quizQuestions.length > 0 && (
-            <motion.div key="question" className="w-full min-h-[400px]">
-              <QuizQuestion
-                question={quizQuestions[currentQuestion]}
-                currentIdx={currentQuestion}
-                total={quizQuestions.length}
-                onAnswer={handleAnswer}
-                selectedAnswer={selectedAnswer}
-                showFeedback={showFeedback}
-                onNext={handleNext}
-              />
-            </motion.div>
-          )}
-
-          {quizFinished && (
-            <motion.div key="results" className="w-full">
-              <QuizResults
-                score={score}
-                total={quizQuestions.length}
-                onRetake={handleRetake}
-              />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Disclaimer */}
-        {/* <div className="mt-20 text-center">
-          <p className="text-[11px] text-gray-400 max-w-4xl mx-auto leading-relaxed">
-            {taxDisclaimer}
-          </p>
-        </div> */}
-      </div>
+      {content}
     </section>
   );
 }

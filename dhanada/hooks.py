@@ -80,9 +80,6 @@ website_route_rules = [
 # application home page (will override Website Settings)
 home_page = "knaps"
 
-# redirect system users to desk after login
-get_website_user_home_page = "dhanada.utils.login.get_home_page"
-
 # website user home page (by Role)
 # role_home_page = {
 # 	"Role": "home_page"
@@ -181,7 +178,7 @@ get_desktop_icons = "dhanada.config.desktop.get_data"
 scheduler_events = {
 	"daily": ["dhanada.sif.sync.scheduler.sync_nav_performance"],
 	"weekly": ["dhanada.sif.sync.scheduler.sync_scheme_details"],
-	"cron": {"0 12 * * *": ["dhanada.sif.sync.scheduler.run_github_sync_pipeline"]},
+	"cron": {"0 13 * * *": ["dhanada.sif.sync.scheduler.run_github_sync_pipeline"]},
 }
 
 # Testing
