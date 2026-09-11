@@ -1,95 +1,75 @@
+import React from 'react';
 import { motion } from 'framer-motion';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faArrowRight, faShieldAlt, faUsers, faBuildingColumns,
-  faChartLine, faWallet, faChartPie, faArrowTrendUp, faCheckCircle
-} from '@fortawesome/free-solid-svg-icons';
+import knapsBanner from '../assets/knaps-banner.png';
+import knapsBannerGlassCards from '../assets/knaps-banner-glass-cards.png';
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen pt-32 pb-20 overflow-hidden bg-white flex items-center">
-      {/* Background Animated Blobs */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
-        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-[#eef5ff] mix-blend-multiply filter blur-[80px] opacity-70 animate-blob"></div>
-        <div className="absolute top-[20%] right-[-10%] w-[600px] h-[600px] rounded-full bg-[#fce8e8] mix-blend-multiply filter blur-[100px] opacity-70 animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-[-20%] left-[20%] w-[500px] h-[500px] rounded-full bg-[#f0f4fd] mix-blend-multiply filter blur-[80px] opacity-70 animate-blob animation-delay-4000"></div>
+    <section className="relative isolate min-h-[680px] lg:min-h-screen pt-28 sm:pt-32 pb-14 lg:pb-16 overflow-hidden flex items-center justify-center">
+      {/* 1. Full Panoramic Landscape Background */}
+      <div className="absolute inset-0 w-full h-full z-0 overflow-hidden pointer-events-none">
+        <img
+          src={knapsBanner}
+          alt="KNAPS Wealth Creation Background"
+          className="w-full h-full object-cover object-center"
+        />
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative w-full">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+      {/* 2. Hero Content Grid */}
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative w-full z-10">
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
 
           {/* Left Side Content */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="max-w-2xl"
-          >
+          <div className="lg:col-span-7 flex flex-col justify-start py-2 sm:py-4">
+            {/* Heading & Subtitle using website standard typography */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, ease: "easeOut" }}
+              className="max-w-2xl text-left"
+            >
+              <h1 className="text-3xl pt-10 md:text-4xl lg:text-5xl font-bold text-[#1a1a1a] leading-[1.15]">
+                <span className="block text-[#032e92]">
+                  Invest Today
+                </span>
+                <span className="block text-[#1a1a1a] mt-1 sm:mt-1.5">
+                  for the Life You Want Tomorrow
+                </span>
+              </h1>
+
+              <p className="text-base sm:text-lg text-[#6b7280] font-medium leading-relaxed mt-3 sm:mt-4">
+                Your goals, your priorities, our expertise.
+              </p>
+            </motion.div>
+
+            {/* Glass Cards Layer - Positioned directly below the text and aligned on the left */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#eef5ff] text-[#032e92] font-semibold text-sm mb-6 border border-blue-100 shadow-sm"
+              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+              className="mt-6 sm:mt-8 w-full max-w-2xl text-left"
             >
-              <FontAwesomeIcon icon={faShieldAlt} className="text-[#c10000]" />
-              Trusted Wealth Management Partner
+              <img
+                src={knapsBannerGlassCards}
+                alt="Investment Goals - Dream House, Family Secure Future, Peaceful Retirement, Financial Freedom"
+                className="w-full h-auto object-contain object-left select-none drop-shadow-xl -ml-1 sm:-ml-2"
+              />
             </motion.div>
-
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1a1a1a] leading-[1.15] mb-8">
-              Build, Protect & Grow Your Wealth With <span className="text-[#032e92] relative">
-                Confidence
-                <span className="absolute bottom-1 left-0 w-full h-3 bg-[#eef5ff] -z-10 rounded-sm"></span>
-              </span>
-            </h1>
-
-            <div className="flex flex-col sm:flex-row gap-4 mb-10">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 rounded-xl font-semibold bg-[#032e92] text-white shadow-lg shadow-[#032e92]/30 flex items-center justify-center gap-2 hover:bg-[#021d63] transition-colors"
-              >
-                Start Investing
-                <FontAwesomeIcon icon={faArrowRight} />
-              </motion.button>
-
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 rounded-xl font-semibold bg-white text-[#c10000] border-2 border-[#c10000] shadow-sm flex items-center justify-center hover:bg-[#c10000] hover:text-white transition-colors"
-              >
-                Talk to Advisor
-              </motion.button>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-6 sm:gap-8 pt-6 border-t border-gray-100">
-              <div className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-[#16a34a] text-lg" />
-                SEBI Registered
-              </div>
-              <div className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                <FontAwesomeIcon icon={faUsers} className="text-[#032e92] text-lg" />
-                10,000+ Investors
-              </div>
-              <div className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                <FontAwesomeIcon icon={faBuildingColumns} className="text-[#c10000] text-lg" />
-                ₹500Cr+ Managed
-              </div>
-            </div>
-          </motion.div>
+          </div>
 
           {/* Right Side - Lead Capture Form */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="flex items-center justify-center lg:justify-end w-full"
+            className="lg:col-span-5 flex items-center justify-center lg:justify-end w-full"
           >
-            <div className="bg-white rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-gray-100 p-8 w-full max-w-md">
-              <h3 className="text-[22px] font-bold text-gray-800 mb-8 leading-tight">
-                Start your Wealth Creation Journey with Knaps
+            <div className="bg-white/95 rounded-2xl shadow-[0_16px_45px_rgba(0,0,0,0.15)] border border-gray-100 p-7 sm:p-8 w-full max-w-md backdrop-blur-md">
+              <h3 className="text-xl sm:text-[22px] font-bold text-gray-800 mb-6 sm:mb-8 leading-tight">
+                Start your Investment Journey with KNAPS
               </h3>
 
-              <form className="space-y-6">
+              <form className="space-y-5 sm:space-y-6">
                 {/* Product Dropdown */}
                 <div className="relative">
                   <select defaultValue="" className="w-full bg-transparent border-b-2 border-gray-300 pb-2 text-gray-700 text-sm focus:outline-none focus:border-[#032e92] appearance-none cursor-pointer transition-colors">
@@ -125,16 +105,16 @@ export default function Hero() {
                 </div>
 
                 {/* Checkbox */}
-                <div className="flex items-start gap-3 pt-2">
+                <div className="flex items-start gap-3 pt-1">
                   <input type="checkbox" id="terms" defaultChecked className="mt-1 w-4 h-4 text-[#0665d0] rounded border-gray-300 focus:ring-[#0665d0] cursor-pointer" />
-                  <label htmlFor="terms" className="text-[13px] text-gray-500 leading-relaxed cursor-pointer select-none">
-                    By continuing, you provide consent and agree to our <a href="#" className="text-[#0665d0] hover:underline">Terms & Conditions</a>
+                  <label htmlFor="terms" className="text-[12px] sm:text-[13px] text-gray-500 leading-relaxed cursor-pointer select-none">
+                    By continuing, you provide consent and agree to our <a href="/terms" className="text-[#0665d0] hover:underline">Terms & Conditions</a>
                   </label>
                 </div>
 
                 {/* Submit Button */}
-                <button type="button" className="w-full bg-[#032e92] hover:bg-[#021d63] text-white text-[15px] font-medium py-3 rounded-md transition-colors mt-2 shadow-lg shadow-[#032e92]/20">
-                  Continue
+                <button type="button" className="w-full bg-[#032e92] hover:bg-[#021d63] text-white text-[15px] font-semibold py-3.5 rounded-lg transition-all hover:shadow-lg hover:shadow-blue-900/20 mt-2 cursor-pointer active:scale-[0.99]">
+                  Start Investing
                 </button>
               </form>
             </div>

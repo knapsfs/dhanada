@@ -178,7 +178,7 @@ get_desktop_icons = "dhanada.config.desktop.get_data"
 scheduler_events = {
 	"daily": ["dhanada.sif.sync.scheduler.sync_nav_performance"],
 	"weekly": ["dhanada.sif.sync.scheduler.sync_scheme_details"],
-	"cron": {"0 13 * * *": ["dhanada.sif.sync.scheduler.run_github_sync_pipeline"]},
+	"cron": {"0 14 * * *": ["dhanada.sif.sync.scheduler.run_github_sync_pipeline"]},
 }
 
 # Testing

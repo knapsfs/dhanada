@@ -13,8 +13,8 @@ const navLinks = [
     href: '/sif',
   },
   { label: 'Mutual Fund', href: '/funds' },
-  { label: 'PMS', href: '/#pms' },
-  { label: 'AIF', href: '/#aif' },
+  // { label: 'PMS', href: '/#pms' },
+  // { label: 'AIF', href: '/#aif' },
   {
     label: 'Services',
     href: '/services',
