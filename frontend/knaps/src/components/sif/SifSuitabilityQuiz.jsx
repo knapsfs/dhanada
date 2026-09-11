@@ -99,49 +99,73 @@ export default function SifSuitabilityQuiz({ isModal = false, onClose }) {
 
   return (
     <div className={`w-full ${isModal ? 'p-0' : ''}`}>
-      <div className={`bg-[#f8faff] border border-[#e2e8f5] rounded-3xl ${isModal ? 'p-5 sm:p-8' : 'p-6 sm:p-10 lg:p-12'} shadow-xl shadow-blue-900/5 relative`}>
+      <div className={`bg-[#f8faff] border border-[#e2e8f5] ${isModal ? 'rounded-2xl p-4 sm:p-6 shadow-sm' : 'rounded-3xl p-6 sm:p-10 lg:p-12 shadow-xl shadow-blue-900/5'} relative`}>
         <AnimatePresence mode="wait">
           {/* 1. INTRO SCREEN */}
           {quizState === 'intro' && (
             <motion.div
               key="intro"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
+              exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.3 }}
-              className="text-center py-4 sm:py-6"
+              className={`text-center ${isModal ? 'py-1 sm:py-2' : 'py-4 sm:py-6'}`}
             >
-              <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-3xl bg-gradient-to-br from-[#032e92] to-[#0a4fd4] text-white flex items-center justify-center text-2xl sm:text-3xl shadow-lg shadow-blue-900/20 mb-6">
+              <div className={`mx-auto rounded-2xl bg-gradient-to-br from-[#032e92] to-[#0a4fd4] text-white flex items-center justify-center shadow-lg shadow-blue-900/20 ${
+                isModal ? 'w-12 h-12 text-xl mb-3' : 'w-16 h-16 sm:w-20 sm:h-20 text-2xl sm:text-3xl mb-6'
+              }`}>
                 <FontAwesomeIcon icon={faChartLine} />
               </div>
 
-              <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
+              <h3 className={`font-bold text-gray-900 ${isModal ? 'text-xl sm:text-2xl mb-2' : 'text-2xl sm:text-3xl mb-3'}`}>
                 Find Out if SIF Fits Your Portfolio
               </h3>
-              <p className="text-gray-600 font-medium max-w-xl mx-auto text-sm sm:text-base mb-8 leading-relaxed">
-                Answer 5 quick questions to evaluate whether Specialized Investment Funds (SIF) align with your financial goals, risk appetite, and investment horizon.
+
+              <p className={`text-gray-600 font-medium max-w-xl mx-auto ${isModal ? 'text-xs sm:text-sm mb-4 leading-relaxed' : 'text-sm sm:text-base mb-8'}`}>
+                Specialized Investment Funds (SIF) offer structured, goal-oriented wealth strategies for high-conviction portfolios. Take this quick 1-minute suitability check.
               </p>
 
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-4">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setCurrentIdx(0)
-                    setQuizState('question')
-                  }}
-                  className="w-full sm:w-auto px-8 py-3.5 sm:py-4 rounded-2xl bg-[#032e92] hover:bg-[#021d63] text-white font-bold text-base shadow-xl shadow-blue-900/20 flex items-center justify-center gap-3 transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
-                >
-                  <span>Start Quiz</span>
-                  <FontAwesomeIcon icon={faArrowRight} />
-                </button>
+              <div className={`flex items-center justify-center gap-4 ${isModal ? 'mb-4 text-xs' : 'mb-8'}`}>
+                <div className="flex items-center gap-1.5 text-gray-700 font-semibold text-xs">
+                  <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92]" />
+                  <span>5 Quick Questions</span>
+                </div>
+                <span className="w-1 h-1 rounded-full bg-gray-300" />
+                <div className="flex items-center gap-1.5 text-gray-700 font-semibold text-xs">
+                  <FontAwesomeIcon icon={faClock} className="text-[#c10000]" />
+                  <span>1 Minute</span>
+                </div>
+                <span className="w-1 h-1 rounded-full bg-gray-300" />
+                <div className="flex items-center gap-1.5 text-gray-700 font-semibold text-xs">
+                  <span>Min ₹10 Lakhs</span>
+                </div>
               </div>
 
-              <div className="flex items-center justify-center gap-2 text-xs font-semibold text-gray-400 mt-4">
-                <FontAwesomeIcon icon={faClock} className="text-[#032e92]" />
-                <span>Takes ~1 minute</span>
-                <span className="mx-1.5">•</span>
-                <span>5 Questions</span>
+              <div className={`grid grid-cols-1 sm:grid-cols-3 gap-2.5 max-w-xl mx-auto text-left ${isModal ? 'mb-4' : 'mb-8'}`}>
+                <div className={`bg-white rounded-xl border border-gray-100 shadow-sm ${isModal ? 'p-2.5' : 'p-3.5'}`}>
+                  <p className="text-[11px] font-bold text-[#032e92]">Targeted Themes</p>
+                  <p className="text-[10px] text-gray-500 mt-0.5">High-conviction strategies</p>
+                </div>
+                <div className={`bg-white rounded-xl border border-gray-100 shadow-sm ${isModal ? 'p-2.5' : 'p-3.5'}`}>
+                  <p className="text-[11px] font-bold text-[#032e92]">Disciplined Process</p>
+                  <p className="text-[10px] text-gray-500 mt-0.5">Structured portfolio execution</p>
+                </div>
+                <div className={`bg-white rounded-xl border border-gray-100 shadow-sm ${isModal ? 'p-2.5' : 'p-3.5'}`}>
+                  <p className="text-[11px] font-bold text-[#032e92]">Long-Term Focus</p>
+                  <p className="text-[10px] text-gray-500 mt-0.5">For ₹10L+ allocation</p>
+                </div>
               </div>
+
+              <button
+                type="button"
+                onClick={() => setQuizState('question')}
+                className={`rounded-xl bg-[#032e92] hover:bg-[#022169] text-white font-bold shadow-lg shadow-blue-900/20 inline-flex items-center justify-center gap-2 transition-all hover:scale-105 active:scale-95 cursor-pointer ${
+                  isModal ? 'px-8 py-3 text-xs sm:text-sm' : 'px-10 py-4 text-base'
+                }`}
+              >
+                <span>Start Assessment</span>
+                <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+              </button>
             </motion.div>
           )}
 
@@ -153,18 +177,18 @@ export default function SifSuitabilityQuiz({ isModal = false, onClose }) {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.25 }}
-              className="py-2"
+              className={`max-w-2xl mx-auto ${isModal ? 'py-1' : 'py-2'}`}
             >
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-xs font-bold text-[#032e92] tracking-wider uppercase">
+              <div className="flex items-center justify-between mb-1.5 text-xs">
+                <span className="font-bold text-[#032e92]">
                   Question {currentIdx + 1} of {quizQuestions.length}
                 </span>
-                <span className="text-xs font-semibold text-gray-400">
+                <span className="text-[11px] font-semibold text-gray-400">
                   {Math.round(progressPct)}% Completed
                 </span>
               </div>
 
-              <div className="w-full h-2 bg-gray-200/80 rounded-full overflow-hidden mb-6">
+              <div className="w-full h-1.5 bg-gray-200/80 rounded-full overflow-hidden mb-4">
                 <motion.div
                   className="h-full bg-gradient-to-r from-[#032e92] to-[#0a4fd4] rounded-full"
                   initial={{ width: `${((currentIdx) / quizQuestions.length) * 100}%` }}
@@ -173,11 +197,11 @@ export default function SifSuitabilityQuiz({ isModal = false, onClose }) {
                 />
               </div>
 
-              <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mb-6 leading-snug">
+              <h3 className={`font-bold text-gray-900 leading-snug ${isModal ? 'text-base sm:text-lg mb-3.5' : 'text-lg sm:text-xl lg:text-2xl mb-6'}`}>
                 {currentQ.question}
               </h3>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-8">
+              <div className={`grid grid-cols-1 sm:grid-cols-2 gap-2.5 ${isModal ? 'mb-4' : 'mb-8'}`}>
                 {currentQ.options.map((opt) => {
                   const isSelected = answers[currentQ.id]?.key === opt.key
                   return (
@@ -185,15 +209,17 @@ export default function SifSuitabilityQuiz({ isModal = false, onClose }) {
                       key={opt.key}
                       type="button"
                       onClick={() => handleSelectOption(currentQ.id, opt)}
-                      className={`p-4 sm:p-5 rounded-2xl border text-left transition-all duration-200 flex items-center justify-between gap-3 group cursor-pointer ${
+                      className={`rounded-xl border text-left transition-all duration-200 flex items-center justify-between gap-2.5 group cursor-pointer ${
+                        isModal ? 'p-3' : 'p-4 sm:p-5 rounded-2xl'
+                      } ${
                         isSelected
-                          ? 'bg-[#032e92] border-[#032e92] text-white shadow-lg shadow-blue-900/15 ring-2 ring-[#032e92]/30 scale-[1.02]'
-                          : 'bg-white border-gray-200 hover:border-[#032e92]/50 hover:bg-blue-50/40 text-gray-800 shadow-sm hover:scale-[1.01]'
+                          ? 'bg-[#032e92] border-[#032e92] text-white shadow-md shadow-blue-900/15 ring-2 ring-[#032e92]/30 scale-[1.01]'
+                          : 'bg-white border-gray-200 hover:border-[#032e92]/50 hover:bg-blue-50/40 text-gray-800 shadow-sm'
                       }`}
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2.5">
                         <span
-                          className={`w-7 h-7 rounded-xl text-xs font-bold flex items-center justify-center transition-colors ${
+                          className={`w-6 h-6 rounded-lg text-xs font-bold flex items-center justify-center transition-colors ${
                             isSelected
                               ? 'bg-white/20 text-white'
                               : 'bg-gray-100 text-gray-600 group-hover:bg-[#eef4ff] group-hover:text-[#032e92]'
@@ -201,30 +227,30 @@ export default function SifSuitabilityQuiz({ isModal = false, onClose }) {
                         >
                           {opt.key}
                         </span>
-                        <span className={`text-sm sm:text-base font-semibold ${isSelected ? 'text-white' : 'text-gray-800'}`}>
+                        <span className={`text-xs sm:text-sm font-semibold ${isSelected ? 'text-white' : 'text-gray-800'}`}>
                           {opt.text}
                         </span>
                       </div>
 
                       {isSelected && (
-                        <FontAwesomeIcon icon={faCircleCheck} className="text-white text-lg flex-shrink-0" />
+                        <FontAwesomeIcon icon={faCircleCheck} className="text-white text-sm flex-shrink-0" />
                       )}
                     </button>
                   )
                 })}
               </div>
 
-              <div className="flex items-center justify-between pt-4 border-t border-gray-200/80">
+              <div className="flex items-center justify-between pt-3 border-t border-gray-200/80">
                 <button
                   type="button"
                   onClick={handleBack}
-                  className="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-700 font-semibold text-sm hover:bg-gray-100 flex items-center gap-2 transition-colors cursor-pointer"
+                  className="px-4 py-1.5 rounded-xl border border-gray-300 text-gray-700 font-semibold text-xs hover:bg-gray-100 flex items-center gap-1.5 transition-colors cursor-pointer"
                 >
                   <FontAwesomeIcon icon={faArrowLeft} />
                   <span>Back</span>
                 </button>
 
-                <span className="text-xs font-medium text-gray-400">
+                <span className="text-[11px] font-medium text-gray-400">
                   Select an option to proceed
                 </span>
               </div>
@@ -238,81 +264,83 @@ export default function SifSuitabilityQuiz({ isModal = false, onClose }) {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.4 }}
-              className="py-2 sm:py-4"
+              transition={{ duration: 0.3 }}
+              className={`text-center max-w-xl mx-auto ${isModal ? 'py-1' : 'py-2 sm:py-4'}`}
             >
-              <div className="text-center max-w-2xl mx-auto">
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-50 border border-green-200 text-green-700 text-xs sm:text-sm font-bold mb-4">
-                  <FontAwesomeIcon icon={faCircleCheck} className="text-green-600" />
-                  Assessment Complete
-                </div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-50 border border-green-200 text-green-700 text-xs font-bold mb-3">
+                <FontAwesomeIcon icon={faCircleCheck} className="text-green-600" />
+                Assessment Complete
+              </div>
 
-                <h3 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight mb-4">
-                  {isHighMatch ? (
-                    <span>SIF could be a <span className="text-[#032e92]">good investment option</span> for you</span>
-                  ) : (
-                    <span>Explore SIF for your <span className="text-[#032e92]">future wealth goals</span></span>
-                  )}
-                </h3>
+              <h3 className={`font-extrabold text-gray-900 tracking-tight mb-3 ${isModal ? 'text-lg sm:text-xl' : 'text-2xl sm:text-3xl mb-4'}`}>
+                {isHighMatch ? (
+                  <span>SIF could be a <span className="text-[#032e92]">good investment option</span> for you</span>
+                ) : (
+                  <span>Explore SIF for your <span className="text-[#032e92]">future wealth goals</span></span>
+                )}
+              </h3>
 
-                <div className="bg-white rounded-2xl p-5 border border-blue-100 shadow-md shadow-blue-900/5 mb-6 text-left">
-                  <div className="flex items-start gap-3.5">
-                    <div className="w-10 h-10 rounded-xl bg-[#eef4ff] text-[#032e92] flex items-center justify-center text-base flex-shrink-0 mt-0.5">
-                      <FontAwesomeIcon icon={faCircleInfo} />
-                    </div>
-                    <div>
-                      <p className="text-sm sm:text-base font-bold text-[#032e92] mb-1">
-                        SIF requires a minimum investment of ₹10 lakh.
-                      </p>
-                      <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-medium">
-                        Based on your answers, SIF is a good choice for you. SIF offers a range of schemes designed for investors looking for advanced strategies to manage their investments.
-                      </p>
-                    </div>
+              <div className={`bg-white rounded-xl border border-blue-100 shadow-sm text-left ${isModal ? 'p-3.5 mb-4' : 'p-5 mb-6'}`}>
+                <div className="flex items-start gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-[#eef4ff] text-[#032e92] flex items-center justify-center text-sm flex-shrink-0 mt-0.5">
+                    <FontAwesomeIcon icon={faCircleInfo} />
+                  </div>
+                  <div>
+                    <p className="text-xs sm:text-sm font-bold text-[#032e92] mb-0.5">
+                      SIF requires a minimum investment of ₹10 lakh.
+                    </p>
+                    <p className="text-[11px] sm:text-xs text-gray-600 leading-relaxed font-medium">
+                      Based on your answers, SIF is a strong match. SIF offers regulated schemes designed for investors seeking structured, high-conviction wealth strategies.
+                    </p>
                   </div>
                 </div>
+              </div>
 
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (onClose) onClose()
-                      openLeadModal()
-                    }}
-                    className="w-full sm:w-auto px-8 py-3.5 sm:py-4 rounded-2xl bg-[#c10000] hover:bg-[#9d0000] text-white font-bold text-base shadow-xl shadow-red-900/20 flex items-center justify-center gap-2 transition-all hover:scale-105 active:scale-95 cursor-pointer"
-                  >
-                    <span>Invest Now</span>
-                    <FontAwesomeIcon icon={faArrowRight} />
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (onClose) onClose()
-                      openLeadModal()
-                    }}
-                    className="w-full sm:w-auto px-8 py-3.5 sm:py-4 rounded-2xl bg-white hover:bg-gray-50 border-2 border-[#032e92] text-[#032e92] font-bold text-base shadow-md flex items-center justify-center gap-2 transition-all hover:scale-105 active:scale-95 cursor-pointer"
-                  >
-                    <FontAwesomeIcon icon={faPhone} />
-                    <span>Talk to Us</span>
-                  </button>
-                </div>
+              <div className="flex flex-row items-center justify-center gap-3 mb-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (onClose) onClose()
+                    openLeadModal()
+                  }}
+                  className={`rounded-xl bg-[#c10000] hover:bg-[#9d0000] text-white font-bold shadow-md flex items-center justify-center gap-1.5 transition-all hover:scale-105 active:scale-95 cursor-pointer ${
+                    isModal ? 'px-6 py-2.5 text-xs sm:text-sm' : 'px-8 py-3.5 text-base'
+                  }`}
+                >
+                  <span>Invest Now</span>
+                  <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+                </button>
 
                 <button
                   type="button"
-                  onClick={handleRestart}
-                  className="inline-flex items-center gap-2 text-xs font-bold text-gray-500 hover:text-[#032e92] transition-colors cursor-pointer py-1"
+                  onClick={() => {
+                    if (onClose) onClose()
+                    openLeadModal()
+                  }}
+                  className={`rounded-xl bg-white hover:bg-gray-50 border-2 border-[#032e92] text-[#032e92] font-bold shadow-sm flex items-center justify-center gap-1.5 transition-all hover:scale-105 active:scale-95 cursor-pointer ${
+                    isModal ? 'px-6 py-2.5 text-xs sm:text-sm' : 'px-8 py-3.5 text-base'
+                  }`}
                 >
-                  <FontAwesomeIcon icon={faRotateRight} />
-                  <span>Retake Quiz</span>
+                  <FontAwesomeIcon icon={faPhone} className="text-xs" />
+                  <span>Talk to Us</span>
                 </button>
               </div>
+
+              <button
+                type="button"
+                onClick={handleRestart}
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-gray-500 hover:text-[#032e92] transition-colors cursor-pointer py-1"
+              >
+                <FontAwesomeIcon icon={faRotateRight} className="text-xs" />
+                <span>Retake Quiz</span>
+              </button>
             </motion.div>
           )}
         </AnimatePresence>
 
-        <div className="mt-6 pt-4 border-t border-gray-200 text-center">
-          <p className="text-[10px] sm:text-xs text-gray-500 font-medium leading-relaxed max-w-2xl mx-auto">
-            <strong>Disclaimer:</strong> This quiz is for educational purposes only and does not constitute investment advice or a recommendation. Please consider your investment objectives, risk profile and applicable scheme documents before investing.
+        <div className={`border-t border-gray-200 text-center ${isModal ? 'mt-3 pt-2' : 'mt-6 pt-4'}`}>
+          <p className="text-[10px] text-gray-500 font-medium leading-relaxed max-w-xl mx-auto">
+            <strong>Disclaimer:</strong> This quiz is for educational purposes only and does not constitute investment advice.
           </p>
         </div>
       </div>

@@ -24,10 +24,10 @@ export default function Home() {
         <Hero />
         <TrustBar />
         <About />
-        <FinanceMythQuiz />
+        {/* <FinanceMythQuiz /> */}
         <Services />
         <WhyChooseUs />
-        <RiskProfiler />
+        {/* <RiskProfiler /> */}
         <HowItWorks />
         <Stats />
         <InvestmentSolutions />
