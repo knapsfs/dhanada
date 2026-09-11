@@ -51,9 +51,8 @@ function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onCh
               onChange(isNaN(num) ? raw : num)
             }
           }}
-          className={`w-full py-3.5 rounded-xl border-2 border-[#e8edf7] bg-[#f7f9fc] text-gray-800 font-bold text-base focus:outline-none focus:border-[#032e92] focus:ring-4 focus:ring-[#032e92]/8 transition-all placeholder-gray-400 ${
-            prefix ? 'pl-8 pr-4' : suffix ? 'pl-4 pr-12' : 'px-4'
-          }`}
+          className={`w-full py-3.5 rounded-xl border-2 border-[#e8edf7] bg-[#f7f9fc] text-gray-800 font-bold text-base focus:outline-none focus:border-[#032e92] focus:ring-4 focus:ring-[#032e92]/8 transition-all placeholder-gray-400 ${prefix ? 'pl-8 pr-4' : suffix ? 'pl-4 pr-12' : 'px-4'
+            }`}
           placeholder={placeholder}
         />
         {suffix && (
@@ -90,7 +89,7 @@ export default function SipCalculatorForm({ inputs, setInputs }) {
           className="bg-white rounded-3xl shadow-xl shadow-blue-900/8 border border-[#e8edf7] p-6 lg:p-8">
 
           {/* Header with Title */}
-          <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[#e8edf7]">
+          {/* <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[#e8edf7]">
             <div className="w-10 h-10 rounded-2xl bg-[#eef4ff] flex items-center justify-center">
               <FontAwesomeIcon icon={faCalculator} className="text-[#032e92] text-sm" />
             </div>
@@ -98,7 +97,7 @@ export default function SipCalculatorForm({ inputs, setInputs }) {
               <h2 className="font-bold text-gray-800 text-lg">SIP Calculator</h2>
               <p className="text-xs text-gray-400 font-medium">Results update instantly as you type</p>
             </div>
-          </div>
+          </div> */}
 
           {/* Main Inputs */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

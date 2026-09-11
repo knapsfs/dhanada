@@ -592,11 +592,7 @@ def get_fund_details(identifier: str):
 			"name": scheme.scheme_name,
 			"amc": amc_name,
 			"category": scheme.scheme_subcategory,
-<<<<<<< HEAD
-						"schemeType": scheme.scheme_type,
-=======
 			"schemeType": scheme.scheme_type,
->>>>>>> 42bd656737cbbc8cf09c1816392f4066c67ac96e
 			"benchmarkTier1": getattr(scheme, "benchmark_tier_1", None),
 			"benchmarkTier2": getattr(scheme, "benchmark_tier_2", None),
 			"launchDate": launch_date,

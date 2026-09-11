@@ -62,7 +62,7 @@ export default function Navbar() {
         }`}
     >
       {/* Top Banner */}
-      <div className="bg-[#000080] py-1.5 w-full overflow-hidden flex">
+      {/* <div className="bg-[#000080] py-1.5 w-full overflow-hidden flex">
         <div className="flex whitespace-nowrap animate-marquee">
           <span className="text-white text-xs font-semibold uppercase tracking-wider flex items-center gap-2 mx-6">
             <FontAwesomeIcon icon={faChartLine} className="text-[#a3e635]" />
@@ -91,7 +91,7 @@ export default function Navbar() {
             Over 500+ Cr AUM Managed
           </span>
         </div>
-      </div>
+      </div> */}
 
       <nav className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
