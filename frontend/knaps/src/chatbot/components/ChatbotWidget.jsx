@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../assets/style.css';
 import { Chatbot } from '../logic/chatbot.js';
+import { saveChatMessage } from '../logic/conversationPersistence.js';
 
 const chatbotInstance = new Chatbot();
 
 const STORAGE_KEYS = {
   sessionId: 'dhanada_session_id',
+  conversationId: 'dhanada_conversation_id',
   history: 'dhanada_chat_history',
   state: 'dhanada_chat_state',
   widgetOpen: 'dhanada_widget_open',
@@ -31,6 +33,9 @@ export default function ChatbotWidget() {
       localStorage.setItem(STORAGE_KEYS.sessionId, id);
     }
     return id;
+  });
+  const [conversationId, setConversationId] = useState(() => {
+    return localStorage.getItem(STORAGE_KEYS.conversationId) || null;
   });
   const [messages, setMessages] = useState(() => {
     try {
@@ -196,10 +201,85 @@ export default function ChatbotWidget() {
 
     setIsTyping(true);
 
+    let activeConvId = conversationId;
+
+    // 1. Persist user message to Dhanada backend
     try {
-      const data = await chatbotInstance.processMessage(sessionId, text);
+      let userPersistRes = await saveChatMessage({
+        conversationId: activeConvId,
+        visitorId: sessionId,
+        role: 'user',
+        message: text,
+      });
+
+      // Handle stale/invalid conversation ID (404/403) by clearing and retrying
+      if (!userPersistRes?.success && (userPersistRes?.status === 404 || userPersistRes?.status === 403 || userPersistRes?.error?.includes('404') || userPersistRes?.error?.includes('403'))) {
+        localStorage.removeItem(STORAGE_KEYS.conversationId);
+        activeConvId = null;
+        userPersistRes = await saveChatMessage({
+          conversationId: null,
+          visitorId: sessionId,
+          role: 'user',
+          message: text,
+        });
+      }
+
+      if (userPersistRes?.success && userPersistRes.conversation_id) {
+        activeConvId = userPersistRes.conversation_id;
+        if (activeConvId !== conversationId) {
+          setConversationId(activeConvId);
+          localStorage.setItem(STORAGE_KEYS.conversationId, activeConvId);
+        }
+      }
+    } catch (persistErr) {
+      console.warn("Failed to persist user message:", persistErr);
+    }
+
+    try {
+      // 2. Generate response via Riddhi logic
+      const data = await chatbotInstance.processMessage(sessionId, text, { conversationId: activeConvId });
       pushMessage('bot', data.reply, data.quickReplies);
       updateStateAndSuggestions(data.state, data.quickReplies);
+
+      // 3. Persist assistant response to Dhanada backend
+      try {
+        const userCollected = data.state?.collected || {};
+        const chatSummary = data.summary || data.state?.summary || "";
+
+        let botPersistRes = await saveChatMessage({
+          conversationId: activeConvId,
+          visitorId: sessionId,
+          role: 'assistant',
+          message: data.reply,
+          chatContext: chatSummary || undefined,
+          userName: userCollected.name || undefined,
+          email: userCollected.email || undefined,
+          phone: userCollected.phone || undefined,
+        });
+
+        // Handle stale/invalid conversation ID fallback
+        if (!botPersistRes?.success && (botPersistRes?.status === 404 || botPersistRes?.status === 403 || botPersistRes?.error?.includes('404') || botPersistRes?.error?.includes('403'))) {
+          localStorage.removeItem(STORAGE_KEYS.conversationId);
+          botPersistRes = await saveChatMessage({
+            conversationId: null,
+            visitorId: sessionId,
+            role: 'assistant',
+            message: data.reply,
+            chatContext: chatSummary || undefined,
+            userName: userCollected.name || undefined,
+            email: userCollected.email || undefined,
+            phone: userCollected.phone || undefined,
+          });
+        }
+
+        if (botPersistRes?.success && botPersistRes.conversation_id && botPersistRes.conversation_id !== activeConvId) {
+          activeConvId = botPersistRes.conversation_id;
+          setConversationId(activeConvId);
+          localStorage.setItem(STORAGE_KEYS.conversationId, activeConvId);
+        }
+      } catch (botPersistErr) {
+        console.warn("Failed to persist assistant message:", botPersistErr);
+      }
     } catch (error) {
       console.error(error);
       pushMessage('bot', 'Sorry, I am having trouble connecting right now. Please try again later.');
@@ -238,6 +318,9 @@ export default function ChatbotWidget() {
       : 'sess-' + Math.random().toString(36).substring(2, 15);
     setSessionId(newId);
     localStorage.setItem(STORAGE_KEYS.sessionId, newId);
+
+    setConversationId(null);
+    localStorage.removeItem(STORAGE_KEYS.conversationId);
 
     const initialMsgs = [{ role: 'bot', text: WELCOME_MESSAGE }];
     setMessages(initialMsgs);

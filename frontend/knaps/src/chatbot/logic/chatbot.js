@@ -1,9 +1,6 @@
 import * as knowledgeService from "./knowledgeService.js";
 import * as leadManager from "./leadManager.js";
 
-// Gemini client initialization is entirely handled server-side now.
-let aiClient = null;
-
 let cachedCsrfToken = null;
 
 async function getCsrfToken() {
@@ -65,6 +62,7 @@ async function generateContentWithFallback(params) {
 						isAppropriateNow: false,
 						offerMessage: null,
 					},
+					contextSummary: parsed.contextSummary || "",
 				};
 			} catch (e) {
 				console.warn("Failed to parse Gemini JSON:", e);
@@ -72,6 +70,7 @@ async function generateContentWithFallback(params) {
 					text: data.message.message,
 					suggestions: [],
 					leadOpportunity: { isAppropriateNow: false, offerMessage: null },
+					contextSummary: "",
 				};
 			}
 		}
@@ -84,7 +83,7 @@ async function generateContentWithFallback(params) {
 async function analyzeContextForSuggestionsAndLeads(state, latestBotReply) {
 	try {
 		const systemInstruction = `You are an AI assistant evaluating the current conversational context. 
-Your task is to generate highly relevant quick-reply suggestions for the user, and evaluate if this is an appropriate time to offer an advisor connection.
+Your task is to generate highly relevant quick-reply suggestions for the user, evaluate if this is an appropriate time to offer an advisor connection, and provide a concise 1-sentence factual summary synthesizing the user's overall actual intent across the entire conversation.
 
 Respond in valid JSON format ONLY, exactly matching this schema:
 {
@@ -92,8 +91,21 @@ Respond in valid JSON format ONLY, exactly matching this schema:
   "leadOpportunity": {
     "isAppropriateNow": boolean,
     "offerMessage": "string or null"
-  }
+  },
+  "contextSummary": "concise 1-sentence summary expressing the user's actual intent"
 }
+
+Rules for contextSummary:
+1. Provide a fresh, concise 1-2 sentence summary strictly describing the USER'S current overall meaningful intent, questions, goals, preferences, amounts, and investment requirements synthesized across the complete conversation.
+2. Filter out and NEVER include lead-capture / advisor workflow messages or personal contact data in the summary (e.g., "Connect with an advisor", names, mobile numbers, email addresses, "Skip", share preferences). If the user's name is known, use it naturally as the subject (e.g. "Satyam Raj wants to..."), but do not make lead-capture or contact information the subject or content of the summary.
+3. Combine separate meaningful intents across the conversation into a single, cohesive, natural summary (e.g., if user asks about differences between SIF, MF, AIF and also wants to invest ₹30,00,000 in SIF, summarize: "Satyam Raj wants to understand the differences between Specialized Investment Funds (SIF), Mutual Funds (MF), and Alternative Investment Funds (AIF) and wants to invest ₹30,00,000 in SIF.").
+4. Do NOT concatenate raw user messages; formulate proper grammatical sentences expressing what the USER wants/needs/asked.
+5. Preserve key user-provided numbers/amounts formatted in Indian currency style (e.g., ₹30,00,000, ₹4 crore, ₹20 Lakhs) and link them to their investment targets.
+6. Preserve all specific entities and topics explicitly mentioned (e.g., SIF, Mutual Funds/MF, AIF, SIP, PMS, Equity). Do not omit any explicitly mentioned entities.
+7. Ignore trivial greetings and filler when meaningful intent is present. If the entire conversation consists only of greetings/filler, keep the summary minimal: "User greeted the assistant."
+8. Summarize the USER'S intent, NOT what the assistant replied or explained.
+9. NEVER invent information the user never mentioned.
+10. NEVER include the word "Dhanada" in the summary.
 
 Rules for suggestions:
 1. Suggestions MUST directly correspond to the assistant's immediately preceding response.
@@ -122,6 +134,14 @@ Rules for leadOpportunity:
 			contents,
 			isJson: true,
 		});
+
+		if (
+			response.contextSummary &&
+			typeof response.contextSummary === "string" &&
+			response.contextSummary.trim()
+		) {
+			state.aiContextSummary = response.contextSummary.trim();
+		}
 
 		return {
 			suggestions: response.suggestions || [],
@@ -152,6 +172,16 @@ const LEAD_STEPS = {
 	NAME: "name",
 	DONE: "done",
 };
+
+export function isGreeting(message) {
+	const clean = normalizeText(message)
+		.replace(/[^a-z0-9\s]+/g, " ")
+		.trim();
+	if (!clean) return false;
+	const greetingRegex =
+		/^(h+i+|h+e+y+|h+e+l+l+o+|h+e+y+a+|howdy|hola|namaste|greetings|good\s+(morning|afternoon|evening|day))$/i;
+	return greetingRegex.test(clean);
+}
 
 const GREETINGS = [
 	"hi",
@@ -299,7 +329,6 @@ function matchesShortReply(text, phrases) {
 function extractProfile(state, message) {
 	const userContext = state.history
 		.filter((msg) => msg.role === "user")
-		.slice(-2)
 		.map((msg) => msg.text)
 		.join(" ");
 	const text = normalizeText(`${userContext} ${message}`);
@@ -324,16 +353,19 @@ function extractProfile(state, message) {
 	}
 
 	const hasAmountCue =
-		/(?:rs\.?|inr|₹|lakh|lakhs|thousand|amount|invest|investment|monthly|month)/.test(text);
+		/(?:rs\.?|inr|₹|crore|crores|cr|lakh|lakhs|thousand|k|amount|invest|investment|monthly|month|bank|balance|have|got)/i.test(
+			text
+		);
 	const amountMatch = text.match(
-		/(?:rs\.?|inr|₹)?\s*([0-9]+(?:\.[0-9]+)?)\s*(lakh|lakhs|k|thousand)?/
+		/(?:rs\.?|inr|₹)?\s*([0-9]+(?:\.[0-9]+)?)\s*(crore|crores|cr|lakh|lakhs|k|thousand)?/i
 	);
 	if (hasAmountCue && amountMatch) {
 		const base = Number(amountMatch[1]);
-		const unit = amountMatch[2];
+		const unit = (amountMatch[2] || "").toLowerCase();
 
-		if (unit === "lakh" || unit === "lakhs") profile.amount = base * 100000;
-		else if (unit === "k" || unit === "thousand") profile.amount = base * 1000;
+		if (unit.startsWith("cr")) profile.amount = base * 10000000;
+		else if (unit.startsWith("lakh")) profile.amount = base * 100000;
+		else if (unit.startsWith("k") || unit.startsWith("thous")) profile.amount = base * 1000;
 		else if (base >= 500) profile.amount = base;
 	}
 
@@ -487,6 +519,7 @@ class SessionStore {
 					mode: null,
 				},
 				awaitingRecommendationDetails: false,
+				aiContextSummary: null,
 			});
 		}
 
@@ -499,45 +532,382 @@ function formatTopicName(topic) {
 	return topic.replace(/([A-Z])/g, " $1").toLowerCase();
 }
 
-function generateChatSummary(state) {
-	const name = state.collected.name || "A user";
-	const topicStr = formatTopicName(state.currentTopic);
-	let summary = `${name} is interested in ${topicStr}`;
+function formatFinancialEntity(raw) {
+	if (!raw) return "";
+	const trimmed = raw
+		.trim()
+		.replace(/^(?:the|an|a)\s+/i, "")
+		.replace(/[?.!]+$/, "")
+		.trim();
+	const lower = trimmed.toLowerCase();
+	if (
+		lower === "sif" ||
+		lower === "sifs" ||
+		lower === "specialized investment fund" ||
+		lower === "specialized investment funds"
+	) {
+		return "Specialized Investment Funds (SIF)";
+	}
+	if (lower === "mf" || lower === "mfs" || lower === "mutual fund" || lower === "mutual funds") {
+		return "Mutual Funds (MF)";
+	}
+	if (
+		lower === "aif" ||
+		lower === "aifs" ||
+		lower === "alternative investment fund" ||
+		lower === "alternative investment funds"
+	) {
+		return "Alternative Investment Funds (AIF)";
+	}
+	if (
+		lower === "sip" ||
+		lower === "sips" ||
+		lower === "systematic investment plan" ||
+		lower === "systematic investment plans"
+	) {
+		return "Systematic Investment Plans (SIP)";
+	}
+	if (lower === "pms" || lower === "portfolio management services") {
+		return "Portfolio Management Services (PMS)";
+	}
+	if (
+		lower === "fd" ||
+		lower === "fds" ||
+		lower === "fixed deposit" ||
+		lower === "fixed deposits"
+	) {
+		return "Fixed Deposits (FD)";
+	}
+	if (lower === "etf" || lower === "etfs") {
+		return "Exchange Traded Funds (ETF)";
+	}
+	if (lower === "lumpsum" || lower === "lump sum") {
+		return "Lumpsum investing";
+	}
+	if (lower.length <= 4) {
+		return trimmed.toUpperCase();
+	}
+	return trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
+}
 
-	const details = [];
-	if (state.profile.amount) {
-		details.push(`investing ₹${state.profile.amount.toLocaleString("en-IN")}`);
-	}
-	if (state.profile.mode) {
-		details.push(`via ${state.profile.mode}`);
-	}
-	if (state.profile.horizonYears) {
-		details.push(`for ${state.profile.horizonYears} years`);
-	}
-	if (state.profile.goal) {
-		details.push(`for their ${state.profile.goal}`);
+export function isLeadCaptureOrTrivialMessage(msg, state = {}) {
+	if (!msg || typeof msg !== "string") return true;
+	const text = msg.trim();
+	const lower = text.toLowerCase();
+
+	// Greetings
+	if (isGreeting(text)) return true;
+
+	// Acknowledgements and short affirmative/negative replies
+	if (
+		matchesShortReply(lower, AFFIRMATIVE) ||
+		matchesShortReply(lower, NEGATIVE) ||
+		matchesShortReply(lower, THANKS)
+	) {
+		return true;
 	}
 
-	if (details.length > 0) {
-		summary += " and wants to explore " + details.join(" ");
+	// Lead flow options & commands
+	if (
+		/^(connect with an advisor|talk to advisor|speak to advisor|advisor|connect with advisor|yes please|no thanks)$/i.test(
+			lower
+		)
+	) {
+		return true;
 	}
-	summary += ".";
-
-	if (state.profile.risk) {
-		summary += ` They prefer a ${state.profile.risk}-risk profile.`;
+	if (
+		/^(?:📱|✉️|\s)*(mobile number|phone number|phone|email|email address|both|phone only|email only|phone then email)$/i.test(
+			lower
+		)
+	) {
+		return true;
+	}
+	if (/^(skip|cancel|later|stop|exit|done)$/i.test(lower)) {
+		return true;
 	}
 
-	const contact = [];
-	if (state.collected.phone) contact.push("mobile number");
-	if (state.collected.email) contact.push("email address");
-
-	if (contact.length > 0) {
-		summary += ` They have requested advisor assistance and provided their ${contact.join(
-			" and "
-		)}.`;
+	// Phone number pattern
+	const digitsOnly = text.replace(/[\s-+()]/g, "");
+	if (/^\d{7,15}$/.test(digitsOnly)) {
+		return true;
 	}
 
-	return summary;
+	// Email pattern
+	if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text)) {
+		return true;
+	}
+
+	// If it matches collected name or contact info
+	if (state.collected?.name && lower === state.collected.name.toLowerCase().trim()) {
+		return true;
+	}
+	if (state.collected?.phone && digitsOnly === state.collected.phone.replace(/[\s-+()]/g, "")) {
+		return true;
+	}
+	if (state.collected?.email && lower === state.collected.email.toLowerCase().trim()) {
+		return true;
+	}
+
+	return false;
+}
+
+function extractAmountFromText(text) {
+	if (!text) return "";
+	const lower = text.toLowerCase();
+	const croreMatch = lower.match(/(\d+(?:\.\d+)?)\s*(?:cr|crore|crores)/i);
+	const lakhMatch = lower.match(/(\d+(?:\.\d+)?)\s*(?:lakh|lakhs)/i);
+	const thousandMatch = lower.match(/(\d+(?:\.\d+)?)\s*(?:k|thousand|thousands)/i);
+	const rawNumberMatch = lower.match(/(?:₹|rs\.?|inr)?\s*([1-9][0-9]{4,})/);
+
+	if (croreMatch) return `₹${croreMatch[1]} crore`;
+	if (lakhMatch) return `₹${lakhMatch[1]} Lakhs`;
+	if (thousandMatch) return `₹${thousandMatch[1]} Thousand`;
+	if (rawNumberMatch) {
+		const num = Number(rawNumberMatch[1]);
+		return `₹${num.toLocaleString("en-IN")}`;
+	}
+	return "";
+}
+
+function extractVehiclesFromText(text) {
+	if (!text) return [];
+	const lower = text.toLowerCase();
+	const detected = [];
+	if (/\bsifs?\b/i.test(lower) || /\bspecialized investment funds?\b/i.test(lower)) {
+		detected.push("SIF");
+	}
+	if (/\bmfs?\b/i.test(lower) || /\bmutual\s*funds?\b/i.test(lower)) {
+		detected.push("Mutual Funds");
+	}
+	if (/\baifs?\b/i.test(lower) || /\balternative investment funds?\b/i.test(lower)) {
+		detected.push("AIF");
+	}
+	if (/\bsips?\b/i.test(lower) || /\bsystematic investment plans?\b/i.test(lower)) {
+		detected.push("SIP");
+	}
+	if (/\bpms\b/i.test(lower) || /\bportfolio management\b/i.test(lower)) {
+		detected.push("PMS");
+	}
+	if (/\bfds?\b/i.test(lower) || /\bfixed deposits?\b/i.test(lower)) {
+		detected.push("Fixed Deposits");
+	}
+	return detected;
+}
+
+export function generateChatSummary(state) {
+	const name = state.collected?.name || "User";
+
+	// 1. If AI generated a context summary based on actual conversation, use it
+	if (
+		state.aiContextSummary &&
+		typeof state.aiContextSummary === "string" &&
+		state.aiContextSummary.trim()
+	) {
+		let summary = state.aiContextSummary.trim();
+		summary = summary.replace(/dhanada/gi, "Investment");
+		return summary;
+	}
+
+	// 2. Extract all user messages in chronological order
+	const rawUserMessages = (state.history || [])
+		.filter((msg) => msg.role === "user" || msg.role === "user_message")
+		.map((msg) => (typeof msg.text === "string" ? msg.text : msg.message || "").trim())
+		.filter(Boolean);
+
+	if (rawUserMessages.length === 0) {
+		return `${name} initiated a chat session.`;
+	}
+
+	// 3. Filter out lead-capture, greetings, and trivial messages
+	const meaningfulMessages = rawUserMessages.filter(
+		(msg) => !isLeadCaptureOrTrivialMessage(msg, state)
+	);
+
+	// If no meaningful messages remain, it was a greeting / trivial session
+	if (meaningfulMessages.length === 0) {
+		return `${name} greeted the assistant.`;
+	}
+
+	const combinedMeaningful = meaningfulMessages.join(" ");
+	const lowerCombined = combinedMeaningful.toLowerCase();
+
+	// Check if user asked about assistant identity
+	if (
+		/\b(who are you|what are you|who r u|what is your name|tell me about yourself|introduce yourself)\b/i.test(
+			lowerCombined
+		)
+	) {
+		return `${name} wants to know who the assistant is.`;
+	}
+
+	// 4. Extract distinct semantic intents from meaningful user messages
+	const intents = [];
+
+	// Intent A: Comparison / Difference questions
+	for (const msg of meaningfulMessages) {
+		const compMatch = msg.match(
+			/\b(?:difference between|compare|comparison between|comparison of|versus|diff between)\s+([^?.!]+)/i
+		);
+		if (compMatch) {
+			const rawEntitiesStr = compMatch[1].trim();
+			const rawParts = rawEntitiesStr
+				.split(/(?:,\s*|\s+(?:and|&|vs\.?|versus|or)\s+)/i)
+				.map((p) => p.trim())
+				.filter((p) => p && !/^(?:the|an|a|between|of|in|to)\b/i.test(p));
+
+			const formatted = rawParts.map(formatFinancialEntity);
+			let compIntent = "";
+			if (formatted.length > 2) {
+				const listStr =
+					formatted.slice(0, -1).join(", ") + ", and " + formatted[formatted.length - 1];
+				compIntent = `wants to understand the differences between ${listStr}`;
+			} else if (formatted.length === 2) {
+				compIntent = `wants to understand the difference between ${formatted[0]} and ${formatted[1]}`;
+			} else if (formatted.length === 1) {
+				compIntent = `wants to understand ${formatted[0]}`;
+			}
+			if (compIntent && !intents.includes(compIntent)) {
+				intents.push(compIntent);
+			}
+		}
+	}
+
+	// Intent B: Investment with Amount and/or Vehicle
+	let overallAmount = extractAmountFromText(combinedMeaningful);
+	if (!overallAmount && state.profile?.amount) {
+		overallAmount = `₹${Number(state.profile.amount).toLocaleString("en-IN")}`;
+	}
+
+	const overallVehicles = extractVehiclesFromText(combinedMeaningful);
+	let overallVehicleText = "";
+	if (overallVehicles.length > 2) {
+		overallVehicleText =
+			overallVehicles.slice(0, -1).join(", ") +
+			" and " +
+			overallVehicles[overallVehicles.length - 1];
+	} else if (overallVehicles.length === 2) {
+		overallVehicleText = `${overallVehicles[0]} and ${overallVehicles[1]}`;
+	} else if (overallVehicles.length === 1) {
+		overallVehicleText = overallVehicles[0];
+	}
+
+	for (const msg of meaningfulMessages) {
+		const msgAmount = extractAmountFromText(msg) || overallAmount;
+		const msgVehicles = extractVehiclesFromText(msg);
+		let msgVehicleText = "";
+		if (msgVehicles.length > 2) {
+			msgVehicleText =
+				msgVehicles.slice(0, -1).join(", ") +
+				" and " +
+				msgVehicles[msgVehicles.length - 1];
+		} else if (msgVehicles.length === 2) {
+			msgVehicleText = `${msgVehicles[0]} and ${msgVehicles[1]}`;
+		} else if (msgVehicles.length === 1) {
+			msgVehicleText = msgVehicles[0];
+		}
+
+		const hasInvest =
+			/\b(invest|investment|allocate|allocation|put|deposit|buy|start|grow|have|bank|portfolio)\b/i.test(
+				msg
+			);
+
+		if (hasInvest && msgAmount && msgVehicleText) {
+			const genericIntent = `wants to invest ${msgAmount}`;
+			const genericIdx = intents.indexOf(genericIntent);
+			if (genericIdx !== -1) {
+				intents.splice(genericIdx, 1);
+			}
+			const invIntent = `wants to invest ${msgAmount} in ${msgVehicleText}`;
+			if (!intents.includes(invIntent)) intents.push(invIntent);
+		} else if (hasInvest && msgAmount && !msgVehicleText) {
+			const alreadyHasSpecific = intents.some((it) =>
+				it.startsWith(`wants to invest ${msgAmount} in`)
+			);
+			if (!alreadyHasSpecific) {
+				const invIntent = `wants to invest ${msgAmount}`;
+				if (!intents.includes(invIntent)) intents.push(invIntent);
+			}
+		} else if (hasInvest && msgVehicleText && !msgAmount && intents.length === 0) {
+			const invIntent = `wants to invest in ${msgVehicleText}`;
+			if (!intents.includes(invIntent)) intents.push(invIntent);
+		}
+	}
+
+	// Intent C: General questions like "what is SIF?"
+	if (intents.length === 0) {
+		for (const msg of meaningfulMessages) {
+			const whatIsMatch = msg.match(
+				/\b(?:what is|what are|explain|tell me about|meaning of|what does)\s+(?:a|an|the)?\s*([^?.!]+)/i
+			);
+			if (whatIsMatch) {
+				const entity = formatFinancialEntity(whatIsMatch[1]);
+				if (entity) {
+					intents.push(`wants to understand ${entity}`);
+					break;
+				}
+			}
+		}
+	}
+
+	// Intent D: Topics (Tax, Retirement, KYC, NAV)
+	if (intents.length === 0) {
+		if (/\btax\b/i.test(lowerCombined)) {
+			intents.push("is exploring tax-saving investments");
+		} else if (/\bretirement\b/i.test(lowerCombined)) {
+			intents.push("is planning for retirement");
+		} else if (/\bkyc\b/i.test(lowerCombined)) {
+			intents.push("inquired about KYC requirements");
+		} else if (/\b(nav|net asset value)\b/i.test(lowerCombined)) {
+			intents.push("inquired about NAV");
+		} else if (overallVehicleText) {
+			intents.push(
+				`is interested in ${
+					overallVehicleText === "SIF"
+						? "Specialized Investment Funds (SIF)"
+						: overallVehicleText
+				}`
+			);
+		}
+	}
+
+	// 5. Combine intents into a cohesive natural summary sentence
+	let summary = "";
+	if (intents.length === 1) {
+		summary = `${name} ${intents[0]}.`;
+	} else if (intents.length === 2) {
+		summary = `${name} ${intents[0]} and ${intents[1]}.`;
+	} else if (intents.length > 2) {
+		summary = `${name} ${intents.slice(0, -1).join(", ")}, and ${
+			intents[intents.length - 1]
+		}.`;
+	} else {
+		const latestSubstantive = meaningfulMessages[meaningfulMessages.length - 1];
+		const cleanSnippet = latestSubstantive.replace(/[?.!]+$/, "").trim();
+		const snippet =
+			cleanSnippet.length > 60 ? cleanSnippet.substring(0, 57) + "..." : cleanSnippet;
+		summary = `${name} inquired about "${snippet}".`;
+	}
+
+	// Append non-redundant financial profile constraints if present
+	const extraDetails = [];
+	if (state.profile?.mode && !summary.toLowerCase().includes(state.profile.mode.toLowerCase())) {
+		extraDetails.push(`via ${state.profile.mode}`);
+	}
+	if (state.profile?.horizonYears && !summary.includes(`${state.profile.horizonYears} year`)) {
+		extraDetails.push(`for ${state.profile.horizonYears} years`);
+	}
+	if (state.profile?.goal && !summary.toLowerCase().includes(state.profile.goal.toLowerCase())) {
+		extraDetails.push(`for ${state.profile.goal}`);
+	}
+	if (extraDetails.length > 0) {
+		summary += ` (${extraDetails.join(", ")})`;
+	}
+	if (state.profile?.risk && !summary.toLowerCase().includes(state.profile.risk.toLowerCase())) {
+		summary += ` Risk preference: ${state.profile.risk}.`;
+	}
+
+	summary = summary.replace(/dhanada/gi, "Investment");
+	return summary.trim();
 }
 
 export class Chatbot {
@@ -546,11 +916,11 @@ export class Chatbot {
 		this.sessionQueue = new Map();
 	}
 
-	async processMessage(sessionId, message) {
+	async processMessage(sessionId, message, options = {}) {
 		const previousTask = this.sessionQueue.get(sessionId) || Promise.resolve();
 		const currentTask = previousTask
 			.catch(() => {})
-			.then(() => this.processMessageInternal(sessionId, message));
+			.then(() => this.processMessageInternal(sessionId, message, options));
 
 		this.sessionQueue.set(sessionId, currentTask);
 
@@ -563,9 +933,17 @@ export class Chatbot {
 		}
 	}
 
-	async processMessageInternal(sessionId, message) {
+	async processMessageInternal(sessionId, message, options = {}) {
 		const state = this.sessionStore.get(sessionId);
 		const cleanMessage = String(message || "").trim();
+
+		state.sessionId = sessionId;
+		state.aiContextSummary = null; // Reset each turn so fresh AI summary is generated
+		if (options.conversationId) {
+			state.conversationId = options.conversationId;
+		} else if (!state.conversationId && typeof localStorage !== "undefined") {
+			state.conversationId = localStorage.getItem("dhanada_conversation_id") || null;
+		}
 
 		state.leadEvaluationCooldown =
 			state.leadEvaluationCooldown === undefined ? 3 : state.leadEvaluationCooldown;
@@ -573,11 +951,9 @@ export class Chatbot {
 		// 1. Scan for explicit financial entity
 		const explicitEntity = this.extractExplicitEntity(cleanMessage);
 
-		// 2. If found and different from current topic, override previous conversation topic and context
+		// 2. If found and different from current topic, update current topic
 		if (explicitEntity && explicitEntity !== state.currentTopic) {
 			state.currentTopic = explicitEntity;
-			// 3. Do not reuse stored conversation context for new entities
-			state.history = [];
 		}
 
 		state.turnCount += 1;
@@ -731,11 +1107,14 @@ export class Chatbot {
 			}
 		}
 
+		const chatSummary = generateChatSummary(state);
+
 		return {
 			reply,
 			history: state.history,
 			state: this.publicState(state),
 			quickReplies: quickReplies,
+			summary: chatSummary,
 		};
 	}
 
@@ -752,13 +1131,14 @@ export class Chatbot {
 			},
 			profile: state.profile,
 			pendingOffer: state.pendingOffer ? state.pendingOffer.id : null,
+			summary: generateChatSummary(state),
 		};
 	}
 
 	detectIntent(message) {
 		const text = normalizeText(message);
 
-		if (matchesShortReply(text, GREETINGS)) return "greeting";
+		if (isGreeting(text) || matchesShortReply(text, GREETINGS)) return "greeting";
 		if (matchesShortReply(text, THANKS)) return "thanks";
 		if (matchesShortReply(text, AFFIRMATIVE)) return "affirmative";
 		if (matchesShortReply(text, NEGATIVE)) return "negative";
@@ -1100,7 +1480,7 @@ export class Chatbot {
 
 	handleDistributors(message) {
 		const result = knowledgeService.getDistributor(message);
-		return `Here are sample Dhanada advisor options for ${result.city}:\n${result.options
+		return `Here are sample advisor options for ${result.city}:\n${result.options
 			.map((item) => `• ${item}`)
 			.join("\n")}`;
 	}
@@ -1140,11 +1520,10 @@ export class Chatbot {
 			return "Please share your risk level and horizon so I can make a good suggestion 😊";
 		}
 
-		const localFallback =
-			"I can help with SIP, mutual funds, risk, tax, and more. What would you like to know?";
+		const localFallback = "Till then you can contact to our advisor at +91 9990243143 ";
 
 		try {
-			const systemInstruction = `You are Riddhi, a friendly, professional investment assistant for Dhanada Specialized Investment Fund.
+			const systemInstruction = `You are Riddhi, a friendly, professional investment assistant.
 SIF means Specialized Investment Fund in this application's Indian investment context. Never confuse SIF with SIP. If the user writes SIF, treat it as Specialized Investment Fund unless the user explicitly indicates another meaning.
 Answer questions about Mutual Funds, SIP, NAV, Tax, Risk, Asset Allocation, Retirement, Investing, Wealth Creation, Financial Planning, and General Finance.
 Default to short, conversational, and concise responses (1-3 short sentences).
@@ -1153,6 +1532,7 @@ Do not repeat information already given earlier in the conversation.
 Use bullet points only when genuinely helpful.
 ONLY provide a longer, detailed response if the user explicitly asks to "Explain in detail", "Tell me more", "Complete comparison", or "Detailed analysis".
 NEVER mention AI, Gemini, or that you are a large language model.
+NEVER mention the word "Dhanada" in any response or describe the chatbot or website as being related to Dhanada. Keep responses neutral and focused strictly on the user's query.
 If the user asks something completely unrelated to finance, politely steer them back.
 
 IMPORTANT: You must respond in valid JSON format exactly matching this schema:
@@ -1162,8 +1542,21 @@ IMPORTANT: You must respond in valid JSON format exactly matching this schema:
   "leadOpportunity": {
     "isAppropriateNow": boolean,
     "offerMessage": "string or null"
-  }
+  },
+  "contextSummary": "concise 1-sentence summary expressing the user's actual intent"
 }
+
+Rules for contextSummary:
+1. Provide a fresh, concise 1-2 sentence summary strictly describing the USER'S current overall meaningful intent, questions, goals, preferences, amounts, and investment requirements synthesized across the complete conversation.
+2. Filter out and NEVER include lead-capture / advisor workflow messages or personal contact data in the summary (e.g., "Connect with an advisor", names, mobile numbers, email addresses, "Skip", share preferences). If the user's name is known, use it naturally as the subject (e.g. "Satyam Raj wants to..."), but do not make lead-capture or contact information the subject or content of the summary.
+3. Combine separate meaningful intents across the conversation into a single, cohesive, natural summary (e.g., if user asks about differences between SIF, MF, AIF and also wants to invest ₹30,00,000 in SIF, summarize: "Satyam Raj wants to understand the differences between Specialized Investment Funds (SIF), Mutual Funds (MF), and Alternative Investment Funds (AIF) and wants to invest ₹30,00,000 in SIF.").
+4. Do NOT concatenate raw user messages; formulate proper grammatical sentences expressing what the USER wants/needs/asked.
+5. Preserve key user-provided numbers/amounts formatted in Indian currency style (e.g., ₹30,00,00,000, ₹4 crore, ₹20 Lakhs) and link them to their investment targets.
+6. Preserve all specific entities and topics explicitly mentioned (e.g., SIF, Mutual Funds/MF, AIF, SIP, PMS, Equity). Do not omit any explicitly mentioned entities.
+7. Ignore trivial greetings and filler when meaningful intent is present. If the entire conversation consists only of greetings/filler, keep the summary minimal: "User greeted the assistant."
+8. Summarize the USER'S intent, NOT what the assistant replied or explained.
+9. NEVER invent information the user never mentioned.
+10. NEVER include the word "Dhanada" in the summary.
 
 Rules for suggestions:
 1. Suggestions MUST directly correspond to your IMMEDIATELY PRECEDING response. 
@@ -1188,12 +1581,23 @@ Rules for leadOpportunity:
 				isJson: true,
 			});
 
+			if (
+				response.contextSummary &&
+				typeof response.contextSummary === "string" &&
+				response.contextSummary.trim()
+			) {
+				state.aiContextSummary = response.contextSummary.trim();
+			}
+
 			state.latestSuggestions = response.suggestions;
 			state.latestLeadOpportunity = response.leadOpportunity;
 			return response.text || "";
 		} catch (error) {
 			console.error("[GEMINI ERROR]:", error.message);
-			const fallbackReply = "I'm having trouble connecting right now, but " + localFallback;
+			const fallbackReply =
+				"I'm facing a lots of requests at this time.... " +
+				localFallback +
+				"we'll get back to you soon";
 			state.latestSuggestions = [];
 			state.latestLeadOpportunity = null;
 			return fallbackReply;
@@ -1318,6 +1722,12 @@ Rules for leadOpportunity:
 			interest: state.currentTopic || "General Inquiry",
 			chat_summary: chatSummary,
 			source: "Website Chatbot",
+			conversation_id:
+				state.conversationId ||
+				(typeof localStorage !== "undefined"
+					? localStorage.getItem("dhanada_conversation_id")
+					: null),
+			visitor_id: state.sessionId,
 		};
 
 		const result = await leadManager.saveLead(leadData);
@@ -1345,6 +1755,12 @@ Rules for leadOpportunity:
 			interest: state.currentTopic !== "unknown" ? formatTopicName(state.currentTopic) : "",
 			chat_summary: chatSummary,
 			existing_lead_name: state.crmLeadName,
+			conversation_id:
+				state.conversationId ||
+				(typeof localStorage !== "undefined"
+					? localStorage.getItem("dhanada_conversation_id")
+					: null),
+			visitor_id: state.sessionId,
 		};
 
 		try {

@@ -88,10 +88,15 @@ const TOPIC_GUIDES = {
 		summary:
 			"A distributor or advisor helps with fund selection, onboarding, and execution. The right one should match your goal and explain risk clearly.",
 	},
-	dhanadaServices: {
-		title: "Dhanada Services",
+	services: {
+		title: "Services",
 		summary:
-			"Dhanada helps with fund research, goal planning, SIP setup, lump sum planning, KYC support, fund comparison, and advisor connection.",
+			"We help with fund research, goal planning, SIP setup, lump sum planning, KYC support, fund comparison, and advisor connection.",
+	},
+	dhanadaServices: {
+		title: "Services",
+		summary:
+			"We help with fund research, goal planning, SIP setup, lump sum planning, KYC support, fund comparison, and advisor connection.",
 	},
 };
 
@@ -226,11 +231,11 @@ const MARKET_NEWS = [
 ];
 
 const DISTRIBUTORS = {
-	delhi: ["Dhanada Advisor Desk - Connaught Place", "Dhanada Partner Advisor - South Delhi"],
-	mumbai: ["Dhanada Advisor Desk - Lower Parel", "Dhanada Partner Advisor - Andheri East"],
-	bengaluru: ["Dhanada Advisor Desk - Indiranagar", "Dhanada Partner Advisor - Whitefield"],
-	hyderabad: ["Dhanada Advisor Desk - Banjara Hills", "Dhanada Partner Advisor - Gachibowli"],
-	default: ["Dhanada Digital Advisor Desk", "Dhanada Phone Support Advisor"],
+	delhi: ["Advisor Desk - Connaught Place", "Partner Advisor - South Delhi"],
+	mumbai: ["Advisor Desk - Lower Parel", "Partner Advisor - Andheri East"],
+	bengaluru: ["Advisor Desk - Indiranagar", "Partner Advisor - Whitefield"],
+	hyderabad: ["Advisor Desk - Banjara Hills", "Partner Advisor - Gachibowli"],
+	default: ["Digital Advisor Desk", "Phone Support Advisor"],
 };
 
 function normalizeText(value) {
@@ -492,7 +497,7 @@ export function getInvestmentGuide(query) {
 export function getPlatformOverview() {
 	return {
 		status: "ok",
-		summary: TOPIC_GUIDES.dhanadaServices.summary,
+		summary: TOPIC_GUIDES.services.summary,
 		services: [
 			"Fund comparison",
 			"SIP and lumpsum planning",
