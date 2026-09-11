@@ -67,7 +67,7 @@ export function formatNav(val) {
 		})}`;
 	}
 	const str = String(val).trim();
-	const clean = str.replace(/[₹Rs.\s]/g, "");
+	const clean = str.replace(/[₹Rs\.\s]/g, "");
 	const num = parseFloat(clean);
 	if (!isNaN(num) && num > 0) {
 		return `₹${num.toLocaleString("en-IN", {
