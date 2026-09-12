@@ -3,8 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faCalculator, faComments, faChevronUp,
-  faArrowRight, faScaleBalanced, faCircleExclamation, faSpinner,
+  faArrowRight, faCircleExclamation, faSpinner,
   faExpand, faCompress, faChartSimple, faFileLines,
   faCoins, faPlus, faWallet, faChartPie, faPercent, faUsers,
   faDoorOpen, faCircleCheck, faChevronDown
@@ -39,51 +38,6 @@ const riskBandConfig = {
   5: { label: 'High risk', color: '#7f1d1d', bg: 'bg-red-950', text: 'text-red-950' },
 }
 
-// Floating Action Button
-function FloatingActions() {
-  const [showTop, setShowTop] = useState(false)
-
-  useEffect(() => {
-    const fn = () => setShowTop(window.scrollY > 400)
-    window.addEventListener('scroll', fn)
-    return () => window.removeEventListener('scroll', fn)
-  }, [])
-
-  const actions = [
-    { icon: faScaleBalanced, label: 'Compare', color: 'bg-[#032e92]' },
-    { icon: faCalculator, label: 'Calculator', color: 'bg-purple-600' },
-    { icon: faComments, label: 'Support', color: 'bg-green-600' },
-  ]
-
-  return (
-    <div className="fixed right-5 bottom-6 z-50 flex flex-col items-center gap-3">
-      {actions.map((a) => (
-        <motion.button
-          key={a.label}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          title={a.label}
-          className={`w-12 h-12 ${a.color} text-white rounded-2xl shadow-xl shadow-black/20 flex items-center justify-center cursor-pointer`}>
-          <FontAwesomeIcon icon={a.icon} className="text-sm" />
-        </motion.button>
-      ))}
-      <AnimatePresence>
-        {showTop && (
-          <motion.button
-            initial={{ opacity: 0, scale: 0.7 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.7 }}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="w-12 h-12 bg-white border-2 border-[#032e92] text-[#032e92] rounded-2xl shadow-xl flex items-center justify-center cursor-pointer">
-            <FontAwesomeIcon icon={faChevronUp} className="text-sm" />
-          </motion.button>
-        )}
-      </AnimatePresence>
-    </div>
-  )
-}
 
 export default function SifFundDetails() {
   const { fundCode, id } = useParams()
@@ -505,9 +459,8 @@ export default function SifFundDetails() {
                           setSelectedPeriod(p.period || '');
                           setIsPlanDropdownOpen(false);
                         }}
-                        className={`w-full text-left px-3 py-2 rounded-xl text-xs flex items-center justify-between transition-colors ${
-                          selectedPlan.name === p.name ? 'bg-blue-50 text-[#032e92] font-bold' : 'text-gray-700 hover:bg-gray-50 font-medium'
-                        }`}
+                        className={`w-full text-left px-3 py-2 rounded-xl text-xs flex items-center justify-between transition-colors ${selectedPlan.name === p.name ? 'bg-blue-50 text-[#032e92] font-bold' : 'text-gray-700 hover:bg-gray-50 font-medium'
+                          }`}
                       >
                         <span>{p.type || 'Plan'} - {p.option || 'Growth'}</span>
                         {selectedPlan.name === p.name && <FontAwesomeIcon icon={faCircleCheck} className="text-xs text-[#032e92]" />}
@@ -525,11 +478,10 @@ export default function SifFundDetails() {
           <button
             type="button"
             onClick={() => setActiveTab('overview')}
-            className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all cursor-pointer ${
-              activeTab === 'overview'
-                ? 'bg-[#6b8acc] text-white shadow-sm'
-                : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
-            }`}
+            className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all cursor-pointer ${activeTab === 'overview'
+              ? 'bg-[#6b8acc] text-white shadow-sm'
+              : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+              }`}
           >
             Overview & Performance
           </button>
@@ -537,11 +489,10 @@ export default function SifFundDetails() {
           <button
             type="button"
             onClick={() => setActiveTab('details')}
-            className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all cursor-pointer ${
-              activeTab === 'details'
-                ? 'bg-[#6b8acc] text-white shadow-sm'
-                : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
-            }`}
+            className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all cursor-pointer ${activeTab === 'details'
+              ? 'bg-[#6b8acc] text-white shadow-sm'
+              : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+              }`}
           >
             Fund Details
           </button>
@@ -549,11 +500,10 @@ export default function SifFundDetails() {
           <button
             type="button"
             onClick={() => setActiveTab('documents')}
-            className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all cursor-pointer ${
-              activeTab === 'documents'
-                ? 'bg-[#6b8acc] text-white shadow-sm'
-                : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
-            }`}
+            className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all cursor-pointer ${activeTab === 'documents'
+              ? 'bg-[#6b8acc] text-white shadow-sm'
+              : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+              }`}
           >
             Documents
           </button>
@@ -582,11 +532,10 @@ export default function SifFundDetails() {
                         key={tf}
                         type="button"
                         onClick={() => setActiveTimeframe(tf)}
-                        className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${
-                          activeTimeframe === tf
-                            ? 'bg-[#0b1b4f] text-white shadow-xs'
-                            : 'text-gray-600 hover:text-gray-900'
-                        }`}
+                        className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${activeTimeframe === tf
+                          ? 'bg-[#0b1b4f] text-white shadow-xs'
+                          : 'text-gray-600 hover:text-gray-900'
+                          }`}
                       >
                         {tf}
                       </button>
@@ -1048,7 +997,6 @@ export default function SifFundDetails() {
 
       <Newsletter />
       <Footer />
-      <FloatingActions />
     </div>
   )
 }

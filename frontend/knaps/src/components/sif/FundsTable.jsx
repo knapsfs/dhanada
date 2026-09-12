@@ -1,6 +1,6 @@
 import { formatAum, formatNav } from '../../utils/formatters'
-import { useState, useMemo } from 'react'
-import { motion } from 'framer-motion'
+import { useState, useMemo, useRef, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -9,10 +9,154 @@ import {
   faSortDown,
   faSearch,
   faChevronDown,
-  faChevronUp
+  faChevronUp,
+  faCheck
 } from '@fortawesome/free-solid-svg-icons'
 import { getRiskLevelConfig } from '../../utils/risk'
 import { useLeadModal } from '../../context/LeadModalContext'
+
+// Custom styled dropdown component with rich popup menu design
+function TableDropdown({ value, onChange, options, minWidth = 'min-w-[140px]' }) {
+  const [isOpen, setIsOpen] = useState(false)
+  const dropdownRef = useRef(null)
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false)
+      }
+    }
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [isOpen])
+
+  const selectedOpt = options.find(o => o.value === value) || options[0] || { label: value, value }
+
+  return (
+    <div className={`relative w-full ${isOpen ? 'z-50' : 'z-20'}`} ref={dropdownRef}>
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between pl-3.5 pr-3 py-1.5 rounded-full border border-gray-200/90 text-xs font-medium text-gray-700 bg-white hover:border-gray-300 focus:outline-none focus:border-[#032e92] focus:ring-2 focus:ring-[#032e92]/10 cursor-pointer shadow-2xs transition-all text-left"
+      >
+        <span className="truncate pr-1">{selectedOpt.label}</span>
+        <FontAwesomeIcon
+          icon={faChevronDown}
+          className={`text-gray-400 text-[10px] flex-shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180 text-[#032e92]' : ''}`}
+        />
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 4, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 4, scale: 0.98 }}
+            transition={{ duration: 0.15 }}
+            className={`absolute left-0 mt-1.5 ${minWidth} w-full bg-white rounded-2xl shadow-xl shadow-blue-900/10 border border-gray-100 p-1.5 z-50 max-h-60 overflow-y-auto`}
+          >
+            {options.map((opt) => {
+              const isSelected = opt.value === value
+              return (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => {
+                    onChange(opt.value)
+                    setIsOpen(false)
+                  }}
+                  className={`w-full text-left px-3 py-2 rounded-xl text-xs flex items-center justify-between transition-colors cursor-pointer ${
+                    isSelected
+                      ? 'bg-blue-50 text-[#032e92] font-bold'
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 font-medium'
+                  }`}
+                >
+                  <span className="truncate">{opt.label}</span>
+                  {isSelected && (
+                    <FontAwesomeIcon icon={faCheck} className="text-[10px] text-[#032e92] ml-2 flex-shrink-0" />
+                  )}
+                </button>
+              )
+            })}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+function CategoryDropdown({ value, onChange, options }) {
+  const [isOpen, setIsOpen] = useState(false)
+  const dropdownRef = useRef(null)
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false)
+      }
+    }
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [isOpen])
+
+  const selectedOpt = options.find(o => o.value === value) || { label: 'All Categories', value: 'All' }
+
+  return (
+    <div className={`relative inline-block ${isOpen ? 'z-50' : 'z-20'}`} ref={dropdownRef}>
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="inline-flex items-center gap-1.5 text-[11px] font-medium text-gray-500 hover:text-[#032e92] transition-colors cursor-pointer"
+      >
+        <span>{selectedOpt.label}</span>
+        <FontAwesomeIcon
+          icon={faChevronDown}
+          className={`text-[9px] text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180 text-[#032e92]' : ''}`}
+        />
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 4, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 4, scale: 0.98 }}
+            transition={{ duration: 0.15 }}
+            className="absolute right-0 mt-1.5 w-48 bg-white rounded-2xl shadow-xl shadow-blue-900/10 border border-gray-100 p-1.5 z-50 max-h-60 overflow-y-auto"
+          >
+            {options.map((opt) => {
+              const isSelected = opt.value === value
+              return (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => {
+                    onChange(opt.value)
+                    setIsOpen(false)
+                  }}
+                  className={`w-full text-left px-3 py-1.5 rounded-xl text-xs flex items-center justify-between transition-colors cursor-pointer ${
+                    isSelected
+                      ? 'bg-blue-50 text-[#032e92] font-bold'
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 font-medium'
+                  }`}
+                >
+                  <span className="truncate">{opt.label}</span>
+                  {isSelected && (
+                    <FontAwesomeIcon icon={faCheck} className="text-[10px] text-[#032e92] ml-2 flex-shrink-0" />
+                  )}
+                </button>
+              )
+            })}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
 
 const INITIAL_VISIBLE_COUNT = 5
 
@@ -224,8 +368,6 @@ export default function FundsTable({
     return fund.returns3M || 1.5
   }
 
-  // Consistent dropdown input styling across all filter headers
-  const dropdownClassName = "w-full px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-700 bg-white focus:outline-none focus:border-[#032e92] cursor-pointer shadow-xs transition-colors"
 
   return (
     <div className="flex flex-col gap-6">
@@ -248,27 +390,24 @@ export default function FundsTable({
                         FUND/AMC
                       </span>
                       {categories.length > 0 && (
-                        <select
+                        <CategoryDropdown
                           value={filters.category || 'All'}
-                          onChange={(e) => setFilters(prev => ({ ...prev, category: e.target.value }))}
-                          className="text-[11px] font-medium text-gray-500 bg-transparent border-0 focus:outline-none cursor-pointer hover:text-[#032e92]"
-                          title="Filter by Fund Category"
-                        >
-                          <option value="All">All Categories</option>
-                          {categories.map(cat => (
-                            <option key={cat} value={cat}>{cat}</option>
-                          ))}
-                        </select>
+                          onChange={(val) => setFilters(prev => ({ ...prev, category: val }))}
+                          options={[
+                            { value: 'All', label: 'All Categories' },
+                            ...categories.map(cat => ({ value: cat, label: cat }))
+                          ]}
+                        />
                       )}
                     </div>
                     <div className="relative">
-                      <FontAwesomeIcon icon={faSearch} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300 text-xs" />
+                      <FontAwesomeIcon icon={faSearch} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none" />
                       <input
                         type="text"
                         placeholder="Search Fund/ Strategy"
                         value={filters.search || ''}
                         onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-                        className="w-full pl-8 pr-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-800 placeholder-gray-400 bg-white focus:outline-none focus:border-[#032e92] transition-colors"
+                        className="w-full pl-9 pr-3.5 py-1.5 rounded-full border border-gray-200/90 text-xs font-medium text-gray-800 placeholder-gray-400 bg-white hover:border-gray-300 focus:outline-none focus:border-[#032e92] focus:ring-2 focus:ring-[#032e92]/10 transition-all shadow-2xs"
                       />
                     </div>
                   </div>
@@ -285,16 +424,14 @@ export default function FundsTable({
                       <span>Scheme Type</span>
                       {renderSortIcon('schemeType')}
                     </button>
-                    <select
+                    <TableDropdown
                       value={filters.schemeType || 'All'}
-                      onChange={(e) => setFilters(prev => ({ ...prev, schemeType: e.target.value }))}
-                      className={dropdownClassName}
-                    >
-                      <option value="All">All Types</option>
-                      {schemeTypes.map(st => (
-                        <option key={st} value={st}>{st}</option>
-                      ))}
-                    </select>
+                      onChange={(val) => setFilters(prev => ({ ...prev, schemeType: val }))}
+                      options={[
+                        { value: 'All', label: 'All Types' },
+                        ...schemeTypes.map(st => ({ value: st, label: st }))
+                      ]}
+                    />
                   </div>
                 </th>
 
@@ -309,18 +446,18 @@ export default function FundsTable({
                       <span>Risk Band</span>
                       {renderSortIcon('riskLevel')}
                     </button>
-                    <select
+                    <TableDropdown
                       value={filters.risk || 'All'}
-                      onChange={(e) => setFilters(prev => ({ ...prev, risk: e.target.value }))}
-                      className={dropdownClassName}
-                    >
-                      <option value="All">All Risk</option>
-                      <option value="Level 1">Level 1</option>
-                      <option value="Level 2">Level 2</option>
-                      <option value="Level 3">Level 3</option>
-                      <option value="Level 4">Level 4</option>
-                      <option value="Level 5">Level 5</option>
-                    </select>
+                      onChange={(val) => setFilters(prev => ({ ...prev, risk: val }))}
+                      options={[
+                        { value: 'All', label: 'All Risk' },
+                        { value: 'Level 1', label: 'Level 1' },
+                        { value: 'Level 2', label: 'Level 2' },
+                        { value: 'Level 3', label: 'Level 3' },
+                        { value: 'Level 4', label: 'Level 4' },
+                        { value: 'Level 5', label: 'Level 5' },
+                      ]}
+                    />
                   </div>
                 </th>
 
@@ -357,16 +494,16 @@ export default function FundsTable({
                             selectedReturnPeriod === '1Y' ? 'returns1Y' : 'returnsYTD'
                       )}
                     </button>
-                    <select
+                    <TableDropdown
                       value={selectedReturnPeriod}
-                      onChange={(e) => handleReturnPeriodChange(e.target.value)}
-                      className={dropdownClassName}
-                    >
-                      <option value="1M">Return 1M</option>
-                      <option value="3M">Return 3M</option>
-                      <option value="1Y">Return 1Y</option>
-                      <option value="YTD">Return YTD</option>
-                    </select>
+                      onChange={(val) => handleReturnPeriodChange(val)}
+                      options={[
+                        { value: '1M', label: 'Return 1M' },
+                        { value: '3M', label: 'Return 3M' },
+                        { value: '1Y', label: 'Return 1Y' },
+                        { value: 'YTD', label: 'Return YTD' },
+                      ]}
+                    />
                   </div>
                 </th>
 
