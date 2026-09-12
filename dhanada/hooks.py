@@ -258,6 +258,9 @@ scheduler_events = {
 # 	"dhanada.auth.validate"
 # ]
 
+after_request = ["dhanada.utils.login.fix_login_response"]
+
+
 # Automatically update python controller files with type annotations for this app.
 # export_python_type_annotations = True
 

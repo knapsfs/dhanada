@@ -28,14 +28,19 @@ def get_lead_url(lead_id: str | None, full_url: bool = False) -> str:
 	"""Generates the canonical Frappe CRM Lead URL if lead_id is present, else empty string."""
 	if not lead_id or not str(lead_id).strip():
 		return ""
-	route = f"/crm/leads/{str(lead_id).strip()}"
+	clean_ref = str(lead_id).strip()
+	if "/crm/leads/" in clean_ref:
+		clean_ref = clean_ref.split("/crm/leads/")[-1].strip()
+	route = f"/crm/leads/{clean_ref}"
 	return get_url(route) if full_url else route
 
 
 def format_conversation_dict(doc) -> dict:
 	"""Formats a Chatbot Conversation document into a clean, serialized dictionary."""
-	lead_ref = getattr(doc, "lead_id", "") or ""
-	conv_url = doc.conversation_url or (get_lead_url(lead_ref) if lead_ref else "")
+	lead_ref = getattr(doc, "conversation_url", None) or getattr(doc, "lead_id", "") or ""
+	if lead_ref and "/crm/leads/" in str(lead_ref):
+		lead_ref = str(lead_ref).split("/crm/leads/")[-1].strip()
+	conv_url = get_lead_url(lead_ref) if lead_ref else ""
 	return {
 		"name": doc.name,
 		"conversation_id": doc.name,
@@ -49,6 +54,7 @@ def format_conversation_dict(doc) -> dict:
 		"conversation_url": conv_url,
 		"transcript": doc.get_transcript_list(),
 	}
+
 
 
 def create_conversation(
@@ -197,7 +203,11 @@ def associate_lead(
 		)
 
 	if lead_id:
-		doc.lead_id = str(lead_id).strip()[:100]
+		clean_lead = str(lead_id).strip()[:100]
+		if "/crm/leads/" in clean_lead:
+			clean_lead = clean_lead.split("/crm/leads/")[-1].strip()
+		doc.lead_id = clean_lead
+		doc.conversation_url = clean_lead
 	if user_name:
 		doc.user_name = str(user_name).strip()[:100]
 	if email:

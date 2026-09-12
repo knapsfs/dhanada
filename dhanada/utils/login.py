@@ -1,13 +1,22 @@
-import frappe
+import json
 
 
-def get_home_page(user):
+def fix_login_response(request, response):
 	"""
-	Override the home page resolution logic.
-	Ensure System Users always default to /desk instead of the KNAPS public homepage
-	during the login flow. If they visit / directly, they should still see KNAPS.
+	Fix login response for direct /login visits:
+	When direct /login is used (without redirect-to), Frappe's auth response uses
+	get_home_page() which returns 'knaps' or '/knaps'.
+	Rewrite 'knaps' / '/knaps' to '/' so direct login lands on the homepage '/'.
+	If a redirect-to was specified (e.g. /desk), Frappe's client-side login.js
+	already prioritizes redirect-to from the URL query params.
 	"""
-	if getattr(frappe.local, "request", None) and frappe.local.request.path == "/api/method/login":
-		if frappe.db.get_value("User", user, "user_type") == "System User":
-			return "/desk"
-	return None
+	if getattr(request, "path", None) == "/api/method/login" and getattr(response, "status_code", None) == 200:
+		try:
+			data = json.loads(response.data)
+			if data.get("home_page") in ("knaps", "/knaps"):
+				data["home_page"] = "/"
+				response.data = json.dumps(data).encode("utf-8")
+				response.headers["Content-Length"] = str(len(response.data))
+		except Exception:
+			pass
+

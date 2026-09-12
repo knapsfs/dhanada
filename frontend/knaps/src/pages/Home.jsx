@@ -1,5 +1,7 @@
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
+import WhyInvestWithUs from '../components/WhyInvestWithUs';
+import OurProducts from '../components/OurProducts';
 import TrustBar from '../components/TrustBar';
 import About from '../components/About';
 import FinanceMythQuiz from '../components/MythOrFactQuiz/FinanceMythQuiz';
@@ -22,6 +24,8 @@ export default function Home() {
 
       <main>
         <Hero />
+        <WhyInvestWithUs />
+        <OurProducts />
         <TrustBar />
         <About />
         {/* <FinanceMythQuiz /> */}
