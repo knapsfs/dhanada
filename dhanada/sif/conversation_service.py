@@ -56,7 +56,6 @@ def format_conversation_dict(doc) -> dict:
 	}
 
 
-
 def create_conversation(
 	visitor_id: str | None = None,
 	user_name: str | None = None,

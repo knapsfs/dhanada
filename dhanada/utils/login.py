@@ -10,7 +10,10 @@ def fix_login_response(request, response):
 	If a redirect-to was specified (e.g. /desk), Frappe's client-side login.js
 	already prioritizes redirect-to from the URL query params.
 	"""
-	if getattr(request, "path", None) == "/api/method/login" and getattr(response, "status_code", None) == 200:
+	if (
+		getattr(request, "path", None) == "/api/method/login"
+		and getattr(response, "status_code", None) == 200
+	):
 		try:
 			data = json.loads(response.data)
 			if data.get("home_page") in ("knaps", "/knaps"):
@@ -19,4 +22,3 @@ def fix_login_response(request, response):
 				response.headers["Content-Length"] = str(len(response.data))
 		except Exception:
 			pass
-
