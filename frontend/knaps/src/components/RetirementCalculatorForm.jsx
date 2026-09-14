@@ -51,9 +51,8 @@ function InputField({ id, label, value, min, max, step = 1, onChange, hint, pref
               onChange(isNaN(num) ? raw : num)
             }
           }}
-          className={`w-full py-3.5 rounded-xl border-2 border-[#e8edf7] bg-[#f7f9fc] text-gray-800 font-bold text-base focus:outline-none focus:border-[#032e92] focus:ring-4 focus:ring-[#032e92]/8 transition-all placeholder-gray-400 ${
-            prefix ? 'pl-8 pr-4' : suffix ? 'pl-4 pr-12' : 'px-4'
-          }`}
+          className={`w-full py-3.5 rounded-xl border-2 border-[#e8edf7] bg-[#f7f9fc] text-gray-800 font-bold text-base focus:outline-none focus:border-[#032e92] focus:ring-4 focus:ring-[#032e92]/8 transition-all placeholder-gray-400 ${prefix ? 'pl-8 pr-4' : suffix ? 'pl-4 pr-12' : 'px-4'
+            }`}
           placeholder={placeholder}
         />
         {suffix && (
@@ -91,12 +90,11 @@ function RadioGroup({ label, options, selected, onChange }) {
               key={opt.value}
               type="button"
               onClick={() => onChange(opt.value)}
-              className={`flex items-center gap-3 w-full text-left p-3.5 rounded-xl border-2 transition-all cursor-pointer ${
-                isSelected ? 'border-[#032e92] bg-[#eef4ff]' : 'border-[#e8edf7] hover:border-[#032e92]/30 bg-white'
-              }`}>
-              <FontAwesomeIcon 
-                icon={isSelected ? faCheckCircle : faCircle} 
-                className={isSelected ? 'text-[#032e92]' : 'text-gray-300'} 
+              className={`flex items-center gap-3 w-full text-left p-3.5 rounded-xl border-2 transition-all cursor-pointer ${isSelected ? 'border-[#032e92] bg-[#eef4ff]' : 'border-[#e8edf7] hover:border-[#032e92]/30 bg-white'
+                }`}>
+              <FontAwesomeIcon
+                icon={isSelected ? faCheckCircle : faCircle}
+                className={isSelected ? 'text-[#032e92]' : 'text-gray-300'}
                 style={{ fontSize: '18px' }}
               />
               <span className={`font-semibold text-sm ${isSelected ? 'text-[#032e92]' : 'text-gray-600'}`}>{opt.label}</span>
@@ -121,7 +119,7 @@ export default function RetirementCalculatorForm({ inputs, setInputs }) {
           className="bg-white rounded-3xl shadow-xl shadow-blue-900/8 border border-[#e8edf7] p-6 lg:p-8">
 
           {/* Header */}
-          <div className="flex items-center justify-between mb-8">
+          {/* <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-2">
               <div className="w-9 h-9 rounded-xl bg-[#eef4ff] flex items-center justify-center">
                 <FontAwesomeIcon icon={faCalculator} className="text-[#032e92] text-sm" />
@@ -131,7 +129,7 @@ export default function RetirementCalculatorForm({ inputs, setInputs }) {
                 <p className="text-xs text-gray-400 font-medium">Results update instantly as you type</p>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-2">
             {/* Left Column */}
@@ -169,7 +167,7 @@ export default function RetirementCalculatorForm({ inputs, setInputs }) {
                 selected={inputs.lifestyle}
                 onChange={v => handleChange('lifestyle', v)}
               />
-              
+
               <RadioGroup
                 label="Where are you saving for your retirement?"
                 options={[

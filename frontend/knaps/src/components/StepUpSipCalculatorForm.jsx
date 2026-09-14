@@ -51,9 +51,8 @@ function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onCh
               onChange(isNaN(num) ? raw : num)
             }
           }}
-          className={`w-full py-3.5 rounded-xl border-2 border-[#e8edf7] bg-[#f7f9fc] text-gray-800 font-bold text-base focus:outline-none focus:border-[#032e92] focus:ring-4 focus:ring-[#032e92]/8 transition-all placeholder-gray-400 ${
-            prefix ? 'pl-8 pr-4' : suffix ? 'pl-4 pr-12' : 'px-4'
-          }`}
+          className={`w-full py-3.5 rounded-xl border-2 border-[#e8edf7] bg-[#f7f9fc] text-gray-800 font-bold text-base focus:outline-none focus:border-[#032e92] focus:ring-4 focus:ring-[#032e92]/8 transition-all placeholder-gray-400 ${prefix ? 'pl-8 pr-4' : suffix ? 'pl-4 pr-12' : 'px-4'
+            }`}
           placeholder={placeholder}
         />
         {suffix && (
@@ -121,7 +120,7 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs }) {
           className="bg-white rounded-3xl shadow-xl shadow-blue-900/8 border border-[#e8edf7] p-6 lg:p-8"
         >
           {/* Header with Title */}
-          <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[#e8edf7]">
+          {/* <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[#e8edf7]">
             <div className="w-10 h-10 rounded-2xl bg-[#eef4ff] flex items-center justify-center">
               <FontAwesomeIcon icon={faCalculator} className="text-[#032e92] text-sm" />
             </div>
@@ -129,7 +128,7 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs }) {
               <h2 className="font-bold text-gray-800 text-lg">Step Up SIP Calculator</h2>
               <p className="text-xs text-gray-400 font-medium">Results update instantly as you type</p>
             </div>
-          </div>
+          </div> */}
 
           {/* Main Inputs */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -156,15 +155,14 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs }) {
 
               {/* Divided Input Container */}
               <div className="grid grid-cols-2 gap-1.5 bg-[#f7f9fc] p-1 rounded-xl border-2 border-[#e8edf7]">
-                
+
                 {/* 1. Percentage Half */}
                 <div
                   onClick={handleSelectPct}
-                  className={`relative flex items-center rounded-lg px-2.5 py-2 transition-all cursor-pointer ${
-                    isPct
+                  className={`relative flex items-center rounded-lg px-2.5 py-2 transition-all cursor-pointer ${isPct
                       ? 'bg-white shadow-sm border border-[#032e92]/30 ring-2 ring-[#032e92]/10'
                       : 'bg-transparent opacity-40 hover:opacity-75'
-                  }`}
+                    }`}
                 >
                   <input
                     id="step-up-pct"
@@ -189,11 +187,10 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs }) {
                 {/* 2. Amount Half */}
                 <div
                   onClick={handleSelectAmt}
-                  className={`relative flex items-center rounded-lg px-2.5 py-2 transition-all cursor-pointer ${
-                    !isPct
+                  className={`relative flex items-center rounded-lg px-2.5 py-2 transition-all cursor-pointer ${!isPct
                       ? 'bg-white shadow-sm border border-[#032e92]/30 ring-2 ring-[#032e92]/10'
                       : 'bg-transparent opacity-40 hover:opacity-75'
-                  }`}
+                    }`}
                 >
                   <span className="absolute left-2 text-xs font-bold text-gray-500 pointer-events-none">₹</span>
                   <input

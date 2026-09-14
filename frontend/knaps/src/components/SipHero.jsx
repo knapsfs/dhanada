@@ -16,11 +16,9 @@ export default function SipHero() {
           <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-white/5 pointer-events-none" />
           <div className="absolute bottom-0 right-0 w-40 h-40 rounded-full bg-[#c10000]/10 pointer-events-none" />
 
-          <div className="relative">
-
-
-
-            <motion.h1
+          <div className="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 lg:gap-12">
+            <div className="max-w-xl xl:max-w-2xl flex-1">
+              <motion.h1
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
@@ -35,11 +33,14 @@ export default function SipHero() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="text-blue-100 font-medium leading-relaxed max-w-2xl text-sm mb-6">
+              className="text-blue-100 font-medium leading-relaxed max-w-2xl text-sm ">
               Estimate the future value of your monthly investments. Adjust your investment amount, expected return, and duration to seamlessly map out your wealth creation journey.
             </motion.p>
+            </div>
 
-            <CalculatorNav />
+            <div className="w-full lg:w-auto flex-shrink-0">
+              <CalculatorNav />
+            </div>
           </div>
         </motion.div>
       </div>

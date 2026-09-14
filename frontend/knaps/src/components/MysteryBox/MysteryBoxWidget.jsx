@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+import lottie from 'lottie-web/build/player/lottie_light'
+import giftBoxAnimationData from '../../assets/Gift Box White.json'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -18,15 +20,65 @@ import SifSuitabilityQuiz from '../sif/SifSuitabilityQuiz'
 export default function MysteryBoxWidget() {
   const [isOpened, setIsOpened] = useState(false)
   const [activeModal, setActiveModal] = useState(null) // null | 'risk' | 'myth' | 'sif'
+  const lottieContainerRef = useRef(null)
+  const animRef = useRef(null)
 
-  // Trigger Open Sequence
+  // Initialize Lottie Animation
+  useEffect(() => {
+    if (!lottieContainerRef.current) return
+
+    animRef.current = lottie.loadAnimation({
+      container: lottieContainerRef.current,
+      renderer: 'svg',
+      loop: false,
+      autoplay: false,
+      animationData: giftBoxAnimationData,
+    })
+
+    // Start at frame 0 (resting idle)
+    animRef.current.goToAndStop(0, true)
+
+    return () => {
+      animRef.current?.destroy()
+    }
+  }, [])
+
+  // Idle Attention Struggle / Wobble Animation (plays every 3.2s when closed)
+  useEffect(() => {
+    if (isOpened) return
+
+    const playWobble = () => {
+      if (animRef.current && !isOpened) {
+        animRef.current.playSegments([0, 35], true)
+      }
+    }
+
+    playWobble()
+    const interval = setInterval(playWobble, 3200)
+    return () => clearInterval(interval)
+  }, [isOpened])
+
+  // Trigger Open Sequence: Lid flies open and stays open
   const handleOpen = () => {
     setIsOpened(true)
+    if (animRef.current) {
+      animRef.current.playSegments([35, 55], true)
+    }
   }
 
-  // Trigger Close Sequence
+  // Trigger Close Sequence: Lid closes back down smoothly
   const handleClose = () => {
     setIsOpened(false)
+    if (animRef.current) {
+      animRef.current.playSegments([119, 142], true)
+    }
+  }
+
+  // Quick playful wobble on hover when closed
+  const handleHover = () => {
+    if (!isOpened && animRef.current) {
+      animRef.current.playSegments([0, 35], true)
+    }
   }
 
   const handleSelectOption = (key) => {
@@ -66,7 +118,6 @@ export default function MysteryBoxWidget() {
       borderGlow: 'border-blue-300 shadow-[0_0_55px_rgba(37,99,235,0.65)]',
       iconColor: 'text-cyan-300',
       badgeBg: 'bg-blue-950/80 text-blue-200 border-blue-400/40',
-      // Trajectory: Vertically centered on the left
       desktopPos: {
         x: ['0vw', '10vw', '18vw'],
         y: ['0vh', '-24vh', '-38vh'],
@@ -88,7 +139,6 @@ export default function MysteryBoxWidget() {
       borderGlow: 'border-amber-300 shadow-[0_0_55px_rgba(234,88,12,0.65)]',
       iconColor: 'text-amber-200',
       badgeBg: 'bg-amber-950/80 text-amber-200 border-amber-400/40',
-      // Trajectory: Vertically centered in the middle (top of the arc)
       desktopPos: {
         x: ['0vw', '26vw', '48vw'],
         y: ['0vh', '-34vh', '-50vh'],
@@ -110,7 +160,6 @@ export default function MysteryBoxWidget() {
       borderGlow: 'border-emerald-300 shadow-[0_0_55px_rgba(16,185,129,0.65)]',
       iconColor: 'text-emerald-200',
       badgeBg: 'bg-emerald-950/80 text-emerald-200 border-emerald-400/40',
-      // Trajectory: Vertically centered on the right
       desktopPos: {
         x: ['0vw', '48vw', '76vw'],
         y: ['0vh', '-24vh', '-38vh'],
@@ -126,6 +175,15 @@ export default function MysteryBoxWidget() {
 
   return (
     <>
+      {/* 3D Box Embedded CSS Styles (Clean & Tag-Free) */}
+      <style>{`
+        /* Smooth subtle pulse for ambient light */
+        @keyframes pulseSlow {
+          0%, 100% { transform: scale(1); opacity: 0.3; }
+          50% { transform: scale(1.1); opacity: 0.6; }
+        }
+      `}</style>
+
       {/* 1. Fullscreen Dimmed Pop-up Backdrop Overlay covering ENTIRE Screen (including Navbar) */}
       <motion.div
         initial={false}
@@ -172,9 +230,8 @@ export default function MysteryBoxWidget() {
         </motion.button>
       </motion.div>
 
-      {/* 2. Mystery Box & Animated Spheres Layer (Fixed Bottom-Left with high z-index) */}
-      <div className="fixed bottom-6 left-6 z-[10000] pointer-events-none flex flex-col items-center">
-        {/* Mystery Box SVG Container */}
+      {/* 2. Compact 3D Gift Box & Animated Spheres Layer (Fixed Bottom-Left with high z-index) */}
+      <div className="fixed bottom-10 left-6 sm:bottom-12 sm:left-8 z-[10000] pointer-events-none flex flex-col items-center select-none">
         <motion.div
           animate={{
             opacity: isOpened ? 0 : 1,
@@ -189,21 +246,22 @@ export default function MysteryBoxWidget() {
           role="button"
           tabIndex={0}
           aria-label={isOpened ? 'Mystery box opened' : 'Open mystery box'}
-          className={`gift-box-trigger ${!isOpened ? 'pointer-events-auto cursor-pointer hover:scale-110' : 'pointer-events-none'} w-20 h-20 sm:w-24 sm:h-24 select-none relative drop-shadow-[0_15px_30px_rgba(0,0,0,0.6)] transition-transform duration-300`}
+          onMouseEnter={handleHover}
+          className={`gift-box-trigger ${!isOpened ? 'pointer-events-auto cursor-pointer hover:scale-110' : 'pointer-events-none'} w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center relative transition-transform duration-300`}
         >
-          {/* Ambient idle magical pulse glow around box */}
+          {/* Ambient idle magical pulse glow */}
           {!isOpened && (
             <motion.div
               animate={{
-                scale: [1, 1.18, 1],
-                opacity: [0.35, 0.75, 0.35],
+                scale: [1, 1.25, 1],
+                opacity: [0.3, 0.7, 0.3],
               }}
               transition={{
                 duration: 2.8,
                 repeat: Infinity,
                 ease: 'easeInOut',
               }}
-              className="absolute inset-0 -m-3 rounded-3xl bg-gradient-to-tr from-blue-600/40 via-cyan-400/30 to-amber-400/30 blur-xl pointer-events-none"
+              className="absolute inset-0 -m-3 rounded-full bg-gradient-to-tr from-blue-600/35 via-cyan-400/25 to-amber-400/25 blur-xl pointer-events-none"
             />
           )}
 
@@ -221,201 +279,11 @@ export default function MysteryBoxWidget() {
             className="absolute -top-4 left-1/2 -translate-x-1/2 w-28 h-28 rounded-full bg-gradient-to-t from-amber-400 via-yellow-300 to-cyan-300 blur-xl pointer-events-none z-10"
           />
 
-          <svg viewBox="0 0 500 500" className="w-full h-full overflow-visible" role="img">
-            <defs>
-              {/* 3D Shadows & Lighting Filters */}
-              <radialGradient id="box3dGroundShadow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#00081d" stopOpacity="0.65" />
-                <stop offset="60%" stopColor="#00081d" stopOpacity="0.25" />
-                <stop offset="100%" stopColor="#00081d" stopOpacity="0" />
-              </radialGradient>
-
-              {/* 3D Box Body Gradient */}
-              <linearGradient id="box3dBodyGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#09359e" />
-                <stop offset="15%" stopColor="#1a55d4" />
-                <stop offset="45%" stopColor="#0a3fae" />
-                <stop offset="85%" stopColor="#032578" />
-                <stop offset="100%" stopColor="#011548" />
-              </linearGradient>
-
-              {/* Vertical Body Highlight */}
-              <linearGradient id="box3dBodyHighlight" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#60a5fa" stopOpacity="0.6" />
-                <stop offset="30%" stopColor="#3b82f6" stopOpacity="0.2" />
-                <stop offset="100%" stopColor="#1d4ed8" stopOpacity="0" />
-              </linearGradient>
-
-              {/* 3D Lid Gradient */}
-              <linearGradient id="box3dLidGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#0b3cb3" />
-                <stop offset="15%" stopColor="#2264ed" />
-                <stop offset="50%" stopColor="#0e48c4" />
-                <stop offset="85%" stopColor="#042c8a" />
-                <stop offset="100%" stopColor="#021a5a" />
-              </linearGradient>
-
-              {/* 3D Red Velvet Ribbon Body Gradient */}
-              <linearGradient id="ribbon3dBodyGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#991b1b" />
-                <stop offset="25%" stopColor="#ef4444" />
-                <stop offset="55%" stopColor="#dc2626" />
-                <stop offset="85%" stopColor="#b91c1c" />
-                <stop offset="100%" stopColor="#7f1d1d" />
-              </linearGradient>
-
-              {/* 3D Bow Left Loop Gradient */}
-              <linearGradient id="bow3dLeftGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#f87171" />
-                <stop offset="35%" stopColor="#ef4444" />
-                <stop offset="75%" stopColor="#b91c1c" />
-                <stop offset="100%" stopColor="#7f1d1d" />
-              </linearGradient>
-
-              {/* 3D Bow Right Loop Gradient */}
-              <linearGradient id="bow3dRightGrad" x1="100%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#f87171" />
-                <stop offset="35%" stopColor="#ef4444" />
-                <stop offset="75%" stopColor="#b91c1c" />
-                <stop offset="100%" stopColor="#7f1d1d" />
-              </linearGradient>
-
-              {/* Bow Center Knot Radial 3D Gradient */}
-              <radialGradient id="bow3dKnotGrad" cx="35%" cy="30%" r="65%">
-                <stop offset="0%" stopColor="#fca5a5" />
-                <stop offset="25%" stopColor="#ef4444" />
-                <stop offset="70%" stopColor="#b91c1c" />
-                <stop offset="100%" stopColor="#6b1111" />
-              </radialGradient>
-
-              {/* Lid Drop Shadow */}
-              <linearGradient id="lid3dDropShadow" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#00061a" stopOpacity="0.75" />
-                <stop offset="100%" stopColor="#00061a" stopOpacity="0" />
-              </linearGradient>
-            </defs>
-
-            {/* 3D Ground Shadow */}
-            <ellipse cx="250" cy="426" rx="145" ry="18" fill="url(#box3dGroundShadow)" />
-
-            <g className="gift-body">
-              {/* Box Base 3D Body */}
-              <path
-                d="M125 215 H375 V382 C375 404 359 418 338 418 H162 C141 418 125 404 125 382 Z"
-                fill="url(#box3dBodyGrad)"
-              />
-
-              {/* Top/Side Bevel Specular Highlights */}
-              <path
-                d="M125 215 H142 V382 C142 398 134 408 125 404 Z"
-                fill="#ffffff"
-                opacity="0.18"
-              />
-
-              {/* Right Side Shadow Depth */}
-              <path
-                d="M358 215 H375 V382 C375 404 365 418 358 416 Z"
-                fill="#00061a"
-                opacity="0.45"
-              />
-
-              {/* Box Center Ribbon 3D Shadow Edges */}
-              <rect x="217" y="215" width="5" height="203" fill="#00061a" opacity="0.4" />
-              <rect x="278" y="215" width="6" height="203" fill="#00061a" opacity="0.45" />
-
-              {/* Box Center Ribbon 3D Body */}
-              <rect x="222" y="215" width="56" height="203" fill="url(#ribbon3dBodyGrad)" />
-
-              {/* Ribbon Gloss Highlight Sheen */}
-              <rect x="232" y="215" width="10" height="203" fill="#ffffff" opacity="0.32" />
-              <rect x="246" y="215" width="4" height="203" fill="#ffffff" opacity="0.2" />
-
-              {/* Lid Cast Shadow onto Base */}
-              <path d="M125 257 H375 V282 H125 Z" fill="url(#lid3dDropShadow)" />
-
-              {/* Box Lid: Opens smoothly when isOpened is true */}
-              <motion.g
-                className="gift-lid"
-                animate={{
-                  transform: isOpened
-                    ? 'translate(-105px, -95px) rotate(-46deg)'
-                    : 'translate(0px, 0px) rotate(0deg)',
-                }}
-                transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-                style={{
-                  transformBox: 'fill-box',
-                  transformOrigin: '50% 100%',
-                }}
-              >
-                {/* 3D Lid Rim & Bevel */}
-                <rect x="110" y="185" width="280" height="72" rx="12" fill="url(#box3dLidGrad)" />
-                
-                {/* Lid Top Specular Light Rim */}
-                <rect x="118" y="187" width="264" height="7" rx="3.5" fill="#ffffff" opacity="0.35" />
-
-                {/* Lid Bottom Underside Shadow */}
-                <rect x="110" y="247" width="280" height="10" rx="4" fill="#00081d" opacity="0.5" />
-
-                {/* Lid Ribbon Shadow Underneath */}
-                <rect x="217" y="185" width="5" height="72" fill="#00061a" opacity="0.4" />
-                <rect x="278" y="185" width="6" height="72" fill="#00061a" opacity="0.45" />
-
-                {/* Lid Center Ribbon */}
-                <rect x="222" y="185" width="56" height="72" fill="url(#ribbon3dBodyGrad)" />
-                <rect x="232" y="185" width="10" height="72" fill="#ffffff" opacity="0.32" />
-
-                {/* 3D Velvet Bow with Silk Luster */}
-                <g>
-                  {/* Left Loop Shadow & Body */}
-                  <path
-                    d="M250 185 C226 184 190 174 190 145 C190 126 206 115 220 122 C241 132 250 159 250 185 Z"
-                    fill="url(#bow3dLeftGrad)"
-                  />
-                  {/* Left Loop Inner Fold Shadow */}
-                  <path
-                    d="M236 172 C222 170 208 160 208 147 C208 138 216 132 222 136 C232 142 238 157 236 172 Z"
-                    fill="#6b1111"
-                    opacity="0.8"
-                  />
-                  {/* Left Loop Specular Shine */}
-                  <path
-                    d="M222 124 C238 132 246 155 248 180"
-                    stroke="#ffffff"
-                    strokeWidth="3.5"
-                    strokeLinecap="round"
-                    opacity="0.4"
-                    fill="none"
-                  />
-
-                  {/* Right Loop Shadow & Body */}
-                  <path
-                    d="M250 185 C274 184 310 174 310 145 C310 126 294 115 280 122 C259 132 250 159 250 185 Z"
-                    fill="url(#bow3dRightGrad)"
-                  />
-                  {/* Right Loop Inner Fold Shadow */}
-                  <path
-                    d="M264 172 C278 170 292 160 292 147 C292 138 284 132 278 136 C268 142 262 157 264 172 Z"
-                    fill="#6b1111"
-                    opacity="0.8"
-                  />
-                  {/* Right Loop Specular Shine */}
-                  <path
-                    d="M278 124 C262 132 254 155 252 180"
-                    stroke="#ffffff"
-                    strokeWidth="3.5"
-                    strokeLinecap="round"
-                    opacity="0.4"
-                    fill="none"
-                  />
-
-                  {/* 3D Spherical Bow Knot */}
-                  <circle cx="250" cy="185" r="19" fill="url(#bow3dKnotGrad)" />
-                  {/* Knot Specular Glint */}
-                  <circle cx="244" cy="179" r="5" fill="#ffffff" opacity="0.65" />
-                </g>
-              </motion.g>
-            </g>
-          </svg>
+          {/* Animated Gift Box (Lottie Vector Animation sized prominently) */}
+          <div
+            ref={lottieContainerRef}
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[245px] h-[144px] sm:w-[285px] sm:h-[168px] flex items-center justify-center pointer-events-none z-20 filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.15)]"
+          />
         </motion.div>
 
         {/* 3. The 3 Big Spheres Emerge from Open Box & Settle in the Vertical Center Arc */}
@@ -466,7 +334,7 @@ export default function MysteryBoxWidget() {
               }}
               onClick={() => handleSelectOption(opt.id)}
             >
-              {/* Continuous Ambient Floating & Hover Pulse (starts seamlessly after emergence) */}
+              {/* Continuous Ambient Floating & Hover Pulse */}
               <motion.div
                 animate={
                   isOpened
