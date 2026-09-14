@@ -92,9 +92,9 @@ const TestimonialCard = ({ testimonial }) => (
 
 export default function Testimonials() {
   return (
-    <section className="py-24 bg-white relative overflow-hidden">
+    <section className="py-12 sm:py-16 bg-white relative overflow-hidden">
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-20 mb-16">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-20 mb-10 sm:mb-12">
         <div className="text-center max-w-3xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -109,7 +109,7 @@ export default function Testimonials() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1a1a1a]"
+            className="text-2xl sm:text-4xl lg:text-[42px] font-extrabold text-[#0f172a] tracking-tight leading-tight"
           >
             Don't Just Take Our <span className="text-[#032e92]">Word</span> For It
           </motion.h2>

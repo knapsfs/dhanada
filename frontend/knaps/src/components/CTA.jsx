@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 export default function CTA() {
   return (
-    <section className="py-24 relative overflow-hidden">
+    <section className="py-14 sm:py-18 relative overflow-hidden">
       {/* Gradient Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#032e92] via-[#021d63] to-[#c10000] z-0"></div>
 
@@ -23,7 +23,8 @@ export default function CTA() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+
+          <h2 className="text-2xl sm:text-4xl lg:text-[42px]  font-extrabold text-white mb-6 leading-tight">
             Ready to Grow Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-white">Wealth?</span>
           </h2>
 

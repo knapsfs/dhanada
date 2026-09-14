@@ -1,9 +1,40 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import knapsBanner from '../assets/knaps-banner.png';
 import knapsBannerGlassCards from '../assets/knaps-banner-glass-cards.png';
+import { useLeadModal } from '../context/LeadModalContext';
+
+const productOptions = [
+  { value: 'mutual-funds', label: 'Mutual Funds' },
+  { value: 'sif', label: 'SIF (Specialized Investment Fund)' },
+  { value: 'pms', label: 'Portfolio Management (PMS)' },
+  { value: 'aif', label: 'Alternative Investment Funds (AIF)' },
+];
 
 export default function Hero() {
+  const { openLeadModal } = useLeadModal();
+  const [productOpen, setProductOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState('');
+  const dropdownRef = useRef(null);
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setProductOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const selectedProductObj = productOptions.find((p) => p.value === selectedProduct);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    openLeadModal(selectedProduct ? `Product: ${selectedProductObj?.label || selectedProduct}` : 'Hero Form: Start Investing');
+  };
+
   return (
     <section className="relative isolate min-h-[680px] lg:min-h-screen pt-28 sm:pt-32 pb-14 lg:pb-16 overflow-hidden flex items-center justify-center">
       {/* 1. Full Panoramic Landscape Background */}
@@ -69,19 +100,84 @@ export default function Hero() {
                 Start your Investment Journey with KNAPS
               </h3>
 
-              <form className="space-y-5 sm:space-y-6">
-                {/* Product Dropdown */}
-                <div className="relative">
-                  <select defaultValue="" className="w-full bg-transparent border-b-2 border-gray-300 pb-2 text-gray-700 text-sm focus:outline-none focus:border-[#032e92] appearance-none cursor-pointer transition-colors">
-                    <option value="" disabled>Select a product</option>
-                    <option value="mutual-funds">Mutual Funds</option>
-                    <option value="sif">SIF</option>
-                    <option value="pms">Portfolio Management (PMS)</option>
-                    <option value="aif">Alternative Investment Funds (AIF)</option>
-                  </select>
-                  <div className="absolute right-0 top-0 text-gray-400 pointer-events-none">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+              <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
+                {/* Product Dropdown - Consistent Underline Style */}
+                <div className="relative" ref={dropdownRef}>
+                  <label className="block text-[11px] font-bold text-gray-600 uppercase tracking-wider mb-1">
+                    Product
+                  </label>
+
+                  <div
+                    onClick={() => setProductOpen(!productOpen)}
+                    role="button"
+                    tabIndex={0}
+                    aria-haspopup="listbox"
+                    aria-expanded={productOpen}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setProductOpen(!productOpen);
+                      } else if (e.key === 'Escape') {
+                        setProductOpen(false);
+                      }
+                    }}
+                    className={`w-full bg-transparent border-b-2 pb-2 text-sm flex items-center justify-between cursor-pointer transition-colors select-none ${
+                      productOpen
+                        ? 'border-[#032e92]'
+                        : 'border-gray-300 hover:border-gray-400'
+                    }`}
+                  >
+                    <span className={selectedProduct ? 'text-gray-800 font-medium' : 'text-gray-400 font-normal'}>
+                      {selectedProductObj ? selectedProductObj.label : 'Select a product'}
+                    </span>
+
+                    <div className={`text-gray-400 transition-transform duration-200 ${productOpen ? 'rotate-180 text-[#032e92]' : ''}`}>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
                   </div>
+
+                  {/* Hidden Input for Native Form Handling */}
+                  <input type="hidden" name="product" value={selectedProduct} />
+
+                  {/* Styled Floating Dropdown Menu */}
+                  <AnimatePresence>
+                    {productOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -4 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute left-0 right-0 top-full mt-1.5 bg-white rounded-xl shadow-xl shadow-blue-950/10 border border-gray-100 p-1.5 z-50 overflow-hidden"
+                      >
+                        {productOptions.map((option) => {
+                          const isSelected = selectedProduct === option.value;
+                          return (
+                            <div
+                              key={option.value}
+                              onClick={() => {
+                                setSelectedProduct(option.value);
+                                setProductOpen(false);
+                              }}
+                              className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg cursor-pointer text-sm transition-colors ${
+                                isSelected
+                                  ? 'bg-[#eef4ff] text-[#032e92] font-semibold'
+                                  : 'text-gray-700 hover:bg-gray-50 hover:text-[#032e92]'
+                              }`}
+                            >
+                              <span>{option.label}</span>
+                              {isSelected && (
+                                <svg className="w-4 h-4 text-[#032e92]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
+                                </svg>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
 
                 {/* Name */}
@@ -113,7 +209,7 @@ export default function Hero() {
                 </div>
 
                 {/* Submit Button */}
-                <button type="button" className="w-full bg-[#032e92] hover:bg-[#021d63] text-white text-[15px] font-semibold py-3.5 rounded-lg transition-all hover:shadow-lg hover:shadow-blue-900/20 mt-2 cursor-pointer active:scale-[0.99]">
+                <button type="submit" className="w-full bg-[#032e92] hover:bg-[#021d63] text-white text-[15px] font-semibold py-3.5 rounded-lg transition-all hover:shadow-lg hover:shadow-blue-900/20 mt-2 cursor-pointer active:scale-[0.99]">
                   Start Investing
                 </button>
               </form>

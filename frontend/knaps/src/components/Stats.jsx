@@ -30,16 +30,16 @@ function AnimatedCounter({ value, duration = 2.5, prefix = '', suffix = '' }) {
   return <>{display}</>;
 }
 
-export default function Stats() {
+export default function Stats({ className = "py-12 sm:py-16" }) {
   const { ref, inView } = useInView({
     threshold: 0.3,
     triggerOnce: true,
   });
 
   return (
-    <section className="py-20 bg-white relative overflow-hidden" ref={ref}>
+    <section className={`bg-white relative overflow-hidden ${className}`} ref={ref}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="bg-gradient-to-br from-[#032e92] to-[#021d63] rounded-3xl p-10 md:p-16 relative overflow-hidden shadow-2xl shadow-blue-900/20">
+        <div className="bg-gradient-to-br from-[#032e92] to-[#021d63] rounded-3xl p-10 md:p-16 relative overflow-hidden ">
 
           {/* Abstract background shapes */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl mix-blend-overlay"></div>
