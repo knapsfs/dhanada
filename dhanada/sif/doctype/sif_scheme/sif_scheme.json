@@ -62,7 +62,8 @@
   {
    "fieldname": "scheme_name",
    "fieldtype": "Data",
-   "label": "Scheme Name"
+   "label": "Scheme Name",
+   "reqd": 1
   },
   {
    "fieldname": "investment_strategy",
@@ -311,7 +312,7 @@
    "link_fieldname": "scheme"
   }
  ],
- "modified": "2026-08-10 11:57:05.578174",
+ "modified": "2026-09-14 17:00:38.856152",
  "modified_by": "Administrator",
  "module": "SIF",
  "name": "SIF Scheme",

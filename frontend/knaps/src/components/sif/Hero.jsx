@@ -19,21 +19,24 @@ export default function Hero() {
     <section id="home" className="relative min-h-screen overflow-hidden sif-hero-gradient">
       {/* Dynamic Animated Ambient Light Layers */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {/* Subtle Dark Vignette Overlay for Rich Depth */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/35 pointer-events-none z-1" />
+
         {/* Top-Right Glowing Cyan & Blue Orb */}
-        <div className="hero-orb-1 absolute -top-24 -right-24 w-[600px] h-[600px] rounded-full bg-gradient-to-br from-cyan-400/40 via-blue-500/30 to-transparent blur-[90px]" />
+        <div className="hero-orb-1 absolute -top-24 -right-24 w-[600px] h-[600px] rounded-full bg-gradient-to-br from-cyan-500/18 via-blue-600/22 to-transparent blur-[100px]" />
 
         {/* Bottom-Left Radiant Cobalt & Royal Blue Orb */}
-        <div className="hero-orb-2 absolute -bottom-32 -left-28 w-[650px] h-[650px] rounded-full bg-gradient-to-tr from-blue-600/45 via-indigo-500/35 to-cyan-300/20 blur-[100px]" />
+        <div className="hero-orb-2 absolute -bottom-32 -left-28 w-[650px] h-[650px] rounded-full bg-gradient-to-tr from-blue-700/30 via-indigo-600/22 to-transparent blur-[110px]" />
 
         {/* Center Pulsating Electric Shimmer */}
-        <div className="hero-orb-3 absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[500px] rounded-full bg-gradient-to-r from-blue-500/25 via-cyan-400/30 to-blue-700/20 blur-[110px]" />
+        <div className="hero-orb-3 absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[500px] rounded-full bg-gradient-to-r from-blue-600/15 via-blue-500/15 to-blue-800/18 blur-[120px]" />
 
         {/* Subtle Brand Accent Warm Glow */}
-        <div className="absolute top-1/4 right-1/4 w-80 h-80 rounded-full bg-[#c10000]/15 blur-[95px]" />
+        <div className="absolute top-1/4 right-1/4 w-80 h-80 rounded-full bg-[#c10000]/10 blur-[100px]" />
 
         {/* Subtle Luxury Mesh Grid Overlay for Texture */}
-        <div 
-          className="absolute inset-0 opacity-[0.07] mix-blend-overlay pointer-events-none"
+        <div
+          className="absolute inset-0 opacity-[0.05] mix-blend-overlay pointer-events-none"
           style={{
             backgroundImage: `radial-gradient(rgba(255, 255, 255, 0.4) 1px, transparent 1px)`,
             backgroundSize: '32px 32px'
@@ -42,10 +45,10 @@ export default function Hero() {
       </div>
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-42 pb-24 lg:pb-28 z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[80vh]">
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-center min-h-[80vh]">
 
           {/* Left Column */}
-          <div>
+          <div className="lg:col-span-6 xl:col-span-5">
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -101,20 +104,22 @@ export default function Hero() {
           </div>
 
           {/* Right Column - Hero Image */}
-          <div className="relative hidden lg:flex items-center justify-center">
+          <div className="lg:col-span-6 xl:col-span-7 relative hidden lg:flex items-center justify-center lg:-mr-6 xl:-mr-10">
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative w-full max-w-lg xl:max-w-xl mx-auto flex items-center justify-center"
+              className="relative w-full max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl mx-auto flex items-center justify-center lg:scale-100 xl:scale-105 2xl:scale-110 origin-center lg:origin-right transition-transform duration-500"
             >
               <img
                 src={heroImg}
                 alt="KNAPS Specialized Investment Funds"
-                className="w-full h-auto object-contain max-h-[800px] drop-shadow-2xl hover:scale-105 transition-transform duration-500"
+                className="w-full h-auto object-contain max-h-[550px] xl:max-h-[600px] drop-shadow-[0_25px_45px_rgba(0,0,0,0.5)] hover:scale-105 transition-transform duration-500"
               />
             </motion.div>
           </div>
+
+
 
         </div>
       </div>

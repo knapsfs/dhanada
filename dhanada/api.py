@@ -393,6 +393,7 @@ def get_funds_list():
 					"category": cat_name,
 					"schemeType": s.scheme_type,
 					"investmentStrategy": s.investment_strategy,
+					"schemeSubcategory": s.scheme_subcategory or cat_name,
 					"risk": s.risk_band,
 					"minInvestment": s.minimum_subscription,
 					"nav": plan_nav,
