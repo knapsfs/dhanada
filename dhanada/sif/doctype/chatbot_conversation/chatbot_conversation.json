@@ -36,9 +36,9 @@
   },
   {
    "fieldname": "conversation_url",
-   "fieldtype": "Data",
-   "label": "Conversation URL",
-   "options": "URL",
+   "fieldtype": "Link",
+   "label": "CRM Lead",
+   "options": "CRM Lead",
    "read_only": 1
   },
   {
@@ -93,9 +93,8 @@
   },
   {
    "fieldname": "chat_transcript",
-   "fieldtype": "Code",
-   "label": "Chat Transcript (JSON)",
-   "options": "JSON"
+   "fieldtype": "JSON",
+   "label": "Chat Transcript (JSON)"
   }
  ],
  "grid_page_length": 50,
