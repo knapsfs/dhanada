@@ -192,7 +192,7 @@ export default function MysteryBoxWidget() {
           pointerEvents: isOpened ? 'auto' : 'none',
         }}
         transition={{ duration: 0.4, ease: 'easeInOut' }}
-        className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-xl cursor-pointer select-none overflow-hidden"
+        className="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-sm cursor-pointer select-none overflow-hidden"
         onClick={handleClose}
       >
         {/* Ambient Radial Lighting */}
@@ -210,7 +210,7 @@ export default function MysteryBoxWidget() {
         >
           <div className="inline-flex items-center gap-2.5 px-6 py-2 rounded-full bg-white/10 border border-white/20 text-white text-sm sm:text-base font-bold backdrop-blur-md shadow-2xl mb-1">
             <FontAwesomeIcon icon={faGift} className="text-amber-300 text-base" />
-            <span>Click any sphere to open assessment or quiz</span>
+            <span>Your Interactive Financial Toolkit</span>
           </div>
         </motion.div>
 
@@ -387,7 +387,7 @@ export default function MysteryBoxWidget() {
       <AnimatePresence>
         {activeModal && (
           <div
-            className="fixed inset-0 z-[10001] flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md overflow-y-auto"
+            className="fixed inset-0 z-[10001] flex items-center justify-center p-3 sm:p-6 bg-black/40 backdrop-blur-sm overflow-y-auto"
             onClick={handleCloseActiveModal}
           >
             <motion.div

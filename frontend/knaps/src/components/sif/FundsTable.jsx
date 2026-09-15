@@ -68,8 +68,8 @@ function TableDropdown({ value, onChange, options, minWidth = 'min-w-[140px]' })
                     setIsOpen(false)
                   }}
                   className={`w-full text-left px-3 py-2 rounded-xl text-xs flex items-center justify-between transition-colors cursor-pointer ${isSelected
-                      ? 'bg-blue-50 text-[#032e92] font-bold'
-                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 font-medium'
+                    ? 'bg-blue-50 text-[#032e92] font-bold'
+                    : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 font-medium'
                     }`}
                 >
                   <span className="truncate">{opt.label}</span>
@@ -321,7 +321,7 @@ export default function FundsTable({
                 {/* 1. FUND / AMC + Search */}
                 <th className="py-4 px-4 sm:px-6 align-top min-w-[260px] max-w-[340px]">
                   <div className="flex flex-col gap-2">
-                    <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                    <span className="text-[12px] font-extrabold text-[#032e92] uppercase tracking-wider">
                       FUND/AMC
                     </span>
                     <div className="relative">
@@ -343,7 +343,7 @@ export default function FundsTable({
                     <button
                       type="button"
                       onClick={() => handleSort('investmentStrategy')}
-                      className="flex items-center gap-1 text-[11px] font-bold text-gray-500 uppercase tracking-wider group cursor-pointer"
+                      className="flex items-center gap-1 text-[12px] font-extrabold text-[#032e92] uppercase tracking-wider group cursor-pointer"
                     >
                       <span>Strategy</span>
                       {renderSortIcon('investmentStrategy')}
@@ -365,7 +365,7 @@ export default function FundsTable({
                     <button
                       type="button"
                       onClick={() => handleSort('schemeSubcategory')}
-                      className="flex items-center gap-1 text-[11px] font-bold text-gray-500 uppercase tracking-wider group cursor-pointer"
+                      className="flex items-center gap-1 text-[12px] font-extrabold text-[#032e92] uppercase tracking-wider group cursor-pointer"
                     >
                       <span>Scheme Subcategory</span>
                       {renderSortIcon('schemeSubcategory')}
@@ -388,7 +388,7 @@ export default function FundsTable({
                     <button
                       type="button"
                       onClick={() => handleSort('riskLevel')}
-                      className="flex items-center gap-1 text-[11px] font-bold text-gray-500 uppercase tracking-wider group cursor-pointer"
+                      className="flex items-center gap-1 text-[12px] font-extrabold text-[#032e92] uppercase tracking-wider group cursor-pointer"
                     >
                       <span>Risk Band</span>
                       {renderSortIcon('riskLevel')}
@@ -414,7 +414,7 @@ export default function FundsTable({
                     <button
                       type="button"
                       onClick={() => handleSort('nav')}
-                      className="flex items-center gap-1 text-[11px] font-bold text-gray-500 uppercase tracking-wider group cursor-pointer"
+                      className="flex items-center gap-1 text-[12px] font-extrabold text-[#032e92] uppercase tracking-wider group cursor-pointer"
                     >
                       <span>NAV</span>
                       {renderSortIcon('nav')}
@@ -426,12 +426,12 @@ export default function FundsTable({
                 </th>
 
                 {/* 6. 1M Return + Sort */}
-                <th className="py-4 px-3 align-top text-center min-w-[120px]">
+                <th className="py-4 px-3 align-top text-center min-w-[130px]">
                   <div className="flex flex-col gap-2 items-center">
                     <button
                       type="button"
                       onClick={() => handleSort('returns1M')}
-                      className="flex items-center gap-1 text-[11px] font-bold text-gray-500 uppercase tracking-wider group cursor-pointer"
+                      className="flex items-center gap-1 text-[12px] font-extrabold text-[#032e92] uppercase tracking-wider group cursor-pointer"
                     >
                       <span>1M Return</span>
                       {renderSortIcon('returns1M')}
@@ -444,7 +444,7 @@ export default function FundsTable({
 
                 {/* 7. Action */}
                 <th className="py-4 px-4 sm:px-6 align-top text-center min-w-[170px]">
-                  <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider block">
+                  <span className="text-[12px] font-extrabold text-[#032e92] uppercase tracking-wider block">
                     Action
                   </span>
                 </th>

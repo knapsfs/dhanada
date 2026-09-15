@@ -28,14 +28,15 @@ import {
 import { Line } from 'react-chartjs-2'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, Tooltip, Legend)
+ChartJS.defaults.font.family = "'Montserrat', sans-serif"
 
 // Risk Bands Configuration (SEBI SIF Standard: 1 - 5)
 const riskBandConfig = {
-  1: { label: 'Low risk', color: '#15803d', bg: 'bg-green-700', text: 'text-green-800' },
-  2: { label: 'Low to Moderate risk', color: '#65a30d', bg: 'bg-lime-600', text: 'text-lime-800' },
-  3: { label: 'Moderate risk', color: '#eab308', bg: 'bg-yellow-500', text: 'text-yellow-800' },
-  4: { label: 'Moderately High risk', color: '#f97316', bg: 'bg-orange-500', text: 'text-orange-800' },
-  5: { label: 'High risk', color: '#7f1d1d', bg: 'bg-red-950', text: 'text-red-950' },
+  1: { label: 'Low Risk', color: '#15803d', bg: 'bg-green-700', text: 'text-green-800' },
+  2: { label: 'Low to Moderate Risk', color: '#65a30d', bg: 'bg-lime-600', text: 'text-lime-800' },
+  3: { label: 'Moderate Risk', color: '#eab308', bg: 'bg-yellow-500', text: 'text-yellow-800' },
+  4: { label: 'Moderately High Risk', color: '#f97316', bg: 'bg-orange-500', text: 'text-orange-800' },
+  5: { label: 'High Risk', color: '#7f1d1d', bg: 'bg-red-950', text: 'text-red-950' },
 }
 
 
@@ -311,14 +312,24 @@ export default function SifFundDetails() {
       legend: { display: false },
       tooltip: {
         backgroundColor: '#ffffff',
-        borderColor: '#e2e8f0',
-        borderWidth: 1,
+        borderColor: '#94a3b8',
+        borderWidth: 1.5,
+        cornerRadius: 10,
         titleColor: '#0f172a',
-        bodyColor: '#1d4ed8',
-        bodyFont: { family: 'inherit', size: 13, weight: '700' },
-        titleFont: { family: 'inherit', size: 11, weight: '500' },
-        padding: 10,
-        boxPadding: 4,
+        bodyColor: '#032e92',
+        titleFont: {
+          family: "'Montserrat', sans-serif",
+          size: 15,
+          weight: 'bold',
+        },
+        bodyFont: {
+          family: "'Montserrat', sans-serif",
+          size: 17,
+          weight: 'bold',
+        },
+        titleMarginBottom: 6,
+        padding: 12,
+        boxPadding: 6,
         displayColors: false,
         callbacks: {
           label: (ctx) => `NAV: ₹${typeof ctx.raw === 'number' ? ctx.raw.toFixed(4) : ctx.raw}`,
@@ -472,143 +483,143 @@ export default function SifFundDetails() {
 
         {/* Section 1: Overview & Performance */}
         <section id="overview" className="pt-8">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-              {/* Left Column (Performance Chart + Investment Objective + Invest Now) */}
-              <div className="lg:col-span-7 xl:col-span-8 space-y-6">
-                {/* Performance Header with Range Selector */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                  <h2 className="text-xl font-extrabold text-[#0f172a] tracking-tight">
-                    Performance
-                  </h2>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            {/* Left Column (Performance Chart + Investment Objective + Invest Now) */}
+            <div className="lg:col-span-7 xl:col-span-8 space-y-6">
+              {/* Performance Header with Range Selector */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <h2 className="text-xl font-extrabold text-[#0f172a] tracking-tight">
+                  Performance
+                </h2>
 
-                  <div className="inline-flex items-center gap-1 bg-[#f4f7fc] border border-gray-200/80 rounded-full p-1 self-start sm:self-auto">
-                    {['1M', '3M', '6M', '12M', 'Since Inception'].map((tf) => (
-                      <button
-                        key={tf}
-                        type="button"
-                        onClick={() => setActiveTimeframe(tf)}
-                        className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${activeTimeframe === tf
-                          ? 'bg-[#0b1b4f] text-white shadow-xs'
-                          : 'text-gray-600 hover:text-gray-900'
-                          }`}
-                      >
-                        {tf}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Chart Box */}
-                <div className="relative w-full h-[320px] sm:h-[360px] bg-white rounded-2xl border border-gray-100 p-2 sm:p-4 shadow-2xs">
-                  {/* Expand icon */}
-                  <button
-                    type="button"
-                    onClick={() => setIsChartExpanded(true)}
-                    title="Expand Chart"
-                    className="absolute top-3 right-3 text-gray-400 hover:text-[#032e92] p-1.5 rounded-lg hover:bg-gray-50 transition-colors z-10 cursor-pointer"
-                  >
-                    <FontAwesomeIcon icon={faExpand} className="text-sm" />
-                  </button>
-
-                  <div className="w-full h-full pt-4">
-                    <Line data={chartData} options={chartOptions} />
-                  </div>
-                </div>
-
-                {/* Investment Objective */}
-                <div className="pt-2">
-                  <h3 className="text-xl font-extrabold text-[#0f172a] tracking-tight mb-2">
-                    Investment Objective
-                  </h3>
-                  <p className="text-sm sm:text-base text-gray-700 leading-relaxed font-normal">
-                    {fund.objective}
-                  </p>
-
-                  <div className="mt-6">
+                <div className="inline-flex items-center gap-1 bg-[#f4f7fc] border border-gray-200/80 rounded-full p-1 self-start sm:self-auto">
+                  {['1M', '3M', '6M', '12M', 'Since Inception'].map((tf) => (
                     <button
+                      key={tf}
                       type="button"
-                      onClick={() => openLeadModal(fund.name)}
-                      className="px-8 py-2.5 rounded-full bg-[#032e92] hover:bg-[#021d63] text-white font-bold text-sm shadow-md hover:shadow-lg transition-all cursor-pointer"
+                      onClick={() => setActiveTimeframe(tf)}
+                      className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${activeTimeframe === tf
+                        ? 'bg-[#0b1b4f] text-white shadow-xs'
+                        : 'text-gray-600 hover:text-gray-900'
+                        }`}
                     >
-                      Invest Now
+                      {tf}
                     </button>
-                  </div>
+                  ))}
                 </div>
               </div>
 
-              {/* Right Column (6 Quick Stat Cards + Risk Band) */}
-              <div className="lg:col-span-5 xl:col-span-4 space-y-4">
-                {/* 2x3 Grid of Stat Cards */}
-                <div className="grid grid-cols-2 gap-3">
-                  {/* Card 1: NAV */}
-                  <div className="bg-[#f0f4f9] rounded-2xl p-4 border border-[#e2e8f0]/60">
-                    <p className="text-xs font-bold text-gray-900">NAV</p>
-                    <p className="text-sm font-semibold text-gray-700 mt-1">{fund.nav}</p>
-                  </div>
+              {/* Chart Box */}
+              <div className="relative w-full h-[320px] sm:h-[360px] bg-white rounded-2xl border border-gray-100 p-2 sm:p-4 shadow-2xs">
+                {/* Expand icon */}
+                <button
+                  type="button"
+                  onClick={() => setIsChartExpanded(true)}
+                  title="Expand Chart"
+                  className="absolute top-3 right-3 text-gray-400 hover:text-[#032e92] p-1.5 rounded-lg hover:bg-gray-50 transition-colors z-10 cursor-pointer"
+                >
+                  <FontAwesomeIcon icon={faExpand} className="text-sm" />
+                </button>
 
-                  {/* Card 2: Min Investment */}
-                  <div className="bg-[#f0f4f9] rounded-2xl p-4 border border-[#e2e8f0]/60">
-                    <p className="text-xs font-bold text-gray-900">Min Investment</p>
-                    <p className="text-sm font-semibold text-gray-700 mt-1">{fund.minimumLumpsum}</p>
-                  </div>
-
-                  {/* Card 3: AUM */}
-                  <div className="bg-[#f0f4f9] rounded-2xl p-4 border border-[#e2e8f0]/60">
-                    <p className="text-xs font-bold text-gray-900">AUM</p>
-                    <p className="text-sm font-semibold text-gray-700 mt-1">{fund.fundSize}</p>
-                  </div>
-
-                  {/* Card 4: Inception Date */}
-                  <div className="bg-[#f0f4f9] rounded-2xl p-4 border border-[#e2e8f0]/60">
-                    <p className="text-xs font-bold text-gray-900">Inception Date</p>
-                    <p className="text-sm font-semibold text-gray-700 mt-1">{fund.launchDate}</p>
-                  </div>
-
-                  {/* Card 5: Category */}
-                  <div className="bg-[#f0f4f9] rounded-2xl p-4 border border-[#e2e8f0]/60">
-                    <p className="text-xs font-bold text-gray-900">Category</p>
-                    <p className="text-sm font-semibold text-gray-700 mt-1">{fund.category}</p>
-                  </div>
-
-                  {/* Card 6: Strategy */}
-                  <div className="bg-[#f0f4f9] rounded-2xl p-4 border border-[#e2e8f0]/60">
-                    <p className="text-xs font-bold text-gray-900">Strategy</p>
-                    <p className="text-sm font-semibold text-gray-700 mt-1 truncate" title={fund.strategy}>
-                      {fund.strategy}
-                    </p>
-                  </div>
+                <div className="w-full h-full pt-4">
+                  <Line data={chartData} options={chartOptions} />
                 </div>
+              </div>
 
-                {/* Risk Band Card */}
-                <div className="bg-[#f0f4f9] rounded-2xl p-4 border border-[#e2e8f0]/60">
-                  <p className="text-xs font-bold text-gray-900 mb-3">Risk Band</p>
+              {/* Investment Objective */}
+              <div className="pt-2">
+                <h3 className="text-xl font-extrabold text-[#0f172a] tracking-tight mb-2">
+                  Investment Objective
+                </h3>
+                <p className="text-sm sm:text-base text-gray-700 leading-relaxed font-normal">
+                  {fund.objective}
+                </p>
 
-                  {/* 5-segment continuous color band with needle */}
-                  <div className="relative pt-2 pb-1">
-                    {/* Color bar */}
-                    <div className="h-6 w-full rounded-md overflow-hidden flex shadow-inner">
-                      <div className="flex-1 bg-[#15803d]" title="Band 1: Low" />
-                      <div className="flex-1 bg-[#84cc16]" title="Band 2: Low to Moderate" />
-                      <div className="flex-1 bg-[#eab308]" title="Band 3: Moderate" />
-                      <div className="flex-1 bg-[#f97316]" title="Band 4: Moderately High" />
-                      <div className="flex-1 bg-[#7f1d1d]" title="Band 5: High" />
-                    </div>
-
-                    {/* Needle Indicator Marker */}
-                    <div
-                      className="absolute top-0 -translate-x-1/2 flex flex-col items-center pointer-events-none"
-                      style={{ left: `${needlePercent}%` }}
-                    >
-                      <div className="w-1.5 h-10 bg-black rounded-full shadow-md" />
-                    </div>
-                  </div>
-
-                  <p className="text-xs font-bold text-gray-900 mt-3 text-right">
-                    Risk Band {fund.riskBand}: {currentRisk.label}
-                  </p>
+                <div className="mt-6">
+                  <button
+                    type="button"
+                    onClick={() => openLeadModal(fund.name)}
+                    className="px-8 py-2.5 rounded-full bg-[#032e92] hover:bg-[#021d63] text-white font-bold text-sm shadow-md hover:shadow-lg transition-all cursor-pointer"
+                  >
+                    Invest Now
+                  </button>
                 </div>
               </div>
             </div>
+
+            {/* Right Column (6 Quick Stat Cards + Risk Band) */}
+            <div className="lg:col-span-5 xl:col-span-4 space-y-4">
+              {/* 2x3 Grid of Stat Cards */}
+              <div className="grid grid-cols-2 gap-3">
+                {/* Card 1: NAV */}
+                <div className="bg-[#f0f4f9] rounded-2xl p-4 border border-[#e2e8f0]/60">
+                  <p className="text-xs font-bold text-gray-900">NAV</p>
+                  <p className="text-sm font-semibold text-gray-700 mt-1">{fund.nav}</p>
+                </div>
+
+                {/* Card 2: Min Investment */}
+                <div className="bg-[#f0f4f9] rounded-2xl p-4 border border-[#e2e8f0]/60">
+                  <p className="text-xs font-bold text-gray-900">Min Investment</p>
+                  <p className="text-sm font-semibold text-gray-700 mt-1">{fund.minimumLumpsum}</p>
+                </div>
+
+                {/* Card 3: AUM */}
+                <div className="bg-[#f0f4f9] rounded-2xl p-4 border border-[#e2e8f0]/60">
+                  <p className="text-xs font-bold text-gray-900">AUM</p>
+                  <p className="text-sm font-semibold text-gray-700 mt-1">{fund.fundSize}</p>
+                </div>
+
+                {/* Card 4: Inception Date */}
+                <div className="bg-[#f0f4f9] rounded-2xl p-4 border border-[#e2e8f0]/60">
+                  <p className="text-xs font-bold text-gray-900">Inception Date</p>
+                  <p className="text-sm font-semibold text-gray-700 mt-1">{fund.launchDate}</p>
+                </div>
+
+                {/* Card 5: Category */}
+                <div className="bg-[#f0f4f9] rounded-2xl p-4 border border-[#e2e8f0]/60">
+                  <p className="text-xs font-bold text-gray-900">Category</p>
+                  <p className="text-sm font-semibold text-gray-700 mt-1">{fund.category}</p>
+                </div>
+
+                {/* Card 6: Strategy */}
+                <div className="bg-[#f0f4f9] rounded-2xl p-4 border border-[#e2e8f0]/60">
+                  <p className="text-xs font-bold text-gray-900">Strategy</p>
+                  <p className="text-sm font-semibold text-gray-700 mt-1" title={fund.strategy}>
+                    {fund.strategy}
+                  </p>
+                </div>
+              </div>
+
+              {/* Risk Band Card */}
+              <div className="bg-[#f0f4f9] rounded-2xl p-4 border border-[#e2e8f0]/60">
+                <p className="text-xs font-bold text-gray-900 mb-3">Risk Band</p>
+
+                {/* 5-segment continuous color band with needle */}
+                <div className="relative pt-2 pb-1">
+                  {/* Color bar */}
+                  <div className="h-6 w-full rounded-md overflow-hidden flex shadow-inner">
+                    <div className="flex-1 bg-[#15803d]" title="Band 1: Low" />
+                    <div className="flex-1 bg-[#84cc16]" title="Band 2: Low to Moderate" />
+                    <div className="flex-1 bg-[#eab308]" title="Band 3: Moderate" />
+                    <div className="flex-1 bg-[#f97316]" title="Band 4: Moderately High" />
+                    <div className="flex-1 bg-[#7f1d1d]" title="Band 5: High" />
+                  </div>
+
+                  {/* Needle Indicator Marker */}
+                  <div
+                    className="absolute top-0 -translate-x-1/2 flex flex-col items-center pointer-events-none"
+                    style={{ left: `${needlePercent}%` }}
+                  >
+                    <div className="w-1.5 h-10 bg-black rounded-full shadow-md" />
+                  </div>
+                </div>
+
+                <p className="text-xs font-bold text-gray-900 mt-3 text-right">
+                  Risk Band {fund.riskBand}: {currentRisk.label}
+                </p>
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* Section 2: Fund Details & Specifications */}
@@ -621,168 +632,168 @@ export default function SifFundDetails() {
               Key operational parameters, benchmark comparison, and stated asset allocation
             </p>
           </div>
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-              {/* Left Specifications Card */}
-              <div className="lg:col-span-7 bg-[#f8faff] border border-[#e2e8f0] rounded-3xl p-6 sm:p-8 shadow-xs">
-                <div className="divide-y divide-gray-100">
-                  {/* Benchmark */}
-                  <div className="py-3.5 flex items-center gap-4 first:pt-0">
-                    <div className="w-9 h-9 rounded-full bg-[#e3ecfc] text-[#032e92] flex items-center justify-center text-sm flex-shrink-0">
-                      <FontAwesomeIcon icon={faChartSimple} />
-                    </div>
-                    <div className="w-5/12 text-sm font-semibold text-gray-800">
-                      Benchmark (Tier 1)
-                    </div>
-                    <div className="w-7/12 text-sm text-gray-700 font-medium">
-                      {fund.benchmark}
-                    </div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            {/* Left Specifications Card */}
+            <div className="lg:col-span-7 bg-[#f8faff] border border-[#e2e8f0] rounded-3xl p-6 sm:p-8 shadow-xs">
+              <div className="divide-y divide-gray-100">
+                {/* Benchmark */}
+                <div className="py-3.5 flex items-center gap-4 first:pt-0">
+                  <div className="w-9 h-9 rounded-full bg-[#e3ecfc] text-[#032e92] flex items-center justify-center text-sm flex-shrink-0">
+                    <FontAwesomeIcon icon={faChartSimple} />
                   </div>
-
-                  {/* Fund Type */}
-                  <div className="py-3.5 flex items-center gap-4">
-                    <div className="w-9 h-9 rounded-full bg-[#e3ecfc] text-[#032e92] flex items-center justify-center text-sm flex-shrink-0">
-                      <FontAwesomeIcon icon={faFileLines} />
-                    </div>
-                    <div className="w-5/12 text-sm font-semibold text-gray-800">
-                      Fund Type
-                    </div>
-                    <div className="w-7/12 text-sm text-gray-700 font-medium">
-                      {fund.schemeType}
-                    </div>
+                  <div className="w-5/12 text-sm font-semibold text-gray-800">
+                    Benchmark (Tier 1)
                   </div>
-
-                  {/* Minimum Application Amount */}
-                  <div className="py-3.5 flex items-center gap-4">
-                    <div className="w-9 h-9 rounded-full bg-[#e3ecfc] text-[#032e92] flex items-center justify-center text-sm flex-shrink-0">
-                      <FontAwesomeIcon icon={faCoins} />
-                    </div>
-                    <div className="w-5/12 text-sm font-semibold text-gray-800">
-                      Minimum Application Amount
-                    </div>
-                    <div className="w-7/12 text-sm text-gray-700 font-medium">
-                      {fund.minimumLumpsum} (thereafter, in multiples of Rs. 1/-)
-                    </div>
-                  </div>
-
-                  {/* Minimum Additional Amount */}
-                  <div className="py-3.5 flex items-center gap-4">
-                    <div className="w-9 h-9 rounded-full bg-[#e3ecfc] text-[#032e92] flex items-center justify-center text-sm flex-shrink-0">
-                      <FontAwesomeIcon icon={faPlus} />
-                    </div>
-                    <div className="w-5/12 text-sm font-semibold text-gray-800">
-                      Minimum Additional Amount
-                    </div>
-                    <div className="w-7/12 text-sm text-gray-700 font-medium">
-                      {fund.minAdditionalAmount}
-                    </div>
-                  </div>
-
-                  {/* Minimum Redemption Amount */}
-                  <div className="py-3.5 flex items-center gap-4">
-                    <div className="w-9 h-9 rounded-full bg-[#e3ecfc] text-[#032e92] flex items-center justify-center text-sm flex-shrink-0">
-                      <FontAwesomeIcon icon={faWallet} />
-                    </div>
-                    <div className="w-5/12 text-sm font-semibold text-gray-800">
-                      Minimum Redemption Amount
-                    </div>
-                    <div className="w-7/12 text-sm text-gray-700 font-medium">
-                      {fund.minRedemptionAmount}
-                    </div>
-                  </div>
-
-                  {/* Options Available */}
-                  <div className="py-3.5 flex items-center gap-4">
-                    <div className="w-9 h-9 rounded-full bg-[#e3ecfc] text-[#032e92] flex items-center justify-center text-sm flex-shrink-0">
-                      <FontAwesomeIcon icon={faChartPie} />
-                    </div>
-                    <div className="w-5/12 text-sm font-semibold text-gray-800">
-                      Options available
-                    </div>
-                    <div className="w-7/12 text-sm text-gray-700 font-medium">
-                      {fund.optionsAvailable}
-                    </div>
-                  </div>
-
-                  {/* TER */}
-                  <div className="py-3.5 flex items-center gap-4">
-                    <div className="w-9 h-9 rounded-full bg-[#e3ecfc] text-[#032e92] flex items-center justify-center text-sm flex-shrink-0">
-                      <FontAwesomeIcon icon={faPercent} />
-                    </div>
-                    <div className="w-5/12 text-sm font-semibold text-gray-800">
-                      Total Expense Ratio (TER)
-                    </div>
-                    <div className="w-7/12 text-sm text-gray-700 font-medium">
-                      {fund.expenseRatio}
-                    </div>
-                  </div>
-
-                  {/* Fund Managers */}
-                  <div className="py-3.5 flex items-start gap-4 last:pb-0">
-                    <div className="w-9 h-9 rounded-full bg-[#e3ecfc] text-[#032e92] flex items-center justify-center text-sm flex-shrink-0 mt-0.5">
-                      <FontAwesomeIcon icon={faUsers} />
-                    </div>
-                    <div className="w-5/12 text-sm font-semibold text-gray-800 pt-1">
-                      Fund managers
-                    </div>
-                    <div className="w-7/12 text-sm text-gray-700 font-medium leading-relaxed">
-                      {fund.managers}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Stack (Stated Asset Allocation + Exit Load) */}
-              <div className="lg:col-span-5 space-y-6">
-                {/* Stated Asset Allocation */}
-                <div className="bg-[#f8faff] border border-[#e2e8f0] rounded-3xl p-6 sm:p-7 shadow-xs">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-8 h-8 rounded-full bg-[#e3ecfc] text-[#032e92] flex items-center justify-center text-sm">
-                      <FontAwesomeIcon icon={faChartPie} />
-                    </div>
-                    <h3 className="text-base font-extrabold text-[#0f172a]">
-                      Stated Asset Allocation
-                    </h3>
-                  </div>
-
-                  <div className="space-y-4">
-                    {fund.allocations.map((item, i) => (
-                      <div key={i} className="space-y-1.5">
-                        <div className="flex items-center justify-between text-xs">
-                          <span className="font-bold text-gray-800 truncate pr-2">
-                            {item.type || 'Asset Allocation Type'}
-                          </span>
-                          <span className="text-gray-500 font-semibold flex-shrink-0">
-                            Min {item.min != null ? `${item.min}%` : '0%'} – Max {item.max != null ? `${item.max}%` : '100%'}
-                          </span>
-                        </div>
-                        <div className="h-2 w-full bg-gray-200/70 rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-[#032e92] rounded-full transition-all duration-500"
-                            style={{ width: `${Math.min(Math.max(item.max != null ? item.max : 50, 15), 100)}%` }}
-                          />
-                        </div>
-                      </div>
-                    ))}
+                  <div className="w-7/12 text-sm text-gray-700 font-medium">
+                    {fund.benchmark}
                   </div>
                 </div>
 
-                {/* Exit Load Card (Warm tinted as in reference) */}
-                <div className="bg-[#fffbf0] border border-[#f5ebd7] rounded-3xl p-6 sm:p-7 shadow-xs">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-8 h-8 rounded-full bg-[#fdeed6] text-[#c27803] flex items-center justify-center text-sm">
-                      <FontAwesomeIcon icon={faDoorOpen} />
-                    </div>
-                    <h3 className="text-base font-extrabold text-gray-900">
-                      Exit Load (if applicable)
-                    </h3>
+                {/* Fund Type */}
+                <div className="py-3.5 flex items-center gap-4">
+                  <div className="w-9 h-9 rounded-full bg-[#e3ecfc] text-[#032e92] flex items-center justify-center text-sm flex-shrink-0">
+                    <FontAwesomeIcon icon={faFileLines} />
                   </div>
+                  <div className="w-5/12 text-sm font-semibold text-gray-800">
+                    Fund Type
+                  </div>
+                  <div className="w-7/12 text-sm text-gray-700 font-medium">
+                    {fund.schemeType}
+                  </div>
+                </div>
 
-                  <p className="text-xs text-gray-700 leading-relaxed font-normal">
-                    {fund.exitLoad}
-                  </p>
+                {/* Minimum Application Amount */}
+                <div className="py-3.5 flex items-center gap-4">
+                  <div className="w-9 h-9 rounded-full bg-[#e3ecfc] text-[#032e92] flex items-center justify-center text-sm flex-shrink-0">
+                    <FontAwesomeIcon icon={faCoins} />
+                  </div>
+                  <div className="w-5/12 text-sm font-semibold text-gray-800">
+                    Minimum Application Amount
+                  </div>
+                  <div className="w-7/12 text-sm text-gray-700 font-medium">
+                    {fund.minimumLumpsum} (thereafter, in multiples of Rs. 1/-)
+                  </div>
+                </div>
+
+                {/* Minimum Additional Amount */}
+                <div className="py-3.5 flex items-center gap-4">
+                  <div className="w-9 h-9 rounded-full bg-[#e3ecfc] text-[#032e92] flex items-center justify-center text-sm flex-shrink-0">
+                    <FontAwesomeIcon icon={faPlus} />
+                  </div>
+                  <div className="w-5/12 text-sm font-semibold text-gray-800">
+                    Minimum Additional Amount
+                  </div>
+                  <div className="w-7/12 text-sm text-gray-700 font-medium">
+                    {fund.minAdditionalAmount}
+                  </div>
+                </div>
+
+                {/* Minimum Redemption Amount */}
+                <div className="py-3.5 flex items-center gap-4">
+                  <div className="w-9 h-9 rounded-full bg-[#e3ecfc] text-[#032e92] flex items-center justify-center text-sm flex-shrink-0">
+                    <FontAwesomeIcon icon={faWallet} />
+                  </div>
+                  <div className="w-5/12 text-sm font-semibold text-gray-800">
+                    Minimum Redemption Amount
+                  </div>
+                  <div className="w-7/12 text-sm text-gray-700 font-medium">
+                    {fund.minRedemptionAmount}
+                  </div>
+                </div>
+
+                {/* Options Available */}
+                <div className="py-3.5 flex items-center gap-4">
+                  <div className="w-9 h-9 rounded-full bg-[#e3ecfc] text-[#032e92] flex items-center justify-center text-sm flex-shrink-0">
+                    <FontAwesomeIcon icon={faChartPie} />
+                  </div>
+                  <div className="w-5/12 text-sm font-semibold text-gray-800">
+                    Options available
+                  </div>
+                  <div className="w-7/12 text-sm text-gray-700 font-medium">
+                    {fund.optionsAvailable}
+                  </div>
+                </div>
+
+                {/* TER */}
+                <div className="py-3.5 flex items-center gap-4">
+                  <div className="w-9 h-9 rounded-full bg-[#e3ecfc] text-[#032e92] flex items-center justify-center text-sm flex-shrink-0">
+                    <FontAwesomeIcon icon={faPercent} />
+                  </div>
+                  <div className="w-5/12 text-sm font-semibold text-gray-800">
+                    Total Expense Ratio (TER)
+                  </div>
+                  <div className="w-7/12 text-sm text-gray-700 font-medium">
+                    {fund.expenseRatio}
+                  </div>
+                </div>
+
+                {/* Fund Managers */}
+                <div className="py-3.5 flex items-start gap-4 last:pb-0">
+                  <div className="w-9 h-9 rounded-full bg-[#e3ecfc] text-[#032e92] flex items-center justify-center text-sm flex-shrink-0 mt-0.5">
+                    <FontAwesomeIcon icon={faUsers} />
+                  </div>
+                  <div className="w-5/12 text-sm font-semibold text-gray-800 pt-1">
+                    Fund managers
+                  </div>
+                  <div className="w-7/12 text-sm text-gray-700 font-medium leading-relaxed">
+                    {fund.managers}
+                  </div>
                 </div>
               </div>
             </div>
+
+            {/* Right Stack (Stated Asset Allocation + Exit Load) */}
+            <div className="lg:col-span-5 space-y-6">
+              {/* Stated Asset Allocation */}
+              <div className="bg-[#f8faff] border border-[#e2e8f0] rounded-3xl p-6 sm:p-7 shadow-xs">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-8 h-8 rounded-full bg-[#e3ecfc] text-[#032e92] flex items-center justify-center text-sm">
+                    <FontAwesomeIcon icon={faChartPie} />
+                  </div>
+                  <h3 className="text-base font-extrabold text-[#0f172a]">
+                    Stated Asset Allocation
+                  </h3>
+                </div>
+
+                <div className="space-y-4">
+                  {fund.allocations.map((item, i) => (
+                    <div key={i} className="space-y-1.5">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="font-bold text-gray-800 truncate pr-2">
+                          {item.type || 'Asset Allocation Type'}
+                        </span>
+                        <span className="text-gray-500 font-semibold flex-shrink-0">
+                          Min {item.min != null ? `${item.min}%` : '0%'} – Max {item.max != null ? `${item.max}%` : '100%'}
+                        </span>
+                      </div>
+                      <div className="h-2 w-full bg-gray-200/70 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-[#032e92] rounded-full transition-all duration-500"
+                          style={{ width: `${Math.min(Math.max(item.max != null ? item.max : 50, 15), 100)}%` }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Exit Load Card (Warm tinted as in reference) */}
+              <div className="bg-[#fffbf0] border border-[#f5ebd7] rounded-3xl p-6 sm:p-7 shadow-xs">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-8 h-8 rounded-full bg-[#fdeed6] text-[#c27803] flex items-center justify-center text-sm">
+                    <FontAwesomeIcon icon={faDoorOpen} />
+                  </div>
+                  <h3 className="text-base font-extrabold text-gray-900">
+                    Exit Load (if applicable)
+                  </h3>
+                </div>
+
+                <p className="text-xs text-gray-700 leading-relaxed font-normal">
+                  {fund.exitLoad}
+                </p>
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* Section 3: Documents */}
@@ -796,123 +807,123 @@ export default function SifFundDetails() {
             </p>
           </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {/* Document 1: SID */}
-              <div className="bg-white border border-gray-200/90 rounded-2xl p-5 hover:shadow-md hover:border-blue-200 transition-all flex flex-col justify-between">
-                <div>
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-gray-100 border border-gray-200 flex items-center justify-center font-bold text-xs text-gray-700 uppercase flex-shrink-0">
-                        SID
-                      </div>
-                      <div>
-                        <h3 className="text-sm font-bold text-gray-900 leading-snug">
-                          Scheme Information Document
-                        </h3>
-                      </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {/* Document 1: SID */}
+            <div className="bg-white border border-gray-200/90 rounded-2xl p-5 hover:shadow-md hover:border-blue-200 transition-all flex flex-col justify-between">
+              <div>
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gray-100 border border-gray-200 flex items-center justify-center font-bold text-xs text-gray-700 uppercase flex-shrink-0">
+                      SID
                     </div>
-                    <a
-                      href={fund.documents.sid}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="px-3 py-1 rounded-full bg-[#032e92] hover:bg-[#021d63] text-white text-xs font-semibold shadow-2xs transition-colors flex-shrink-0"
-                    >
-                      View
-                    </a>
-                  </div>
-                  <p className="text-xs text-gray-500 mt-3 leading-relaxed">
-                    Mandate, portfolio bands, risk factors, and application terms
-                  </p>
-                </div>
-              </div>
-
-              {/* Document 2: KIM */}
-              <div className="bg-white border border-gray-200/90 rounded-2xl p-5 hover:shadow-md hover:border-blue-200 transition-all flex flex-col justify-between">
-                <div>
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-gray-100 border border-gray-200 flex items-center justify-center font-bold text-xs text-gray-700 uppercase flex-shrink-0">
-                        KIM
-                      </div>
-                      <div>
-                        <h3 className="text-sm font-bold text-gray-900 leading-snug">
-                          Key Information Memorandum
-                        </h3>
-                      </div>
+                    <div>
+                      <h3 className="text-sm font-bold text-gray-900 leading-snug">
+                        Scheme Information Document
+                      </h3>
                     </div>
-                    <a
-                      href={fund.documents.kim}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="px-3 py-1 rounded-full bg-[#032e92] hover:bg-[#021d63] text-white text-xs font-semibold shadow-2xs transition-colors flex-shrink-0"
-                    >
-                      View
-                    </a>
                   </div>
-                  <p className="text-xs text-gray-500 mt-3 leading-relaxed">
-                    Quick-reference investor disclosure
-                  </p>
+                  <a
+                    href={fund.documents.sid}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-3 py-1 rounded-full bg-[#032e92] hover:bg-[#021d63] text-white text-xs font-semibold shadow-2xs transition-colors flex-shrink-0"
+                  >
+                    View
+                  </a>
                 </div>
-              </div>
-
-              {/* Document 3: Factsheet */}
-              <div className="bg-white border border-gray-200/90 rounded-2xl p-5 hover:shadow-md hover:border-blue-200 transition-all flex flex-col justify-between">
-                <div>
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-gray-100 border border-gray-200 flex items-center justify-center font-bold text-xs text-gray-700 uppercase flex-shrink-0">
-                        FS
-                      </div>
-                      <div>
-                        <h3 className="text-sm font-bold text-gray-900 leading-snug">
-                          Monthly Factsheet
-                        </h3>
-                      </div>
-                    </div>
-                    <a
-                      href={fund.documents.factsheet}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="px-3 py-1 rounded-full bg-[#032e92] hover:bg-[#021d63] text-white text-xs font-semibold shadow-2xs transition-colors flex-shrink-0"
-                    >
-                      View
-                    </a>
-                  </div>
-                  <p className="text-xs text-gray-500 mt-3 leading-relaxed">
-                    NAV, TER, allocation, and portfolio updates
-                  </p>
-                </div>
-              </div>
-
-              {/* Document 4: SAI */}
-              <div className="bg-white border border-gray-200/90 rounded-2xl p-5 hover:shadow-md hover:border-blue-200 transition-all flex flex-col justify-between">
-                <div>
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-gray-100 border border-gray-200 flex items-center justify-center font-bold text-xs text-gray-700 uppercase flex-shrink-0">
-                        SAI
-                      </div>
-                      <div>
-                        <h3 className="text-sm font-bold text-gray-900 leading-snug">
-                          Statement of Additional Information (SAI)
-                        </h3>
-                      </div>
-                    </div>
-                    <a
-                      href={fund.documents.sai}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="px-3 py-1 rounded-full bg-[#032e92] hover:bg-[#021d63] text-white text-xs font-semibold shadow-2xs transition-colors flex-shrink-0"
-                    >
-                      View
-                    </a>
-                  </div>
-                  <p className="text-xs text-gray-500 mt-3 leading-relaxed">
-                    Legal terms, tax and risk factors
-                  </p>
-                </div>
+                <p className="text-xs text-gray-500 mt-3 leading-relaxed">
+                  Mandate, portfolio bands, risk factors, and application terms
+                </p>
               </div>
             </div>
+
+            {/* Document 2: KIM */}
+            <div className="bg-white border border-gray-200/90 rounded-2xl p-5 hover:shadow-md hover:border-blue-200 transition-all flex flex-col justify-between">
+              <div>
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gray-100 border border-gray-200 flex items-center justify-center font-bold text-xs text-gray-700 uppercase flex-shrink-0">
+                      KIM
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-bold text-gray-900 leading-snug">
+                        Key Information Memorandum
+                      </h3>
+                    </div>
+                  </div>
+                  <a
+                    href={fund.documents.kim}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-3 py-1 rounded-full bg-[#032e92] hover:bg-[#021d63] text-white text-xs font-semibold shadow-2xs transition-colors flex-shrink-0"
+                  >
+                    View
+                  </a>
+                </div>
+                <p className="text-xs text-gray-500 mt-3 leading-relaxed">
+                  Quick-reference investor disclosure
+                </p>
+              </div>
+            </div>
+
+            {/* Document 3: Factsheet */}
+            <div className="bg-white border border-gray-200/90 rounded-2xl p-5 hover:shadow-md hover:border-blue-200 transition-all flex flex-col justify-between">
+              <div>
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gray-100 border border-gray-200 flex items-center justify-center font-bold text-xs text-gray-700 uppercase flex-shrink-0">
+                      FS
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-bold text-gray-900 leading-snug">
+                        Monthly Factsheet
+                      </h3>
+                    </div>
+                  </div>
+                  <a
+                    href={fund.documents.factsheet}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-3 py-1 rounded-full bg-[#032e92] hover:bg-[#021d63] text-white text-xs font-semibold shadow-2xs transition-colors flex-shrink-0"
+                  >
+                    View
+                  </a>
+                </div>
+                <p className="text-xs text-gray-500 mt-3 leading-relaxed">
+                  NAV, TER, allocation, and portfolio updates
+                </p>
+              </div>
+            </div>
+
+            {/* Document 4: SAI */}
+            <div className="bg-white border border-gray-200/90 rounded-2xl p-5 hover:shadow-md hover:border-blue-200 transition-all flex flex-col justify-between">
+              <div>
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gray-100 border border-gray-200 flex items-center justify-center font-bold text-xs text-gray-700 uppercase flex-shrink-0">
+                      SAI
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-bold text-gray-900 leading-snug">
+                        Statement of Additional Information (SAI)
+                      </h3>
+                    </div>
+                  </div>
+                  <a
+                    href={fund.documents.sai}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-3 py-1 rounded-full bg-[#032e92] hover:bg-[#021d63] text-white text-xs font-semibold shadow-2xs transition-colors flex-shrink-0"
+                  >
+                    View
+                  </a>
+                </div>
+                <p className="text-xs text-gray-500 mt-3 leading-relaxed">
+                  Legal terms, tax and risk factors
+                </p>
+              </div>
+            </div>
+          </div>
         </section>
       </main>
 

@@ -29,9 +29,9 @@ ChartJS.register(
 
 // Deterministic slot colors: Slot 0 (Fund 1), Slot 1 (Fund 2), Slot 2 (Fund 3)
 const SLOT_COLORS = [
-  { border: '#032e92', bg: 'rgba(3, 46, 146, 0.08)', text: 'text-[#032e92]', badge: 'bg-blue-50 text-[#032e92] border-blue-200' },
-  { border: '#c10000', bg: 'rgba(193, 0, 0, 0.08)', text: 'text-[#c10000]', badge: 'bg-red-50 text-[#c10000] border-red-200' },
-  { border: '#059669', bg: 'rgba(5, 150, 105, 0.08)', text: 'text-[#059669]', badge: 'bg-emerald-50 text-[#059669] border-emerald-200' },
+  { border: '#8B5CF6', bg: 'rgba(3, 46, 146, 0.08)', text: 'text-[#8B5CF6]', badge: 'bg-violet-50 text-[#8B5CF6] border-[#8B5CF6]' },
+  { border: '#F97316', bg: 'rgba(193, 0, 0, 0.08)', text: 'text-[#F97316]', badge: 'bg-orange-50 text-[#F97316] border-[#F97316]' },
+  { border: '#EC4899', bg: 'rgba(5, 150, 105, 0.08)', text: 'text-[#EC4899]', badge: 'bg-pink-50 text-[#EC4899] border-[#EC4899]' },
 ];
 
 const InlineComparison = forwardRef(function InlineComparison(
@@ -105,11 +105,11 @@ const InlineComparison = forwardRef(function InlineComparison(
       const rawAum = defaultPlan?.aum != null ? defaultPlan.aum : (details?.aum != null ? details.aum : fund.aum);
       let formattedAum = 'N/A';
       if (rawAum != null && rawAum !== '' && rawAum !== 'N/A') {
-        if (typeof rawAum === 'number' || !isNaN(Number(rawAum))) {
-          const num = Number(rawAum);
+        const num = typeof rawAum === 'number' ? rawAum : parseFloat(String(rawAum).replace(/[₹,Cr\s]/gi, ''));
+        if (!isNaN(num) && num > 0) {
           formattedAum = `₹${num.toLocaleString('en-IN', { maximumFractionDigits: 2 })} Cr`;
-        } else if (typeof rawAum === 'string') {
-          formattedAum = rawAum.includes('Cr') ? rawAum : `₹${rawAum} Cr`;
+        } else {
+          formattedAum = 'N/A';
         }
       }
 
@@ -348,21 +348,19 @@ const InlineComparison = forwardRef(function InlineComparison(
         <div className="flex items-center gap-1 bg-[#f7f9fc] p-1.5 rounded-2xl border border-[#e8edf7] self-start sm:self-auto shadow-sm">
           <button
             onClick={() => setActiveMode('performance')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
-              activeMode === 'performance'
-                ? 'bg-[#032e92] text-white shadow-md shadow-blue-900/20'
-                : 'text-gray-600 hover:text-[#032e92]'
-            }`}
+            className={`px-4 py-2 rounded-xl text-[1rem] font-bold transition-all duration-200 cursor-pointer ${activeMode === 'performance'
+              ? 'bg-[#032e92] text-white shadow-md shadow-blue-900/20'
+              : 'text-gray-600 hover:text-[#032e92]'
+              }`}
           >
             Performance
           </button>
           <button
             onClick={() => setActiveMode('parameters')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
-              activeMode === 'parameters'
-                ? 'bg-[#032e92] text-white shadow-md shadow-blue-900/20'
-                : 'text-gray-600 hover:text-[#032e92]'
-            }`}
+            className={`px-4 py-2 rounded-xl text-[1rem] font-bold transition-all duration-200 cursor-pointer ${activeMode === 'parameters'
+              ? 'bg-[#032e92] text-white shadow-md shadow-blue-900/20'
+              : 'text-gray-600 hover:text-[#032e92]'
+              }`}
           >
             Parameters
           </button>
@@ -384,11 +382,10 @@ const InlineComparison = forwardRef(function InlineComparison(
                   <button
                     key={p}
                     onClick={() => setSelectedTimeframe(p)}
-                    className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
-                      selectedTimeframe === p
-                        ? 'bg-[#032e92] text-white shadow-md shadow-blue-900/20'
-                        : 'text-gray-600 hover:text-[#032e92]'
-                    }`}
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${selectedTimeframe === p
+                      ? 'bg-[#032e92] text-white shadow-md shadow-blue-900/20'
+                      : 'text-gray-600 hover:text-[#032e92]'
+                      }`}
                   >
                     {p}
                   </button>
@@ -450,7 +447,7 @@ const InlineComparison = forwardRef(function InlineComparison(
                         </span>
                       ) : (
                         <span className="font-semibold text-gray-800">
-                          {item[param.key] || 'N/A'}
+                          {(!item[param.key] || item[param.key] === '₹0 Cr' || item[param.key] === '₹0.00 Cr' || item[param.key] === '0') ? 'N/A' : item[param.key]}
                         </span>
                       )}
                     </td>

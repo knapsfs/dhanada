@@ -602,7 +602,6 @@ def get_fund_details(identifier: str):
 			"schemeObjective": scheme.scheme_objective,
 			"exitLoad": scheme.exit_load,
 			"minInvestment": scheme.minimum_subscription,
-			"minInvestmentText": getattr(scheme, "minimum_subscription_text", None),
 			"faceValue": getattr(scheme, "face_value", None),
 			"registrar": getattr(scheme, "registrar", None),
 			"custodian": getattr(scheme, "custodian", None),

@@ -5,10 +5,12 @@ import knapsBannerGlassCards from '../assets/knaps-banner-glass-cards.png';
 import { useLeadModal } from '../context/LeadModalContext';
 
 const productOptions = [
-  { value: 'mutual-funds', label: 'Mutual Funds' },
+  { value: 'mutual-funds', label: 'Mutual Funds (Lumpsum/ SIP)' },
   { value: 'sif', label: 'SIF (Specialized Investment Fund)' },
   { value: 'pms', label: 'Portfolio Management (PMS)' },
   { value: 'aif', label: 'Alternative Investment Funds (AIF)' },
+  { value: 'nps', label: 'National Pension System (NPS)' },
+  { value: 'others', label: 'Others' },
 ];
 
 export default function Hero() {
@@ -121,11 +123,10 @@ export default function Hero() {
                         setProductOpen(false);
                       }
                     }}
-                    className={`w-full bg-transparent border-b-2 pb-2 text-sm flex items-center justify-between cursor-pointer transition-colors select-none ${
-                      productOpen
-                        ? 'border-[#032e92]'
-                        : 'border-gray-300 hover:border-gray-400'
-                    }`}
+                    className={`w-full bg-transparent border-b-2 pb-2 text-sm flex items-center justify-between cursor-pointer transition-colors select-none ${productOpen
+                      ? 'border-[#032e92]'
+                      : 'border-gray-300 hover:border-gray-400'
+                      }`}
                   >
                     <span className={selectedProduct ? 'text-gray-800 font-medium' : 'text-gray-400 font-normal'}>
                       {selectedProductObj ? selectedProductObj.label : 'Select a product'}
@@ -160,11 +161,10 @@ export default function Hero() {
                                 setSelectedProduct(option.value);
                                 setProductOpen(false);
                               }}
-                              className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg cursor-pointer text-sm transition-colors ${
-                                isSelected
-                                  ? 'bg-[#eef4ff] text-[#032e92] font-semibold'
-                                  : 'text-gray-700 hover:bg-gray-50 hover:text-[#032e92]'
-                              }`}
+                              className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg cursor-pointer text-sm transition-colors ${isSelected
+                                ? 'bg-[#eef4ff] text-[#032e92] font-semibold'
+                                : 'text-gray-700 hover:bg-gray-50 hover:text-[#032e92]'
+                                }`}
                             >
                               <span>{option.label}</span>
                               {isSelected && (
@@ -189,7 +189,7 @@ export default function Hero() {
                 {/* Email */}
                 <div>
                   <label className="block text-[11px] font-bold text-gray-600 uppercase tracking-wider mb-1">
-                    Email Address <span className="text-[9px] text-gray-400 ml-1 tracking-normal">(OPTIONAL)</span>
+                    Email Address
                   </label>
                   <input type="email" placeholder="Your email id" className="w-full bg-transparent border-b-2 border-gray-300 pb-2 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#032e92] transition-colors" />
                 </div>
@@ -204,7 +204,7 @@ export default function Hero() {
                 <div className="flex items-start gap-3 pt-1">
                   <input type="checkbox" id="terms" defaultChecked className="mt-1 w-4 h-4 text-[#0665d0] rounded border-gray-300 focus:ring-[#0665d0] cursor-pointer" />
                   <label htmlFor="terms" className="text-[12px] sm:text-[13px] text-gray-500 leading-relaxed cursor-pointer select-none">
-                    By continuing, you provide consent and agree to our <a href="/terms" className="text-[#0665d0] hover:underline">Terms & Conditions</a>
+                    I agree to be contacted regarding my investment enquiry.
                   </label>
                 </div>
 
