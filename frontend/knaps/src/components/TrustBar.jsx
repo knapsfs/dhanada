@@ -18,7 +18,7 @@ const partners = [
 
 export default function TrustBar() {
   return (
-    <section className="py-12 bg-white border-b border-gray-100 overflow-hidden">
+    <section className="py-10 sm:py-12 bg-white border-b border-gray-100 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 mb-6 text-center">
         <p className="text-sm font-semibold text-gray-400 uppercase tracking-widest">
           Trusted by Top Financial Institutions

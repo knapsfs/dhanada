@@ -194,7 +194,7 @@ body {
 }
 
 .sif-hero-gradient {
-  background: linear-gradient(-45deg, #02123b, #032e92, #0056d6, #0284c7, #1e40af, #011b4e);
+  background: linear-gradient(-45deg, #010a1c, #02143d, #03246e, #021b4e, #072a78, #010c26);
   background-size: 300% 300%;
   animation: heroGradientShift 9s ease infinite;
 }

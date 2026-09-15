@@ -3,6 +3,7 @@ import re
 from datetime import datetime
 from typing import Any
 
+from .constants import APPROVED_SUBCATEGORIES, SUBCATEGORY_SEBI_CODE_MAP
 from .logger import log_warning
 from .models import (
 	AMC,
@@ -17,6 +18,38 @@ from .models import (
 	SyncDataset,
 )
 from .validator import DataValidator
+
+PREFIX_REGEX = re.compile(
+	r"^(equity|debt|hybrid)(\s+oriented)?(\s+investment)?\s+strategies\s*[-:\u2013\u2014]\s*",
+	re.IGNORECASE,
+)
+
+
+def normalize_subcategory_string(text: str) -> str:
+	if not text:
+		return ""
+	t = PREFIX_REGEX.sub("", str(text).strip())
+	t = re.sub(r"[-/.,:\u2013\u2014]", " ", t)
+	t = re.sub(r"\s+", " ", t).strip().lower()
+	return t
+
+
+def build_subcategory_norm_map() -> dict[str, str]:
+	norm_map: dict[str, str] = {}
+	for app in APPROVED_SUBCATEGORIES:
+		norm = normalize_subcategory_string(app)
+		norm_map[norm] = app
+		if norm.endswith(" fund"):
+			norm_map[norm[:-5].strip()] = app
+
+	for k, v in SUBCATEGORY_SEBI_CODE_MAP.items():
+		norm_map[k.lower()] = v
+
+	norm_map["active asset allocator"] = "Active Asset Allocator Long-Short Fund"
+	return norm_map
+
+
+SUBCATEGORY_NORM_MAP = build_subcategory_norm_map()
 
 
 class DataMapper:
@@ -75,6 +108,46 @@ class DataMapper:
 			return float(str(val).replace(",", "").strip())
 		except (ValueError, TypeError):
 			return None
+
+	def map_subcategory(
+		self,
+		raw_category: Any,
+		fund_name: Any = None,
+		sebi_code: Any = None,
+	) -> str | None:
+		"""
+		Maps raw category to one of the 7 approved Investment Strategy Subcategories.
+		If raw category is generic/vague (e.g. 'HYBRID'), inspects SEBI code tokens
+		and fund_name to deterministically resolve the approved subcategory.
+		Returns canonical approved subcategory name, or None if unmapped.
+		"""
+		# 1. Try raw category string
+		if raw_category and str(raw_category).strip():
+			raw = str(raw_category).strip()
+			for app in APPROVED_SUBCATEGORIES:
+				if raw.lower() == app.lower():
+					return app
+			norm = normalize_subcategory_string(raw)
+			if norm in SUBCATEGORY_NORM_MAP:
+				return SUBCATEGORY_NORM_MAP[norm]
+
+		# 2. Inspect SEBI code tokens if available
+		if sebi_code and "/" in str(sebi_code):
+			parts = [p.strip().upper() for p in str(sebi_code).split("/") if p.strip()]
+			for p in parts:
+				if p in SUBCATEGORY_SEBI_CODE_MAP:
+					return SUBCATEGORY_SEBI_CODE_MAP[p]
+
+		# 3. Inspect Fund Name / Scheme Name if available
+		if fund_name and str(fund_name).strip():
+			norm_name = normalize_subcategory_string(str(fund_name))
+			for key, app in sorted(SUBCATEGORY_NORM_MAP.items(), key=lambda x: -len(x[0])):
+				if key in ["elsf", "eels", "srls", "dlsf", "sdls", "aals", "hlsf"]:
+					continue
+				if key in norm_name:
+					return app
+
+		return None
 
 	def extract_numeric_risk(self, val: Any) -> int | None:
 		if val is None:
@@ -401,16 +474,37 @@ class DataMapper:
 							)
 						)
 
-				category_name = raw_scheme.get("category", "Uncategorized")
-				dataset.subcategories.append(Subcategory(subcategory_name=category_name))
+				raw_category = raw_scheme.get("category")
+				fund_name = raw_scheme.get("fund_name") or raw_scheme.get("scheme_name")
+				mapped_subcategory = self.map_subcategory(
+					raw_category=raw_category,
+					fund_name=fund_name,
+					sebi_code=raw_scheme.get("sebi_code"),
+				)
+
+				if mapped_subcategory:
+					if not any(s.subcategory_name == mapped_subcategory for s in dataset.subcategories):
+						dataset.subcategories.append(Subcategory(subcategory_name=mapped_subcategory))
+				else:
+					log_warning(
+						f"Unmapped Investment Strategy Subcategory '{raw_category}' for scheme '{fund_name}' "
+						f"({raw_scheme.get('sebi_code')}) - no matching approved subcategory found."
+					)
+					self.validator.log_error(
+						"Subcategory",
+						str(raw_scheme.get("sebi_code") or fund_name or "Unknown"),
+						f"Unmapped subcategory: '{raw_category}' (not in approved 7 subcategories)",
+					)
 
 				raw_sif = raw_scheme.get("sif_name")
 				sif_name = str(raw_sif).replace(" SIF", "").strip() if raw_sif else None
 
 				# Extract AMC
 				if sif_name:
-					sebi_code = raw_scheme.get("sebi_code", "")
-					code_fallback = sebi_code.split("/")[-1] if "/" in sebi_code else sif_name.upper()[:4]
+					sebi_code_val = raw_scheme.get("sebi_code", "")
+					code_fallback = (
+						sebi_code_val.split("/")[-1] if "/" in sebi_code_val else sif_name.upper()[:4]
+					)
 
 					dataset.amcs.append(
 						AMC(
@@ -431,7 +525,7 @@ class DataMapper:
 						sif_name=sif_name,
 						investment_strategy=investment_strategy,
 						scheme_type=scheme_type,
-						scheme_subcategory=category_name,
+						scheme_subcategory=mapped_subcategory,
 						risk_band=self.extract_numeric_risk(raw_scheme.get("riskometer_as_on_date"))
 						or self.extract_numeric_risk(raw_scheme.get("riskometer_at_launch")),
 						riskometer_at_launch=raw_scheme.get("riskometer_at_launch"),

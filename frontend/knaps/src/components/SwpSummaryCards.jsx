@@ -11,7 +11,7 @@ function CountUpNumber({ target, prefix = '', suffix = '', inView, decimals = 0 
 
   useEffect(() => {
     if (!inView) return
-    const duration = 1800
+    const duration = 100
     const steps = 60
     const increment = target / steps
     let current = 0
@@ -39,7 +39,7 @@ export default function SwpSummaryCards({ results }) {
     <section ref={ref} className="bg-[#f7f9fc] pb-6">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6">
-          
+
           {/* 1. Total Investment (Left) */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}

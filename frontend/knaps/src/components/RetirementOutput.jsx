@@ -9,7 +9,7 @@ function CountUpNumber({ target, prefix = '', suffix = '', inView, decimals = 0 
 
   useEffect(() => {
     if (!inView) return
-    const duration = 1800
+    const duration = 100
     const steps = 60
     const increment = target / steps
     let current = 0
@@ -41,11 +41,11 @@ export default function RetirementOutput({ results }) {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
           className="bg-gradient-to-br from-[#e8f5e9] to-[#c8e6c9] rounded-3xl border border-green-200 shadow-xl shadow-green-900/5 p-8 lg:p-10 relative overflow-hidden">
-          
+
           <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-white/20 blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
 
           <div className="relative grid md:grid-cols-2 gap-8 lg:gap-12">
-            
+
             {/* Amount Required */}
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-3 mb-2">
@@ -70,7 +70,7 @@ export default function RetirementOutput({ results }) {
             {/* Monthly Savings Needed */}
             <div className="flex flex-col gap-2 relative">
               <div className="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 -ml-6 lg:-ml-8 w-px h-24 bg-green-900/10" />
-              
+
               <div className="flex items-center gap-3 mb-2">
                 <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">
                   <FontAwesomeIcon icon={faPiggyBank} className="text-green-700 text-lg" />

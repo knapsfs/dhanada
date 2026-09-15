@@ -48,7 +48,7 @@ export default function FundsHero({ totalFunds = 33 }) {
                 transition={{ duration: 0.5, delay: 0.3 }}
                 className="text-[#64748b] text-sm lg:text-base font-medium leading-relaxed max-w-md"
               >
-                Compare investment opportunities and choose the right fund for your financial goals.
+                Choose the right SIF for your financial goals.
               </motion.p>
             </div>
 
@@ -83,7 +83,7 @@ export default function FundsHero({ totalFunds = 33 }) {
                   <FontAwesomeIcon icon={faShieldHalved} className="text-xs sm:text-sm" />
                 </div>
                 <p className="text-white text-base sm:text-xl font-extrabold mb-0.5 leading-tight">23,345 Cr</p>
-                <p className="text-blue-100 text-[10px] sm:text-xs font-semibold leading-tight">Total AUM</p>
+                <p className="text-blue-100 text-[10px] sm:text-xs font-semibold leading-tight"> SIF Industry AUM</p>
               </div>
 
             </motion.div>

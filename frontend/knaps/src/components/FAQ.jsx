@@ -58,8 +58,8 @@ export default function FAQ() {
       {faqsList.map((faq, localIndex) => {
         const index = startIndex + localIndex;
         return (
-          <div 
-            key={index} 
+          <div
+            key={index}
             className={`rounded-2xl border transition-all duration-300 ${openIndex === index ? 'border-[#032e92] bg-white shadow-lg shadow-blue-900/5' : 'border-gray-100 bg-gray-50 hover:bg-white hover:border-gray-200'}`}
           >
             <button
@@ -73,7 +73,7 @@ export default function FAQ() {
                 <FontAwesomeIcon icon={openIndex === index ? faMinus : faPlus} className="text-sm" />
               </div>
             </button>
-            
+
             <AnimatePresence>
               {openIndex === index && (
                 <motion.div
@@ -96,11 +96,11 @@ export default function FAQ() {
   );
 
   return (
-    <section className="py-24 bg-white relative">
+    <section className="py-12 sm:py-16 bg-white relative">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        
-        <div className="text-center mb-16 max-w-3xl mx-auto">
-          <motion.div 
+
+        <div className="text-center mb-10 sm:mb-12 max-w-3xl mx-auto">
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -108,18 +108,18 @@ export default function FAQ() {
           >
             FAQ
           </motion.div>
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1a1a1a]"
+            className="text-2xl sm:text-4xl lg:text-[42px] font-extrabold text-[#0f172a] tracking-tight leading-tight"
           >
             Frequently Asked <span className="text-[#032e92]">Questions</span>
           </motion.h2>
         </div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -128,7 +128,7 @@ export default function FAQ() {
         >
           {/* Left Column (0 to 4) */}
           {renderFaqColumn(faqs.slice(0, 5), 0)}
-          
+
           {/* Right Column (5 to 9) */}
           {renderFaqColumn(faqs.slice(5, 10), 5)}
         </motion.div>

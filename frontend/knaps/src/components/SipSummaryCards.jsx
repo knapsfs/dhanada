@@ -11,7 +11,7 @@ function CountUpNumber({ target, prefix = '', suffix = '', inView, decimals = 0 
 
   useEffect(() => {
     if (!inView) return
-    const duration = 300
+    const duration = 100
     const steps = 60
     const increment = target / steps
     let current = 0

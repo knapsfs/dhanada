@@ -2,6 +2,7 @@ import frappe
 
 from .approval import create_approval_request
 from .comparator import compare_scheme
+from .constants import APPROVED_SUBCATEGORIES
 from .logger import log_error, log_warning
 from .models import SyncDataset
 
@@ -21,87 +22,19 @@ class DataImporter:
 	def import_dataset(self, dataset: SyncDataset):
 		"""
 		Imports the dataset idempotently.
-		Follows strictly the order required for SIF DocTypes.
+		AMFI ingestion does NOT directly write to master DocTypes (SIF Scheme, AMC, Fund Manager, Subcategory, etc.).
+		It creates SIF New Scheme Requests for new schemes and SIF Scheme Modification Requests for modifications.
 		"""
-
 		self.dataset = dataset
 
-		for amc in dataset.amcs:
-			self._upsert_amc(amc)
-
-		for sub in dataset.subcategories:
-			self._upsert_subcategory(sub)
-
-		for fm in dataset.fund_managers:
-			self._upsert_fund_manager(fm)
-
 		for scheme in dataset.schemes:
-			self._upsert_scheme(scheme)
-
-		for plan in dataset.scheme_plans:
-			self._upsert_scheme_plan(plan)
-
-		self._reconcile_all_scheme_plans()
+			self._process_scheme(scheme)
 
 		for nav_update in dataset.nav_updates:
 			self._update_nav(nav_update)
 
 		for perf in dataset.performances:
 			self._upsert_performance(perf)
-
-	def _upsert_amc(self, amc):
-		try:
-			exists = frappe.db.exists("SIF Asset Management Company", {"code": amc.code}) or frappe.db.exists(
-				"SIF Asset Management Company", {"registration_number": amc.registration_number}
-			)
-
-			if exists:
-				if not self.dry_run:
-					doc = frappe.get_doc("SIF Asset Management Company", exists)
-					doc.amc_name = amc.amc_name
-					doc.sif_name = amc.sif_name
-					if amc.rta:
-						doc.rta = amc.rta
-					doc.is_active = int(amc.is_active)
-					doc.save(ignore_permissions=True)
-				self.stats["updated"] += 1
-			else:
-				if not self.dry_run:
-					doc = frappe.get_doc(
-						{
-							"doctype": "SIF Asset Management Company",
-							"code": amc.code,
-							"amc_name": amc.amc_name,
-							"sif_name": amc.sif_name,
-							"registration_number": amc.registration_number,
-							"rta": amc.rta or "CAMS",
-							"is_active": int(amc.is_active),
-						}
-					)
-					doc.insert(ignore_permissions=True)
-				self.stats["created"] += 1
-		except Exception as e:
-			self.stats["errors"] += 1
-			log_error(f"Failed to upsert AMC {amc.code}: {e}", exc_info=True)
-
-	def _upsert_subcategory(self, sub):
-		try:
-			exists = frappe.db.exists("SIF Investment Strategy Subcategory", sub.subcategory_name)
-			if exists:
-				self.stats["skipped"] += 1  # Nothing to update
-			else:
-				if not self.dry_run:
-					doc = frappe.get_doc(
-						{
-							"doctype": "SIF Investment Strategy Subcategory",
-							"subcategory_name": sub.subcategory_name,
-						}
-					)
-					doc.insert(ignore_permissions=True)
-				self.stats["created"] += 1
-		except Exception as e:
-			self.stats["errors"] += 1
-			log_error(f"Failed to upsert Subcategory {sub.subcategory_name}: {e}", exc_info=True)
 
 	def _get_existing_fund_manager(self, manager_name):
 		import re
@@ -122,40 +55,8 @@ class DataImporter:
 
 		return self._manager_cache.get(norm)
 
-	def _upsert_fund_manager(self, fm):
+	def _process_scheme(self, scheme):
 		try:
-			exists = self._get_existing_fund_manager(fm.manager_name)
-			if exists:
-				self.stats["skipped"] += 1  # Nothing to update
-			else:
-				if not self.dry_run:
-					doc = frappe.get_doc({"doctype": "SIF Fund Manager", "manager_name": fm.manager_name})
-					doc.insert(ignore_permissions=True)
-					import re
-
-					norm = re.sub(r"[^a-z0-9]", "", str(fm.manager_name).lower())
-					if norm:
-						self._manager_cache[norm] = doc.name
-				self.stats["created"] += 1
-		except Exception as e:
-			self.stats["errors"] += 1
-			log_error(f"Failed to upsert Fund Manager {fm.manager_name}: {e}", exc_info=True)
-
-	def _upsert_scheme(self, scheme):
-		try:
-			amc_doc = None
-			if scheme.sif_name:
-				amc_doc = frappe.db.get_value(
-					"SIF Asset Management Company", {"sif_name": scheme.sif_name}, "name"
-				)
-
-			if not amc_doc:
-				log_warning(
-					f"Skipping Scheme {scheme.sebi_code} - Missing AMC for SIF Name: {scheme.sif_name}"
-				)
-				self.stats["skipped"] += 1
-				return
-
 			if scheme.sebi_code.startswith("TEMP_"):
 				has_plans = getattr(self, "dataset", None) and any(
 					p.sebi_code == scheme.sebi_code for p in self.dataset.scheme_plans
@@ -174,8 +75,6 @@ class DataImporter:
 					"SIF Scheme", {"scheme_name": scheme.scheme_name, "sebi_code": ["like", "TEMP_%"]}
 				)
 				if temp_exists:
-					if not self.dry_run:
-						frappe.db.set_value("SIF Scheme", temp_exists, "sebi_code", scheme.sebi_code)
 					exists = temp_exists
 
 			if exists:
@@ -190,28 +89,29 @@ class DataImporter:
 						_ = create_approval_request(doc, changes)
 					self.stats["approvals_requested"] += 1
 				else:
-					# 2b. Auto-Update (No editable fields changed)
-					if not self.dry_run:
-						self._map_scheme_fields(doc, scheme, amc_doc, update_child_tables=False)
-						doc.save(ignore_permissions=True)
-					self.stats["updated"] += 1
+					# 2b. Unchanged - do NOT modify SIF Scheme directly
+					self.stats["skipped"] += 1
 			else:
 				if not self.dry_run:
 					pending = frappe.db.exists(
 						"SIF New Scheme Request", {"sebi_code": scheme.sebi_code, "docstatus": 0}
 					)
 					if not pending:
-						doc = frappe.new_doc("SIF New Scheme Request")
-						doc.sebi_code = scheme.sebi_code
-						self._map_scheme_fields(doc, scheme, amc_doc)
-						doc.flags.skip_auto_submit = True
-						doc.insert(ignore_permissions=True)
+						req = frappe.new_doc("SIF New Scheme Request")
+						req.sebi_code = scheme.sebi_code
+						self._map_scheme_fields(req, scheme)
+						req.flags.skip_auto_submit = True
+						req.flags.ignore_mandatory = True
+						req.flags.ignore_links = True
+						req.insert(ignore_permissions=True)
 						self.stats["approvals_requested"] += 1
 					else:
 						self.stats["skipped"] += 1
 						log_warning(
 							f"Skipping new scheme {scheme.sebi_code} - New Scheme Approval already pending"
 						)
+				else:
+					self.stats["approvals_requested"] += 1
 
 			if not self.dry_run:
 				frappe.db.commit()
@@ -219,15 +119,14 @@ class DataImporter:
 			if not self.dry_run:
 				frappe.db.rollback()
 			self.stats["errors"] += 1
-			log_error(f"Failed to upsert Scheme {scheme.sebi_code}: {e}", exc_info=True)
+			log_error(f"Failed to process Scheme {scheme.sebi_code}: {e}", exc_info=True)
 
-	def _map_scheme_fields(self, doc, scheme, amc_doc, update_child_tables=True):
+	def _map_scheme_fields(self, doc, scheme):
 		doc.scheme_name = scheme.scheme_name
-		if amc_doc:
-			doc.amc = amc_doc
+		doc.amc = scheme.sif_name
 		doc.investment_strategy = scheme.investment_strategy
 		doc.scheme_type = scheme.scheme_type
-		doc.scheme_subcategory = scheme.scheme_subcategory
+		doc.scheme_subcategory = scheme.scheme_subcategory or None
 		doc.riskometer_at_launch = scheme.riskometer_at_launch
 		doc.risk_band = scheme.risk_band
 		doc.potential_risk_class = scheme.potential_risk_class
@@ -254,135 +153,29 @@ class DataImporter:
 		doc.factsheet_url = scheme.factsheet_url
 		doc.monthly_portfolio_disclosure_url = scheme.monthly_portfolio_disclosure_url
 
-		if update_child_tables:
-			doc.set("allocations", [])
-			for alloc in scheme.allocations:
-				doc.append(
-					"allocations",
-					{
-						"allocation_type": alloc.allocation_type,
-						"minimum_allocation_percentage": alloc.minimum_allocation_percentage,
-						"maximum_allocation_percentage": alloc.maximum_allocation_percentage,
-					},
-				)
+		doc.set("allocations", [])
+		for alloc in scheme.allocations:
+			doc.append(
+				"allocations",
+				{
+					"allocation_type": alloc.allocation_type,
+					"minimum_allocation_percentage": alloc.minimum_allocation_percentage,
+					"maximum_allocation_percentage": alloc.maximum_allocation_percentage,
+				},
+			)
 
-			doc.set("managers", [])
-			for mgr in scheme.managers:
-				fm_doc = self._get_existing_fund_manager(mgr.manager_name)
-				if fm_doc:
-					doc.append(
-						"managers",
-						{
-							"manager_name": fm_doc,
-							"from": mgr.from_date,
-							"to": mgr.to_date,
-							"is_active": int(mgr.is_active),
-						},
-					)
-				else:
-					log_warning(
-						f"Fund manager {mgr.manager_name} not found, skipping for scheme {scheme.sebi_code}"
-					)
-
-	def _upsert_scheme_plan(self, plan):
-		try:
-			scheme_doc = frappe.db.exists("SIF Scheme", {"sebi_code": plan.sebi_code})
-			if not scheme_doc:
-				log_warning(f"Skipping Scheme Plan {plan.isin} - Missing Scheme {plan.sebi_code}")
-				self.stats["skipped"] += 1
-				return
-
-			exists = frappe.db.exists("SIF Scheme Plan", {"isin": plan.isin})
-			if exists:
-				if not self.dry_run:
-					doc = frappe.get_doc("SIF Scheme Plan", exists)
-					doc.scheme = scheme_doc
-					doc.type = plan.type
-					doc.option = plan.option
-					doc.sub_option = plan.sub_option
-					doc.period = plan.period
-					doc.sif_code = plan.sif_code
-					doc.rta_code = plan.rta_code
-					# Do not overwrite nav, nav_date, and aum if None (to preserve NAV syncs)
-					if plan.nav is not None:
-						doc.nav = plan.nav
-					if plan.nav_date is not None:
-						doc.nav_date = plan.nav_date
-					if getattr(plan, "aum", None) is not None:
-						doc.aum = plan.aum
-					doc.save(ignore_permissions=True)
-				self.stats["updated"] += 1
-			else:
-				if not self.dry_run:
-					doc = frappe.new_doc("SIF Scheme Plan")
-					doc.isin = plan.isin
-					doc.scheme = scheme_doc
-					doc.type = plan.type
-					doc.option = plan.option
-					doc.sub_option = plan.sub_option
-					doc.period = plan.period
-					doc.sif_code = plan.sif_code
-					doc.rta_code = plan.rta_code
-					if plan.nav is not None:
-						doc.nav = plan.nav
-					if plan.nav_date is not None:
-						doc.nav_date = plan.nav_date
-					if getattr(plan, "aum", None) is not None:
-						doc.aum = plan.aum
-					doc.insert(ignore_permissions=True)
-				self.stats["created"] += 1
-
-			if not self.dry_run:
-				frappe.db.commit()
-		except Exception as e:
-			if not self.dry_run:
-				frappe.db.rollback()
-			self.stats["errors"] += 1
-			log_error(f"Failed to upsert Scheme Plan {plan.isin}: {e}", exc_info=True)
-
-	def _reconcile_all_scheme_plans(self):
-		"""
-		Deletes SIF Scheme Plan records from the database that belong to the schemes in the current
-		dataset but are no longer present in the dataset's scheme_plans list.
-		This cleans up old Direct plans or stale mappings.
-		"""
-		if not getattr(self, "dataset", None) or not self.dataset.schemes:
-			return
-
-		try:
-			for scheme in self.dataset.schemes:
-				# Find the parent Scheme in Frappe
-				scheme_doc = frappe.db.exists("SIF Scheme", {"sebi_code": scheme.sebi_code})
-				if not scheme_doc:
-					continue
-
-				# Identify ISINs present in the incoming payload for THIS scheme
-				incoming_isins = {
-					p.isin for p in self.dataset.scheme_plans if p.sebi_code == scheme.sebi_code
-				}
-
-				# Identify ISINs currently in the Frappe DB for THIS scheme
-				existing_plans = frappe.get_all(
-					"SIF Scheme Plan", filters={"scheme": scheme_doc}, pluck="isin"
-				)
-
-				stale_isins = set(existing_plans) - incoming_isins
-
-				for stale_isin in stale_isins:
-					if not self.dry_run:
-						# Deleting a Scheme Plan might have side effects on Performance
-						# Frappe handles referential integrity natively if configured,
-						# but we force delete it to ensure cleanup.
-						frappe.delete_doc("SIF Scheme Plan", stale_isin, force=1, ignore_permissions=True)
-					self.stats["deleted"] += 1
-
-			if not self.dry_run:
-				frappe.db.commit()
-		except Exception as e:
-			if not self.dry_run:
-				frappe.db.rollback()
-			self.stats["errors"] += 1
-			log_error(f"Failed to reconcile Scheme Plans: {e}", exc_info=True)
+		doc.set("managers", [])
+		for mgr in scheme.managers:
+			fm_doc = self._get_existing_fund_manager(mgr.manager_name) or mgr.manager_name
+			doc.append(
+				"managers",
+				{
+					"manager_name": fm_doc,
+					"from": mgr.from_date,
+					"to": mgr.to_date,
+					"is_active": int(mgr.is_active),
+				},
+			)
 
 	def _update_nav(self, nav_update):
 		try:

@@ -44,12 +44,12 @@ const containerVariants = {
 
 export default function BlogSection() {
   return (
-    <section id="blogs" className="py-24 bg-gray-50 relative">
+    <section id="blogs" className="py-12 sm:py-16 bg-gray-50 relative">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+
+        <div className="flex flex-col md:flex-row justify-between items-end mb-10 sm:mb-12 gap-6">
           <div className="max-w-2xl">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -57,12 +57,12 @@ export default function BlogSection() {
             >
               Latest Insights
             </motion.div>
-            <motion.h2 
+            <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1a1a1a]"
+              className="text-2xl sm:text-4xl lg:text-[42px] font-extrabold text-[#0f172a] tracking-tight leading-tight"
             >
               Expert Financial <span className="text-[#032e92]">Perspectives</span>
             </motion.h2>
@@ -80,7 +80,7 @@ export default function BlogSection() {
           </motion.div>
         </div>
 
-        <motion.div 
+        <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"

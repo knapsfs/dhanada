@@ -47,8 +47,8 @@ class Scheme:
 	amc_registration_number: str | None  # Derived from SEBI code usually, or passed explicitly
 	investment_strategy: str
 	scheme_type: str | None
-	scheme_subcategory: str  # For linking to Subcategory
-	risk_band: str | None
+	scheme_subcategory: str | None = None  # For linking to Subcategory
+	risk_band: str | None = None
 	scheme_objective: str | None = None
 	exit_load: str | None = None
 	riskometer_at_launch: str | None = None

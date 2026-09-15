@@ -23,3 +23,23 @@ EDITABLE_FIELDS = [
 ]
 
 AMFI_SIF_NAV_URL = "https://portal.amfiindia.com/spages/SIF_NAVAll.txt"
+
+APPROVED_SUBCATEGORIES = (
+	"Equity Long-Short Fund",
+	"Equity Ex-Top 100 Long-Short Fund",
+	"Sector Rotation Long-Short Fund",
+	"Debt Long-Short Fund",
+	"Sectoral Debt Long-Short Fund",
+	"Active Asset Allocator Long-Short Fund",
+	"Hybrid Long-Short Fund",
+)
+
+SUBCATEGORY_SEBI_CODE_MAP = {
+	"ELSF": "Equity Long-Short Fund",
+	"EELS": "Equity Ex-Top 100 Long-Short Fund",
+	"SRLS": "Sector Rotation Long-Short Fund",
+	"DLSF": "Debt Long-Short Fund",
+	"SDLS": "Sectoral Debt Long-Short Fund",
+	"AALS": "Active Asset Allocator Long-Short Fund",
+	"HLSF": "Hybrid Long-Short Fund",
+}

@@ -278,4 +278,22 @@ fixtures = [
 	"Workflow State",
 	{"dt": "Custom Field", "filters": [["dt", "=", "CRM Lead"]]},
 	{"dt": "CRM Form Script", "filters": [["name", "=", "CRM Lead UI Fix"]]},
+	{
+		"dt": "SIF Investment Strategy Subcategory",
+		"filters": [
+			[
+				"name",
+				"in",
+				[
+					"Equity Long-Short Fund",
+					"Equity Ex-Top 100 Long-Short Fund",
+					"Sector Rotation Long-Short Fund",
+					"Debt Long-Short Fund",
+					"Sectoral Debt Long-Short Fund",
+					"Active Asset Allocator Long-Short Fund",
+					"Hybrid Long-Short Fund",
+				],
+			]
+		],
+	},
 ]

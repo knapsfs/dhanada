@@ -61,6 +61,9 @@ export default function Footer() {
               <li><Link to="https://www.amfiindia.com/uploads/Revised_Codeof_Conductfor_Mutual_Fund_Distributors_April2022_57d91fe1c4.pdf" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white text-sm transition-colors">Code of Conduct</Link></li>
               <li><Link to="https://www.sebi.gov.in/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white text-sm transition-colors">SEBI Circulars</Link></li>
               <li><Link to="https://www.amfiindia.com/investor/knowledge-center-info?zoneName=riskInMutualFunds" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white text-sm transition-colors">AMFI Risk Factors</Link></li>
+              <li><Link to="https://docs.google.com/forms/d/e/1FAIpQLScFM3VyKSdT0JXJCSW75ZYfSpFuzlQVEzR1VB4M_T6AhssOkA/viewform" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white text-sm transition-colors">Risk Profiler</Link></li>
+              <li><Link to="https://docs.google.com/forms/d/e/1FAIpQLScsCHBPgZgxA8gngLvwJNd6VjO_ec6mCW9Fdu3C4HsvRl55mA/viewform" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white text-sm transition-colors">Risk Factors</Link></li>
+              <li><Link to="https://docs.google.com/spreadsheets/d/1iJwaJMttwF00wH_OfAtELi5j0vO26nrt/edit?gid=115017046#gid=115017046" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white text-sm transition-colors">Income disclosure</Link></li>
             </ul>
           </div>
 
@@ -101,7 +104,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-gray-500 text-xs text-center md:text-left">
-            &copy; {currentYear} Knaps Wealth Management. All rights reserved. SEBI Registered.
+            &copy; {currentYear} Knaps Private Limited. All rights reserved. AMFI Registered.
           </p>
           <div className="flex gap-6 text-xs text-gray-500">
             <Link to="/#privacy" className="hover:text-white transition-colors">Privacy Policy</Link>

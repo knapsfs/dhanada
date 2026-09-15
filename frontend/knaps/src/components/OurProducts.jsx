@@ -108,16 +108,15 @@ export default function OurProducts() {
   };
 
   return (
-    <section className="py-16 sm:py-20 bg-white relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
+    <section className="py-12 sm:py-16 bg-white relative overflow-hidden">
+      <div className="max-w-7xl mx-auto text-center px-4 sm:px-6 lg:px-8 relative z-10">
+
         {/* Header Tag */}
         <motion.p
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.4 }}
-          className="text-xs sm:text-[13px] font-bold tracking-[0.2em] text-gray-400 uppercase mb-3 text-center"
+          className="inline-block px-4 py-2 rounded-full border border-[#032e92]/20 text-[#032e92] bg-[#eef5ff] font-semibold text-sm mb-4 uppercase tracking-wider text-center"
         >
           OUR PRODUCTS
         </motion.p>
@@ -131,7 +130,7 @@ export default function OurProducts() {
           className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-extrabold text-[#0f172a] tracking-tight leading-tight text-center max-w-3xl mx-auto"
         >
           A Complete Range of{' '}
-          <span className="text-[#2563eb] block sm:inline">Financial Solutions</span>
+          <span className="text-[#032e92] block sm:inline">Financial Solutions</span>
         </motion.h2>
 
         {/* Subtitle */}
@@ -145,39 +144,39 @@ export default function OurProducts() {
           From growing your wealth to protecting what matters, we offer a wide range of trusted financial products to support every stage of your life.
         </motion.p>
 
-        {/* 4x3 Grid of 12 Products */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mt-12 sm:mt-14">
+        {/* 3-Column Grid of 12 Products */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 mt-10 sm:mt-12 text-left">
           {products.map((item, idx) => (
             <motion.div
               key={idx}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.05 * (idx % 4) }}
-              whileHover={{ y: -3, scale: 1.01 }}
+              transition={{ duration: 0.4, delay: 0.05 * (idx % 3) }}
+              whileHover={{ y: -4, scale: 1.015 }}
               onClick={() => handleCardClick(item)}
-              className="bg-white rounded-2xl border border-gray-100 shadow-md shadow-blue-900/4 p-4 sm:p-5 flex items-center justify-between gap-3 hover:shadow-xl hover:border-blue-100 transition-all duration-300 group cursor-pointer"
+              className="bg-white rounded-2xl border border-gray-100 shadow-md shadow-blue-900/4 p-5 sm:p-6 flex items-center justify-between gap-4 hover:shadow-xl hover:border-blue-100 transition-all duration-300 group cursor-pointer"
             >
               {/* Left Content */}
-              <div className="flex items-center gap-3.5 min-w-0">
+              <div className="flex items-center gap-4 min-w-0">
                 {/* Icon Box */}
-                <div className={`w-11 h-11 rounded-xl flex items-center justify-center text-base flex-shrink-0 transition-transform group-hover:scale-110 ${item.iconBg}`}>
+                <div className={`w-12 h-12 sm:w-13 sm:h-13 rounded-2xl flex items-center justify-center text-lg sm:text-xl flex-shrink-0 transition-transform group-hover:scale-110 ${item.iconBg}`}>
                   <FontAwesomeIcon icon={item.icon} />
                 </div>
 
                 {/* Text */}
                 <div className="min-w-0">
-                  <h3 className="text-xs sm:text-[13px] font-bold text-gray-900 leading-snug group-hover:text-[#032e92] transition-colors truncate">
+                  <h3 className="text-sm sm:text-base font-bold text-gray-900 leading-snug group-hover:text-[#032e92] transition-colors">
                     {item.title}
                   </h3>
-                  <p className="text-[11px] text-gray-500 font-normal leading-relaxed mt-0.5 line-clamp-2">
+                  <p className="text-xs sm:text-[13.5px] text-gray-500 font-normal leading-relaxed mt-1 line-clamp-2">
                     {item.description}
                   </p>
                 </div>
               </div>
 
               {/* Arrow Pill */}
-              <div className="w-8 h-8 rounded-full bg-gray-50 group-hover:bg-[#032e92] text-gray-400 group-hover:text-white flex items-center justify-center text-[11px] transition-all flex-shrink-0 ml-1 shadow-2xs">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-50 group-hover:bg-[#032e92] text-gray-400 group-hover:text-white flex items-center justify-center text-xs sm:text-sm transition-all flex-shrink-0 ml-1 shadow-2xs">
                 <FontAwesomeIcon icon={faArrowRight} />
               </div>
             </motion.div>
@@ -188,13 +187,13 @@ export default function OurProducts() {
         <div className="mt-12 text-center">
           <motion.button
             type="button"
-            whileHover={{ scale: 1.03 }}
+            whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => openLeadModal('Explore All Products')}
-            className="inline-flex items-center justify-center gap-2.5 px-8 py-3 rounded-xl bg-[#1d4ed8] hover:bg-[#1e40af] text-white font-bold text-sm shadow-md hover:shadow-lg transition-all cursor-pointer"
+            className="inline-flex items-center justify-center gap-2.5 px-8 sm:px-10 py-3.5 sm:py-4 rounded-full bg-[#032e92] hover:bg-[#021d63] text-white font-semibold text-sm sm:text-base shadow-lg shadow-[#032e92]/20 hover:shadow-xl hover:shadow-[#032e92]/30 transition-all duration-300 cursor-pointer group"
           >
             <span>Explore All Products</span>
-            <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+            <FontAwesomeIcon icon={faArrowRight} className="text-xs transition-transform duration-300 group-hover:translate-x-1" />
           </motion.button>
         </div>
 

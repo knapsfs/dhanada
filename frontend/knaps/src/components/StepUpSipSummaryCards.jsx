@@ -11,7 +11,7 @@ function CountUpNumber({ target, prefix = '', suffix = '', inView, decimals = 0 
 
   useEffect(() => {
     if (!inView) return
-    const duration = 300
+    const duration = 100
     const steps = 60
     const increment = target / steps
     let current = 0
@@ -185,14 +185,12 @@ export default function StepUpSipSummaryCards({
                     role="switch"
                     aria-checked={isInflationAdjusted}
                     onClick={() => setIsInflationAdjusted(!isInflationAdjusted)}
-                    className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors duration-200 focus:outline-none cursor-pointer flex-shrink-0 ${
-                      isInflationAdjusted ? 'bg-[#ff5722]' : 'bg-white/20 hover:bg-white/30'
-                    }`}
+                    className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors duration-200 focus:outline-none cursor-pointer flex-shrink-0 ${isInflationAdjusted ? 'bg-[#ff5722]' : 'bg-white/20 hover:bg-white/30'
+                      }`}
                   >
                     <span
-                      className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform duration-200 shadow-md ${
-                        isInflationAdjusted ? 'translate-x-4' : 'translate-x-0.5'
-                      }`}
+                      className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform duration-200 shadow-md ${isInflationAdjusted ? 'translate-x-4' : 'translate-x-0.5'
+                        }`}
                     />
                   </button>
                 </div>

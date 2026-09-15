@@ -7,91 +7,85 @@ import SwpSummaryCards from '../components/SwpSummaryCards'
 import SwpGrowthChart from '../components/SwpGrowthChart'
 import SwpProjectionTable from '../components/SwpProjectionTable'
 import SwpFAQ from '../components/SwpFAQ'
-import Newsletter from '../components/Newsletter'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 
 // SWP Calculation
 // Uses effective monthly rate: (1 + annual_rate)^(1/12) - 1
 function getEffectiveMonthlyRate(annualReturn) {
-  return Math.pow(1 + annualReturn / 100, 1 / 12) - 1
+  return annualReturn > 0 ? Math.pow(1 + annualReturn / 100, 1 / 12) - 1 : 0
 }
 
-function calculateSWP(totalInvestment, withdrawalPerMonth, annualReturn, duration) {
-  const r = getEffectiveMonthlyRate(annualReturn)
-  const n = duration * 12
+function simulateSWP(totalInvestment, withdrawalPerMonth, annualReturn, duration) {
+  const inv = Math.max(0, Number(totalInvestment) || 0)
+  const w = Math.max(0, Number(withdrawalPerMonth) || 0)
+  const ret = Math.max(0, Number(annualReturn) || 0)
+  const dur = Math.max(0, Number(duration) || 0)
 
-  let finalValue
-  if (r === 0) {
-    finalValue = totalInvestment - (withdrawalPerMonth * n)
-  } else {
-    // FV = P * (1+r)^n - W * [ ((1+r)^n - 1) / r ]
-    const pGrowth = totalInvestment * Math.pow(1 + r, n)
-    const wDeduction = withdrawalPerMonth * ((Math.pow(1 + r, n) - 1) / r)
-    finalValue = pGrowth - wDeduction
+  if (dur <= 0 || inv <= 0) {
+    return {
+      results: {
+        totalInvestment: Math.round(inv),
+        totalWithdrawal: 0,
+        finalValue: Math.round(inv),
+      },
+      yearlyData: [],
+    }
   }
 
-  const totalWithdrawal = withdrawalPerMonth * n
+  const r = getEffectiveMonthlyRate(ret)
+  const totalMonths = Math.round(dur * 12)
 
-  return {
-    totalInvestment: Math.round(totalInvestment),
-    totalWithdrawal: Math.round(totalWithdrawal),
-    finalValue: Math.round(Math.max(0, finalValue)), // Don't show negative final value
-  }
-}
-
-function calculateYearlyData(totalInvestment, withdrawalPerMonth, annualReturn, duration) {
-  const r = getEffectiveMonthlyRate(annualReturn)
-
-  const getFV = (months) => {
-    if (r === 0) return totalInvestment - (withdrawalPerMonth * months)
-    const pGrowth = totalInvestment * Math.pow(1 + r, months)
-    const wDeduction = withdrawalPerMonth * ((Math.pow(1 + r, months) - 1) / r)
-    return pGrowth - wDeduction
-  }
-
+  let balance = inv
+  let totalWithdrawn = 0
   const yearlyData = []
-  let cumulativeWithdrawals = 0
 
-  for (let year = 1; year <= duration; year++) {
-    const openingBalance = year === 1 ? totalInvestment : Math.max(0, getFV((year - 1) * 12))
+  let yearOpeningBalance = balance
+  let currentYearWithdrawals = 0
+  let currentYearInterest = 0
 
-    // If opening balance is 0, the fund is depleted
-    if (openingBalance <= 0) {
+  for (let m = 1; m <= totalMonths; m++) {
+    if ((m - 1) % 12 === 0) {
+      yearOpeningBalance = balance
+      currentYearWithdrawals = 0
+      currentYearInterest = 0
+    }
+
+    const interest = balance > 0 && r > 0 ? balance * r : 0
+    currentYearInterest += interest
+    balance += interest
+
+    // If balance is exhausted, no further withdrawals can occur
+    const actualWithdrawal = balance > 0 ? Math.min(balance, w) : 0
+    balance -= actualWithdrawal
+    currentYearWithdrawals += actualWithdrawal
+    totalWithdrawn += actualWithdrawal
+
+    if (balance < 0.000001) {
+      balance = 0
+    }
+
+    if (m % 12 === 0 || (m === totalMonths && m % 12 !== 0)) {
+      const year = m % 12 === 0 ? m / 12 : Number((m / 12).toFixed(1))
       yearlyData.push({
         year,
-        openingBalance: 0,
-        totalWithdrawals: 0,
-        cumulativeWithdrawals: Math.round(cumulativeWithdrawals),
-        interestEarned: 0,
-        closingBalance: 0
+        openingBalance: Math.round(yearOpeningBalance),
+        totalWithdrawals: Math.round(currentYearWithdrawals),
+        cumulativeWithdrawals: Math.round(totalWithdrawn),
+        interestEarned: Math.round(currentYearInterest),
+        closingBalance: Math.round(balance),
       })
-      continue
     }
-
-    let closingBalance = getFV(year * 12)
-    let actualWithdrawal = withdrawalPerMonth * 12
-
-    if (closingBalance < 0) {
-      // Adjust last year's withdrawal if fund depletes
-      actualWithdrawal = Math.max(0, openingBalance + (openingBalance * Math.pow(1 + r, 12) - openingBalance))
-      closingBalance = 0
-    }
-
-    cumulativeWithdrawals += actualWithdrawal
-    const interestEarned = Math.max(0, closingBalance - openingBalance + actualWithdrawal)
-
-    yearlyData.push({
-      year,
-      openingBalance: Math.round(openingBalance),
-      totalWithdrawals: Math.round(actualWithdrawal),
-      cumulativeWithdrawals: Math.round(cumulativeWithdrawals),
-      interestEarned: Math.round(interestEarned),
-      closingBalance: Math.round(Math.max(0, closingBalance))
-    })
   }
 
-  return yearlyData
+  return {
+    results: {
+      totalInvestment: Math.round(inv),
+      totalWithdrawal: Math.round(totalWithdrawn),
+      finalValue: Math.round(balance),
+    },
+    yearlyData,
+  }
 }
 
 const DEFAULT_INPUTS = {
@@ -127,13 +121,8 @@ export default function SwpCalculator() {
   const numReturn = inputs.annualReturn === '' ? 0 : Number(inputs.annualReturn)
   const numDuration = inputs.duration === '' ? 0 : Number(inputs.duration)
 
-  const results = useMemo(
-    () => calculateSWP(numInvestment, numWithdrawal, numReturn, numDuration),
-    [numInvestment, numWithdrawal, numReturn, numDuration]
-  )
-
-  const yearlyData = useMemo(
-    () => calculateYearlyData(numInvestment, numWithdrawal, numReturn, numDuration),
+  const { results, yearlyData } = useMemo(
+    () => simulateSWP(numInvestment, numWithdrawal, numReturn, numDuration),
     [numInvestment, numWithdrawal, numReturn, numDuration]
   )
 
@@ -162,9 +151,6 @@ export default function SwpCalculator() {
 
         {/* FAQ */}
         <SwpFAQ />
-
-        {/* Newsletter */}
-        {/* <Newsletter /> */}
       </main>
 
       <Footer />

@@ -45,9 +45,6 @@ export default function SifFundDetails() {
   const [apiFund, setApiFund] = useState(null)
   const { openLeadModal } = useLeadModal()
 
-  // Tab State: 'overview' | 'details' | 'documents'
-  const [activeTab, setActiveTab] = useState('overview')
-
   // Plan Selection State
   const [selectedType, setSelectedType] = useState('')
   const [selectedOption, setSelectedOption] = useState('')
@@ -473,50 +470,8 @@ export default function SifFundDetails() {
           )}
         </div>
 
-        {/* Navigation Tabs (Overview & Performance | Fund Details | Documents) */}
-        <div className="flex flex-wrap items-center gap-3 pt-2 pb-8 border-b border-gray-100">
-          <button
-            type="button"
-            onClick={() => setActiveTab('overview')}
-            className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all cursor-pointer ${activeTab === 'overview'
-              ? 'bg-[#6b8acc] text-white shadow-sm'
-              : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
-              }`}
-          >
-            Overview & Performance
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('details')}
-            className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all cursor-pointer ${activeTab === 'details'
-              ? 'bg-[#6b8acc] text-white shadow-sm'
-              : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
-              }`}
-          >
-            Fund Details
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('documents')}
-            className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all cursor-pointer ${activeTab === 'documents'
-              ? 'bg-[#6b8acc] text-white shadow-sm'
-              : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
-              }`}
-          >
-            Documents
-          </button>
-        </div>
-
-        {/* Tab 1: Overview & Performance */}
-        {activeTab === 'overview' && (
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="pt-8"
-          >
+        {/* Section 1: Overview & Performance */}
+        <section id="overview" className="pt-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
               {/* Left Column (Performance Chart + Investment Objective + Invest Now) */}
               <div className="lg:col-span-7 xl:col-span-8 space-y-6">
@@ -654,17 +609,18 @@ export default function SifFundDetails() {
                 </div>
               </div>
             </div>
-          </motion.div>
-        )}
+        </section>
 
-        {/* Tab 2: Fund Details */}
-        {activeTab === 'details' && (
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="pt-8"
-          >
+        {/* Section 2: Fund Details & Specifications */}
+        <section id="fund-details" className="pt-12 mt-12 border-t border-gray-200/80">
+          <div className="mb-6">
+            <h2 className="text-xl font-extrabold text-[#0f172a] tracking-tight">
+              Fund Details & Specifications
+            </h2>
+            <p className="text-xs text-gray-500 mt-1">
+              Key operational parameters, benchmark comparison, and stated asset allocation
+            </p>
+          </div>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
               {/* Left Specifications Card */}
               <div className="lg:col-span-7 bg-[#f8faff] border border-[#e2e8f0] rounded-3xl p-6 sm:p-8 shadow-xs">
@@ -827,20 +783,18 @@ export default function SifFundDetails() {
                 </div>
               </div>
             </div>
-          </motion.div>
-        )}
+        </section>
 
-        {/* Tab 3: Documents */}
-        {activeTab === 'documents' && (
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="pt-8"
-          >
-            <h2 className="text-xl font-extrabold text-[#032e92] mb-6">
+        {/* Section 3: Documents */}
+        <section id="documents" className="pt-12 mt-12 pb-16 border-t border-gray-200/80">
+          <div className="mb-6">
+            <h2 className="text-xl font-extrabold text-[#0f172a] tracking-tight">
               All Scheme Related Documents
             </h2>
+            <p className="text-xs text-gray-500 mt-1">
+              Official regulatory disclosures, portfolio factsheets, and legal documents
+            </p>
+          </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {/* Document 1: SID */}
@@ -959,8 +913,7 @@ export default function SifFundDetails() {
                 </div>
               </div>
             </div>
-          </motion.div>
-        )}
+        </section>
       </main>
 
       {/* Expanded Chart Modal */}

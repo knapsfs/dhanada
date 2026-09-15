@@ -1,4 +1,4 @@
-import { formatAum, formatNav } from '../../utils/formatters'
+import { formatNav } from '../../utils/formatters'
 import { useState, useMemo, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
@@ -67,82 +67,10 @@ function TableDropdown({ value, onChange, options, minWidth = 'min-w-[140px]' })
                     onChange(opt.value)
                     setIsOpen(false)
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-xl text-xs flex items-center justify-between transition-colors cursor-pointer ${
-                    isSelected
+                  className={`w-full text-left px-3 py-2 rounded-xl text-xs flex items-center justify-between transition-colors cursor-pointer ${isSelected
                       ? 'bg-blue-50 text-[#032e92] font-bold'
                       : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 font-medium'
-                  }`}
-                >
-                  <span className="truncate">{opt.label}</span>
-                  {isSelected && (
-                    <FontAwesomeIcon icon={faCheck} className="text-[10px] text-[#032e92] ml-2 flex-shrink-0" />
-                  )}
-                </button>
-              )
-            })}
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  )
-}
-
-function CategoryDropdown({ value, onChange, options }) {
-  const [isOpen, setIsOpen] = useState(false)
-  const dropdownRef = useRef(null)
-
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false)
-      }
-    }
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside)
-    }
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [isOpen])
-
-  const selectedOpt = options.find(o => o.value === value) || { label: 'All Categories', value: 'All' }
-
-  return (
-    <div className={`relative inline-block ${isOpen ? 'z-50' : 'z-20'}`} ref={dropdownRef}>
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className="inline-flex items-center gap-1.5 text-[11px] font-medium text-gray-500 hover:text-[#032e92] transition-colors cursor-pointer"
-      >
-        <span>{selectedOpt.label}</span>
-        <FontAwesomeIcon
-          icon={faChevronDown}
-          className={`text-[9px] text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180 text-[#032e92]' : ''}`}
-        />
-      </button>
-
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: 4, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 4, scale: 0.98 }}
-            transition={{ duration: 0.15 }}
-            className="absolute right-0 mt-1.5 w-48 bg-white rounded-2xl shadow-xl shadow-blue-900/10 border border-gray-100 p-1.5 z-50 max-h-60 overflow-y-auto"
-          >
-            {options.map((opt) => {
-              const isSelected = opt.value === value
-              return (
-                <button
-                  key={opt.value}
-                  type="button"
-                  onClick={() => {
-                    onChange(opt.value)
-                    setIsOpen(false)
-                  }}
-                  className={`w-full text-left px-3 py-1.5 rounded-xl text-xs flex items-center justify-between transition-colors cursor-pointer ${
-                    isSelected
-                      ? 'bg-blue-50 text-[#032e92] font-bold'
-                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 font-medium'
-                  }`}
+                    }`}
                 >
                   <span className="truncate">{opt.label}</span>
                   {isSelected && (
@@ -167,56 +95,75 @@ export default function FundsTable({
   const { openLeadModal } = useLeadModal()
   const [filters, setFilters] = useState({
     search: '',
-    schemeType: 'All',
-    category: 'All',
+    investmentStrategy: 'All',
+    schemeSubcategory: 'All',
     risk: 'All',
   })
-  const [selectedReturnPeriod, setSelectedReturnPeriod] = useState('3M') // '1M', '3M', '1Y', 'YTD'
-  const [sortConfig, setSortConfig] = useState({ key: 'returns3M', direction: 'desc' })
+  const [sortConfig, setSortConfig] = useState({ key: 'returns1M', direction: 'desc' })
   const [isExpanded, setIsExpanded] = useState(false)
 
-  // Unique categories for header dropdown
-  const categories = useMemo(() => {
+  // Unique Investment Strategies for header dropdown
+  const investmentStrategies = useMemo(() => {
     const set = new Set()
     funds.forEach(f => {
-      if (f.category) set.add(f.category)
-    })
-    return Array.from(set).sort()
-  }, [funds])
-
-  // Unique Scheme Types for header dropdown
-  const schemeTypes = useMemo(() => {
-    const set = new Set()
-    funds.forEach(f => {
-      const type = f.schemeType
-      if (type && type.trim() !== '') {
-        set.add(type.trim())
+      const s = f.investmentStrategy || f.investment_strategy
+      if (s && String(s).trim() !== '') {
+        set.add(String(s).trim())
       }
     })
     if (set.size === 0) {
-      set.add('Open Ended')
-      set.add('Interval')
-      set.add('Close Ended')
+      set.add('Equity')
+      set.add('Hybrid')
     }
     return Array.from(set).sort()
   }, [funds])
+
+  // Unique Scheme Subcategories for header dropdown (filtered by selected investmentStrategy if any)
+  const schemeSubcategories = useMemo(() => {
+    const set = new Set()
+    const targetStrategy = filters.investmentStrategy && filters.investmentStrategy !== 'All'
+      ? filters.investmentStrategy.trim().toLowerCase()
+      : null
+
+    funds.forEach(f => {
+      const strat = String(f.investmentStrategy || f.investment_strategy || '').trim().toLowerCase()
+      if (!targetStrategy || strat === targetStrategy) {
+        const sub = f.schemeSubcategory || f.scheme_subcategory || f.category
+        if (sub && String(sub).trim() !== '') {
+          set.add(String(sub).trim())
+        }
+      }
+    })
+    return Array.from(set).sort()
+  }, [funds, filters.investmentStrategy])
+
+  // Handle Strategy change with subcategory cascade reset if needed
+  const handleStrategyChange = (newStrategy) => {
+    setFilters(prev => {
+      let nextSubcategory = prev.schemeSubcategory
+      if (newStrategy !== 'All' && prev.schemeSubcategory !== 'All') {
+        const isValid = funds.some(f => {
+          const strat = String(f.investmentStrategy || f.investment_strategy || '').trim().toLowerCase()
+          const sub = String(f.schemeSubcategory || f.scheme_subcategory || f.category || '').trim().toLowerCase()
+          return strat === newStrategy.trim().toLowerCase() && sub === prev.schemeSubcategory.trim().toLowerCase()
+        })
+        if (!isValid) {
+          nextSubcategory = 'All'
+        }
+      }
+      return {
+        ...prev,
+        investmentStrategy: newStrategy,
+        schemeSubcategory: nextSubcategory,
+      }
+    })
+  }
 
   const handleSort = (key) => {
     setSortConfig(prev => ({
       key,
       direction: prev.key === key && prev.direction === 'desc' ? 'asc' : 'desc'
     }))
-  }
-
-  const handleReturnPeriodChange = (period) => {
-    setSelectedReturnPeriod(period)
-    const sortKeyMap = {
-      '1M': 'returns1M',
-      '3M': 'returns3M',
-      '1Y': 'returns1Y',
-      'YTD': 'returnsYTD',
-    }
-    setSortConfig({ key: sortKeyMap[period] || 'returns3M', direction: 'desc' })
   }
 
   const parseNum = (val) => {
@@ -237,21 +184,25 @@ export default function FundsTable({
       list = list.filter(f =>
         (f.name && f.name.toLowerCase().includes(q)) ||
         (f.amc && f.amc.toLowerCase().includes(q)) ||
-        (f.category && f.category.toLowerCase().includes(q)) ||
-        (f.schemeType && String(f.schemeType).toLowerCase().includes(q))
+        (f.investmentStrategy && String(f.investmentStrategy).toLowerCase().includes(q)) ||
+        (f.schemeSubcategory && String(f.schemeSubcategory).toLowerCase().includes(q)) ||
+        (f.category && String(f.category).toLowerCase().includes(q))
       )
     }
 
-    // Category filter
-    if (filters.category && filters.category !== 'All') {
-      list = list.filter(f => f.category === filters.category)
+    // Investment Strategy filter
+    if (filters.investmentStrategy && filters.investmentStrategy !== 'All') {
+      list = list.filter(f => {
+        const strat = String(f.investmentStrategy || f.investment_strategy || '').trim().toLowerCase()
+        return strat === filters.investmentStrategy.trim().toLowerCase()
+      })
     }
 
-    // Scheme Type filter
-    if (filters.schemeType && filters.schemeType !== 'All') {
+    // Scheme Subcategory filter
+    if (filters.schemeSubcategory && filters.schemeSubcategory !== 'All') {
       list = list.filter(f => {
-        const st = String(f.schemeType || '').trim().toLowerCase()
-        return st === filters.schemeType.trim().toLowerCase()
+        const sub = String(f.schemeSubcategory || f.scheme_subcategory || f.category || '').trim().toLowerCase()
+        return sub === filters.schemeSubcategory.trim().toLowerCase()
       })
     }
 
@@ -278,18 +229,20 @@ export default function FundsTable({
             : (b.name || '').localeCompare(a.name || '')
         }
 
-        if (sortConfig.key === 'schemeType') {
-          const aType = String(a.schemeType || '')
-          const bType = String(b.schemeType || '')
+        if (sortConfig.key === 'investmentStrategy') {
+          const aStrat = String(a.investmentStrategy || a.investment_strategy || '')
+          const bStrat = String(b.investmentStrategy || b.investment_strategy || '')
           return sortConfig.direction === 'asc'
-            ? aType.localeCompare(bType)
-            : bType.localeCompare(aType)
+            ? aStrat.localeCompare(bStrat)
+            : bStrat.localeCompare(aStrat)
         }
 
-        if (sortConfig.key === 'category') {
+        if (sortConfig.key === 'schemeSubcategory') {
+          const aSub = String(a.schemeSubcategory || a.scheme_subcategory || a.category || '')
+          const bSub = String(b.schemeSubcategory || b.scheme_subcategory || b.category || '')
           return sortConfig.direction === 'asc'
-            ? (a.category || '').localeCompare(b.category || '')
-            : (b.category || '').localeCompare(a.category || '')
+            ? aSub.localeCompare(bSub)
+            : bSub.localeCompare(aSub)
         }
 
         aVal = parseNum(a[sortConfig.key])
@@ -352,23 +305,6 @@ export default function FundsTable({
     )
   }
 
-  const getActiveReturn = (fund, period) => {
-    if (period === '1M') {
-      return fund.returns1M != null ? fund.returns1M : 1.0
-    }
-    if (period === '3M') {
-      return fund.returns3M != null ? fund.returns3M : 1.5
-    }
-    if (period === '1Y') {
-      return fund.returns1Y != null ? fund.returns1Y : 2.0
-    }
-    if (period === 'YTD') {
-      return fund.returnsYTD != null ? fund.returnsYTD : 3.4
-    }
-    return fund.returns3M || 1.5
-  }
-
-
   return (
     <div className="flex flex-col gap-6">
 
@@ -376,7 +312,7 @@ export default function FundsTable({
       <div className="bg-white rounded-3xl border border-[#e8edf7] shadow-xl shadow-blue-900/5 overflow-hidden">
 
         {/* Table Container */}
-        <div className="overflow-x-auto w-full">
+        <div className="w-full">
           <table className="w-full text-left min-w-[950px] border-collapse">
             <thead>
               {/* Main Header / Top Filter Row */}
@@ -385,26 +321,14 @@ export default function FundsTable({
                 {/* 1. FUND / AMC + Search */}
                 <th className="py-4 px-4 sm:px-6 align-top min-w-[260px] max-w-[340px]">
                   <div className="flex flex-col gap-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
-                        FUND/AMC
-                      </span>
-                      {categories.length > 0 && (
-                        <CategoryDropdown
-                          value={filters.category || 'All'}
-                          onChange={(val) => setFilters(prev => ({ ...prev, category: val }))}
-                          options={[
-                            { value: 'All', label: 'All Categories' },
-                            ...categories.map(cat => ({ value: cat, label: cat }))
-                          ]}
-                        />
-                      )}
-                    </div>
+                    <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                      FUND/AMC
+                    </span>
                     <div className="relative">
                       <FontAwesomeIcon icon={faSearch} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none" />
                       <input
                         type="text"
-                        placeholder="Search Fund/ Strategy"
+                        placeholder="Search Fund / AMC"
                         value={filters.search || ''}
                         onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
                         className="w-full pl-9 pr-3.5 py-1.5 rounded-full border border-gray-200/90 text-xs font-medium text-gray-800 placeholder-gray-400 bg-white hover:border-gray-300 focus:outline-none focus:border-[#032e92] focus:ring-2 focus:ring-[#032e92]/10 transition-all shadow-2xs"
@@ -413,29 +337,52 @@ export default function FundsTable({
                   </div>
                 </th>
 
-                {/* 2. Scheme Type + Dropdown */}
-                <th className="py-4 px-3 align-top min-w-[140px]">
+                {/* 2. Investment Strategy + Dropdown */}
+                <th className="py-4 px-3 align-top min-w-[160px]">
                   <div className="flex flex-col gap-2">
                     <button
                       type="button"
-                      onClick={() => handleSort('schemeType')}
+                      onClick={() => handleSort('investmentStrategy')}
                       className="flex items-center gap-1 text-[11px] font-bold text-gray-500 uppercase tracking-wider group cursor-pointer"
                     >
-                      <span>Scheme Type</span>
-                      {renderSortIcon('schemeType')}
+                      <span>Strategy</span>
+                      {renderSortIcon('investmentStrategy')}
                     </button>
                     <TableDropdown
-                      value={filters.schemeType || 'All'}
-                      onChange={(val) => setFilters(prev => ({ ...prev, schemeType: val }))}
+                      value={filters.investmentStrategy || 'All'}
+                      onChange={handleStrategyChange}
                       options={[
-                        { value: 'All', label: 'All Types' },
-                        ...schemeTypes.map(st => ({ value: st, label: st }))
+                        { value: 'All', label: 'All Strategies' },
+                        ...investmentStrategies.map(st => ({ value: st, label: st }))
                       ]}
                     />
                   </div>
                 </th>
 
-                {/* 3. Risk Band + Dropdown */}
+                {/* 3. Scheme Subcategory + Dropdown (Cascades based on Strategy) */}
+                <th className="py-4 px-3 align-top min-w-[220px]">
+                  <div className="flex flex-col gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleSort('schemeSubcategory')}
+                      className="flex items-center gap-1 text-[11px] font-bold text-gray-500 uppercase tracking-wider group cursor-pointer"
+                    >
+                      <span>Scheme Subcategory</span>
+                      {renderSortIcon('schemeSubcategory')}
+                    </button>
+                    <TableDropdown
+                      value={filters.schemeSubcategory || 'All'}
+                      onChange={(val) => setFilters(prev => ({ ...prev, schemeSubcategory: val }))}
+                      minWidth="min-w-[250px]"
+                      options={[
+                        { value: 'All', label: 'All Subcategories' },
+                        ...schemeSubcategories.map(sub => ({ value: sub, label: sub }))
+                      ]}
+                    />
+                  </div>
+                </th>
+
+                {/* 4. Risk Band + Dropdown */}
                 <th className="py-4 px-3 align-top min-w-[140px]">
                   <div className="flex flex-col gap-2">
                     <button
@@ -461,7 +408,7 @@ export default function FundsTable({
                   </div>
                 </th>
 
-                {/* 4. NAV + Sort */}
+                {/* 5. NAV + Sort */}
                 <th className="py-4 px-3 align-top text-center min-w-[120px]">
                   <div className="flex flex-col gap-2 items-center">
                     <button
@@ -472,52 +419,26 @@ export default function FundsTable({
                       <span>NAV</span>
                       {renderSortIcon('nav')}
                     </button>
+                    <span className="text-[11px] font-semibold text-gray-400 py-1.5 block">
+                      Daily Value
+                    </span>
                   </div>
                 </th>
 
-                {/* 5. Return Dropdown (Return 1M, Return 3M, Return 1Y, Return YTD) + Sort */}
-                <th className="py-4 px-3 align-top min-w-[150px]">
-                  <div className="flex flex-col gap-2">
-                    <button
-                      type="button"
-                      onClick={() => handleSort(
-                        selectedReturnPeriod === '1M' ? 'returns1M' :
-                          selectedReturnPeriod === '3M' ? 'returns3M' :
-                            selectedReturnPeriod === '1Y' ? 'returns1Y' : 'returnsYTD'
-                      )}
-                      className="flex items-center gap-1 text-[11px] font-bold text-gray-500 uppercase tracking-wider group cursor-pointer"
-                    >
-                      <span>Return</span>
-                      {renderSortIcon(
-                        selectedReturnPeriod === '1M' ? 'returns1M' :
-                          selectedReturnPeriod === '3M' ? 'returns3M' :
-                            selectedReturnPeriod === '1Y' ? 'returns1Y' : 'returnsYTD'
-                      )}
-                    </button>
-                    <TableDropdown
-                      value={selectedReturnPeriod}
-                      onChange={(val) => handleReturnPeriodChange(val)}
-                      options={[
-                        { value: '1M', label: 'Return 1M' },
-                        { value: '3M', label: 'Return 3M' },
-                        { value: '1Y', label: 'Return 1Y' },
-                        { value: 'YTD', label: 'Return YTD' },
-                      ]}
-                    />
-                  </div>
-                </th>
-
-                {/* 6. AUM + Sort */}
-                <th className="py-4 px-3 align-top text-center min-w-[110px]">
+                {/* 6. 1M Return + Sort */}
+                <th className="py-4 px-3 align-top text-center min-w-[120px]">
                   <div className="flex flex-col gap-2 items-center">
                     <button
                       type="button"
-                      onClick={() => handleSort('aum')}
+                      onClick={() => handleSort('returns1M')}
                       className="flex items-center gap-1 text-[11px] font-bold text-gray-500 uppercase tracking-wider group cursor-pointer"
                     >
-                      <span>AUM</span>
-                      {renderSortIcon('aum')}
+                      <span>1M Return</span>
+                      {renderSortIcon('returns1M')}
                     </button>
+                    <span className="text-[11px] font-semibold text-gray-400 py-1.5 block">
+                      Past 30 Days
+                    </span>
                   </div>
                 </th>
 
@@ -548,11 +469,10 @@ export default function FundsTable({
               ) : displayedFunds.length > 0 ? (
                 displayedFunds.map((fund, idx) => {
                   const riskConfig = getRiskLevelConfig(fund.riskLevel)
-                  const aumVal = fund.aum ? formatAum(fund.aum) : `₹${(500 + ((idx * 150) % 700)).toLocaleString('en-IN')} Cr`
-                  const returnVal = getActiveReturn(fund, selectedReturnPeriod)
-                  const isNavUp = idx % 2 === 1 || (returnVal >= 0)
-                  const schemeTypeVal = fund.schemeType || 'Open Ended'
+                  const returnVal1M = fund.returns1M != null ? fund.returns1M : (fund.returns_1m != null ? fund.returns_1m : null)
                   const fundCode = fund.id || fund.sebi_code || fund.name
+                  const strategyVal = fund.investmentStrategy || fund.investment_strategy || 'Equity'
+                  const subcategoryVal = fund.schemeSubcategory || fund.scheme_subcategory || fund.category || 'Specialized Fund'
 
                   return (
                     <motion.tr
@@ -577,23 +497,26 @@ export default function FundsTable({
                             <p className="text-xs text-gray-400 font-medium truncate mt-0.5">
                               {fund.amc || 'SIF Fund'}
                             </p>
-                            {fund.category && (
-                              <span className="inline-block self-start bg-[#e8edf7] text-gray-700 text-[10px] font-semibold px-2.5 py-0.5 rounded-full mt-1">
-                                {fund.category}
-                              </span>
-                            )}
                           </div>
                         </div>
                       </td>
 
-                      {/* 2. Scheme Type */}
+                      {/* 2. Investment Strategy */}
                       <td className="py-4 px-3">
-                        <span className="text-xs sm:text-sm font-semibold text-emerald-700">
-                          {schemeTypeVal}
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#f1f5f9] text-[#334155] border border-[#e2e8f0]">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#475569]" />
+                          {strategyVal}
                         </span>
                       </td>
 
-                      {/* 3. Risk Band */}
+                      {/* 3. Scheme Subcategory */}
+                      <td className="py-4 px-3">
+                        <span className="text-xs sm:text-sm font-medium text-gray-700 leading-snug">
+                          {subcategoryVal}
+                        </span>
+                      </td>
+
+                      {/* 4. Risk Band */}
                       <td className="py-4 px-3">
                         <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${riskConfig.bg} ${riskConfig.text} ${riskConfig.border}`}>
                           <span className="w-1.5 h-1.5 rounded-full bg-current" />
@@ -601,30 +524,24 @@ export default function FundsTable({
                         </span>
                       </td>
 
-                      {/* 4. NAV */}
+                      {/* 5. NAV */}
                       <td className="py-4 px-3 text-center">
-                        <div className="flex flex-col items-center">
-                          <span className={`text-[10px] font-bold leading-tight ${isNavUp ? 'text-emerald-600' : 'text-red-500'}`}>
-                            {isNavUp ? '^ 1.1%' : 'v 1.1%'}
-                          </span>
-                          <span className="text-xs sm:text-sm font-bold text-gray-900 leading-tight mt-0.5">
-                            {fund.nav != null ? formatNav(fund.nav) : (idx === 0 ? '₹11.2776' : idx === 1 ? '₹11.1244' : '₹10.7764')}
-                          </span>
-                        </div>
-                      </td>
-
-                      {/* 5. Selected Return (1M / 3M / 1Y / YTD) */}
-                      <td className="py-4 px-3 text-center">
-                        <span className="text-xs sm:text-sm font-bold text-emerald-600">
-                          {typeof returnVal === 'number' ? `${returnVal > 0 ? '' : ''}${returnVal}%` : returnVal}
+                        <span className="text-xs sm:text-sm font-bold text-gray-900 leading-tight">
+                          {fund.nav != null ? formatNav(fund.nav) : (idx === 0 ? '₹11.2776' : idx === 1 ? '₹11.1244' : '₹10.7764')}
                         </span>
                       </td>
 
-                      {/* 6. AUM */}
+                      {/* 6. 1M Return */}
                       <td className="py-4 px-3 text-center">
-                        <span className="text-xs sm:text-sm font-bold text-emerald-700">
-                          {aumVal}
-                        </span>
+                        {typeof returnVal1M === 'number' ? (
+                          <span className={`text-xs sm:text-sm font-bold ${returnVal1M < 0 ? 'text-red-500' : 'text-emerald-600'}`}>
+                            {returnVal1M > 0 ? '+' : ''}{returnVal1M}%
+                          </span>
+                        ) : (
+                          <span className="text-xs sm:text-sm font-medium text-gray-400">
+                            {returnVal1M || 'N/A'}
+                          </span>
+                        )}
                       </td>
 
                       {/* 7. Actions */}
