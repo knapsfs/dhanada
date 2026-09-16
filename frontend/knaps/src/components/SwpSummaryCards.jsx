@@ -98,7 +98,7 @@ export default function SwpSummaryCards({ results }) {
             </div>
 
             <div className="relative z-10">
-              <p className="text-xs font-bold text-blue-200 uppercase tracking-wider mb-1.5">Final Value</p>
+              <p className="text-xs font-bold text-blue-200 uppercase tracking-wider mb-1.5">Remaining Corpus (Funds left after withdrawals)</p>
               <p className="text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-tight">
                 <CountUpNumber
                   target={results.finalValue || 0}

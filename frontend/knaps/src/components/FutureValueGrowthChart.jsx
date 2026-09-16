@@ -1,4 +1,3 @@
-import { useRef } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -18,19 +17,19 @@ const fmt = (n) => {
   return `₹${Math.round(n).toLocaleString('en-IN')}`
 }
 
-export default function SwpGrowthChart({ yearlyData, results }) {
+export default function FutureValueGrowthChart({ chartData }) {
   const { ref, inView } = useInView({ triggerOnce: true })
 
-  const labels = yearlyData.map(d => `Y${d.year}`)
-  const remainingArr = yearlyData.map(d => Math.round(d.closingBalance))
-  const cumulativeWithdrawalsArr = yearlyData.map(d => Math.round(d.cumulativeWithdrawals ?? (d.totalWithdrawals * d.year)))
+  const labels = chartData.labels || []
+  const investedArr = (chartData.investedData || []).map(d => Math.round(d))
+  const valueArr = (chartData.growthData || chartData.fvData || []).map(d => Math.round(d))
 
   const data = {
     labels,
     datasets: [
       {
-        label: 'Total Withdrawn',
-        data: cumulativeWithdrawalsArr,
+        label: 'Your Money',
+        data: investedArr,
         borderColor: '#94a3b8',
         backgroundColor: 'rgba(148,163,184,0.08)',
         borderWidth: 2,
@@ -42,8 +41,8 @@ export default function SwpGrowthChart({ yearlyData, results }) {
         pointHoverRadius: 6,
       },
       {
-        label: 'Remaining Balance',
-        data: remainingArr,
+        label: 'Potential Future Value',
+        data: valueArr,
         borderColor: '#032e92',
         backgroundColor: (ctx) => {
           const chart = ctx.chart
@@ -108,8 +107,8 @@ export default function SwpGrowthChart({ yearlyData, results }) {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="bg-white rounded-3xl border border-[#e8edf7] shadow-xl shadow-blue-900/5 p-6 lg:p-8">
-
+          className="bg-white rounded-3xl border border-[#e8edf7] shadow-xl shadow-blue-900/5 p-6 lg:p-8"
+        >
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div className="flex items-center gap-3">
@@ -117,8 +116,8 @@ export default function SwpGrowthChart({ yearlyData, results }) {
                 <FontAwesomeIcon icon={faChartLine} className="text-[#032e92] text-sm" />
               </div>
               <div>
-                <h3 className="font-bold text-gray-800 text-lg">SWP Balance Projection</h3>
-                <p className="text-xs text-gray-400 font-medium">Year-by-year breakdown of your total withdrawals vs remaining balance</p>
+                <h3 className="font-bold text-gray-800 text-lg">Wealth Growth Projection</h3>
+                <p className="text-xs text-gray-400 font-medium">Year-by-year breakdown of your investment vs estimated returns</p>
               </div>
             </div>
 
@@ -126,11 +125,11 @@ export default function SwpGrowthChart({ yearlyData, results }) {
             <div className="flex items-center gap-4 text-xs font-semibold text-gray-500">
               <div className="flex items-center gap-1.5">
                 <span className="w-3 h-3 rounded-full bg-[#94a3b8] inline-block"></span>
-                Total Withdrawn
+                Your Money
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="w-3 h-3 rounded-full bg-[#032e92] inline-block"></span>
-                Remaining Balance
+                Potential Future Value
               </div>
             </div>
           </div>

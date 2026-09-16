@@ -32,7 +32,7 @@ function CountUpNumber({ target, prefix = '', suffix = '', inView, decimals = 0 
   return <span>{prefix}{formatted}{suffix}</span>
 }
 
-export default function StepUpSipSummaryCards({
+export default function SipLumpsumSummaryCards({
   results,
   isInflationAdjusted,
   setIsInflationAdjusted,
@@ -69,7 +69,7 @@ export default function StepUpSipSummaryCards({
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 lg:gap-5 items-stretch">
 
-          {/* 1. Invested Amount (Compact Left Card - 3 cols) */}
+          {/* 1. Total Invested Amount */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -91,7 +91,7 @@ export default function StepUpSipSummaryCards({
             </div>
           </motion.div>
 
-          {/* 2. Estimated Gain (Compact Middle Card - 3 cols) */}
+          {/* 2. Gain */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -113,7 +113,7 @@ export default function StepUpSipSummaryCards({
             </div>
           </motion.div>
 
-          {/* 3. Estimated Value (Expanded Wide Card - 6 cols with Adjacent Values) */}
+          {/* 3. Future Value */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -185,12 +185,14 @@ export default function StepUpSipSummaryCards({
                     role="switch"
                     aria-checked={isInflationAdjusted}
                     onClick={() => setIsInflationAdjusted(!isInflationAdjusted)}
-                    className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors duration-200 focus:outline-none cursor-pointer flex-shrink-0 ${isInflationAdjusted ? 'bg-[#ff5722]' : 'bg-white/20 hover:bg-white/30'
-                      }`}
+                    className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors duration-200 focus:outline-none cursor-pointer flex-shrink-0 ${
+                      isInflationAdjusted ? 'bg-[#ff5722]' : 'bg-white/20 hover:bg-white/30'
+                    }`}
                   >
                     <span
-                      className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform duration-200 shadow-md ${isInflationAdjusted ? 'translate-x-4' : 'translate-x-0.5'
-                        }`}
+                      className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform duration-200 shadow-md ${
+                        isInflationAdjusted ? 'translate-x-4' : 'translate-x-0.5'
+                      }`}
                     />
                   </button>
                 </div>

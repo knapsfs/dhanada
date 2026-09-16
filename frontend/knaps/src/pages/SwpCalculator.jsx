@@ -130,7 +130,7 @@ export default function SwpCalculator() {
     <div className="min-h-screen bg-[#f7f9fc]">
       <Navbar />
 
-      <main className="pt-10">
+      <main className="pt-2">
         {/* Hero */}
         <SwpHero />
 

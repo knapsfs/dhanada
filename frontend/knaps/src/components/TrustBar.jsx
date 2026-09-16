@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faBuildingColumns, faShieldHeart, faLandmark, 
-  faPiggyBank, faChartPie, faCoins 
+import {
+  faBuildingColumns, faShieldHeart, faLandmark,
+  faPiggyBank, faChartPie, faCoins
 } from '@fortawesome/free-solid-svg-icons';
 
 const partners = [
@@ -21,7 +21,7 @@ export default function TrustBar() {
     <section className="py-10 sm:py-12 bg-white border-b border-gray-100 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 mb-6 text-center">
         <p className="text-sm font-semibold text-gray-400 uppercase tracking-widest">
-          Trusted by Top Financial Institutions
+          Our Partners
         </p>
       </div>
 
@@ -41,14 +41,14 @@ export default function TrustBar() {
         >
           {/* Double the array for seamless infinite scroll */}
           {[...partners, ...partners].map((partner, idx) => (
-            <div 
-              key={idx} 
+            <div
+              key={idx}
               className="flex items-center gap-3 group cursor-pointer transition-all duration-300 filter grayscale hover:grayscale-0 opacity-60 hover:opacity-100"
             >
               <div className="w-10 h-10 rounded-full bg-gray-100 group-hover:bg-[#eef5ff] flex items-center justify-center transition-colors">
-                <FontAwesomeIcon 
-                  icon={partner.icon} 
-                  className="text-gray-400 group-hover:text-[#032e92] text-lg transition-colors" 
+                <FontAwesomeIcon
+                  icon={partner.icon}
+                  className="text-gray-400 group-hover:text-[#032e92] text-lg transition-colors"
                 />
               </div>
               <div>

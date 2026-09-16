@@ -110,8 +110,8 @@ export default function MysteryBoxWidget() {
   const options = [
     {
       id: 'risk',
-      title: 'Risk Profiler',
-      subtitle: 'Investor Profile',
+      title: 'Risk Profile',
+      subtitle: 'Know your risk appetite before investing.',
       tagline: 'Check Now',
       icon: faShieldHalved,
       bgGradient: 'from-[#032e92] via-[#0a4fd4] to-[#0284c7]',
@@ -132,7 +132,7 @@ export default function MysteryBoxWidget() {
     {
       id: 'myth',
       title: 'Myth or Fact?',
-      subtitle: 'Finance Quiz',
+      subtitle: 'See if you really know your investments.',
       tagline: 'Test Your Knowledge',
       icon: faLightbulb,
       bgGradient: 'from-[#d97706] via-[#ea580c] to-[#c10000]',
@@ -152,8 +152,8 @@ export default function MysteryBoxWidget() {
     },
     {
       id: 'sif',
-      title: 'Is SIF Right For You?',
-      subtitle: 'Suitability Assessment',
+      title: 'SIF Fit',
+      subtitle: 'Find out if SIFs are right for you.',
       tagline: '5 Quick Questions',
       icon: faCompass,
       bgGradient: 'from-[#059669] via-[#0d9488] to-[#032e92]',

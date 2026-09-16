@@ -10,7 +10,7 @@ const faqs = [
     a: 'An SWP allows you to withdraw a fixed amount of money from your mutual fund investment at regular intervals (e.g., monthly). It helps generate a steady stream of income, especially useful for retirees or anyone seeking regular cash flow from their investments.',
   },
   {
-    q: 'How does an SWP work?',
+    q: 'Is there any minimum amount to start SWP?',
     a: 'In an SWP, units from your mutual fund are sold periodically to generate the fixed withdrawal amount. If your fund earns a return higher than your withdrawal rate, your invested capital may continue to grow even while you receive regular income.',
   },
   {
@@ -81,7 +81,6 @@ export default function SwpFAQ() {
             </div>
             <div>
               <h2 className="text-lg font-bold text-gray-900">Frequently Asked Questions</h2>
-              <p className="text-xs text-gray-400 font-medium">SWP basics explained simply</p>
             </div>
           </div>
 

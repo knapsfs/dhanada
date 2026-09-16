@@ -194,38 +194,38 @@ body {
 }
 
 .sif-hero-gradient {
-  background: linear-gradient(-45deg, #010a1c, #02143d, #03246e, #021b4e, #072a78, #010c26);
-  background-size: 300% 300%;
-  animation: heroGradientShift 9s ease infinite;
+  background: linear-gradient(-45deg, #020919 0%, #0d4fe3 25%, #031338 50%, #026cf5 75%, #04102c 100%);
+  background-size: 260% 260%;
+  animation: heroGradientShift 7.5s ease-in-out infinite;
 }
 
 @keyframes heroOrbFloat1 {
   0%, 100% {
     transform: translate(0px, 0px) scale(1);
-    opacity: 0.6;
+    opacity: 0.75;
   }
   33% {
-    transform: translate(50px, -40px) scale(1.2);
-    opacity: 0.85;
+    transform: translate(60px, -50px) scale(1.3);
+    opacity: 1;
   }
   66% {
-    transform: translate(-30px, 30px) scale(0.9);
-    opacity: 0.5;
+    transform: translate(-40px, 40px) scale(0.9);
+    opacity: 0.6;
   }
 }
 
 @keyframes heroOrbFloat2 {
   0%, 100% {
     transform: translate(0px, 0px) scale(1);
-    opacity: 0.55;
+    opacity: 0.7;
   }
   33% {
-    transform: translate(-60px, 40px) scale(1.25);
-    opacity: 0.85;
+    transform: translate(-70px, 50px) scale(1.35);
+    opacity: 1;
   }
   66% {
-    transform: translate(40px, -30px) scale(0.95);
-    opacity: 0.5;
+    transform: translate(50px, -40px) scale(0.9);
+    opacity: 0.6;
   }
 }
 
@@ -251,6 +251,9 @@ body {
 .hero-orb-3 {
   animation: heroOrbFloat3 8s ease-in-out infinite;
 }
+
+
+
 
 /* SVG Gift Box Hover & Attention Animation */
 .gift-box-trigger {

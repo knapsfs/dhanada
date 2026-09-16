@@ -5,31 +5,40 @@ import RetirementHero from '../components/RetirementHero'
 import RetirementCalculatorForm from '../components/RetirementCalculatorForm'
 import RetirementOutput from '../components/RetirementOutput'
 import RetirementFAQ from '../components/RetirementFAQ'
-import Newsletter from '../components/Newsletter'
+import CTA from '../components/CTA'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 
 // ─── Retirement Calculation ──────────────────────────────────────────────────
-function calculateRetirement(age, monthlySpend, lifestyle, savingStyle) {
-  const retirementAge = 60
+function calculateRetirement(age, retirementAge, monthlySpend, lifestyle, investmentPreference) {
+  const currentAge = Number(age) || 25
+  const retAge = Math.max(currentAge + 1, Number(retirementAge) || 60)
+  const spend = Number(monthlySpend) || 25000
   const lifeExpectancy = 85
-  const yearsToRetirement = Math.max(1, retirementAge - age)
-  const yearsInRetirement = Math.max(1, lifeExpectancy - retirementAge)
+
+  const yearsToRetirement = Math.max(1, retAge - currentAge)
+  const yearsInRetirement = Math.max(1, lifeExpectancy - retAge)
 
   // Assumptions
-  const inflation = 0.06 // 6%
-  const postRetirementReturn = 0.07 // 7%
+  const inflation = 0.06 // 6% inflation
+  const postRetirementReturn = 0.07 // 7% safe return post-retirement
 
-  // Lifestyle multipliers based on reference behavior
+  // Lifestyle multipliers
   let lifestyleMultiplier = 1.0
-  if (lifestyle === 'king') lifestyleMultiplier = 1.4 // ~ 10Cr target for 25k spend
-  else if (lifestyle === 'monk') lifestyleMultiplier = 0.7
+  if (lifestyle === 'luxury') {
+    lifestyleMultiplier = 1.4
+  } else if (lifestyle === 'simple') {
+    lifestyleMultiplier = 0.7
+  } else {
+    // comfortable
+    lifestyleMultiplier = 1.0
+  }
 
-  // Calculate monthly expenses at retirement age
-  const expensesAtRetirement = monthlySpend * Math.pow(1 + inflation, yearsToRetirement) * lifestyleMultiplier
+  // Monthly expenses at retirement age adjusted for inflation
+  const expensesAtRetirement = spend * Math.pow(1 + inflation, yearsToRetirement) * lifestyleMultiplier
 
-  // Calculate required corpus (PV of annuity in advance)
-  const realReturnPostRetirement = (postRetirementReturn - inflation) / (1 + inflation)
+  // Real rate of return post-retirement
+  const realReturnPostRetirement = (1 + postRetirementReturn) / (1 + inflation) - 1
   const r_monthly = realReturnPostRetirement / 12
   const monthsInRetirement = yearsInRetirement * 12
 
@@ -37,33 +46,48 @@ function calculateRetirement(age, monthlySpend, lifestyle, savingStyle) {
   if (r_monthly === 0) {
     requiredCorpus = expensesAtRetirement * monthsInRetirement
   } else {
-    // PV of growing annuity
+    // PV of growing annuity in advance
     requiredCorpus = expensesAtRetirement * ((1 - Math.pow(1 + r_monthly, -monthsInRetirement)) / r_monthly) * (1 + r_monthly)
   }
 
-  // Pre-retirement savings return rate
-  // Based on reverse engineering, the SAFE rate for 17,200 PMT to reach 10Cr over 35 years is ~11.6%.
-  // So we'll use 11.5% for SAFE and 14% for AGGRESSIVE to align closely with standard Indian Mutual Fund / high-yield platforms.
-  const preRetirementReturn = savingStyle === 'safe' ? 0.11616 : 0.14
+  // Pre-retirement savings return rate:
+  // safe: 7% | growth: 12% | both: 10%
+  let preRetirementReturn = 0.10
+  if (investmentPreference === 'safe') {
+    preRetirementReturn = 0.07
+  } else if (investmentPreference === 'growth') {
+    preRetirementReturn = 0.12
+  } else if (investmentPreference === 'both') {
+    preRetirementReturn = 0.10
+  }
 
-  // Effective monthly rate
+  // Monthly compounding rate for pre-retirement SIP
   const r_pre_monthly = Math.pow(1 + preRetirementReturn, 1 / 12) - 1
   const monthsToSave = yearsToRetirement * 12
 
   // Calculate monthly savings needed (PMT)
-  const monthlySavingsNeeded = requiredCorpus / (((Math.pow(1 + r_pre_monthly, monthsToSave) - 1) / r_pre_monthly) * (1 + r_pre_monthly))
+  let monthlySavingsNeeded = 0
+  if (r_pre_monthly === 0) {
+    monthlySavingsNeeded = requiredCorpus / monthsToSave
+  } else {
+    monthlySavingsNeeded = requiredCorpus / (((Math.pow(1 + r_pre_monthly, monthsToSave) - 1) / r_pre_monthly) * (1 + r_pre_monthly))
+  }
 
   return {
-    requiredCorpus,
-    monthlySavingsNeeded
+    requiredCorpus: Math.round(requiredCorpus),
+    monthlySavingsNeeded: Math.round(monthlySavingsNeeded),
+    retirementAge: retAge,
+    yearsToRetirement,
+    yearsInRetirement
   }
 }
 
 const DEFAULT_INPUTS = {
   age: 25,
+  retirementAge: 60,
   monthlySpend: 25000,
-  lifestyle: 'king',
-  savingStyle: 'safe'
+  lifestyle: 'comfortable',
+  investmentPreference: 'both'
 }
 
 // ─── Disclaimer ────────────────────────────────────────────────────────────────
@@ -75,7 +99,9 @@ function Disclaimer() {
           <FontAwesomeIcon icon={faCircleInfo} className="text-gray-400 text-base flex-shrink-0 mt-0.5" />
           <div>
             <p className="text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wide">Disclaimer</p>
-            <p className="text-xs text-gray-500 font-medium leading-relaxed">The calculations provided are illustrative in nature and based on mathematical compounding and your inputs. Actual investment returns are subject to market risks and will depend on fund performance, asset allocation, and market conditions. Please consult a qualified financial advisor before making investment decisions.</p>
+            <p className="text-xs text-gray-500 font-medium leading-relaxed">
+              The calculations provided are illustrative in nature and based on mathematical compounding and your inputs. Actual investment returns are subject to market risks and will depend on fund performance, asset allocation, and market conditions. Please consult a qualified financial advisor before making investment decisions.
+            </p>
           </div>
         </div>
       </div>
@@ -87,11 +113,15 @@ function Disclaimer() {
 export default function RetirementCalculator() {
   const [inputs, setInputs] = useState(DEFAULT_INPUTS)
 
-
-
   const results = useMemo(
-    () => calculateRetirement(inputs.age, inputs.monthlySpend, inputs.lifestyle, inputs.savingStyle),
-    [inputs.age, inputs.monthlySpend, inputs.lifestyle, inputs.savingStyle]
+    () => calculateRetirement(
+      inputs.age,
+      inputs.retirementAge,
+      inputs.monthlySpend,
+      inputs.lifestyle,
+      inputs.investmentPreference
+    ),
+    [inputs.age, inputs.retirementAge, inputs.monthlySpend, inputs.lifestyle, inputs.investmentPreference]
   )
 
   return (
@@ -114,8 +144,8 @@ export default function RetirementCalculator() {
         {/* FAQ */}
         <RetirementFAQ />
 
-        {/* Newsletter */}
-        {/* <Newsletter /> */}
+        {/* CTA */}
+        <CTA />
       </main>
 
       <Footer />

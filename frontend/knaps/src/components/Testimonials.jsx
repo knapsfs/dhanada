@@ -102,7 +102,7 @@ export default function Testimonials() {
             viewport={{ once: true }}
             className="inline-block px-4 py-2 rounded-full border border-[#032e92]/20 text-[#032e92] bg-[#eef5ff] font-semibold text-sm mb-4 uppercase tracking-wider"
           >
-            Client Success
+            Client Testimonials
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}

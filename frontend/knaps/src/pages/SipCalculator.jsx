@@ -26,21 +26,29 @@ function calculateSIP(sipAmount, annualReturn, duration, isInflationAdjusted = f
     nominalFutureValue = sipAmount * ((Math.pow(1 + i, n) - 1) / i)
   }
 
+  // Real Rate of Return for SIP (Fisher equation):
+  // Real return = (1 + r_nominal) / (1 + r_inflation) - 1
+  const nomRate = annualReturn / 100
   const infRate = Number(inflationRate) / 100
+  const rReal = (1 + nomRate) / (1 + infRate) - 1
+
   let inflationAdjustedValue = nominalFutureValue
   if (duration > 0) {
-    inflationAdjustedValue = nominalFutureValue / Math.pow(1 + infRate, duration)
+    if (rReal === 0) {
+      inflationAdjustedValue = totalInvested
+    } else {
+      const iReal = Math.pow(1 + rReal, 1 / 12) - 1
+      inflationAdjustedValue = sipAmount * ((Math.pow(1 + iReal, n) - 1) / iReal)
+    }
   }
 
-  const futureValue = isInflationAdjusted ? inflationAdjustedValue : nominalFutureValue
-  const wealthGained = Math.max(0, futureValue - totalInvested)
+  // Gains should NOT change as per inflation
+  const wealthGained = Math.max(0, nominalFutureValue - totalInvested)
   const absoluteReturn = totalInvested > 0 ? (wealthGained / totalInvested) * 100 : 0
-  const expectedReturn = isInflationAdjusted
-    ? ((1 + annualReturn / 100) / (1 + infRate) - 1) * 100
-    : annualReturn
+  const expectedReturn = annualReturn
 
   return {
-    futureValue: Math.round(futureValue),
+    futureValue: Math.round(nominalFutureValue),
     nominalFutureValue: Math.round(nominalFutureValue),
     inflationAdjustedValue: Math.round(inflationAdjustedValue),
     totalInvested: Math.round(totalInvested),
@@ -51,9 +59,9 @@ function calculateSIP(sipAmount, annualReturn, duration, isInflationAdjusted = f
   }
 }
 
-function calculateYearlyData(sipAmount, annualReturn, duration, isInflationAdjusted = false, inflationRate = 5) {
+// Gains and graph do not change as per inflation
+function calculateYearlyData(sipAmount, annualReturn, duration) {
   const i = (annualReturn / 12) / 100
-  const infRate = Number(inflationRate) / 100
   return Array.from({ length: duration }, (_, idx) => {
     const year = idx + 1
     const n = year * 12
@@ -63,9 +71,6 @@ function calculateYearlyData(sipAmount, annualReturn, duration, isInflationAdjus
       fv = invested
     } else {
       fv = sipAmount * ((Math.pow(1 + i, n) - 1) / i)
-    }
-    if (isInflationAdjusted) {
-      fv = fv / Math.pow(1 + infRate, year)
     }
     const gain = Math.max(0, fv - invested)
     const returnPct = invested > 0 ? (gain / invested) * 100 : 0
@@ -121,15 +126,15 @@ export default function SipCalculator() {
   )
 
   const yearlyData = useMemo(
-    () => calculateYearlyData(numSip, numReturn, numDuration, isInflationAdjusted, numInflation),
-    [numSip, numReturn, numDuration, isInflationAdjusted, numInflation]
+    () => calculateYearlyData(numSip, numReturn, numDuration),
+    [numSip, numReturn, numDuration]
   )
 
   return (
     <div className="min-h-screen bg-[#f7f9fc]">
       <Navbar />
 
-      <main className="pt-10">
+      <main className="pt-2">
         {/* Hero */}
         <SipHero />
 

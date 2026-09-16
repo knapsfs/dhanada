@@ -81,7 +81,6 @@ export default function StepUpSipFAQ() {
             </div>
             <div>
               <h2 className="text-lg font-bold text-gray-900">Frequently Asked Questions</h2>
-              <p className="text-xs text-gray-400 font-medium">Step Up SIP basics explained simply</p>
             </div>
           </div>
 

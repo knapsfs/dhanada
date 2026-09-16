@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarAlt, faPhone } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
+import { useLeadModal } from '../context/LeadModalContext';
 
 export default function CTA() {
+  const { openLeadModal } = useLeadModal();
+
   return (
     <section className="py-14 sm:py-18 relative overflow-hidden">
       {/* Gradient Background */}
@@ -23,8 +23,7 @@ export default function CTA() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-
-          <h2 className="text-2xl sm:text-4xl lg:text-[42px]  font-extrabold text-white mb-6 leading-tight">
+          <h2 className="text-2xl sm:text-4xl lg:text-[42px] font-extrabold text-white mb-6 leading-tight">
             Ready to Grow Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-white">Wealth?</span>
           </h2>
 
@@ -33,17 +32,15 @@ export default function CTA() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
-            <Link to="#contact">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-full sm:w-auto px-8 py-4 rounded-xl font-bold bg-white text-[#032e92] shadow-xl flex items-center justify-center gap-3 hover:bg-gray-50 transition-colors btn-ripple"
-              >
-                Schedule Consultation
-              </motion.button>
-            </Link>
-
-
+            <motion.button
+              type="button"
+              onClick={openLeadModal}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="w-full sm:w-auto px-8 py-4 rounded-xl font-bold bg-white text-[#032e92] shadow-xl flex items-center justify-center gap-3 hover:bg-gray-50 transition-colors btn-ripple cursor-pointer"
+            >
+              START INVESTING NOW
+            </motion.button>
           </div>
         </motion.div>
       </div>

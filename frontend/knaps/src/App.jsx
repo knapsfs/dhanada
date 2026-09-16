@@ -18,6 +18,7 @@ import SwpCalculator from './pages/SwpCalculator';
 import LumpsumCalculator from './pages/LumpsumCalculator';
 import RetirementCalculator from './pages/RetirementCalculator';
 import FutureValueCalculatorPage from './pages/FutureValueCalculatorPage';
+import SipLumpsumCalculator from './pages/SipLumpsumCalculator';
 
 // Global Infrastructure Components
 import ScrollToTop from './components/ScrollToTop';
@@ -52,6 +53,8 @@ function App() {
             <Route path="/calculators/lumpsum" element={<LumpsumCalculator />} />
             <Route path="/calculators/retirement" element={<RetirementCalculator />} />
             <Route path="/calculators/future-value" element={<FutureValueCalculatorPage />} />
+            <Route path="/calculators/sip-lumpsum" element={<SipLumpsumCalculator />} />
+            <Route path="/calculators/sip-plus-lumpsum" element={<SipLumpsumCalculator />} />
           </Routes>
           <MysteryBoxWidget />
           <ChatbotWidget />

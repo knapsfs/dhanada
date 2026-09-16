@@ -41,17 +41,37 @@ export const calculateFutureValue = ({
 	}
 
 	const totalInvested = pv + pmt * n;
+
+	// Real Rate of Return for Future Value (Fisher equation):
+	const nomRate = annualRate / 100;
 	const infRate = Number(inflationRate) / 100;
+	const rReal = (1 + nomRate) / (1 + infRate) - 1;
+
 	let inflationAdjustedValue = fv;
 	if (years > 0) {
-		inflationAdjustedValue = fv / Math.pow(1 + infRate, years);
+		if (rReal === 0) {
+			inflationAdjustedValue = totalInvested;
+		} else {
+			const iReal = isMonthly ? Math.pow(1 + rReal, 1 / 12) - 1 : rReal;
+			let fvPvReal = pv * Math.pow(1 + rReal, years);
+			let fvPmtReal = 0;
+			if (iReal === 0) {
+				fvPmtReal = pmt * n;
+			} else {
+				fvPmtReal = pmt * ((Math.pow(1 + iReal, n) - 1) / iReal);
+				if (timing === "beginning") {
+					fvPmtReal = fvPmtReal * (1 + iReal);
+				}
+			}
+			inflationAdjustedValue = fvPvReal + fvPmtReal;
+		}
 	}
 
-	const finalFv = isInflationAdjusted ? inflationAdjustedValue : fv;
-	const potentialGrowth = Math.max(0, finalFv - totalInvested);
+	// Gains should NOT change as per inflation
+	const potentialGrowth = Math.max(0, fv - totalInvested);
 
 	return {
-		futureValue: Math.round(finalFv),
+		futureValue: Math.round(fv),
 		nominalFutureValue: Math.round(fv),
 		inflationAdjustedValue: Math.round(inflationAdjustedValue),
 		totalInvested: Math.round(totalInvested),
@@ -164,7 +184,6 @@ export const generateChartData = ({
 			: pmt;
 
 	const isMonthly = frequency === "monthly";
-	const infRate = Number(inflationRate) / 100;
 
 	for (let y = 0; y <= years; y++) {
 		labels.push(`Year ${y}`);
@@ -190,15 +209,11 @@ export const generateChartData = ({
 			fv = fvPv + fvPmt;
 		}
 
-		let finalFv = fv;
-		if (isInflationAdjusted) {
-			finalFv = fv / Math.pow(1 + infRate, y);
-		}
-
+		// Graph should NOT change as per inflation
 		const totalInvested = pv + effectivePmt * n;
 
 		investedData.push(Math.round(totalInvested));
-		growthData.push(Math.round(finalFv));
+		growthData.push(Math.round(fv));
 	}
 
 	return {

@@ -17,36 +17,35 @@ function calculateLumpsum(totalInvestment, annualReturn, duration, isInflationAd
   const infRate = Number(inflationRate) / 100
 
   const nominalFutureValue = totalInvestment * Math.pow(1 + r, n)
+
+  // Real Rate of Return for Lumpsum (Fisher equation):
+  // Real return = (1 + r) / (1 + infRate) - 1
+  const rReal = (1 + r) / (1 + infRate) - 1
   let inflationAdjustedValue = nominalFutureValue
 
   if (duration > 0) {
-    inflationAdjustedValue = nominalFutureValue / Math.pow(1 + infRate, duration)
+    inflationAdjustedValue = totalInvestment * Math.pow(1 + rReal, duration)
   }
 
-  const futureValue = isInflationAdjusted ? inflationAdjustedValue : nominalFutureValue
-  const wealthGained = Math.max(0, futureValue - totalInvestment)
+  // Gains should NOT change as per inflation
+  const wealthGained = Math.max(0, nominalFutureValue - totalInvestment)
 
   return {
     totalInvested: Math.round(totalInvestment),
     wealthGained: Math.round(wealthGained),
-    futureValue: Math.round(futureValue),
+    futureValue: Math.round(nominalFutureValue),
     nominalFutureValue: Math.round(nominalFutureValue),
     inflationAdjustedValue: Math.round(inflationAdjustedValue)
   }
 }
 
-function calculateYearlyData(totalInvestment, annualReturn, duration, isInflationAdjusted = false, inflationRate = 5) {
+// Gains and graph do not change as per inflation
+function calculateYearlyData(totalInvestment, annualReturn, duration) {
   const r = annualReturn / 100
-  const infRate = Number(inflationRate) / 100
 
   return Array.from({ length: duration }, (_, i) => {
     const year = i + 1
-    let value = totalInvestment * Math.pow(1 + r, year)
-
-    if (isInflationAdjusted) {
-      value = value / Math.pow(1 + infRate, year)
-    }
-
+    const value = totalInvestment * Math.pow(1 + r, year)
     const gain = Math.max(0, value - totalInvestment)
 
     return {
@@ -100,15 +99,15 @@ export default function LumpsumCalculator() {
   )
 
   const yearlyData = useMemo(
-    () => calculateYearlyData(numInvestment, numReturn, numDuration, isInflationAdjusted, numInflation),
-    [numInvestment, numReturn, numDuration, isInflationAdjusted, numInflation]
+    () => calculateYearlyData(numInvestment, numReturn, numDuration),
+    [numInvestment, numReturn, numDuration]
   )
 
   return (
     <div className="min-h-screen bg-[#f7f9fc]">
       <Navbar />
 
-      <main className="pt-10">
+      <main className="pt-2">
         {/* Hero */}
         <LumpsumHero />
 

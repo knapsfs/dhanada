@@ -103,36 +103,36 @@ export default function LumpsumCalculatorForm({ inputs, setInputs }) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <InputField
               id="total-investment"
-              label="Total Investment"
+              label="Initial Lump Sum Amount Invested"
               prefix="₹"
               value={inputs.totalInvestment}
               min={500}
               max={50000000}
               step={1000}
               onChange={v => handleChange('totalInvestment', v)}
-              hint="One-time amount you want to invest"
+            // hint="One-time amount you want to invest"
             />
             <InputField
               id="annual-return"
-              label="Expected Return Rate (p.a)"
+              label="Expected Rate of Return (p.a)"
               suffix="%"
               value={inputs.annualReturn}
               min={1}
               max={30}
               step={0.5}
               onChange={v => handleChange('annualReturn', v)}
-              hint="Historical large cap average: 12-15% p.a."
+            // hint="Historical large cap average: 12-15% p.a."
             />
             <InputField
               id="duration"
-              label="Time Period"
+              label="Investment Duration"
               suffix=" Yr"
               value={inputs.duration}
               min={1}
               max={40}
               step={1}
               onChange={v => handleChange('duration', v)}
-              hint="Duration for which you want to hold the investment"
+            // hint="Duration for which you want to hold the investment"
             />
           </div>
 

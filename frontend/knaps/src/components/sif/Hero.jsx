@@ -22,14 +22,14 @@ export default function Hero() {
         {/* Subtle Dark Vignette Overlay for Rich Depth */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/35 pointer-events-none z-1" />
 
-        {/* Top-Right Glowing Cyan & Blue Orb */}
-        <div className="hero-orb-1 absolute -top-24 -right-24 w-[600px] h-[600px] rounded-full bg-gradient-to-br from-cyan-500/18 via-blue-600/22 to-transparent blur-[100px]" />
+        {/* Top-Right Glowing Cyan & Vivid Blue Orb (High Contrast Light Stream) */}
+        <div className="hero-orb-1 absolute -top-24 -right-24 w-[620px] h-[620px] rounded-full bg-gradient-to-br from-cyan-400/35 via-blue-500/40 to-transparent blur-[90px]" />
 
-        {/* Bottom-Left Radiant Cobalt & Royal Blue Orb */}
-        <div className="hero-orb-2 absolute -bottom-32 -left-28 w-[650px] h-[650px] rounded-full bg-gradient-to-tr from-blue-700/30 via-indigo-600/22 to-transparent blur-[110px]" />
+        {/* Bottom-Left Radiant Royal Blue & Indigo Orb (Luminous Movement) */}
+        <div className="hero-orb-2 absolute -bottom-32 -left-28 w-[680px] h-[680px] rounded-full bg-gradient-to-tr from-blue-600/45 via-indigo-500/35 to-transparent blur-[100px]" />
 
-        {/* Center Pulsating Electric Shimmer */}
-        <div className="hero-orb-3 absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[500px] rounded-full bg-gradient-to-r from-blue-600/15 via-blue-500/15 to-blue-800/18 blur-[120px]" />
+        {/* Center Pulsating Electric Sapphire Shimmer */}
+        <div className="hero-orb-3 absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[500px] rounded-full bg-gradient-to-r from-blue-500/30 via-cyan-500/25 to-indigo-700/30 blur-[110px]" />
 
         {/* Subtle Brand Accent Warm Glow */}
         <div className="absolute top-1/4 right-1/4 w-80 h-80 rounded-full bg-[#c10000]/10 blur-[100px]" />
@@ -48,7 +48,7 @@ export default function Hero() {
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-center min-h-[80vh]">
 
           {/* Left Column */}
-          <div className="lg:col-span-6 xl:col-span-5">
+          <div className="lg:col-span-7 xl:col-span-6">
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -104,7 +104,7 @@ export default function Hero() {
           </div>
 
           {/* Right Column - Hero Image */}
-          <div className="lg:col-span-6 xl:col-span-7 relative hidden lg:flex items-center justify-center lg:-mr-6 xl:-mr-10">
+          <div className="lg:col-span-5 xl:col-span-6 relative hidden lg:flex items-center justify-center lg:-mr-6 xl:-mr-10">
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}

@@ -141,16 +141,16 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs }) {
               max={500000}
               step={500}
               onChange={v => handleChange('monthlyInvestment', v)}
-              hint="Initial monthly SIP amount"
+            // hint="Initial monthly SIP amount"
             />
 
             {/* Annual Step Up - Split Two-Part Input (Percentage & Amount) */}
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-bold text-gray-500 uppercase tracking-wide flex items-center gap-1.5">
                 Annual Step Up
-                <span title="Increase your SIP every year by percentage or fixed amount" className="cursor-help">
+                {/* <span title="Increase your SIP every year by percentage or fixed amount" className="cursor-help">
                   <FontAwesomeIcon icon={faCircleInfo} className="text-gray-300 text-xs" />
-                </span>
+                </span> */}
               </label>
 
               {/* Divided Input Container */}
@@ -160,8 +160,8 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs }) {
                 <div
                   onClick={handleSelectPct}
                   className={`relative flex items-center rounded-lg px-2.5 py-2 transition-all cursor-pointer ${isPct
-                      ? 'bg-white shadow-sm border border-[#032e92]/30 ring-2 ring-[#032e92]/10'
-                      : 'bg-transparent opacity-40 hover:opacity-75'
+                    ? 'bg-white shadow-sm border border-[#032e92]/30 ring-2 ring-[#032e92]/10'
+                    : 'bg-transparent opacity-40 hover:opacity-75'
                     }`}
                 >
                   <input
@@ -181,18 +181,18 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs }) {
                     className="w-full bg-transparent text-gray-800 font-bold text-sm sm:text-base focus:outline-none pr-4 cursor-pointer"
                     placeholder="10"
                   />
-                  <span className="absolute right-2 text-xs font-bold text-gray-500 pointer-events-none">%</span>
+                  <span className="absolute right-2 text-lg font-bold text-gray-500 pointer-events-none">%</span>
                 </div>
 
                 {/* 2. Amount Half */}
                 <div
                   onClick={handleSelectAmt}
                   className={`relative flex items-center rounded-lg px-2.5 py-2 transition-all cursor-pointer ${!isPct
-                      ? 'bg-white shadow-sm border border-[#032e92]/30 ring-2 ring-[#032e92]/10'
-                      : 'bg-transparent opacity-40 hover:opacity-75'
+                    ? 'bg-white shadow-sm border border-[#032e92]/30 ring-2 ring-[#032e92]/10'
+                    : 'bg-transparent opacity-40 hover:opacity-75'
                     }`}
                 >
-                  <span className="absolute left-2 text-xs font-bold text-gray-500 pointer-events-none">₹</span>
+                  <span className="absolute left-2 text-lg font-bold text-gray-500 pointer-events-none">₹</span>
                   <input
                     id="step-up-amt"
                     type="text"
@@ -242,26 +242,26 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs }) {
 
             <InputField
               id="annual-return"
-              label="Expected Return Rate (p.a)"
+              label="Expected Rate of Return (p.a)"
               suffix="%"
               value={inputs.annualReturn}
               min={1}
               max={30}
               step={0.5}
               onChange={v => handleChange('annualReturn', v)}
-              hint="Historical large cap average: 12-15% p.a."
+            // hint="Historical large cap average: 12-15% p.a."
             />
 
             <InputField
               id="duration"
-              label="Time Period"
+              label=" Investment Duration"
               suffix=" Yr"
               value={inputs.duration}
               min={1}
               max={40}
               step={1}
               onChange={v => handleChange('duration', v)}
-              hint="Investment duration in years"
+            // hint="Investment duration in years"
             />
           </div>
 

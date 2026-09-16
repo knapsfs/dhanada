@@ -15,6 +15,32 @@ import {
 import { getRiskLevelConfig } from '../../utils/risk'
 import { useLeadModal } from '../../context/LeadModalContext'
 
+function formatNavDate(dateVal) {
+  if (!dateVal) return null;
+  const str = String(dateVal).trim();
+  if (/^\d{4}-\d{2}-\d{2}/.test(str)) {
+    const parts = str.split('-');
+    const year = parts[0];
+    const monthIndex = parseInt(parts[1], 10) - 1;
+    const day = parseInt(parts[2].slice(0, 2), 10);
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    if (monthIndex >= 0 && monthIndex < 12) {
+      return `${day} ${months[monthIndex]} ${year}`;
+    }
+  }
+  try {
+    const d = new Date(str);
+    if (!isNaN(d.getTime())) {
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+    }
+  } catch {
+    // fallback
+  }
+  return str;
+}
+
+
 // Custom styled dropdown component with rich popup menu design
 function TableDropdown({ value, onChange, options, minWidth = 'min-w-[140px]' }) {
   const [isOpen, setIsOpen] = useState(false)
@@ -313,7 +339,7 @@ export default function FundsTable({
 
         {/* Table Container */}
         <div className="w-full">
-          <table className="w-full text-left min-w-[950px] border-collapse">
+          <table className="w-full text-left min-w-[950px] min-h-[280px] border-collapse">
             <thead>
               {/* Main Header / Top Filter Row */}
               <tr className="bg-white border-b border-[#e8edf7]">
@@ -373,7 +399,7 @@ export default function FundsTable({
                     <TableDropdown
                       value={filters.schemeSubcategory || 'All'}
                       onChange={(val) => setFilters(prev => ({ ...prev, schemeSubcategory: val }))}
-                      minWidth="min-w-[250px]"
+                      minWidth="min-w-[290px]"
                       options={[
                         { value: 'All', label: 'All Subcategories' },
                         ...schemeSubcategories.map(sub => ({ value: sub, label: sub }))
@@ -526,9 +552,16 @@ export default function FundsTable({
 
                       {/* 5. NAV */}
                       <td className="py-4 px-3 text-center">
-                        <span className="text-xs sm:text-sm font-bold text-gray-900 leading-tight">
-                          {fund.nav != null ? formatNav(fund.nav) : (idx === 0 ? '₹11.2776' : idx === 1 ? '₹11.1244' : '₹10.7764')}
-                        </span>
+                        <div className="flex flex-col items-center">
+                          <span className="text-xs sm:text-sm font-bold text-gray-900 leading-tight">
+                            {fund.nav != null ? formatNav(fund.nav) : (idx === 0 ? '₹11.2776' : idx === 1 ? '₹11.1244' : '₹10.7764')}
+                          </span>
+                          {(fund.navDate || fund.nav_date || fund.nav == null) && (
+                            <span className="text-[11px] font-medium text-gray-400 mt-0.5 whitespace-nowrap">
+                              {formatNavDate(fund.navDate || fund.nav_date) || '11 Sep 2026'}
+                            </span>
+                          )}
+                        </div>
                       </td>
 
                       {/* 6. 1M Return */}

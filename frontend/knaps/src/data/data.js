@@ -259,13 +259,13 @@ export const comparisonData = {
 			values: [
 				"Yes, in eligible strategies*",
 				"Generally No",
-				"Yes",
+				"Yes, depending on strategies",
 				"Yes, depending on category",
 			],
 		},
 		{
 			feature: "Unhedged Short Exposure",
-			values: ["Up to 25%", "No", "Yes, subject to applicant rules", "yes, mainly cat III"],
+			values: ["Up to 25%", "Not Permitted", "Yes, subject to applicant rules", "yes, mainly cat III"],
 		},
 		{
 			feature: "Portfolio Customisation",

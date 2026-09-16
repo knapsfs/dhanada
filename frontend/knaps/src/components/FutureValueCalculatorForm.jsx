@@ -1,8 +1,6 @@
 import { motion } from 'framer-motion'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faCalculator, faCircleInfo
-} from '@fortawesome/free-solid-svg-icons'
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 
 const formatIndianNumber = (val) => {
   if (val === '' || val === null || val === undefined) return ''
@@ -18,8 +16,7 @@ const formatIndianNumber = (val) => {
 
 const parseRawNumber = (rawStr) => {
   if (!rawStr) return ''
-  const cleaned = rawStr.replace(/,/g, '').replace(/[^0-9.]/g, '')
-  return cleaned
+  return rawStr.replace(/,/g, '').replace(/[^0-9.]/g, '')
 }
 
 function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onChange, hint, placeholder = '' }) {
@@ -76,7 +73,11 @@ function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onCh
   )
 }
 
-export default function SwpCalculatorForm({ inputs, setInputs }) {
+export default function FutureValueCalculatorForm({
+  inputs,
+  setInputs,
+  _resetDefaults
+}) {
   const handleChange = (key, val) => setInputs(prev => ({ ...prev, [key]: val }))
 
   return (
@@ -86,67 +87,45 @@ export default function SwpCalculatorForm({ inputs, setInputs }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="bg-white rounded-3xl shadow-xl shadow-blue-900/8 border border-[#e8edf7] p-6 lg:p-8">
-
-          {/* Header */}
-          {/* <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[#e8edf7]">
-            <div className="w-10 h-10 rounded-2xl bg-[#eef4ff] flex items-center justify-center">
-              <FontAwesomeIcon icon={faCalculator} className="text-[#032e92] text-sm" />
-            </div>
-            <div>
-              <h2 className="font-bold text-gray-800 text-lg">SWP Calculator</h2>
-              <p className="text-xs text-gray-400 font-medium">Results update instantly as you type</p>
-            </div>
-          </div> */}
-
-          {/* Main Inputs */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          className="bg-white rounded-3xl shadow-xl shadow-blue-900/8 border border-[#e8edf7] p-6 lg:p-8"
+        >
+          {/* Main Inputs: Find Your Monthly Investment */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <InputField
-              id="total-investment"
-              label="Starting Investment Amount"
+              id="target-future-value"
+              label="How Much Money Do You Need?"
               prefix="₹"
-              value={inputs.totalInvestment}
-              min={50000}
-              max={50000000}
-              step={10000}
-              onChange={v => handleChange('totalInvestment', v)}
-            // hint="Total amount invested initially"
+              value={inputs.targetFutureValue}
+              min={100000}
+              max={100000000}
+              step={100000}
+              onChange={v => handleChange('targetFutureValue', v)}
             />
             <InputField
-              id="withdrawal"
-              label="Withdrawal Per Month"
-              prefix="₹"
-              value={inputs.withdrawalPerMonth}
-              min={500}
-              max={500000}
-              step={500}
-              onChange={v => handleChange('withdrawalPerMonth', v)}
-            // hint="Amount you wish to withdraw monthly"
-            />
-            <InputField
-              id="annual-return"
-              label="Expected Rate of Return (p.a)"
-              suffix="%"
-              value={inputs.annualReturn}
-              min={1}
-              max={30}
-              step={0.5}
-              onChange={v => handleChange('annualReturn', v)}
-            // hint="Expected annual return rate"
-            />
-            <InputField
-              id="duration"
-              label="Withdrawal Duration"
-              suffix=" Yr"
-              value={inputs.duration}
+              id="investment-period"
+              label="When Will You Need the Money?"
+              suffix=" Years"
+              value={inputs.years}
               min={1}
               max={40}
               step={1}
-              onChange={v => handleChange('duration', v)}
-            // hint="Duration for which you want to withdraw"
+              onChange={v => handleChange('years', v)}
+            />
+            <InputField
+              id="annual-return"
+              label="Potential Annual Growth"
+              suffix="%"
+              value={inputs.annualReturn}
+              min={0}
+              max={30}
+              step={0.5}
+              onChange={v => handleChange('annualReturn', v)}
             />
           </div>
 
+          <p className="text-[10px] text-gray-400 italic mt-6 mb-0 leading-tight">
+            * Illustrative assumption only. Actual investment returns may vary and are not guaranteed.
+          </p>
         </motion.div>
       </div>
     </section>

@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import CalculatorNav from './CalculatorNav'
 
-export default function SwpHero() {
+export default function FutureValueHero() {
   return (
     <section className="pt-20 pb-6 bg-[#f7f9fc] relative overflow-hidden">
       <div className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full bg-gradient-to-br from-[#eef4ff] to-[#dbeafe] blur-3xl opacity-40 -translate-y-1/2 translate-x-1/3 pointer-events-none" />
@@ -11,8 +11,8 @@ export default function SwpHero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#032e92] via-[#0a4fd4] to-[#021d63] p-6 lg:p6 shadow-xl shadow-blue-900/10">
-
+          className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#032e92] via-[#0a4fd4] to-[#021d63] p-6 lg:p-6 shadow-xl shadow-blue-900/10"
+        >
           <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-white/5 pointer-events-none" />
           <div className="absolute bottom-0 right-0 w-40 h-40 rounded-full bg-[#c10000]/10 pointer-events-none" />
 
@@ -22,8 +22,9 @@ export default function SwpHero() {
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-3xl lg:text-4xl font-bold text-white leading-tight mb-3">
-                SWP{' '}
+                className="text-3xl lg:text-4xl font-bold text-white leading-tight mb-3"
+              >
+                Goal Based{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-orange-400">
                   Calculator
                 </span>
@@ -33,8 +34,9 @@ export default function SwpHero() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="text-blue-100 font-medium leading-relaxed max-w-2xl text-sm ">
-                Plan your regular income with a Systematic Withdrawal Plan. Calculate how much you can withdraw monthly while managing your investment corpus.
+                className="text-blue-100 font-medium leading-relaxed max-w-2xl text-sm"
+              >
+                Discover exactly how much you need to invest every month to reach your specific financial goals.
               </motion.p>
             </div>
 
