@@ -9,9 +9,12 @@ import uuid
 import frappe
 from frappe.utils import get_url, now_datetime
 
+from dhanada.utils.execution_context import DATA_SCHEDULER_USER, set_scheduler_user
+
 
 def get_conversation_doc(conversation_id: str):
 	"""Retrieves the Chatbot Conversation document or raises DoesNotExistError."""
+	set_scheduler_user()
 	if not conversation_id or not isinstance(conversation_id, str):
 		frappe.throw(frappe._("Invalid conversation ID"), frappe.ValidationError)
 
@@ -68,6 +71,7 @@ def create_conversation(
 	"""
 	Creates and initializes a new persistent Chatbot Conversation document.
 	"""
+	set_scheduler_user()
 	resolved_visitor_id = str(visitor_id).strip() if visitor_id else str(uuid.uuid4())
 
 	doc = frappe.new_doc("Chatbot Conversation")
@@ -95,6 +99,7 @@ def append_message(
 	"""
 	Safely appends a message to the conversation transcript and updates metadata.
 	"""
+	set_scheduler_user()
 	doc = get_conversation_doc(conversation_id)
 	doc.append_message(role=role, message=message)
 
@@ -140,6 +145,7 @@ def update_chat_context(conversation_id: str, chat_context: str) -> dict:
 	Updates the short conversational summary / context field.
 	Safely synchronizes to linked CRM Lead's custom_chat_context if available.
 	"""
+	set_scheduler_user()
 	doc = get_conversation_doc(conversation_id)
 	doc.set_context(str(chat_context).strip()[:500] if chat_context else "")
 	doc.save(ignore_permissions=True)
@@ -186,12 +192,14 @@ def associate_lead(
 	email: str | None = None,
 	phone: str | None = None,
 	visitor_id: str | None = None,
+	chat_context: str | None = None,
 ) -> dict:
 	"""
 	Associates lead and contact information with the conversation without coupling to Frappe CRM.
 	Enforces visitor ownership validation when visitor_id is provided.
-	Safely populates custom_conversation and custom_chat_context on CRM Lead if CRM is present.
+	Safely populates custom_conversation, custom_chat_context, and contact fields on CRM Lead.
 	"""
+	set_scheduler_user()
 	doc = get_conversation_doc(conversation_id)
 
 	# Session ownership check
@@ -213,19 +221,63 @@ def associate_lead(
 		doc.email = str(email).strip().lower()[:100]
 	if phone:
 		doc.phone = str(phone).strip()[:30]
+	if chat_context:
+		doc.set_context(str(chat_context).strip()[:500])
 
 	doc.save(ignore_permissions=True)
 
 	# Optional CRM Lead sync
 	if lead_id and frappe.db.exists("DocType", "CRM Lead") and frappe.db.exists("CRM Lead", lead_id):
 		try:
-			lead_updates = {}
-			if frappe.db.has_column("CRM Lead", "custom_conversation"):
-				lead_updates["custom_conversation"] = doc.name
+			lead_doc = frappe.get_doc("CRM Lead", lead_id)
+			lead_changed = False
+			if (
+				frappe.db.has_column("CRM Lead", "custom_conversation")
+				and lead_doc.get("custom_conversation") != doc.name
+			):
+				lead_doc.custom_conversation = doc.name
+				lead_changed = True
 			if frappe.db.has_column("CRM Lead", "custom_chat_context") and doc.chat_context:
-				lead_updates["custom_chat_context"] = doc.chat_context
-			if lead_updates:
-				frappe.db.set_value("CRM Lead", lead_id, lead_updates)
+				lead_doc.custom_chat_context = doc.chat_context
+				lead_changed = True
+			if (
+				frappe.db.has_column("CRM Lead", "chat_summary")
+				and doc.chat_context
+				and not lead_doc.get("chat_summary")
+			):
+				lead_doc.chat_summary = doc.chat_context
+				lead_changed = True
+
+			clean_u_name = str(user_name or doc.user_name or "").strip()
+			if clean_u_name and clean_u_name.lower() not in ("unknown", "website visitor"):
+				if not lead_doc.first_name or lead_doc.first_name.lower() in ("unknown", "website visitor"):
+					if " " in clean_u_name:
+						p = clean_u_name.split(" ", 1)
+						lead_doc.first_name = p[0].strip()
+						lead_doc.last_name = p[1].strip()
+					else:
+						lead_doc.first_name = clean_u_name
+						lead_doc.last_name = ""
+					lead_doc.lead_name = clean_u_name
+					lead_changed = True
+
+			lead_email = str(email or doc.email or "").strip().lower()
+			if lead_email and not lead_doc.email:
+				lead_doc.email = lead_email
+				lead_changed = True
+
+			lead_phone = str(phone or doc.phone or "").strip()
+			if lead_phone and not lead_doc.mobile_no:
+				lead_doc.mobile_no = lead_phone
+				lead_doc.phone = lead_phone
+				lead_changed = True
+
+			if not lead_doc.lead_owner:
+				lead_doc.lead_owner = DATA_SCHEDULER_USER
+				lead_changed = True
+
+			if lead_changed:
+				lead_doc.save(ignore_permissions=True)
 		except Exception:
 			frappe.log_error(title="CRM Lead Association Sync Error", message=frappe.get_traceback())
 
@@ -238,6 +290,7 @@ def associate_lead_to_conversation() -> dict:
 	Guest-whitelisted endpoint to associate lead identifier and contact details with an existing conversation.
 	Enforces visitor/session ownership validation.
 	"""
+	set_scheduler_user()
 	payload = {}
 	try:
 		req = getattr(frappe.local, "request", None)
@@ -311,6 +364,7 @@ def save_chat_message() -> dict:
 	Hardened guest-whitelisted endpoint to persist a chatbot message into Chatbot Conversation.
 	Enforces strict visitor/session token ownership, persists chat_context, and avoids disclosing transcripts.
 	"""
+	set_scheduler_user()
 	payload = {}
 	try:
 		req = getattr(frappe.local, "request", None)
@@ -408,6 +462,7 @@ def update_chatbot_context() -> dict:
 	Guest-whitelisted endpoint to safely update the chat_context of an active conversation.
 	Enforces visitor/session ownership validation and limits context length.
 	"""
+	set_scheduler_user()
 	payload = {}
 	try:
 		req = getattr(frappe.local, "request", None)

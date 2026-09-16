@@ -68,13 +68,13 @@ export default function TopFunds({
           transition={{ duration: 0.7 }}
           className="text-center mb-12">
           <span className="inline-block px-4 py-1.5 rounded-full bg-[#eef4ff] text-[#032e92] text-sm font-semibold mb-4">
-            🔥 Top Performing Funds
+            📈 Top Performing Funds
           </span>
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
             Compare Top <span className="gradient-text">SIF Schemes</span>
           </h2>
           <p className="text-gray-500 font-medium max-w-xl mx-auto">
-            Carefully curated, research-backed funds with consistent performance across market cycles.
+            Compare India’s leading SIF schemes across investment strategy, portfolio construction, risk management and performance.
           </p>
         </motion.div>
 

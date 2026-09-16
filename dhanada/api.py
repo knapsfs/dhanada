@@ -9,6 +9,8 @@ import frappe
 from dateutil.relativedelta import relativedelta
 from frappe.utils import cstr, date_diff, flt, getdate, nowdate
 
+from dhanada.utils.execution_context import DATA_SCHEDULER_USER, set_scheduler_user
+
 ALLOWED_SCHEME_DATA_SUBDIRS = {
 	"performance": "performance",
 	"historical_nav": os.path.join("nav", "historical"),
@@ -299,6 +301,7 @@ def get_performance_for_sif(sif_code: str):
 
 @frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
 def get_funds_list():
+	set_scheduler_user()
 	try:
 		schemes = frappe.get_all(
 			"SIF Scheme",
@@ -470,6 +473,7 @@ def get_historical_nav_for_sif(sif_code: str) -> list[dict]:
 
 @frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
 def get_historical_nav(sif_code: str):
+	set_scheduler_user()
 	try:
 		data = get_historical_nav_for_sif(sif_code)
 		return {"status": "success", "data": data}
@@ -479,6 +483,7 @@ def get_historical_nav(sif_code: str):
 
 @frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
 def get_fund_details(identifier: str):
+	set_scheduler_user()
 	try:
 		# Identifier can be sebi_code or name
 		scheme_name = frappe.db.get_value("SIF Scheme", {"sebi_code": identifier}, "name")
@@ -602,7 +607,6 @@ def get_fund_details(identifier: str):
 			"schemeObjective": scheme.scheme_objective,
 			"exitLoad": scheme.exit_load,
 			"minInvestment": scheme.minimum_subscription,
-			"minInvestmentText": getattr(scheme, "minimum_subscription_text", None),
 			"faceValue": getattr(scheme, "face_value", None),
 			"registrar": getattr(scheme, "registrar", None),
 			"custodian": getattr(scheme, "custodian", None),
@@ -638,92 +642,195 @@ def get_fund_details(identifier: str):
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])  # nosemgrep: guest-whitelisted-method
 def create_chatbot_lead():
+	set_scheduler_user()
 	try:
-		lead_name = frappe.form_dict.get("lead_name")
-		chat_summary_value = frappe.form_dict.get("chat_summary") or ""
-		conversation_id = frappe.form_dict.get("conversation_id")
-		visitor_id = frappe.form_dict.get("visitor_id")
+		# 1. Parse payload supporting both JSON request body and form_dict
+		payload = {}
+		try:
+			req = getattr(frappe.local, "request", None)
+			if req and hasattr(req, "data") and req.data:
+				try:
+					payload = json.loads(req.data)
+				except Exception:
+					payload = frappe.form_dict or {}
+			else:
+				payload = frappe.form_dict or {}
+		except Exception:
+			payload = frappe.form_dict or {}
 
-		# If conversation_id is given, retrieve latest context from the actual conversation
-		conversation_context = ""
+		if not payload and hasattr(frappe, "form_dict") and frappe.form_dict:
+			payload = frappe.form_dict
+
+		# 2. Extract identifiers with multiple fallback aliases
+		lead_id = (
+			payload.get("lead_name") or payload.get("lead_id") or payload.get("leadId") or payload.get("lead")
+		)
+		conversation_id = (
+			payload.get("conversation_id") or payload.get("conversationId") or payload.get("conversation")
+		)
+		visitor_id = payload.get("visitor_id") or payload.get("visitorId")
+
+		# 3. Retrieve conversation doc if available
+		conv_doc = None
 		if conversation_id and frappe.db.exists("Chatbot Conversation", conversation_id):
 			conv_doc = frappe.get_doc("Chatbot Conversation", conversation_id)
-			conversation_context = conv_doc.chat_context or ""
 
+		# 4. Resolve Name with fallbacks: payload -> conversation doc -> email prefix -> None
+		raw_name = (
+			payload.get("full_name")
+			or payload.get("name")
+			or payload.get("userName")
+			or payload.get("user_name")
+			or payload.get("first_name")
+			or (conv_doc.user_name if conv_doc and conv_doc.user_name else None)
+		)
+
+		# 5. Resolve Email with fallbacks: payload -> conversation doc -> None
+		email = (
+			payload.get("email")
+			or payload.get("email_id")
+			or payload.get("emailAddress")
+			or (conv_doc.email if conv_doc and conv_doc.email else None)
+		)
+		if email:
+			email = str(email).strip().lower()
+
+		# 6. Resolve Phone with fallbacks: payload -> conversation doc -> None
+		phone = (
+			payload.get("phone")
+			or payload.get("mobile")
+			or payload.get("mobile_no")
+			or payload.get("mobile_number")
+			or payload.get("contact_no")
+			or (conv_doc.phone if conv_doc and conv_doc.phone else None)
+		)
+		if phone:
+			phone = str(phone).strip()
+
+		# 7. Resolve Interest / Requirement
+		interest = (
+			payload.get("interest")
+			or payload.get("requirement")
+			or payload.get("requirements")
+			or payload.get("notes")
+			or payload.get("message")
+			or ""
+		)
+
+		# 8. Resolve Chat Context / Summary
+		chat_summary_value = (
+			payload.get("chat_summary")
+			or payload.get("chatSummary")
+			or payload.get("chat_context")
+			or payload.get("chatContext")
+			or payload.get("summary")
+			or ""
+		)
+		conversation_context = conv_doc.chat_context if conv_doc and conv_doc.chat_context else ""
 		final_context = conversation_context or chat_summary_value
 
-		if lead_name and frappe.db.exists("CRM Lead", lead_name):
-			lead_updates = {}
-			if frappe.db.has_column("CRM Lead", "chat_summary"):
-				lead_updates["chat_summary"] = final_context
-			if frappe.db.has_column("CRM Lead", "custom_chat_context"):
-				lead_updates["custom_chat_context"] = final_context
-			if conversation_id and frappe.db.has_column("CRM Lead", "custom_conversation"):
-				lead_updates["custom_conversation"] = conversation_id
+		if interest and interest not in final_context:
+			if final_context:
+				final_context = f"{final_context}\nInterest/Requirement: {interest}".strip()
+			else:
+				final_context = f"Interest/Requirement: {interest}".strip()
 
-			if lead_updates:
-				frappe.db.set_value("CRM Lead", lead_name, lead_updates)
-				frappe.db.commit()
+		# 9. Clean and partition name parts
+		clean_name = str(raw_name).strip() if raw_name else ""
+		if clean_name.lower() in ("unknown", "none", "null", ""):
+			clean_name = ""
 
-			if conversation_id:
-				try:
-					from dhanada.sif.conversation_service import associate_lead
-
-					associate_lead(
-						conversation_id=conversation_id,
-						lead_id=lead_name,
-						visitor_id=visitor_id,
-					)
-				except Exception:
-					frappe.log_error(title="Chatbot Lead Association Error", message=frappe.get_traceback())
-
-			return {"success": True, "lead_name": lead_name, "updated": True}
-
-		first_name = frappe.form_dict.get("name", "Unknown")
+		first_name = ""
 		last_name = ""
 
-		if " " in first_name and first_name != "Unknown":
-			parts = first_name.split(" ", 1)
-			first_name = parts[0]
-			last_name = parts[1]
+		if clean_name:
+			if " " in clean_name:
+				parts = clean_name.split(" ", 1)
+				first_name = parts[0].strip()
+				last_name = parts[1].strip()
+			else:
+				first_name = clean_name
+		elif email and "@" in email:
+			first_name = email.split("@")[0].replace(".", " ").replace("_", " ").title()
+		elif phone:
+			first_name = f"Lead {phone[-4:]}" if len(phone) >= 4 else "Lead"
+		else:
+			first_name = "Website Visitor"
 
-		doc_data = {
-			"doctype": "CRM Lead",
-			"first_name": first_name,
-			"last_name": last_name,
-			"email": frappe.form_dict.get("email"),
-			"mobile_no": frappe.form_dict.get("mobile"),
-			"interest": frappe.form_dict.get("interest"),
-			"source": frappe.form_dict.get("source", "Website Chatbot"),
-		}
+		lead_full_name = f"{first_name} {last_name}".strip() if last_name else first_name
+		source = payload.get("source") or "Website Chatbot"
 
-		if frappe.db.has_column("CRM Lead", "chat_summary"):
-			doc_data["chat_summary"] = final_context
-		if frappe.db.has_column("CRM Lead", "custom_chat_context"):
-			doc_data["custom_chat_context"] = final_context
-		if conversation_id and frappe.db.has_column("CRM Lead", "custom_conversation"):
-			doc_data["custom_conversation"] = conversation_id
+		# 10. Update existing Lead if found
+		if lead_id and frappe.db.exists("CRM Lead", lead_id):
+			lead_doc = frappe.get_doc("CRM Lead", lead_id)
+			if first_name and (
+				not lead_doc.first_name or lead_doc.first_name.lower() in ("unknown", "website visitor")
+			):
+				lead_doc.first_name = first_name
+				lead_doc.last_name = last_name
+				lead_doc.lead_name = lead_full_name
+			if email and not lead_doc.email:
+				lead_doc.email = email
+			if phone and not lead_doc.mobile_no:
+				lead_doc.mobile_no = phone
+				lead_doc.phone = phone
+			if final_context:
+				if frappe.db.has_column("CRM Lead", "chat_summary"):
+					lead_doc.chat_summary = final_context
+				if frappe.db.has_column("CRM Lead", "custom_chat_context"):
+					lead_doc.custom_chat_context = final_context
+			if conversation_id and frappe.db.has_column("CRM Lead", "custom_conversation"):
+				lead_doc.custom_conversation = conversation_id
+			if not lead_doc.lead_owner:
+				lead_doc.lead_owner = DATA_SCHEDULER_USER
 
-		lead = frappe.get_doc(doc_data)
-		lead.insert(ignore_permissions=True)
-		frappe.db.commit()
+			lead_doc.save(ignore_permissions=True)
+			frappe.db.commit()
+			created_lead_name = lead_doc.name
+		else:
+			# 11. Create new CRM Lead
+			doc_data = {
+				"doctype": "CRM Lead",
+				"first_name": first_name,
+				"last_name": last_name,
+				"lead_name": lead_full_name,
+				"email": email,
+				"mobile_no": phone,
+				"phone": phone,
+				"source": source,
+				"lead_owner": DATA_SCHEDULER_USER,
+			}
 
+			if frappe.db.has_column("CRM Lead", "chat_summary"):
+				doc_data["chat_summary"] = final_context
+			if frappe.db.has_column("CRM Lead", "custom_chat_context"):
+				doc_data["custom_chat_context"] = final_context
+			if conversation_id and frappe.db.has_column("CRM Lead", "custom_conversation"):
+				doc_data["custom_conversation"] = conversation_id
+
+			lead = frappe.get_doc(doc_data)
+			lead.insert(ignore_permissions=True)
+			frappe.db.commit()
+			created_lead_name = lead.name
+
+		# 12. Link to conversation
 		if conversation_id:
 			try:
 				from dhanada.sif.conversation_service import associate_lead
 
 				associate_lead(
 					conversation_id=conversation_id,
-					lead_id=lead.name,
-					user_name=frappe.form_dict.get("name"),
-					email=frappe.form_dict.get("email"),
-					phone=frappe.form_dict.get("mobile"),
+					lead_id=created_lead_name,
+					user_name=lead_full_name,
+					email=email,
+					phone=phone,
 					visitor_id=visitor_id,
+					chat_context=final_context,
 				)
 			except Exception:
 				frappe.log_error(title="Chatbot Lead Association Error", message=frappe.get_traceback())
 
-		return {"success": True, "lead_name": lead.name}
+		return {"success": True, "lead_name": created_lead_name}
 	except Exception as e:
 		frappe.log_error(message=frappe.get_traceback(), title="Chatbot Lead Creation Failed")
 		frappe.throw(f"Failed to create Lead: {e!s}")
@@ -731,6 +838,7 @@ def create_chatbot_lead():
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])  # nosemgrep: guest-whitelisted-method
 def create_website_lead():
+	set_scheduler_user()
 	try:
 		full_name = frappe.form_dict.get("full_name", "").strip()
 		email = frappe.form_dict.get("email", "").strip()
@@ -757,6 +865,7 @@ def create_website_lead():
 			"email": email,
 			"mobile_no": phone,
 			"source": "Website Form",
+			"lead_owner": DATA_SCHEDULER_USER,
 		}
 
 		lead = frappe.get_doc(doc_data)
@@ -774,6 +883,7 @@ def create_website_lead():
 @frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
 def get_chatbot_config():
 	"""Returns non-sensitive chatbot configuration like the API Base URL and CSRF token."""
+	set_scheduler_user()
 	try:
 		config = {"api_base_url": "", "csrf_token": ""}
 
@@ -796,6 +906,7 @@ def get_chatbot_config():
 @frappe.whitelist(allow_guest=True, methods=["POST"])  # nosemgrep: guest-whitelisted-method
 def chatbot_response():
 	"""Securely proxies the chat request to Gemini API."""
+	set_scheduler_user()
 	import json
 
 	import requests

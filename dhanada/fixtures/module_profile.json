@@ -1,0 +1,53 @@
+[
+ {
+  "block_modules": [
+   {
+    "module": "Automation"
+   },
+   {
+    "module": "Contacts"
+   },
+   {
+    "module": "Core"
+   },
+   {
+    "module": "Custom"
+   },
+   {
+    "module": "Desk"
+   },
+   {
+    "module": "Dhanada"
+   },
+   {
+    "module": "Lead Syncing"
+   },
+   {
+    "module": "Integrations"
+   },
+   {
+    "module": "Geo"
+   },
+   {
+    "module": "Email"
+   },
+   {
+    "module": "Domain Enrichment"
+   },
+   {
+    "module": "Printing"
+   },
+   {
+    "module": "Website"
+   },
+   {
+    "module": "Workflow"
+   }
+  ],
+  "docstatus": 0,
+  "doctype": "Module Profile",
+  "modified": "2026-09-16 10:56:13.409601",
+  "module_profile_name": "Data Scheduler",
+  "name": "Data Scheduler"
+ }
+]

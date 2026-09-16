@@ -332,7 +332,7 @@
    "link_fieldname": "scheme"
   }
  ],
- "modified": "2026-08-10 11:57:05.341614",
+ "modified": "2026-09-15 16:47:58.254318",
  "modified_by": "Administrator",
  "module": "SIF",
  "name": "SIF New Scheme Request",
@@ -351,6 +351,17 @@
    "role": "System Manager",
    "share": 1,
    "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Data Scheduler",
+   "share": 1,
    "write": 1
   }
  ],

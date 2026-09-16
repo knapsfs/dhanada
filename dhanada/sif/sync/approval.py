@@ -3,6 +3,8 @@ import json
 import frappe
 from frappe.utils import cstr
 
+from dhanada.utils.execution_context import set_scheduler_user
+
 
 def find_pending_approval(scheme_doc):
 	"""
@@ -59,6 +61,7 @@ def create_approval_request(existing_doc, changes):
 	Creates a new SIF Scheme Approval request if no identical pending request exists.
 	Returns the created or existing approval document.
 	"""
+	set_scheduler_user()
 	if not changes:
 		return None
 

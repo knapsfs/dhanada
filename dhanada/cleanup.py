@@ -2,8 +2,11 @@ import json
 
 import frappe
 
+from dhanada.utils.execution_context import set_scheduler_user
+
 
 def execute():
+	set_scheduler_user()
 	try:
 		if not frappe.db.exists("CRM Fields Layout", {"dt": "CRM Lead", "type": "Side Panel"}):
 			print("No layout found")

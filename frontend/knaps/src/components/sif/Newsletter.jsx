@@ -10,7 +10,7 @@ export default function Newsletter() {
 
   const stats = [
     { value: '50,000+', label: 'Investors' },
-    { value: '23,000Cr+', label: 'AUM' },
+    { value: '23,000Cr+', label: 'SIF Industry AUM' },
     { value: '30', label: 'Active SIFs' },
   ]
 

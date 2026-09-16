@@ -296,4 +296,9 @@ fixtures = [
 			]
 		],
 	},
+	{"dt": "Role", "filters": [["name", "=", "Data Scheduler"]]},
+	{"dt": "Role Profile", "filters": [["name", "=", "Data Scheduler"]]},
+	{"dt": "Module Profile", "filters": [["name", "=", "Data Scheduler"]]},
+	{"dt": "User", "filters": [["name", "=", "datascheduler@gmail.com"]]},
+	{"dt": "Custom DocPerm", "filters": [["role", "=", "Data Scheduler"]]},
 ]

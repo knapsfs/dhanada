@@ -312,7 +312,7 @@
    "link_fieldname": "scheme"
   }
  ],
- "modified": "2026-09-15 13:05:00.372669",
+ "modified": "2026-09-15 16:52:42.031887",
  "modified_by": "Administrator",
  "module": "SIF",
  "name": "SIF Scheme",
@@ -330,6 +330,15 @@
    "role": "System Manager",
    "share": 1,
    "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Data Scheduler",
+   "share": 1
   }
  ],
  "row_format": "Dynamic",

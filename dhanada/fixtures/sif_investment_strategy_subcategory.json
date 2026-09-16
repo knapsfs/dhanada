@@ -2,42 +2,49 @@
  {
   "docstatus": 0,
   "doctype": "SIF Investment Strategy Subcategory",
-  "name": "Equity Long-Short Fund",
-  "subcategory_name": "Equity Long-Short Fund"
- },
- {
-  "docstatus": 0,
-  "doctype": "SIF Investment Strategy Subcategory",
-  "name": "Equity Ex-Top 100 Long-Short Fund",
-  "subcategory_name": "Equity Ex-Top 100 Long-Short Fund"
- },
- {
-  "docstatus": 0,
-  "doctype": "SIF Investment Strategy Subcategory",
+  "modified": "2026-09-15 12:17:24.567388",
   "name": "Sector Rotation Long-Short Fund",
   "subcategory_name": "Sector Rotation Long-Short Fund"
  },
  {
   "docstatus": 0,
   "doctype": "SIF Investment Strategy Subcategory",
+  "modified": "2026-09-15 12:17:24.568464",
   "name": "Debt Long-Short Fund",
   "subcategory_name": "Debt Long-Short Fund"
  },
  {
   "docstatus": 0,
   "doctype": "SIF Investment Strategy Subcategory",
+  "modified": "2026-09-15 12:17:24.569321",
   "name": "Sectoral Debt Long-Short Fund",
   "subcategory_name": "Sectoral Debt Long-Short Fund"
  },
  {
   "docstatus": 0,
   "doctype": "SIF Investment Strategy Subcategory",
+  "modified": "2026-09-15 12:17:24.572435",
   "name": "Active Asset Allocator Long-Short Fund",
   "subcategory_name": "Active Asset Allocator Long-Short Fund"
  },
  {
   "docstatus": 0,
   "doctype": "SIF Investment Strategy Subcategory",
+  "modified": "2026-09-15 12:17:24.563720",
+  "name": "Equity Ex-Top 100 Long-Short Fund",
+  "subcategory_name": "Equity Ex-Top 100 Long-Short Fund"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "SIF Investment Strategy Subcategory",
+  "modified": "2026-09-15 12:17:24.560167",
+  "name": "Equity Long-Short Fund",
+  "subcategory_name": "Equity Long-Short Fund"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "SIF Investment Strategy Subcategory",
+  "modified": "2026-09-15 12:17:24.575345",
   "name": "Hybrid Long-Short Fund",
   "subcategory_name": "Hybrid Long-Short Fund"
  }
