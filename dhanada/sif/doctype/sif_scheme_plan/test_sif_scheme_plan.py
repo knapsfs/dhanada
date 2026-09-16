@@ -105,7 +105,7 @@ class IntegrationTestSIFSchemePlan(IntegrationTestCase):
 		frappe.set_user("Guest")
 		self.assertEqual(frappe.session.user, "Guest")
 
-		frappe.form_dict = frappe._dict(
+		frappe.local.form_dict = frappe._dict(
 			{
 				"full_name": "Execution Identity Test User",
 				"email": "test_exec_user@example.com",
@@ -141,7 +141,7 @@ class IntegrationTestSIFSchemePlan(IntegrationTestCase):
 			chat_context="User interested in Hybrid SIF schemes with 10L budget.",
 		)
 
-		frappe.form_dict = frappe._dict(
+		frappe.local.form_dict = frappe._dict(
 			{
 				"full_name": "Priya Sharma",
 				"email": "priya.sharma@example.com",
@@ -192,7 +192,7 @@ class IntegrationTestSIFSchemePlan(IntegrationTestCase):
 		)
 
 		# Payload omits full_name and email, passing only conversation_id
-		frappe.form_dict = frappe._dict(
+		frappe.local.form_dict = frappe._dict(
 			{
 				"conversation_id": conv["name"],
 				"visitor_id": "visitor-lead-test-2",
@@ -224,7 +224,7 @@ class IntegrationTestSIFSchemePlan(IntegrationTestCase):
 		from dhanada.api import create_chatbot_lead
 
 		frappe.set_user("Guest")
-		frappe.form_dict = frappe._dict()
+		frappe.local.form_dict = frappe._dict()
 
 		# Simulate raw JSON POST request
 		raw_json = json.dumps(

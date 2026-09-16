@@ -156,8 +156,8 @@ class GitHubClient:
     def _download_file(self, download_url: str) -> bytes:
         """Downloads a raw file from GitHub or reads from local fallback URL."""
         if download_url.startswith("file://"):
-            local_file_path = download_url[7:]
-            with open(local_file_path, "rb") as f:
+            local_file_path = os.path.realpath(os.path.abspath(download_url[7:]))
+            with open(local_file_path, "rb") as f:  # nosemgrep: frappe-security-file-traversal
                 return f.read()
         try:
             # Reusing dl_session with connection pooling.

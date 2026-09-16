@@ -24,6 +24,7 @@ def set_scheduler_user(user: str = DATA_SCHEDULER_USER) -> str:
 	Sets the Frappe execution context to the dedicated Data Scheduler user.
 	Fails explicitly if the user does not exist or is disabled; never falls back to Administrator.
 	Guarantees frappe.session.user == user immediately before returning.
+	Preserves active request form_dict across the user switch.
 	"""
 	if not frappe.db.exists("User", {"name": user, "enabled": 1}):
 		if frappe.db.exists("User", user):
@@ -34,6 +35,14 @@ def set_scheduler_user(user: str = DATA_SCHEDULER_USER) -> str:
 			f"Dedicated scheduler user '{user}' does not exist. Cannot execute automation operations."
 		)
 
-	frappe.set_user(user)
+	saved_form_dict = getattr(frappe.local, "form_dict", None)
+	if saved_form_dict is not None:
+		saved_form_dict = frappe._dict(saved_form_dict)
+
+	frappe.set_user(user)  # nosemgrep: frappe-setuser
+
+	if saved_form_dict:
+		frappe.local.form_dict = saved_form_dict
+
 	assert_scheduler_user(user)
 	return user
