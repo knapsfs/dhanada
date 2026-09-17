@@ -23,7 +23,7 @@ const goals = [
     ),
   },
   {
-    title: 'Child Marriage',
+    title: 'Marriage',
     iconBg: 'bg-[#ffe4e6] text-[#e11d48]',
     image: marriageImg,
     icon: (
