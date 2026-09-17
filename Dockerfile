@@ -54,9 +54,10 @@ RUN mkdir /tmp/assets && \
 # Retain existing entrypoint logic
 COPY docker/frappe/nginx-template.conf /templates/nginx/frappe.conf.template
 COPY docker/frappe/entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY docker/scripts /docker/scripts
 
 USER root
-RUN chmod +x /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh && chmod -R +x /docker/scripts
 
 USER frappe
 
