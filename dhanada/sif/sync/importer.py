@@ -1,7 +1,5 @@
 import frappe
 
-from dhanada.utils.execution_context import set_scheduler_user
-
 from .approval import create_approval_request
 from .comparator import compare_scheme
 from .constants import APPROVED_SUBCATEGORIES
@@ -11,7 +9,6 @@ from .models import SyncDataset
 
 class DataImporter:
 	def __init__(self, dry_run: bool = False):
-		set_scheduler_user()
 		self.dry_run = dry_run
 		self.stats = {
 			"created": 0,

@@ -9,8 +9,6 @@ import frappe
 from dateutil.relativedelta import relativedelta
 from frappe.utils import cstr, date_diff, flt, getdate, nowdate
 
-from dhanada.utils.execution_context import DATA_SCHEDULER_USER, set_scheduler_user
-
 ALLOWED_SCHEME_DATA_SUBDIRS = {
 	"performance": "performance",
 	"historical_nav": os.path.join("nav", "historical"),
@@ -274,7 +272,6 @@ def get_performance_for_sif(sif_code: str):
 
 @frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
 def get_funds_list():
-	set_scheduler_user()
 	try:
 		schemes = frappe.get_all(
 			"SIF Scheme",
@@ -465,7 +462,6 @@ def get_historical_nav_for_sif(sif_code: str) -> list[dict]:
 
 @frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
 def get_historical_nav(sif_code: str):
-	set_scheduler_user()
 	try:
 		data = get_historical_nav_for_sif(sif_code)
 		return {"status": "success", "data": data}
@@ -475,7 +471,6 @@ def get_historical_nav(sif_code: str):
 
 @frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
 def get_fund_details(identifier: str):
-	set_scheduler_user()
 	try:
 		# Identifier can be sebi_code or name
 		scheme_name = frappe.db.get_value("SIF Scheme", {"sebi_code": identifier}, "name")
@@ -634,7 +629,6 @@ def get_fund_details(identifier: str):
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])  # nosemgrep: guest-whitelisted-method
 def create_chatbot_lead():
-	set_scheduler_user()
 	try:
 		# 1. Parse payload supporting both JSON request body and form_dict
 		payload = {}
@@ -773,8 +767,6 @@ def create_chatbot_lead():
 					lead_doc.custom_chat_context = final_context
 			if conversation_id and frappe.db.has_column("CRM Lead", "custom_conversation"):
 				lead_doc.custom_conversation = conversation_id
-			if not lead_doc.lead_owner:
-				lead_doc.lead_owner = DATA_SCHEDULER_USER
 
 			lead_doc.save(ignore_permissions=True)
 			frappe.db.commit()
@@ -790,7 +782,6 @@ def create_chatbot_lead():
 				"mobile_no": phone,
 				"phone": phone,
 				"source": source,
-				"lead_owner": DATA_SCHEDULER_USER,
 			}
 
 			if frappe.db.has_column("CRM Lead", "chat_summary"):
@@ -830,7 +821,6 @@ def create_chatbot_lead():
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])  # nosemgrep: guest-whitelisted-method
 def create_website_lead():
-	set_scheduler_user()
 	try:
 		full_name = frappe.form_dict.get("full_name", "").strip()
 		email = frappe.form_dict.get("email", "").strip()
@@ -857,7 +847,6 @@ def create_website_lead():
 			"email": email,
 			"mobile_no": phone,
 			"source": "Website Form",
-			"lead_owner": DATA_SCHEDULER_USER,
 		}
 
 		lead = frappe.get_doc(doc_data)
@@ -875,7 +864,6 @@ def create_website_lead():
 @frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
 def get_chatbot_config():
 	"""Returns non-sensitive chatbot configuration like the API Base URL and CSRF token."""
-	set_scheduler_user()
 	try:
 		config = {"api_base_url": "", "csrf_token": ""}
 
@@ -898,7 +886,6 @@ def get_chatbot_config():
 @frappe.whitelist(allow_guest=True, methods=["POST"])  # nosemgrep: guest-whitelisted-method
 def chatbot_response():
 	"""Securely proxies the chat request to Gemini API."""
-	set_scheduler_user()
 	import json
 
 	import requests
@@ -975,7 +962,6 @@ def get_scheme_heatmap_performance(
 	"""
 	Read-only API to fetch monthly heatmap performance data for SIF Scheme Plans.
 	"""
-	set_scheduler_user()
 	try:
 		filters = {}
 		if scheme_plan:

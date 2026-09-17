@@ -2,12 +2,6 @@ import time
 
 import frappe
 
-from dhanada.utils.execution_context import (
-	DATA_SCHEDULER_USER,
-	assert_scheduler_user,
-	set_scheduler_user,
-)
-
 from .github_client import GitHubClient
 from .importer import DataImporter
 from .logger import log_error, log_sync_completed, log_sync_start, log_warning
@@ -18,8 +12,6 @@ def sync_nav_performance(dry_run: bool = False):
 	"""
 	Fetches, maps, and imports the latest NAV CSV and all Performance JSONs.
 	"""
-	set_scheduler_user()
-	assert_scheduler_user()
 	start_time = time.time()
 	log_sync_start()
 
@@ -65,8 +57,6 @@ def sync_scheme_details(dry_run: bool = False):
 	"""
 	Fetches, maps, and imports all Scheme Detail JSONs.
 	"""
-	set_scheduler_user()
-	assert_scheduler_user()
 	start_time = time.time()
 	log_sync_start()
 
@@ -122,8 +112,6 @@ def run_github_sync_pipeline():
 	Master scheduled job to sync all data directly from GitHub.
 	Serially executes scheme details, followed by nav and performance.
 	"""
-	set_scheduler_user()
-	assert_scheduler_user()
 	try:
 		frappe.logger("sif_sync").info("Starting automated GitHub Sync Pipeline")
 		sync_scheme_details()

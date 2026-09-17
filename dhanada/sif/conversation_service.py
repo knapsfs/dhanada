@@ -9,12 +9,9 @@ import uuid
 import frappe
 from frappe.utils import get_url, now_datetime
 
-from dhanada.utils.execution_context import DATA_SCHEDULER_USER, set_scheduler_user
-
 
 def get_conversation_doc(conversation_id: str):
 	"""Retrieves the Chatbot Conversation document or raises DoesNotExistError."""
-	set_scheduler_user()
 	if not conversation_id or not isinstance(conversation_id, str):
 		frappe.throw(frappe._("Invalid conversation ID"), frappe.ValidationError)
 
@@ -71,7 +68,6 @@ def create_conversation(
 	"""
 	Creates and initializes a new persistent Chatbot Conversation document.
 	"""
-	set_scheduler_user()
 	resolved_visitor_id = str(visitor_id).strip() if visitor_id else str(uuid.uuid4())
 
 	doc = frappe.new_doc("Chatbot Conversation")
@@ -99,7 +95,6 @@ def append_message(
 	"""
 	Safely appends a message to the conversation transcript and updates metadata.
 	"""
-	set_scheduler_user()
 	doc = get_conversation_doc(conversation_id)
 	doc.append_message(role=role, message=message)
 
@@ -145,7 +140,6 @@ def update_chat_context(conversation_id: str, chat_context: str) -> dict:
 	Updates the short conversational summary / context field.
 	Safely synchronizes to linked CRM Lead's custom_chat_context if available.
 	"""
-	set_scheduler_user()
 	doc = get_conversation_doc(conversation_id)
 	doc.set_context(str(chat_context).strip()[:500] if chat_context else "")
 	doc.save(ignore_permissions=True)
@@ -199,7 +193,6 @@ def associate_lead(
 	Enforces visitor ownership validation when visitor_id is provided.
 	Safely populates custom_conversation, custom_chat_context, and contact fields on CRM Lead.
 	"""
-	set_scheduler_user()
 	doc = get_conversation_doc(conversation_id)
 
 	# Session ownership check
@@ -272,10 +265,6 @@ def associate_lead(
 				lead_doc.phone = lead_phone
 				lead_changed = True
 
-			if not lead_doc.lead_owner:
-				lead_doc.lead_owner = DATA_SCHEDULER_USER
-				lead_changed = True
-
 			if lead_changed:
 				lead_doc.save(ignore_permissions=True)
 		except Exception:
@@ -290,7 +279,6 @@ def associate_lead_to_conversation() -> dict:
 	Guest-whitelisted endpoint to associate lead identifier and contact details with an existing conversation.
 	Enforces visitor/session ownership validation.
 	"""
-	set_scheduler_user()
 	payload = {}
 	try:
 		req = getattr(frappe.local, "request", None)
@@ -364,7 +352,6 @@ def save_chat_message() -> dict:
 	Hardened guest-whitelisted endpoint to persist a chatbot message into Chatbot Conversation.
 	Enforces strict visitor/session token ownership, persists chat_context, and avoids disclosing transcripts.
 	"""
-	set_scheduler_user()
 	payload = {}
 	try:
 		req = getattr(frappe.local, "request", None)
@@ -462,7 +449,6 @@ def update_chatbot_context() -> dict:
 	Guest-whitelisted endpoint to safely update the chat_context of an active conversation.
 	Enforces visitor/session ownership validation and limits context length.
 	"""
-	set_scheduler_user()
 	payload = {}
 	try:
 		req = getattr(frappe.local, "request", None)

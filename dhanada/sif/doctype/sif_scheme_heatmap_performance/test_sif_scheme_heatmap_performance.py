@@ -8,10 +8,7 @@ from frappe.tests import IntegrationTestCase
 
 from dhanada.api import get_scheme_heatmap_performance
 from dhanada.sif.sync.models import SchemeHeatmapPerformance, SyncDataset
-from dhanada.sif.sync.scheduler import (
-	DATA_SCHEDULER_USER,
-	sync_nav_performance,
-)
+from dhanada.sif.sync.scheduler import sync_nav_performance
 
 
 class TestSIFSchemeHeatmapPerformance(IntegrationTestCase):
@@ -123,7 +120,6 @@ class TestSIFSchemeHeatmapPerformance(IntegrationTestCase):
 		self.assertEqual(doc.mar, 4.08)
 		self.assertIn(doc.apr, [None, 0.0])
 		self.assertEqual(doc.may, 3.21)
-		self.assertEqual(doc.owner, DATA_SCHEDULER_USER)
 
 		# Direct plan must NOT receive heatmap records
 		self.assertFalse(frappe.db.exists("SIF Scheme Heatmap Performance", "TEST_ISIN_DIR_HM-2026"))
@@ -207,7 +203,7 @@ class TestSIFSchemeHeatmapPerformance(IntegrationTestCase):
 	def test_scheduler_sync_nav_performance_includes_heatmaps(self):
 		"""
 		Verifies sync_nav_performance orchestrates NAV, performance, and heatmaps
-		as DATA_SCHEDULER_USER without modifying existing performance logic.
+		as a system operation without mutating the session user.
 		"""
 		frappe.set_user("Administrator")
 		self.assertEqual(frappe.session.user, "Administrator")
@@ -241,8 +237,8 @@ class TestSIFSchemeHeatmapPerformance(IntegrationTestCase):
 			res = sync_nav_performance(dry_run=False)
 			self.assertEqual(res["status"], "success")
 
-		# Execution switches to DATA_SCHEDULER_USER
-		self.assertEqual(frappe.session.user, DATA_SCHEDULER_USER)
+		# Execution must NOT mutate frappe.session.user
+		self.assertEqual(frappe.session.user, "Administrator")
 
 		# Verify heatmap record created
 		doc_name = "TEST_ISIN_REG_HM-2026"

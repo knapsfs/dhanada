@@ -8,7 +8,7 @@ app_license = "mit"
 
 add_to_apps_screen = [
 	{
-		"name": "sif",
+		"name": "dhanada",
 		"logo": "/assets/dhanada/images/SIF-Assets-Favicon.png",
 		"title": "SIF",
 		"route": "/desk/sif",
@@ -297,9 +297,4 @@ fixtures = [
 			]
 		],
 	},
-	{"dt": "Role", "filters": [["name", "=", "Data Scheduler"]]},
-	{"dt": "Role Profile", "filters": [["name", "=", "Data Scheduler"]]},
-	{"dt": "Module Profile", "filters": [["name", "=", "Data Scheduler"]]},
-	{"dt": "User", "filters": [["name", "=", "datascheduler@gmail.com"]]},
-	{"dt": "Custom DocPerm", "filters": [["role", "=", "Data Scheduler"]]},
 ]
