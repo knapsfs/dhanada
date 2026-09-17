@@ -36,7 +36,7 @@ class IntegrationTestSIFSchemePlan(IntegrationTestCase):
 		"""
 		# 1. Ensure execution_context module does not exist
 		with self.assertRaises(ImportError):
-			import dhanada.utils.execution_context  # noqa: F401
+			import dhanada.utils.execution_context
 
 		# 2. Ensure hooks fixtures do not contain Data Scheduler
 		import dhanada.hooks as hooks
