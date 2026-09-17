@@ -77,9 +77,7 @@ class TestSIFSchemeHeatmapPerformance(IntegrationTestCase):
 			pluck="name",
 		)
 		for hm_name in test_heatmaps:
-			frappe.delete_doc(
-				"SIF Scheme Heatmap Performance", hm_name, ignore_permissions=True, force=True
-			)
+			frappe.delete_doc("SIF Scheme Heatmap Performance", hm_name, ignore_permissions=True, force=True)
 		frappe.db.commit()  # nosemgrep: frappe-manual-commit
 		super().tearDown()
 
