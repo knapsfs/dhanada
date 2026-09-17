@@ -280,6 +280,39 @@ class GitHubClient:
             log_warning(f"Failed to fetch or parse AMFI SIF NAV feed from {url}: {e}")
             return {}
 
+    # 4. HEATMAP DISCOVERY
+    def fetch_heatmap_performance(self) -> list[dict[str, Any]]:
+        """
+        Fetches all yearly heatmap CSV files from data/sif/scheme/heatMap/.
+        Returns list of parsed row dictionaries containing sif_code, year, jan..dec.
+        """
+        directory = "data/sif/scheme/heatMap"
+        logger.info(f"Using repository: {self.repo_url} (branch: {self.branch})")
+        logger.info(f"Fetching heatmap data from directory: {directory}")
+
+        files = self._list_directory(directory)
+        csv_files = [f for f in files if f.get("name", "").endswith(".csv")]
+
+        logger.info(f"Discovered {len(csv_files)} CSV heatmap files in {directory}")
+
+        all_heatmap_rows = []
+        for file_info in sorted(csv_files, key=lambda x: x.get("name", "")):
+            try:
+                content = self._download_file(file_info["download_url"])
+                text = content.decode("utf-8")
+                reader = csv.DictReader(io.StringIO(text))
+                for row in reader:
+                    if "sif_code" in row and "year" in row:
+                        all_heatmap_rows.append(row)
+                    else:
+                        log_warning(f"Skipping malformed row in {file_info.get('name')}: {row}")
+            except Exception as e:
+                log_error(f"Failed to fetch or parse heatmap CSV {file_info.get('name')}: {e}", exc_info=True)
+
+        logger.info(f"Successfully parsed {len(all_heatmap_rows)} heatmap rows across {len(csv_files)} files.")
+        return all_heatmap_rows
+
+
     # 6. BACKWARD COMPATIBILITY
     def fetch_json(self, path: str) -> dict[str, Any]:
         """

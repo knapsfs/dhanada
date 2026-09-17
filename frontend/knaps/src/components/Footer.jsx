@@ -75,6 +75,7 @@ export default function Footer() {
               <li><Link to="/calculators/step-up-sip" className="text-gray-400 hover:text-white text-sm transition-colors">Step-Up SIP</Link></li>
               <li><Link to="/calculators/swp" className="text-gray-400 hover:text-white text-sm transition-colors">SWP Calculator</Link></li>
               <li><Link to="/calculators/lumpsum" className="text-gray-400 hover:text-white text-sm transition-colors">Lumpsum Calculator</Link></li>
+              <li><Link to="/calculators/sip-lumpsum" className="text-gray-400 hover:text-white text-sm transition-colors">SIP + Lump Sum</Link></li>
               <li><Link to="/calculators/retirement" className="text-gray-400 hover:text-white text-sm transition-colors">Retirement</Link></li>
               <li><Link to="/calculators/future-value" className="text-gray-400 hover:text-white text-sm transition-colors">Future Value</Link></li>
             </ul>

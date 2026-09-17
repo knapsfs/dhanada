@@ -23,6 +23,13 @@ class IntegrationTestSIFSchemePlan(IntegrationTestCase):
 	Integration tests for SIFSchemePlan and SIF synchronization scheduler execution identity.
 	"""
 
+	@classmethod
+	def setUpClass(cls):
+		super().setUpClass()
+		from dhanada.setup.bootstrap import before_tests
+
+		before_tests()
+
 	def test_set_scheduler_user_switches_to_data_scheduler(self):
 		frappe.set_user("Administrator")
 		self.assertEqual(frappe.session.user, "Administrator")

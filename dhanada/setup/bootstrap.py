@@ -9,7 +9,11 @@ def after_migrate():
 	ensure_master_data()
 
 
-frappe.logger().info("Running bootstrap...")
+def before_tests():
+	from frappe.utils.fixtures import sync_fixtures
+
+	sync_fixtures("dhanada")
+	ensure_master_data()
 
 
 def ensure_master_data():

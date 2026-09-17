@@ -110,18 +110,18 @@ export default function SipCalculatorForm({ inputs, setInputs }) {
               max={200000}
               step={500}
               onChange={v => handleChange('sipAmount', v)}
-              hint="How much do you want to invest monthly?"
+            // hint="How much do you want to invest monthly?"
             />
             <InputField
               id="annual-return"
-              label="Expected Annual Return"
+              label="Expected Rate of Return (P.A.)"
               suffix="%"
               value={inputs.annualReturn}
               min={1}
               max={30}
               step={0.5}
               onChange={v => handleChange('annualReturn', v)}
-              hint="Historical large cap average: 12-15% p.a."
+            // hint="Historical large cap average: 12-15% p.a."
             />
             <InputField
               id="duration"
@@ -132,7 +132,7 @@ export default function SipCalculatorForm({ inputs, setInputs }) {
               max={40}
               step={1}
               onChange={v => handleChange('duration', v)}
-              hint="Longer duration = greater compounding benefit"
+            // hint="Longer duration = greater compounding benefit"
             />
           </div>
 

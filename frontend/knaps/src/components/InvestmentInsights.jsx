@@ -32,16 +32,25 @@ function doublingYears(rate) {
   return (72 / rate).toFixed(1)
 }
 
-export default function InvestmentInsights({ inputs, results }) {
+export default function InvestmentInsights({ inputs = {}, results = {} }) {
   const { ref, inView } = useInView({ triggerOnce: true })
   
-  const sipAmount = inputs.sipAmount === '' ? 0 : Number(inputs.sipAmount)
-  const annualReturn = inputs.annualReturn === '' ? 0 : Number(inputs.annualReturn)
-  const duration = inputs.duration === '' ? 0 : Number(inputs.duration)
+  const safeInputs = inputs || {}
+  const safeResults = results || {}
 
-  const totalInvested = results.totalInvested || 0
-  const wealthGained = results.wealthGained || 0
-  const futureValue = results.futureValue || 0
+  const sipAmount = safeInputs.sipAmount === '' || safeInputs.sipAmount == null 
+    ? (Number(safeInputs.recurringInvestment) || 0) 
+    : Number(safeInputs.sipAmount)
+  const annualReturn = safeInputs.annualReturn === '' || safeInputs.annualReturn == null 
+    ? 0 
+    : Number(safeInputs.annualReturn)
+  const duration = safeInputs.duration === '' || safeInputs.duration == null 
+    ? (Number(safeInputs.years) || 0) 
+    : Number(safeInputs.duration)
+
+  const totalInvested = safeResults.totalInvested || 0
+  const wealthGained = safeResults.wealthGained || 0
+  const futureValue = safeResults.futureValue || 0
   const absoluteReturn = results.absoluteReturn != null ? results.absoluteReturn : (totalInvested > 0 ? (wealthGained / totalInvested) * 100 : 0)
 
   const monthlyRate = annualReturn / 12 / 100

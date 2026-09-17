@@ -29,8 +29,9 @@ def sync_nav_performance(dry_run: bool = False):
 		# 1. Fetch data
 		nav_data = client.fetch_latest_nav()
 		perf_data = client.fetch_performance()
+		heatmap_data = client.fetch_heatmap_performance()
 
-		raw_data = {"nav_daily": nav_data, "performance": perf_data}
+		raw_data = {"nav_daily": nav_data, "performance": perf_data, "heatmaps": heatmap_data}
 
 		# 2. Map data
 		mapper = DataMapper()

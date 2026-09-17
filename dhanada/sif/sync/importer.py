@@ -45,6 +45,9 @@ class DataImporter:
 		for perf in dataset.performances:
 			self._upsert_performance(perf)
 
+		for hm in getattr(dataset, "heatmaps", []):
+			self._upsert_heatmap_performance(hm)
+
 	def _zero_missing_source_plans(self, matched_plan_names: set[str]):
 		"""
 		If no NAV data exists for a Regular SIF Scheme Plan in the GitHub NAV source,
@@ -335,3 +338,50 @@ class DataImporter:
 		doc.set("5_years", perf.years_5)
 		doc.set("10_years", perf.years_10)
 		doc.since_inception = perf.since_inception
+
+	def _upsert_heatmap_performance(self, hm):
+		try:
+			matching_plans = self._get_matching_plans(hm.sif_code)
+			if not matching_plans:
+				log_warning(
+					f"Skipping Heatmap Performance for sif_code {hm.sif_code} (year {hm.year}) - Missing Scheme Plan"
+				)
+				self.stats["skipped"] += 1
+				return
+
+			for plan_doc in matching_plans:
+				exists = frappe.db.exists(
+					"SIF Scheme Heatmap Performance", {"scheme_plan": plan_doc, "year": hm.year}
+				)
+				if exists:
+					if not self.dry_run:
+						doc = frappe.get_doc("SIF Scheme Heatmap Performance", exists)
+						doc.sif_code = hm.sif_code
+						self._map_heatmap_fields(doc, hm)
+						doc.save(ignore_permissions=True)
+					self.stats["updated"] += 1
+				else:
+					if not self.dry_run:
+						doc = frappe.new_doc("SIF Scheme Heatmap Performance")
+						doc.scheme_plan = plan_doc
+						doc.sif_code = hm.sif_code
+						doc.year = hm.year
+						self._map_heatmap_fields(doc, hm)
+						doc.insert(ignore_permissions=True)
+					self.stats["created"] += 1
+
+			if not self.dry_run:
+				frappe.db.commit()
+		except Exception as e:
+			if not self.dry_run:
+				frappe.db.rollback()
+			self.stats["errors"] += 1
+			log_error(
+				f"Failed to upsert Heatmap Performance for sif_code {hm.sif_code} (year {hm.year}): {e}",
+				exc_info=True,
+			)
+
+	def _map_heatmap_fields(self, doc, hm):
+		for month in ("jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"):
+			val = getattr(hm, month, None)
+			doc.set(month, val)

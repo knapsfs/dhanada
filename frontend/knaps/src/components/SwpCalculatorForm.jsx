@@ -103,14 +103,14 @@ export default function SwpCalculatorForm({ inputs, setInputs }) {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <InputField
               id="total-investment"
-              label="Total Investment"
+              label="Starting Investment Amount"
               prefix="₹"
               value={inputs.totalInvestment}
               min={50000}
               max={50000000}
               step={10000}
               onChange={v => handleChange('totalInvestment', v)}
-              hint="Total amount invested initially"
+            // hint="Total amount invested initially"
             />
             <InputField
               id="withdrawal"
@@ -121,29 +121,29 @@ export default function SwpCalculatorForm({ inputs, setInputs }) {
               max={500000}
               step={500}
               onChange={v => handleChange('withdrawalPerMonth', v)}
-              hint="Amount you wish to withdraw monthly"
+            // hint="Amount you wish to withdraw monthly"
             />
             <InputField
               id="annual-return"
-              label="Expected Return Rate (p.a)"
+              label="Expected Rate of Return (p.a)"
               suffix="%"
               value={inputs.annualReturn}
               min={1}
               max={30}
               step={0.5}
               onChange={v => handleChange('annualReturn', v)}
-              hint="Expected annual return rate"
+            // hint="Expected annual return rate"
             />
             <InputField
               id="duration"
-              label="Time Period"
+              label="Withdrawal Duration"
               suffix=" Yr"
               value={inputs.duration}
               min={1}
               max={40}
               step={1}
               onChange={v => handleChange('duration', v)}
-              hint="Duration for which you want to withdraw"
+            // hint="Duration for which you want to withdraw"
             />
           </div>
 

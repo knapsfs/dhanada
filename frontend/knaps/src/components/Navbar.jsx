@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faChevronDown, faXmark, faChartLine } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faChevronDown, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import logo from '../assets/knaps-logo.png';
 
@@ -36,6 +36,7 @@ const navLinks = [
       { label: 'Step Up SIP', href: '/calculators/step-up-sip' },
       { label: 'SWP Calculator', href: '/calculators/swp' },
       { label: 'Lumpsum Calculator', href: '/calculators/lumpsum' },
+      { label: 'SIP + Lump Sum', href: '/calculators/sip-lumpsum' },
       { label: 'Retirement Calculator', href: '/calculators/retirement' },
       { label: 'Future Value', href: '/calculators/future-value' },
     ],

@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faCalculator, faCircleInfo, faCheckCircle, faCircle
+  faCircleInfo, faCheckCircle, faCircle
 } from '@fortawesome/free-solid-svg-icons'
 
 const formatIndianNumber = (val) => {
@@ -51,8 +51,9 @@ function InputField({ id, label, value, min, max, step = 1, onChange, hint, pref
               onChange(isNaN(num) ? raw : num)
             }
           }}
-          className={`w-full py-3.5 rounded-xl border-2 border-[#e8edf7] bg-[#f7f9fc] text-gray-800 font-bold text-base focus:outline-none focus:border-[#032e92] focus:ring-4 focus:ring-[#032e92]/8 transition-all placeholder-gray-400 ${prefix ? 'pl-8 pr-4' : suffix ? 'pl-4 pr-12' : 'px-4'
-            }`}
+          className={`w-full py-3.5 rounded-xl border-2 border-[#e8edf7] bg-[#f7f9fc] text-gray-800 font-bold text-base focus:outline-none focus:border-[#032e92] focus:ring-4 focus:ring-[#032e92]/8 transition-all placeholder-gray-400 ${
+            prefix ? 'pl-8 pr-4' : suffix ? 'pl-4 pr-12' : 'px-4'
+          }`}
           placeholder={placeholder}
         />
         {suffix && (
@@ -82,7 +83,7 @@ function RadioGroup({ label, options, selected, onChange }) {
       <label className="text-xs font-bold text-gray-500 uppercase tracking-wide flex items-center gap-1.5 mb-1">
         {label}
       </label>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2.5">
         {options.map((opt) => {
           const isSelected = selected === opt.value
           return (
@@ -90,14 +91,27 @@ function RadioGroup({ label, options, selected, onChange }) {
               key={opt.value}
               type="button"
               onClick={() => onChange(opt.value)}
-              className={`flex items-center gap-3 w-full text-left p-3.5 rounded-xl border-2 transition-all cursor-pointer ${isSelected ? 'border-[#032e92] bg-[#eef4ff]' : 'border-[#e8edf7] hover:border-[#032e92]/30 bg-white'
-                }`}>
+              className={`flex items-start gap-3.5 w-full text-left p-4 rounded-2xl border-2 transition-all cursor-pointer ${
+                isSelected
+                  ? 'border-[#032e92] bg-[#eef4ff] shadow-sm'
+                  : 'border-[#e8edf7] hover:border-[#032e92]/30 bg-white'
+              }`}
+            >
               <FontAwesomeIcon
                 icon={isSelected ? faCheckCircle : faCircle}
-                className={isSelected ? 'text-[#032e92]' : 'text-gray-300'}
+                className={`mt-0.5 flex-shrink-0 ${isSelected ? 'text-[#032e92]' : 'text-gray-300'}`}
                 style={{ fontSize: '18px' }}
               />
-              <span className={`font-semibold text-sm ${isSelected ? 'text-[#032e92]' : 'text-gray-600'}`}>{opt.label}</span>
+              <div className="flex flex-col">
+                <span className={`font-bold text-sm tracking-wide ${isSelected ? 'text-[#032e92]' : 'text-gray-800'}`}>
+                  {opt.title}
+                </span>
+                {opt.desc && (
+                  <span className="text-xs text-gray-500 mt-1 leading-relaxed">
+                    {opt.desc}
+                  </span>
+                )}
+              </div>
             </button>
           )
         })}
@@ -107,7 +121,18 @@ function RadioGroup({ label, options, selected, onChange }) {
 }
 
 export default function RetirementCalculatorForm({ inputs, setInputs }) {
-  const handleChange = (key, val) => setInputs(prev => ({ ...prev, [key]: val }))
+  const handleChange = (key, val) => {
+    setInputs(prev => {
+      const next = { ...prev, [key]: val }
+      // Ensure retirementAge is always strictly greater than current age
+      if (key === 'age' && Number(val) >= Number(next.retirementAge)) {
+        next.retirementAge = Math.min(80, Number(val) + 5)
+      }
+      return next
+    })
+  }
+
+  const minRetireAge = Math.max(30, (Number(inputs.age) || 18) + 1)
 
   return (
     <section className="bg-[#f7f9fc] pb-6">
@@ -116,70 +141,99 @@ export default function RetirementCalculatorForm({ inputs, setInputs }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="bg-white rounded-3xl shadow-xl shadow-blue-900/8 border border-[#e8edf7] p-6 lg:p-8">
-
-          {/* Header */}
-          {/* <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-2">
-              <div className="w-9 h-9 rounded-xl bg-[#eef4ff] flex items-center justify-center">
-                <FontAwesomeIcon icon={faCalculator} className="text-[#032e92] text-sm" />
-              </div>
-              <div>
-                <h2 className="font-bold text-gray-800">Retirement Calculator</h2>
-                <p className="text-xs text-gray-400 font-medium">Results update instantly as you type</p>
-              </div>
-            </div>
-          </div> */}
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-2">
-            {/* Left Column */}
+          className="bg-white rounded-3xl shadow-xl shadow-blue-900/8 border border-[#e8edf7] p-6 lg:p-8"
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-6">
+            {/* Left Column: Numeric Sliders */}
             <div>
+              {/* How old are you? */}
               <InputField
                 id="age"
-                label="How old are you ?"
+                label="How old are you?"
                 value={inputs.age}
                 min={18}
                 max={60}
                 step={1}
+                suffix=" Yrs"
                 onChange={v => handleChange('age', v)}
               />
+
+              {/* When do you wish to retire? */}
               <InputField
-                id="spend"
-                label="How much do you spend per month?"
+                id="retirement-age"
+                label="When do you wish to retire?"
+                value={inputs.retirementAge}
+                min={minRetireAge}
+                max={80}
+                step={1}
+                suffix=" Yrs"
+                onChange={v => handleChange('retirementAge', v)}
+              />
+
+              {/* What are your current monthly household expenses? */}
+              <InputField
+                id="monthly-spend"
+                label="What are your current monthly household expenses?"
                 prefix="₹"
                 value={inputs.monthlySpend}
-                min={5000}
-                max={500000}
-                step={1000}
+                min={10000}
+                max={1000000}
+                step={5000}
                 onChange={v => handleChange('monthlySpend', v)}
               />
             </div>
 
-            {/* Right Column */}
+            {/* Right Column: Radio Selection Groups */}
             <div>
+              {/* How do you want to live after retirement? */}
               <RadioGroup
-                label="What kind of retirement you want?"
+                label="How do you want to live after retirement?"
                 options={[
-                  { label: 'LIKE A KING', value: 'king' },
-                  { label: 'I AM HAPPY THE WAY I AM', value: 'happy' },
-                  { label: 'LIKE A MONK', value: 'monk' }
+                  {
+                    title: 'Simple',
+                    desc: 'I just want to cover my essential living expenses and enjoy a simple, peaceful lifestyle.',
+                    value: 'simple',
+                  },
+                  {
+                    title: 'Comfortable',
+                    desc: 'I want to maintain a comfortable lifestyle with regular travel, hobbies and leisure.',
+                    value: 'comfortable',
+                  },
+                  {
+                    title: 'Luxury',
+                    desc: 'I want a high-end lifestyle with frequent travel, premium experiences and greater spending freedom.',
+                    value: 'luxury',
+                  },
                 ]}
                 selected={inputs.lifestyle}
                 onChange={v => handleChange('lifestyle', v)}
               />
 
+              {/* WHERE DO YOU PREFER TO INVEST FOR RETIREMENT? */}
               <RadioGroup
-                label="Where are you saving for your retirement?"
+                label="WHERE DO YOU PREFER TO INVEST FOR RETIREMENT?"
                 options={[
-                  { label: 'SAFE (PF, FD, ETC)', value: 'safe' },
-                  { label: 'AGGRESSIVE (MUTUAL FUNDS, EQUITY, ETC)', value: 'aggressive' }
+                  {
+                    title: 'SAFE',
+                    desc: 'PPF, FD, EPF, NPS, Government Bonds etc.',
+                    value: 'safe',
+                  },
+                  {
+                    title: 'GROWTH',
+                    desc: 'Mutual Funds, SIF, AIF, Stocks etc.',
+                    value: 'growth',
+                  },
+                  {
+                    title: 'INVEST IN BOTH',
+                    desc: 'I would invest in a mix of safe and growth options.',
+                    value: 'both',
+                  },
                 ]}
-                selected={inputs.savingStyle}
-                onChange={v => handleChange('savingStyle', v)}
+                selected={inputs.investmentPreference}
+                onChange={v => handleChange('investmentPreference', v)}
               />
             </div>
           </div>
-
         </motion.div>
       </div>
     </section>

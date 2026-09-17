@@ -40,26 +40,45 @@ function calculateStepUpSip(monthlyInvestment, stepUp, stepUpType = 'percentage'
     nominalFutureValue += fvy
   }
 
-  let inflationAdjustedValue = nominalFutureValue
+  // Real Rate of Return for Step-Up SIP (Fisher equation):
+  // Real return = (1 + r_nominal) / (1 + r_inflation) - 1
+  const nomRate = annualReturn / 100
+  const rReal = (1 + nomRate) / (1 + infRate) - 1
+  let inflationAdjustedValue = 0
+
   if (duration > 0) {
-    inflationAdjustedValue = nominalFutureValue / Math.pow(1 + infRate, duration)
+    if (rReal === 0) {
+      inflationAdjustedValue = totalInvested
+    } else {
+      const iReal = Math.pow(1 + rReal, 1 / 12) - 1
+      for (let y = 1; y <= duration; y++) {
+        let py = monthlyInvestment
+        if (stepUpType === 'amount') {
+          py = monthlyInvestment + (y - 1) * stepUp
+        } else {
+          py = monthlyInvestment * Math.pow(1 + Math.min(stepUp, 100) / 100, y - 1)
+        }
+        const months_left = 12 * (duration - y)
+        const fvy = py * ((Math.pow(1 + iReal, 12) - 1) / iReal) * Math.pow(1 + iReal, months_left)
+        inflationAdjustedValue += fvy
+      }
+    }
   }
 
-  const futureValue = isInflationAdjusted ? inflationAdjustedValue : nominalFutureValue
-  const wealthGained = Math.max(0, futureValue - totalInvested)
+  // Gains should NOT change as per inflation
+  const wealthGained = Math.max(0, nominalFutureValue - totalInvested)
 
   return {
     totalInvested: Math.round(totalInvested),
     wealthGained: Math.round(wealthGained),
-    futureValue: Math.round(futureValue),
+    futureValue: Math.round(nominalFutureValue),
     nominalFutureValue: Math.round(nominalFutureValue),
     inflationAdjustedValue: Math.round(inflationAdjustedValue)
   }
 }
 
-function calculateYearlyData(monthlyInvestment, stepUp, stepUpType = 'percentage', annualReturn, duration, isInflationAdjusted = false, inflationRate = 5) {
+function calculateYearlyData(monthlyInvestment, stepUp, stepUpType = 'percentage', annualReturn, duration) {
   const i = (annualReturn / 12) / 100
-  const infRate = Number(inflationRate) / 100
   const yearlyData = []
 
   let cumulativeInvested = 0
@@ -94,10 +113,7 @@ function calculateYearlyData(monthlyInvestment, stepUp, stepUpType = 'percentage
       fv_k += fvy
     }
 
-    if (isInflationAdjusted) {
-      fv_k = fv_k / Math.pow(1 + infRate, k)
-    }
-
+    // Gains and graph do not change as per inflation
     const gain = Math.max(0, fv_k - cumulativeInvested)
     const returnPct = cumulativeInvested > 0 ? (gain / cumulativeInvested) * 100 : 0
 
@@ -164,15 +180,15 @@ export default function StepUpSipCalculator() {
   )
 
   const yearlyData = useMemo(
-    () => calculateYearlyData(numInvestment, numStepUp, inputs.stepUpType, numReturn, numDuration, isInflationAdjusted, numInflation),
-    [numInvestment, numStepUp, inputs.stepUpType, numReturn, numDuration, isInflationAdjusted, numInflation]
+    () => calculateYearlyData(numInvestment, numStepUp, inputs.stepUpType, numReturn, numDuration),
+    [numInvestment, numStepUp, inputs.stepUpType, numReturn, numDuration]
   )
 
   return (
     <div className="min-h-screen bg-[#f7f9fc]">
       <Navbar />
 
-      <main className="pt-10">
+      <main className="pt-2">
         {/* Hero */}
         <StepUpSipHero />
 

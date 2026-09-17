@@ -184,7 +184,8 @@ scheduler_events = {
 # Testing
 # -------
 
-# before_tests = "dhanada.install.before_tests"
+before_tests = "dhanada.setup.bootstrap.before_tests"
+
 
 # Extend DocType Class
 # ------------------------------
