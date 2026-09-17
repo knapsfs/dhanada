@@ -1,138 +1,195 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faPiggyBank, faCoins, faShieldHeart, faHeartPulse,
-  faBuildingShield, faPeopleRoof, faPersonWalkingLuggage, faArrowRight, faCheck
+  faChartLine,
+  faCompass,
+  faUserTie,
+  faBuildingColumns,
+  faShieldHeart,
+  faBuildingShield,
+  faHeartPulse,
+  faFileInvoiceDollar,
+  faVault,
+  faRotate,
+  faPiggyBank,
+  faCoins,
+  faArrowRight
 } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
+import { useLeadModal } from '../../context/LeadModalContext';
 
-const services = [
+const SERVICES_DATA = [
   {
-    id: "nps",
-    title: "National Pension System (NPS)",
-    icon: faPiggyBank,
-    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=800&auto=format&fit=crop",
-    desc: "Build a disciplined retirement corpus with government-backed pension planning.",
-    features: ["Tax Benefits", "Long-Term Growth", "Retirement Income", "Flexible Contributions"]
+    id: "mutual-funds",
+    title: "Mutual Funds",
+    desc: "Invest in a wide range of equity, debt, and hybrid funds to grow your wealth over time. Benefit from professional fund management, automated SIP compounding, and portfolio diversification suited to your risk appetite.",
+    image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=800&auto=format&fit=crop",
+    icon: faChartLine,
+    link: null
   },
   {
-    id: "sss",
-    title: "Small Savings Scheme",
-    icon: faCoins,
-    image: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=800&auto=format&fit=crop",
-    desc: "Secure government-backed savings options for steady and reliable returns.",
-    features: ["Low Risk", "Guaranteed Returns", "Capital Protection", "Flexible Investment"]
+    id: "sif",
+    title: "SIF (Specialised Investment Funds)",
+    desc: "Goal-based, flexible investing engineered for your unique financial milestones. Leverage curated asset allocation, dynamic market hedging, and disciplined strategies designed to navigate volatility while capturing upside.",
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop",
+    icon: faCompass,
+    link: "/sif"
+  },
+  {
+    id: "pms",
+    title: "PMS (Portfolio Management Services)",
+    desc: "Personalised portfolio management tailored exclusively for high-net-worth investors. Enjoy direct stock ownership, bespoke risk-reward mandates, dedicated fund manager attention, and institutional-grade research.",
+    image: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=800&auto=format&fit=crop",
+    icon: faUserTie,
+    link: null
+  },
+  {
+    id: "aif",
+    title: "AIF (Alternative Investment Funds)",
+    desc: "Access exclusive, high-alpha opportunities beyond traditional public markets. Participate in private equity, private debt, real estate, and venture capital designed for sophisticated investors seeking uncorrelated returns.",
+    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=800&auto=format&fit=crop",
+    icon: faBuildingColumns,
+    link: null
   },
   {
     id: "life-insurance",
     title: "Life Insurance",
-    icon: faShieldHeart,
+    desc: "Comprehensive life cover to ensure your family's financial security and lifestyle continuity. Safeguard their future with high sum assured term plans, income protection, critical illness coverage, and tax benefits under Section 80C.",
     image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=800&auto=format&fit=crop",
-    desc: "Protect your family's financial future with comprehensive life insurance solutions.",
-    features: ["Financial Security", "Tax Benefits", "Life Cover", "Long-Term Protection"]
-  },
-  {
-    id: "health-insurance",
-    title: "Health Insurance",
-    icon: faHeartPulse,
-    image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=800&auto=format&fit=crop",
-    desc: "Protect yourself and your loved ones from unexpected medical expenses.",
-    features: ["Cashless Treatment", "Hospital Cover", "Critical Illness", "Family Plans"]
+    icon: faShieldHeart,
+    link: "/life-insurance"
   },
   {
     id: "general-insurance",
     title: "General Insurance",
-    icon: faBuildingShield,
+    desc: "Protect your most valuable physical assets including your home, vehicle, business, and travel. Shield yourself from unexpected liabilities, accidents, natural damages, and financial disruptions with complete peace of mind.",
     image: "https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?q=80&w=800&auto=format&fit=crop",
-    desc: "Protect your valuable assets with comprehensive insurance coverage.",
-    features: ["Motor Insurance", "Home Insurance", "Business Insurance", "Travel Insurance"]
+    icon: faBuildingShield,
+    link: "/general-insurance"
   },
   {
-    id: "child-planning",
-    title: "Child Marriage Planning",
-    icon: faPeopleRoof,
-    image: "https://images.unsplash.com/photo-1511895426328-dc8714191300?q=80&w=800&auto=format&fit=crop",
-    desc: "Create a financial roadmap for your child's future education and marriage expenses.",
-    features: ["Goal Planning", "Regular Investments", "Long-Term Wealth", "Financial Security"]
+    id: "health-insurance",
+    title: "Health Insurance",
+    desc: "Stay prepared for medical uncertainties with extensive health coverage. Access cashless hospitalization across premier hospital networks, comprehensive daycare treatments, pre/post medical care, and tax savings under Section 80D.",
+    image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=800&auto=format&fit=crop",
+    icon: faHeartPulse,
+    link: "/health-insurance"
   },
   {
-    id: "retirement",
-    title: "Retirement Planning",
-    icon: faPersonWalkingLuggage,
+    id: "elss",
+    title: "ELSS",
+    desc: "Save tax under Section 80C while investing in high-growth equity funds. Benefit from the shortest lock-in period among all tax-saving instruments (just 3 years) combined with the long-term wealth compounding power of equities.",
+    image: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=800&auto=format&fit=crop",
+    icon: faFileInvoiceDollar,
+    link: "/elss"
+  },
+  {
+    id: "fixed-deposits",
+    title: "Fixed Deposits (FD)",
+    desc: "A safe and steady investment option offering predictable interest income and capital stability. Choose flexible tenures ranging from 7 days to 10 years with assured interest payouts and preferential rates for senior citizens.",
+    image: "https://images.unsplash.com/photo-1565372195458-9de0b320ef04?q=80&w=800&auto=format&fit=crop",
+    icon: faVault,
+    link: "/fixed-deposits"
+  },
+  {
+    id: "recurring-deposits",
+    title: "Recurring Deposits (RD)",
+    desc: "Build your savings consistently, one step at a time. Cultivate a disciplined monthly investment habit with fixed, guaranteed compounding interest, zero exposure to market volatility, and flexible tenure choices.",
+    image: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=800&auto=format&fit=crop",
+    icon: faRotate,
+    link: "/recurring-deposits"
+  },
+  {
+    id: "nps",
+    title: "National Pension System (NPS)",
+    desc: "Plan for a secure, comfortable, and tax-efficient retirement. Accumulate a disciplined pension corpus with market-linked growth across equity and debt, enjoy an additional ₹50,000 tax deduction under 80CCD(1B), and secure lifelong annuity.",
     image: "https://images.unsplash.com/photo-1507206130118-b5907f817163?q=80&w=800&auto=format&fit=crop",
-    desc: "Plan today for a financially independent and stress-free retirement.",
-    features: ["Retirement Corpus", "Passive Income", "Wealth Preservation", "Tax Efficient Planning"]
+    icon: faPiggyBank,
+    link: "/nps"
+  },
+  {
+    id: "small-savings",
+    title: "Small Savings Schemes",
+    desc: "Government-backed savings instruments offering sovereign safety and assured returns. Invest in popular avenues like Public Provident Fund (PPF), Sukanya Samriddhi Yojana (SSY), and SCSS to enjoy tax-free compounding and capital security.",
+    image: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?q=80&w=800&auto=format&fit=crop",
+    icon: faCoins,
+    link: "/small-savings-schemes"
   }
 ];
 
-function ServiceCard({ service, index }) {
-  // Alternate image and content placement slightly for visual interest on desktop
-  const isEven = index % 2 === 0;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      className="bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_50px_-15px_rgba(3,46,146,0.15)] transition-all duration-500 group flex flex-col"
-    >
-      {/* Top Image Section */}
-      <div className="relative aspect-[4/3] w-full overflow-hidden">
-        <img
-          src={service.image}
-          alt={service.title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-        />
-        {/* Subtle gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a192f]/60 via-[#0a192f]/10 to-transparent"></div>
-
-        {/* Floating Icon */}
-        <div className="absolute top-4 right-4 w-12 h-12 rounded-2xl bg-white/90 backdrop-blur-sm flex items-center justify-center text-[#032e92] shadow-lg border border-white z-10 transition-transform group-hover:scale-110">
-          <FontAwesomeIcon icon={service.icon} className="text-xl" />
-        </div>
-      </div>
-
-      {/* Content Section */}
-      <div className="p-6 md:p-8 flex-1 flex flex-col">
-        <h3 className="text-xl font-bold text-[#0a192f] mb-3 group-hover:text-[#032e92] transition-colors line-clamp-1">
-          {service.title}
-        </h3>
-
-        <p className="text-gray-500 text-[14px] leading-relaxed mb-6 flex-1 line-clamp-3">
-          {service.desc}
-        </p>
-
-        {/* Features List */}
-        <div className="space-y-2 mb-8">
-          {service.features.slice(0, 3).map((feature, idx) => (
-            <div key={idx} className="flex items-center gap-3 text-[13px] text-gray-700 font-medium">
-              <FontAwesomeIcon icon={faCheck} className="text-[#c10000] text-[10px]" />
-              {feature}
-            </div>
-          ))}
-        </div>
-
-        {/* Action Button */}
-        <Link
-          to={`/#${service.id}`}
-          className="inline-flex items-center justify-center gap-2 w-full px-6 py-3.5 rounded-xl bg-[#f8f9fa] text-[#032e92] font-semibold text-sm group-hover:bg-[#032e92] group-hover:text-white transition-colors duration-300"
-        >
-          <span>Learn More</span>
-          <FontAwesomeIcon icon={faArrowRight} className="transform group-hover:translate-x-1 transition-transform" />
-        </Link>
-      </div>
-    </motion.div>
-  );
-}
-
 export default function ServicesGrid() {
+  const { openLeadModal } = useLeadModal();
+
   return (
-    <section className="py-12 pb-24">
+    <section className="py-12 pb-24 bg-[#f7f9fc]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {services.map((service, index) => (
-            <ServiceCard key={service.id} service={service} index={index} />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          {SERVICES_DATA.map((service, index) => (
+            <motion.div
+              key={service.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.5, delay: (index % 3) * 0.1 }}
+              className="bg-white rounded-3xl overflow-hidden border border-[#e8edf7] shadow-[0_10px_35px_-15px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_45px_-15px_rgba(3,46,146,0.14)] hover:-translate-y-1.5 transition-all duration-300 group flex flex-col justify-between"
+            >
+              {/* Top Image Section with Gradient Overlay and Floating Icon */}
+              <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
+                <img
+                  src={service.image}
+                  alt={service.title}
+                  loading="lazy"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a192f]/60 via-[#0a192f]/10 to-transparent" />
+
+                {/* Floating Frosted Icon Box */}
+                <div className="absolute top-4 right-4 w-11 h-11 rounded-2xl bg-white/90 backdrop-blur-md flex items-center justify-center text-[#032e92] shadow-md border border-white/80 group-hover:scale-110 transition-transform duration-300 z-10">
+                  <FontAwesomeIcon icon={service.icon} className="text-lg" />
+                </div>
+              </div>
+
+              {/* Content Section */}
+              <div className="p-6 md:p-7 flex-1 flex flex-col justify-between">
+                <div>
+                  <h3 className="text-xl font-bold text-[#0a192f] mb-3 group-hover:text-[#032e92] transition-colors leading-snug">
+                    {service.title}
+                  </h3>
+
+                  <p className="text-gray-600 text-sm leading-relaxed font-medium mb-6">
+                    {service.desc}
+                  </p>
+                </div>
+
+                {/* Action Button */}
+                <div className="pt-2">
+                  {service.link ? (
+                    <Link
+                      to={service.link}
+                      className="btn-ripple inline-flex items-center justify-center gap-2 w-full py-3 px-5 rounded-xl text-sm font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-md hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 group/btn"
+                    >
+                      <span>Explore {service.title.split(' ')[0]}</span>
+                      <FontAwesomeIcon
+                        icon={faArrowRight}
+                        className="text-xs group-hover/btn:translate-x-1 transition-transform"
+                      />
+                    </Link>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={openLeadModal}
+                      className="btn-ripple inline-flex items-center justify-center gap-2 w-full py-3 px-5 rounded-xl text-sm font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-md hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 group/btn cursor-pointer"
+                    >
+                      <span>Get Started</span>
+                      <FontAwesomeIcon
+                        icon={faArrowRight}
+                        className="text-xs group-hover/btn:translate-x-1 transition-transform"
+                      />
+                    </button>
+                  )}
+                </div>
+              </div>
+            </motion.div>
           ))}
         </div>
       </div>

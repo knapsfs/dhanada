@@ -81,12 +81,9 @@ export default function HeatmapSection({ fundsData = [] }) {
     }
   };
 
-  const currentCategoryData = groupedData.find((g) => g.id === activeCategory);
-  const activeSubCatData = currentCategoryData?.subCategories.find((s) => s.id === activeSubCategory);
-
-  const activeFunds = useMemo(() => {
-    return activeSubCatData ? activeSubCatData.funds : [];
-  }, [activeSubCatData]);
+  const currentCategoryData = groupedData.find(g => g.id === activeCategory);
+  const activeSubCatData = currentCategoryData?.subCategories.find(s => s.id === activeSubCategory);
+  const activeFunds = activeSubCatData ? activeSubCatData.funds : [];
 
   if (groupedData.length === 0) return null; // Don't render if no data
 
@@ -177,3 +174,4 @@ export default function HeatmapSection({ fundsData = [] }) {
     </section>
   );
 }
+

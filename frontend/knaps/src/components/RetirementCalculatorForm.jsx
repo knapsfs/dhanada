@@ -24,7 +24,7 @@ const parseRawNumber = (rawStr) => {
 
 function InputField({ id, label, value, min, max, step = 1, onChange, hint, prefix, suffix, placeholder = '' }) {
   return (
-    <div className="flex flex-col gap-1.5 mb-6">
+    <div className="flex flex-col gap-1.5">
       <label htmlFor={id} className="text-xs font-bold text-gray-500 uppercase tracking-wide flex items-center gap-1.5">
         {label}
         {hint && (
@@ -79,7 +79,7 @@ function InputField({ id, label, value, min, max, step = 1, onChange, hint, pref
 
 function RadioGroup({ label, options, selected, onChange }) {
   return (
-    <div className="flex flex-col gap-3 mb-6">
+    <div className="flex flex-col gap-3">
       <label className="text-xs font-bold text-gray-500 uppercase tracking-wide flex items-center gap-1.5 mb-1">
         {label}
       </label>
@@ -143,48 +143,49 @@ export default function RetirementCalculatorForm({ inputs, setInputs }) {
           transition={{ duration: 0.6 }}
           className="bg-white rounded-3xl shadow-xl shadow-blue-900/8 border border-[#e8edf7] p-6 lg:p-8"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-6">
-            {/* Left Column: Numeric Sliders */}
-            <div>
-              {/* How old are you? */}
-              <InputField
-                id="age"
-                label="How old are you?"
-                value={inputs.age}
-                min={18}
-                max={60}
-                step={1}
-                suffix=" Yrs"
-                onChange={v => handleChange('age', v)}
-              />
+          {/* Top Row: 3 Numeric Sliders across the full width */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            {/* How old are you? */}
+            <InputField
+              id="age"
+              label="How old are you?"
+              value={inputs.age}
+              min={18}
+              max={60}
+              step={1}
+              suffix=" Yrs"
+              onChange={v => handleChange('age', v)}
+            />
 
-              {/* When do you wish to retire? */}
-              <InputField
-                id="retirement-age"
-                label="When do you wish to retire?"
-                value={inputs.retirementAge}
-                min={minRetireAge}
-                max={80}
-                step={1}
-                suffix=" Yrs"
-                onChange={v => handleChange('retirementAge', v)}
-              />
+            {/* When do you wish to retire? */}
+            <InputField
+              id="retirement-age"
+              label="When do you wish to retire?"
+              value={inputs.retirementAge}
+              min={minRetireAge}
+              max={80}
+              step={1}
+              suffix=" Yrs"
+              onChange={v => handleChange('retirementAge', v)}
+            />
 
-              {/* What are your current monthly household expenses? */}
-              <InputField
-                id="monthly-spend"
-                label="What are your current monthly household expenses?"
-                prefix="₹"
-                value={inputs.monthlySpend}
-                min={10000}
-                max={1000000}
-                step={5000}
-                onChange={v => handleChange('monthlySpend', v)}
-              />
-            </div>
+            {/* What are your current monthly household expenses? */}
+            <InputField
+              id="monthly-spend"
+              label="What are your current monthly household expenses?"
+              prefix="₹"
+              value={inputs.monthlySpend}
+              min={10000}
+              max={1000000}
+              step={5000}
+              onChange={v => handleChange('monthlySpend', v)}
+            />
+          </div>
 
-            {/* Right Column: Radio Selection Groups */}
-            <div>
+          {/* Divider */}
+          <div className="border-t border-[#e8edf7] pt-8">
+            {/* Bottom Row: Selection Question Groups Side-by-Side */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* How do you want to live after retirement? */}
               <RadioGroup
                 label="How do you want to live after retirement?"
@@ -234,6 +235,10 @@ export default function RetirementCalculatorForm({ inputs, setInputs }) {
               />
             </div>
           </div>
+
+          <p className="text-[10px] text-gray-400 italic mt-6 mb-0 leading-tight">
+            * Illustrative assumption only. Actual investment returns and expenses may vary and are not guaranteed.
+          </p>
         </motion.div>
       </div>
     </section>

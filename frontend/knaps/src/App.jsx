@@ -19,6 +19,14 @@ import LumpsumCalculator from './pages/LumpsumCalculator';
 import RetirementCalculator from './pages/RetirementCalculator';
 import FutureValueCalculatorPage from './pages/FutureValueCalculatorPage';
 import SipLumpsumCalculator from './pages/SipLumpsumCalculator';
+import LifeInsurance from './pages/LifeInsurance';
+import GeneralInsurance from './pages/GeneralInsurance';
+import HealthInsurance from './pages/HealthInsurance';
+import ELSS from './pages/ELSS';
+import FixedDeposit from './pages/FixedDeposit';
+import RecurringDeposits from './pages/RecurringDeposits';
+import NationalPensionSystem from './pages/NationalPensionSystem';
+import SmallSavingsSchemes from './pages/SmallSavingsSchemes';
 
 // Global Infrastructure Components
 import ScrollToTop from './components/ScrollToTop';
@@ -54,7 +62,31 @@ function App() {
             <Route path="/calculators/retirement" element={<RetirementCalculator />} />
             <Route path="/calculators/future-value" element={<FutureValueCalculatorPage />} />
             <Route path="/calculators/sip-lumpsum" element={<SipLumpsumCalculator />} />
-            <Route path="/calculators/sip-plus-lumpsum" element={<SipLumpsumCalculator />} />
+            {/* Insurance Routes */}
+            <Route path="/life-insurance" element={<LifeInsurance />} />
+            <Route path="/services/life-insurance" element={<LifeInsurance />} />
+            <Route path="/general-insurance" element={<GeneralInsurance />} />
+            <Route path="/services/general-insurance" element={<GeneralInsurance />} />
+            <Route path="/health-insurance" element={<HealthInsurance />} />
+            <Route path="/services/health-insurance" element={<HealthInsurance />} />
+            {/* ELSS Routes */}
+            <Route path="/elss" element={<ELSS />} />
+            <Route path="/services/elss" element={<ELSS />} />
+            {/* Fixed Deposit Routes */}
+            <Route path="/fixed-deposits" element={<FixedDeposit />} />
+            <Route path="/services/fixed-deposits" element={<FixedDeposit />} />
+            {/* Recurring Deposit Routes */}
+            <Route path="/recurring-deposits" element={<RecurringDeposits />} />
+            <Route path="/services/recurring-deposits" element={<RecurringDeposits />} />
+            {/* National Pension System Routes */}
+            <Route path="/nps" element={<NationalPensionSystem />} />
+            <Route path="/services/nps" element={<NationalPensionSystem />} />
+            <Route path="/national-pension-system" element={<NationalPensionSystem />} />
+            {/* Small Savings Schemes Routes */}
+            <Route path="/small-savings-schemes" element={<SmallSavingsSchemes />} />
+            <Route path="/services/small-savings-schemes" element={<SmallSavingsSchemes />} />
+            <Route path="/small-savings" element={<SmallSavingsSchemes />} />
+            <Route path="/services/small-savings" element={<SmallSavingsSchemes />} />
           </Routes>
           <MysteryBoxWidget />
           <ChatbotWidget />
