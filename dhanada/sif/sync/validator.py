@@ -1,7 +1,5 @@
-import re
 from datetime import datetime
 from typing import Any
-from urllib.parse import urlparse
 
 
 class ValidationError(Exception):

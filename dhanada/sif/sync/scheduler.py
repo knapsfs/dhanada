@@ -4,7 +4,7 @@ import frappe
 
 from .github_client import GitHubClient
 from .importer import DataImporter
-from .logger import log_error, log_sync_completed, log_sync_start, log_warning
+from .logger import log_error, log_sync_completed, log_sync_start
 from .mapper import DataMapper
 
 

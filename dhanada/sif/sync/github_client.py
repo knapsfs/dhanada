@@ -4,7 +4,7 @@ import json
 import logging
 import os
 import re
-from typing import Any, Optional
+from typing import Any
 
 import frappe
 import requests
@@ -102,7 +102,7 @@ class GitHubClient:
             raise ValueError("sif_sync_github_repo_url is not configured in site_config.json")
         return f"https://api.github.com/repos/{self._owner}/{self._repo}/contents/{path}?ref={self.branch}"
 
-    def _get_local_fallback_path(self, path: str) -> Optional[str]:
+    def _get_local_fallback_path(self, path: str) -> str | None:
         candidates = [
             frappe.conf.get("amfi_fetcher_path"),
             frappe.conf.get("sif_data_path"),

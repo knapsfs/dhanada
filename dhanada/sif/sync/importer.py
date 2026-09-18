@@ -2,7 +2,6 @@ import frappe
 
 from .approval import create_approval_request
 from .comparator import compare_scheme
-from .constants import APPROVED_SUBCATEGORIES
 from .logger import log_error, log_warning
 from .models import SyncDataset
 

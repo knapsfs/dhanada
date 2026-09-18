@@ -1,13 +1,10 @@
-import csv
-import io
 import json
-import os
 import re
 from datetime import datetime
 
 import frappe
 from dateutil.relativedelta import relativedelta
-from frappe.utils import cstr, date_diff, flt, getdate, nowdate
+from frappe.utils import cstr, date_diff, getdate, nowdate
 
 
 def get_default_plan(plans):
@@ -295,13 +292,6 @@ def get_funds_list():
 	except Exception as e:
 		frappe.log_error(title="get_funds_list API Error", message=frappe.get_traceback())
 		return {"status": "error", "message": str(e)}
-
-
-def clear_historical_nav_cache(safe_code: str | None = None):
-	"""
-	Preserved for backward compatibility.
-	"""
-	pass
 
 
 def get_historical_nav_for_sif(sif_code: str) -> list[dict]:
