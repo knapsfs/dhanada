@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faArrowTrendUp } from '@fortawesome/free-solid-svg-icons';
 import { useLeadModal } from '../context/LeadModalContext';
 
 import homeImg from '../assets/goals/goal_dream_home.jpg';
@@ -159,20 +159,20 @@ export default function GoalFocus() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-8 sm:mt-10 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-[#eef4ff] via-[#f7faff] to-[#edf4ff] border border-blue-100/70 p-6 sm:p-8 relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-6 shadow-2xs"
+            className="mt-8 sm:mt-10 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-[#edf4ff] via-[#f7faff] to-[#edf4ff] border border-blue-100/90 p-6 sm:p-7 lg:py-7 lg:px-9 relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-8 shadow-xs"
           >
-            {/* Left Checkpoints */}
-            <div className="space-y-3.5 z-10 w-full lg:w-auto">
+            {/* Left Checkpoints (No awkward wrapping) */}
+            <div className="space-y-3 z-10 w-full lg:w-auto shrink-0">
               {[
                 'Stay invested for the long term',
                 'Let compounding work for you',
                 'Build the life you envision',
               ].map((text, idx) => (
                 <div key={idx} className="flex items-center gap-3">
-                  <div className="w-5 h-5 rounded-full bg-blue-100/90 text-[#032e92] flex items-center justify-center text-[10px] flex-shrink-0">
+                  <div className="w-5 h-5 rounded-full bg-blue-100 text-[#032e92] flex items-center justify-center text-[10px] shrink-0 shadow-2xs">
                     <FontAwesomeIcon icon={faCheck} />
                   </div>
-                  <span className="text-xs sm:text-sm font-bold text-slate-800">
+                  <span className="text-xs sm:text-[13.5px] font-bold text-slate-800 tracking-tight whitespace-nowrap">
                     {text}
                   </span>
                 </div>
@@ -180,50 +180,146 @@ export default function GoalFocus() {
             </div>
 
             {/* Center Playful Cursive Script */}
-            <div className="z-10 text-center lg:text-left self-center">
-              <span className="text-base sm:text-xl font-bold text-sky-700/60 italic tracking-wider select-none font-serif">
-                Disciplined<br className="hidden sm:inline lg:hidden" /> Investing.
+            <div className="z-10 text-center py-1 lg:py-0 px-2 lg:px-4 shrink-0">
+              <span className="text-xl sm:text-2xl lg:text-[26px] font-bold bg-gradient-to-r from-[#032e92] via-[#0284c7] to-[#032e92] bg-clip-text text-transparent font-serif italic tracking-wide block">
+                Disciplined Investing.
+              </span>
+              <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest block mt-0.5">
+                The Power of Time
               </span>
             </div>
 
             {/* Right Compounding Growth Graph Graphic */}
-            <div className="relative w-full sm:w-[320px] lg:w-[360px] h-[90px] flex items-end justify-end flex-shrink-0 overflow-hidden">
-              {/* Histogram bars in background */}
-              <div className="absolute inset-0 flex items-end justify-between px-2 opacity-25 pointer-events-none">
-                {[20, 24, 28, 33, 39, 46, 54, 63, 73, 85, 95].map((height, i) => (
-                  <div
-                    key={i}
-                    className="w-2.5 sm:w-3 bg-blue-400 rounded-t-xs"
-                    style={{ height: `${height}%` }}
-                  />
-                ))}
+            <div className="relative w-full sm:w-[380px] md:w-[420px] lg:w-[450px] flex flex-col justify-end shrink-0">
+
+              {/* Header Label Row Above Chart (Clean alignment) */}
+              <div className="flex items-center justify-between mb-1.5 px-1">
+                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+
+                  {/* Compound Growth */}
+                </span>
+                <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/95 border border-sky-200/90 shadow-2xs text-[11px] font-bold text-[#032e92]">
+                  <FontAwesomeIcon icon={faArrowTrendUp} className="text-emerald-500 text-xs" />
+                  <span>Compounding</span>
+                </div>
               </div>
 
-              {/* Smooth Exponential Compounding Curve */}
-              <svg
-                className="w-full h-full relative z-10 overflow-visible"
-                viewBox="0 0 340 90"
-                fill="none"
-                preserveAspectRatio="none"
-              >
-                <defs>
-                  <linearGradient id="curveGradient" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#93c5fd" />
-                    <stop offset="70%" stopColor="#38bdf8" />
-                    <stop offset="100%" stopColor="#0284c7" />
-                  </linearGradient>
-                </defs>
-                <path
-                  d="M 10 82 C 100 80, 200 68, 325 15"
-                  stroke="url(#curveGradient)"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                />
-                {/* Glowing Pulse Dot at end */}
-                <circle cx="325" cy="15" r="7" fill="#0284c7" opacity="0.3" />
-                <circle cx="325" cy="15" r="4.5" fill="#0284c7" />
-                <circle cx="325" cy="15" r="2" fill="#ffffff" />
-              </svg>
+              {/* Chart Canvas */}
+              <div className="relative w-full h-[125px] sm:h-[135px] lg:h-[145px] flex items-end">
+                {/* Histogram bars in background (Static - already rendered) */}
+                <div className="absolute inset-x-1 bottom-0 top-3 flex items-end justify-between px-1 opacity-25 pointer-events-none z-0">
+                  {[14, 18, 23, 29, 36, 45, 55, 66, 78, 90, 100].map((height, i) => (
+                    <div
+                      key={i}
+                      className="w-2.5 sm:w-3.5 bg-gradient-to-t from-blue-300 via-sky-400 to-blue-500 rounded-t-sm"
+                      style={{ height: `${height}%` }}
+                    />
+                  ))}
+                </div>
+
+                {/* Smooth Exponential Compounding Curve SVG */}
+                <svg
+                  className="w-full h-full relative z-10 overflow-visible"
+                  viewBox="0 0 450 145"
+                  fill="none"
+                  preserveAspectRatio="none"
+                >
+                  <defs>
+                    {/* Base Gradient for the Curve */}
+                    <linearGradient id="curveGradient" x1="0" y1="1" x2="1" y2="0">
+                      <stop offset="0%" stopColor="#93c5fd" />
+                      <stop offset="40%" stopColor="#38bdf8" />
+                      <stop offset="85%" stopColor="#0284c7" />
+                      <stop offset="100%" stopColor="#032e92" />
+                    </linearGradient>
+
+                    {/* Gradient for Traveling Pulse */}
+                    <linearGradient id="surgeGradient" x1="0" y1="1" x2="1" y2="0">
+                      <stop offset="0%" stopColor="#60a5fa" stopOpacity="0.1" />
+                      <stop offset="50%" stopColor="#38bdf8" stopOpacity="0.9" />
+                      <stop offset="100%" stopColor="#ffffff" stopOpacity="1" />
+                    </linearGradient>
+
+                    {/* Shaded Area Under the Curve */}
+                    <linearGradient id="curveAreaGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.25" />
+                      <stop offset="60%" stopColor="#93c5fd" stopOpacity="0.08" />
+                      <stop offset="100%" stopColor="#dbeafe" stopOpacity="0" />
+                    </linearGradient>
+                  </defs>
+
+                  {/* Shaded Area Under Curve (Static fill) */}
+                  <path
+                    d="M 10 138 C 125 136, 245 120, 335 76 C 388 50, 420 28, 438 14 L 438 144 L 10 144 Z"
+                    fill="url(#curveAreaGradient)"
+                  />
+
+                  {/* Subtle Background Guideline Track */}
+                  <path
+                    d="M 10 138 C 125 136, 245 120, 335 76 C 388 50, 420 28, 438 14"
+                    stroke="#93c5fd"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    opacity="0.35"
+                  />
+
+                  {/* Active Compounding Curve Line - Forms upward when section loads into view, then stays formed */}
+                  <motion.path
+                    d="M 10 138 C 125 136, 245 120, 335 76 C 388 50, 420 28, 438 14"
+                    stroke="url(#curveGradient)"
+                    strokeWidth="3.5"
+                    strokeLinecap="round"
+                    initial={{ pathLength: 0 }}
+                    whileInView={{ pathLength: 1 }}
+                    viewport={{ once: true }}
+                    transition={{
+                      duration: 1.8,
+                      ease: "easeOut"
+                    }}
+                  />
+
+                  {/* Continuous Energy Surge Animation along the line */}
+                  <motion.path
+                    d="M 10 138 C 125 136, 245 120, 335 76 C 388 50, 420 28, 438 14"
+                    stroke="url(#surgeGradient)"
+                    strokeWidth="4"
+                    strokeLinecap="round"
+                    fill="none"
+                    strokeDasharray="50 350"
+                    animate={{ strokeDashoffset: [400, 0] }}
+                    transition={{
+                      duration: 2.4,
+                      repeat: Infinity,
+                      ease: "linear"
+                    }}
+                  />
+
+                  {/* Apex Pulsing Radar Rings */}
+                  <motion.circle
+                    cx="438"
+                    cy="14"
+                    r="5.5"
+                    fill="#0284c7"
+                    animate={{ scale: [1, 2.4, 1], opacity: [0.6, 0, 0.6] }}
+                    transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+                    style={{ transformOrigin: "438px 14px" }}
+                  />
+                  <motion.circle
+                    cx="438"
+                    cy="14"
+                    r="9.5"
+                    stroke="#38bdf8"
+                    strokeWidth="1.5"
+                    animate={{ scale: [1, 1.8, 1], opacity: [0.5, 0, 0.5] }}
+                    transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
+                    style={{ transformOrigin: "438px 14px" }}
+                  />
+
+                  {/* Apex Core Glowing Dot */}
+                  <circle cx="438" cy="14" r="4.5" fill="#032e92" />
+                  <circle cx="438" cy="14" r="2" fill="#ffffff" />
+                </svg>
+              </div>
             </div>
           </motion.div>
 

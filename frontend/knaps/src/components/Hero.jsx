@@ -211,11 +211,10 @@ export default function Hero() {
                           setProductOpen(false);
                         }
                       }}
-                      className={`w-full bg-transparent border-b-2 pb-2 text-sm flex items-center justify-between cursor-pointer transition-colors select-none ${
-                        productOpen
+                      className={`w-full bg-transparent border-b-2 pb-2 text-sm flex items-center justify-between cursor-pointer transition-colors select-none ${productOpen
                           ? 'border-[#032e92]'
                           : 'border-gray-300 hover:border-gray-400'
-                      }`}
+                        }`}
                     >
                       <span className={selectedProduct ? 'text-gray-800 font-medium' : 'text-gray-400 font-normal'}>
                         {selectedProductObj ? selectedProductObj.label : 'Select a product'}
@@ -250,11 +249,10 @@ export default function Hero() {
                                   setSelectedProduct(option.value);
                                   setProductOpen(false);
                                 }}
-                                className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg cursor-pointer text-sm transition-colors ${
-                                  isSelected
+                                className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg cursor-pointer text-sm transition-colors ${isSelected
                                     ? 'bg-[#eef4ff] text-[#032e92] font-semibold'
                                     : 'text-gray-700 hover:bg-gray-50 hover:text-[#032e92]'
-                                }`}
+                                  }`}
                               >
                                 <span>{option.label}</span>
                                 {isSelected && (
@@ -337,7 +335,7 @@ export default function Hero() {
                         <span>Submitting...</span>
                       </>
                     ) : (
-                      'Start Investing'
+                      'Submit'
                     )}
                   </button>
                 </form>
