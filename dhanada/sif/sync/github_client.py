@@ -106,9 +106,9 @@ class GitHubClient:
         candidates = [
             frappe.conf.get("amfi_fetcher_path"),
             frappe.conf.get("sif_data_path"),
-            os.path.join(frappe.get_app_path("dhanada"), "..", "..", "..", "..", "AMFI_Fetcher"),
-            os.path.join(os.getcwd(), "..", "AMFI_Fetcher"),
-            "/Users/smritisoni/Desktop/My_SIF/AMFI_Fetcher",
+            os.environ.get("SIF_DATA_PATH"),
+            os.environ.get("AMFI_FETCHER_PATH"),
+            frappe.get_site_path("sif_data"),
         ]
         for base in candidates:
             if base and isinstance(base, str):
@@ -312,6 +312,58 @@ class GitHubClient:
         logger.info(f"Successfully parsed {len(all_heatmap_rows)} heatmap rows across {len(csv_files)} files.")
         return all_heatmap_rows
 
+
+    # 5. HISTORICAL NAV DISCOVERY
+    def fetch_historical_nav(self) -> list[dict[str, Any]]:
+        """
+        Fetches all historical NAV CSV files from data/sif/scheme/nav/historical/.
+        Returns list of scheme datasets:
+        [
+            {
+                "sif_code": "SIF-2",
+                "rows": [{"sif_code": "SIF-2", "nav_date": "09-Jul-2026", "nav": "10.902"}, ...]
+            },
+            ...
+        ]
+        """
+        directory = "data/sif/scheme/nav/historical"
+        logger.info(f"Using repository: {self.repo_url} (branch: {self.branch})")
+        logger.info(f"Fetching historical NAV data from directory: {directory}")
+
+        files = self._list_directory(directory)
+        csv_files = [f for f in files if f.get("name", "").endswith(".csv")]
+
+        logger.info(f"Discovered {len(csv_files)} historical NAV CSV files in {directory}")
+
+        all_schemes_hist: list[dict[str, Any]] = []
+        for file_info in sorted(csv_files, key=lambda x: x.get("name", "")):
+            filename = file_info.get("name", "")
+            base_name = os.path.splitext(filename)[0]
+            fallback_code = base_name.upper().replace("_", "-")
+
+            try:
+                content = self._download_file(file_info["download_url"])
+                text = content.decode("utf-8")
+                reader = csv.DictReader(io.StringIO(text))
+                scheme_code = None
+                rows = []
+                for row in reader:
+                    if not scheme_code and row.get("sif_code"):
+                        scheme_code = row.get("sif_code").strip().upper()
+                    rows.append(row)
+
+                resolved_code = scheme_code or fallback_code
+                all_schemes_hist.append(
+                    {
+                        "sif_code": resolved_code,
+                        "rows": rows,
+                    }
+                )
+            except Exception as e:
+                log_error(f"Failed to fetch or parse historical NAV CSV {filename}: {e}", exc_info=True)
+
+        logger.info(f"Successfully parsed historical NAV across {len(all_schemes_hist)} scheme files.")
+        return all_schemes_hist
 
     # 6. BACKWARD COMPATIBILITY
     def fetch_json(self, path: str) -> dict[str, Any]:

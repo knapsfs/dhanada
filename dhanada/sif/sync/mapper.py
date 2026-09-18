@@ -8,11 +8,13 @@ from .logger import log_warning
 from .models import (
 	AMC,
 	FundManager,
+	HistoricalNavEntry,
 	NavUpdate,
 	Scheme,
 	SchemeAllocation,
 	SchemeFundManager,
 	SchemeHeatmapPerformance,
+	SchemeHistoricalNav,
 	SchemePlan,
 	SchemePlanPerformance,
 	Subcategory,
@@ -622,6 +624,43 @@ class DataMapper:
 						oct=self._parse_float(raw_hm.get("oct")),
 						nov=self._parse_float(raw_hm.get("nov")),
 						dec=self._parse_float(raw_hm.get("dec")),
+					)
+				)
+
+		# 5. Historical NAV (Per Scheme)
+		for raw_scheme_hist in raw_data.get("historical_nav", []):
+			sif_code_val = str(raw_scheme_hist.get("sif_code") or "").strip().upper()
+			if not sif_code_val:
+				continue
+
+			valid_entries: list[HistoricalNavEntry] = []
+			seen_dates = set()
+			for raw_row in raw_scheme_hist.get("rows", []):
+				if "sif_code" not in raw_row:
+					raw_row["sif_code"] = sif_code_val
+				if self.validator.validate_amfi_historical_nav(raw_row):
+					parsed_date = self._parse_date(raw_row.get("nav_date"))
+					parsed_nav = self._parse_float(raw_row.get("nav"))
+					if (
+						parsed_date
+						and parsed_nav is not None
+						and parsed_nav > 0
+						and parsed_date not in seen_dates
+					):
+						seen_dates.add(parsed_date)
+						valid_entries.append(
+							HistoricalNavEntry(
+								nav_date=parsed_date,
+								nav=parsed_nav,
+							)
+						)
+
+			if valid_entries:
+				valid_entries.sort(key=lambda x: x.nav_date)
+				dataset.historical_nav.append(
+					SchemeHistoricalNav(
+						sif_code=sif_code_val,
+						entries=valid_entries,
 					)
 				)
 
