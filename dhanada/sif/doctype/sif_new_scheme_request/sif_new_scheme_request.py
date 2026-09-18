@@ -261,5 +261,5 @@ def create_approval_from_ui(data: dict | str):
 						new_row.pop(key, None)
 					approval_doc.append(field.fieldname, new_row)
 
-	approval_doc.insert(ignore_permissions=True)
+	approval_doc.insert()
 	return approval_doc.name

@@ -2,11 +2,32 @@ import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import HeatmapHeader from './HeatmapHeader';
 import HeatmapTable from './HeatmapTable';
+import { fetchSchemeHeatmapPerformance } from '../../api/funds';
 
 export default function HeatmapSection({ fundsData = [] }) {
   const [timeFilter, setTimeFilter] = useState('12M'); 
   const [activeCategory, setActiveCategory] = useState('');
   const [activeSubCategory, setActiveSubCategory] = useState('');
+  const [heatmapRecords, setHeatmapRecords] = useState([]);
+
+  // Fetch heatmap performance data from Dhanada backend API
+  useEffect(() => {
+    let isMounted = true;
+    async function loadHeatmapData() {
+      try {
+        const heatmapData = await fetchSchemeHeatmapPerformance();
+        if (!isMounted) return;
+        setHeatmapRecords(heatmapData || []);
+      } catch (err) {
+        console.error('Error loading heatmap performance data:', err);
+      }
+    }
+
+    loadHeatmapData();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // Process live fundsData into a hierarchical structure
   const groupedData = useMemo(() => {
@@ -140,6 +161,7 @@ export default function HeatmapSection({ fundsData = [] }) {
                 >
                   <HeatmapTable 
                     funds={activeFunds} 
+                    heatmapRecords={heatmapRecords}
                     timeFilter={timeFilter} 
                     activeSubCategoryLabel={activeSubCatData?.name} 
                   />
@@ -152,3 +174,4 @@ export default function HeatmapSection({ fundsData = [] }) {
     </section>
   );
 }
+

@@ -80,7 +80,7 @@ jobs:
       - name: Verify KNAPS assets
         run: |
           docker pull knapsdocker/dhanada:${{ steps.version.outputs.version }}
-          docker run --rm knapsdocker/dhanada:${{ steps.version.outputs.version }} \
+          docker run --rm --entrypoint "" knapsdocker/dhanada:${{ steps.version.outputs.version }} \
             find /home/frappe/frappe-bench/apps/dhanada/public/knaps -maxdepth 3 -type f
 
       - name: Create and Push Git Tag

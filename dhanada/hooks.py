@@ -8,7 +8,7 @@ app_license = "mit"
 
 add_to_apps_screen = [
 	{
-		"name": "sif",
+		"name": "dhanada",
 		"logo": "/assets/dhanada/images/SIF-Assets-Favicon.png",
 		"title": "SIF",
 		"route": "/desk/sif",
@@ -184,7 +184,8 @@ scheduler_events = {
 # Testing
 # -------
 
-# before_tests = "dhanada.install.before_tests"
+before_tests = "dhanada.setup.bootstrap.before_tests"
+
 
 # Extend DocType Class
 # ------------------------------

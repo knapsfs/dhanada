@@ -3,7 +3,7 @@
  "allow_bulk_edit": 1,
  "allow_rename": 1,
  "autoname": "CHAT-.YYYY.-.#####",
- "creation": "2026-09-10 11:45:00.000000",
+ "creation": "2026-09-10 11:45:00",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -100,7 +100,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-10 12:10:00.000000",
+ "modified": "2026-09-15 16:36:14.640469",
  "modified_by": "Administrator",
  "module": "SIF",
  "name": "Chatbot Conversation",

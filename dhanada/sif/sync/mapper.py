@@ -12,6 +12,7 @@ from .models import (
 	Scheme,
 	SchemeAllocation,
 	SchemeFundManager,
+	SchemeHeatmapPerformance,
 	SchemePlan,
 	SchemePlanPerformance,
 	Subcategory,
@@ -592,6 +593,35 @@ class DataMapper:
 						years_5=self._parse_float(ret.get("5_year")),  # Mismatch handled
 						years_10=self._parse_float(ret.get("10_year")),  # Mismatch handled
 						since_inception=self._parse_float(ret.get("since_launch")),  # Mismatch handled
+					)
+				)
+
+		# 4. Heatmap Performance
+		for raw_hm in raw_data.get("heatmaps", []):
+			sif_code = raw_hm.get("sif_code")
+			year_val = raw_hm.get("year")
+			try:
+				year_int = int(year_val)
+			except (ValueError, TypeError):
+				year_int = None
+
+			if sif_code and year_int:
+				dataset.heatmaps.append(
+					SchemeHeatmapPerformance(
+						sif_code=str(sif_code).strip(),
+						year=year_int,
+						jan=self._parse_float(raw_hm.get("jan")),
+						feb=self._parse_float(raw_hm.get("feb")),
+						mar=self._parse_float(raw_hm.get("mar")),
+						apr=self._parse_float(raw_hm.get("apr")),
+						may=self._parse_float(raw_hm.get("may")),
+						jun=self._parse_float(raw_hm.get("jun")),
+						jul=self._parse_float(raw_hm.get("jul")),
+						aug=self._parse_float(raw_hm.get("aug")),
+						sep=self._parse_float(raw_hm.get("sep")),
+						oct=self._parse_float(raw_hm.get("oct")),
+						nov=self._parse_float(raw_hm.get("nov")),
+						dec=self._parse_float(raw_hm.get("dec")),
 					)
 				)
 

@@ -186,11 +186,12 @@ def associate_lead(
 	email: str | None = None,
 	phone: str | None = None,
 	visitor_id: str | None = None,
+	chat_context: str | None = None,
 ) -> dict:
 	"""
 	Associates lead and contact information with the conversation without coupling to Frappe CRM.
 	Enforces visitor ownership validation when visitor_id is provided.
-	Safely populates custom_conversation and custom_chat_context on CRM Lead if CRM is present.
+	Safely populates custom_conversation, custom_chat_context, and contact fields on CRM Lead.
 	"""
 	doc = get_conversation_doc(conversation_id)
 
@@ -213,19 +214,59 @@ def associate_lead(
 		doc.email = str(email).strip().lower()[:100]
 	if phone:
 		doc.phone = str(phone).strip()[:30]
+	if chat_context:
+		doc.set_context(str(chat_context).strip()[:500])
 
 	doc.save(ignore_permissions=True)
 
 	# Optional CRM Lead sync
 	if lead_id and frappe.db.exists("DocType", "CRM Lead") and frappe.db.exists("CRM Lead", lead_id):
 		try:
-			lead_updates = {}
-			if frappe.db.has_column("CRM Lead", "custom_conversation"):
-				lead_updates["custom_conversation"] = doc.name
+			lead_doc = frappe.get_doc("CRM Lead", lead_id)
+			lead_changed = False
+			if (
+				frappe.db.has_column("CRM Lead", "custom_conversation")
+				and lead_doc.get("custom_conversation") != doc.name
+			):
+				lead_doc.custom_conversation = doc.name
+				lead_changed = True
 			if frappe.db.has_column("CRM Lead", "custom_chat_context") and doc.chat_context:
-				lead_updates["custom_chat_context"] = doc.chat_context
-			if lead_updates:
-				frappe.db.set_value("CRM Lead", lead_id, lead_updates)
+				lead_doc.custom_chat_context = doc.chat_context
+				lead_changed = True
+			if (
+				frappe.db.has_column("CRM Lead", "chat_summary")
+				and doc.chat_context
+				and not lead_doc.get("chat_summary")
+			):
+				lead_doc.chat_summary = doc.chat_context
+				lead_changed = True
+
+			clean_u_name = str(user_name or doc.user_name or "").strip()
+			if clean_u_name and clean_u_name.lower() not in ("unknown", "website visitor"):
+				if not lead_doc.first_name or lead_doc.first_name.lower() in ("unknown", "website visitor"):
+					if " " in clean_u_name:
+						p = clean_u_name.split(" ", 1)
+						lead_doc.first_name = p[0].strip()
+						lead_doc.last_name = p[1].strip()
+					else:
+						lead_doc.first_name = clean_u_name
+						lead_doc.last_name = ""
+					lead_doc.lead_name = clean_u_name
+					lead_changed = True
+
+			lead_email = str(email or doc.email or "").strip().lower()
+			if lead_email and not lead_doc.email:
+				lead_doc.email = lead_email
+				lead_changed = True
+
+			lead_phone = str(phone or doc.phone or "").strip()
+			if lead_phone and not lead_doc.mobile_no:
+				lead_doc.mobile_no = lead_phone
+				lead_doc.phone = lead_phone
+				lead_changed = True
+
+			if lead_changed:
+				lead_doc.save(ignore_permissions=True)
 		except Exception:
 			frappe.log_error(title="CRM Lead Association Sync Error", message=frappe.get_traceback())
 

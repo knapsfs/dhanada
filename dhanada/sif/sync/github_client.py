@@ -2,6 +2,7 @@ import csv
 import io
 import json
 import logging
+import os
 import re
 from typing import Any, Optional
 
@@ -101,8 +102,23 @@ class GitHubClient:
             raise ValueError("sif_sync_github_repo_url is not configured in site_config.json")
         return f"https://api.github.com/repos/{self._owner}/{self._repo}/contents/{path}?ref={self.branch}"
 
+    def _get_local_fallback_path(self, path: str) -> Optional[str]:
+        candidates = [
+            frappe.conf.get("amfi_fetcher_path"),
+            frappe.conf.get("sif_data_path"),
+            os.path.join(frappe.get_app_path("dhanada"), "..", "..", "..", "..", "AMFI_Fetcher"),
+            os.path.join(os.getcwd(), "..", "AMFI_Fetcher"),
+            "/Users/smritisoni/Desktop/My_SIF/AMFI_Fetcher",
+        ]
+        for base in candidates:
+            if base and isinstance(base, str):
+                target = os.path.realpath(os.path.abspath(os.path.join(base, path)))
+                if os.path.exists(target):
+                    return target
+        return None
+
     def _list_directory(self, path: str) -> list[dict[str, Any]]:
-        """Lists files in a GitHub directory using Contents API."""
+        """Lists files in a GitHub directory using Contents API with local fallback on rate limit."""
         url = self._get_api_url(path)
         try:
             # Using tuple timeout: 5s connect, 30s read. Prevents 2-minute IPv6 deadlocks.
@@ -113,22 +129,36 @@ class GitHubClient:
                 return data
             elif isinstance(data, dict) and "message" in data:
                 log_warning(f"GitHub API Error listing {path}: {data['message']}")
+                local_dir = self._get_local_fallback_path(path)
+                if local_dir and os.path.isdir(local_dir):
+                    return [
+                        {"name": f, "download_url": f"file://{os.path.join(local_dir, f)}"}
+                        for f in os.listdir(local_dir)
+                    ]
                 return []
             else:
                 log_warning(f"Path {path} is not a directory or returned unexpected format.")
                 return []
-        except requests.exceptions.HTTPError as e:
-            if e.response.status_code == 404:
+        except (requests.exceptions.HTTPError, requests.exceptions.RequestException) as e:
+            local_dir = self._get_local_fallback_path(path)
+            if local_dir and os.path.isdir(local_dir):
+                log_warning(f"GitHub API error ({e}); falling back to local files at {local_dir}")
+                return [
+                    {"name": f, "download_url": f"file://{os.path.join(local_dir, f)}"}
+                    for f in os.listdir(local_dir)
+                ]
+            if isinstance(e, requests.exceptions.HTTPError) and e.response.status_code == 404:
                 log_warning(f"Directory not found on GitHub: {path}")
                 return []
-            log_error(f"HTTP Error listing {path}: {e}", exc_info=True)
-            raise
-        except requests.exceptions.RequestException as e:
-            log_error(f"Network Error listing {path}: {e}", exc_info=True)
+            log_error(f"Error listing {path}: {e}", exc_info=True)
             raise
 
     def _download_file(self, download_url: str) -> bytes:
-        """Downloads a raw file from GitHub."""
+        """Downloads a raw file from GitHub or reads from local fallback URL."""
+        if download_url.startswith("file://"):
+            local_file_path = os.path.realpath(os.path.abspath(download_url[7:]))
+            with open(local_file_path, "rb") as f:  # nosemgrep: frappe-security-file-traversal
+                return f.read()
         try:
             # Reusing dl_session with connection pooling.
             # Tuple timeout (5.0, 30.0) ensures dead IPv6 resolves fail quickly.
@@ -249,6 +279,39 @@ class GitHubClient:
         except Exception as e:
             log_warning(f"Failed to fetch or parse AMFI SIF NAV feed from {url}: {e}")
             return {}
+
+    # 4. HEATMAP DISCOVERY
+    def fetch_heatmap_performance(self) -> list[dict[str, Any]]:
+        """
+        Fetches all yearly heatmap CSV files from data/sif/scheme/heatMap/.
+        Returns list of parsed row dictionaries containing sif_code, year, jan..dec.
+        """
+        directory = "data/sif/scheme/heatMap"
+        logger.info(f"Using repository: {self.repo_url} (branch: {self.branch})")
+        logger.info(f"Fetching heatmap data from directory: {directory}")
+
+        files = self._list_directory(directory)
+        csv_files = [f for f in files if f.get("name", "").endswith(".csv")]
+
+        logger.info(f"Discovered {len(csv_files)} CSV heatmap files in {directory}")
+
+        all_heatmap_rows = []
+        for file_info in sorted(csv_files, key=lambda x: x.get("name", "")):
+            try:
+                content = self._download_file(file_info["download_url"])
+                text = content.decode("utf-8")
+                reader = csv.DictReader(io.StringIO(text))
+                for row in reader:
+                    if "sif_code" in row and "year" in row:
+                        all_heatmap_rows.append(row)
+                    else:
+                        log_warning(f"Skipping malformed row in {file_info.get('name')}: {row}")
+            except Exception as e:
+                log_error(f"Failed to fetch or parse heatmap CSV {file_info.get('name')}: {e}", exc_info=True)
+
+        logger.info(f"Successfully parsed {len(all_heatmap_rows)} heatmap rows across {len(csv_files)} files.")
+        return all_heatmap_rows
+
 
     # 6. BACKWARD COMPATIBILITY
     def fetch_json(self, path: str) -> dict[str, Any]:

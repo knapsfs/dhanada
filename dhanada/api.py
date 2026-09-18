@@ -83,6 +83,27 @@ def _get_candidate_scheme_base_dirs() -> list[str]:
 	return candidates
 
 
+_VALID_BASE_DIRS_CACHE = None
+
+
+def _get_valid_scheme_base_dirs() -> list[str]:
+	global _VALID_BASE_DIRS_CACHE
+	if _VALID_BASE_DIRS_CACHE is not None:
+		return _VALID_BASE_DIRS_CACHE
+
+	valid = []
+	for candidate in _get_candidate_scheme_base_dirs():
+		try:
+			real_path = os.path.realpath(os.path.abspath(candidate))
+			if os.path.isdir(real_path) and real_path not in valid:
+				valid.append(real_path)
+		except Exception:
+			continue
+
+	_VALID_BASE_DIRS_CACHE = valid
+	return valid
+
+
 def _get_safe_scheme_data_file(data_type: str, safe_code: str, extension: str) -> str | None:
 	"""
 	Safely resolves the file path for scheme data (performance JSON or historical NAV CSV).
@@ -96,68 +117,20 @@ def _get_safe_scheme_data_file(data_type: str, safe_code: str, extension: str) -
 		return None
 
 	filename = f"{safe_code}.{extension.lstrip('.')}"
-	base_candidates = _get_candidate_scheme_base_dirs()
+	base_candidates = _get_valid_scheme_base_dirs()
 
-	for base_candidate in base_candidates:
+	for allowed_base in base_candidates:
 		try:
-			allowed_dir = os.path.realpath(os.path.abspath(os.path.join(base_candidate, sub_rel)))
-			target_path = os.path.realpath(os.path.abspath(os.path.join(allowed_dir, filename)))
+			allowed_dir = os.path.join(allowed_base, sub_rel)
+			target_path = os.path.join(allowed_dir, filename)
 
-			if (
-				os.path.commonpath([allowed_dir, target_path]) == allowed_dir
-				and target_path.startswith(allowed_dir + os.sep)
-				and os.path.isfile(target_path)
-			):
-				return target_path
+			if os.path.isfile(target_path):
+				real_target = os.path.realpath(target_path)
+				real_dir = os.path.realpath(allowed_dir)
+				if real_target.startswith(real_dir + os.sep):
+					return real_target
 		except Exception:
 			continue
-
-	return None
-
-
-def _fetch_scheme_data_from_github(data_type: str, safe_code: str, extension: str) -> str | None:
-	"""
-	Fallback to fetch scheme data from GitHub if local mount is unavailable.
-	Validates safe_code strictly against allowlist.
-	"""
-	if not safe_code or not re.match(r"^[a-z0-9_]+$", safe_code):
-		return None
-
-	sub_rel = ALLOWED_SCHEME_DATA_SUBDIRS.get(data_type)
-	if not sub_rel:
-		return None
-
-	cache_key = f"sif_gh_data_{data_type}_{safe_code}"
-	try:
-		cached = frappe.cache.get_value(cache_key)
-		if cached:
-			return cached
-	except Exception:
-		pass
-
-	repo_url = frappe.conf.get("sif_sync_github_repo_url", "https://github.com/Satyam4755/AMFI_Fetcher")
-	branch = frappe.conf.get("sif_sync_github_branch", "main")
-
-	clean_repo = repo_url.rstrip("/").replace("https://github.com/", "")
-	if not re.match(r"^[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+$", clean_repo):
-		clean_repo = "Satyam4755/AMFI_Fetcher"
-
-	clean_sub = sub_rel.replace(os.sep, "/")
-	clean_ext = extension.lstrip(".")
-	url = f"https://raw.githubusercontent.com/{clean_repo}/{branch}/data/sif/scheme/{clean_sub}/{safe_code}.{clean_ext}"
-
-	try:
-		import requests
-
-		resp = requests.get(url, timeout=(3.0, 5.0))
-		if resp.status_code == 200 and resp.text:
-			try:
-				frappe.cache.set_value(cache_key, resp.text, expires_in_sec=3600)
-			except Exception:
-				pass
-			return resp.text
-	except Exception:
-		pass
 
 	return None
 
@@ -194,7 +167,9 @@ def mask_invalid_returns(perf_dict, launch_date, historical_nav=None):
 	if historical_nav and len(historical_nav) >= 2:
 		try:
 
-			def parse_dt(s):
+			def parse_single_dt(s):
+				if not s:
+					return None
 				for fmt in ("%d-%b-%Y", "%Y-%m-%d", "%d/%m/%Y"):
 					try:
 						return datetime.strptime(s, fmt).date()
@@ -202,14 +177,15 @@ def mask_invalid_returns(perf_dict, launch_date, historical_nav=None):
 						pass
 				return None
 
-			dates = sorted([parse_dt(r.get("date", "")) for r in historical_nav if r.get("date")])
-			dates = [d for d in dates if d is not None]
-			if len(dates) >= 2:
-				first_date = dates[0]
-				latest_date = dates[-1]
+			first_date = parse_single_dt(historical_nav[0].get("date", ""))
+			latest_date = parse_single_dt(historical_nav[-1].get("date", ""))
+
+			if first_date and latest_date:
+				if first_date > latest_date:
+					first_date, latest_date = latest_date, first_date
 
 				horizons = {
-					"1_day": len(dates) >= 2,
+					"1_day": len(historical_nav) >= 2,
 					"1_week": first_date <= (latest_date - relativedelta(days=7)),
 					"1_month": first_date <= (latest_date - relativedelta(months=1)),
 					"3_months": first_date <= (latest_date - relativedelta(months=3)),
@@ -220,7 +196,7 @@ def mask_invalid_returns(perf_dict, launch_date, historical_nav=None):
 					"3_years": first_date <= (latest_date - relativedelta(years=3)),
 					"5_years": first_date <= (latest_date - relativedelta(years=5)),
 					"10_years": first_date <= (latest_date - relativedelta(years=10)),
-					"since_inception": len(dates) >= 2,
+					"since_inception": len(historical_nav) >= 2,
 				}
 
 				for key, is_available in horizons.items():
@@ -268,9 +244,6 @@ def get_performance_for_sif(sif_code: str):
 			content = frappe.read_file(path)
 		except Exception as e:
 			frappe.log_error(f"Failed to read performance JSON {path}: {e}")
-
-	if not content:
-		content = _fetch_scheme_data_from_github("performance", safe_code, "json")
 
 	if not content:
 		return None
@@ -326,7 +299,18 @@ def get_funds_list():
 			plans = frappe.get_all(
 				"SIF Scheme Plan",
 				filters={"scheme": s.name},
-				fields=["name", "type", "option", "sub_option", "nav", "nav_date", "aum", "performance"],
+				fields=[
+					"name",
+					"type",
+					"option",
+					"sub_option",
+					"sif_code",
+					"isin",
+					"nav",
+					"nav_date",
+					"aum",
+					"performance",
+				],
 			)
 
 			best_plan = get_default_plan(plans)
@@ -412,6 +396,8 @@ def get_funds_list():
 					"expenseRatio": None,
 					"rating": None,
 					"isNew": False,
+					"scheme_plan": best_plan.name if best_plan else None,
+					"sif_code": best_plan.get("sif_code") if best_plan else None,
 				}
 			)
 
@@ -419,6 +405,9 @@ def get_funds_list():
 	except Exception as e:
 		frappe.log_error(title="get_funds_list API Error", message=frappe.get_traceback())
 		return {"status": "error", "message": str(e)}
+
+
+_HISTORICAL_NAV_CACHE = {}
 
 
 def get_historical_nav_for_sif(sif_code: str) -> list[dict]:
@@ -434,6 +423,9 @@ def get_historical_nav_for_sif(sif_code: str) -> list[dict]:
 	if not re.match(r"^[a-z0-9_]+$", safe_code):
 		return []
 
+	if safe_code in _HISTORICAL_NAV_CACHE:
+		return _HISTORICAL_NAV_CACHE[safe_code]
+
 	content = None
 	path = _get_safe_scheme_data_file("historical_nav", safe_code, "csv")
 	if path:
@@ -443,9 +435,7 @@ def get_historical_nav_for_sif(sif_code: str) -> list[dict]:
 			frappe.log_error(f"Failed to read historical CSV {path}: {e}", title="Historical NAV Read Error")
 
 	if not content:
-		content = _fetch_scheme_data_from_github("historical_nav", safe_code, "csv")
-
-	if not content:
+		_HISTORICAL_NAV_CACHE[safe_code] = []
 		return []
 
 	records = []
@@ -461,10 +451,12 @@ def get_historical_nav_for_sif(sif_code: str) -> list[dict]:
 				records.append({"date": date_str, "nav": nav_val})
 			except (ValueError, TypeError):
 				continue
+		_HISTORICAL_NAV_CACHE[safe_code] = records
 		return records
 	except Exception as e:
 		frappe.log_error(f"Failed to parse historical CSV: {e}", title="Historical NAV Read Error")
 
+	_HISTORICAL_NAV_CACHE[safe_code] = []
 	return []
 
 
@@ -638,91 +630,190 @@ def get_fund_details(identifier: str):
 @frappe.whitelist(allow_guest=True, methods=["POST"])  # nosemgrep: guest-whitelisted-method
 def create_chatbot_lead():
 	try:
-		lead_name = frappe.form_dict.get("lead_name")
-		chat_summary_value = frappe.form_dict.get("chat_summary") or ""
-		conversation_id = frappe.form_dict.get("conversation_id")
-		visitor_id = frappe.form_dict.get("visitor_id")
+		# 1. Parse payload supporting both JSON request body and form_dict
+		payload = {}
+		try:
+			req = getattr(frappe.local, "request", None)
+			if req and hasattr(req, "data") and req.data:
+				try:
+					payload = json.loads(req.data)
+				except Exception:
+					payload = frappe.form_dict or {}
+			else:
+				payload = frappe.form_dict or {}
+		except Exception:
+			payload = frappe.form_dict or {}
 
-		# If conversation_id is given, retrieve latest context from the actual conversation
-		conversation_context = ""
+		if not payload and hasattr(frappe, "form_dict") and frappe.form_dict:
+			payload = frappe.form_dict
+
+		# 2. Extract identifiers with multiple fallback aliases
+		lead_id = (
+			payload.get("lead_name") or payload.get("lead_id") or payload.get("leadId") or payload.get("lead")
+		)
+		conversation_id = (
+			payload.get("conversation_id") or payload.get("conversationId") or payload.get("conversation")
+		)
+		visitor_id = payload.get("visitor_id") or payload.get("visitorId")
+
+		# 3. Retrieve conversation doc if available
+		conv_doc = None
 		if conversation_id and frappe.db.exists("Chatbot Conversation", conversation_id):
 			conv_doc = frappe.get_doc("Chatbot Conversation", conversation_id)
-			conversation_context = conv_doc.chat_context or ""
 
+		# 4. Resolve Name with fallbacks: payload -> conversation doc -> email prefix -> None
+		raw_name = (
+			payload.get("full_name")
+			or payload.get("name")
+			or payload.get("userName")
+			or payload.get("user_name")
+			or payload.get("first_name")
+			or (conv_doc.user_name if conv_doc and conv_doc.user_name else None)
+		)
+
+		# 5. Resolve Email with fallbacks: payload -> conversation doc -> None
+		email = (
+			payload.get("email")
+			or payload.get("email_id")
+			or payload.get("emailAddress")
+			or (conv_doc.email if conv_doc and conv_doc.email else None)
+		)
+		if email:
+			email = str(email).strip().lower()
+
+		# 6. Resolve Phone with fallbacks: payload -> conversation doc -> None
+		phone = (
+			payload.get("phone")
+			or payload.get("mobile")
+			or payload.get("mobile_no")
+			or payload.get("mobile_number")
+			or payload.get("contact_no")
+			or (conv_doc.phone if conv_doc and conv_doc.phone else None)
+		)
+		if phone:
+			phone = str(phone).strip()
+
+		# 7. Resolve Interest / Requirement
+		interest = (
+			payload.get("interest")
+			or payload.get("requirement")
+			or payload.get("requirements")
+			or payload.get("notes")
+			or payload.get("message")
+			or ""
+		)
+
+		# 8. Resolve Chat Context / Summary
+		chat_summary_value = (
+			payload.get("chat_summary")
+			or payload.get("chatSummary")
+			or payload.get("chat_context")
+			or payload.get("chatContext")
+			or payload.get("summary")
+			or ""
+		)
+		conversation_context = conv_doc.chat_context if conv_doc and conv_doc.chat_context else ""
 		final_context = conversation_context or chat_summary_value
 
-		if lead_name and frappe.db.exists("CRM Lead", lead_name):
-			lead_updates = {}
-			if frappe.db.has_column("CRM Lead", "chat_summary"):
-				lead_updates["chat_summary"] = final_context
-			if frappe.db.has_column("CRM Lead", "custom_chat_context"):
-				lead_updates["custom_chat_context"] = final_context
-			if conversation_id and frappe.db.has_column("CRM Lead", "custom_conversation"):
-				lead_updates["custom_conversation"] = conversation_id
+		if interest and interest not in final_context:
+			if final_context:
+				final_context = f"{final_context}\nInterest/Requirement: {interest}".strip()
+			else:
+				final_context = f"Interest/Requirement: {interest}".strip()
 
-			if lead_updates:
-				frappe.db.set_value("CRM Lead", lead_name, lead_updates)
-				frappe.db.commit()
+		# 9. Clean and partition name parts
+		clean_name = str(raw_name).strip() if raw_name else ""
+		if clean_name.lower() in ("unknown", "none", "null", ""):
+			clean_name = ""
 
-			if conversation_id:
-				try:
-					from dhanada.sif.conversation_service import associate_lead
-
-					associate_lead(
-						conversation_id=conversation_id,
-						lead_id=lead_name,
-						visitor_id=visitor_id,
-					)
-				except Exception:
-					frappe.log_error(title="Chatbot Lead Association Error", message=frappe.get_traceback())
-
-			return {"success": True, "lead_name": lead_name, "updated": True}
-
-		first_name = frappe.form_dict.get("name", "Unknown")
+		first_name = ""
 		last_name = ""
 
-		if " " in first_name and first_name != "Unknown":
-			parts = first_name.split(" ", 1)
-			first_name = parts[0]
-			last_name = parts[1]
+		if clean_name:
+			if " " in clean_name:
+				parts = clean_name.split(" ", 1)
+				first_name = parts[0].strip()
+				last_name = parts[1].strip()
+			else:
+				first_name = clean_name
+		elif email and "@" in email:
+			first_name = email.split("@")[0].replace(".", " ").replace("_", " ").title()
+		elif phone:
+			first_name = f"Lead {phone[-4:]}" if len(phone) >= 4 else "Lead"
+		else:
+			first_name = "Website Visitor"
 
-		doc_data = {
-			"doctype": "CRM Lead",
-			"first_name": first_name,
-			"last_name": last_name,
-			"email": frappe.form_dict.get("email"),
-			"mobile_no": frappe.form_dict.get("mobile"),
-			"interest": frappe.form_dict.get("interest"),
-			"source": frappe.form_dict.get("source", "Website Chatbot"),
-		}
+		lead_full_name = f"{first_name} {last_name}".strip() if last_name else first_name
+		source = payload.get("source") or "Website Chatbot"
 
-		if frappe.db.has_column("CRM Lead", "chat_summary"):
-			doc_data["chat_summary"] = final_context
-		if frappe.db.has_column("CRM Lead", "custom_chat_context"):
-			doc_data["custom_chat_context"] = final_context
-		if conversation_id and frappe.db.has_column("CRM Lead", "custom_conversation"):
-			doc_data["custom_conversation"] = conversation_id
+		# 10. Update existing Lead if found
+		if lead_id and frappe.db.exists("CRM Lead", lead_id):
+			lead_doc = frappe.get_doc("CRM Lead", lead_id)
+			if first_name and (
+				not lead_doc.first_name or lead_doc.first_name.lower() in ("unknown", "website visitor")
+			):
+				lead_doc.first_name = first_name
+				lead_doc.last_name = last_name
+				lead_doc.lead_name = lead_full_name
+			if email and not lead_doc.email:
+				lead_doc.email = email
+			if phone and not lead_doc.mobile_no:
+				lead_doc.mobile_no = phone
+				lead_doc.phone = phone
+			if final_context:
+				if frappe.db.has_column("CRM Lead", "chat_summary"):
+					lead_doc.chat_summary = final_context
+				if frappe.db.has_column("CRM Lead", "custom_chat_context"):
+					lead_doc.custom_chat_context = final_context
+			if conversation_id and frappe.db.has_column("CRM Lead", "custom_conversation"):
+				lead_doc.custom_conversation = conversation_id
 
-		lead = frappe.get_doc(doc_data)
-		lead.insert(ignore_permissions=True)
-		frappe.db.commit()
+			lead_doc.save(ignore_permissions=True)
+			frappe.db.commit()
+			created_lead_name = lead_doc.name
+		else:
+			# 11. Create new CRM Lead
+			doc_data = {
+				"doctype": "CRM Lead",
+				"first_name": first_name,
+				"last_name": last_name,
+				"lead_name": lead_full_name,
+				"email": email,
+				"mobile_no": phone,
+				"phone": phone,
+				"source": source,
+			}
 
+			if frappe.db.has_column("CRM Lead", "chat_summary"):
+				doc_data["chat_summary"] = final_context
+			if frappe.db.has_column("CRM Lead", "custom_chat_context"):
+				doc_data["custom_chat_context"] = final_context
+			if conversation_id and frappe.db.has_column("CRM Lead", "custom_conversation"):
+				doc_data["custom_conversation"] = conversation_id
+
+			lead = frappe.get_doc(doc_data)
+			lead.insert(ignore_permissions=True)
+			frappe.db.commit()
+			created_lead_name = lead.name
+
+		# 12. Link to conversation
 		if conversation_id:
 			try:
 				from dhanada.sif.conversation_service import associate_lead
 
 				associate_lead(
 					conversation_id=conversation_id,
-					lead_id=lead.name,
-					user_name=frappe.form_dict.get("name"),
-					email=frappe.form_dict.get("email"),
-					phone=frappe.form_dict.get("mobile"),
+					lead_id=created_lead_name,
+					user_name=lead_full_name,
+					email=email,
+					phone=phone,
 					visitor_id=visitor_id,
+					chat_context=final_context,
 				)
 			except Exception:
 				frappe.log_error(title="Chatbot Lead Association Error", message=frappe.get_traceback())
 
-		return {"success": True, "lead_name": lead.name}
+		return {"success": True, "lead_name": created_lead_name}
 	except Exception as e:
 		frappe.log_error(message=frappe.get_traceback(), title="Chatbot Lead Creation Failed")
 		frappe.throw(f"Failed to create Lead: {e!s}")
@@ -862,3 +953,60 @@ def chatbot_response():
 	except Exception:
 		frappe.log_error(message=frappe.get_traceback(), title="Chatbot Response Wrapper Error")
 		return {"success": False, "message": "Internal Server Error"}
+		return {"success": False, "message": "Internal Server Error"}
+
+
+@frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
+def get_scheme_heatmap_performance(
+	scheme_plan: str | None = None, sif_code: str | None = None, year: int | None = None
+):
+	"""
+	Read-only API to fetch monthly heatmap performance data for SIF Scheme Plans.
+	"""
+	try:
+		filters = {}
+		if scheme_plan:
+			filters["scheme_plan"] = scheme_plan
+		elif sif_code:
+			plan_names = frappe.get_all(
+				"SIF Scheme Plan", filters={"sif_code": sif_code, "type": "Regular"}, pluck="name"
+			)
+			if not plan_names and frappe.db.exists("SIF Scheme Plan", sif_code):
+				plan_names = [sif_code]
+			if plan_names:
+				filters["scheme_plan"] = ["in", plan_names]
+			else:
+				return {"status": "success", "data": []}
+
+		if year:
+			try:
+				filters["year"] = int(year)
+			except (ValueError, TypeError):
+				pass
+
+		records = frappe.get_all(
+			"SIF Scheme Heatmap Performance",
+			filters=filters,
+			fields=[
+				"name",
+				"scheme_plan",
+				"sif_code",
+				"year",
+				"jan",
+				"feb",
+				"mar",
+				"apr",
+				"may",
+				"jun",
+				"jul",
+				"aug",
+				"sep",
+				"oct",
+				"nov",
+				"dec",
+			],
+			order_by="year asc, scheme_plan asc",
+		)
+		return {"status": "success", "data": records}
+	except Exception as e:
+		return {"status": "error", "message": str(e)}
