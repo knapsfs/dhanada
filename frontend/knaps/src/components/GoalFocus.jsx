@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faArrowTrendUp } from '@fortawesome/free-solid-svg-icons';
-import { useLeadModal } from '../context/LeadModalContext';
+import { faArrowTrendUp } from '@fortawesome/free-solid-svg-icons';
 
 import homeImg from '../assets/goals/goal_dream_home.jpg';
 import marriageImg from '../assets/goals/goal_child_marriage.jpg';
@@ -84,8 +83,6 @@ const goals = [
 ];
 
 export default function GoalFocus() {
-  const { openLeadModal } = useLeadModal();
-
   return (
     <section className="py-12 sm:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -126,8 +123,7 @@ export default function GoalFocus() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.35, delay: 0.05 * idx }}
                 whileHover={{ y: -5 }}
-                onClick={() => openLeadModal(`Goal: ${item.title}`)}
-                className="bg-white rounded-[20px] sm:rounded-[22px] border border-slate-100/90 shadow-[0_4px_16px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_28px_rgba(3,46,146,0.08)] hover:border-blue-200/80 transition-all duration-300 flex flex-col justify-between group cursor-pointer overflow-hidden"
+                className="bg-white rounded-[20px] sm:rounded-[22px] border border-slate-100/90 shadow-[0_4px_16px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_28px_rgba(3,46,146,0.08)] hover:border-blue-200/80 transition-all duration-300 flex flex-col justify-between group overflow-hidden"
               >
                 {/* Top Section: Pastel Icon Pill & Title */}
                 <div className="pt-4 sm:pt-5 pb-3 px-2 sm:px-3 text-center flex flex-col items-center">
@@ -161,43 +157,21 @@ export default function GoalFocus() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="mt-8 sm:mt-10 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-[#edf4ff] via-[#f7faff] to-[#edf4ff] border border-blue-100/90 p-6 sm:p-7 lg:py-7 lg:px-9 relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-8 shadow-xs"
           >
-            {/* Left Checkpoints (No awkward wrapping) */}
-            <div className="space-y-3 z-10 w-full lg:w-auto shrink-0">
-              {[
-                'Stay invested for the long term',
-                'Let compounding work for you',
-                'Build the life you envision',
-              ].map((text, idx) => (
-                <div key={idx} className="flex items-center gap-3">
-                  <div className="w-5 h-5 rounded-full bg-blue-100 text-[#032e92] flex items-center justify-center text-[10px] shrink-0 shadow-2xs">
-                    <FontAwesomeIcon icon={faCheck} />
-                  </div>
-                  <span className="text-xs sm:text-[13.5px] font-bold text-slate-800 tracking-tight whitespace-nowrap">
-                    {text}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            {/* Center Playful Cursive Script */}
-            <div className="z-10 text-center py-1 lg:py-0 px-2 lg:px-4 shrink-0">
-              <span className="text-xl sm:text-2xl lg:text-[26px] font-bold bg-gradient-to-r from-[#032e92] via-[#0284c7] to-[#032e92] bg-clip-text text-transparent font-serif italic tracking-wide block">
+            {/* Left Title: Disciplined Investing / The Power of Time */}
+            <div className="z-10 text-left py-1 lg:py-0 shrink-0">
+              <span className="text-2xl sm:text-3xl lg:text-[32px] font-bold bg-gradient-to-r from-[#032e92] via-[#0284c7] to-[#032e92] bg-clip-text text-transparent font-serif italic tracking-tight block">
                 Disciplined Investing.
               </span>
-              <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest block mt-0.5">
+              <span className="text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-widest block mt-1">
                 The Power of Time
               </span>
             </div>
 
             {/* Right Compounding Growth Graph Graphic */}
-            <div className="relative w-full sm:w-[380px] md:w-[420px] lg:w-[450px] flex flex-col justify-end shrink-0">
+            <div className="relative w-full sm:w-[400px] md:w-[440px] lg:w-[480px] flex flex-col justify-end shrink-0">
 
-              {/* Header Label Row Above Chart (Clean alignment) */}
-              <div className="flex items-center justify-between mb-1.5 px-1">
-                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
-
-                  {/* Compound Growth */}
-                </span>
+              {/* Header Label Row Above Chart */}
+              <div className="flex items-center justify-end mb-1.5 px-1">
                 <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/95 border border-sky-200/90 shadow-2xs text-[11px] font-bold text-[#032e92]">
                   <FontAwesomeIcon icon={faArrowTrendUp} className="text-emerald-500 text-xs" />
                   <span>Compounding</span>

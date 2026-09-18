@@ -212,8 +212,8 @@ export default function Hero() {
                         }
                       }}
                       className={`w-full bg-transparent border-b-2 pb-2 text-sm flex items-center justify-between cursor-pointer transition-colors select-none ${productOpen
-                          ? 'border-[#032e92]'
-                          : 'border-gray-300 hover:border-gray-400'
+                        ? 'border-[#032e92]'
+                        : 'border-gray-300 hover:border-gray-400'
                         }`}
                     >
                       <span className={selectedProduct ? 'text-gray-800 font-medium' : 'text-gray-400 font-normal'}>
@@ -250,8 +250,8 @@ export default function Hero() {
                                   setProductOpen(false);
                                 }}
                                 className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg cursor-pointer text-sm transition-colors ${isSelected
-                                    ? 'bg-[#eef4ff] text-[#032e92] font-semibold'
-                                    : 'text-gray-700 hover:bg-gray-50 hover:text-[#032e92]'
+                                  ? 'bg-[#eef4ff] text-[#032e92] font-semibold'
+                                  : 'text-gray-700 hover:bg-gray-50 hover:text-[#032e92]'
                                   }`}
                               >
                                 <span>{option.label}</span>
@@ -285,7 +285,7 @@ export default function Hero() {
                   {/* Email */}
                   <div>
                     <label className="block text-[11px] font-bold text-gray-600 uppercase tracking-wider mb-1">
-                      Email Address <span className="text-[9px] text-gray-400 ml-1 tracking-normal">(OPTIONAL)</span>
+                      Email Address
                     </label>
                     <input
                       type="email"
