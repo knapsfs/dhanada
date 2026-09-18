@@ -39,6 +39,39 @@ const riskBandConfig = {
   5: { label: 'High Risk', color: '#7f1d1d', bg: 'bg-red-950', text: 'text-red-950' },
 }
 
+export function formatPlanLabel(plan) {
+  if (!plan) return 'Regular Growth';
+  const type = plan.type ? plan.type.trim() : 'Regular';
+  const option = plan.option ? plan.option.trim() : 'Growth';
+  const subOption = plan.sub_option ? plan.sub_option.trim() : '';
+
+  if (subOption && !option.toLowerCase().includes(subOption.toLowerCase())) {
+    return `${type} ${option} (${subOption})`;
+  }
+  return `${type} ${option}`;
+}
+
+export function isPeriodReturnValid(period, perfData) {
+  if (!perfData) return false;
+  let val = null;
+  if (period === '1M') {
+    val = perfData['1_month'];
+  } else if (period === '3M') {
+    val = perfData['3_months'] ?? perfData['3_month'];
+  } else if (period === '6M') {
+    val = perfData['6_months'] ?? perfData['6_month'];
+  } else if (period === '12M') {
+    val = perfData['1_year'];
+  } else if (period === 'Since Inception') {
+    val = perfData['since_inception'] ?? perfData['since_launch'];
+  }
+
+  if (val === null || val === undefined || val === '' || val === 'N/A') {
+    return false;
+  }
+  const num = typeof val === 'number' ? val : parseFloat(String(val).replace('%', ''));
+  return !isNaN(num);
+}
 
 export default function SifFundDetails() {
   const { fundCode, id } = useParams()
@@ -46,11 +79,8 @@ export default function SifFundDetails() {
   const [apiFund, setApiFund] = useState(null)
   const { openLeadModal } = useLeadModal()
 
-  // Plan Selection State
-  const [selectedType, setSelectedType] = useState('')
-  const [selectedOption, setSelectedOption] = useState('')
-  const [selectedSubOption, setSelectedSubOption] = useState('')
-  const [selectedPeriod, setSelectedPeriod] = useState('')
+  // Plan Selection State (keyed by unique plan name)
+  const [selectedPlanName, setSelectedPlanName] = useState('')
   const [isPlanDropdownOpen, setIsPlanDropdownOpen] = useState(false)
 
   // Chart Timeframe Selection
@@ -72,10 +102,9 @@ export default function SifFundDetails() {
 
           // Initialize selector with default plan
           if (data.defaultPlan) {
-            setSelectedType(data.defaultPlan.type || '')
-            setSelectedOption(data.defaultPlan.option || '')
-            setSelectedSubOption(data.defaultPlan.sub_option || '')
-            setSelectedPeriod(data.defaultPlan.period || '')
+            setSelectedPlanName(data.defaultPlan.name || '')
+          } else if (data.plans && data.plans.length > 0) {
+            setSelectedPlanName(data.plans[0].name || '')
           }
         } else {
           setError('Scheme not found.')
@@ -91,33 +120,33 @@ export default function SifFundDetails() {
     }
   }, [rawId])
 
-  // Derive available options based on current selections
+  // Derive available plans
   const availablePlans = useMemo(() => apiFund?.plans || [], [apiFund?.plans])
-  const availableTypes = useMemo(() => [...new Set(availablePlans.map(p => p.type).filter(Boolean))], [availablePlans])
-
-  const filteredByType = useMemo(() => availablePlans.filter(p => !selectedType || p.type === selectedType), [availablePlans, selectedType])
-  const availableOptions = useMemo(() => [...new Set(filteredByType.map(p => p.option).filter(Boolean))], [filteredByType])
-
-  const filteredByOption = useMemo(() => filteredByType.filter(p => !selectedOption || p.option === selectedOption), [filteredByType, selectedOption])
-  const availableSubOptions = useMemo(() => [...new Set(filteredByOption.map(p => p.sub_option).filter(Boolean))], [filteredByOption])
-
-  const filteredBySubOption = useMemo(() => filteredByOption.filter(p => (!selectedSubOption && !p.sub_option) || p.sub_option === selectedSubOption), [filteredByOption, selectedSubOption])
-  const availablePeriods = useMemo(() => [...new Set(filteredBySubOption.map(p => p.period).filter(Boolean))], [filteredBySubOption])
 
   // Find exact plan match
   const selectedPlan = useMemo(() => {
-    return filteredBySubOption.find(p => (!selectedPeriod && !p.period) || p.period === selectedPeriod) || filteredBySubOption[0] || availablePlans[0] || {}
-  }, [filteredBySubOption, selectedPeriod, availablePlans])
-
-  // Automatically adjust cascading selections if invalid
-  useEffect(() => {
-    if (apiFund && availablePlans.length > 0) {
-      if (selectedType && !availableTypes.includes(selectedType)) setSelectedType(availableTypes[0] || '')
-      if (selectedOption && !availableOptions.includes(selectedOption)) setSelectedOption(availableOptions[0] || '')
-      if (selectedSubOption && !availableSubOptions.includes(selectedSubOption)) setSelectedSubOption(availableSubOptions[0] || '')
-      if (selectedPeriod && !availablePeriods.includes(selectedPeriod)) setSelectedPeriod(availablePeriods[0] || '')
+    if (!availablePlans || availablePlans.length === 0) return {};
+    if (selectedPlanName) {
+      const found = availablePlans.find(p => p.name === selectedPlanName);
+      if (found) return found;
     }
-  }, [selectedType, selectedOption, selectedSubOption, selectedPeriod, availableTypes, availableOptions, availableSubOptions, availablePeriods, apiFund, availablePlans])
+    return availablePlans[0] || {};
+  }, [availablePlans, selectedPlanName])
+
+  // Derive available timeframes strictly based on valid return values in selected plan's SIF Scheme Plan Performance
+  const availableTimeframes = useMemo(() => {
+    const perf = selectedPlan?.performance_data;
+    const candidatePeriods = ['1M', '3M', '6M', '12M', 'Since Inception'];
+    const valid = candidatePeriods.filter(p => isPeriodReturnValid(p, perf));
+    return valid.length > 0 ? valid : ['Since Inception'];
+  }, [selectedPlan?.performance_data])
+
+  // Ensure activeTimeframe is valid for the current plan, defaulting to the first available period
+  useEffect(() => {
+    if (availableTimeframes.length > 0 && !availableTimeframes.includes(activeTimeframe)) {
+      setActiveTimeframe(availableTimeframes[0]);
+    }
+  }, [availableTimeframes, activeTimeframe])
 
   // Construct UI Fund Object based on selected plan
   const fund = useMemo(() => {
@@ -257,25 +286,133 @@ export default function SifFundDetails() {
 
     const filtered = cleanHistory.filter(p => p.date >= cutoffDate);
     return filtered.length > 0 ? filtered : cleanHistory;
-  }, [cleanHistory, activeTimeframe, fund?.rawNav]);
+  }, [cleanHistory, activeTimeframe, fund?.rawNav])
+
+  // Build Chart Labels containing dynamically calculated month-based labels (maximum 6 evenly distributed labels)
+  const chartLabels = useMemo(() => {
+    if (!currentChartPoints || currentChartPoints.length === 0) return []
+
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    const labels = new Array(currentChartPoints.length).fill('')
+
+    const lastPoint = currentChartPoints[currentChartPoints.length - 1]
+    const maxDate = lastPoint.date
+    const lastYear = maxDate.getUTCFullYear()
+    const lastMonth = maxDate.getUTCMonth()
+
+    const firstPoint = currentChartPoints[0]
+    const minDate = firstPoint.date
+    const firstYear = minDate.getUTCFullYear()
+    const firstMonth = minDate.getUTCMonth()
+
+    let targetMonths = []
+
+    if (activeTimeframe === '1M') {
+      targetMonths = [{ year: lastYear, month: lastMonth }]
+    } else {
+      const fixedMonthsMap = {
+        '3M': 3,
+        '6M': 6,
+        '12M': 12,
+        '1Y': 12,
+      }
+
+      const nominalCount = fixedMonthsMap[activeTimeframe]
+
+      if (nominalCount) {
+        for (let k = nominalCount - 1; k >= 0; k--) {
+          const d = new Date(Date.UTC(lastYear, lastMonth - k, 1))
+          const y = d.getUTCFullYear()
+          const m = d.getUTCMonth()
+          // Exclude months strictly before the earliest available data month
+          if (y > firstYear || (y === firstYear && m >= firstMonth)) {
+            targetMonths.push({ year: y, month: m })
+          }
+        }
+      } else {
+        // Since Inception or custom range: all months from firstMonth to lastMonth
+        const totalMonthsCount = (lastYear - firstYear) * 12 + (lastMonth - firstMonth) + 1
+        for (let k = totalMonthsCount - 1; k >= 0; k--) {
+          const d = new Date(Date.UTC(lastYear, lastMonth - k, 1))
+          targetMonths.push({ year: d.getUTCFullYear(), month: d.getUTCMonth() })
+        }
+      }
+    }
+
+    const monthCount = targetMonths.length
+    if (monthCount === 0) return labels
+
+    // 1. WHICH month labels to show (maximum 6 labels):
+    const interval = monthCount <= 6 ? 1 : Math.ceil(monthCount / 6)
+    const selectedMonthObjects = []
+    for (let i = 0; i < monthCount; i += interval) {
+      selectedMonthObjects.push(targetMonths[i])
+    }
+
+    // 2. WHERE those labels appear across the chart width (equal visual spacing):
+    const N = selectedMonthObjects.length
+    const M = currentChartPoints.length
+
+    if (N === 1) {
+      // N = 1 (e.g. 1M): Place the single label at the horizontal center of the chart
+      const { year, month } = selectedMonthObjects[0]
+      const centerIdx = Math.floor((M - 1) / 2)
+      labels[centerIdx] = `${months[month]} ${year}`
+    } else {
+      // N > 1: Distribute the N labels at evenly spaced percentage intervals across the chart:
+      // N = 3 -> 0%, 50%, 100%
+      // N = 6 -> 0%, 20%, 40%, 60%, 80%, 100%
+      selectedMonthObjects.forEach((obj, k) => {
+        const { year, month } = obj
+        const label = `${months[month]} ${year}`
+        const fraction = k / (N - 1)
+        const targetIdx = Math.min(Math.round(fraction * (M - 1)), M - 1)
+        labels[targetIdx] = label
+      })
+    }
+
+    return labels
+  }, [currentChartPoints, activeTimeframe])
+
+  // Derive selected period's return from selected plan's SIF Scheme Plan Performance data
+  const selectedPeriodReturn = useMemo(() => {
+    const perf = selectedPlan?.performance_data || {}
+    let val = null
+
+    if (activeTimeframe === '1M') {
+      val = perf['1_month']
+    } else if (activeTimeframe === '3M') {
+      val = perf['3_months'] ?? perf['3_month']
+    } else if (activeTimeframe === '6M') {
+      val = perf['6_months'] ?? perf['6_month']
+    } else if (activeTimeframe === '12M' || activeTimeframe === '1Y') {
+      val = perf['1_year']
+    } else if (activeTimeframe === 'Since Inception' || activeTimeframe === 'Since Launch') {
+      val = perf['since_inception'] ?? perf['since_launch']
+    }
+
+    if (val === null || val === undefined || val === '' || val === 'N/A') {
+      return null
+    }
+
+    const num = typeof val === 'number' ? val : parseFloat(String(val).replace('%', ''))
+    if (isNaN(num)) {
+      return null
+    }
+
+    return {
+      text: `${num > 0 ? '+' : ''}${num.toFixed(2)}%`,
+      isPositive: num >= 0,
+      value: num,
+    }
+  }, [selectedPlan?.performance_data, activeTimeframe])
 
   // Build Chart Data
   const chartData = useMemo(() => {
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    const labels = currentChartPoints.map(p => {
-      const day = p.date.getUTCDate()
-      const m = months[p.date.getUTCMonth()]
-      const y = p.date.getUTCFullYear()
-      if (activeTimeframe === '1M') {
-        return `${day} ${m}`
-      }
-      return `${day} ${m} ${y}`
-    })
-
     const navs = currentChartPoints.map(p => p.nav)
 
     return {
-      labels,
+      labels: chartLabels,
       datasets: [
         {
           label: fund?.name || 'NAV',
@@ -302,11 +439,19 @@ export default function SifFundDetails() {
         },
       ],
     }
-  }, [currentChartPoints, activeTimeframe, fund?.name])
+  }, [currentChartPoints, chartLabels, fund?.name])
 
   const chartOptions = useMemo(() => ({
     responsive: true,
     maintainAspectRatio: false,
+    layout: {
+      padding: {
+        left: 12,
+        right: 12,
+        top: 4,
+        bottom: 0,
+      },
+    },
     interaction: { mode: 'index', intersect: false },
     plugins: {
       legend: { display: false },
@@ -332,6 +477,19 @@ export default function SifFundDetails() {
         boxPadding: 6,
         displayColors: false,
         callbacks: {
+          title: (items) => {
+            if (!items || !items.length) return ''
+            const idx = items[0].dataIndex
+            const pt = currentChartPoints[idx]
+            if (pt) {
+              const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+              const day = pt.date.getUTCDate()
+              const m = months[pt.date.getUTCMonth()]
+              const y = pt.date.getUTCFullYear()
+              return `${day} ${m} ${y}`
+            }
+            return ''
+          },
           label: (ctx) => `NAV: ₹${typeof ctx.raw === 'number' ? ctx.raw.toFixed(4) : ctx.raw}`,
         },
       },
@@ -340,10 +498,11 @@ export default function SifFundDetails() {
       x: {
         grid: { display: false },
         ticks: {
-          font: { size: 10 },
+          font: { size: 10, weight: '500' },
           color: '#94a3b8',
-          maxTicksLimit: 7,
+          autoSkip: false,
           maxRotation: 0,
+          minRotation: 0,
         },
       },
       y: {
@@ -357,7 +516,7 @@ export default function SifFundDetails() {
         },
       },
     },
-  }), [])
+  }), [currentChartPoints])
 
   if (loading) {
     return (
@@ -399,13 +558,14 @@ export default function SifFundDetails() {
     <div className="min-h-screen bg-white font-sans text-gray-900">
       <Navbar />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16">
-        {/* Breadcrumbs */}
-        <div className="flex items-center gap-2 text-xs font-medium text-gray-400 mb-6">
-          <Link to="/" className="hover:text-gray-700 transition-colors">Home</Link>
-          <FontAwesomeIcon icon={faArrowRight} className="text-[9px]" />
-          <Link to="/sif" className="hover:text-gray-700 transition-colors">SIF</Link>
-          <FontAwesomeIcon icon={faArrowRight} className="text-[9px]" />
+      {/* Main Container */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
+        {/* Breadcrumb */}
+        <div className="flex items-center gap-2 text-xs text-gray-400 mb-6 font-medium">
+          <Link to="/" className="hover:text-gray-600 transition-colors">Home</Link>
+          <span>/</span>
+          <Link to="/sif" className="hover:text-gray-600 transition-colors">SIF</Link>
+          <span>/</span>
           <span className="text-gray-700 font-semibold">{fund.name}</span>
         </div>
 
@@ -440,10 +600,10 @@ export default function SifFundDetails() {
               <button
                 type="button"
                 onClick={() => setIsPlanDropdownOpen(!isPlanDropdownOpen)}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-200 bg-gray-50 hover:bg-gray-100 text-xs font-semibold text-gray-700 transition-all shadow-2xs"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-200 bg-gray-50 hover:bg-gray-100 text-xs font-semibold text-gray-700 transition-all shadow-2xs cursor-pointer"
               >
                 <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                <span>{selectedType || 'Regular'} • {selectedOption || 'Growth'}</span>
+                <span>{formatPlanLabel(selectedPlan)}</span>
                 <FontAwesomeIcon icon={faChevronDown} className="text-[10px] text-gray-400" />
               </button>
 
@@ -453,24 +613,22 @@ export default function SifFundDetails() {
                     initial={{ opacity: 0, y: 5 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 5 }}
-                    className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 p-2 z-30 space-y-1"
+                    className="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 p-2 z-30 space-y-1"
                   >
                     <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 px-3 py-1">Select Plan</p>
                     {availablePlans.map((p, idx) => (
                       <button
-                        key={idx}
+                        key={p.name || idx}
                         type="button"
                         onClick={() => {
-                          setSelectedType(p.type || '');
-                          setSelectedOption(p.option || '');
-                          setSelectedSubOption(p.sub_option || '');
-                          setSelectedPeriod(p.period || '');
+                          setSelectedPlanName(p.name || '');
                           setIsPlanDropdownOpen(false);
                         }}
-                        className={`w-full text-left px-3 py-2 rounded-xl text-xs flex items-center justify-between transition-colors ${selectedPlan.name === p.name ? 'bg-blue-50 text-[#032e92] font-bold' : 'text-gray-700 hover:bg-gray-50 font-medium'
-                          }`}
+                        className={`w-full text-left px-3 py-2 rounded-xl text-xs flex items-center justify-between transition-colors cursor-pointer ${
+                          selectedPlan.name === p.name ? 'bg-blue-50 text-[#032e92] font-bold' : 'text-gray-700 hover:bg-gray-50 font-medium'
+                        }`}
                       >
-                        <span>{p.type || 'Plan'} - {p.option || 'Growth'}</span>
+                        <span>{formatPlanLabel(p)}</span>
                         {selectedPlan.name === p.name && <FontAwesomeIcon icon={faCircleCheck} className="text-xs text-[#032e92]" />}
                       </button>
                     ))}
@@ -488,25 +646,39 @@ export default function SifFundDetails() {
             <div className="lg:col-span-7 xl:col-span-8 space-y-6">
               {/* Performance Header with Range Selector */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <h2 className="text-xl font-extrabold text-[#0f172a] tracking-tight">
-                  Performance
-                </h2>
-
-                <div className="inline-flex items-center gap-1 bg-[#f4f7fc] border border-gray-200/80 rounded-full p-1 self-start sm:self-auto">
-                  {['1M', '3M', '6M', '12M', 'Since Inception'].map((tf) => (
-                    <button
-                      key={tf}
-                      type="button"
-                      onClick={() => setActiveTimeframe(tf)}
-                      className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${activeTimeframe === tf
-                        ? 'bg-[#0b1b4f] text-white shadow-xs'
-                        : 'text-gray-600 hover:text-gray-900'
-                        }`}
+                <div className="flex items-center gap-3">
+                  <h2 className="text-xl font-extrabold text-[#0f172a] tracking-tight">
+                    Performance
+                  </h2>
+                  {selectedPeriodReturn && (
+                    <span
+                      className={`text-base sm:text-lg font-extrabold tracking-tight ${
+                        selectedPeriodReturn.isPositive ? 'text-emerald-600' : 'text-rose-600'
+                      }`}
                     >
-                      {tf}
-                    </button>
-                  ))}
+                      {selectedPeriodReturn.text}
+                    </span>
+                  )}
                 </div>
+
+                {availableTimeframes.length > 0 && (
+                  <div className="inline-flex items-center gap-1 bg-[#f4f7fc] border border-gray-200/80 rounded-full p-1 self-start sm:self-auto">
+                    {availableTimeframes.map((tf) => (
+                      <button
+                        key={tf}
+                        type="button"
+                        onClick={() => setActiveTimeframe(tf)}
+                        className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+                          activeTimeframe === tf
+                            ? 'bg-[#0b1b4f] text-white shadow-xs'
+                            : 'text-gray-600 hover:text-gray-900'
+                        }`}
+                      >
+                        {tf}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Chart Box */}
@@ -939,7 +1111,18 @@ export default function SifFundDetails() {
             >
               <div className="flex items-center justify-between pb-4 border-b border-gray-100">
                 <div>
-                  <h3 className="text-lg font-bold text-gray-900">{fund.name} — Historical Performance</h3>
+                  <div className="flex items-center gap-3">
+                    <h3 className="text-lg font-bold text-gray-900">{fund.name} — Historical Performance</h3>
+                    {selectedPeriodReturn && (
+                      <span
+                        className={`text-sm sm:text-base font-extrabold ${
+                          selectedPeriodReturn.isPositive ? 'text-emerald-600' : 'text-rose-600'
+                        }`}
+                      >
+                        {selectedPeriodReturn.text}
+                      </span>
+                    )}
+                  </div>
                   <p className="text-xs text-gray-500">Range: {activeTimeframe}</p>
                 </div>
                 <button

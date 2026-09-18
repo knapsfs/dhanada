@@ -16,7 +16,6 @@ import {
   faFileLines,
   faArrowRight,
 } from '@fortawesome/free-solid-svg-icons';
-import { useLeadModal } from '../context/LeadModalContext';
 
 const products = [
   {
@@ -38,72 +37,79 @@ const products = [
     description: 'Personalised portfolio management for high-net-worth investors.',
     icon: faLayerGroup,
     iconBg: 'bg-sky-50 text-sky-600',
+    route: '/services',
   },
   {
     title: 'AIF (Alternative Investment Funds)',
     description: 'Access unique opportunities beyond traditional markets.',
     icon: faUsers,
     iconBg: 'bg-amber-50 text-amber-600',
+    route: '/services',
   },
   {
     title: 'Life Insurance',
     description: "Comprehensive life cover to ensure your family's financial security.",
     icon: faShieldHalved,
     iconBg: 'bg-rose-50 text-rose-600',
+    route: '/life-insurance',
   },
   {
     title: 'General Insurance',
     description: 'Protect your valuable assets including home, vehicle and more.',
     icon: faShield,
     iconBg: 'bg-blue-50 text-blue-600',
+    route: '/general-insurance',
   },
   {
     title: 'Health Insurance',
     description: "Stay prepared for life's uncertainties with adequate health cover.",
     icon: faHeartPulse,
     iconBg: 'bg-emerald-50 text-emerald-600',
+    route: '/health-insurance',
   },
   {
     title: 'ELSS',
     description: 'Save tax while investing in equity for long-term growth.',
     icon: faPercent,
     iconBg: 'bg-violet-50 text-violet-600',
+    route: '/elss',
   },
   {
     title: 'Fixed Deposits (FD)',
     description: 'A safe and steady investment option with assured returns.',
     icon: faCoins,
     iconBg: 'bg-amber-50 text-amber-600',
+    route: '/fixed-deposits',
   },
   {
     title: 'Recurring Deposits (RD)',
     description: 'Build your savings consistently, one step at a time.',
     icon: faPiggyBank,
     iconBg: 'bg-rose-50 text-rose-500',
+    route: '/recurring-deposits',
   },
   {
     title: 'National Pension System (NPS)',
     description: 'Plan for a secure, tax-efficient retirement.',
     icon: faUser,
     iconBg: 'bg-blue-50 text-blue-600',
+    route: '/nps',
   },
   {
     title: 'Small Savings Schemes',
     description: 'Government-backed schemes with guaranteed returns.',
     icon: faFileLines,
     iconBg: 'bg-green-50 text-green-600',
+    route: '/small-savings-schemes',
   },
 ];
 
 export default function OurProducts() {
-  const { openLeadModal } = useLeadModal();
   const navigate = useNavigate();
 
   const handleCardClick = (product) => {
     if (product.route) {
       navigate(product.route);
-    } else {
-      openLeadModal(product.title);
     }
   };
 
@@ -189,7 +195,7 @@ export default function OurProducts() {
             type="button"
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => openLeadModal('Explore All Products')}
+            onClick={() => navigate('/services')}
             className="inline-flex items-center justify-center gap-2.5 px-8 sm:px-10 py-3.5 sm:py-4 rounded-full bg-[#032e92] hover:bg-[#021d63] text-white font-semibold text-sm sm:text-base shadow-lg shadow-[#032e92]/20 hover:shadow-xl hover:shadow-[#032e92]/30 transition-all duration-300 cursor-pointer group"
           >
             <span>Explore All Products</span>

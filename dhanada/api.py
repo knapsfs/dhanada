@@ -9,131 +9,6 @@ import frappe
 from dateutil.relativedelta import relativedelta
 from frappe.utils import cstr, date_diff, flt, getdate, nowdate
 
-ALLOWED_SCHEME_DATA_SUBDIRS = {
-	"performance": "performance",
-	"historical_nav": os.path.join("nav", "historical"),
-}
-
-
-def _get_candidate_scheme_base_dirs() -> list[str]:
-	"""
-	Returns a list of candidate base directory paths for AMFI_Fetcher scheme data.
-	Supports site config overrides, environment variables, dynamic app/site relative paths,
-	and standard container paths without hardcoding developer-specific paths.
-	"""
-	candidates = []
-
-	# 1. Configured path via site config / common site config
-	for key in ("sif_data_path", "amfi_fetcher_path", "amfi_fetcher_data_path"):
-		try:
-			conf_path = frappe.conf.get(key)
-			if conf_path and isinstance(conf_path, str):
-				candidates.append(conf_path)
-		except Exception:
-			pass
-
-	# 2. Configured path via environment variables
-	for env_key in ("SIF_DATA_PATH", "AMFI_FETCHER_DATA_PATH", "AMFI_FETCHER_PATH"):
-		env_path = os.environ.get(env_key)
-		if env_path:
-			candidates.append(env_path)
-
-	# 3. Dynamic App-relative paths (works across local bench, dev server, containerized app)
-	try:
-		app_path = frappe.get_app_path("dhanada")
-		candidates.extend(
-			[
-				os.path.join(app_path, "..", "..", "..", "..", "AMFI_Fetcher", "data", "sif", "scheme"),
-				os.path.join(app_path, "..", "..", "..", "AMFI_Fetcher", "data", "sif", "scheme"),
-				os.path.join(app_path, "..", "..", "AMFI_Fetcher", "data", "sif", "scheme"),
-				os.path.join(app_path, "..", "..", "..", "..", "data", "sif", "scheme"),
-				os.path.join(app_path, "..", "..", "..", "data", "sif", "scheme"),
-				os.path.join(app_path, "data", "sif", "scheme"),
-			]
-		)
-	except Exception:
-		pass
-
-	# 4. Dynamic Site-relative paths (works with custom site volumes and multi-tenant setups)
-	try:
-		site_path = frappe.get_site_path()
-		candidates.extend(
-			[
-				os.path.join(site_path, "..", "..", "..", "AMFI_Fetcher", "data", "sif", "scheme"),
-				os.path.join(site_path, "..", "..", "AMFI_Fetcher", "data", "sif", "scheme"),
-				os.path.join(site_path, "..", "AMFI_Fetcher", "data", "sif", "scheme"),
-				os.path.join(site_path, "AMFI_Fetcher", "data", "sif", "scheme"),
-				os.path.join(site_path, "data", "sif", "scheme"),
-				os.path.join(site_path, "private", "data", "sif", "scheme"),
-				os.path.join(site_path, "public", "data", "sif", "scheme"),
-			]
-		)
-	except Exception:
-		pass
-
-	# 5. Standard Frappe Linux / Docker container paths
-	candidates.extend(
-		[
-			"/home/frappe/frappe-bench/AMFI_Fetcher/data/sif/scheme",
-			"/home/frappe/frappe-bench/sites/data/sif/scheme",
-			"/home/frappe/AMFI_Fetcher/data/sif/scheme",
-		]
-	)
-
-	return candidates
-
-
-_VALID_BASE_DIRS_CACHE = None
-
-
-def _get_valid_scheme_base_dirs() -> list[str]:
-	global _VALID_BASE_DIRS_CACHE
-	if _VALID_BASE_DIRS_CACHE is not None:
-		return _VALID_BASE_DIRS_CACHE
-
-	valid = []
-	for candidate in _get_candidate_scheme_base_dirs():
-		try:
-			real_path = os.path.realpath(os.path.abspath(candidate))
-			if os.path.isdir(real_path) and real_path not in valid:
-				valid.append(real_path)
-		except Exception:
-			continue
-
-	_VALID_BASE_DIRS_CACHE = valid
-	return valid
-
-
-def _get_safe_scheme_data_file(data_type: str, safe_code: str, extension: str) -> str | None:
-	"""
-	Safely resolves the file path for scheme data (performance JSON or historical NAV CSV).
-	Ensures strict path confinement within AMFI_Fetcher data directory to prevent path traversal.
-	"""
-	if not safe_code or not re.match(r"^[a-z0-9_]+$", safe_code):
-		return None
-
-	sub_rel = ALLOWED_SCHEME_DATA_SUBDIRS.get(data_type)
-	if not sub_rel:
-		return None
-
-	filename = f"{safe_code}.{extension.lstrip('.')}"
-	base_candidates = _get_valid_scheme_base_dirs()
-
-	for allowed_base in base_candidates:
-		try:
-			allowed_dir = os.path.join(allowed_base, sub_rel)
-			target_path = os.path.join(allowed_dir, filename)
-
-			if os.path.isfile(target_path):
-				real_target = os.path.realpath(target_path)
-				real_dir = os.path.realpath(allowed_dir)
-				if real_target.startswith(real_dir + os.sep):
-					return real_target
-		except Exception:
-			continue
-
-	return None
-
 
 def get_default_plan(plans):
 	if not plans:
@@ -231,42 +106,57 @@ def mask_invalid_returns(perf_dict, launch_date, historical_nav=None):
 
 
 def get_performance_for_sif(sif_code: str):
+	"""
+	Returns performance metrics for a given SIF code directly from SIF Scheme Plan Performance.
+	"""
 	if not sif_code:
 		return None
-	safe_code = str(sif_code).strip().replace("-", "_").lower()
-	if not re.match(r"^[a-z0-9_]+$", safe_code):
-		return None
 
-	content = None
-	path = _get_safe_scheme_data_file("performance", safe_code, "json")
-	if path:
-		try:
-			content = frappe.read_file(path)
-		except Exception as e:
-			frappe.log_error(f"Failed to read performance JSON {path}: {e}")
+	clean_code = str(sif_code).strip().upper().replace("_", "-")
+	if re.match(r"^SIF\d+$", clean_code):
+		clean_code = f"SIF-{clean_code[3:]}"
 
-	if not content:
-		return None
+	code_variants = list(
+		dict.fromkeys(
+			[
+				clean_code,
+				str(sif_code).strip(),
+				str(sif_code).strip().upper(),
+				str(sif_code).strip().lower(),
+				str(sif_code).strip().lower().replace("-", "_"),
+			]
+		)
+	)
 
 	try:
-		data = json.loads(content)
-		returns = data.get("returns", {})
-		return {
-			"1_day": returns.get("1_day"),
-			"1_week": returns.get("1_week"),
-			"1_month": returns.get("1_month"),
-			"3_months": returns.get("3_month"),
-			"6_months": returns.get("6_month"),
-			"year_to_date": returns.get("year_to_date"),
-			"1_year": returns.get("1_year"),
-			"2_years": returns.get("2_year"),
-			"3_years": returns.get("3_year"),
-			"5_years": returns.get("5_year"),
-			"since_inception": returns.get("since_launch"),
-			"performance_date": data.get("last_updated"),
-		}
+		plan = frappe.db.get_value(
+			"SIF Scheme Plan",
+			{"sif_code": ["in", code_variants]},
+			["name", "performance"],
+			as_dict=True,
+		)
+		if plan and plan.performance:
+			return frappe.db.get_value(
+				"SIF Scheme Plan Performance",
+				plan.performance,
+				[
+					"1_day",
+					"1_week",
+					"1_month",
+					"3_months",
+					"6_months",
+					"year_to_date",
+					"1_year",
+					"2_years",
+					"3_years",
+					"5_years",
+					"since_inception",
+					"performance_date",
+				],
+				as_dict=True,
+			)
 	except Exception as e:
-		frappe.log_error(f"Failed to parse performance JSON: {e}")
+		frappe.log_error(f"Failed to fetch performance for sif_code {sif_code}: {e}")
 	return None
 
 
@@ -407,57 +297,62 @@ def get_funds_list():
 		return {"status": "error", "message": str(e)}
 
 
-_HISTORICAL_NAV_CACHE = {}
+def clear_historical_nav_cache(safe_code: str | None = None):
+	"""
+	Preserved for backward compatibility.
+	"""
+	pass
 
 
 def get_historical_nav_for_sif(sif_code: str) -> list[dict]:
 	"""
-	Loads historical NAV time-series records for a given SIF code.
-	Checks local AMFI_Fetcher directory and fallback paths.
+	Loads historical NAV time-series records for a given SIF code from the SIF NAV Historical Data DocType.
 	Returns list of dicts: [{'date': '14-Oct-2025', 'nav': 10.0149}, ...]
 	"""
 	if not sif_code:
 		return []
 
-	safe_code = str(sif_code).strip().lower().replace("-", "_")
-	if not re.match(r"^[a-z0-9_]+$", safe_code):
-		return []
+	clean_code = str(sif_code).strip().upper().replace("_", "-")
+	if re.match(r"^SIF\d+$", clean_code):
+		clean_code = f"SIF-{clean_code[3:]}"
 
-	if safe_code in _HISTORICAL_NAV_CACHE:
-		return _HISTORICAL_NAV_CACHE[safe_code]
+	code_variants = list(
+		dict.fromkeys(
+			[
+				clean_code,
+				str(sif_code).strip(),
+				str(sif_code).strip().upper(),
+				str(sif_code).strip().lower(),
+				str(sif_code).strip().lower().replace("-", "_"),
+			]
+		)
+	)
 
-	content = None
-	path = _get_safe_scheme_data_file("historical_nav", safe_code, "csv")
-	if path:
-		try:
-			content = frappe.read_file(path)
-		except Exception as e:
-			frappe.log_error(f"Failed to read historical CSV {path}: {e}", title="Historical NAV Read Error")
-
-	if not content:
-		_HISTORICAL_NAV_CACHE[safe_code] = []
-		return []
-
-	records = []
 	try:
-		reader = csv.DictReader(io.StringIO(content))
-		for r in reader:
-			nav_str = r.get("nav", "").strip()
-			date_str = r.get("nav_date", "").strip()
-			if not nav_str or not date_str:
-				continue
-			try:
-				nav_val = float(nav_str.replace(",", ""))
-				records.append({"date": date_str, "nav": nav_val})
-			except (ValueError, TypeError):
-				continue
-		_HISTORICAL_NAV_CACHE[safe_code] = records
-		return records
-	except Exception as e:
-		frappe.log_error(f"Failed to parse historical CSV: {e}", title="Historical NAV Read Error")
+		records = frappe.get_all(
+			"SIF NAV Historical Data Entry",
+			filters={
+				"parent": ["in", code_variants],
+				"parenttype": "SIF NAV Historical Data",
+			},
+			fields=["nav_date", "nav"],
+			order_by="nav_date asc",
+		)
 
-	_HISTORICAL_NAV_CACHE[safe_code] = []
-	return []
+		return [
+			{
+				"date": r.nav_date.strftime("%d-%b-%Y")
+				if hasattr(r.nav_date, "strftime")
+				else frappe.utils.format_date(r.nav_date, "dd-MMM-yyyy"),
+				"nav": float(r.nav),
+			}
+			for r in records
+		]
+	except Exception as e:
+		frappe.log_error(
+			f"Failed to fetch historical NAV for {sif_code}: {e}", title="Historical NAV DB Query Error"
+		)
+		return []
 
 
 @frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
@@ -952,7 +847,6 @@ def chatbot_response():
 
 	except Exception:
 		frappe.log_error(message=frappe.get_traceback(), title="Chatbot Response Wrapper Error")
-		return {"success": False, "message": "Internal Server Error"}
 		return {"success": False, "message": "Internal Server Error"}
 
 

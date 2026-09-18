@@ -3,9 +3,9 @@ import { motion, animate, useMotionValue, useTransform } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 
 const stats = [
-  { id: 1, value: 10000, suffix: '+', label: 'Happy Investors' },
-  { id: 2, value: 500, prefix: '₹', suffix: 'Cr+', label: 'Assets Managed' },
-  { id: 3, value: 15, suffix: '+', label: 'Years Experience' },
+  { id: 1, value: 1000, suffix: '+', label: 'Happy Investors' },
+  { id: 2, value: 200, prefix: '₹', suffix: 'Cr+', label: 'Assets Managed' },
+  { id: 3, value: 30, suffix: '+', label: 'Years Experience' },
   { id: 4, value: 98, suffix: '%', label: 'Client Satisfaction' },
 ];
 
