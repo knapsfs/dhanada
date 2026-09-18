@@ -91,7 +91,9 @@ class TestSIFNAVHistoricalData(IntegrationTestCase):
 			self.assertEqual(res["stats"].get("historical_nav_created"), 2)
 
 		# Check parent count: exactly 2 parent documents
-		self.assertEqual(frappe.db.count("SIF NAV Historical Data", filters={"sif_code": ["like", "SIF-TEST%"]}), 2)
+		self.assertEqual(
+			frappe.db.count("SIF NAV Historical Data", filters={"sif_code": ["like", "SIF-TEST%"]}), 2
+		)
 
 		# Check child entries for SIF-TEST-1
 		doc1 = frappe.get_doc("SIF NAV Historical Data", "SIF-TEST-1")
@@ -157,11 +159,11 @@ class TestSIFNAVHistoricalData(IntegrationTestCase):
 				"sif_code": "SIF-TEST-1",
 				"rows": [
 					{"sif_code": "SIF-TEST-1", "nav_date": "09-Jul-2026", "nav": "-5.00"},  # Negative NAV
-					{"sif_code": "SIF-TEST-1", "nav_date": "10-Jul-2026", "nav": "0.00"},   # Zero NAV
-					{"sif_code": "SIF-TEST-1", "nav_date": "invalid-date", "nav": "10.00"}, # Malformed date
-					{"sif_code": "SIF-TEST-1", "nav_date": "11-Jul-2026", "nav": "10.00"}, # Valid
-					{"sif_code": "SIF-TEST-1", "nav_date": "11-Jul-2026", "nav": "10.00"}, # Duplicate date
-					{"sif_code": "SIF-TEST-1", "nav_date": "12-Jul-2026", "nav": "10.50"}, # Valid
+					{"sif_code": "SIF-TEST-1", "nav_date": "10-Jul-2026", "nav": "0.00"},  # Zero NAV
+					{"sif_code": "SIF-TEST-1", "nav_date": "invalid-date", "nav": "10.00"},  # Malformed date
+					{"sif_code": "SIF-TEST-1", "nav_date": "11-Jul-2026", "nav": "10.00"},  # Valid
+					{"sif_code": "SIF-TEST-1", "nav_date": "11-Jul-2026", "nav": "10.00"},  # Duplicate date
+					{"sif_code": "SIF-TEST-1", "nav_date": "12-Jul-2026", "nav": "10.50"},  # Valid
 				],
 			}
 		]
@@ -229,11 +231,11 @@ class TestSIFNAVHistoricalData(IntegrationTestCase):
 
 		# Dynamic range filtering simulation matching frontend logic
 		from datetime import datetime
+
 		from dateutil.relativedelta import relativedelta
 
 		parsed_data = [
-			{"date": datetime.strptime(d["date"], "%d-%b-%Y").date(), "nav": d["nav"]}
-			for d in data
+			{"date": datetime.strptime(d["date"], "%d-%b-%Y").date(), "nav": d["nav"]} for d in data
 		]
 		max_date = parsed_data[-1]["date"]
 
@@ -284,4 +286,3 @@ class TestSIFNAVHistoricalData(IntegrationTestCase):
 		plan2_hist = get_historical_nav_for_sif("SIF-TEST-MULTI")
 		self.assertEqual(plan1_hist, plan2_hist)
 		self.assertEqual(len(plan1_hist), 2)
-
