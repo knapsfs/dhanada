@@ -1,5 +1,4 @@
 import os
-
 import frappe
 
 
@@ -10,7 +9,21 @@ def get_context(context):
 	index_path = dist_path if is_prod else dev_path
 
 	if os.path.exists(index_path):
-		context.knaps_html = frappe.read_file(index_path)
+		html = frappe.read_file(index_path)
+		try:
+			csrf_token = frappe.sessions.get_csrf_token() or ""
+			csrf_script = (
+				f'<script>window.csrf_token = "{csrf_token}";'
+				f' window.frappe = window.frappe || {{}};'
+				f' window.frappe.csrf_token = "{csrf_token}";</script>'
+			)
+			if "</head>" in html:
+				html = html.replace("</head>", f"{csrf_script}</head>", 1)
+			else:
+				html = f"{csrf_script}\n{html}"
+		except Exception:
+			pass
+		context.knaps_html = html
 	else:
 		context.knaps_html = "<h1>KNAPS Frontend Not Found</h1>"
 
