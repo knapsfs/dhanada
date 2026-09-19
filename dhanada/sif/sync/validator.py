@@ -1,7 +1,5 @@
-import re
 from datetime import datetime
 from typing import Any
-from urllib.parse import urlparse
 
 
 class ValidationError(Exception):
@@ -105,6 +103,41 @@ class DataValidator:
 
 		if "returns" not in raw_perf or not isinstance(raw_perf["returns"], dict):
 			self.log_error("Performance", str(sif_code), "Missing or invalid 'returns' dictionary")
+			return False
+
+		return True
+
+	def validate_amfi_historical_nav(self, raw_hist: dict[str, Any]) -> bool:
+		sif_code = raw_hist.get("sif_code")
+		if not sif_code:
+			self.log_error("HistoricalNAV", "Unknown", "Missing 'sif_code'")
+			return False
+
+		if not raw_hist.get("nav_date"):
+			self.log_error("HistoricalNAV", str(sif_code), "Missing 'nav_date'")
+			return False
+
+		if not self._is_valid_date(raw_hist.get("nav_date")):
+			self.log_error(
+				"HistoricalNAV",
+				str(sif_code),
+				f"Invalid date format for nav_date: {raw_hist.get('nav_date')}",
+			)
+			return False
+
+		if raw_hist.get("nav") is None or str(raw_hist.get("nav")).strip() == "":
+			self.log_error("HistoricalNAV", str(sif_code), "Missing 'nav' value")
+			return False
+
+		try:
+			val = float(str(raw_hist.get("nav")).replace(",", ""))
+			if val <= 0:
+				self.log_error("HistoricalNAV", str(sif_code), f"Non-positive NAV: {val}")
+				return False
+		except (ValueError, TypeError):
+			self.log_error(
+				"HistoricalNAV", str(sif_code), f"Invalid number format for 'nav': {raw_hist.get('nav')}"
+			)
 			return False
 
 		return True

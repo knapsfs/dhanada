@@ -4,5 +4,5 @@
 from frappe.model.document import Document
 
 
-class SIFFundManager(Document):
+class SIFNAVHistoricalData(Document):
 	pass

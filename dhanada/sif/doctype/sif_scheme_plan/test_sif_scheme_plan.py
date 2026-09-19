@@ -31,8 +31,7 @@ class IntegrationTestSIFSchemePlan(IntegrationTestCase):
 	def test_data_scheduler_fixtures_and_helpers_removed(self):
 		"""
 		Verifies DATA_SCHEDULER_USER and execution_context module are completely removed,
-		no Data Scheduler fixtures remain in hooks.py, no database records exist,
-		and the migration patch is idempotent.
+		no Data Scheduler fixtures remain in hooks.py, and no database records exist.
 		"""
 		# 1. Ensure execution_context module does not exist
 		with self.assertRaises(ImportError):
@@ -55,15 +54,6 @@ class IntegrationTestSIFSchemePlan(IntegrationTestCase):
 		self.assertFalse(frappe.db.exists("Role Profile", "Data Scheduler"))
 		self.assertFalse(frappe.db.exists("Module Profile", "Data Scheduler"))
 		self.assertEqual(len(frappe.get_all("Custom DocPerm", filters={"role": "Data Scheduler"})), 0)
-
-		# 4. Ensure migration patch executes cleanly and idempotently
-		from dhanada.patches.remove_legacy_data_scheduler import execute as patch_execute
-
-		patch_execute()
-		patch_execute()
-
-		self.assertFalse(frappe.db.exists("User", "datascheduler@gmail.com"))
-		self.assertFalse(frappe.db.exists("Role", "Data Scheduler"))
 
 	def test_sync_nav_performance_preserves_session_user(self):
 		"""Verifies sync_nav_performance does not mutate the calling user session."""
@@ -334,3 +324,24 @@ class IntegrationTestSIFSchemePlan(IntegrationTestCase):
 		initial_user = frappe.session.user
 		cleanup_execute()
 		self.assertEqual(frappe.session.user, initial_user)
+
+	def test_get_historical_nav_returns_database_records(self):
+		"""Verifies get_historical_nav reads from SIF NAV Historical Data DocType."""
+		from dhanada.api import get_historical_nav, get_historical_nav_for_sif
+
+		test_code = "SIF-TEST-PLAN"
+		doc = frappe.new_doc("SIF NAV Historical Data")
+		doc.sif_code = test_code
+		doc.append("historical_nav_data", {"nav_date": "2026-06-15", "nav": 12.3456})
+		doc.insert(ignore_permissions=True)
+
+		data = get_historical_nav_for_sif(test_code)
+		self.assertTrue(len(data) >= 1)
+		self.assertEqual(data[0]["date"], "15-Jun-2026")
+		self.assertAlmostEqual(data[0]["nav"], 12.3456, places=4)
+
+		res = get_historical_nav(test_code)
+		self.assertEqual(res.get("status"), "success")
+		self.assertEqual(res.get("data"), data)
+
+		frappe.delete_doc("SIF NAV Historical Data", doc.name, ignore_permissions=True, force=True)

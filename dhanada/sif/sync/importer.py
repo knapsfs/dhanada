@@ -2,7 +2,6 @@ import frappe
 
 from .approval import create_approval_request
 from .comparator import compare_scheme
-from .constants import APPROVED_SUBCATEGORIES
 from .logger import log_error, log_warning
 from .models import SyncDataset
 
@@ -17,6 +16,10 @@ class DataImporter:
 			"skipped": 0,
 			"errors": 0,
 			"approvals_requested": 0,
+			"historical_nav_created": 0,
+			"historical_nav_updated": 0,
+			"historical_nav_skipped": 0,
+			"historical_nav_errors": 0,
 		}
 
 	def import_dataset(self, dataset: SyncDataset):
@@ -44,6 +47,8 @@ class DataImporter:
 
 		for hm in getattr(dataset, "heatmaps", []):
 			self._upsert_heatmap_performance(hm)
+
+		self._upsert_historical_nav(getattr(dataset, "historical_nav", []))
 
 	def _zero_missing_source_plans(self, matched_plan_names: set[str]):
 		"""
@@ -382,3 +387,72 @@ class DataImporter:
 		for month in ("jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"):
 			val = getattr(hm, month, None)
 			doc.set(month, val)
+
+	def _is_historical_nav_identical(self, doc, entries) -> bool:
+		from frappe.utils import getdate
+
+		current_rows = doc.get("historical_nav_data") or []
+		if len(current_rows) != len(entries):
+			return False
+		for r, e in zip(current_rows, entries, strict=True):
+			r_date = getdate(r.nav_date) if r.nav_date else None
+			if r_date != e.nav_date:
+				return False
+			if abs(float(r.nav or 0) - float(e.nav or 0)) > 1e-6:
+				return False
+		return True
+
+	def _upsert_historical_nav(self, historical_schemes_list):
+		if not historical_schemes_list:
+			return
+
+		for scheme_hist in historical_schemes_list:
+			sif_code = scheme_hist.sif_code
+			entries = scheme_hist.entries
+			if not sif_code or not entries:
+				continue
+
+			try:
+				if frappe.db.exists("SIF NAV Historical Data", sif_code):
+					doc = frappe.get_doc("SIF NAV Historical Data", sif_code)
+					if self._is_historical_nav_identical(doc, entries):
+						self.stats["historical_nav_skipped"] += 1
+					else:
+						doc.set("historical_nav_data", [])
+						for entry in entries:
+							doc.append(
+								"historical_nav_data",
+								{
+									"nav_date": entry.nav_date,
+									"nav": entry.nav,
+								},
+							)
+						if not self.dry_run:
+							doc.save(ignore_permissions=True)
+						self.stats["historical_nav_updated"] += 1
+				else:
+					doc = frappe.new_doc("SIF NAV Historical Data")
+					doc.sif_code = sif_code
+					for entry in entries:
+						doc.append(
+							"historical_nav_data",
+							{
+								"nav_date": entry.nav_date,
+								"nav": entry.nav,
+							},
+						)
+					if not self.dry_run:
+						doc.insert(ignore_permissions=True)
+					self.stats["historical_nav_created"] += 1
+
+			except Exception as e:
+				self.stats["historical_nav_errors"] += 1
+				log_error(f"Failed to upsert historical NAV for SIF {sif_code}: {e}", exc_info=True)
+
+		if not self.dry_run:
+			try:
+				frappe.db.commit()
+			except Exception as e:
+				frappe.db.rollback()
+				self.stats["historical_nav_errors"] += 1
+				log_error(f"Failed to commit historical NAV transaction: {e}", exc_info=True)

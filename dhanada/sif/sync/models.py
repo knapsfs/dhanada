@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field
 from datetime import date
-from typing import Optional
 
 
 @dataclass
@@ -138,6 +137,18 @@ class SchemeHeatmapPerformance:
 
 
 @dataclass
+class HistoricalNavEntry:
+	nav_date: date
+	nav: float
+
+
+@dataclass
+class SchemeHistoricalNav:
+	sif_code: str
+	entries: list[HistoricalNavEntry] = field(default_factory=list)
+
+
+@dataclass
 class SyncDataset:
 	amcs: list[AMC] = field(default_factory=list)
 	subcategories: list[Subcategory] = field(default_factory=list)
@@ -147,3 +158,4 @@ class SyncDataset:
 	nav_updates: list[NavUpdate] = field(default_factory=list)
 	performances: list[SchemePlanPerformance] = field(default_factory=list)
 	heatmaps: list[SchemeHeatmapPerformance] = field(default_factory=list)
+	historical_nav: list[SchemeHistoricalNav] = field(default_factory=list)
