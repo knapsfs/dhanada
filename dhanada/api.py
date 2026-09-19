@@ -717,9 +717,22 @@ def create_chatbot_lead():
 @frappe.whitelist(allow_guest=True, methods=["POST"])  # nosemgrep: guest-whitelisted-method
 def create_website_lead():
 	try:
-		full_name = frappe.form_dict.get("full_name", "").strip()
-		email = frappe.form_dict.get("email", "").strip()
-		phone = frappe.form_dict.get("phone", "").strip()
+		payload = {}
+		req = getattr(frappe.local, "request", None)
+		if req and hasattr(req, "data") and req.data:
+			try:
+				payload = json.loads(req.data)
+			except Exception:
+				payload = frappe.form_dict or {}
+		else:
+			payload = frappe.form_dict or {}
+
+		if not payload and hasattr(frappe, "form_dict") and frappe.form_dict:
+			payload = frappe.form_dict
+
+		full_name = (payload.get("full_name") or payload.get("name") or "").strip()
+		email = (payload.get("email") or "").strip()
+		phone = (payload.get("phone") or payload.get("mobile") or "").strip()
 
 		if not full_name:
 			frappe.throw(frappe._("Full Name is a required field."))

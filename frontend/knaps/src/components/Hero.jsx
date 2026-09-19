@@ -2,11 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import knapsBanner from '../assets/knaps-banner.png';
 import knapsBannerGlassCards from '../assets/knaps-banner-glass-cards.png';
+import { getCsrfToken } from '../utils/csrf';
 
 const productOptions = [
-  { value: 'mutual-funds', label: 'Mutual Funds (Lumpsum/ SIP)' },
-  { value: 'sif', label: 'SIF (Specialized Investment Fund)' },
-  { value: 'pms', label: 'Portfolio Management (PMS)' },
+  { value: 'mutual-funds', label: 'Mutual Funds (Lumpsum / SIP)' },
+  { value: 'sif', label: 'Specialized Investment Fund (SIF)' },
+  { value: 'pms', label: 'Portfolio Management Services (PMS)' },
   { value: 'aif', label: 'Alternative Investment Funds (AIF)' },
   { value: 'nps', label: 'National Pension System (NPS)' },
   { value: 'others', label: 'Others' },
@@ -20,6 +21,8 @@ export default function Hero() {
     email: '',
     mobile: '',
   });
+  const [agreedToTerms, setAgreedToTerms] = useState(true);
+  const [errors, setErrors] = useState({});
   const [status, setStatus] = useState('idle'); // 'idle' | 'submitting' | 'success' | 'error'
   const [errorMessage, setErrorMessage] = useState('');
   const dropdownRef = useRef(null);
@@ -37,53 +40,134 @@ export default function Hero() {
 
   const selectedProductObj = productOptions.find((p) => p.value === selectedProduct);
 
+  const validateField = (name, value) => {
+    switch (name) {
+      case 'product':
+        if (!value) return 'Please select a product';
+        return '';
+      case 'name': {
+        const trimmed = value.trim();
+        if (!trimmed) return 'Please enter your full name';
+        if (trimmed.length < 2) return 'Name must be at least 2 characters long';
+        if (!/^[a-zA-Z\s.'-]+$/.test(trimmed)) return 'Name should contain letters only';
+        return '';
+      }
+      case 'email': {
+        const trimmed = value.trim();
+        if (!trimmed) return 'Please enter your email address';
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(trimmed)) return 'Please enter a valid email address';
+        return '';
+      }
+      case 'mobile': {
+        const digits = value.replace(/\D/g, '');
+        if (!digits) return 'Please enter your 10-digit mobile number';
+        if (digits.length !== 10) return `Mobile number must be exactly 10 digits (${digits.length}/10 entered)`;
+        if (!/^[6-9]\d{9}$/.test(digits)) return 'Please enter a valid mobile number starting with 6, 7, 8, or 9';
+        return '';
+      }
+      default:
+        return '';
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {
+      product: validateField('product', selectedProduct),
+      name: validateField('name', formData.name),
+      email: validateField('email', formData.email),
+      mobile: validateField('mobile', formData.mobile),
+    };
+
+    if (!agreedToTerms) {
+      newErrors.terms = 'Please accept Terms & Conditions to proceed';
+    }
+
+    // Filter out empty errors
+    const activeErrors = Object.fromEntries(
+      Object.entries(newErrors).filter(([, msg]) => Boolean(msg))
+    );
+
+    setErrors(activeErrors);
+    return Object.keys(activeErrors).length === 0;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (name === 'mobile') {
+      // Only allow numeric digits and limit to 10 digits
+      const digitsOnly = value.replace(/\D/g, '').slice(0, 10);
+      setFormData((prev) => ({ ...prev, mobile: digitsOnly }));
+      if (errors.mobile) {
+        setErrors((prev) => ({ ...prev, mobile: '' }));
+      }
+      return;
+    }
+
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: '' }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (status === 'submitting') return;
 
-    if (!formData.name.trim()) {
+    if (!validateForm()) {
       setStatus('error');
-      setErrorMessage('Please enter your full name.');
-      return;
-    }
-
-    if (!formData.mobile.trim() && !formData.email.trim()) {
-      setStatus('error');
-      setErrorMessage('Please provide either your mobile number or email address.');
+      setErrorMessage('Please fill all the fields in the form before submitting.');
       return;
     }
 
     setStatus('submitting');
     setErrorMessage('');
+    setErrors({});
 
     try {
+      const csrfToken = await getCsrfToken();
+      const headers = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      };
+      if (csrfToken) {
+        headers['X-Frappe-CSRF-Token'] = csrfToken;
+      }
+
       const response = await fetch('/api/method/dhanada.api.create_website_lead', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
+        headers,
         body: JSON.stringify({
           full_name: formData.name.trim(),
           email: formData.email.trim(),
           phone: formData.mobile.trim(),
           product: selectedProductObj?.label || selectedProduct || 'Hero Form',
+          csrf_token: csrfToken || undefined,
         }),
       });
 
       const data = await response.json();
       if (response.ok && data.message && data.message.success) {
         setStatus('success');
-      } else if (data?.message?.success === false || data?.exc_message) {
-        setStatus('error');
-        setErrorMessage(data?.message?.message || 'Something went wrong. Please try again.');
       } else {
-        setStatus('success');
+        let errorMsg = 'Something went wrong. Please try again.';
+        if (data?.message?.message) {
+          errorMsg = data.message.message;
+        } else if (data?.exc_message) {
+          errorMsg = data.exc_message;
+        } else if (data?._server_messages) {
+          try {
+            const parsed = JSON.parse(data._server_messages);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              const inner = typeof parsed[0] === 'string' ? JSON.parse(parsed[0]) : parsed[0];
+              errorMsg = inner?.message || errorMsg;
+            }
+          } catch {
+            errorMsg = 'Something went wrong. Please try again.';
+          }
+        }
+        setStatus('error');
+        setErrorMessage(errorMsg);
       }
     } catch {
       // In offline / preview / dev environment where API isn't hosted locally
@@ -177,6 +261,8 @@ export default function Hero() {
                       setStatus('idle');
                       setFormData({ name: '', email: '', mobile: '' });
                       setSelectedProduct('');
+                      setErrors({});
+                      setAgreedToTerms(true);
                     }}
                     className="inline-flex items-center justify-center px-6 py-2.5 rounded-lg bg-[#032e92] text-white text-sm font-semibold hover:bg-[#021d63] transition-colors cursor-pointer"
                   >
@@ -184,17 +270,22 @@ export default function Hero() {
                   </button>
                 </motion.div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
                   {status === 'error' && errorMessage && (
-                    <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-xs font-medium">
-                      {errorMessage}
+                    <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-xs font-medium flex items-center gap-2">
+                      <svg className="w-4 h-4 text-red-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10" strokeWidth="2"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12" strokeWidth="2"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16" strokeWidth="2"></line>
+                      </svg>
+                      <span>{errorMessage}</span>
                     </div>
                   )}
 
                   {/* Product Dropdown - Consistent Underline Style */}
                   <div className="relative" ref={dropdownRef}>
                     <label className="block text-[11px] font-bold text-gray-600 uppercase tracking-wider mb-1">
-                      Product
+                      Product <span className="text-red-500">*</span>
                     </label>
 
                     <div
@@ -211,9 +302,11 @@ export default function Hero() {
                           setProductOpen(false);
                         }
                       }}
-                      className={`w-full bg-transparent border-b-2 pb-2 text-sm flex items-center justify-between cursor-pointer transition-colors select-none ${productOpen
-                        ? 'border-[#032e92]'
-                        : 'border-gray-300 hover:border-gray-400'
+                      className={`w-full bg-transparent border-b-2 pb-2 text-sm flex items-center justify-between cursor-pointer transition-colors select-none ${errors.product
+                        ? 'border-red-400'
+                        : productOpen
+                          ? 'border-[#032e92]'
+                          : 'border-gray-300 hover:border-gray-400'
                         }`}
                     >
                       <span className={selectedProduct ? 'text-gray-800 font-medium' : 'text-gray-400 font-normal'}>
@@ -226,6 +319,10 @@ export default function Hero() {
                         </svg>
                       </div>
                     </div>
+
+                    {errors.product && (
+                      <p className="text-red-500 text-[11px] mt-1 font-medium">{errors.product}</p>
+                    )}
 
                     {/* Hidden Input for Native Form Handling */}
                     <input type="hidden" name="product" value={selectedProduct} />
@@ -248,6 +345,9 @@ export default function Hero() {
                                 onClick={() => {
                                   setSelectedProduct(option.value);
                                   setProductOpen(false);
+                                  if (errors.product) {
+                                    setErrors((prev) => ({ ...prev, product: '' }));
+                                  }
                                 }}
                                 className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg cursor-pointer text-sm transition-colors ${isSelected
                                   ? 'bg-[#eef4ff] text-[#032e92] font-semibold'
@@ -270,7 +370,9 @@ export default function Hero() {
 
                   {/* Name */}
                   <div>
-                    <label className="block text-[11px] font-bold text-gray-600 uppercase tracking-wider mb-1">Name</label>
+                    <label className="block text-[11px] font-bold text-gray-600 uppercase tracking-wider mb-1">
+                      Full Name <span className="text-red-500">*</span>
+                    </label>
                     <input
                       type="text"
                       name="name"
@@ -278,14 +380,20 @@ export default function Hero() {
                       onChange={handleChange}
                       disabled={status === 'submitting'}
                       placeholder="Please enter your full name"
-                      className="w-full bg-transparent border-b-2 border-gray-300 pb-2 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#032e92] transition-colors disabled:opacity-60"
+                      className={`w-full bg-transparent border-b-2 pb-2 text-sm text-gray-800 placeholder-gray-400 focus:outline-none transition-colors disabled:opacity-60 ${errors.name
+                        ? 'border-red-400 focus:border-red-500'
+                        : 'border-gray-300 focus:border-[#032e92]'
+                        }`}
                     />
+                    {errors.name && (
+                      <p className="text-red-500 text-[11px] mt-1 font-medium">{errors.name}</p>
+                    )}
                   </div>
 
                   {/* Email */}
                   <div>
                     <label className="block text-[11px] font-bold text-gray-600 uppercase tracking-wider mb-1">
-                      Email Address
+                      Email Address <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="email"
@@ -293,31 +401,81 @@ export default function Hero() {
                       value={formData.email}
                       onChange={handleChange}
                       disabled={status === 'submitting'}
-                      placeholder="Your email id"
-                      className="w-full bg-transparent border-b-2 border-gray-300 pb-2 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#032e92] transition-colors disabled:opacity-60"
+                      placeholder="e.g. yourname@example.com"
+                      className={`w-full bg-transparent border-b-2 pb-2 text-sm text-gray-800 placeholder-gray-400 focus:outline-none transition-colors disabled:opacity-60 ${errors.email
+                        ? 'border-red-400 focus:border-red-500'
+                        : 'border-gray-300 focus:border-[#032e92]'
+                        }`}
                     />
+                    {errors.email && (
+                      <p className="text-red-500 text-[11px] mt-1 font-medium">{errors.email}</p>
+                    )}
                   </div>
 
                   {/* Mobile */}
                   <div>
-                    <label className="block text-[11px] font-bold text-gray-600 uppercase tracking-wider mb-1">Mobile Number</label>
-                    <input
-                      type="tel"
-                      name="mobile"
-                      value={formData.mobile}
-                      onChange={handleChange}
-                      disabled={status === 'submitting'}
-                      placeholder="Enter Your mobile number"
-                      className="w-full bg-transparent border-b-2 border-gray-300 pb-2 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#032e92] transition-colors disabled:opacity-60"
-                    />
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="block text-[11px] font-bold text-gray-600 uppercase tracking-wider">
+                        Mobile Number <span className="text-red-500">*</span>
+                      </label>
+                      <span className={`text-[10px] font-medium transition-colors ${formData.mobile.length === 10
+                        ? 'text-emerald-600 font-semibold'
+                        : formData.mobile.length > 0
+                          ? 'text-blue-600'
+                          : 'text-gray-400'
+                        }`}>
+                        {formData.mobile.length}/10 digits
+                      </span>
+                    </div>
+                    <div className="flex items-center">
+                      <span className="text-sm font-semibold text-gray-400 pb-2 mr-1.5 select-none">
+                        +91
+                      </span>
+                      <input
+                        type="tel"
+                        name="mobile"
+                        inputMode="numeric"
+                        maxLength={10}
+                        value={formData.mobile}
+                        onChange={handleChange}
+                        disabled={status === 'submitting'}
+                        placeholder="Enter 10-digit mobile number"
+                        className={`w-full bg-transparent border-b-2 pb-2 text-sm text-gray-800 placeholder-gray-400 focus:outline-none transition-colors disabled:opacity-60 tracking-wider ${errors.mobile
+                          ? 'border-red-400 focus:border-red-500'
+                          : 'border-gray-300 focus:border-[#032e92]'
+                          }`}
+                      />
+                    </div>
+                    {errors.mobile && (
+                      <p className="text-red-500 text-[11px] mt-1 font-medium">{errors.mobile}</p>
+                    )}
                   </div>
 
                   {/* Checkbox */}
-                  <div className="flex items-start gap-3 pt-1">
-                    <input type="checkbox" id="terms" defaultChecked className="mt-1 w-4 h-4 text-[#0665d0] rounded border-gray-300 focus:ring-[#0665d0] cursor-pointer" />
-                    <label htmlFor="terms" className="text-[12px] sm:text-[13px] text-gray-500 leading-relaxed cursor-pointer select-none">
-                      By continuing, you provide consent and agree to our <a href="/terms" className="text-[#0665d0] hover:underline">Terms & Conditions</a>
-                    </label>
+                  <div className="pt-1">
+                    <div className="flex items-start gap-3">
+                      <input
+                        type="checkbox"
+                        id="terms"
+                        checked={agreedToTerms}
+                        onChange={(e) => {
+                          setAgreedToTerms(e.target.checked);
+                          if (e.target.checked && errors.terms) {
+                            setErrors((prev) => ({ ...prev, terms: '' }));
+                          }
+                        }}
+                        className="mt-1 w-4 h-4 text-[#0665d0] rounded border-gray-300 focus:ring-[#0665d0] cursor-pointer"
+                      />
+                      <label htmlFor="terms" className="text-[12px] sm:text-[13px] text-gray-500 leading-relaxed cursor-pointer select-none">
+                        By continuing, you provide consent and agree to our{' '}
+                        <a href="/terms" className="text-[#0665d0] hover:underline">
+                          Terms & Conditions
+                        </a>
+                      </label>
+                    </div>
+                    {errors.terms && (
+                      <p className="text-red-500 text-[11px] mt-1 font-medium pl-7">{errors.terms}</p>
+                    )}
                   </div>
 
                   {/* Submit Button */}
