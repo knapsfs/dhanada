@@ -119,6 +119,7 @@ function calculateYearlyData(monthlyInvestment, stepUp, stepUpType = 'percentage
 
     yearlyData.push({
       year: k,
+      monthlySip: Math.round(currentYearSip),
       monthlyInvestment: Math.round(currentYearSip),
       invested: Math.round(cumulativeInvested),
       value: Math.round(fv_k),

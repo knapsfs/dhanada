@@ -79,6 +79,7 @@ export default function FutureValueGrowthChart({ chartData }) {
         padding: 12,
         boxPadding: 4,
         cornerRadius: 12,
+        itemSort: (a, b) => b.datasetIndex - a.datasetIndex,
         callbacks: {
           label: (ctx) => ` ${ctx.dataset.label}: ${fmt(ctx.parsed.y)}`,
         },
@@ -124,12 +125,12 @@ export default function FutureValueGrowthChart({ chartData }) {
             {/* Custom Legend */}
             <div className="flex items-center gap-4 text-xs font-semibold text-gray-500">
               <div className="flex items-center gap-1.5">
-                <span className="w-3 h-3 rounded-full bg-[#94a3b8] inline-block"></span>
-                Your Money
-              </div>
-              <div className="flex items-center gap-1.5">
                 <span className="w-3 h-3 rounded-full bg-[#032e92] inline-block"></span>
                 Potential Future Value
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-3 h-3 rounded-full bg-[#94a3b8] inline-block"></span>
+                Your Money
               </div>
             </div>
           </div>

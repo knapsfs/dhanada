@@ -98,6 +98,7 @@ export default function GrowthChart({ chartData }) {
         titleFont: { size: 13, weight: 'bold' },
         bodyFont: { size: 12, weight: '600' },
         displayColors: true,
+        itemSort: (a, b) => b.datasetIndex - a.datasetIndex,
         callbacks: {
           label: function (context) {
             let label = context.dataset.label || '';
