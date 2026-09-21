@@ -64,7 +64,7 @@ export default function BlogSection() {
               transition={{ delay: 0.1 }}
               className="text-2xl sm:text-4xl lg:text-[42px] font-extrabold text-[#0f172a] tracking-tight leading-tight"
             >
-              Expert Financial <span className="text-[#032e92]">Perspectives</span>
+              Blogs and <span className="text-[#032e92]">Resources</span>
             </motion.h2>
           </div>
           <motion.div

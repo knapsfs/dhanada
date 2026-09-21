@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChartColumn } from '@fortawesome/free-solid-svg-icons'
 
 const fmt = (n) => {
+  if (n == null || isNaN(n)) return '₹0'
   if (n >= 10000000) return `₹${(n / 10000000).toFixed(2)} Cr`
   if (n >= 100000) return `₹${(n / 100000).toFixed(2)} L`
   return `₹${Math.round(n).toLocaleString('en-IN')}`
@@ -55,7 +56,7 @@ export default function StepUpSipProjectionTable({ yearlyData }) {
                         </span>
                       </div>
                     </td>
-                    <td className="px-5 py-3.5 font-semibold text-gray-700">{fmt(row.monthlySip)}</td>
+                    <td className="px-5 py-3.5 font-semibold text-gray-700">{fmt(row.monthlySip ?? row.monthlyInvestment)}</td>
                     <td className="px-5 py-3.5 font-semibold text-gray-700">{fmt(row.invested)}</td>
                     <td className="px-5 py-3.5">
                       <span className="font-bold text-green-600">{fmt(row.gain)}</span>

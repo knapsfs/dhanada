@@ -9,6 +9,7 @@ import AboutWhyInvestors from '../components/about/AboutWhyInvestors';
 import AboutJourney from '../components/about/AboutJourney';
 import Stats from '../components/Stats';
 import AboutLeadership from '../components/about/AboutLeadership';
+import AboutCallToAction from '../components/about/AboutCallToAction';
 import CTA from '../components/CTA';
 
 export default function AboutUs() {
@@ -24,6 +25,7 @@ export default function AboutUs() {
         <AboutJourney />
         <Stats />
         <AboutLeadership />
+        {/* <AboutCallToAction /> */}
         <CTA />
       </main>
 

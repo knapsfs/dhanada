@@ -79,8 +79,9 @@ function App() {
             <Route path="/recurring-deposits" element={<RecurringDeposits />} />
             <Route path="/services/recurring-deposits" element={<RecurringDeposits />} />
             {/* National Pension System Routes */}
-            <Route path="/nps" element={<NationalPensionSystem />} />
             <Route path="/services/nps" element={<NationalPensionSystem />} />
+            <Route path="/nps" element={<NationalPensionSystem />} />
+            <Route path="/services/national-pension-system" element={<NationalPensionSystem />} />
             <Route path="/national-pension-system" element={<NationalPensionSystem />} />
             {/* Small Savings Schemes Routes */}
             <Route path="/small-savings-schemes" element={<SmallSavingsSchemes />} />
