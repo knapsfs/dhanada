@@ -32,10 +32,10 @@ export default function ContactFAQ() {
   const [openIndex, setOpenIndex] = useState(0); // Only one open by default
 
   return (
-    <section className="py-24 bg-[#f7f9fc]">
+    <section className="py-12 sm:py-16 bg-[#f7f9fc]">
       <div className="max-w-4xl mx-auto px-6 lg:px-8">
         
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 sm:mb-12">
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

@@ -180,6 +180,9 @@ export default function SifFundDetails() {
       id: apiFund.id,
       name: apiFund.name || 'Fund Name',
       amc: apiFund.amc || 'AMC name',
+      amc_logo: apiFund.amc_logo || apiFund.amcLogo || apiFund.logo,
+      amcLogo: apiFund.amc_logo || apiFund.amcLogo || apiFund.logo,
+      logo: apiFund.amc_logo || apiFund.amcLogo || apiFund.logo,
       category: apiFund.category || 'Hybrid',
       strategy: apiFund.investmentStrategy || apiFund.category || 'Hybrid Long short',
       schemeType: apiFund.schemeType || 'Open-ended',
@@ -412,17 +415,27 @@ export default function SifFundDetails() {
         {/* Top Header Row (Logo + Fund Name + AMC + Plan Selector) */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6">
           <div className="flex items-center gap-4 sm:gap-5">
-            {/* Custom rounded abstract watercolor logo box */}
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-[#fbf8f0] via-[#f7f2e4] to-[#ede4cc] border-2 border-[#e6dbc0] shadow-sm flex items-center justify-center overflow-hidden flex-shrink-0 relative">
-              <svg viewBox="0 0 100 100" className="w-full h-full opacity-70">
-                <circle cx="35" cy="40" r="30" fill="#d4af37" filter="blur(6px)" />
-                <circle cx="65" cy="55" r="28" fill="#c2a649" filter="blur(7px)" />
-                <path d="M 20 50 Q 50 15 80 50 T 20 50" fill="#eed994" filter="blur(4px)" />
-              </svg>
-              <span className="absolute font-black text-amber-900/60 text-lg tracking-wider select-none">
-                {fund.name.charAt(0)}
-              </span>
-            </div>
+            {/* AMC Logo or Custom rounded abstract watercolor logo fallback */}
+            {fund.amc_logo || fund.amcLogo || apiFund?.amc_logo || apiFund?.amcLogo || (typeof fund.logo === 'string' && (fund.logo.startsWith('/') || fund.logo.startsWith('http')) ? fund.logo : null) ? (
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white border-2 border-gray-200/80 shadow-sm flex items-center justify-center p-1 sm:p-1.5 overflow-hidden flex-shrink-0">
+                <img
+                  src={fund.amc_logo || fund.amcLogo || apiFund?.amc_logo || apiFund?.amcLogo || fund.logo}
+                  alt={fund.amc || fund.name || 'AMC Logo'}
+                  className="w-full h-full object-contain object-center"
+                />
+              </div>
+            ) : (
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-[#fbf8f0] via-[#f7f2e4] to-[#ede4cc] border-2 border-[#e6dbc0] shadow-sm flex items-center justify-center overflow-hidden flex-shrink-0 relative">
+                <svg viewBox="0 0 100 100" className="w-full h-full opacity-70">
+                  <circle cx="35" cy="40" r="30" fill="#d4af37" filter="blur(6px)" />
+                  <circle cx="65" cy="55" r="28" fill="#c2a649" filter="blur(7px)" />
+                  <path d="M 20 50 Q 50 15 80 50 T 20 50" fill="#eed994" filter="blur(4px)" />
+                </svg>
+                <span className="absolute font-black text-amber-900/60 text-lg tracking-wider select-none">
+                  {fund.name.charAt(0)}
+                </span>
+              </div>
+            )}
 
             <div>
               <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0f172a] tracking-tight leading-tight">

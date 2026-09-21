@@ -9,6 +9,7 @@
  "field_order": [
   "sif_name",
   "amc_name",
+  "amc_logo",
   "rta",
   "is_active",
   "column_break_xcxy",
@@ -21,6 +22,11 @@
    "fieldtype": "Data",
    "label": "AMC Name",
    "reqd": 1
+  },
+  {
+   "fieldname": "amc_logo",
+   "fieldtype": "Attach Image",
+   "label": "AMC Logo"
   },
   {
    "fieldname": "code",
@@ -86,10 +92,10 @@
  ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
- "search_fields": "amc_name",
+ "search_fields": "amc_name,code,sif_name",
  "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
- "title_field": "sif_name"
+ "title_field": "amc_name"
 }

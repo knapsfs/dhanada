@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 
 export default function OfficeExperience() {
   return (
-    <section className="py-24 bg-white relative overflow-hidden">
+    <section className="py-12 sm:py-16 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         
         <div className="text-center mb-12">

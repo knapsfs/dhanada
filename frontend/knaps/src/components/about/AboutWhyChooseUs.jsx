@@ -20,14 +20,14 @@ const reasons = [
 
 export default function AboutWhyChooseUs() {
   return (
-    <section className="py-24 bg-[#032e92] relative overflow-hidden rounded-[40px] mx-4 lg:mx-8 mb-24">
+    <section className="py-12 sm:py-16 bg-[#032e92] relative overflow-hidden rounded-[40px] mx-4 lg:mx-8 mb-24">
       {/* Decorative Elements */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[#021d63] to-transparent opacity-50 z-0"></div>
       <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full border-[20px] border-white/5 z-0"></div>
       <div className="absolute bottom-20 left-20 w-64 h-64 rounded-full border-[15px] border-[#c10000]/20 z-0"></div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

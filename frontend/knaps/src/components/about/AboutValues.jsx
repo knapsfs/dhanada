@@ -11,7 +11,7 @@ export default function AboutValues() {
   ];
 
   return (
-    <section className="py-20">
+    <section className="py-12 sm:py-16">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">

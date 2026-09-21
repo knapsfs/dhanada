@@ -20,10 +20,10 @@ export default function FixedDepositInterestMaturity() {
   const { openLeadModal } = useLeadModal();
 
   return (
-    <section className="py-20 lg:py-28 bg-white relative overflow-hidden">
+    <section className="py-12 sm:py-16 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-20">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs sm:text-sm font-semibold mb-4 shadow-xs">
             <FontAwesomeIcon icon={faCoins} className="text-[#032e92]" />
             <span>Compounding Explained</span>
@@ -40,7 +40,7 @@ export default function FixedDepositInterestMaturity() {
         </div>
 
         {/* Illustrative Compounding Milestones Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10 sm:mb-12">
           {tenureBreakdowns.map((item, idx) => (
             <div
               key={idx}
@@ -76,7 +76,7 @@ export default function FixedDepositInterestMaturity() {
         </div>
 
         {/* Cumulative vs Non-Cumulative Comparison Box */}
-        <div className="bg-gradient-to-br from-[#0a192f] to-[#021d63] rounded-3xl p-6 sm:p-10 lg:p-12 text-white shadow-xl mb-16">
+        <div className="bg-gradient-to-br from-[#0a192f] to-[#021d63] rounded-3xl p-6 sm:p-10 lg:p-12 text-white shadow-xl mb-10 sm:mb-12">
           <div className="text-center max-w-2xl mx-auto mb-10">
             <span className="text-xs font-bold uppercase tracking-wider text-blue-300">Payout Comparison</span>
             <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight mt-1">

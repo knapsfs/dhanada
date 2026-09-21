@@ -246,10 +246,21 @@ def get_funds_list():
 						returns_3y = perf.get("3_years")
 						returns_5y = perf.get("5_years")
 
-			# Get AMC name if it's a link
+			# Get AMC details
 			amc_name = None
+			amc_logo = None
 			if s.amc:
-				amc_name = frappe.db.get_value("SIF Asset Management Company", s.amc, "amc_name") or s.amc
+				amc_doc = frappe.db.get_value(
+					"SIF Asset Management Company",
+					s.amc,
+					["amc_name", "amc_logo"],
+					as_dict=True,
+				)
+				if amc_doc:
+					amc_name = amc_doc.get("amc_name") or s.amc
+					amc_logo = amc_doc.get("amc_logo")
+				else:
+					amc_name = s.amc
 
 			cat_name = None
 			if s.scheme_subcategory:
@@ -283,6 +294,10 @@ def get_funds_list():
 					"expenseRatio": None,
 					"rating": None,
 					"isNew": False,
+					"amc_code": s.amc,
+					"amc_logo": amc_logo,
+					"amcLogo": amc_logo,
+					"logo": amc_logo,
 					"scheme_plan": best_plan.name if best_plan else None,
 					"sif_code": best_plan.get("sif_code") if best_plan else None,
 				}
@@ -374,12 +389,21 @@ def get_fund_details(identifier: str):
 
 		scheme = frappe.get_doc("SIF Scheme", scheme_name)
 
-		# Resolve related data
+		# Resolve related AMC data
 		amc_name = None
+		amc_logo = None
 		if scheme.amc:
-			amc_name = (
-				frappe.db.get_value("SIF Asset Management Company", scheme.amc, "amc_name") or scheme.amc
+			amc_doc = frappe.db.get_value(
+				"SIF Asset Management Company",
+				scheme.amc,
+				["amc_name", "amc_logo"],
+				as_dict=True,
 			)
+			if amc_doc:
+				amc_name = amc_doc.get("amc_name") or scheme.amc
+				amc_logo = amc_doc.get("amc_logo")
+			else:
+				amc_name = scheme.amc
 
 		launch_date = scheme.nfo_allotment_date or scheme.nfo_start_date
 
@@ -476,6 +500,10 @@ def get_fund_details(identifier: str):
 			"sebi_code": scheme.sebi_code,
 			"name": scheme.scheme_name,
 			"amc": amc_name,
+			"amc_code": scheme.amc,
+			"amc_logo": amc_logo,
+			"amcLogo": amc_logo,
+			"logo": amc_logo,
 			"category": scheme.scheme_subcategory,
 			"schemeType": scheme.scheme_type,
 			"benchmarkTier1": getattr(scheme, "benchmark_tier_1", None),

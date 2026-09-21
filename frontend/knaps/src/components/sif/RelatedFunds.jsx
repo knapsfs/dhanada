@@ -18,7 +18,7 @@ export default function RelatedFunds({ funds = [] }) {
   const navigate = useNavigate()
 
   return (
-    <section ref={ref} className="py-12 bg-[#f7f9fc]">
+    <section ref={ref} className="py-12 sm:py-16 bg-[#f7f9fc] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

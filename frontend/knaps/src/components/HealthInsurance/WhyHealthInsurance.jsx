@@ -23,14 +23,14 @@ export default function WhyHealthInsurance() {
   const { openLeadModal } = useLeadModal();
 
   return (
-    <section className="py-20 lg:py-28 bg-white relative overflow-hidden">
+    <section className="py-12 sm:py-16 bg-white relative overflow-hidden">
       {/* Background Shapes */}
       <div className="absolute top-0 right-0 w-80 h-80 bg-blue-50/70 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-80 h-80 bg-indigo-50/70 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 sm:mb-20">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs sm:text-sm font-semibold mb-4 shadow-xs">
             <FontAwesomeIcon icon={faShieldHeart} className="text-[#032e92]" />
             <span>The Financial Imperative</span>
@@ -47,7 +47,7 @@ export default function WhyHealthInsurance() {
         </div>
 
         {/* 3 Core Financial Realities Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-10 sm:mb-12">
           <div className="bg-[#f7f9fc] rounded-2xl p-7 border border-gray-200/80 shadow-xs hover:shadow-lg transition-all duration-300">
             <div className="w-12 h-12 rounded-xl bg-rose-50 border border-rose-200/60 flex items-center justify-center text-rose-600 mb-5">
               <FontAwesomeIcon icon={faArrowTrendUp} className="text-lg" />
@@ -80,7 +80,7 @@ export default function WhyHealthInsurance() {
         </div>
 
         {/* Side-by-Side Comparison: With Insurance vs Without Insurance */}
-        <div className="bg-gradient-to-br from-[#0a192f] via-[#021d63] to-[#032e92] rounded-3xl p-6 sm:p-10 lg:p-12 text-white shadow-2xl mb-16">
+        <div className="bg-gradient-to-br from-[#0a192f] via-[#021d63] to-[#032e92] rounded-3xl p-6 sm:p-10 lg:p-12 text-white shadow-2xl mb-10 sm:mb-12">
           <div className="text-center max-w-2xl mx-auto mb-10">
             <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
               Hospitalization Reality Check

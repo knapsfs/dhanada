@@ -97,7 +97,7 @@ export default function RiskResult({ result, onRetake }) {
       
       {/* Explore Concepts */}
       <h3 className="text-2xl font-black text-[#0a192f] mb-8 text-center">Explore Investment Concepts</h3>
-      <div className="grid md:grid-cols-2 gap-6 mb-16">
+      <div className="grid md:grid-cols-2 gap-6 mb-10 sm:mb-12">
         <div className="border border-gray-200 rounded-2xl p-8 hover:shadow-lg hover:border-[#032e92] transition-all bg-white group cursor-pointer">
           <h4 className="text-xl font-bold text-[#0a192f] mb-3">Mutual Funds</h4>
           <p className="text-gray-600 mb-6">Learn about diversified market-linked investment strategies tailored to various risk profiles.</p>

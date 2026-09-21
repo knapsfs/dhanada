@@ -127,13 +127,13 @@ export default function HealthInsuranceCoverageExplorer() {
   };
 
   return (
-    <section id="coverage-explorer" className="py-20 lg:py-28 bg-white relative overflow-hidden">
+    <section id="coverage-explorer" className="py-12 sm:py-16 bg-white relative overflow-hidden">
       {/* Background Subtle Gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#f7f9fc]/60 to-transparent pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-10 sm:mb-12">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs sm:text-sm font-semibold mb-4 shadow-xs">
             <FontAwesomeIcon icon={faCompass} className="text-[#032e92]" />
             <span>Smart Coverage Matcher</span>

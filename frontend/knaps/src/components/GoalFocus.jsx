@@ -88,7 +88,7 @@ export default function GoalFocus() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Enclosing Soft Card Container matching Reference Design */}
-        <div className=" rounded-[28px] sm:rounded-[36px] p-6 sm:p-8 lg:p-10 ">
+        <div className="rounded-[28px] sm:rounded-[36px]">
 
           {/* Section Heading */}
           <div className="text-center max-w-3xl mx-auto">

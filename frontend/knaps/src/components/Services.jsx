@@ -34,12 +34,12 @@ const itemVariants = {
 
 export default function Services() {
   return (
-    <section id="services" className="py-24 bg-gray-50 relative overflow-hidden">
+    <section id="services" className="py-12 sm:py-16 bg-gray-50 relative overflow-hidden">
       {/* Background elements */}
       <div className="absolute top-0 left-0 w-full h-[400px] bg-gradient-to-b from-white to-transparent"></div>
       
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

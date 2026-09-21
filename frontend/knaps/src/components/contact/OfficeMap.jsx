@@ -2,10 +2,10 @@ import { motion } from 'framer-motion';
 
 export default function OfficeMap() {
   return (
-    <section className="py-24 bg-white relative">
+    <section className="py-12 sm:py-16 bg-white relative">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 sm:mb-12">
           <h2 className="text-3xl md:text-[36px] font-bold text-[#0a192f] mb-4">Visit Our Office</h2>
           <p className="text-gray-500 text-lg max-w-2xl mx-auto">We are centrally located in the financial district. Drop by for a cup of coffee and a detailed consultation regarding your portfolio.</p>
         </div>

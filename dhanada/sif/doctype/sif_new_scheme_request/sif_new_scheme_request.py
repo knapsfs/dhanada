@@ -6,6 +6,8 @@ import json
 import frappe
 from frappe.model.document import Document
 
+from dhanada.sif.sync.constants import resolve_amc, resolve_sif_brand
+
 
 class SIFNewSchemeRequest(Document):
 	_DOCTYPE_NAME = "SIF New Scheme Request"
@@ -23,30 +25,66 @@ class SIFNewSchemeRequest(Document):
 
 	def _ensure_prerequisites(self):
 		# 1. Ensure AMC master record exists
-		amc_name = self.amc
-		if amc_name:
-			amc_exists = frappe.db.exists("SIF Asset Management Company", amc_name) or frappe.db.exists(
-				"SIF Asset Management Company", {"sif_name": amc_name}
+		amc_val = self.amc
+		sebi_code_val = self.sebi_code
+
+		resolved_code, resolved_amc_name = resolve_amc(
+			sebi_code=sebi_code_val,
+			sif_name=amc_val,
+		)
+
+		code_to_check = resolved_code or (
+			sebi_code_val.split("/")[-1].strip().upper()
+			if (sebi_code_val and "/" in sebi_code_val)
+			else (amc_val[:4].upper() if amc_val else None)
+		)
+
+		existing_amc = None
+		if code_to_check:
+			existing_amc = frappe.db.exists(
+				"SIF Asset Management Company", code_to_check
+			) or frappe.db.exists("SIF Asset Management Company", {"code": code_to_check})
+		if not existing_amc and amc_val:
+			existing_amc = (
+				frappe.db.exists("SIF Asset Management Company", amc_val)
+				or frappe.db.exists("SIF Asset Management Company", {"sif_name": amc_val})
+				or frappe.db.exists("SIF Asset Management Company", {"amc_name": amc_val})
 			)
-			if not amc_exists:
-				code_val = (
-					self.sebi_code.split("/")[-1] if "/" in (self.sebi_code or "") else amc_name[:4]
-				).upper()
-				amc_doc = frappe.get_doc(
-					{
-						"doctype": "SIF Asset Management Company",
-						"code": code_val,
-						"amc_name": f"{amc_name} Asset Management",
-						"sif_name": amc_name,
-						"registration_number": code_val,
-						"rta": "CAMS",
-						"is_active": 1,
-					}
-				)
-				amc_doc.insert(ignore_permissions=True)
-				self.amc = amc_doc.name
-			else:
-				self.amc = amc_exists
+
+		canonical_brand = resolve_sif_brand(code_to_check, amc_val)
+
+		if existing_amc:
+			if resolved_amc_name:
+				curr_name = frappe.db.get_value("SIF Asset Management Company", existing_amc, "amc_name")
+				if not curr_name or (
+					curr_name.endswith(" Asset Management") and curr_name != resolved_amc_name
+				):
+					frappe.db.set_value(
+						"SIF Asset Management Company", existing_amc, "amc_name", resolved_amc_name
+					)
+			if canonical_brand:
+				curr_brand = frappe.db.get_value("SIF Asset Management Company", existing_amc, "sif_name")
+				if not curr_brand or curr_brand.endswith(" Asset Management") or curr_brand == code_to_check:
+					frappe.db.set_value(
+						"SIF Asset Management Company", existing_amc, "sif_name", canonical_brand
+					)
+			self.amc = existing_amc
+		elif code_to_check:
+			display_name = resolved_amc_name or amc_val or code_to_check
+			brand_name = canonical_brand or amc_val or code_to_check
+			amc_doc = frappe.get_doc(
+				{
+					"doctype": "SIF Asset Management Company",
+					"code": code_to_check,
+					"amc_name": display_name,
+					"sif_name": brand_name,
+					"registration_number": code_to_check,
+					"rta": "CAMS",
+					"is_active": 1,
+				}
+			)
+			amc_doc.insert(ignore_permissions=True)
+			self.amc = amc_doc.name
 
 		# 2. Ensure Fund Manager master records exist
 		for mgr_row in self.get("managers", []):

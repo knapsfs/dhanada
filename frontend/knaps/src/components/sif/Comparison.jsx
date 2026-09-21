@@ -8,7 +8,7 @@ export default function Comparison() {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 })
 
   return (
-    <section id="comparison" className="py-20 bg-[#f7f9fc]">
+    <section id="comparison" className="py-12 sm:py-16 bg-[#f7f9fc] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Header */}
         <motion.div

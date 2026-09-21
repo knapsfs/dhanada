@@ -8,7 +8,7 @@ export default function InvestmentPhilosophy() {
   const { openLeadModal } = useLeadModal();
 
   return (
-    <section id="philosophy" className="py-20 lg:py-28 bg-white overflow-hidden">
+    <section id="philosophy" className="py-12 sm:py-16 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div ref={ref} className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
 

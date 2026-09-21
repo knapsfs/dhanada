@@ -16,10 +16,10 @@ export default function RecurringDepositMaturityBreakdown() {
   const { openLeadModal } = useLeadModal();
 
   return (
-    <section className="py-20 bg-white relative overflow-hidden">
+    <section className="py-12 sm:py-16 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#032e92]/10 border border-[#032e92]/20 text-[#032e92] text-xs font-semibold uppercase tracking-wider mb-4">
             <FontAwesomeIcon icon={faChartPie} />
             <span>Component Analysis</span>
@@ -33,7 +33,7 @@ export default function RecurringDepositMaturityBreakdown() {
         </div>
 
         {/* Visual 4-Pillar Metric Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10 sm:mb-12">
           <div className="p-6 rounded-2xl bg-[#f7f9fc] border border-slate-200/80 hover:border-blue-300 transition-all">
             <div className="w-12 h-12 rounded-xl bg-blue-100 text-[#032e92] flex items-center justify-center text-lg mb-4">
               <FontAwesomeIcon icon={faCoins} />

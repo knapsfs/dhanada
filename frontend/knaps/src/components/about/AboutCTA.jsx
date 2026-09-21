@@ -4,7 +4,7 @@ import { faArrowRight, faPhoneVolume, faEnvelope, faLocationDot, faClock } from 
 
 export default function AboutCTA() {
   return (
-    <section className="py-24 bg-white relative">
+    <section className="py-12 sm:py-16 bg-white relative">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         
         {/* Main CTA Block */}
@@ -12,7 +12,7 @@ export default function AboutCTA() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative bg-gradient-to-br from-[#032e92] via-[#021d63] to-[#01123d] rounded-[40px] overflow-hidden mb-16 p-10 md:p-16 lg:p-20 text-center shadow-2xl"
+          className="relative bg-gradient-to-br from-[#032e92] via-[#021d63] to-[#01123d] rounded-[40px] overflow-hidden mb-10 sm:mb-12 p-10 md:p-16 lg:p-20 text-center shadow-2xl"
         >
           {/* Abstract background graphics */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-white/10 to-transparent rounded-bl-full pointer-events-none"></div>

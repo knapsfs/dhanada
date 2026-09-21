@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 export default function FeaturedBlog() {
   return (
-    <section className="py-20 bg-gray-50">
+    <section className="py-12 sm:py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         
         <motion.div 

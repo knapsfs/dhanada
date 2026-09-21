@@ -617,12 +617,12 @@ export default function FundsTable({
           <button
             type="button"
             onClick={() => setIsExpanded(prev => !prev)}
-            className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full bg-[#032e92] hover:bg-[#021d63] text-white font-bold text-sm shadow-lg shadow-blue-900/20 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 cursor-pointer group"
+            className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center gap-2 cursor-pointer"
           >
-            <span>{isExpanded ? 'Show Less' : `View All Funds`}</span>
+            <span>{isExpanded ? 'Show Less' : 'View All Funds'}</span>
             <FontAwesomeIcon
               icon={isExpanded ? faChevronUp : faChevronDown}
-              className="text-xs text-blue-200 group-hover:text-white transition-transform duration-300"
+              className="text-[10px] transition-transform duration-300"
             />
           </button>
         </div>

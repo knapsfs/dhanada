@@ -166,7 +166,45 @@ def compare_scheme(existing_doc, incoming_scheme: Scheme) -> list:
 			old_raw = existing_doc.get(field)
 			new_raw = getattr(incoming_scheme, field, None)
 
-			if field in ["is_active", "is_active_for_subscription"]:
+			if field == "amc":
+				old_val = normalize_str(old_raw)
+				new_val = normalize_str(
+					getattr(incoming_scheme, "amc", None)
+					or getattr(incoming_scheme, "amc_registration_number", None)
+					or getattr(incoming_scheme, "sif_name", None)
+				)
+
+			elif field in ["amc_name", "sif_name"]:
+				current_amc_docname = existing_doc.get("amc")
+				old_val = ""
+				if current_amc_docname and frappe.db.exists(
+					"SIF Asset Management Company", current_amc_docname
+				):
+					old_val = normalize_str(
+						frappe.db.get_value("SIF Asset Management Company", current_amc_docname, field)
+					)
+
+				if field == "amc_name":
+					from .constants import resolve_amc
+
+					_, canonical_amc_name = resolve_amc(
+						sebi_code=getattr(incoming_scheme, "sebi_code", None),
+						sif_name=getattr(incoming_scheme, "sif_name", None),
+					)
+					new_val = normalize_str(canonical_amc_name)
+				else:  # sif_name
+					from .constants import resolve_amc, resolve_sif_brand
+
+					code_val = getattr(incoming_scheme, "amc_registration_number", None)
+					if not code_val:
+						code_val, _ = resolve_amc(
+							sebi_code=getattr(incoming_scheme, "sebi_code", None),
+							sif_name=getattr(incoming_scheme, "sif_name", None),
+						)
+					brand_val = getattr(incoming_scheme, "sif_name", None)
+					new_val = normalize_str(resolve_sif_brand(code_val, brand_val))
+
+			elif field in ["is_active", "is_active_for_subscription"]:
 				old_val = normalize_bool(old_raw)
 				new_val = normalize_bool(new_raw)
 

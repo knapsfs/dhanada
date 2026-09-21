@@ -184,17 +184,19 @@ export default function FundSelector({ selectedFunds = [null, null, null], onFun
 
       <div className="flex items-center gap-4 flex-wrap">
         <button
+          type="button"
           onClick={handleReset}
-          className="bg-[#f7f9fc] text-gray-700 hover:text-gray-900 hover:bg-gray-100 border border-[#e8edf7] px-8 py-3 rounded-xl font-bold shadow-sm hover:shadow transition-all duration-300 cursor-pointer"
+          className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-white hover:bg-blue-50 text-[#032e92] border border-[#032e92]/20 shadow-sm hover:shadow-md transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
         >
           Reset
         </button>
         <button
+          type="button"
           onClick={onCompare}
           disabled={!canCompare}
-          className={`px-8 py-3 rounded-xl font-bold shadow-lg transition-all duration-300 ${
+          className={`px-6 py-3 rounded-xl text-[15px] font-semibold transition-all duration-300 inline-flex items-center justify-center ${
             canCompare
-              ? 'bg-gradient-to-r from-[#032e92] to-[#0a4fd4] text-white shadow-blue-900/20 hover:shadow-xl hover:-translate-y-0.5 cursor-pointer'
+              ? 'btn-ripple bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 cursor-pointer'
               : 'bg-gray-200 text-gray-400 border border-gray-200 cursor-not-allowed shadow-none'
           }`}
         >

@@ -12,7 +12,7 @@ export default function FAQ() {
   const toggle = (id) => setOpenId(openId === id ? null : id)
 
   return (
-    <section id="faq" className="py-20 bg-white">
+    <section id="faq" className="py-12 sm:py-16 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
           {/* Left */}
@@ -39,12 +39,12 @@ export default function FAQ() {
               <p className="text-2xl font-bold mb-2">You might have questions about SIF?</p>
               <p className="text-blue-200 font-medium mb-5 text-sm"> Here are the answers to the questions you may have before you invest in an SIF.</p>
               <div className="flex gap-3">
-                <a href="tel:+919990243143" className="flex-1 text-center py-3 rounded-2xl bg-white text-[#032e92] text-sm font-bold hover:bg-blue-50 transition-colors">
+                <a
+                  href="tel:+919990243143"
+                  className="flex-1 btn-ripple text-center px-6 py-3 rounded-xl bg-white text-[#032e92] text-[15px] font-semibold hover:bg-blue-50 shadow-md hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
+                >
                   Talk to Us
                 </a>
-                {/* <a href="tel:1800-123-4567" className="flex-1 text-center py-3 rounded-2xl bg-white/10 border border-white/20 text-white text-sm font-bold hover:bg-white/20 transition-colors">
-                  Call Us
-                </a> */}
               </div>
             </div>
           </motion.div>

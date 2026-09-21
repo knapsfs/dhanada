@@ -45,7 +45,7 @@ export default function Achievements() {
   const isInView = useInView(ref, { once: true, margin: "-50px" });
 
   return (
-    <section className="py-24 bg-[#032e92] relative overflow-hidden" ref={ref}>
+    <section className="py-12 sm:py-16 bg-[#032e92] relative overflow-hidden" ref={ref}>
       {/* Dynamic Background Pattern */}
       <div className="absolute inset-0 z-0 opacity-10">
         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-br from-white to-transparent rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
@@ -54,7 +54,7 @@ export default function Achievements() {
       
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

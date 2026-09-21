@@ -30,10 +30,10 @@ const services = [
 
 export default function ServicesSnapshot() {
   return (
-    <section className="py-24 bg-white relative">
+    <section className="py-12 sm:py-16 bg-white relative">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-10 sm:mb-12 gap-6">
           <div className="max-w-2xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
