@@ -118,7 +118,7 @@ export default function WhyChooseUs() {
               We protect your financial information and keep every interaction secure, private, and confidential.
             </p>
 
-            <button className="mt-auto relative z-10 bg-[#c10000] text-white py-4 px-8 rounded-full font-bold w-max hover:bg-red-700 transition-colors duration-300 flex items-center gap-3 group-hover:-translate-y-1">
+            <button className="btn-ripple mt-auto relative z-10 bg-gradient-to-r from-[#c10000] to-[#9d0000] text-white px-6 py-3 rounded-xl text-[15px] font-semibold w-max hover:shadow-lg hover:shadow-red-900/30 transition-all duration-300 flex items-center gap-2 cursor-pointer">
               Book Consultation
               <FontAwesomeIcon icon={faArrowRight} />
             </button>

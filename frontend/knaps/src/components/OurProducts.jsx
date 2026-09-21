@@ -191,16 +191,13 @@ export default function OurProducts() {
 
         {/* Bottom CTA Button */}
         <div className="mt-12 text-center">
-          <motion.button
+          <button
             type="button"
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.98 }}
             onClick={() => navigate('/services')}
-            className="inline-flex items-center justify-center gap-2.5 px-8 sm:px-10 py-3.5 sm:py-4 rounded-full bg-[#032e92] hover:bg-[#021d63] text-white font-semibold text-sm sm:text-base shadow-lg shadow-[#032e92]/20 hover:shadow-xl hover:shadow-[#032e92]/30 transition-all duration-300 cursor-pointer group"
+            className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
           >
-            <span>Explore All Products</span>
-            <FontAwesomeIcon icon={faArrowRight} className="text-xs transition-transform duration-300 group-hover:translate-x-1" />
-          </motion.button>
+            Explore All Products
+          </button>
         </div>
 
       </div>

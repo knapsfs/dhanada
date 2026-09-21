@@ -165,7 +165,7 @@ class DataImporter:
 
 	def _map_scheme_fields(self, doc, scheme):
 		doc.scheme_name = scheme.scheme_name
-		doc.amc = scheme.sif_name
+		doc.amc = scheme.amc_registration_number or scheme.sif_name
 		doc.investment_strategy = scheme.investment_strategy
 		doc.scheme_type = scheme.scheme_type
 		doc.scheme_subcategory = scheme.scheme_subcategory or None

@@ -8,9 +8,9 @@ export default function CalculatorNav() {
   const calculators = [
     { name: 'SIP Calculator', path: '/calculators/sip' },
     { name: 'Step Up SIP', path: '/calculators/step-up-sip' },
+    { name: 'SWP Calculator', path: '/calculators/swp' },
     { name: 'Lumpsum Calculator', path: '/calculators/lumpsum' },
     { name: 'SIP + Lump Sum', path: '/calculators/sip-lumpsum' },
-    { name: 'SWP Calculator', path: '/calculators/swp' },
     { name: 'Retirement Calculator', path: '/calculators/retirement' },
     { name: 'Goal Based Calculator', path: '/calculators/future-value' },
   ];

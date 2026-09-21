@@ -36,9 +36,19 @@ export default function FundCard({ fund, index, isGrid }) {
         <div className="p-5 pb-4">
           {/* Logo + Name */}
           <div className="flex items-start gap-3 mb-4">
-            <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${fund.logoColor} flex items-center justify-center text-xl flex-shrink-0 shadow-md group-hover:scale-105 transition-transform`}>
-              {fund.logo}
-            </div>
+            {fund.amc_logo || fund.amcLogo || (typeof fund.logo === 'string' && (fund.logo.startsWith('/') || fund.logo.startsWith('http')) ? fund.logo : null) ? (
+              <div className="w-12 h-12 rounded-2xl bg-white border border-gray-200/70 flex items-center justify-center p-0.5 flex-shrink-0 shadow-md group-hover:scale-105 transition-transform overflow-hidden">
+                <img
+                  src={fund.amc_logo || fund.amcLogo || fund.logo}
+                  alt={fund.amc || fund.name || 'AMC Logo'}
+                  className="w-full h-full object-contain object-center"
+                />
+              </div>
+            ) : (
+              <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${fund.logoColor || 'from-[#eef4ff] to-[#dbeafe] text-[#032e92]'} flex items-center justify-center text-xl flex-shrink-0 shadow-md group-hover:scale-105 transition-transform`}>
+                {fund.logo || (fund.name ? fund.name.charAt(0) : 'F')}
+              </div>
+            )}
             <div className="flex-1 min-w-0">
               <h3 className="font-bold text-gray-900 text-sm leading-snug line-clamp-2 group-hover:text-[#032e92] transition-colors">{fund.name}</h3>
               <div className="flex items-center gap-1 mt-1">
@@ -104,7 +114,7 @@ export default function FundCard({ fund, index, isGrid }) {
 
         {/* Footer */}
         <div className="border-t border-[#e8edf7] px-5 py-4 flex gap-2">
-          <button onClick={openLeadModal} className="flex-1 py-2.5 rounded-xl bg-[#032e92] text-white text-xs font-bold hover:bg-[#021d63] shadow-md shadow-blue-900/20 transition-all duration-200 flex items-center justify-center gap-1.5">
+          <button onClick={openLeadModal} className="flex-1 btn-ripple py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#032e92] to-[#021d63] text-white text-xs font-semibold hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer">
             Invest Now <FontAwesomeIcon icon={faArrowRight} className="text-[10px]" />
           </button>
           <Link to={`/sif/${encodeURIComponent(fund.id)}`} className="px-4 py-2.5 rounded-xl border-2 border-[#e8edf7] text-gray-500 text-xs font-bold hover:border-[#032e92] hover:text-[#032e92] transition-all duration-200 flex items-center justify-center">
@@ -127,9 +137,19 @@ export default function FundCard({ fund, index, isGrid }) {
         {/* Top Row */}
         <div className="flex items-start gap-4 mb-4">
           {/* Logo */}
-          <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${fund.logoColor} flex items-center justify-center text-2xl flex-shrink-0 shadow-md group-hover:scale-105 transition-transform`}>
-            {fund.logo}
-          </div>
+          {fund.amc_logo || fund.amcLogo || (typeof fund.logo === 'string' && (fund.logo.startsWith('/') || fund.logo.startsWith('http')) ? fund.logo : null) ? (
+            <div className="w-14 h-14 rounded-2xl bg-white border border-gray-200/70 flex items-center justify-center p-1 flex-shrink-0 shadow-md group-hover:scale-105 transition-transform overflow-hidden">
+              <img
+                src={fund.amc_logo || fund.amcLogo || fund.logo}
+                alt={fund.amc || fund.name || 'AMC Logo'}
+                className="w-full h-full object-contain object-center"
+              />
+            </div>
+          ) : (
+            <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${fund.logoColor || 'from-[#eef4ff] to-[#dbeafe] text-[#032e92]'} flex items-center justify-center text-2xl flex-shrink-0 shadow-md group-hover:scale-105 transition-transform`}>
+              {fund.logo || (fund.name ? fund.name.charAt(0) : 'F')}
+            </div>
+          )}
 
           {/* Info */}
           <div className="flex-1 min-w-0">
@@ -159,7 +179,7 @@ export default function FundCard({ fund, index, isGrid }) {
 
               {/* Action Buttons */}
               <div className="flex items-center gap-2 flex-shrink-0">
-                <button onClick={openLeadModal} className="btn-ripple flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#032e92] text-white text-sm font-semibold hover:bg-[#021d63] shadow-md shadow-blue-900/20 transition-all duration-200">
+                <button onClick={openLeadModal} className="btn-ripple flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#032e92] to-[#021d63] text-white text-sm font-semibold hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 cursor-pointer">
                   Invest Now
                   <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
                 </button>

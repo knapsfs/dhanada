@@ -90,7 +90,7 @@ export default function NpsAccountTypes() {
                     defaultService: 'National Pension System (NPS)'
                   })
                 }
-                className="w-full py-3.5 rounded-xl text-sm font-semibold bg-[#032e92] text-white hover:bg-[#021d63] transition-all flex items-center justify-center gap-2 cursor-pointer"
+                className="btn-ripple w-full px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span>Open Tier I Account</span>
                 <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
@@ -154,7 +154,7 @@ export default function NpsAccountTypes() {
                     defaultService: 'National Pension System (NPS)'
                   })
                 }
-                className="w-full py-3.5 rounded-xl text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                className="btn-ripple w-full px-6 py-3 rounded-xl text-[15px] font-semibold bg-white hover:bg-blue-50 text-[#032e92] border border-[#032e92]/20 shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span>Inquire About Tier II Setup</span>
                 <FontAwesomeIcon icon={faArrowRight} className="text-xs" />

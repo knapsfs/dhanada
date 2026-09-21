@@ -25,9 +25,19 @@ export default function RecommendedFundCard({ fund, index }) {
 
       <div className="flex items-start gap-4">
         {/* Logo */}
-        <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br from-[#eef4ff] to-[#dbeafe] text-[#032e92] flex items-center justify-center text-xl shadow-md flex-shrink-0 group-hover:scale-105 transition-transform`}>
-          {fund.name ? fund.name.substring(0, 1) : 'F'}
-        </div>
+        {fund.amc_logo || fund.amcLogo || (typeof fund.logo === 'string' && (fund.logo.startsWith('/') || fund.logo.startsWith('http')) ? fund.logo : null) ? (
+          <div className="w-12 h-12 rounded-2xl bg-white border border-gray-100 flex items-center justify-center p-1 shadow-md flex-shrink-0 group-hover:scale-105 transition-transform overflow-hidden">
+            <img
+              src={fund.amc_logo || fund.amcLogo || fund.logo}
+              alt={fund.amc || fund.name || 'AMC Logo'}
+              className="w-full h-full object-contain"
+            />
+          </div>
+        ) : (
+          <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br from-[#eef4ff] to-[#dbeafe] text-[#032e92] flex items-center justify-center text-xl shadow-md flex-shrink-0 group-hover:scale-105 transition-transform`}>
+            {fund.name ? fund.name.substring(0, 1) : 'F'}
+          </div>
+        )}
 
         {/* Info */}
         <div className="flex-1 min-w-0">

@@ -60,7 +60,7 @@ export default function AboutHero() {
                 From personalized investment strategies to retirement planning, financial discipline has significantly improved stability and confidence in the modern sector.
               </p>
 
-              <button className="bg-[#4d7aff] hover:bg-[#3b66e5] text-white px-10 py-3.5 rounded-lg font-medium shadow-md hover:shadow-lg transition-all duration-300">
+              <button className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center gap-2 cursor-pointer">
                 Read More
               </button>
             </div>

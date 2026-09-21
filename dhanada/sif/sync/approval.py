@@ -130,6 +130,47 @@ def _write_field_to_scheme(scheme_doc, field_name, raw_value):
 					},
 				)
 
+	elif field_name == "amc":
+		if raw_value:
+			from dhanada.sif.sync.constants import resolve_amc, resolve_sif_brand
+
+			resolved_code, resolved_name = resolve_amc(sif_name=raw_value)
+			code_to_use = resolved_code or raw_value
+			if not frappe.db.exists("SIF Asset Management Company", code_to_use):
+				amc_doc = frappe.get_doc(
+					{
+						"doctype": "SIF Asset Management Company",
+						"code": code_to_use,
+						"amc_name": resolved_name or code_to_use,
+						"sif_name": resolve_sif_brand(code_to_use, raw_value),
+						"registration_number": code_to_use,
+						"rta": "CAMS",
+						"is_active": 1,
+					}
+				)
+				amc_doc.insert(ignore_permissions=True)
+				scheme_doc.set("amc", amc_doc.name)
+			else:
+				if resolved_name:
+					curr_name = frappe.db.get_value("SIF Asset Management Company", code_to_use, "amc_name")
+					if not curr_name or curr_name.endswith(" Asset Management"):
+						frappe.db.set_value(
+							"SIF Asset Management Company", code_to_use, "amc_name", resolved_name
+						)
+				scheme_doc.set("amc", code_to_use)
+		else:
+			scheme_doc.set("amc", None)
+
+	elif field_name == "amc_name":
+		amc_code = scheme_doc.amc
+		if amc_code and frappe.db.exists("SIF Asset Management Company", amc_code):
+			frappe.db.set_value("SIF Asset Management Company", amc_code, "amc_name", raw_value)
+
+	elif field_name == "sif_name":
+		amc_code = scheme_doc.amc
+		if amc_code and frappe.db.exists("SIF Asset Management Company", amc_code):
+			frappe.db.set_value("SIF Asset Management Company", amc_code, "sif_name", raw_value)
+
 	elif field_name in ["is_active", "is_active_for_subscription"]:
 		scheme_doc.set(field_name, 1 if raw_value == "True" else 0)
 
@@ -188,3 +229,72 @@ def revert_approval(approval_doc):
 	scheme_doc.save(ignore_permissions=True)
 
 	return approval_doc
+
+
+@frappe.whitelist()
+def get_pending_amc_corrections() -> list[dict]:
+	"""
+	Returns all existing SIF Asset Management Company records that have
+	stale or fabricated AMC corporate names or SIF brand names.
+	"""
+	from dhanada.sif.sync.constants import SEBI_AMC_CODE_MAP, resolve_sif_brand
+
+	corrections = []
+	all_amcs = frappe.get_all(
+		"SIF Asset Management Company",
+		fields=["name", "code", "amc_name", "sif_name", "registration_number"],
+	)
+
+	for amc in all_amcs:
+		code = (amc.code or amc.registration_number or amc.name or "").strip().upper()
+		if not code or code not in SEBI_AMC_CODE_MAP:
+			continue
+
+		canonical_name = SEBI_AMC_CODE_MAP[code]
+		canonical_brand = resolve_sif_brand(code, amc.sif_name)
+
+		needs_name_fix = amc.amc_name != canonical_name
+		needs_brand_fix = bool(canonical_brand and amc.sif_name != canonical_brand)
+
+		if needs_name_fix or needs_brand_fix:
+			corrections.append(
+				{
+					"name": amc.name,
+					"code": code,
+					"current_amc_name": amc.amc_name,
+					"canonical_amc_name": canonical_name,
+					"current_sif_name": amc.sif_name,
+					"canonical_sif_name": canonical_brand,
+				}
+			)
+
+	return corrections
+
+
+@frappe.whitelist()
+def apply_amc_master_corrections(dry_run: bool = False) -> dict:
+	"""
+	Reconciles and corrects all existing SIF Asset Management Company records
+	in the database to match the canonical SEBI corporate entity names and SIF brand names.
+	"""
+	corrections = get_pending_amc_corrections()
+	updated_count = 0
+
+	if not dry_run:
+		for item in corrections:
+			doc = frappe.get_doc("SIF Asset Management Company", item["name"])
+			doc.amc_name = item["canonical_amc_name"]
+			if item.get("canonical_sif_name"):
+				doc.sif_name = item["canonical_sif_name"]
+			doc.flags.ignore_permissions = True
+			doc.save()
+			updated_count += 1
+		frappe.db.commit()
+
+	return {
+		"status": "success",
+		"dry_run": dry_run,
+		"pending_count": len(corrections),
+		"updated_count": updated_count if not dry_run else 0,
+		"corrections": corrections,
+	}

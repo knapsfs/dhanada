@@ -40,9 +40,19 @@ export default function FundSummaryCard({ fund }) {
         <div className="absolute -bottom-4 -left-4 w-16 h-16 rounded-full bg-[#c10000]/15" />
 
         <div className="relative flex items-start gap-3 mb-4">
-          <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${fund.logoColor} flex items-center justify-center text-2xl shadow-lg border-2 border-white/20 flex-shrink-0`}>
-            {fund.logo}
-          </div>
+          {fund.amc_logo || fund.amcLogo || (typeof fund.logo === 'string' && (fund.logo.startsWith('/') || fund.logo.startsWith('http')) ? fund.logo : null) ? (
+            <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center p-1.5 shadow-lg border-2 border-white/20 flex-shrink-0 overflow-hidden">
+              <img
+                src={fund.amc_logo || fund.amcLogo || fund.logo}
+                alt={fund.amc || fund.name || 'AMC Logo'}
+                className="w-full h-full object-contain"
+              />
+            </div>
+          ) : (
+            <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${fund.logoColor || 'from-white/20 to-white/10 text-white'} flex items-center justify-center text-2xl shadow-lg border-2 border-white/20 flex-shrink-0`}>
+              {fund.logo || (fund.name ? fund.name.charAt(0) : 'F')}
+            </div>
+          )}
           <div className="flex-1 min-w-0">
             <h2 className="font-bold text-white text-sm leading-snug line-clamp-2">{fund.name}</h2>
             <div className="flex items-center gap-1 mt-1">
@@ -118,14 +128,14 @@ export default function FundSummaryCard({ fund }) {
         <motion.button
           onClick={() => openLeadModal()}
           whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-          className="w-full py-3 rounded-2xl bg-[#032e92] text-white font-bold text-sm hover:bg-[#021d63] shadow-lg shadow-blue-900/25 transition-all flex items-center justify-center gap-2">
+          className="btn-ripple w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#032e92] to-[#021d63] text-white font-semibold text-sm hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer">
           <FontAwesomeIcon icon={faArrowRight} />
           Invest Now
         </motion.button>
         <motion.button
           onClick={handleCompare}
           whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-          className="w-full py-2.5 rounded-2xl border-2 border-[#e8edf7] text-gray-600 font-semibold text-sm hover:border-[#032e92] hover:text-[#032e92] transition-all flex items-center justify-center gap-2">
+          className="btn-ripple w-full py-2.5 px-4 rounded-xl bg-white hover:bg-blue-50 text-[#032e92] border border-[#032e92]/20 font-semibold text-sm shadow-xs transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer">
           <FontAwesomeIcon icon={faCircleCheck} className="text-xs" />
           Compare Fund
         </motion.button>

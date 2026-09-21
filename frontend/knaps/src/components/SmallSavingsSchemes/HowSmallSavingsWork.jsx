@@ -114,7 +114,7 @@ export default function HowSmallSavingsWork() {
                 defaultService: 'Small Savings Schemes'
               })
             }
-            className="btn-ripple px-6 py-3 rounded-xl text-[14px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center gap-2 shrink-0 cursor-pointer"
+            className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center gap-2 shrink-0 cursor-pointer"
           >
             <span>Get Scheme Setup Assistance</span>
             <FontAwesomeIcon icon={faArrowRight} className="text-xs" />

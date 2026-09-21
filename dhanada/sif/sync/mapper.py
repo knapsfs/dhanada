@@ -3,7 +3,7 @@ import re
 from datetime import datetime
 from typing import Any
 
-from .constants import APPROVED_SUBCATEGORIES, SUBCATEGORY_SEBI_CODE_MAP
+from .constants import APPROVED_SUBCATEGORIES, SUBCATEGORY_SEBI_CODE_MAP, resolve_amc
 from .logger import log_warning
 from .models import (
 	AMC,
@@ -500,25 +500,40 @@ class DataMapper:
 					)
 
 				raw_sif = raw_scheme.get("sif_name")
-				sif_name = str(raw_sif).replace(" SIF", "").strip() if raw_sif else None
+				sif_brand = str(raw_sif).strip() if raw_sif else None
+				amc_det = raw_scheme.get("amc_details") or {}
+				amc_web = amc_det.get("amc_website") if isinstance(amc_det, dict) else None
+				sebi_code_val = raw_scheme.get("sebi_code")
 
-				# Extract AMC
-				if sif_name:
-					sebi_code_val = raw_scheme.get("sebi_code", "")
-					code_fallback = (
-						sebi_code_val.split("/")[-1] if "/" in sebi_code_val else sif_name.upper()[:4]
-					)
+				# Extract and resolve canonical AMC
+				amc_code, canonical_amc_name = resolve_amc(
+					sebi_code=sebi_code_val,
+					sif_name=sif_brand,
+					website=amc_web,
+				)
 
-					dataset.amcs.append(
-						AMC(
-							code=code_fallback,
-							amc_name=f"{sif_name} Asset Management",
-							sif_name=sif_name,
-							registration_number=code_fallback,  # Unavailable in JSON, fallback to code
-							rta="",  # Unavailable at root level, safely default to empty
-							is_active=True,
+				if amc_code:
+					if canonical_amc_name:
+						dataset.amcs.append(
+							AMC(
+								code=amc_code,
+								amc_name=canonical_amc_name,
+								sif_name=sif_brand or amc_code,
+								registration_number=amc_code,
+								rta="CAMS",
+								is_active=True,
+							)
 						)
-					)
+					else:
+						log_warning(
+							f"Unresolved AMC corporate name for SEBI AMC code '{amc_code}' "
+							f"(scheme: {raw_scheme.get('fund_name')})"
+						)
+						self.validator.log_error(
+							"AMC",
+							str(sebi_code_val or amc_code),
+							f"Unresolved AMC code '{amc_code}'",
+						)
 
 				raw_docs = raw_scheme.get("documents")
 				isid_url = None
@@ -531,8 +546,8 @@ class DataMapper:
 					Scheme(
 						sebi_code=raw_scheme.get("sebi_code"),
 						scheme_name=raw_scheme.get("fund_name"),
-						amc_registration_number=None,
-						sif_name=sif_name,
+						amc_registration_number=amc_code,
+						sif_name=sif_brand,
 						investment_strategy=investment_strategy,
 						scheme_type=scheme_type,
 						scheme_subcategory=mapped_subcategory,
@@ -684,7 +699,7 @@ class DataMapper:
 				unique_fms[norm] = fm
 		dataset.fund_managers = list(unique_fms.values())
 
-		unique_amcs = {amc.sif_name: amc for amc in dataset.amcs if amc.sif_name}
+		unique_amcs = {amc.code: amc for amc in dataset.amcs if amc.code}
 		dataset.amcs = list(unique_amcs.values())
 
 		return dataset

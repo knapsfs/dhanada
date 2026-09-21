@@ -76,7 +76,7 @@ export default function Newsletter() {
             >
               <button
                 onClick={() => openLeadModal()}
-                className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white text-[#032e92] text-sm font-semibold shadow-xl shadow-black/10 hover:bg-blue-50 hover:shadow-2xl transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 cursor-pointer"
+                className="btn-ripple w-full sm:w-auto px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-white text-[#032e92] hover:bg-blue-50 shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span>Invest Now</span>
                 <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
@@ -84,7 +84,7 @@ export default function Newsletter() {
 
               <a
                 href="tel:+919990243143"
-                className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm font-semibold border border-white/30 backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2.5"
+                className="btn-ripple w-full sm:w-auto px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-transparent border-2 border-white/30 text-white hover:bg-white/10 hover:border-white/50 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
               >
                 <FontAwesomeIcon icon={faPhone} className="text-xs text-green-400" />
                 <span>Call us - +91-9990243143</span>

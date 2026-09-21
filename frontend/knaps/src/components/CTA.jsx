@@ -32,15 +32,13 @@ export default function CTA() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
-            <motion.button
+            <button
               type="button"
               onClick={openLeadModal}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="w-full sm:w-auto px-8 py-4 rounded-xl font-bold bg-white text-[#032e92] shadow-xl flex items-center justify-center gap-3 hover:bg-gray-50 transition-colors btn-ripple cursor-pointer"
+              className="btn-ripple px-8 py-3.5 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white border border-white/30 hover:border-white/60 hover:shadow-xl hover:shadow-[#032e92]/50 transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
             >
-              START INVESTING NOW
-            </motion.button>
+              Start Investing Now
+            </button>
           </div>
         </motion.div>
       </div>

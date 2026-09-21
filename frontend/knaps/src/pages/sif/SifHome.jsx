@@ -16,7 +16,7 @@ import HeatmapSection from '../../components/sif/HeatmapSection'
 import InvestmentPhilosophy from '../../components/sif/InvestmentPhilosophy'
 import Comparison from '../../components/sif/Comparison'
 import TrustSection from '../../components/sif/TrustSection'
-import Testimonials from '../../components/sif/Testimonials'
+// import Testimonials from '../../components/sif/Testimonials'
 import FAQ from '../../components/sif/FAQ'
 import Newsletter from '../../components/sif/Newsletter'
 
@@ -122,7 +122,7 @@ export default function SifHome() {
         <TrustSection />
 
         {/* 8. Testimonials */}
-        <Testimonials />
+        {/* <Testimonials /> */}
 
         {/* 9. Frequently Asked Questions */}
         <FAQ />

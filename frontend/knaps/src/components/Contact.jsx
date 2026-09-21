@@ -77,7 +77,7 @@ export default function Contact() {
                 <textarea rows="4" placeholder="How can we help you?" className="w-full px-5 py-4 rounded-xl bg-gray-50 border border-gray-200 focus:border-[#032e92] focus:bg-white focus:ring-2 focus:ring-[#032e92]/20 transition-all outline-none resize-none"></textarea>
               </div>
 
-              <button type="button" className="w-full py-4 rounded-xl font-bold bg-[#032e92] text-white hover:bg-[#021d63] transition-colors shadow-lg shadow-[#032e92]/30 btn-ripple">
+              <button type="button" className="w-full btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer">
                 Request Consultation
               </button>
             </form>

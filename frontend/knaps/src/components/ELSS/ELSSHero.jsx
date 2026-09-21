@@ -102,7 +102,7 @@ export default function ELSSHero() {
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-4">
               <button
                 onClick={() => openLeadModal({ title: 'Explore ELSS Mutual Funds', defaultService: 'ELSS' })}
-                className="btn-ripple px-7 py-3.5 rounded-xl text-sm sm:text-base font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-lg shadow-[#032e92]/25 hover:shadow-xl hover:shadow-[#032e92]/35 transition-all duration-300 flex items-center justify-center gap-2.5 group cursor-pointer"
+                className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer"
               >
                 <span>Explore ELSS Funds</span>
                 <FontAwesomeIcon icon={faArrowRight} className="text-xs group-hover:translate-x-1 transition-transform" />
@@ -110,7 +110,7 @@ export default function ELSSHero() {
 
               <button
                 onClick={scrollToCalculator}
-                className="px-6 py-3.5 rounded-xl text-sm sm:text-base font-semibold text-[#032e92] bg-white border border-blue-200/80 hover:bg-blue-50 hover:border-blue-300 shadow-xs transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer"
+                className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-white hover:bg-blue-50 text-[#032e92] border border-[#032e92]/20 shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
               >
                 <FontAwesomeIcon icon={faCalculator} className="text-xs text-[#032e92]" />
                 <span>Calculate Tax & Growth</span>

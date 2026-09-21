@@ -34,11 +34,11 @@ export default function BlogCTA() {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link to="/#contact" className="inline-flex justify-center items-center gap-3 bg-white text-[#032e92] px-8 py-4 rounded-xl font-bold hover:bg-gray-50 hover:scale-105 transition-all duration-300 shadow-xl shadow-black/10">
+                <Link to="/#contact" className="btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-white text-[#032e92] hover:bg-blue-50 shadow-xl hover:shadow-2xl transition-all duration-300 inline-flex justify-center items-center gap-3 cursor-pointer">
                   Schedule Consultation
                   <FontAwesomeIcon icon={faArrowRight} />
                 </Link>
-                <Link to="tel:+918800000000" className="inline-flex justify-center items-center gap-3 bg-transparent border-2 border-white/30 text-white px-8 py-4 rounded-xl font-bold hover:bg-white/10 transition-all duration-300">
+                <Link to="tel:+918800000000" className="btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-transparent border-2 border-white/30 text-white hover:bg-white/10 hover:border-white/50 transition-all duration-300 inline-flex justify-center items-center gap-3 cursor-pointer">
                   <FontAwesomeIcon icon={faPhoneVolume} />
                   Contact Our Advisor
                 </Link>

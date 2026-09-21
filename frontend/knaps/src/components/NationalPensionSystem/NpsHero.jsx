@@ -74,7 +74,7 @@ export default function NpsHero() {
                     defaultService: 'National Pension System (NPS)'
                   })
                 }
-                className="btn-ripple px-8 py-4 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer"
+                className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer"
               >
                 <span>Explore NPS</span>
                 <FontAwesomeIcon
@@ -85,7 +85,7 @@ export default function NpsHero() {
 
               <button
                 onClick={scrollToCalculator}
-                className="px-7 py-4 rounded-xl text-[15px] font-semibold bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 hover:border-slate-300 shadow-sm transition-all duration-300 flex items-center justify-center gap-2"
+                className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-white hover:bg-blue-50 text-[#032e92] border border-[#032e92]/20 shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
               >
                 <FontAwesomeIcon icon={faCalculator} className="text-[#032e92]" />
                 <span>Calculate Retirement Corpus</span>

@@ -298,8 +298,24 @@ export default function FundsTable({
     )
   }
 
-  // Get AMC Logo or stylized representation
+  // Get AMC Logo or stylized fallback representation
   const renderLogo = (fund) => {
+    const logoUrl = fund.amc_logo || fund.amcLogo || (typeof fund.logo === 'string' && (fund.logo.startsWith('/') || fund.logo.startsWith('http')) ? fund.logo : null)
+    if (logoUrl) {
+      return (
+        <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white border border-gray-200/70 flex items-center justify-center p-0.5 shadow-xs flex-shrink-0 overflow-hidden">
+          <img
+            src={logoUrl}
+            alt={fund.amc || fund.name || 'AMC Logo'}
+            className="w-full h-full object-contain object-center"
+            onError={(e) => {
+              e.currentTarget.parentElement.style.display = 'none'
+            }}
+          />
+        </div>
+      )
+    }
+
     const amcLower = (fund.amc || fund.name || '').toLowerCase()
 
     if (amcLower.includes('quant')) {
@@ -582,7 +598,7 @@ export default function FundsTable({
                         <div className="flex items-center justify-center gap-2">
                           <button
                             onClick={openLeadModal}
-                            className="px-4 py-2 rounded-xl bg-[#032e92] text-white text-xs font-bold hover:bg-[#021d63] shadow-md shadow-blue-900/20 transition-all duration-200 cursor-pointer"
+                            className="btn-ripple px-4 py-2 rounded-xl bg-gradient-to-r from-[#032e92] to-[#021d63] text-white text-xs font-semibold hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 cursor-pointer"
                           >
                             Invest
                           </button>

@@ -94,7 +94,7 @@ export default function RiskProfiler({ isModal = false, onClose }) {
 
             <button
               onClick={handleStart}
-              className={`rounded-xl font-bold bg-[#032e92] text-white shadow-lg shadow-blue-900/20 hover:-translate-y-0.5 hover:shadow-xl hover:bg-[#022169] transition-all duration-300 ${isModal ? 'w-full sm:w-auto px-8 py-3 text-sm' : 'w-full md:w-auto px-10 py-4'}`}
+              className={`btn-ripple rounded-xl font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 cursor-pointer ${isModal ? 'w-full sm:w-auto px-6 py-3 text-[14px]' : 'w-full md:w-auto px-8 py-3.5 text-[15px]'}`}
             >
               Start Risk Assessment
             </button>

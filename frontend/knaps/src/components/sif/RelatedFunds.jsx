@@ -45,9 +45,19 @@ export default function RelatedFunds({ funds = [] }) {
               className="bg-white rounded-3xl border border-[#e8edf7] shadow-lg shadow-blue-900/5 p-5 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group cursor-pointer">
 
               <div className="flex items-center gap-3 mb-4">
-                <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${fund.logoColor} flex items-center justify-center text-xl shadow-md group-hover:scale-105 transition-transform`}>
-                  {fund.logo}
-                </div>
+                {fund.amc_logo || fund.amcLogo || (typeof fund.logo === 'string' && (fund.logo.startsWith('/') || fund.logo.startsWith('http')) ? fund.logo : null) ? (
+                  <div className="w-12 h-12 rounded-2xl bg-white border border-gray-100 flex items-center justify-center p-1 shadow-md flex-shrink-0 group-hover:scale-105 transition-transform overflow-hidden">
+                    <img
+                      src={fund.amc_logo || fund.amcLogo || fund.logo}
+                      alt={fund.amc || fund.name || 'AMC Logo'}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                ) : (
+                  <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${fund.logoColor || 'from-[#eef4ff] to-[#dbeafe] text-[#032e92]'} flex items-center justify-center text-xl shadow-md group-hover:scale-105 transition-transform`}>
+                    {fund.logo || (fund.name ? fund.name.charAt(0) : 'F')}
+                  </div>
+                )}
                 <div className="flex-1 min-w-0">
                   <h4 className="font-bold text-gray-900 text-xs leading-snug line-clamp-2 group-hover:text-[#032e92] transition-colors">{fund.name}</h4>
                   <p className="text-[10px] text-gray-400 font-medium mt-0.5">{fund.category}</p>
@@ -79,7 +89,7 @@ export default function RelatedFunds({ funds = [] }) {
                 </span>
               </div>
 
-              <button onClick={(e) => { e.stopPropagation(); openLeadModal(); }} className="w-full mt-4 py-2.5 rounded-xl bg-[#032e92] text-white text-xs font-bold hover:bg-[#021d63] shadow-sm shadow-blue-900/20 transition-all flex items-center justify-center gap-1.5">
+              <button onClick={(e) => { e.stopPropagation(); openLeadModal(); }} className="w-full mt-4 btn-ripple py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#032e92] to-[#021d63] text-white text-xs font-semibold hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer">
                 Invest Now <FontAwesomeIcon icon={faArrowRight} className="text-[10px]" />
               </button>
             </motion.div>

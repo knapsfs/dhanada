@@ -169,7 +169,7 @@ export default function LifeInsuranceWhoShouldBuy() {
               <button
                 type="button"
                 onClick={openLeadModal}
-                className="btn-ripple w-full py-3.5 px-5 rounded-xl text-xs sm:text-sm font-semibold bg-white text-[#032e92] hover:bg-blue-50 shadow-md transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer group"
+                className="btn-ripple w-full py-3.5 px-6 rounded-xl text-[15px] font-semibold bg-white text-[#032e92] hover:bg-blue-50 shadow-md transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer group"
               >
                 <span>Get Advice for {current.tab.split(' ')[0]}</span>
                 <FontAwesomeIcon icon={faArrowRight} className="text-xs group-hover:translate-x-1 transition-transform" />

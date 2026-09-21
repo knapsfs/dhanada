@@ -135,12 +135,12 @@ export default function FundMarketplace({ fundsData = [] }) {
               <div className="px-6 pb-6 flex gap-3">
                 <button 
                   onClick={() => openLeadModal()}
-                  className="flex-1 py-3 rounded-2xl bg-[#032e92] text-white text-sm font-semibold hover:bg-[#021d63] shadow-md shadow-blue-900/20 transition-all duration-200 flex items-center justify-center gap-2 group-hover:gap-3">
+                  className="flex-1 btn-ripple py-3 px-4 rounded-xl text-sm font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer">
                   Invest Now <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
                 </button>
                 <button 
                   onClick={() => handleFundClick(fund.id)}
-                  className="px-4 py-3 rounded-2xl border-2 border-[#e8edf7] text-gray-600 text-sm font-semibold hover:border-[#032e92] hover:text-[#032e92] transition-all duration-200">
+                  className="px-4 py-3 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:border-[#032e92] hover:text-[#032e92] hover:bg-blue-50 transition-all duration-200 cursor-pointer">
                   Details
                 </button>
               </div>

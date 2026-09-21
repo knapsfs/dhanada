@@ -2,23 +2,23 @@ import { motion } from 'framer-motion';
 
 export default function HeatmapHeader({ timeFilter, setTimeFilter }) {
   const tabs = [
-    { label: '1M', value: '1M' },
     { label: '3M', value: '3M' },
     { label: '6M', value: '6M' },
     { label: '12M', value: '12M' },
+    { label: 'All', value: 'All' },
   ];
 
   const getSubTitle = () => {
     switch (timeFilter) {
-      case '1M':
-        return 'Compare the performance of SIF schemes in terms of absolute returns over the last 1 month.';
       case '3M':
         return 'Compare the performance of SIF schemes in terms of absolute returns over the last 3 months.';
       case '6M':
         return 'Compare the performance of SIF schemes in terms of absolute returns over the last 6 months.';
       case '12M':
-      default:
         return 'Compare the performance of SIF schemes in terms of absolute returns over the last 12 months.';
+      case 'All':
+      default:
+        return 'Compare the performance of SIF schemes in terms of absolute returns across all available months.';
     }
   };
 
@@ -61,4 +61,3 @@ export default function HeatmapHeader({ timeFilter, setTimeFilter }) {
     </div>
   );
 }
-
