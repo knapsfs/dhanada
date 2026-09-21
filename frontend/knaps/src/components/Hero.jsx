@@ -253,7 +253,7 @@ export default function Hero() {
                   </div>
                   <h4 className="text-xl font-bold text-gray-900 mb-2">Thank You!</h4>
                   <p className="text-gray-600 text-sm leading-relaxed mb-6">
-                    We have received your details. Our investment advisor will get in touch with you shortly.
+                    We have received your details. Our team will get in touch with you shortly.
                   </p>
                   <button
                     type="button"
