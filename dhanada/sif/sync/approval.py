@@ -289,7 +289,6 @@ def apply_amc_master_corrections(dry_run: bool = False) -> dict:
 			doc.flags.ignore_permissions = True
 			doc.save()
 			updated_count += 1
-		frappe.db.commit()
 
 	return {
 		"status": "success",

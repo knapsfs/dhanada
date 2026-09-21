@@ -36,7 +36,8 @@ RUN cd /home/frappe/frappe-bench/apps/dhanada && /home/frappe/frappe-bench/env/b
 # The vite configs output to <repo-root>/dhanada/public, so they reside at /app/dhanada/public in the builder
 COPY --chown=frappe:frappe --from=frontend-builder /app/dhanada/public /home/frappe/frappe-bench/apps/dhanada/public
 
-
+# Remove development-only frontend source code from runtime image
+RUN rm -rf /home/frappe/frappe-bench/apps/dhanada/frontend
 
 RUN python3 -c "from pathlib import Path; p=Path('/home/frappe/frappe-bench/sites/apps.txt'); names=p.read_text().splitlines(); names=[n for n in names if n]; names.append('dhanada') if 'dhanada' not in names else None; p.write_text('\n'.join(names) + '\n')"
 

@@ -285,28 +285,99 @@ class IntegrationTestSIFScheme(IntegrationTestCase):
 
 	def test_apex_equity_long_short_fund_regression(self):
 		"""
-		Regression test using the real Apex Equity Long-Short Fund JSON fixture.
+		Regression test using the real Apex Equity Long-Short Fund JSON data structure.
 		SEBI code: APEX/O/E/ELSF/26/06/0003/ABSL
+		Verifies canonical AMC resolution (ABSL -> Aditya Birla Sun Life AMC -> Apex SIF)
+		and document URL mapping without external repository dependencies.
 		"""
-		# Locate real fixture
-		candidates = [
-			"/Users/smritisoni/Desktop/My_SIF/AMFI_Fetcher/data/sif/scheme/details/apex_o_e_elsf_26_06_0003_absl.json",
-			os.path.join(
-				os.getcwd(), "AMFI_Fetcher/data/sif/scheme/details/apex_o_e_elsf_26_06_0003_absl.json"
-			),
-		]
-		fixture_path = None
-		for c in candidates:
-			if os.path.exists(c):
-				fixture_path = c
-				break
-
-		self.assertTrue(
-			fixture_path and os.path.exists(fixture_path), f"Apex fixture file not found in {candidates}"
-		)
-
-		with open(fixture_path) as f:
-			raw_apex = json.load(f)
+		raw_apex = {
+			"sebi_code": "APEX/O/E/ELSF/26/06/0003/ABSL",
+			"scheme_name": "Apex Equity Long-Short Fund",
+			"fund_name": "Apex Equity Long-Short Fund",
+			"sif_name": "Apex SIF",
+			"scheme_type": "An open ended equity investment strategy investing in listed equity and equity related instruments including limited short exposure in equity through derivative instruments.",
+			"fund_type": "An open ended equity investment strategy investing in listed equity and equity related instruments including limited short exposure in equity through derivative instruments.",
+			"category": "Equity Long Short Fund",
+			"riskometer_at_launch": "Risk Level 5",
+			"riskometer_as_on_date": "Risk Level 1",
+			"scheme_objective": "The Investment strategy seeks to generate long-term capital appreciation...",
+			"face_value": "10",
+			"nfo_open_date": "2026-08-10",
+			"nfo_close_date": "2026-08-24",
+			"allotment_date": "2026-08-31",
+			"reopen_date": "2026-09-01",
+			"benchmark_tier_1": "NIFTY 500 TRI",
+			"asset_allocation": [
+				{"allocation_type": "", "minimum_percentage": 80, "maximum_percentage": 100},
+				{"allocation_type": "", "minimum_percentage": 0, "maximum_percentage": 20},
+				{
+					"allocation_type": "Units issued by InvITs",
+					"minimum_percentage": 0,
+					"maximum_percentage": 20,
+				},
+			],
+			"plans": {
+				"regular": {
+					"growth": [
+						{
+							"plan_type": "regular",
+							"option": "growth",
+							"name": "Apex Equity Long-short Fund-Regular Growth- SIF- 154",
+							"amfi_code": "SIF-154",
+							"isin_code": "INF209K30107",
+						}
+					],
+					"idcw": {
+						"payout": [],
+						"reinvestment": [],
+						"transfer": [],
+						"time_period": [],
+						"unknown": [],
+					},
+					"unresolved": [],
+				},
+				"direct": {
+					"growth": [
+						{
+							"plan_type": "direct",
+							"option": "growth",
+							"name": "Apex Equity Long-short Fund-Direct Growth-SIF- 153",
+							"amfi_code": "SIF-153",
+							"isin_code": "INF209K30099",
+						}
+					],
+					"idcw": {
+						"payout": [],
+						"reinvestment": [],
+						"transfer": [],
+						"time_period": [],
+						"unknown": [],
+					},
+					"unresolved": [],
+				},
+			},
+			"fund_managers": [
+				{"name": "Mr. Manish Gupta", "type": "Primary", "from": "2026-08-31", "to": None},
+				{"name": "Mr. Harshil Suvarnkar", "type": "Comanage", "from": "2026-08-31", "to": None},
+			],
+			"investment_limits": {
+				"minimum_application_amount": "For normal investors - Rs. 10 lakh",
+				"application_multiple": "Re.1",
+				"minimum_additional_amount": "Rs. 10,000",
+				"minimum_redemption_amount": "Rs. 10,000",
+			},
+			"amc_details": {
+				"sif_name": "Apex SIF",
+				"amc_website": "https://mutualfund.adityabirlacapital.com/",
+			},
+			"documents": {
+				"scheme_id": "S-31",
+				"info_pdf_url": "https://portal.amfiindia.com/spages/S-31.pdf",
+				"summary_pdf_url": "https://portal.amfiindia.com/spages/SSD_S-31.pdf",
+				"summary_xls_url": "https://portal.amfiindia.com/spages/SSD_S-31.xls",
+				"summary_xml_url": "https://portal.amfiindia.com/spages/SSD_S-31.xml",
+			},
+		}
 
 		mapper = DataMapper(isin_sif_map={})
 		dataset = mapper.map_dataset({"scheme_details": [raw_apex]})
@@ -321,6 +392,12 @@ class IntegrationTestSIFScheme(IntegrationTestCase):
 		self.assertIsNone(apex_scheme.sai_url)
 		self.assertIsNone(apex_scheme.factsheet_url)
 		self.assertIsNone(apex_scheme.monthly_portfolio_disclosure_url)
+
+		# Canonical AMC resolution verification from real fixture
+		self.assertEqual(len(dataset.amcs), 1)
+		self.assertEqual(dataset.amcs[0].code, "ABSL")
+		self.assertEqual(dataset.amcs[0].amc_name, "Aditya Birla Sun Life AMC")
+		self.assertEqual(dataset.amcs[0].sif_name, "Apex SIF")
 
 	def test_canonical_amc_code_resolution(self):
 		"""
@@ -796,3 +873,46 @@ class IntegrationTestSIFScheme(IntegrationTestCase):
 				"SIF Scheme Modification Request", mod_name, ignore_permissions=True, force=True
 			)
 		frappe.delete_doc("SIF Scheme", scheme_doc.name, ignore_permissions=True, force=True)
+
+	def test_amc_correction_rollback_on_failure(self):
+		"""
+		Tests that without manual commit, an unhandled exception during AMC correction
+		allows the transaction to roll back cleanly without leaving partial state.
+		"""
+		from unittest.mock import patch
+
+		from dhanada.sif.sync.approval import apply_amc_master_corrections
+
+		if not frappe.db.exists("SIF Asset Management Company", "UNIN"):
+			frappe.get_doc(
+				{
+					"doctype": "SIF Asset Management Company",
+					"code": "UNIN",
+					"amc_name": "Old Union Entity",
+					"sif_name": "Union",
+					"registration_number": "UNIN",
+					"rta": "CAMS",
+					"is_active": 1,
+				}
+			).insert(ignore_permissions=True)
+		else:
+			frappe.db.set_value("SIF Asset Management Company", "UNIN", "amc_name", "Old Union Entity")
+			frappe.db.set_value("SIF Asset Management Company", "UNIN", "sif_name", "Union")
+
+		frappe.db.savepoint("before_amc_rollback_test")
+
+		real_save = frappe.model.document.Document.save
+
+		def failing_save(doc_self, *args, **kwargs):
+			real_save(doc_self, *args, **kwargs)
+			raise RuntimeError("Simulated mid-transaction failure")
+
+		with patch("frappe.model.document.Document.save", new=failing_save):
+			with self.assertRaises(RuntimeError):
+				apply_amc_master_corrections(dry_run=False)
+
+		# Roll back to the savepoint before the batch correction
+		frappe.db.rollback(save_point="before_amc_rollback_test")
+
+		current_name = frappe.db.get_value("SIF Asset Management Company", "UNIN", "amc_name")
+		self.assertEqual(current_name, "Old Union Entity")
