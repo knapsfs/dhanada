@@ -520,6 +520,13 @@ class DataMapper:
 						)
 					)
 
+				raw_docs = raw_scheme.get("documents")
+				isid_url = None
+				if isinstance(raw_docs, dict):
+					isid_val = raw_docs.get("info_pdf_url")
+					if isid_val and str(isid_val).strip():
+						isid_url = str(isid_val).strip()
+
 				dataset.schemes.append(
 					Scheme(
 						sebi_code=raw_scheme.get("sebi_code"),
@@ -549,6 +556,7 @@ class DataMapper:
 						custodian=raw_scheme.get("custodian"),
 						auditor=raw_scheme.get("auditor"),
 						is_active=True,
+						isid_url=isid_url,
 						allocations=allocations,
 						managers=managers,
 					)

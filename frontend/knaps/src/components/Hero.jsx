@@ -176,7 +176,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative isolate min-h-[680px] lg:min-h-screen pt-28 sm:pt-32 pb-14 lg:pb-16 overflow-hidden flex items-center justify-center">
+    <section className="mb-12 sm:mb-16 relative isolate min-h-[680px] lg:min-h-screen pt-28 sm:pt-32 pb-14 lg:pb-16 overflow-hidden flex items-center justify-center">
       {/* 1. Full Panoramic Landscape Background */}
       <div className="absolute inset-0 w-full h-full z-0 overflow-hidden pointer-events-none">
         <img
