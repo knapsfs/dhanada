@@ -9,7 +9,7 @@ export default function LuxuryContactSection() {
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
 
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 sm:mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#f0f4fd] text-[#032e92] font-semibold text-xs tracking-widest uppercase mb-4">
             Get In Touch
           </div>

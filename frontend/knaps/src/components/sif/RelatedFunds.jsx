@@ -18,7 +18,7 @@ export default function RelatedFunds({ funds = [] }) {
   const navigate = useNavigate()
 
   return (
-    <section ref={ref} className="py-12 bg-[#f7f9fc]">
+    <section ref={ref} className="py-12 sm:py-16 bg-[#f7f9fc] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -45,19 +45,9 @@ export default function RelatedFunds({ funds = [] }) {
               className="bg-white rounded-3xl border border-[#e8edf7] shadow-lg shadow-blue-900/5 p-5 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group cursor-pointer">
 
               <div className="flex items-center gap-3 mb-4">
-                {fund.amc_logo || fund.amcLogo || (typeof fund.logo === 'string' && (fund.logo.startsWith('/') || fund.logo.startsWith('http')) ? fund.logo : null) ? (
-                  <div className="w-12 h-12 rounded-2xl bg-white border border-gray-100 flex items-center justify-center p-1 shadow-md flex-shrink-0 group-hover:scale-105 transition-transform overflow-hidden">
-                    <img
-                      src={fund.amc_logo || fund.amcLogo || fund.logo}
-                      alt={fund.amc || fund.name || 'AMC Logo'}
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
-                ) : (
-                  <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${fund.logoColor || 'from-[#eef4ff] to-[#dbeafe] text-[#032e92]'} flex items-center justify-center text-xl shadow-md group-hover:scale-105 transition-transform`}>
-                    {fund.logo || (fund.name ? fund.name.charAt(0) : 'F')}
-                  </div>
-                )}
+                <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${fund.logoColor} flex items-center justify-center text-xl shadow-md group-hover:scale-105 transition-transform`}>
+                  {fund.logo}
+                </div>
                 <div className="flex-1 min-w-0">
                   <h4 className="font-bold text-gray-900 text-xs leading-snug line-clamp-2 group-hover:text-[#032e92] transition-colors">{fund.name}</h4>
                   <p className="text-[10px] text-gray-400 font-medium mt-0.5">{fund.category}</p>

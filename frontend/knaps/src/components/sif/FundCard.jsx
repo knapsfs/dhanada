@@ -36,19 +36,9 @@ export default function FundCard({ fund, index, isGrid }) {
         <div className="p-5 pb-4">
           {/* Logo + Name */}
           <div className="flex items-start gap-3 mb-4">
-            {fund.amc_logo || fund.amcLogo || (typeof fund.logo === 'string' && (fund.logo.startsWith('/') || fund.logo.startsWith('http')) ? fund.logo : null) ? (
-              <div className="w-12 h-12 rounded-2xl bg-white border border-gray-200/70 flex items-center justify-center p-0.5 flex-shrink-0 shadow-md group-hover:scale-105 transition-transform overflow-hidden">
-                <img
-                  src={fund.amc_logo || fund.amcLogo || fund.logo}
-                  alt={fund.amc || fund.name || 'AMC Logo'}
-                  className="w-full h-full object-contain object-center"
-                />
-              </div>
-            ) : (
-              <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${fund.logoColor || 'from-[#eef4ff] to-[#dbeafe] text-[#032e92]'} flex items-center justify-center text-xl flex-shrink-0 shadow-md group-hover:scale-105 transition-transform`}>
-                {fund.logo || (fund.name ? fund.name.charAt(0) : 'F')}
-              </div>
-            )}
+            <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${fund.logoColor} flex items-center justify-center text-xl flex-shrink-0 shadow-md group-hover:scale-105 transition-transform`}>
+              {fund.logo}
+            </div>
             <div className="flex-1 min-w-0">
               <h3 className="font-bold text-gray-900 text-sm leading-snug line-clamp-2 group-hover:text-[#032e92] transition-colors">{fund.name}</h3>
               <div className="flex items-center gap-1 mt-1">
@@ -137,19 +127,9 @@ export default function FundCard({ fund, index, isGrid }) {
         {/* Top Row */}
         <div className="flex items-start gap-4 mb-4">
           {/* Logo */}
-          {fund.amc_logo || fund.amcLogo || (typeof fund.logo === 'string' && (fund.logo.startsWith('/') || fund.logo.startsWith('http')) ? fund.logo : null) ? (
-            <div className="w-14 h-14 rounded-2xl bg-white border border-gray-200/70 flex items-center justify-center p-1 flex-shrink-0 shadow-md group-hover:scale-105 transition-transform overflow-hidden">
-              <img
-                src={fund.amc_logo || fund.amcLogo || fund.logo}
-                alt={fund.amc || fund.name || 'AMC Logo'}
-                className="w-full h-full object-contain object-center"
-              />
-            </div>
-          ) : (
-            <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${fund.logoColor || 'from-[#eef4ff] to-[#dbeafe] text-[#032e92]'} flex items-center justify-center text-2xl flex-shrink-0 shadow-md group-hover:scale-105 transition-transform`}>
-              {fund.logo || (fund.name ? fund.name.charAt(0) : 'F')}
-            </div>
-          )}
+          <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${fund.logoColor} flex items-center justify-center text-2xl flex-shrink-0 shadow-md group-hover:scale-105 transition-transform`}>
+            {fund.logo}
+          </div>
 
           {/* Info */}
           <div className="flex-1 min-w-0">

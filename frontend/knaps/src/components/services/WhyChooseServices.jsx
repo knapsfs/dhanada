@@ -30,7 +30,7 @@ export default function WhyChooseServices() {
   ];
 
   return (
-    <section className="py-20 lg:py-24 bg-white overflow-hidden">
+    <section className="py-12 sm:py-16 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           

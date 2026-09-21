@@ -35,7 +35,7 @@ export default function Expertise() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section className="py-24 bg-[#f7f9fc]" ref={ref}>
+    <section className="py-12 sm:py-16 bg-[#f7f9fc]" ref={ref}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         
         <div className="grid lg:grid-cols-2 gap-16 items-center">

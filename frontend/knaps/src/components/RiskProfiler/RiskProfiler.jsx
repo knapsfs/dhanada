@@ -156,7 +156,7 @@ export default function RiskProfiler({ isModal = false, onClose }) {
   }
 
   return (
-    <section className="py-24 bg-[#f8fafc] relative overflow-hidden border-t border-gray-100">
+    <section className="py-12 sm:py-16 bg-[#f8fafc] relative overflow-hidden border-t border-gray-100">
       <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #032e92 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
       {content}
     </section>

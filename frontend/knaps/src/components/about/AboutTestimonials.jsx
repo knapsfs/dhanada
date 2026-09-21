@@ -43,14 +43,14 @@ const testimonials = [
 
 export default function AboutTestimonials() {
   return (
-    <section className="py-24 bg-[#032e92] relative overflow-hidden">
+    <section className="py-12 sm:py-16 bg-[#032e92] relative overflow-hidden">
       
       {/* Decorative elements */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[#021d63] to-transparent opacity-50 z-0"></div>
       
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

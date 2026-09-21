@@ -42,10 +42,10 @@ const containerVariants = {
 
 export default function RelatedArticles() {
   return (
-    <section className="py-24 ">
+    <section className="py-12 sm:py-16">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
 
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 sm:mb-12">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

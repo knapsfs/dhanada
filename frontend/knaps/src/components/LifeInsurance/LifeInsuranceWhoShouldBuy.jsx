@@ -76,7 +76,7 @@ export default function LifeInsuranceWhoShouldBuy() {
   const current = PROFILES[activeTab];
 
   return (
-    <section className="py-20 lg:py-24 bg-[#f7f9fc] relative">
+    <section className="py-12 sm:py-16 bg-[#f7f9fc] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         
         {/* Section Header */}

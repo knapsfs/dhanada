@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowRight, faPhone } from '@fortawesome/free-solid-svg-icons'
+import { faPhone } from '@fortawesome/free-solid-svg-icons'
 import { useLeadModal } from '../../context/LeadModalContext'
 
 export default function Newsletter() {
@@ -15,7 +15,7 @@ export default function Newsletter() {
   ]
 
   return (
-    <section id="newsletter" className="py-20 bg-white">
+    <section id="newsletter" className="py-12 sm:py-16 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div
           ref={ref}
@@ -75,16 +75,16 @@ export default function Newsletter() {
               className="flex flex-col sm:flex-row items-center justify-center gap-4"
             >
               <button
+                type="button"
                 onClick={() => openLeadModal()}
-                className="btn-ripple w-full sm:w-auto px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-white text-[#032e92] hover:bg-blue-50 shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
+                className="btn-ripple w-full sm:w-auto px-6 py-3 rounded-xl text-[15px] font-semibold bg-white text-[#032e92] hover:bg-blue-50 shadow-md hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
               >
-                <span>Invest Now</span>
-                <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+                Invest Now
               </button>
 
               <a
                 href="tel:+919990243143"
-                className="btn-ripple w-full sm:w-auto px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-transparent border-2 border-white/30 text-white hover:bg-white/10 hover:border-white/50 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
+                className="btn-ripple w-full sm:w-auto px-6 py-3 rounded-xl text-[15px] font-semibold bg-transparent border border-white/30 text-white hover:bg-white/10 hover:border-white/50 transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer"
               >
                 <FontAwesomeIcon icon={faPhone} className="text-xs text-green-400" />
                 <span>Call us - +91-9990243143</span>

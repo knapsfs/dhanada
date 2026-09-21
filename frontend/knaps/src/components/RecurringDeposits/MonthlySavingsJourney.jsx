@@ -63,7 +63,7 @@ export default function MonthlySavingsJourney() {
   const current = journeyTiers[selectedTenure];
 
   return (
-    <section className="py-20 bg-[#f7f9fc] relative overflow-hidden">
+    <section className="py-12 sm:py-16 bg-[#f7f9fc] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14">

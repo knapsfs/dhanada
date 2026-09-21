@@ -21,7 +21,7 @@ export default function FeaturedFund({ fund }) {
   };
 
   return (
-    <section id="featured" className="py-20 bg-[#f7f9fc]">
+    <section id="featured" className="py-12 sm:py-16 bg-[#f7f9fc] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div
           ref={ref}

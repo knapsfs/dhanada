@@ -58,7 +58,7 @@ export default function TopFunds({
   }
 
   return (
-    <section id="top-funds" className="py-20 bg-white">
+    <section id="top-funds" className="py-12 sm:py-16 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Header */}
         <motion.div

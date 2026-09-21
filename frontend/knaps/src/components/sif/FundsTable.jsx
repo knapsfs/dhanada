@@ -298,24 +298,8 @@ export default function FundsTable({
     )
   }
 
-  // Get AMC Logo or stylized fallback representation
+  // Get AMC Logo or stylized representation
   const renderLogo = (fund) => {
-    const logoUrl = fund.amc_logo || fund.amcLogo || (typeof fund.logo === 'string' && (fund.logo.startsWith('/') || fund.logo.startsWith('http')) ? fund.logo : null)
-    if (logoUrl) {
-      return (
-        <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white border border-gray-200/70 flex items-center justify-center p-0.5 shadow-xs flex-shrink-0 overflow-hidden">
-          <img
-            src={logoUrl}
-            alt={fund.amc || fund.name || 'AMC Logo'}
-            className="w-full h-full object-contain object-center"
-            onError={(e) => {
-              e.currentTarget.parentElement.style.display = 'none'
-            }}
-          />
-        </div>
-      )
-    }
-
     const amcLower = (fund.amc || fund.name || '').toLowerCase()
 
     if (amcLower.includes('quant')) {
@@ -633,12 +617,12 @@ export default function FundsTable({
           <button
             type="button"
             onClick={() => setIsExpanded(prev => !prev)}
-            className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-full bg-[#032e92] hover:bg-[#021d63] text-white font-bold text-sm shadow-lg shadow-blue-900/20 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 cursor-pointer group"
+            className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center gap-2 cursor-pointer"
           >
-            <span>{isExpanded ? 'Show Less' : `View All Funds`}</span>
+            <span>{isExpanded ? 'Show Less' : 'View All Funds'}</span>
             <FontAwesomeIcon
               icon={isExpanded ? faChevronUp : faChevronDown}
-              className="text-xs text-blue-200 group-hover:text-white transition-transform duration-300"
+              className="text-[10px] transition-transform duration-300"
             />
           </button>
         </div>

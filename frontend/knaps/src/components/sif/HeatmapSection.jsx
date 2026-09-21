@@ -67,7 +67,7 @@ export default function HeatmapSection({ fundsData = [] }) {
   if (groupedData.length === 0) return null; // Don't render if no data
 
   return (
-    <section className="py-16 bg-[#f7f9fc]">
+    <section className="py-12 sm:py-16 bg-[#f7f9fc] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

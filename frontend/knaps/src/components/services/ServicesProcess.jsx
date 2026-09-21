@@ -31,11 +31,11 @@ const STEPS = [
 
 export default function ServicesProcess() {
   return (
-    <section className="py-20 bg-white border-t border-[#e8edf7]">
+    <section className="py-12 sm:py-16 bg-white relative overflow-hidden border-t border-[#e8edf7]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#eef4ff] text-[#032e92] text-[11px] font-extrabold tracking-widest uppercase mb-4">
             How It Works
           </div>

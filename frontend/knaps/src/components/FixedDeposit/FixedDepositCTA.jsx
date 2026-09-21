@@ -15,12 +15,12 @@ export default function FixedDepositCTA() {
   const { openLeadModal } = useLeadModal();
 
   return (
-    <section className="py-20 lg:py-28 bg-[#f7f9fc] relative overflow-hidden">
+    <section className="py-12 sm:py-16 bg-[#f7f9fc] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-[#0a192f] via-[#032e92] to-[#021d63] text-white p-8 sm:p-12 lg:p-16 shadow-2xl border border-blue-900/40">
           {/* Decorative Lighting Orbs */}
           <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none -ml-20 -mb-20" />
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none -ml-20 -mb-10 sm:mb-12" />
 
           <div className="relative z-10 max-w-4xl mx-auto text-center space-y-8">
             {/* Pill */}

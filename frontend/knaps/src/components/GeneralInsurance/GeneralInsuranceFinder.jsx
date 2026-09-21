@@ -254,7 +254,7 @@ const GeneralInsuranceFinder = () => {
   };
 
   return (
-    <section id="insurance-finder" className="py-20 lg:py-28 bg-[#f7f9fc] relative overflow-hidden">
+    <section id="insurance-finder" className="py-12 sm:py-16 bg-[#f7f9fc] relative overflow-hidden">
       {/* Background Decor */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100/50 rounded-full blur-3xl pointer-events-none -mr-32 -mt-32" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-50/70 rounded-full blur-3xl pointer-events-none -ml-32 -mb-32" />
