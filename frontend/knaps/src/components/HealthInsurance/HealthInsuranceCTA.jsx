@@ -64,7 +64,7 @@ export default function HealthInsuranceCTA() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
               <button
                 onClick={() => openLeadModal({ title: 'Protect Family Health Now', defaultService: 'Health Insurance' })}
-                className="w-full sm:w-auto btn-ripple px-8 py-4 rounded-xl text-base font-bold bg-white text-[#032e92] hover:bg-blue-50 shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 group cursor-pointer"
+                className="w-full sm:w-auto btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-white text-[#032e92] hover:bg-blue-50 shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 group cursor-pointer"
               >
                 <span>Compare Health Plans Free</span>
                 <FontAwesomeIcon icon={faArrowRight} className="text-[#032e92] group-hover:translate-x-1 transition-transform" />
@@ -72,7 +72,7 @@ export default function HealthInsuranceCTA() {
 
               <a
                 href="tel:+918080808080"
-                className="w-full sm:w-auto px-7 py-4 rounded-xl text-base font-semibold text-white/95 hover:text-white bg-white/10 hover:bg-white/15 border border-white/20 hover:border-white/30 transition-all duration-300 flex items-center justify-center gap-2.5 backdrop-blur-sm"
+                className="w-full sm:w-auto btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold text-white/95 hover:text-white bg-white/10 hover:bg-white/15 border border-white/20 hover:border-white/30 transition-all duration-300 flex items-center justify-center gap-2.5 backdrop-blur-sm cursor-pointer"
               >
                 <FontAwesomeIcon icon={faPhone} className="text-blue-200" />
                 <span>Call +91 8080808080</span>

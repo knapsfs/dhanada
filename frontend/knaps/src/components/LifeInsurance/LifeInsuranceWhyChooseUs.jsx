@@ -79,7 +79,7 @@ export default function LifeInsuranceWhyChooseUs() {
             <button
               type="button"
               onClick={openLeadModal}
-              className="btn-ripple bg-gradient-to-r from-[#032e92] to-[#021d63] text-white px-8 py-3.5 rounded-xl font-semibold shadow-md hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 text-[15px] flex items-center gap-3 cursor-pointer"
+              className="btn-ripple bg-gradient-to-r from-[#032e92] to-[#021d63] text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 text-[15px] flex items-center gap-2 cursor-pointer"
             >
               <span>Schedule Free Insurance Audit</span>
               <FontAwesomeIcon icon={faArrowRight} className="text-xs" />

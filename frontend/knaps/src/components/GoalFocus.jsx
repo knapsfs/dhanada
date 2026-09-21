@@ -92,22 +92,34 @@ export default function GoalFocus() {
 
           {/* Section Heading */}
           <div className="text-center max-w-3xl mx-auto">
+            {/* Header Tag */}
+            <motion.span
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="inline-block px-4 py-2 rounded-full border border-[#032e92]/20 text-[#032e92] bg-[#eef5ff] font-semibold text-sm mb-4 uppercase tracking-wider text-center"
+            >
+              GOAL FOCUS
+            </motion.span>
+
+            {/* Heading */}
             <motion.h2
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0f172a] tracking-tight"
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-extrabold text-[#0f172a] tracking-tight leading-tight text-center max-w-3xl mx-auto"
             >
-              Your Goals, Our Focus
+              Your Goals, <span className="text-[#032e92] block sm:inline">Our Focus</span>
             </motion.h2>
 
+            {/* Subtitle */}
             <motion.p
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-sm sm:text-base text-gray-500 font-normal max-w-xl mx-auto mt-2 leading-relaxed"
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl mx-auto leading-relaxed mt-3.5 text-center"
             >
               Life has many milestones. We help you turn them into achievable goals.
             </motion.p>

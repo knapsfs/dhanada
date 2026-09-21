@@ -110,7 +110,7 @@ export default function ELSSFeatures() {
         <div className="mt-14 text-center">
           <button
             onClick={() => openLeadModal({ title: 'Explore Top ELSS Features', defaultService: 'ELSS' })}
-            className="btn-ripple px-8 py-3.5 rounded-xl text-sm sm:text-base font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-lg shadow-[#032e92]/25 hover:shadow-xl hover:shadow-[#032e92]/35 transition-all duration-300 inline-flex items-center gap-2 cursor-pointer"
+            className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center gap-2 cursor-pointer"
           >
             <span>Compare ELSS with Other Instruments</span>
             <FontAwesomeIcon icon={faArrowRight} className="text-xs" />

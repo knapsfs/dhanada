@@ -149,10 +149,10 @@ export default function LeadCapture({ onSubmitSuccess, isModal = false }) {
           <button 
             type="submit"
             disabled={isSubmitting}
-            className={`w-full rounded-xl font-bold text-white transition-all shadow-md ${
-              isModal ? 'py-2.5 text-xs sm:text-sm' : 'py-4'
+            className={`w-full btn-ripple rounded-xl font-semibold text-white transition-all duration-300 cursor-pointer ${
+              isModal ? 'py-3 px-6 text-[14px]' : 'py-3.5 px-6 text-[15px]'
             } ${
-              isSubmitting ? 'bg-gray-400 cursor-wait' : 'bg-[#032e92] hover:bg-[#022169] hover:-translate-y-0.5 hover:shadow-blue-900/20'
+              isSubmitting ? 'bg-gray-400 opacity-70 cursor-wait' : 'bg-gradient-to-r from-[#032e92] to-[#021d63] hover:shadow-lg hover:shadow-[#032e92]/30'
             }`}
           >
             {isSubmitting ? 'Sending Request...' : 'Get My Risk Profile →'}

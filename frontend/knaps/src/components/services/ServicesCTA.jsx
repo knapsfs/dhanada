@@ -29,10 +29,10 @@ export default function ServicesCTA() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button className="w-full sm:w-auto bg-white text-[#032e92] px-8 py-4 rounded-xl font-bold hover:bg-gray-50 transition-colors shadow-lg">
+              <button className="w-full sm:w-auto btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-white text-[#032e92] hover:bg-blue-50 shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer">
                 Book Consultation
               </button>
-              <button className="w-full sm:w-auto bg-transparent border-2 border-white/20 text-white hover:bg-white/10 px-8 py-4 rounded-xl font-bold transition-colors">
+              <button className="w-full sm:w-auto btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-transparent border-2 border-white/30 text-white hover:bg-white/10 hover:border-white/50 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer">
                 Contact Our Team
               </button>
             </div>

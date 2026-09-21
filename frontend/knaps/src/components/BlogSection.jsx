@@ -1,6 +1,4 @@
 import { motion } from 'framer-motion';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import BlogCard from './BlogCard';
 
@@ -73,9 +71,8 @@ export default function BlogSection() {
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            <Link to="#all-blogs" className="px-6 py-3 rounded-xl border-2 border-[#032e92] text-[#032e92] font-semibold hover:bg-[#032e92] hover:text-white transition-all duration-300 inline-flex items-center gap-2">
+            <Link to="/blogs" className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center justify-center cursor-pointer">
               View All Articles
-              <FontAwesomeIcon icon={faArrowRight} />
             </Link>
           </motion.div>
         </div>

@@ -71,7 +71,7 @@ export default function FixedDepositCTA() {
                     defaultService: 'Fixed Deposits'
                   })
                 }
-                className="w-full sm:w-auto px-8 py-4 rounded-xl text-[15px] font-semibold bg-white text-[#032e92] hover:bg-blue-50 hover:shadow-xl hover:shadow-white/20 transition-all duration-300 flex items-center justify-center gap-3 group cursor-pointer"
+                className="w-full sm:w-auto btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-white text-[#032e92] hover:bg-blue-50 shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 group cursor-pointer"
               >
                 <span>Explore Fixed Deposit Options</span>
                 <FontAwesomeIcon
@@ -82,7 +82,7 @@ export default function FixedDepositCTA() {
 
               <a
                 href="tel:+918080808080"
-                className="w-full sm:w-auto px-7 py-4 rounded-xl text-[15px] font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all duration-300 flex items-center justify-center gap-3 backdrop-blur-sm"
+                className="w-full sm:w-auto btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all duration-300 flex items-center justify-center gap-3 backdrop-blur-sm cursor-pointer"
               >
                 <FontAwesomeIcon icon={faPhone} className="text-sm text-blue-200" />
                 <span>Call a Fixed Income Specialist</span>

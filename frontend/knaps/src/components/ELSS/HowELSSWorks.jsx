@@ -131,14 +131,14 @@ export default function HowELSSWorks() {
           <div className="flex flex-wrap items-center gap-3">
             <button
               onClick={() => openLeadModal({ title: 'Start ELSS Investment', defaultService: 'ELSS' })}
-              className="btn-ripple px-6 py-3 rounded-xl text-sm font-semibold bg-white text-[#032e92] hover:bg-blue-50 shadow-md transition-all duration-300 flex items-center gap-2 cursor-pointer"
+              className="btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-white text-[#032e92] hover:bg-blue-50 shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>Explore Top ELSS Funds</span>
               <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
             </button>
             <a
               href="tel:+918080808080"
-              className="px-5 py-3 rounded-xl text-sm font-semibold text-white/90 hover:text-white border border-white/20 hover:border-white/40 transition-colors flex items-center gap-2"
+              className="btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-transparent border-2 border-white/30 text-white hover:bg-white/10 hover:border-white/50 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
             >
               <FontAwesomeIcon icon={faPhone} className="text-xs" />
               <span>+91 8080808080</span>

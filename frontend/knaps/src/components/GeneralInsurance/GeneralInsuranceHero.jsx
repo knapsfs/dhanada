@@ -79,7 +79,7 @@ export default function GeneralInsuranceHero() {
               <button
                 type="button"
                 onClick={scrollToFinder}
-                className="btn-ripple bg-gradient-to-r from-[#032e92] to-[#021d63] text-white px-7 py-4 rounded-xl font-semibold shadow-lg shadow-blue-900/20 hover:shadow-xl hover:shadow-[#032e92]/30 transition-all duration-300 text-sm flex items-center justify-center gap-2.5 cursor-pointer group"
+                className="btn-ripple bg-gradient-to-r from-[#032e92] to-[#021d63] text-white px-6 py-3 rounded-xl text-[15px] font-semibold hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer group"
               >
                 <FontAwesomeIcon icon={faShieldHalved} className="text-xs" />
                 <span>Find the Right Cover</span>
@@ -89,7 +89,7 @@ export default function GeneralInsuranceHero() {
               <button
                 type="button"
                 onClick={openLeadModal}
-                className="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-white hover:bg-[#f7f9fc] text-[#032e92] font-semibold text-sm border-2 border-[#e8edf7] hover:border-[#032e92]/30 transition-all duration-200 cursor-pointer shadow-sm"
+                className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-white hover:bg-blue-50 text-[#032e92] border border-[#032e92]/20 shadow-md hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span>Speak with an Insurance Specialist</span>
               </button>

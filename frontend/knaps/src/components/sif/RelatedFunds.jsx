@@ -79,7 +79,7 @@ export default function RelatedFunds({ funds = [] }) {
                 </span>
               </div>
 
-              <button onClick={(e) => { e.stopPropagation(); openLeadModal(); }} className="w-full mt-4 py-2.5 rounded-xl bg-[#032e92] text-white text-xs font-bold hover:bg-[#021d63] shadow-sm shadow-blue-900/20 transition-all flex items-center justify-center gap-1.5">
+              <button onClick={(e) => { e.stopPropagation(); openLeadModal(); }} className="w-full mt-4 btn-ripple py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#032e92] to-[#021d63] text-white text-xs font-semibold hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer">
                 Invest Now <FontAwesomeIcon icon={faArrowRight} className="text-[10px]" />
               </button>
             </motion.div>

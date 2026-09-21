@@ -264,7 +264,7 @@ export default function Hero() {
                       setErrors({});
                       setAgreedToTerms(true);
                     }}
-                    className="inline-flex items-center justify-center px-6 py-2.5 rounded-lg bg-[#032e92] text-white text-sm font-semibold hover:bg-[#021d63] transition-colors cursor-pointer"
+                    className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer"
                   >
                     Submit Another Enquiry
                   </button>
@@ -482,7 +482,7 @@ export default function Hero() {
                   <button
                     type="submit"
                     disabled={status === 'submitting'}
-                    className="w-full bg-[#032e92] hover:bg-[#021d63] disabled:opacity-75 text-white text-[15px] font-semibold py-3.5 rounded-lg transition-all hover:shadow-lg hover:shadow-blue-900/20 mt-2 cursor-pointer active:scale-[0.99] flex items-center justify-center gap-2"
+                    className="w-full btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 mt-2 disabled:opacity-75 cursor-pointer active:scale-[0.99]"
                   >
                     {status === 'submitting' ? (
                       <>

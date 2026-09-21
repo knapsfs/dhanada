@@ -582,7 +582,7 @@ export default function FundsTable({
                         <div className="flex items-center justify-center gap-2">
                           <button
                             onClick={openLeadModal}
-                            className="px-4 py-2 rounded-xl bg-[#032e92] text-white text-xs font-bold hover:bg-[#021d63] shadow-md shadow-blue-900/20 transition-all duration-200 cursor-pointer"
+                            className="btn-ripple px-4 py-2 rounded-xl bg-gradient-to-r from-[#032e92] to-[#021d63] text-white text-xs font-semibold hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 cursor-pointer"
                           >
                             Invest
                           </button>

@@ -130,10 +130,10 @@ export default function RiskResult({ result, onRetake }) {
         <p className="text-gray-600 mb-8 max-w-xl mx-auto">Our financial professionals can help you align your indicative risk profile with actionable investment solutions.</p>
         
         <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <button className="px-8 py-4 rounded-xl font-bold bg-[#0a192f] text-white hover:bg-[#032e92] transition-all shadow-lg hover:-translate-y-0.5">
+          <button className="btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer">
             Talk to a Financial Professional &rarr;
           </button>
-          <a href="#services" className="px-8 py-4 rounded-xl font-bold bg-white text-[#0a192f] border-2 border-gray-200 hover:border-[#0a192f] transition-all">
+          <a href="#services" className="btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-white text-[#032e92] hover:bg-blue-50 border border-[#032e92]/20 shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer">
             Explore Our Services &rarr;
           </a>
         </div>

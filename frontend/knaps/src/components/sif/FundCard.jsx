@@ -104,7 +104,7 @@ export default function FundCard({ fund, index, isGrid }) {
 
         {/* Footer */}
         <div className="border-t border-[#e8edf7] px-5 py-4 flex gap-2">
-          <button onClick={openLeadModal} className="flex-1 py-2.5 rounded-xl bg-[#032e92] text-white text-xs font-bold hover:bg-[#021d63] shadow-md shadow-blue-900/20 transition-all duration-200 flex items-center justify-center gap-1.5">
+          <button onClick={openLeadModal} className="flex-1 btn-ripple py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#032e92] to-[#021d63] text-white text-xs font-semibold hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer">
             Invest Now <FontAwesomeIcon icon={faArrowRight} className="text-[10px]" />
           </button>
           <Link to={`/sif/${encodeURIComponent(fund.id)}`} className="px-4 py-2.5 rounded-xl border-2 border-[#e8edf7] text-gray-500 text-xs font-bold hover:border-[#032e92] hover:text-[#032e92] transition-all duration-200 flex items-center justify-center">
@@ -159,7 +159,7 @@ export default function FundCard({ fund, index, isGrid }) {
 
               {/* Action Buttons */}
               <div className="flex items-center gap-2 flex-shrink-0">
-                <button onClick={openLeadModal} className="btn-ripple flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#032e92] text-white text-sm font-semibold hover:bg-[#021d63] shadow-md shadow-blue-900/20 transition-all duration-200">
+                <button onClick={openLeadModal} className="btn-ripple flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#032e92] to-[#021d63] text-white text-sm font-semibold hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 cursor-pointer">
                   Invest Now
                   <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
                 </button>

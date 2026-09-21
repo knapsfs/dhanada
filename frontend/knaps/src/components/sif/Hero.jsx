@@ -1,8 +1,4 @@
 import { motion } from 'framer-motion'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faCircleArrowRight, faChartLine
-} from '@fortawesome/free-solid-svg-icons'
 import { useLeadModal } from '../../context/LeadModalContext'
 import heroImg from '../../assets/sif/knaps-hero.png'
 
@@ -87,17 +83,16 @@ export default function Hero() {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="flex flex-wrap gap-4 mb-12">
               <button
+                type="button"
                 onClick={openLeadModal}
-                className="btn-ripple flex items-center gap-2 px-8 py-4 rounded-full bg-[#c10000] hover:bg-[#9d0000] text-white font-semibold shadow-xl shadow-red-900/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl cursor-pointer"
+                className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-white text-[#032e92] hover:bg-blue-50 shadow-md hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
               >
-                <FontAwesomeIcon icon={faCircleArrowRight} />
                 Invest Now
               </button>
               <a
                 href="#top-funds"
-                className="flex items-center gap-2 px-8 py-4 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white font-semibold transition-all duration-300 hover:-translate-y-1"
+                className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-transparent border border-white/30 text-white hover:bg-white/10 hover:border-white/50 transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
               >
-                <FontAwesomeIcon icon={faChartLine} />
                 Explore Funds
               </a>
             </motion.div>

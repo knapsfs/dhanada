@@ -52,7 +52,7 @@ export default function ContactCTA() {
           <div className="lg:col-span-5 flex flex-col sm:flex-row lg:flex-col xl:flex-row gap-5 justify-center lg:justify-end items-center">
             <button 
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
-              className="group relative overflow-hidden bg-white text-[#032e92] px-8 py-5 rounded-2xl font-bold text-lg w-full sm:w-auto shadow-xl transition-transform hover:-translate-y-1"
+              className="btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-white text-[#032e92] hover:bg-blue-50 shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 w-full sm:w-auto cursor-pointer"
             >
               <span className="relative z-10 flex items-center justify-center gap-3">
                 Schedule Consultation
@@ -60,7 +60,7 @@ export default function ContactCTA() {
               </span>
             </button>
             
-            <Link to="tel:+919876543210" className="group relative overflow-hidden bg-white/10 backdrop-blur-md border border-white/20 text-white px-8 py-5 rounded-2xl font-bold text-lg w-full sm:w-auto flex items-center justify-center gap-3 transition-colors hover:bg-white/20 hover:border-white/40">
+            <Link to="tel:+919876543210" className="btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 hover:border-white/40 transition-all duration-300 flex items-center justify-center gap-3 w-full sm:w-auto cursor-pointer">
               <FontAwesomeIcon icon={faPhoneVolume} />
               Call Now
             </Link>

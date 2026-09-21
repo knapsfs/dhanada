@@ -87,7 +87,7 @@ export default function About() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 rounded-xl font-semibold bg-[#032e92] text-white shadow-lg shadow-[#032e92]/20 flex items-center gap-2 hover:bg-[#021d63] transition-colors btn-ripple"
+              className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center gap-2 cursor-pointer"
             >
               Learn More About Us
               <FontAwesomeIcon icon={faArrowRight} />
