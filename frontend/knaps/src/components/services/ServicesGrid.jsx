@@ -57,7 +57,7 @@ const SERVICES_DATA = [
     desc: "Comprehensive life cover to ensure your family's financial security and lifestyle continuity. Safeguard their future with high sum assured term plans, income protection, critical illness coverage, and tax benefits under Section 80C.",
     image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=800&auto=format&fit=crop",
     icon: faShieldHeart,
-    link: "/life-insurance"
+    link: "/services/life-insurance"
   },
   {
     id: "general-insurance",
@@ -65,7 +65,7 @@ const SERVICES_DATA = [
     desc: "Protect your most valuable physical assets including your home, vehicle, business, and travel. Shield yourself from unexpected liabilities, accidents, natural damages, and financial disruptions with complete peace of mind.",
     image: "https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?q=80&w=800&auto=format&fit=crop",
     icon: faBuildingShield,
-    link: "/general-insurance"
+    link: "/services/general-insurance"
   },
   {
     id: "health-insurance",
@@ -73,7 +73,7 @@ const SERVICES_DATA = [
     desc: "Stay prepared for medical uncertainties with extensive health coverage. Access cashless hospitalization across premier hospital networks, comprehensive daycare treatments, pre/post medical care, and tax savings under Section 80D.",
     image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=800&auto=format&fit=crop",
     icon: faHeartPulse,
-    link: "/health-insurance"
+    link: "/services/health-insurance"
   },
   {
     id: "elss",
@@ -81,7 +81,7 @@ const SERVICES_DATA = [
     desc: "Save tax under Section 80C while investing in high-growth equity funds. Benefit from the shortest lock-in period among all tax-saving instruments (just 3 years) combined with the long-term wealth compounding power of equities.",
     image: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=800&auto=format&fit=crop",
     icon: faFileInvoiceDollar,
-    link: "/elss"
+    link: "/services/elss"
   },
   {
     id: "fixed-deposits",
@@ -89,7 +89,7 @@ const SERVICES_DATA = [
     desc: "A safe and steady investment option offering predictable interest income and capital stability. Choose flexible tenures ranging from 7 days to 10 years with assured interest payouts and preferential rates for senior citizens.",
     image: "https://images.unsplash.com/photo-1565372195458-9de0b320ef04?q=80&w=800&auto=format&fit=crop",
     icon: faVault,
-    link: "/fixed-deposits"
+    link: "/services/fixed-deposits"
   },
   {
     id: "recurring-deposits",
@@ -97,7 +97,7 @@ const SERVICES_DATA = [
     desc: "Build your savings consistently, one step at a time. Cultivate a disciplined monthly investment habit with fixed, guaranteed compounding interest, zero exposure to market volatility, and flexible tenure choices.",
     image: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=800&auto=format&fit=crop",
     icon: faRotate,
-    link: "/recurring-deposits"
+    link: "/services/recurring-deposits"
   },
   {
     id: "nps",
@@ -105,7 +105,7 @@ const SERVICES_DATA = [
     desc: "Plan for a secure, comfortable, and tax-efficient retirement. Accumulate a disciplined pension corpus with market-linked growth across equity and debt, enjoy an additional ₹50,000 tax deduction under 80CCD(1B), and secure lifelong annuity.",
     image: "https://images.unsplash.com/photo-1507206130118-b5907f817163?q=80&w=800&auto=format&fit=crop",
     icon: faPiggyBank,
-    link: "/nps"
+    link: "/services/nps"
   },
   {
     id: "small-savings",
@@ -113,7 +113,7 @@ const SERVICES_DATA = [
     desc: "Government-backed savings instruments offering sovereign safety and assured returns. Invest in popular avenues like Public Provident Fund (PPF), Sukanya Samriddhi Yojana (SSY), and SCSS to enjoy tax-free compounding and capital security.",
     image: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?q=80&w=800&auto=format&fit=crop",
     icon: faCoins,
-    link: "/small-savings-schemes"
+    link: "/services/small-savings-schemes"
   }
 ];
 

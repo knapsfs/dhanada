@@ -69,6 +69,7 @@ website_route_rules = [
 	{"from_route": "/about", "to_route": "knaps"},
 	{"from_route": "/services", "to_route": "knaps"},
 	{"from_route": "/services/<path:app_path>", "to_route": "knaps"},
+
 	{"from_route": "/blogs", "to_route": "knaps"},
 	{"from_route": "/blogs/<path:app_path>", "to_route": "knaps"},
 	{"from_route": "/calculators", "to_route": "knaps"},
