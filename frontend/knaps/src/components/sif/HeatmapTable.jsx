@@ -47,17 +47,9 @@ const getCellColor = (val) => {
   return 'bg-[#881337] text-white font-bold shadow-sm';
 };
 
-// Compute deterministic month return or N/L if before launch
+// Return actual database month return or N/L if before launch
 function getFundMonthlyReturn(fund, month, mIndex) {
-  // If explicitly present on fund object
-  if (fund.monthlyReturns && fund.monthlyReturns[month.key] !== undefined) {
-    return fund.monthlyReturns[month.key];
-  }
-  if (fund[month.key] !== undefined) {
-    return fund[month.key];
-  }
-
-  // Check launch date if available
+  // 1. Check launch date if available
   if (fund.launchDate) {
     const launch = new Date(fund.launchDate);
     const mDate = new Date(month.date);
@@ -69,22 +61,17 @@ function getFundMonthlyReturn(fund, month, mIndex) {
     }
   }
 
-  // Generate deterministic realistic monthly returns if backend does not provide historical month breakdown
-  const seed = (fund.name || fund.id || '').split('').reduce((acc, c, i) => acc + c.charCodeAt(0) * (i + 1), 0);
-  
-  // Chronological index (0 for oldest sep_25 to 12 for most recent sep_26)
-  const chronoIndex = (monthsConfig.length - 1) - mIndex;
-
-  // Staggered launch offset for realistic N/L display
-  const launchOffset = fund.launchDate ? 0 : (seed % 9);
-  if (chronoIndex < launchOffset) {
-    return 'N/L';
+  // 2. If present in database monthlyReturns map
+  if (fund.monthlyReturns && fund.monthlyReturns[month.key] !== undefined && fund.monthlyReturns[month.key] !== null) {
+    const val = fund.monthlyReturns[month.key];
+    return typeof val === 'number' ? val : parseFloat(val);
+  }
+  if (fund[month.key] !== undefined && fund[month.key] !== null) {
+    const val = fund[month.key];
+    return typeof val === 'number' ? val : parseFloat(val);
   }
 
-  const baseReturn = fund.returns1M != null ? parseFloat(fund.returns1M) : (seed % 4 - 1);
-  const wave = Math.sin(seed * 19.3 + chronoIndex * 37.7) * 2.8;
-  const result = (baseReturn * 0.35 + wave).toFixed(2);
-  return parseFloat(result);
+  return 'N/L';
 }
 
 export default function HeatmapTable({ funds = [], timeFilter = '12M', activeSubCategoryLabel }) {

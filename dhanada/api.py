@@ -193,6 +193,50 @@ def get_funds_list():
 			],
 		)
 
+		# Pre-fetch all heatmap performance records from database
+		heatmap_records = frappe.get_all(
+			"SIF Scheme Heatmap Performance",
+			fields=[
+				"scheme_plan",
+				"sif_code",
+				"year",
+				"jan",
+				"feb",
+				"mar",
+				"apr",
+				"may",
+				"jun",
+				"jul",
+				"aug",
+				"sep",
+				"oct",
+				"nov",
+				"dec",
+			],
+		)
+		heatmap_by_plan = {}
+		heatmap_by_sif = {}
+		months_list = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
+		for r in heatmap_records:
+			yr_suffix = str(r.year)[-2:] if r.year else ""
+			if not yr_suffix:
+				continue
+			p_dict = {}
+			for m in months_list:
+				val = r.get(m)
+				if val is not None:
+					p_dict[f"{m}_{yr_suffix}"] = float(val)
+
+			if r.scheme_plan:
+				if r.scheme_plan not in heatmap_by_plan:
+					heatmap_by_plan[r.scheme_plan] = {}
+				heatmap_by_plan[r.scheme_plan].update(p_dict)
+
+			if r.sif_code:
+				if r.sif_code not in heatmap_by_sif:
+					heatmap_by_sif[r.sif_code] = {}
+				heatmap_by_sif[r.sif_code].update(p_dict)
+
 		result = []
 		for s in schemes:
 			launch_date = s.nfo_allotment_date or s.nfo_start_date
@@ -317,6 +361,24 @@ def get_funds_list():
 					"logo": amc_logo,
 					"scheme_plan": best_plan.name if best_plan else None,
 					"sif_code": best_plan.get("sif_code") if best_plan else None,
+					"monthlyReturns": (
+						heatmap_by_plan.get(best_plan.name)
+						if best_plan and best_plan.name in heatmap_by_plan
+						else (
+							heatmap_by_sif.get(best_plan.get("sif_code"))
+							if best_plan and best_plan.get("sif_code") in heatmap_by_sif
+							else {}
+						)
+					),
+					"monthly_returns": (
+						heatmap_by_plan.get(best_plan.name)
+						if best_plan and best_plan.name in heatmap_by_plan
+						else (
+							heatmap_by_sif.get(best_plan.get("sif_code"))
+							if best_plan and best_plan.get("sif_code") in heatmap_by_sif
+							else {}
+						)
+					),
 				}
 			)
 
