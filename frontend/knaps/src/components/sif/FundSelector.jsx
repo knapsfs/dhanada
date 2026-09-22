@@ -78,13 +78,17 @@ export default function FundSelector({ selectedFunds = [null, null, null], onFun
         backgroundColor: state.isSelected ? '#032e92' : '#dbeafe'
       }
     }),
+    menuPortal: (base) => ({
+      ...base,
+      zIndex: 9999
+    }),
     menu: (provided) => ({
       ...provided,
       borderRadius: '1rem',
       overflow: 'hidden',
       boxShadow: '0 12px 30px -4px rgba(3, 46, 146, 0.15)',
       border: '1px solid #e8edf7',
-      zIndex: 30
+      zIndex: 9999
     }),
     menuList: (provided) => ({
       ...provided,
@@ -113,7 +117,7 @@ export default function FundSelector({ selectedFunds = [null, null, null], onFun
   };
 
   return (
-    <div className="bg-white rounded-[2rem] p-8 lg:p-10 shadow-xl shadow-blue-900/10 border border-[#e8edf7] mb-12 relative z-10">
+    <div className="bg-white rounded-[2rem] p-8 lg:p-10 shadow-xl shadow-blue-900/10 border border-[#e8edf7] relative z-10">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <div>
           <h2 className="text-2xl font-bold text-[#1e293b] font-serif mb-1">Select Funds</h2>
@@ -148,6 +152,10 @@ export default function FundSelector({ selectedFunds = [null, null, null], onFun
                 placeholder="Search fund..."
                 isClearable
                 isSearchable
+                menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
+                menuPosition="fixed"
+                menuPlacement="auto"
+                maxMenuHeight={280}
                 formatOptionLabel={(option, { context, selectValue }) => {
                   const isSelectedInMenu = context === 'menu' && selectValue?.some(s => s.value === option.value);
                   return (
@@ -194,11 +202,10 @@ export default function FundSelector({ selectedFunds = [null, null, null], onFun
           type="button"
           onClick={onCompare}
           disabled={!canCompare}
-          className={`px-6 py-3 rounded-xl text-[15px] font-semibold transition-all duration-300 inline-flex items-center justify-center ${
-            canCompare
+          className={`px-6 py-3 rounded-xl text-[15px] font-semibold transition-all duration-300 inline-flex items-center justify-center ${canCompare
               ? 'btn-ripple bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 cursor-pointer'
               : 'bg-gray-200 text-gray-400 border border-gray-200 cursor-not-allowed shadow-none'
-          }`}
+            }`}
         >
           Compare
         </button>

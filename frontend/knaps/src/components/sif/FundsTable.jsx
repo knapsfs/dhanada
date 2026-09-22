@@ -300,32 +300,61 @@ export default function FundsTable({
 
   // Get AMC Logo or stylized representation
   const renderLogo = (fund) => {
+    const rawLogo = fund.amc_logo || fund.amcLogo || (typeof fund.logo === 'string' && (fund.logo.startsWith('/') || fund.logo.startsWith('http')) ? fund.logo : null)
+    const logoUrl = rawLogo && typeof rawLogo === 'string' && rawLogo.startsWith('/private/files/')
+      ? rawLogo.replace('/private/files/', '/files/')
+      : rawLogo
+
+    if (logoUrl) {
+      return (
+        <div className="w-10 h-10 rounded-full bg-white border border-gray-200/80 flex items-center justify-center p-1.5 shadow-xs flex-shrink-0 overflow-hidden">
+          <img
+            src={logoUrl}
+            alt={fund.amc || fund.name || 'AMC Logo'}
+            className="w-full h-full object-contain object-center"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none'
+              if (e.currentTarget.nextSibling) {
+                e.currentTarget.nextSibling.style.display = 'flex'
+              }
+            }}
+          />
+          <div
+            style={{ display: 'none' }}
+            className="w-full h-full bg-[#eef4ff] text-[#032e92] items-center justify-center font-bold text-xs rounded-full"
+          >
+            {(fund.name || 'F').charAt(0).toUpperCase()}
+          </div>
+        </div>
+      )
+    }
+
     const amcLower = (fund.amc || fund.name || '').toLowerCase()
 
     if (amcLower.includes('quant')) {
       return (
-        <div className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center p-1 shadow-xs flex-shrink-0">
+        <div className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center p-1 shadow-xs flex-shrink-0">
           <span className="text-[11px] font-bold text-gray-800 tracking-tighter">quant</span>
         </div>
       )
     }
     if (amcLower.includes('edelweiss') || fund.name?.toLowerCase().includes('altiva')) {
       return (
-        <div className="w-10 h-10 rounded-xl bg-[#1e3a8a] text-white flex items-center justify-center font-bold text-base shadow-xs flex-shrink-0">
+        <div className="w-10 h-10 rounded-full bg-[#1e3a8a] text-white flex items-center justify-center font-bold text-base shadow-xs flex-shrink-0">
           <span>❄</span>
         </div>
       )
     }
     if (amcLower.includes('aditya') || amcLower.includes('birla') || fund.name?.toLowerCase().includes('apex')) {
       return (
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-600 to-red-600 text-white flex items-center justify-center font-bold text-xs shadow-xs flex-shrink-0">
+        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-600 to-red-600 text-white flex items-center justify-center font-bold text-xs shadow-xs flex-shrink-0">
           <span>AB</span>
         </div>
       )
     }
 
     return (
-      <div className="w-10 h-10 rounded-xl bg-[#eef4ff] text-[#032e92] border border-blue-100 flex items-center justify-center font-bold text-xs shadow-xs flex-shrink-0">
+      <div className="w-10 h-10 rounded-full bg-[#eef4ff] text-[#032e92] border border-blue-100 flex items-center justify-center font-bold text-xs shadow-xs flex-shrink-0">
         {(fund.name || 'F').charAt(0).toUpperCase()}
       </div>
     )

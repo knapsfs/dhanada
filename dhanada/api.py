@@ -259,6 +259,8 @@ def get_funds_list():
 				if amc_doc:
 					amc_name = amc_doc.get("amc_name") or s.amc
 					amc_logo = amc_doc.get("amc_logo")
+					if amc_logo and amc_logo.startswith("/private/files/"):
+						amc_logo = amc_logo.replace("/private/files/", "/files/")
 				else:
 					amc_name = s.amc
 
@@ -402,6 +404,8 @@ def get_fund_details(identifier: str):
 			if amc_doc:
 				amc_name = amc_doc.get("amc_name") or scheme.amc
 				amc_logo = amc_doc.get("amc_logo")
+				if amc_logo and amc_logo.startswith("/private/files/"):
+					amc_logo = amc_logo.replace("/private/files/", "/files/")
 			else:
 				amc_name = scheme.amc
 
