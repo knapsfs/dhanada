@@ -35,11 +35,12 @@
  ],
  "fields": [
   {
+   "default": "Regular",
    "fieldname": "type",
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Type",
-   "options": "\nRegular\nDirect",
+   "options": "Regular",
    "reqd": 1
   },
   {

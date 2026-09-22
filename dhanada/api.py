@@ -12,20 +12,35 @@ def get_default_plan(plans):
 	if not plans:
 		return None
 
-	# Sort order: type='Direct' + option='Growth' is best.
-	# We will score them to find the best match.
+	# Filter strictly to Regular plans
+	regular_plans = [
+		p
+		for p in plans
+		if cstr(getattr(p, "type", None) if hasattr(p, "type") else p.get("type")).strip().lower()
+		== "regular"
+	]
+	if not regular_plans:
+		return None
+
+	# Sort order: option='Growth' is preferred as primary benchmark option
 	def score(p):
 		s = 0
-		p_type = cstr(p.type).strip().lower()
-		p_opt = cstr(p.option).strip().lower()
-		if p_type == "direct":
-			s += 10
+		p_opt = cstr(
+			getattr(p, "option", None) if hasattr(p, "option") else p.get("option")
+		).strip().lower()
 		if p_opt == "growth":
-			s += 5
+			s += 10
 		return s
 
 	# Sort deterministically by score (desc) then name (desc)
-	return sorted(plans, key=lambda p: (score(p), p.name or ""), reverse=True)[0]
+	return sorted(
+		regular_plans,
+		key=lambda p: (
+			score(p),
+			getattr(p, "name", None) if hasattr(p, "name") else p.get("name", ""),
+		),
+		reverse=True,
+	)[0]
 
 
 def mask_invalid_returns(perf_dict, launch_date, historical_nav=None):
@@ -129,7 +144,7 @@ def get_performance_for_sif(sif_code: str):
 	try:
 		plan = frappe.db.get_value(
 			"SIF Scheme Plan",
-			{"sif_code": ["in", code_variants]},
+			{"sif_code": ["in", code_variants], "type": "Regular"},
 			["name", "performance"],
 			as_dict=True,
 		)
@@ -187,7 +202,7 @@ def get_funds_list():
 			# Get plans for this scheme
 			plans = frappe.get_all(
 				"SIF Scheme Plan",
-				filters={"scheme": s.name},
+				filters={"scheme": s.name, "type": "Regular"},
 				fields=[
 					"name",
 					"type",
@@ -411,7 +426,7 @@ def get_fund_details(identifier: str):
 		# Get Plans and Performance
 		plans = frappe.get_all(
 			"SIF Scheme Plan",
-			filters={"scheme": scheme.name},
+			filters={"scheme": scheme.name, "type": "Regular"},
 			fields=[
 				"name",
 				"type",
