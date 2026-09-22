@@ -192,6 +192,15 @@ export async function saveLead({
 		console.log("[STEP 4] Frappe response");
 
 		if (!response.ok) {
+			if (response.status === 429) {
+				return {
+					success: false,
+					status: 429,
+					isRateLimited: true,
+					message:
+						"You're sending requests a little too quickly. Please wait about a minute and try again.",
+				};
+			}
 			const errorText = await response.text();
 			console.log(errorText);
 			throw new Error(`CRM API returned ${response.status}: ${errorText}`);
@@ -214,9 +223,14 @@ export async function saveLead({
 		}
 	} catch (error) {
 		console.error("[CRM] Failed to save lead:", error.message);
+		const is429 = error.status === 429 || error.isRateLimited;
 		return {
 			success: false,
-			message: `Could not save lead: ${error.message}`,
+			status: is429 ? 429 : 500,
+			isRateLimited: is429,
+			message: is429
+				? "You're sending requests a little too quickly. Please wait about a minute and try again."
+				: `Could not save lead: ${error.message}`,
 		};
 	}
 }

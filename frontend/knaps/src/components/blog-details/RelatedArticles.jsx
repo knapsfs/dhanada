@@ -1,36 +1,6 @@
 import { motion } from 'framer-motion';
 import BlogCard from '../BlogCard';
-
-// 3 dummy blogs for related section
-const relatedBlogs = [
-  {
-    id: 1,
-    category: 'Market Trends',
-    date: 'Oct 24, 2026',
-    title: 'Navigating Volatility: A Guide for Long-Term Investors',
-    description: 'Discover strategies to protect your portfolio during market downturns and capitalize on emerging opportunities.',
-    image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=800&q=80',
-    author: 'Rahul Verma',
-  },
-  {
-    id: 2,
-    category: 'Personal Finance',
-    date: 'Nov 02, 2026',
-    title: '5 Steps to Building a Bulletproof Retirement Plan',
-    description: 'A comprehensive approach to ensuring you have the corpus needed for a comfortable and stress-free retirement.',
-    image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80',
-    author: 'Neha Kapoor',
-  },
-  {
-    id: 3,
-    category: 'Wealth Management',
-    date: 'Nov 15, 2026',
-    title: 'Understanding Alternative Investment Funds (AIFs)',
-    description: 'An introductory guide to how high-net-worth individuals are diversifying beyond traditional stocks and bonds.',
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
-    author: 'Vikram Singh',
-  }
-];
+import { getRelatedBlogs } from '../../data/blogsData';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -40,20 +10,22 @@ const containerVariants = {
   }
 };
 
-export default function RelatedArticles() {
+export default function RelatedArticles({ currentBlog }) {
+  const related = getRelatedBlogs(currentBlog?.id || 1, 3);
+
   return (
-    <section className="py-12 sm:py-16">
+    <section className="py-12 sm:py-16 bg-gray-50/60 border-t border-gray-100">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
 
-        <div className="text-center mb-10 sm:mb-12">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-3xl md:text-[36px] font-bold text-[#0a192f]"
-          >
-            Related <span className="text-[#032e92]">Articles</span>
-          </motion.h2>
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
+          <div>
+            <span className="text-xs font-bold uppercase tracking-wider text-[#032e92] bg-blue-50 px-3 py-1 rounded-full">
+              Keep Reading
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0a192f] mt-2">
+              Related <span className="text-[#032e92]">Articles</span>
+            </h2>
+          </div>
         </div>
 
         <motion.div
@@ -63,7 +35,7 @@ export default function RelatedArticles() {
           viewport={{ once: true, margin: "-50px" }}
           className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
-          {relatedBlogs.map((blog) => (
+          {related.map((blog) => (
             <BlogCard key={blog.id} blog={blog} />
           ))}
         </motion.div>

@@ -28,6 +28,16 @@ class IntegrationTestSIFSchemePlan(IntegrationTestCase):
 
 		before_tests()
 
+	def setUp(self):
+		super().setUp()
+		frappe.local.request = None
+		frappe.local.request_ip = None
+
+	def tearDown(self):
+		frappe.local.request = None
+		frappe.local.request_ip = None
+		super().tearDown()
+
 	def test_data_scheduler_fixtures_and_helpers_removed(self):
 		"""
 		Verifies DATA_SCHEDULER_USER and execution_context module are completely removed,
@@ -239,26 +249,31 @@ class IntegrationTestSIFSchemePlan(IntegrationTestCase):
 
 		class MockRequest:
 			data = raw_json
+			method = "POST"
 
 		frappe.local.request = MockRequest()
+		frappe.local.request_ip = "127.0.0.1"
 
-		res = create_chatbot_lead()
-		self.assertTrue(res.get("success"))
-		self.assertEqual(frappe.session.user, initial_user)
+		lead_name = None
+		try:
+			res = create_chatbot_lead()
+			self.assertTrue(res.get("success"))
+			self.assertEqual(frappe.session.user, initial_user)
 
-		lead_name = res.get("lead_name")
-		lead = frappe.get_doc("CRM Lead", lead_name)
+			lead_name = res.get("lead_name")
+			lead = frappe.get_doc("CRM Lead", lead_name)
 
-		self.assertEqual(lead.first_name, "Kavita")
-		self.assertEqual(lead.last_name, "Rao")
-		self.assertEqual(lead.lead_name, "Kavita Rao")
-		self.assertEqual(lead.email, "kavita.rao@example.com")
-		self.assertEqual(lead.mobile_no, "9811122233")
-		self.assertEqual(lead.source, "Website Chatbot")
-
-		# Cleanup
-		frappe.delete_doc("CRM Lead", lead_name, ignore_permissions=True, force=True)
-		frappe.local.request = None
+			self.assertEqual(lead.first_name, "Kavita")
+			self.assertEqual(lead.last_name, "Rao")
+			self.assertEqual(lead.lead_name, "Kavita Rao")
+			self.assertEqual(lead.email, "kavita.rao@example.com")
+			self.assertEqual(lead.mobile_no, "9811122233")
+			self.assertEqual(lead.source, "Website Chatbot")
+		finally:
+			if lead_name and frappe.db.exists("CRM Lead", lead_name):
+				frappe.delete_doc("CRM Lead", lead_name, ignore_permissions=True, force=True)
+			frappe.local.request = None
+			frappe.local.request_ip = None
 
 	def test_get_chatbot_config_preserves_session_user(self):
 		from dhanada.api import get_chatbot_config

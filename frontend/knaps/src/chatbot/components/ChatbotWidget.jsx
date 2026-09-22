@@ -282,7 +282,11 @@ export default function ChatbotWidget() {
       }
     } catch (error) {
       console.error(error);
-      pushMessage('bot', 'Sorry, I am having trouble connecting right now. Please try again later.');
+      if (error?.status === 429 || error?.isRateLimited) {
+        pushMessage('bot', "You're sending requests a little too quickly. Please wait about a minute and try again.");
+      } else {
+        pushMessage('bot', 'Sorry, I am having trouble connecting right now. Please try again later.');
+      }
     } finally {
       setIsTyping(false);
       setIsBusy(false);

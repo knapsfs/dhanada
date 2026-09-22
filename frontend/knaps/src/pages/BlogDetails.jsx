@@ -1,35 +1,33 @@
 import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import ServicesHero from '../components/services/ServicesHero';
 import BlogHeader from '../components/blog-details/BlogHeader';
 import BlogContent from '../components/blog-details/BlogContent';
-import ArticleNavigation from '../components/blog-details/ArticleNavigation';
-import RelatedArticles from '../components/blog-details/RelatedArticles';
-import BlogCTA from '../components/blog-details/BlogCTA';
 import CTA from '../components/CTA';
+import { getBlogByIdOrSlug } from '../data/blogsData';
 
 export default function BlogDetails() {
+  const { id } = useParams();
+  const blog = getBlogByIdOrSlug(id);
 
-  // Scroll to top on page load
+  // Scroll to top on page load or when article changes
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [id]);
 
   return (
     <div className="font-sans text-gray-900 bg-white min-h-screen">
       <Navbar />
 
       <main>
+        {/* Dynamic Blog Header */}
+        <BlogHeader blog={blog} />
 
+        {/* Dynamic Blog Content */}
+        <BlogContent blog={blog} />
 
-        {/* The Blog Content */}
-        <BlogHeader />
-        <BlogContent />
-        <ArticleNavigation />
-
-        {/* Related Posts & CTA */}
-        <RelatedArticles />
+        {/* Bottom CTA */}
         <CTA />
       </main>
 

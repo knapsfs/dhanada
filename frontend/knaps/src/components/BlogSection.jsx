@@ -1,36 +1,7 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import BlogCard from './BlogCard';
-
-const blogs = [
-  {
-    id: 1,
-    category: 'Market Trends',
-    date: 'Oct 24, 2023',
-    title: 'Navigating Volatility: A Guide for Long-Term Investors',
-    description: 'Discover strategies to protect your portfolio during market downturns and capitalize on emerging opportunities.',
-    image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=800&q=80',
-    author: 'Rahul Verma',
-  },
-  {
-    id: 2,
-    category: 'Personal Finance',
-    date: 'Nov 02, 2023',
-    title: '5 Steps to Building a Bulletproof Retirement Plan',
-    description: 'A comprehensive approach to ensuring you have the corpus needed for a comfortable and stress-free retirement.',
-    image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80',
-    author: 'Neha Kapoor',
-  },
-  {
-    id: 3,
-    category: 'Wealth Management',
-    date: 'Nov 15, 2023',
-    title: 'Understanding Alternative Investment Funds (AIFs)',
-    description: 'An introductory guide to how high-net-worth individuals are diversifying beyond traditional stocks and bonds.',
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
-    author: 'Vikram Singh',
-  },
-];
+import { getLatestBlogs } from '../data/blogsData';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -41,6 +12,8 @@ const containerVariants = {
 };
 
 export default function BlogSection() {
+  const blogs = getLatestBlogs(3);
+
   return (
     <section id="blogs" className="py-12 sm:py-16 bg-gray-50 relative">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
