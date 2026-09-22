@@ -25,9 +25,7 @@ def get_default_plan(plans):
 	# Sort order: option='Growth' is preferred as primary benchmark option
 	def score(p):
 		s = 0
-		p_opt = cstr(
-			getattr(p, "option", None) if hasattr(p, "option") else p.get("option")
-		).strip().lower()
+		p_opt = cstr(getattr(p, "option", None) if hasattr(p, "option") else p.get("option")).strip().lower()
 		if p_opt == "growth":
 			s += 10
 		return s
