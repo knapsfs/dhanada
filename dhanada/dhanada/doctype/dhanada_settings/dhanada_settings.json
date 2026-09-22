@@ -1,0 +1,62 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "creation": "2026-09-22 15:13:34.541300",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "github_amfi_fetcher_url",
+  "amfi_data_local_file_path",
+  "column_break_fmup",
+  "github_amfi_fetcher_branch"
+ ],
+ "fields": [
+  {
+   "fieldname": "github_amfi_fetcher_url",
+   "fieldtype": "Data",
+   "label": "Github AMFI Fetcher URL",
+   "options": "URL"
+  },
+  {
+   "fieldname": "github_amfi_fetcher_branch",
+   "fieldtype": "Data",
+   "label": "Github AMFI Fetcher Branch"
+  },
+  {
+   "fieldname": "column_break_fmup",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "amfi_data_local_file_path",
+   "fieldtype": "Data",
+   "label": "AMFI Data Local File Path"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-09-22 15:56:08.528334",
+ "modified_by": "Administrator",
+ "module": "Dhanada",
+ "name": "Dhanada Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
