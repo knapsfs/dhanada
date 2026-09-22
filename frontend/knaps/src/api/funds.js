@@ -12,6 +12,14 @@ export async function fetchFundsList() {
 	try {
 		const response = await fetch("/api/method/dhanada.api.get_funds_list");
 		if (!response.ok) {
+			if (response.status === 429) {
+				const err = new Error(
+					"You're sending requests a little too quickly. Please wait about a minute and try again."
+				);
+				err.status = 429;
+				err.isRateLimited = true;
+				throw err;
+			}
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 		const result = await response.json();
@@ -46,6 +54,14 @@ export async function fetchFundDetails(identifier) {
 			`/api/method/dhanada.api.get_fund_details?identifier=${encodeURIComponent(identifier)}`
 		);
 		if (!response.ok) {
+			if (response.status === 429) {
+				const err = new Error(
+					"You're sending requests a little too quickly. Please wait about a minute and try again."
+				);
+				err.status = 429;
+				err.isRateLimited = true;
+				throw err;
+			}
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 		const result = await response.json();

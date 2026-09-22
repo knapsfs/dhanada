@@ -70,6 +70,17 @@ export async function saveChatMessage({
 		);
 
 		if (!response.ok) {
+			if (response.status === 429) {
+				console.warn(
+					"[ChatbotPersistence] HTTP 429 Rate limit reached, skipping persistence."
+				);
+				return {
+					success: false,
+					status: 429,
+					isRateLimited: true,
+					error: "RateLimitExceeded",
+				};
+			}
 			const errorText = await response.text();
 			console.warn(`[ChatbotPersistence] HTTP ${response.status}:`, errorText);
 			return { success: false, error: `HTTP ${response.status}`, status: response.status };
@@ -122,12 +133,23 @@ export async function updateChatContext({ conversationId, visitorId, chatContext
 		);
 
 		if (!response.ok) {
+			if (response.status === 429) {
+				console.warn(
+					"[ChatbotPersistence] Context update rate limited (HTTP 429), skipping."
+				);
+				return {
+					success: false,
+					status: 429,
+					isRateLimited: true,
+					error: "RateLimitExceeded",
+				};
+			}
 			const errorText = await response.text();
 			console.warn(
 				`[ChatbotPersistence] Context update HTTP ${response.status}:`,
 				errorText
 			);
-			return { success: false, error: `HTTP ${response.status}` };
+			return { success: false, error: `HTTP ${response.status}`, status: response.status };
 		}
 
 		const data = await response.json();

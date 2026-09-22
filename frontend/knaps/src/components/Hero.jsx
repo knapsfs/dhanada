@@ -146,12 +146,14 @@ export default function Hero() {
         }),
       });
 
-      const data = await response.json();
+      const data = await response.json().catch(() => ({}));
       if (response.ok && data.message && data.message.success) {
         setStatus('success');
       } else {
         let errorMsg = 'Something went wrong. Please try again.';
-        if (data?.message?.message) {
+        if (response.status === 429 || data?.exc_type === 'RateLimitExceededError') {
+          errorMsg = "You're sending requests a little too quickly. Please wait about a minute and try again.";
+        } else if (data?.message?.message) {
           errorMsg = data.message.message;
         } else if (data?.exc_message) {
           errorMsg = data.exc_message;

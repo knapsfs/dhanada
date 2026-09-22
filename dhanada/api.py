@@ -4,6 +4,7 @@ from datetime import datetime
 
 import frappe
 from dateutil.relativedelta import relativedelta
+from frappe.rate_limiter import rate_limit
 from frappe.utils import cstr, date_diff, getdate, nowdate
 
 
@@ -158,6 +159,7 @@ def get_performance_for_sif(sif_code: str):
 
 
 @frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
+@rate_limit(limit=60, seconds=60, ip_based=True)
 def get_funds_list():
 	try:
 		schemes = frappe.get_all(
@@ -259,6 +261,8 @@ def get_funds_list():
 				if amc_doc:
 					amc_name = amc_doc.get("amc_name") or s.amc
 					amc_logo = amc_doc.get("amc_logo")
+					if amc_logo and amc_logo.startswith("/private/files/"):
+						amc_logo = amc_logo.replace("/private/files/", "/files/")
 				else:
 					amc_name = s.amc
 
@@ -361,6 +365,7 @@ def get_historical_nav_for_sif(sif_code: str) -> list[dict]:
 
 
 @frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
+@rate_limit(limit=180, seconds=60, ip_based=True)
 def get_historical_nav(sif_code: str):
 	try:
 		data = get_historical_nav_for_sif(sif_code)
@@ -370,6 +375,7 @@ def get_historical_nav(sif_code: str):
 
 
 @frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
+@rate_limit(limit=120, seconds=60, ip_based=True)
 def get_fund_details(identifier: str):
 	try:
 		# Identifier can be sebi_code or name
@@ -395,6 +401,8 @@ def get_fund_details(identifier: str):
 			if amc_doc:
 				amc_name = amc_doc.get("amc_name") or scheme.amc
 				amc_logo = amc_doc.get("amc_logo")
+				if amc_logo and amc_logo.startswith("/private/files/"):
+					amc_logo = amc_logo.replace("/private/files/", "/files/")
 			else:
 				amc_name = scheme.amc
 
@@ -541,6 +549,7 @@ def get_fund_details(identifier: str):
 
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])  # nosemgrep: guest-whitelisted-method
+@rate_limit(limit=5, seconds=60, ip_based=True, methods="POST")
 def create_chatbot_lead():
 	try:
 		# 1. Parse payload supporting both JSON request body and form_dict
@@ -733,6 +742,7 @@ def create_chatbot_lead():
 
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])  # nosemgrep: guest-whitelisted-method
+@rate_limit(limit=3, seconds=60, ip_based=True, methods="POST")
 def create_website_lead():
 	try:
 		payload = {}
@@ -788,6 +798,7 @@ def create_website_lead():
 
 
 @frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
+@rate_limit(limit=60, seconds=60, ip_based=True)
 def get_chatbot_config():
 	"""Returns non-sensitive chatbot configuration like the API Base URL and CSRF token."""
 	try:
@@ -810,6 +821,7 @@ def get_chatbot_config():
 
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])  # nosemgrep: guest-whitelisted-method
+@rate_limit(limit=15, seconds=60, ip_based=True, methods="POST")
 def chatbot_response():
 	"""Securely proxies the chat request to Gemini API."""
 	import json
@@ -882,6 +894,7 @@ def chatbot_response():
 
 
 @frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
+@rate_limit(limit=120, seconds=60, ip_based=True)
 def get_scheme_heatmap_performance(
 	scheme_plan: str | None = None, sif_code: str | None = None, year: int | None = None
 ):

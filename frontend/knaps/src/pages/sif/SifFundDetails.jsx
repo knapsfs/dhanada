@@ -417,7 +417,7 @@ export default function SifFundDetails() {
           <div className="flex items-center gap-4 sm:gap-5">
             {/* AMC Logo or Custom rounded abstract watercolor logo fallback */}
             {fund.amc_logo || fund.amcLogo || apiFund?.amc_logo || apiFund?.amcLogo || (typeof fund.logo === 'string' && (fund.logo.startsWith('/') || fund.logo.startsWith('http')) ? fund.logo : null) ? (
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white border-2 border-gray-200/80 shadow-sm flex items-center justify-center p-1 sm:p-1.5 overflow-hidden flex-shrink-0">
+              <div className="w-24 h-24 sm:w-24 sm:h-24 rounded-2xl bg-white border-2 border-gray-200/80 shadow-sm flex items-center justify-center p-1 sm:p-1.5 overflow-hidden flex-shrink-0">
                 <img
                   src={fund.amc_logo || fund.amcLogo || apiFund?.amc_logo || apiFund?.amcLogo || fund.logo}
                   alt={fund.amc || fund.name || 'AMC Logo'}
@@ -425,7 +425,7 @@ export default function SifFundDetails() {
                 />
               </div>
             ) : (
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-[#fbf8f0] via-[#f7f2e4] to-[#ede4cc] border-2 border-[#e6dbc0] shadow-sm flex items-center justify-center overflow-hidden flex-shrink-0 relative">
+              <div className="w-24 h-24 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-br from-[#fbf8f0] via-[#f7f2e4] to-[#ede4cc] border-2 border-[#e6dbc0] shadow-sm flex items-center justify-center overflow-hidden flex-shrink-0 relative">
                 <svg viewBox="0 0 100 100" className="w-full h-full opacity-70">
                   <circle cx="35" cy="40" r="30" fill="#d4af37" filter="blur(6px)" />
                   <circle cx="65" cy="55" r="28" fill="#c2a649" filter="blur(7px)" />

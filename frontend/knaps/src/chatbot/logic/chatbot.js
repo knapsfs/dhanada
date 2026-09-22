@@ -1,6 +1,9 @@
 import * as knowledgeService from "./knowledgeService.js";
 import * as leadManager from "./leadManager.js";
 
+export const RATE_LIMIT_USER_MESSAGE =
+	"You're sending requests a little too quickly. Please wait about a minute and try again.";
+
 let cachedCsrfToken = null;
 
 async function getCsrfToken() {
@@ -45,6 +48,12 @@ async function generateContentWithFallback(params) {
 	});
 
 	if (!response.ok) {
+		if (response.status === 429) {
+			const err = new Error(RATE_LIMIT_USER_MESSAGE);
+			err.status = 429;
+			err.isRateLimited = true;
+			throw err;
+		}
 		throw new Error("Failed to reach Frappe API");
 	}
 
@@ -183,6 +192,34 @@ export function isGreeting(message) {
 	return greetingRegex.test(clean);
 }
 
+export function isAdvisorRequest(message) {
+	const text = normalizeText(message);
+	if (!text) return false;
+	if (text === "connect with an advisor") return true;
+
+	const lower = text.toLowerCase();
+	const phrases = [
+		"connect with an advisor",
+		"connect with advisor",
+		"talk to an advisor",
+		"talk to advisor",
+		"speak with an advisor",
+		"speak with advisor",
+		"speak to an advisor",
+		"speak to advisor",
+		"connect me with an advisor",
+		"contact advisor",
+		"call me",
+		"contact me",
+		"reach out to me",
+		"need an advisor",
+		"consult an advisor",
+	];
+	if (phrases.some((p) => lower.includes(p))) return true;
+	if (/^(advisor|connect advisor|call advisor)$/i.test(lower)) return true;
+	return false;
+}
+
 const GREETINGS = [
 	"hi",
 	"hello",
@@ -203,7 +240,6 @@ const AFFIRMATIVE = [
 	"go ahead",
 	"sounds good",
 	"yes please",
-	"connect with an advisor",
 ];
 const NEGATIVE = [
 	"no",
@@ -971,33 +1007,58 @@ export class Chatbot {
 		const isNewTopic = !["unknown", "affirmative", "negative", "thanks"].includes(intent);
 
 		let reply;
+		let isLeadTurn = false;
 
-		if (state.leadStep !== LEAD_STEPS.NONE && state.leadStep !== LEAD_STEPS.DONE) {
-			if (state.leadStep === LEAD_STEPS.PENDING_OFFER && intent === "negative") {
-				state.leadStep = LEAD_STEPS.NONE;
-				// Reset so the LLM can naturally offer it again much later, but the conversation history will prevent it from spamming immediately.
-				state.advisorOffered = false;
-				state.leadEvaluationCooldown = 4;
-				reply = "Alright! What else would you like to know about investing?";
-			} else if (state.leadStep === LEAD_STEPS.PENDING_OFFER && intent === "affirmative") {
-				if (!state.collected.name) {
-					state.leadStep = LEAD_STEPS.NAME;
-					reply = "Great! To start, what name should I tell our advisor?";
+		const isAdvisor = isAdvisorRequest(cleanMessage);
+
+		if (isAdvisor) {
+			isLeadTurn = true;
+			state.advisorOffered = true;
+			if (!state.collected.name) {
+				state.leadStep = LEAD_STEPS.NAME;
+				reply = "Great! To start, what name should I tell our advisor?";
+			} else {
+				state.leadStep = LEAD_STEPS.CHOOSE_SHARE;
+				if (!state.collected.phone && !state.collected.email) {
+					reply = `Nice to meet you, ${state.collected.name}! To help our advisor connect with you, what would you like to share?`;
+				} else if (state.collected.phone && !state.collected.email) {
+					state.leadStep = LEAD_STEPS.ASK_OPTIONAL_EMAIL;
+					reply = "Thank you. Would you also like to share your email address?";
+				} else if (state.collected.email && !state.collected.phone) {
+					state.leadStep = LEAD_STEPS.ASK_OPTIONAL_PHONE;
+					reply = "Thank you. Would you also like to share your mobile number?";
 				} else {
-					state.leadStep = LEAD_STEPS.CHOOSE_SHARE;
-					if (!state.collected.phone && !state.collected.email) {
-						reply =
-							"Great! To help our advisor connect with you, what would you like to share?";
-					} else if (state.collected.phone && !state.collected.email) {
-						state.leadStep = LEAD_STEPS.ASK_OPTIONAL_EMAIL;
-						reply = `Great! Since we already have your phone number, would you also like to share your email address?`;
-					} else if (state.collected.email && !state.collected.phone) {
-						state.leadStep = LEAD_STEPS.ASK_OPTIONAL_PHONE;
-						reply = `Great! Since we already have your email address, would you also like to share your mobile number?`;
+					reply = await this.saveCompletedLead(state);
+				}
+			}
+		} else if (state.leadStep !== LEAD_STEPS.NONE && state.leadStep !== LEAD_STEPS.DONE) {
+			isLeadTurn = true;
+			if (state.leadStep === LEAD_STEPS.PENDING_OFFER) {
+				if (intent === "negative") {
+					state.leadStep = LEAD_STEPS.NONE;
+					state.advisorOffered = false;
+					state.leadEvaluationCooldown = 4;
+					reply = "Alright! What else would you like to know about investing?";
+				} else if (intent === "affirmative") {
+					if (!state.collected.name) {
+						state.leadStep = LEAD_STEPS.NAME;
+						reply = "Great! To start, what name should I tell our advisor?";
 					} else {
-						// Should not happen since we don't offer if both are known, but just in case
-						reply = await this.saveCompletedLead(state);
+						state.leadStep = LEAD_STEPS.CHOOSE_SHARE;
+						reply = `Nice to meet you, ${state.collected.name}! To help our advisor connect with you, what would you like to share?`;
 					}
+				} else {
+					state.leadStep = LEAD_STEPS.NONE;
+					isLeadTurn = false;
+				}
+			} else {
+				const lower = cleanMessage.toLowerCase();
+				if (lower === "cancel" || lower === "stop" || lower === "exit") {
+					state.leadStep = LEAD_STEPS.NONE;
+					reply =
+						"Alright, I have cancelled the advisor request. What else would you like to know?";
+				} else {
+					reply = await this.continueLeadFlow(state, cleanMessage, intent);
 				}
 			}
 		}
@@ -1009,30 +1070,6 @@ export class Chatbot {
 		if (!reply) {
 			if (!cleanMessage) {
 				reply = "Please type your question and I will help.";
-			} else if (state.leadStep !== LEAD_STEPS.NONE && state.leadStep !== LEAD_STEPS.DONE) {
-				const isInterruption = this.isLeadInterruption(
-					state,
-					cleanMessage,
-					intent,
-					explicitEntity
-				);
-				if (isInterruption) {
-					reply = await this.handleIntent(state, cleanMessage);
-
-					state.leadInterruptionTurns = (state.leadInterruptionTurns || 0) + 1;
-					if (
-						state.leadInterruptionTurns === 1 ||
-						state.leadInterruptionTurns % 3 === 0
-					) {
-						const reminder = this.getLeadReminder(state);
-						if (!reply.includes(reminder)) {
-							reply += "\n\n" + reminder;
-						}
-					}
-				} else {
-					state.leadInterruptionTurns = 0;
-					reply = await this.continueLeadFlow(state, cleanMessage, intent);
-				}
 			} else if (state.awaitingRecommendationDetails) {
 				extractProfile(state, cleanMessage);
 				reply = this.handleRecommendation(state);
@@ -1063,6 +1100,8 @@ export class Chatbot {
 
 		if (state.leadStep !== LEAD_STEPS.NONE && state.leadStep !== LEAD_STEPS.DONE) {
 			quickReplies = getQuickReplies(state);
+		} else if (isLeadTurn) {
+			quickReplies = DEFAULT_QUICK_REPLIES;
 		} else {
 			if (state.latestSuggestions) {
 				quickReplies = state.latestSuggestions;
@@ -1367,15 +1406,18 @@ export class Chatbot {
 				state.currentTopic = "dhanadaServices";
 				if (!state.collected.name) {
 					state.leadStep = LEAD_STEPS.NAME;
-					return "I can arrange that. May I know your name?";
+					return "Great! To start, what name should I tell our advisor?";
+				} else if (!state.collected.phone && !state.collected.email) {
+					state.leadStep = LEAD_STEPS.CHOOSE_SHARE;
+					return `Nice to meet you, ${state.collected.name}! To help our advisor connect with you, what would you like to share?`;
 				} else if (!state.collected.phone) {
-					state.leadStep = LEAD_STEPS.PHONE;
-					return `I can arrange that. Could you share your mobile number?`;
+					state.leadStep = LEAD_STEPS.ASK_OPTIONAL_PHONE;
+					return "Thank you. Would you also like to share your mobile number?";
 				} else if (!state.collected.email) {
-					state.leadStep = LEAD_STEPS.EMAIL;
-					return `I can arrange that. Could you also share your email address?`;
+					state.leadStep = LEAD_STEPS.ASK_OPTIONAL_EMAIL;
+					return "Thank you. Would you also like to share your email address?";
 				} else {
-					return "Our advisor will connect with you shortly!";
+					return "Thank you! Our advisor will connect with you shortly.";
 				}
 
 			default:
@@ -1594,6 +1636,11 @@ Rules for leadOpportunity:
 			return response.text || "";
 		} catch (error) {
 			console.error("[GEMINI ERROR]:", error.message);
+			if (error.status === 429 || error.isRateLimited) {
+				state.latestSuggestions = DEFAULT_QUICK_REPLIES;
+				state.latestLeadOpportunity = null;
+				return RATE_LIMIT_USER_MESSAGE;
+			}
 			const fallbackReply =
 				"I'm facing a lots of requests at this time.... " +
 				localFallback +
@@ -1620,7 +1667,10 @@ Rules for leadOpportunity:
 		}
 
 		if (state.leadStep === LEAD_STEPS.NAME) {
-			const nameCheck = leadManager.validateName(message);
+			const cleanName = message
+				.replace(/^(my name is|i am|i'm|this is|myself)\s+/i, "")
+				.trim();
+			const nameCheck = leadManager.validateName(cleanName || message);
 			if (!nameCheck.valid) {
 				return `${nameCheck.message}\nMay I know your name?`;
 			}
@@ -1630,20 +1680,42 @@ Rules for leadOpportunity:
 		}
 
 		if (state.leadStep === LEAD_STEPS.ASK_OPTIONAL_PHONE) {
-			if (intent === "negative" || message.toLowerCase().trim() === "skip") {
+			const lower = message.toLowerCase().trim();
+			if (
+				intent === "negative" ||
+				lower === "skip" ||
+				lower === "no" ||
+				lower === "no thanks"
+			) {
 				return await this.saveCompletedLead(state);
 			}
-			if (intent === "affirmative") {
+			if (
+				intent === "affirmative" ||
+				lower === "yes" ||
+				lower === "yes please" ||
+				lower === "sure"
+			) {
 				state.leadStep = LEAD_STEPS.PHONE_ONLY;
 				return "Great! Please share your 10-digit mobile number.";
 			}
 		}
 
 		if (state.leadStep === LEAD_STEPS.ASK_OPTIONAL_EMAIL) {
-			if (intent === "negative" || message.toLowerCase().trim() === "skip") {
+			const lower = message.toLowerCase().trim();
+			if (
+				intent === "negative" ||
+				lower === "skip" ||
+				lower === "no" ||
+				lower === "no thanks"
+			) {
 				return await this.saveCompletedLead(state);
 			}
-			if (intent === "affirmative") {
+			if (
+				intent === "affirmative" ||
+				lower === "yes" ||
+				lower === "yes please" ||
+				lower === "sure"
+			) {
 				state.leadStep = LEAD_STEPS.EMAIL_ONLY;
 				return "Great! Please share your email address.";
 			}
@@ -1733,7 +1805,7 @@ Rules for leadOpportunity:
 		const result = await leadManager.saveLead(leadData);
 		if (result.success) {
 			state.leadCaptured = true;
-			state.leadStep = LEAD_STEPS.DONE;
+			state.leadStep = LEAD_STEPS.NONE;
 			state.crmLeadName = result.lead_name;
 			return `Thank you, ${
 				state.collected.name || ""
@@ -1741,6 +1813,9 @@ Rules for leadOpportunity:
 		} else {
 			console.error("[CRM ERROR]", result.message);
 			state.leadStep = LEAD_STEPS.NONE;
+			if (result.status === 429 || result.isRateLimited) {
+				return RATE_LIMIT_USER_MESSAGE;
+			}
 			return `We're sorry, there was a temporary issue saving your details to our system. Please try providing your details again later, or contact us directly.`;
 		}
 	}

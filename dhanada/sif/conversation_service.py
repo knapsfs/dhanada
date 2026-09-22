@@ -7,6 +7,7 @@ import json
 import uuid
 
 import frappe
+from frappe.rate_limiter import rate_limit
 from frappe.utils import get_url, now_datetime
 
 
@@ -274,6 +275,7 @@ def associate_lead(
 
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])  # nosemgrep: guest-whitelisted-method
+@rate_limit(limit=20, seconds=60, ip_based=True, methods="POST")
 def associate_lead_to_conversation() -> dict:
 	"""
 	Guest-whitelisted endpoint to associate lead identifier and contact details with an existing conversation.
@@ -347,6 +349,7 @@ def associate_lead_to_conversation() -> dict:
 
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])  # nosemgrep: guest-whitelisted-method
+@rate_limit(limit=120, seconds=60, ip_based=True, methods="POST")
 def save_chat_message() -> dict:
 	"""
 	Hardened guest-whitelisted endpoint to persist a chatbot message into Chatbot Conversation.
@@ -444,6 +447,7 @@ def save_chat_message() -> dict:
 
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])  # nosemgrep: guest-whitelisted-method
+@rate_limit(limit=120, seconds=60, ip_based=True, methods="POST")
 def update_chatbot_context() -> dict:
 	"""
 	Guest-whitelisted endpoint to safely update the chat_context of an active conversation.
