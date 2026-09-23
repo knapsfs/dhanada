@@ -38,7 +38,7 @@ def compare_scheme(existing_doc, incoming_scheme: Scheme) -> list:
 			return 0
 		try:
 			return int(float(val))
-		except (ValueError, TypeError):
+		except ValueError, TypeError:
 			return 0
 
 	for field in EDITABLE_FIELDS:

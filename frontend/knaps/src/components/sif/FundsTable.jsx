@@ -112,13 +112,20 @@ function TableDropdown({ value, onChange, options, minWidth = 'min-w-[140px]' })
   )
 }
 
+import { fetchFundsList, fetchFundsSelectorList } from '../../api/funds'
+
 const INITIAL_VISIBLE_COUNT = 5
 
 export default function FundsTable({
   funds = [],
   loading = false,
+  onTotalCountChange,
 }) {
   const { openLeadModal } = useLeadModal()
+  const [localFunds, setLocalFunds] = useState([])
+  const [tableLoading, setTableLoading] = useState(loading)
+  const [totalCount, setTotalCount] = useState(0)
+  const [selectorFunds, setSelectorFunds] = useState([])
   const [filters, setFilters] = useState({
     search: '',
     investmentStrategy: 'All',
@@ -128,62 +135,132 @@ export default function FundsTable({
   const [sortConfig, setSortConfig] = useState({ key: 'returns1M', direction: 'desc' })
   const [isExpanded, setIsExpanded] = useState(false)
 
-  // Unique Investment Strategies for header dropdown
-  const investmentStrategies = useMemo(() => {
-    const set = new Set()
-    funds.forEach(f => {
-      const s = f.investmentStrategy || f.investment_strategy
-      if (s && String(s).trim() !== '') {
-        set.add(String(s).trim())
-      }
-    })
-    if (set.size === 0) {
-      set.add('Equity')
-      set.add('Hybrid')
-    }
-    return Array.from(set).sort()
-  }, [funds])
-
-  // Unique Scheme Subcategories for header dropdown (filtered by selected investmentStrategy if any)
-  const schemeSubcategories = useMemo(() => {
-    const set = new Set()
-    const targetStrategy = filters.investmentStrategy && filters.investmentStrategy !== 'All'
-      ? filters.investmentStrategy.trim().toLowerCase()
-      : null
-
-    funds.forEach(f => {
-      const strat = String(f.investmentStrategy || f.investment_strategy || '').trim().toLowerCase()
-      if (!targetStrategy || strat === targetStrategy) {
-        const sub = f.schemeSubcategory || f.scheme_subcategory || f.category
-        if (sub && String(sub).trim() !== '') {
-          set.add(String(sub).trim())
+  // Load distinct filter metadata using cached selector list (0 additional network requests)
+  useEffect(() => {
+    let isMounted = true;
+    async function loadFilterMetadata() {
+      try {
+        const list = await fetchFundsSelectorList();
+        if (isMounted && Array.isArray(list)) {
+          setSelectorFunds(list);
         }
+      } catch (err) {
+        console.error('Failed to load filter metadata:', err);
       }
-    })
-    return Array.from(set).sort()
-  }, [funds, filters.investmentStrategy])
+    }
+    loadFilterMetadata();
+    return () => { isMounted = false; };
+  }, []);
+
+  // Server-side query on filter, sort, or expand change
+  useEffect(() => {
+    let isMounted = true;
+    async function loadTableData() {
+      setTableLoading(true);
+      try {
+        const pageSize = isExpanded ? 50 : INITIAL_VISIBLE_COUNT;
+        const res = await fetchFundsList({
+          page: 1,
+          page_size: pageSize,
+          search: filters.search,
+          strategy: filters.investmentStrategy,
+          subcategory: filters.schemeSubcategory,
+          risk: filters.risk,
+          sort_by: sortConfig.key,
+          sort_order: sortConfig.direction,
+        });
+        if (isMounted) {
+          setLocalFunds(res || []);
+          if (res.pagination && res.pagination.total !== undefined) {
+            setTotalCount(res.pagination.total);
+            if (onTotalCountChange) {
+              onTotalCountChange(res.pagination.total);
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load table funds:', err);
+      } finally {
+        if (isMounted) setTableLoading(false);
+      }
+    }
+
+    loadTableData();
+    return () => { isMounted = false; };
+  }, [filters.search, filters.investmentStrategy, filters.schemeSubcategory, filters.risk, sortConfig.key, sortConfig.direction, isExpanded]);
+
+  // Unique Investment Strategies dynamically derived from dataset
+  const investmentStrategies = useMemo(() => {
+    if (!selectorFunds.length) return ['Equity', 'Hybrid'];
+    const set = new Set();
+    selectorFunds.forEach(f => {
+      if (f.strategy) set.add(f.strategy);
+    });
+    return Array.from(set).filter(Boolean).sort();
+  }, [selectorFunds]);
+
+  // Unique Scheme Subcategories dynamically derived and filtered by selected investmentStrategy
+  const schemeSubcategories = useMemo(() => {
+    if (!selectorFunds.length) {
+      if (filters.investmentStrategy === 'Hybrid') {
+        return ['Active Asset Allocator Long-Short Fund', 'Hybrid Long-Short Fund'];
+      }
+      if (filters.investmentStrategy === 'Equity') {
+        return [
+          'Active Asset Allocator Long-Short Fund',
+          'Equity Ex-Top 100 Long-Short Fund',
+          'Equity Long-Short Fund',
+          'Sector Rotation Long-Short Fund',
+        ];
+      }
+      return [
+        'Active Asset Allocator Long-Short Fund',
+        'Equity Ex-Top 100 Long-Short Fund',
+        'Equity Long-Short Fund',
+        'Hybrid Long-Short Fund',
+        'Sector Rotation Long-Short Fund',
+      ];
+    }
+
+    const set = new Set();
+    selectorFunds.forEach(f => {
+      const stratMatches =
+        !filters.investmentStrategy ||
+        filters.investmentStrategy === 'All' ||
+        f.strategy === filters.investmentStrategy;
+      const sub = f.category || f.schemeSubcategory;
+      if (stratMatches && sub) {
+        set.add(sub);
+      }
+    });
+    return Array.from(set).filter(Boolean).sort();
+  }, [selectorFunds, filters.investmentStrategy]);
 
   // Handle Strategy change with subcategory cascade reset if needed
   const handleStrategyChange = (newStrategy) => {
     setFilters(prev => {
-      let nextSubcategory = prev.schemeSubcategory
+      let nextSubcategory = prev.schemeSubcategory;
       if (newStrategy !== 'All' && prev.schemeSubcategory !== 'All') {
-        const isValid = funds.some(f => {
-          const strat = String(f.investmentStrategy || f.investment_strategy || '').trim().toLowerCase()
-          const sub = String(f.schemeSubcategory || f.scheme_subcategory || f.category || '').trim().toLowerCase()
-          return strat === newStrategy.trim().toLowerCase() && sub === prev.schemeSubcategory.trim().toLowerCase()
-        })
-        if (!isValid) {
-          nextSubcategory = 'All'
+        const validForNew = selectorFunds.length
+          ? selectorFunds.some(
+              f =>
+                f.strategy === newStrategy &&
+                (f.category === prev.schemeSubcategory || f.schemeSubcategory === prev.schemeSubcategory)
+            )
+          : (newStrategy === 'Hybrid' && ['Hybrid Long-Short Fund', 'Active Asset Allocator Long-Short Fund'].includes(prev.schemeSubcategory)) ||
+            (newStrategy === 'Equity' && ['Equity Long-Short Fund', 'Equity Ex-Top 100 Long-Short Fund', 'Sector Rotation Long-Short Fund', 'Active Asset Allocator Long-Short Fund'].includes(prev.schemeSubcategory));
+
+        if (!validForNew) {
+          nextSubcategory = 'All';
         }
       }
       return {
         ...prev,
         investmentStrategy: newStrategy,
         schemeSubcategory: nextSubcategory,
-      }
-    })
-  }
+      };
+    });
+  };
 
   const handleSort = (key) => {
     setSortConfig(prev => ({
@@ -192,100 +269,7 @@ export default function FundsTable({
     }))
   }
 
-  const parseNum = (val) => {
-    if (val == null || val === 'N/A' || val === '-') return -Infinity
-    if (typeof val === 'number') return val
-    const clean = String(val).replace(/[₹,crCR%\s]/g, '')
-    const num = parseFloat(clean)
-    return isNaN(num) ? -Infinity : num
-  }
-
-  // Filter and Sort Funds
-  const processedFunds = useMemo(() => {
-    let list = [...funds]
-
-    // Search filter
-    if (filters.search) {
-      const q = filters.search.toLowerCase()
-      list = list.filter(f =>
-        (f.name && f.name.toLowerCase().includes(q)) ||
-        (f.amc && f.amc.toLowerCase().includes(q)) ||
-        (f.investmentStrategy && String(f.investmentStrategy).toLowerCase().includes(q)) ||
-        (f.schemeSubcategory && String(f.schemeSubcategory).toLowerCase().includes(q)) ||
-        (f.category && String(f.category).toLowerCase().includes(q))
-      )
-    }
-
-    // Investment Strategy filter
-    if (filters.investmentStrategy && filters.investmentStrategy !== 'All') {
-      list = list.filter(f => {
-        const strat = String(f.investmentStrategy || f.investment_strategy || '').trim().toLowerCase()
-        return strat === filters.investmentStrategy.trim().toLowerCase()
-      })
-    }
-
-    // Scheme Subcategory filter
-    if (filters.schemeSubcategory && filters.schemeSubcategory !== 'All') {
-      list = list.filter(f => {
-        const sub = String(f.schemeSubcategory || f.scheme_subcategory || f.category || '').trim().toLowerCase()
-        return sub === filters.schemeSubcategory.trim().toLowerCase()
-      })
-    }
-
-    // Risk filter
-    if (filters.risk && filters.risk !== 'All') {
-      const target = parseInt(filters.risk.replace(/[^0-9]/g, ''), 10)
-      if (!isNaN(target)) {
-        list = list.filter(f => {
-          const r = getRiskLevelConfig(f.riskLevel).level
-          return r === target || f.riskLevel === target
-        })
-      }
-    }
-
-    // Sort
-    if (sortConfig.key) {
-      list.sort((a, b) => {
-        let aVal = -Infinity
-        let bVal = -Infinity
-
-        if (sortConfig.key === 'name') {
-          return sortConfig.direction === 'asc'
-            ? (a.name || '').localeCompare(b.name || '')
-            : (b.name || '').localeCompare(a.name || '')
-        }
-
-        if (sortConfig.key === 'investmentStrategy') {
-          const aStrat = String(a.investmentStrategy || a.investment_strategy || '')
-          const bStrat = String(b.investmentStrategy || b.investment_strategy || '')
-          return sortConfig.direction === 'asc'
-            ? aStrat.localeCompare(bStrat)
-            : bStrat.localeCompare(aStrat)
-        }
-
-        if (sortConfig.key === 'schemeSubcategory') {
-          const aSub = String(a.schemeSubcategory || a.scheme_subcategory || a.category || '')
-          const bSub = String(b.schemeSubcategory || b.scheme_subcategory || b.category || '')
-          return sortConfig.direction === 'asc'
-            ? aSub.localeCompare(bSub)
-            : bSub.localeCompare(aSub)
-        }
-
-        aVal = parseNum(a[sortConfig.key])
-        bVal = parseNum(b[sortConfig.key])
-
-        return sortConfig.direction === 'asc' ? aVal - bVal : bVal - aVal
-      })
-    }
-
-    return list
-  }, [funds, filters, sortConfig])
-
-  // Visible funds based on expand/collapse state
-  const displayedFunds = useMemo(() => {
-    if (isExpanded) return processedFunds
-    return processedFunds.slice(0, INITIAL_VISIBLE_COUNT)
-  }, [processedFunds, isExpanded])
+  const displayedFunds = localFunds;
 
   const renderSortIcon = (key) => {
     if (sortConfig.key !== key) {
@@ -641,7 +625,7 @@ export default function FundsTable({
       </div>
 
       {/* View All / Expand Button below the 5 funds */}
-      {!loading && processedFunds.length > INITIAL_VISIBLE_COUNT && (
+      {!tableLoading && (totalCount > INITIAL_VISIBLE_COUNT || isExpanded || displayedFunds.length >= INITIAL_VISIBLE_COUNT) && (
         <div className="flex justify-center items-center pt-2">
           <button
             type="button"

@@ -70,12 +70,13 @@ export default function SifFundDetails() {
         if (data) {
           setApiFund(data)
 
-          // Initialize selector with default plan
-          if (data.defaultPlan) {
-            setSelectedType(data.defaultPlan.type || '')
-            setSelectedOption(data.defaultPlan.option || '')
-            setSelectedSubOption(data.defaultPlan.sub_option || '')
-            setSelectedPeriod(data.defaultPlan.period || '')
+          // Initialize selector with selected or default plan
+          const initialPlan = data.selectedPlan || (data.plans && data.plans.length > 0 ? data.plans[0] : null)
+          if (initialPlan) {
+            setSelectedType(initialPlan.type || '')
+            setSelectedOption(initialPlan.option || '')
+            setSelectedSubOption(initialPlan.sub_option || '')
+            setSelectedPeriod(initialPlan.period || '')
           }
         } else {
           setError('Scheme not found.')
@@ -119,6 +120,40 @@ export default function SifFundDetails() {
     }
   }, [selectedType, selectedOption, selectedSubOption, selectedPeriod, availableTypes, availableOptions, availableSubOptions, availablePeriods, apiFund, availablePlans])
 
+  // On plan switch, load plan-specific performance & historical NAV if not already loaded
+  useEffect(() => {
+    if (!apiFund || !selectedPlan?.name) return;
+    if (selectedPlan.historical_nav?.length > 0 || selectedPlan.performance_data) return;
+
+    let isMounted = true;
+    async function loadPlanData() {
+      try {
+        const decodedId = decodeURIComponent(rawId);
+        const data = await fetchFundDetails(decodedId, selectedPlan.name);
+        if (isMounted && data && data.plans) {
+          setApiFund(prev => {
+            if (!prev) return data;
+            const updatedPlans = prev.plans.map(p => {
+              const matched = data.plans.find(np => np.name === p.name);
+              return matched && (matched.historical_nav?.length || matched.performance_data)
+                ? { ...p, ...matched }
+                : p;
+            });
+            return {
+              ...prev,
+              plans: updatedPlans,
+            };
+          });
+        }
+      } catch (err) {
+        console.error('Failed to load plan details for plan:', selectedPlan.name, err);
+      }
+    }
+
+    loadPlanData();
+    return () => { isMounted = false; };
+  }, [selectedPlan?.name, rawId, apiFund]);
+
   // Construct UI Fund Object based on selected plan
   const fund = useMemo(() => {
     if (!apiFund) return null;
@@ -127,8 +162,8 @@ export default function SifFundDetails() {
     const historicalNav = selectedPlan.historical_nav || [];
     const returnsTable = generatePerformanceTable(perfData, historicalNav);
 
-    // Selected plan AUM or fallback to top-level fund AUM
-    const rawAum = selectedPlan.aum != null ? selectedPlan.aum : (apiFund.aum != null ? apiFund.aum : apiFund.fundSize);
+    // Selected plan AUM
+    const rawAum = selectedPlan.aum != null ? selectedPlan.aum : null;
     let formattedAum = 'N/A';
     if (rawAum != null && rawAum !== '' && rawAum !== 'N/A') {
       if (typeof rawAum === 'number' || !isNaN(Number(rawAum))) {
@@ -139,7 +174,7 @@ export default function SifFundDetails() {
       }
     }
 
-    const rawNavDate = selectedPlan.nav_date || apiFund.navDate || apiFund.nav_date;
+    const rawNavDate = selectedPlan.nav_date;
     const formattedNavDate = rawNavDate || 'N/A';
 
     // Min Investment formatted
@@ -173,7 +208,7 @@ export default function SifFundDetails() {
     }
 
     // Nav formatting
-    const rawNav = selectedPlan.nav != null ? selectedPlan.nav : (apiFund.nav != null ? apiFund.nav : null);
+    const rawNav = selectedPlan.nav != null ? selectedPlan.nav : null;
     const displayNav = rawNav != null ? `Rs. ${Number(rawNav).toFixed(2)}/-` : 'Rs. 10.00/-';
 
     return {

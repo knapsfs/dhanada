@@ -41,7 +41,7 @@ const navLinks = [
       { label: 'Lumpsum Calculator', href: '/calculators/lumpsum' },
       { label: 'SIP + Lump Sum', href: '/calculators/sip-lumpsum' },
       { label: 'Retirement Calculator', href: '/calculators/retirement' },
-      { label: 'Future Value', href: '/calculators/future-value' },
+      { label: 'Goal Based Calculator', href: '/calculators/future-value' },
     ],
   },
   { label: 'Blogs', href: '/blogs' },

@@ -1,71 +1,126 @@
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarDays, faClock, faUserTie, faLink } from '@fortawesome/free-solid-svg-icons';
-import { faFacebook, faLinkedin, faXTwitter } from '@fortawesome/free-brands-svg-icons';
+import { faCalendarDays, faClock, faUserTie, faLink, faChevronRight, faShareNodes } from '@fortawesome/free-solid-svg-icons';
+import { faFacebook, faLinkedin, faXTwitter, faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
-export default function BlogHeader() {
+export default function BlogHeader({ blog }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyLink = () => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    }
+  };
+
+  const shareUrl = encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '');
+  const shareTitle = encodeURIComponent(blog?.title || 'Check out this article on KNAPS');
+
   return (
-    <section className="bg-white pt-50 pb-12">
+    <section className="bg-gradient-to-b from-[#f8fbff] via-white to-white pt-32 pb-10">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
+
+        {/* Breadcrumb Navigation */}
+        <motion.nav
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="flex items-center gap-2 text-xs sm:text-sm text-gray-500 mb-8 overflow-x-auto whitespace-nowrap hide-scrollbar"
+        >
+          <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
+          <FontAwesomeIcon icon={faChevronRight} className="text-gray-300 text-[10px]" />
+          <Link to="/blogs" className="hover:text-[#032e92] transition-colors">Blogs & Insights</Link>
+          <FontAwesomeIcon icon={faChevronRight} className="text-gray-300 text-[10px]" />
+          <span className="text-[#032e92] font-semibold truncate max-w-[280px] sm:max-w-md">
+            {blog?.title}
+          </span>
+        </motion.nav>
 
         {/* Top Meta Info */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="flex flex-col items-center text-center mb-10"
+          transition={{ duration: 0.5 }}
+          className="flex flex-col items-center text-center mt-20 mb-8"
         >
-          <div className="inline-block bg-[#eef5ff] text-[#032e92] font-bold text-xs px-4 py-1.5 rounded-full uppercase tracking-wider mb-8 border border-blue-100">
-            Wealth Management
+          <div className="inline-block bg-[#eef5ff] text-[#032e92] font-bold text-xs px-4 py-1.5 rounded-full uppercase tracking-wider mb-6 border border-blue-100 shadow-sm">
+            {blog?.category || 'Investment Insights'}
           </div>
 
-          <h1 className="text-4xl md:text-[48px] font-bold text-[#0a192f] leading-tight mb-8">
-            The Wealth Masterclass: Building a Multi-Generational Portfolio
+          <h1 className="text-3xl sm:text-4xl md:text-[44px] font-extrabold text-[#0a192f] tracking-tight leading-tight mb-6">
+            {blog?.title}
           </h1>
 
-          <div className="flex flex-wrap items-center justify-center gap-6 text-[15px] font-semibold text-gray-500 mb-8">
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-sm font-medium text-gray-500 mb-8">
             <span className="flex items-center gap-2">
-              <FontAwesomeIcon icon={faCalendarDays} className="text-[#c10000]" />
-              July 28, 2026
+              <FontAwesomeIcon icon={faCalendarDays} className="text-[#032e92]" />
+              {blog?.date}
             </span>
             <span className="w-1.5 h-1.5 rounded-full bg-gray-300"></span>
             <span className="flex items-center gap-2">
-              <FontAwesomeIcon icon={faClock} className="text-[#c10000]" />
-              8 min read
+              <FontAwesomeIcon icon={faClock} className="text-[#032e92]" />
+              {blog?.readTime || '6 min read'}
             </span>
           </div>
 
-          <div className="flex flex-col md:flex-row items-center justify-between w-full border-t border-b border-gray-100 py-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between w-full border-t border-b border-gray-100 py-5 gap-4">
             {/* Author */}
-            <div className="flex items-center gap-4 mb-6 md:mb-0">
+            <div className="flex items-center gap-3.5">
               <img
-                src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=200&auto=format&fit=crop"
-                alt="Saurabh Sharma"
-                className="w-14 h-14 rounded-full object-cover shadow-md"
+                src={blog?.authorImage || 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=200&auto=format&fit=crop'}
+                alt={blog?.author || 'Author'}
+                className="w-12 h-12 rounded-full object-cover shadow-sm ring-2 ring-blue-100"
               />
               <div className="text-left">
-                <p className="text-[#0a192f] font-bold text-lg">Saurabh Sharma</p>
-                <p className="text-gray-500 text-sm flex items-center gap-1.5">
+                <p className="text-[#0a192f] font-bold text-base">{blog?.author || 'KNAPS Research'}</p>
+                <p className="text-gray-500 text-xs flex items-center gap-1.5">
                   <FontAwesomeIcon icon={faUserTie} className="text-[#032e92]" />
-                  Senior Financial Advisor
+                  {blog?.authorRole || 'AMFI-Registered Financial Advisor'}
                 </p>
               </div>
             </div>
 
             {/* Share Icons */}
-            <div className="flex items-center gap-3">
-              <span className="text-sm font-semibold text-gray-400 mr-2 uppercase tracking-wider">Share:</span>
-              <Link to="#" className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-[#1877F2] hover:text-white transition-colors duration-300">
-                <FontAwesomeIcon icon={faFacebook} />
-              </Link>
-              <Link to="#" className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-[#0A66C2] hover:text-white transition-colors duration-300">
+            <div className="flex items-center gap-2.5">
+              <span className="text-xs font-semibold text-gray-400 mr-1 uppercase tracking-wider flex items-center gap-1">
+                <FontAwesomeIcon icon={faShareNodes} /> Share:
+              </span>
+              <a
+                href={`https://wa.me/?text=${shareTitle}%20${shareUrl}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Share on WhatsApp"
+                className="w-9 h-9 rounded-full bg-gray-50 flex items-center justify-center text-gray-600 hover:bg-[#25D366] hover:text-white transition-colors duration-200"
+              >
+                <FontAwesomeIcon icon={faWhatsapp} />
+              </a>
+              <a
+                href={`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Share on LinkedIn"
+                className="w-9 h-9 rounded-full bg-gray-50 flex items-center justify-center text-gray-600 hover:bg-[#0A66C2] hover:text-white transition-colors duration-200"
+              >
                 <FontAwesomeIcon icon={faLinkedin} />
-              </Link>
-              <Link to="#" className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-black hover:text-white transition-colors duration-300">
+              </a>
+              <a
+                href={`https://twitter.com/intent/tweet?text=${shareTitle}&url=${shareUrl}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Share on X"
+                className="w-9 h-9 rounded-full bg-gray-50 flex items-center justify-center text-gray-600 hover:bg-black hover:text-white transition-colors duration-200"
+              >
                 <FontAwesomeIcon icon={faXTwitter} />
-              </Link>
-              <button className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-500 hover:bg-[#032e92] hover:text-white transition-colors duration-300">
+              </a>
+              <button
+                onClick={handleCopyLink}
+                title="Copy Link"
+                className={`w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 ${copied ? 'bg-emerald-500 text-white shadow-md' : 'bg-gray-50 text-gray-600 hover:bg-[#032e92] hover:text-white'
+                  }`}
+              >
                 <FontAwesomeIcon icon={faLink} />
               </button>
             </div>
@@ -74,15 +129,15 @@ export default function BlogHeader() {
 
         {/* Featured Image */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="relative w-full aspect-[16/9] md:aspect-[21/9] rounded-[32px] overflow-hidden shadow-[0_20px_50px_-15px_rgba(0,0,0,0.1)] border border-gray-100"
+          transition={{ duration: 0.6, delay: 0.15 }}
+          className="relative w-full rounded-3xl overflow-hidden shadow-xl border border-gray-100"
         >
           <img
-            src="https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?q=80&w=1600&auto=format&fit=crop"
-            alt="Stock market growth analysis"
-            className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+            src={blog?.image || 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?q=80&w=1600&auto=format&fit=crop'}
+            alt={blog?.title || 'Blog Banner'}
+            className="w-full h-full object-cover"
           />
         </motion.div>
 

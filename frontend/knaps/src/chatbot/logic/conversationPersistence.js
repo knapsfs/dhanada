@@ -58,7 +58,7 @@ export async function saveChatMessage({
 		};
 
 		const response = await fetch(
-			"/api/method/dhanada.sif.conversation_service.save_chat_message",
+			"/api/method/dhanada.api.save_chat_message",
 			{
 				method: "POST",
 				headers: {
@@ -121,7 +121,7 @@ export async function updateChatContext({ conversationId, visitorId, chatContext
 		};
 
 		const response = await fetch(
-			"/api/method/dhanada.sif.conversation_service.update_chatbot_context",
+			"/api/method/dhanada.api.update_chatbot_context",
 			{
 				method: "POST",
 				headers: {

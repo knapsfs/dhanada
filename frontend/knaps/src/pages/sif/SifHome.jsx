@@ -25,35 +25,17 @@ import FundsHero from '../../components/sif/FundsHero'
 import FundsTable from '../../components/sif/FundsTable'
 
 export default function SifHome() {
-  const [fundsData, setFundsData] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [totalFunds, setTotalFunds] = useState(33)
 
   // FundSelector state (3 fund comparator slots)
   const [selectedFunds, setSelectedFunds] = useState([null, null, null])
 
-  useEffect(() => {
-    async function loadFunds() {
-      try {
-        setLoading(true)
-        setError(null)
-        const data = await fetchFundsList()
-        setFundsData(data || [])
-      } catch (err) {
-        setError(err.message || 'Failed to load funds. Please try again later.')
-      } finally {
-        setLoading(false)
-      }
-    }
-    loadFunds()
-  }, [])
-
   // Handle slot selection in FundSelector
-  const handleFundSelect = (index, fundId) => {
-    const chosenFund = fundId ? fundsData.find(f => f.id === fundId) || null : null
+  const handleFundSelect = (index, fundItem) => {
     setSelectedFunds(prev => {
       const updated = [...prev]
-      updated[index] = chosenFund
+      // fundItem can be full fund object or {id, name, ...}
+      updated[index] = typeof fundItem === 'object' ? fundItem : (fundItem ? { id: fundItem } : null)
       return updated
     })
   }
@@ -73,44 +55,28 @@ export default function SifHome() {
 
         {/* 2. Complete SIF Fund Directory with Tabular Format */}
         <section id="funds-directory">
-          <FundsHero totalFunds={fundsData.length || 33} />
+          <FundsHero totalFunds={totalFunds} />
 
           <div className="py-12 sm:py-16 bg-[#ffffff]">
             <div className="max-w-[86rem] mx-auto px-2 lg:px-2">
-              {error ? (
-                <div className="bg-red-50 border border-red-200 text-red-600 rounded-2xl p-6 text-center flex flex-col items-center justify-center min-h-[300px]">
-                  <FontAwesomeIcon icon={faCircleExclamation} className="text-4xl mb-4 text-red-400" />
-                  <h3 className="text-lg font-bold mb-2">Error Loading Funds</h3>
-                  <p className="text-sm font-medium">{error}</p>
-                  <button
-                    onClick={() => window.location.reload()}
-                    className="mt-4 px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg text-sm font-bold transition-colors"
-                  >
-                    Try Again
-                  </button>
-                </div>
-              ) : (
-                <FundsTable
-                  funds={fundsData}
-                  loading={loading}
-                />
-              )}
+              <FundsTable
+                onTotalCountChange={(count) => {
+                  if (count) setTotalFunds(count)
+                }}
+              />
             </div>
           </div>
         </section>
 
         {/* 3. Compare Top SIF Schemes */}
-        {!loading && fundsData.length > 0 && (
-          <TopFunds
-            fundsData={fundsData}
-            selectedFunds={selectedFunds}
-            onFundSelect={handleFundSelect}
-            onReset={handleResetSelector}
-          />
-        )}
+        <TopFunds
+          selectedFunds={selectedFunds}
+          onFundSelect={handleFundSelect}
+          onReset={handleResetSelector}
+        />
 
         {/* 4. Performance Heatmap */}
-        {!loading && fundsData.length > 0 && <HeatmapSection fundsData={fundsData} />}
+        <HeatmapSection />
 
         {/* 5. Investment Philosophy */}
         <InvestmentPhilosophy />

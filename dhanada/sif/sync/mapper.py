@@ -109,7 +109,7 @@ class DataMapper:
 			return None
 		try:
 			return float(str(val).replace(",", "").strip())
-		except (ValueError, TypeError):
+		except ValueError, TypeError:
 			return None
 
 	def map_subcategory(

@@ -12,16 +12,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 import {
   calculateRequiredInvestment,
+  calculateRequiredLumpsum,
   generateChartData
 } from '../components/FutureValueCalculator/calculatorUtils'
 
 const DEFAULT_INPUTS = {
+  goal: 'Retirement',
   targetFutureValue: 10000000,
   annualReturn: 12,
   years: 15,
 }
 
-// Disclaimer matching SipCalculator and StepUpSipCalculator
+// Disclaimer matching other calculators
 function Disclaimer() {
   return (
     <section className="bg-[#f7f9fc] pb-8">
@@ -42,27 +44,23 @@ function Disclaimer() {
 
 export default function FutureValueCalculatorPage() {
   const [inputs, setInputs] = useState(DEFAULT_INPUTS)
-  const [isInflationAdjusted, setIsInflationAdjusted] = useState(false)
-  const [inflationRate, setInflationRate] = useState(5)
   const frequency = 'monthly'
   const paymentTiming = 'end'
 
   useEffect(() => {
     window.scrollTo(0, 0)
+    document.title = "Goal Based Calculator | KNAPS Wealth"
   }, [])
 
   const resetDefaults = () => {
     setInputs(DEFAULT_INPUTS)
-    setIsInflationAdjusted(false)
-    setInflationRate(5)
   }
 
   const numTarget = inputs.targetFutureValue === '' ? 0 : Number(inputs.targetFutureValue)
   const numAnnual = inputs.annualReturn === '' ? 0 : Number(inputs.annualReturn)
   const numYears = inputs.years === '' ? 0 : Number(inputs.years)
-  const numInflation = inflationRate === '' ? 0 : Number(inflationRate)
 
-  // 100% exact calculation function for required monthly investment
+  // 1. Calculate Required Monthly SIP Investment
   const results = useMemo(() => {
     return calculateRequiredInvestment({
       targetFv: numTarget,
@@ -71,12 +69,21 @@ export default function FutureValueCalculatorPage() {
       years: numYears,
       frequency,
       timing: paymentTiming,
-      isInflationAdjusted,
-      inflationRate: numInflation
+      isInflationAdjusted: false,
+      inflationRate: 0
     })
-  }, [numTarget, numAnnual, numYears, isInflationAdjusted, numInflation])
+  }, [numTarget, numAnnual, numYears])
 
-  // 100% exact chart data generator for required monthly investment
+  // 2. Calculate Required One-time Lump Sum Investment
+  const requiredLumpsum = useMemo(() => {
+    return calculateRequiredLumpsum({
+      targetFv: numTarget,
+      annualRate: numAnnual,
+      years: numYears
+    })
+  }, [numTarget, numAnnual, numYears])
+
+  // 3. Generate Chart Data for Monthly SIP growth towards goal
   const chartData = useMemo(() => {
     return generateChartData({
       calcMode: 'pmt',
@@ -87,12 +94,12 @@ export default function FutureValueCalculatorPage() {
       years: numYears,
       frequency,
       timing: paymentTiming,
-      isInflationAdjusted,
-      inflationRate: numInflation
+      isInflationAdjusted: false,
+      inflationRate: 0
     })
-  }, [numTarget, numAnnual, numYears, isInflationAdjusted, numInflation])
+  }, [numTarget, numAnnual, numYears])
 
-  // Derive yearly data directly from chartData for projection table
+  // 4. Derive yearly data directly from chartData for projection table
   const yearlyData = useMemo(() => {
     const labels = chartData.labels || []
     return labels.slice(1).map((lbl, idx) => {
@@ -132,21 +139,21 @@ export default function FutureValueCalculatorPage() {
         {/* Hero */}
         <FutureValueHero />
 
-        {/* Calculator Form */}
+        {/* Calculator Form with Goal Selection */}
         <FutureValueCalculatorForm
           inputs={inputs}
           setInputs={setInputs}
           resetDefaults={resetDefaults}
         />
 
-        {/* Summary Cards */}
+        {/* Two-Card Output: Monthly Investment Needed OR Lump Sum Investment Needed */}
         <FutureValueSummaryCards
-          calcMode="pmt"
           results={results}
-          isInflationAdjusted={isInflationAdjusted}
-          setIsInflationAdjusted={setIsInflationAdjusted}
-          inflationRate={inflationRate}
-          setInflationRate={setInflationRate}
+          requiredLumpsum={requiredLumpsum}
+          targetFutureValue={numTarget}
+          selectedGoal={inputs.goal}
+          years={numYears}
+          annualReturn={numAnnual}
         />
 
         {/* Growth Chart */}

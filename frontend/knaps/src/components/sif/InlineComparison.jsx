@@ -12,7 +12,7 @@ import {
   Filler
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { fetchFundDetails } from '../../api/funds';
+import { fetchComparisonData } from '../../api/funds';
 import { cleanNavHistory, getAvailableGraphPeriods, getTargetDateForPeriod } from '../../utils/performance';
 import { getRiskLevelConfig } from '../../utils/risk';
 
@@ -39,7 +39,7 @@ const InlineComparison = forwardRef(function InlineComparison(
   ref
 ) {
   const [detailsCache, setDetailsCache] = useState({});
-  const [loadingIds, setLoadingIds] = useState(new Set());
+  const [loading, setLoading] = useState(false);
   const [activeMode, setActiveMode] = useState('performance');
   const [selectedTimeframe, setSelectedTimeframe] = useState('');
 
@@ -57,52 +57,52 @@ const InlineComparison = forwardRef(function InlineComparison(
     }
   }, [isVisible, activeFundSlots.length]);
 
-  // Fetch full details for any selected fund that is not in the cache yet
+  // Lazy-load targeted comparison data ONLY after user clicks Compare (isVisible is true)
   useEffect(() => {
+    if (!isVisible || activeFundSlots.length < 2) return;
+
     const idsToFetch = activeFundSlots
-      .map(({ fund }) => fund.id || fund.sebi_code)
-      .filter(id => id && !detailsCache[id] && !loadingIds.has(id));
+      .map(({ fund }) => String(fund.id || fund.sebi_code))
+      .filter(id => id && !detailsCache[id]);
 
     if (idsToFetch.length === 0) return;
 
-    setLoadingIds(prev => {
-      const next = new Set(prev);
-      idsToFetch.forEach(id => next.add(id));
-      return next;
-    });
-
-    idsToFetch.forEach(async (id) => {
+    let isMounted = true;
+    async function loadComparison() {
       try {
-        const detail = await fetchFundDetails(id);
-        if (detail) {
-          setDetailsCache(prev => ({ ...prev, [id]: detail }));
+        setLoading(true);
+        const results = await fetchComparisonData(idsToFetch);
+        if (isMounted && Array.isArray(results)) {
+          const newEntries = {};
+          results.forEach(item => {
+            if (item.id) newEntries[String(item.id)] = item;
+            if (item.sebi_code) newEntries[String(item.sebi_code)] = item;
+          });
+          setDetailsCache(prev => ({ ...prev, ...newEntries }));
         }
       } catch (err) {
-        console.error('Failed to fetch details for fund:', id, err);
+        console.error('Failed to fetch comparison data for funds:', idsToFetch, err);
       } finally {
-        setLoadingIds(prev => {
-          const next = new Set(prev);
-          next.delete(id);
-          return next;
-        });
+        if (isMounted) setLoading(false);
       }
-    });
-  }, [activeFundSlots, detailsCache, loadingIds]);
+    }
+
+    loadComparison();
+    return () => { isMounted = false; };
+  }, [isVisible, activeFundSlots, detailsCache]);
 
   // Enriched fund data list combining base item with loaded details
   const enrichedActiveFunds = useMemo(() => {
     return activeFundSlots.map(({ fund, slotIndex }) => {
       const fundId = fund.id || fund.sebi_code;
       const details = detailsCache[fundId] || null;
-      const plans = details?.plans || [];
-      const defaultPlan = details?.defaultPlan || (plans.length > 0 ? plans[0] : null);
 
-      const historicalNavRaw = defaultPlan?.historical_nav || details?.historical_nav || fund.historicalNav || [];
+      const historicalNavRaw = details?.historicalNav || details?.historical_nav || fund.historicalNav || [];
       const cleanHistory = cleanNavHistory(historicalNavRaw);
-      const perfData = defaultPlan?.performance_data || details?.performance_data || fund.performanceData || {};
+      const perfData = details?.performance_data || fund.performanceData || fund.performance_data || {};
 
       // AUM formatting
-      const rawAum = defaultPlan?.aum != null ? defaultPlan.aum : (details?.aum != null ? details.aum : fund.aum);
+      const rawAum = details?.aum != null ? details.aum : fund.aum;
       let formattedAum = 'N/A';
       if (rawAum != null && rawAum !== '' && rawAum !== 'N/A') {
         const num = typeof rawAum === 'number' ? rawAum : parseFloat(String(rawAum).replace(/[₹,Cr\s]/gi, ''));
@@ -114,7 +114,7 @@ const InlineComparison = forwardRef(function InlineComparison(
       }
 
       // NAV formatting
-      const rawNav = defaultPlan?.nav != null ? defaultPlan.nav : (details?.nav != null ? details.nav : fund.nav);
+      const rawNav = details?.nav != null ? details.nav : fund.nav;
       let formattedNav = 'N/A';
       if (rawNav != null && rawNav !== '' && rawNav !== 'N/A') {
         const navNum = typeof rawNav === 'number' ? rawNav : parseFloat(String(rawNav).replace(/[₹,\s]/g, ''));

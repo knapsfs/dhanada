@@ -222,3 +222,16 @@ export const generateChartData = ({
 		growthData,
 	};
 };
+
+export const calculateRequiredLumpsum = ({
+	targetFv,
+	annualRate,
+	years
+}) => {
+	if (!targetFv || targetFv <= 0) return 0;
+	if (!years || years <= 0) return Math.round(targetFv);
+	const r = annualRate / 100;
+	if (r === 0) return Math.round(targetFv);
+	const pv = targetFv / Math.pow(1 + r, years);
+	return Math.max(0, Math.round(pv));
+};

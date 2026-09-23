@@ -1,10 +1,19 @@
 import frappe
 from frappe.tests import IntegrationTestCase
-from dhanada.sif.sync.models import MonthlyReturnEntry, SchemePlanPerformance, SyncDataset
+
+from dhanada.api import (
+	get_comparison_data,
+	get_fund_details,
+	get_funds_list,
+	get_funds_selector_list,
+	get_heatmap_data,
+	get_heatmap_filters,
+	get_historical_nav,
+	get_scheme_heatmap_performance,
+)
 from dhanada.sif.sync.importer import DataImporter
 from dhanada.sif.sync.mapper import DataMapper
-from dhanada.api import get_funds_list, get_scheme_heatmap_performance
-
+from dhanada.sif.sync.models import MonthlyReturnEntry, SchemePlanPerformance, SyncDataset
 
 EXTRA_TEST_RECORD_DEPENDENCIES = []
 IGNORE_TEST_RECORD_DEPENDENCIES = []
@@ -12,7 +21,7 @@ IGNORE_TEST_RECORD_DEPENDENCIES = []
 
 class IntegrationTestSIFSchemePlanPerformance(IntegrationTestCase):
 	"""
-	Integration tests for SIF Scheme Plan Performance and Monthly Returns ingestion.
+	Integration tests for SIF Scheme Plan Performance, Monthly Returns ingestion, and Modular SIF APIs.
 	"""
 
 	def setUp(self):
@@ -28,6 +37,9 @@ class IntegrationTestSIFSchemePlanPerformance(IntegrationTestCase):
 			scheme = frappe.new_doc("SIF Scheme")
 			scheme.scheme_name = "Test Scheme Perf 1"
 			scheme.sebi_code = "TEST/PERF/001"
+			scheme.investment_strategy = "Equity"
+			scheme.scheme_subcategory = "Equity Long-Short Fund"
+			scheme.risk_level = 0
 			scheme.flags.from_approval = True
 			scheme.flags.ignore_mandatory = True
 			scheme.flags.ignore_links = True
@@ -193,3 +205,103 @@ class IntegrationTestSIFSchemePlanPerformance(IntegrationTestCase):
 		year_2025 = next((r for r in data if r["year"] == 2025 and r["scheme_plan"] == "INFTEST00001"), None)
 		self.assertIsNotNone(year_2025)
 		self.assertEqual(year_2025["dec"], 2.50)
+
+	def test_get_funds_list_pagination_and_id(self):
+		"""Verifies get_funds_list returns paginated response, correct ID and minimal projection."""
+		res = get_funds_list(page=1, page_size=10, search="Test Scheme Perf")
+		self.assertEqual(res.get("status"), "success")
+		data = res.get("data", [])
+		self.assertGreaterEqual(len(data), 1)
+		fund = data[0]
+		self.assertIn("id", fund)
+		self.assertEqual(fund["name"], "Test Scheme Perf 1")
+		self.assertIn("investmentStrategy", fund)
+		self.assertIn("schemeSubcategory", fund)
+		self.assertIn("risk", fund)
+		self.assertIn("riskLevel", fund)
+		self.assertIn("pagination", res)
+		self.assertEqual(res["pagination"]["page"], 1)
+		self.assertEqual(res["pagination"]["page_size"], 10)
+		self.assertGreaterEqual(res["pagination"]["total"], 1)
+
+	def test_get_fund_details_and_comparison(self):
+		"""Verifies get_fund_details and get_comparison_data fetch targeted scheme data."""
+		scheme_name = frappe.db.get_value("SIF Scheme", {"sebi_code": "TEST/PERF/001"}, "name")
+		details_res = get_fund_details(scheme_id=scheme_name)
+		self.assertEqual(details_res.get("status"), "success")
+		scheme_data = details_res.get("data")
+		self.assertEqual(scheme_data.get("sebi_code"), "TEST/PERF/001")
+		self.assertIn("plans", scheme_data)
+
+		# Comparison data
+		comp_res = get_comparison_data(scheme_ids=[scheme_name])
+		self.assertEqual(comp_res.get("status"), "success")
+		comp_data = comp_res.get("data", [])
+		self.assertEqual(len(comp_data), 1)
+		self.assertEqual(comp_data[0].get("id"), scheme_name)
+
+	def test_get_funds_selector_list_minimal_fields(self):
+		"""Verifies that get_funds_selector_list returns only lightweight selector dropdown fields."""
+		res = get_funds_selector_list()
+		self.assertEqual(res.get("status"), "success")
+		data = res.get("data", [])
+		self.assertIsInstance(data, list)
+		if data:
+			item = data[0]
+			# Ensure only selector-relevant fields are present
+			self.assertIn("id", item)
+			self.assertIn("name", item)
+			self.assertNotIn("historical_nav", item)
+			self.assertNotIn("plans", item)
+			self.assertNotIn("portfolio", item)
+
+	def test_get_heatmap_filters_and_time_filtering(self):
+		"""Verifies get_heatmap_filters and DB-level time filtering in get_heatmap_data."""
+		filter_res = get_heatmap_filters()
+		self.assertEqual(filter_res.get("status"), "success")
+		filter_data = filter_res.get("data", [])
+		self.assertIsInstance(filter_data, list)
+		if filter_data:
+			self.assertIn("schemeType", filter_data[0])
+			self.assertIn("category", filter_data[0])
+
+		# Heatmap with 3M time filter
+		res_3m = get_heatmap_data(time_filter="3M")
+		self.assertEqual(res_3m.get("status"), "success")
+		months_3m = res_3m.get("meta", {}).get("months", [])
+		self.assertLessEqual(len(months_3m), 4)
+
+	def test_memoized_historical_nav_for_multi_plan_scheme(self):
+		"""Verifies that schemes with multiple plans sharing a SIF code reuse cached historical NAV."""
+		scheme_name = frappe.db.get_value("SIF Scheme", {"sebi_code": "TEST/PERF/001"}, "name")
+		# Create a second Regular plan with same sif_code
+		if not frappe.db.exists("SIF Scheme Plan", "INFTEST00002"):
+			plan2 = frappe.new_doc("SIF Scheme Plan")
+			plan2.scheme = scheme_name
+			plan2.isin = "INFTEST00002"
+			plan2.sif_code = "SIF-TEST-1"
+			plan2.type = "Regular"
+			plan2.option = "IDCW"
+			plan2.flags.ignore_mandatory = True
+			plan2.flags.ignore_links = True
+			plan2.insert(ignore_permissions=True)
+			frappe.db.commit()
+
+		try:
+			details = get_fund_details(scheme_id=scheme_name)
+			self.assertEqual(details.get("status"), "success")
+			plans = details.get("data", {}).get("plans", [])
+			self.assertGreaterEqual(len(plans), 2)
+			# Both plans must have historical_nav list populated identically
+			for p in plans:
+				self.assertIsInstance(p.get("historical_nav"), list)
+
+			comp = get_comparison_data(scheme_ids=[scheme_name])
+			self.assertEqual(comp.get("status"), "success")
+			comp_item = comp.get("data", [])[0]
+			self.assertIsInstance(comp_item.get("historicalNav"), list)
+			self.assertGreaterEqual(len(comp_item.get("historicalNav")), 1)
+		finally:
+			if frappe.db.exists("SIF Scheme Plan", "INFTEST00002"):
+				frappe.delete_doc("SIF Scheme Plan", "INFTEST00002", force=1)
+				frappe.db.commit()

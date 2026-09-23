@@ -14,8 +14,8 @@ const faqs = [
     a: 'Starting with an initial lumpsum provides an immediate capital base that compounds from day one, while monthly SIPs take advantage of rupee cost averaging and continuous compounding. Together, they achieve targets far faster than relying on SIP alone.',
   },
   {
-    q: 'Why should I consider inflation when planning financial goals?',
-    a: 'Inflation reduces the purchasing power of money over time. A goal of ₹1 Crore in 15 years will buy significantly less than ₹1 Crore today. Enabling the inflation adjustment feature calculates the real future value in today’s purchasing power.',
+    q: 'Should I invest via Monthly SIP or a One-Time Lump Sum for my goal?',
+    a: 'A monthly SIP distributes your investment across time, offering rupee cost averaging and easing monthly cash flow. A lump sum investment deploys capital immediately, giving the entire amount maximum compounding time. You can choose whichever best fits your cash flow and financial readiness.',
   },
   {
     q: 'What rate of return should I assume in the calculator?',

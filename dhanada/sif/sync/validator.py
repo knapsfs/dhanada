@@ -81,7 +81,7 @@ class DataValidator:
 
 		try:
 			float(raw_nav.get("nav", 0))
-		except (ValueError, TypeError):
+		except ValueError, TypeError:
 			self.log_error("NAV", str(sif_code), f"Invalid number format for 'nav': {raw_nav.get('nav')}")
 			return False
 
@@ -134,7 +134,7 @@ class DataValidator:
 			if val <= 0:
 				self.log_error("HistoricalNAV", str(sif_code), f"Non-positive NAV: {val}")
 				return False
-		except (ValueError, TypeError):
+		except ValueError, TypeError:
 			self.log_error(
 				"HistoricalNAV", str(sif_code), f"Invalid number format for 'nav': {raw_hist.get('nav')}"
 			)
