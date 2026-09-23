@@ -1,7 +1,7 @@
 {
  "app": "dhanada",
  "charts": [],
- "content": "[{\"id\":\"dBzy2lJqNA\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">My SIF Workspace</span>\",\"col\":12}},{\"id\":\"3Rir8iKZVB\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SIF Scheme\",\"col\":3}},{\"id\":\"5jv1ACqK7U\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Investment Strategy Subcategory\",\"col\":3}},{\"id\":\"rwIv-j69qr\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Fund Managers\",\"col\":3}},{\"id\":\"3Y4V3yh-5u\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Scheme Plan Performance\",\"col\":3}},{\"id\":\"8iIj6B6UZf\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Scheme Plan\",\"col\":3}},{\"id\":\"2ecDOgaLzK\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Asset Management Company\",\"col\":3}},{\"id\":\"3QvmgYekJl\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Scheme Modification Request\",\"col\":3}},{\"id\":\"cLOXX5iMIX\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Scheme Request\",\"col\":3}},{\"id\":\"RCVaU0VnNN\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Heatmap Performance\",\"col\":3}},{\"id\":\"_5qRTR6uyX\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"NAV Historical Data\",\"col\":3}}]",
+ "content": "[{\"id\":\"dBzy2lJqNA\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">My SIF Workspace</span>\",\"col\":12}},{\"id\":\"3Rir8iKZVB\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"SIF Scheme\",\"col\":3}},{\"id\":\"5jv1ACqK7U\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Investment Strategy Subcategory\",\"col\":3}},{\"id\":\"rwIv-j69qr\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Fund Managers\",\"col\":3}},{\"id\":\"3Y4V3yh-5u\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Scheme Plan Performance\",\"col\":3}},{\"id\":\"8iIj6B6UZf\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Scheme Plan\",\"col\":3}},{\"id\":\"2ecDOgaLzK\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Asset Management Company\",\"col\":3}},{\"id\":\"3QvmgYekJl\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Scheme Modification Request\",\"col\":3}},{\"id\":\"cLOXX5iMIX\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Scheme Request\",\"col\":3}},{\"id\":\"_5qRTR6uyX\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"NAV Historical Data\",\"col\":3}}]",
  "creation": "2026-08-10 11:35:29.794474",
  "custom_blocks": [],
  "docstatus": 0,
@@ -47,14 +47,6 @@
    "doc_view": "List",
    "label": "NAV Historical Data",
    "link_to": "SIF NAV Historical Data",
-   "stats_filter": "[]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Heatmap Performance",
-   "link_to": "SIF Scheme Heatmap Performance",
    "stats_filter": "[]",
    "type": "DocType"
   },

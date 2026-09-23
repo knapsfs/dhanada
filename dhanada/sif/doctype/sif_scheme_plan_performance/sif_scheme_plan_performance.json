@@ -3,7 +3,7 @@
  "allow_bulk_edit": 1,
  "allow_rename": 1,
  "autoname": "field:scheme_plan",
- "creation": "2026-07-16 15:07:57.502345",
+ "creation": "2026-09-21 15:35:02.268852",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -25,7 +25,9 @@
   "3_years",
   "5_years",
   "10_years",
-  "since_inception"
+  "since_inception",
+  "section_break_lxux",
+  "monthly_returns"
  ],
  "fields": [
   {
@@ -163,12 +165,23 @@
   {
    "fieldname": "column_break_xrbb",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_lxux",
+   "fieldtype": "Section Break",
+   "label": "Monthly Returns"
+  },
+  {
+   "fieldname": "monthly_returns",
+   "fieldtype": "Table",
+   "label": "Monthly Returns",
+   "options": "SIF Monthly Returns"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-15 16:49:31.123305",
+ "modified": "2026-09-22 17:58:23.443876",
  "modified_by": "Administrator",
  "module": "SIF",
  "name": "SIF Scheme Plan Performance",

@@ -11,7 +11,7 @@ from .mapper import DataMapper
 def sync_nav_performance(dry_run: bool = False):
 	"""
 	Fetches, maps, and imports the latest NAV CSV, all Performance JSONs,
-	Heatmap returns, and Historical NAV records into the database.
+	and Historical NAV records into the database.
 	"""
 	start_time = time.time()
 	log_sync_start()
@@ -22,13 +22,11 @@ def sync_nav_performance(dry_run: bool = False):
 		# 1. Fetch data
 		nav_data = client.fetch_latest_nav()
 		perf_data = client.fetch_performance()
-		heatmap_data = client.fetch_heatmap_performance()
 		historical_nav_data = client.fetch_historical_nav()
 
 		raw_data = {
 			"nav_daily": nav_data,
 			"performance": perf_data,
-			"heatmaps": heatmap_data,
 			"historical_nav": historical_nav_data,
 		}
 

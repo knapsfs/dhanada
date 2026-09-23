@@ -193,49 +193,49 @@ def get_funds_list():
 			],
 		)
 
-		# Pre-fetch all heatmap performance records from database
-		heatmap_records = frappe.get_all(
-			"SIF Scheme Heatmap Performance",
-			fields=[
-				"scheme_plan",
-				"sif_code",
-				"year",
-				"jan",
-				"feb",
-				"mar",
-				"apr",
-				"may",
-				"jun",
-				"jul",
-				"aug",
-				"sep",
-				"oct",
-				"nov",
-				"dec",
-			],
+		# Pre-fetch all monthly return records from database
+		monthly_records = frappe.get_all(
+			"SIF Monthly Returns",
+			fields=["parent", "month", "return"],
+			order_by="month desc",
 		)
 		heatmap_by_plan = {}
 		heatmap_by_sif = {}
-		months_list = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
-		for r in heatmap_records:
-			yr_suffix = str(r.year)[-2:] if r.year else ""
-			if not yr_suffix:
+		months_short = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
+
+		# Map parent plans to sif_code
+		all_plans_sif = frappe.get_all("SIF Scheme Plan", fields=["name", "sif_code"])
+		plan_to_sif = {p.name: p.sif_code for p in all_plans_sif if p.sif_code}
+
+		for r in monthly_records:
+			if not r.month or "-" not in str(r.month):
 				continue
+			month_str = str(r.month).strip()
+			parts = month_str.split("-")
 			p_dict = {}
-			for m in months_list:
-				val = r.get(m)
-				if val is not None:
-					p_dict[f"{m}_{yr_suffix}"] = float(val)
+			val = r.get("return")
+			if val is not None:
+				float_val = float(val)
+				p_dict[month_str] = float_val
+				try:
+					yr_suffix = parts[0][-2:]
+					m_idx = int(parts[1]) - 1
+					if 0 <= m_idx < 12:
+						m_name = months_short[m_idx]
+						p_dict[f"{m_name}_{yr_suffix}"] = float_val
+				except (ValueError, IndexError):
+					pass
 
-			if r.scheme_plan:
-				if r.scheme_plan not in heatmap_by_plan:
-					heatmap_by_plan[r.scheme_plan] = {}
-				heatmap_by_plan[r.scheme_plan].update(p_dict)
+			if r.parent:
+				if r.parent not in heatmap_by_plan:
+					heatmap_by_plan[r.parent] = {}
+				heatmap_by_plan[r.parent].update(p_dict)
 
-			if r.sif_code:
-				if r.sif_code not in heatmap_by_sif:
-					heatmap_by_sif[r.sif_code] = {}
-				heatmap_by_sif[r.sif_code].update(p_dict)
+				sif_c = plan_to_sif.get(r.parent)
+				if sif_c:
+					if sif_c not in heatmap_by_sif:
+						heatmap_by_sif[sif_c] = {}
+					heatmap_by_sif[sif_c].update(p_dict)
 
 		result = []
 		for s in schemes:
@@ -975,51 +975,77 @@ def get_scheme_heatmap_performance(
 ):
 	"""
 	Read-only API to fetch monthly heatmap performance data for SIF Scheme Plans.
+	Constructs monthly performance records from the SIF Monthly Returns child table.
 	"""
 	try:
-		filters = {}
+		target_plans = []
 		if scheme_plan:
-			filters["scheme_plan"] = scheme_plan
+			target_plans = [scheme_plan]
 		elif sif_code:
-			plan_names = frappe.get_all(
+			target_plans = frappe.get_all(
 				"SIF Scheme Plan", filters={"sif_code": sif_code, "type": "Regular"}, pluck="name"
 			)
-			if not plan_names and frappe.db.exists("SIF Scheme Plan", sif_code):
-				plan_names = [sif_code]
-			if plan_names:
-				filters["scheme_plan"] = ["in", plan_names]
-			else:
-				return {"status": "success", "data": []}
+			if not target_plans and frappe.db.exists("SIF Scheme Plan", sif_code):
+				target_plans = [sif_code]
 
-		if year:
-			try:
-				filters["year"] = int(year)
-			except (ValueError, TypeError):
-				pass
+		filters = {}
+		if target_plans:
+			filters["parent"] = ["in", target_plans]
 
-		records = frappe.get_all(
-			"SIF Scheme Heatmap Performance",
+		monthly_rows = frappe.get_all(
+			"SIF Monthly Returns",
 			filters=filters,
-			fields=[
-				"name",
-				"scheme_plan",
-				"sif_code",
-				"year",
-				"jan",
-				"feb",
-				"mar",
-				"apr",
-				"may",
-				"jun",
-				"jul",
-				"aug",
-				"sep",
-				"oct",
-				"nov",
-				"dec",
-			],
-			order_by="year asc, scheme_plan asc",
+			fields=["parent", "month", "return"],
+			order_by="month asc",
 		)
+
+		plan_sif_map = {}
+		if monthly_rows:
+			parent_plans = list({r.parent for r in monthly_rows if r.parent})
+			plans_info = frappe.get_all(
+				"SIF Scheme Plan",
+				filters={"name": ["in", parent_plans]},
+				fields=["name", "sif_code"],
+			)
+			for p in plans_info:
+				plan_sif_map[p.name] = p.sif_code
+
+		month_names = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
+
+		grouped = {}
+		for r in monthly_rows:
+			if not r.month or "-" not in str(r.month):
+				continue
+			parts = str(r.month).strip().split("-")
+			try:
+				row_year = int(parts[0])
+				row_month = int(parts[1])
+			except (ValueError, IndexError):
+				continue
+
+			if year:
+				try:
+					if row_year != int(year):
+						continue
+				except (ValueError, TypeError):
+					pass
+
+			plan_name = r.parent
+			key = (plan_name, row_year)
+			if key not in grouped:
+				grouped[key] = {
+					"scheme_plan": plan_name,
+					"sif_code": plan_sif_map.get(plan_name) or sif_code,
+					"year": row_year,
+					"jan": None, "feb": None, "mar": None, "apr": None,
+					"may": None, "jun": None, "jul": None, "aug": None,
+					"sep": None, "oct": None, "nov": None, "dec": None,
+				}
+			if 1 <= row_month <= 12:
+				m_name = month_names[row_month - 1]
+				grouped[key][m_name] = r.get("return")
+
+		records = sorted(grouped.values(), key=lambda x: (x["year"], str(x["scheme_plan"] or "")))
 		return {"status": "success", "data": records}
 	except Exception as e:
 		return {"status": "error", "message": str(e)}
