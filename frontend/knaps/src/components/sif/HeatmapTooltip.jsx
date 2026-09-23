@@ -23,7 +23,9 @@ export default function HeatmapTooltip({ data, position }) {
         <div className="flex justify-between items-center text-xs mt-1">
           <span className="font-medium text-gray-600 uppercase">Return:</span>
           <span className={`font-bold ${data.isPositive ? 'text-green-600' : data.isNegative ? 'text-red-500' : 'text-gray-400'}`}>
-            {data.returnVal === "N/L" ? data.returnVal : `${data.returnVal > 0 ? '+' : ''}${data.returnVal}%`}
+            {typeof data.returnVal === 'number'
+              ? `${data.returnVal > 0 ? '+' : ''}${data.returnVal}%`
+              : (data.returnVal === 'N/L' ? 'N/A' : (data.returnVal || 'N/A'))}
           </span>
         </div>
       </motion.div>

@@ -11,7 +11,7 @@ from .scheme_details import get_historical_nav_for_sif
 # Selected funds ka comparison data laata hai.
 @frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
 @rate_limit(limit=120, seconds=60, ip_based=True)
-def get_comparison_data(scheme_ids=None):
+def get_comparison_data(scheme_ids: str | list | None = None):
 	"""
 	Targeted Comparison API. Queries ONLY the schemes requested for comparison (e.g. 2-3 schemes)
 	using Frappe Query Builder.

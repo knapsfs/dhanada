@@ -74,7 +74,12 @@ def get_historical_nav_for_sif(sif_code: str) -> list[dict]:
 # SIF ka historical NAV data laata hai.
 @frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
 @rate_limit(limit=180, seconds=60, ip_based=True)
-def get_historical_nav(sif_code=None, scheme_id=None, plan_isin=None, isin=None):
+def get_historical_nav(
+	sif_code: str | None = None,
+	scheme_id: str | int | None = None,
+	plan_isin: str | None = None,
+	isin: str | None = None,
+):
 	"""
 	Retrieves historical NAV time-series for a given SIF code or scheme.
 	"""
@@ -432,14 +437,14 @@ def get_funds_list(
 @frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
 @rate_limit(limit=120, seconds=60, ip_based=True)
 def get_fund_details(
-	identifier=None,
-	scheme_id=None,
-	fund_id=None,
-	id=None,
-	sebi_code=None,
-	plan_id=None,
-	plan_name=None,
-	isin=None,
+	identifier: str | int | None = None,
+	scheme_id: str | int | None = None,
+	fund_id: str | int | None = None,
+	id: str | int | None = None,
+	sebi_code: str | None = None,
+	plan_id: str | int | None = None,
+	plan_name: str | None = None,
+	isin: str | None = None,
 ):
 	"""
 	Targeted SIF Scheme Details API. Accepts internal document ID (name) or sebi_code.

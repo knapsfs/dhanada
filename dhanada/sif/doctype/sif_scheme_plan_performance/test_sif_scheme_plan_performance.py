@@ -60,17 +60,25 @@ class IntegrationTestSIFSchemePlanPerformance(IntegrationTestCase):
 			plan.flags.ignore_links = True
 			plan.insert(ignore_permissions=True)
 
-		frappe.db.commit()
+		# Create historical NAV data for SIF-TEST-1
+		if not frappe.db.exists("SIF NAV Historical Data", "SIF-TEST-1"):
+			nav_doc = frappe.new_doc("SIF NAV Historical Data")
+			nav_doc.sif_code = "SIF-TEST-1"
+			nav_doc.append("historical_nav_data", {"nav_date": "2026-07-09", "nav": 10.5})
+			nav_doc.append("historical_nav_data", {"nav_date": "2026-07-10", "nav": 10.65})
+			nav_doc.append("historical_nav_data", {"nav_date": "2026-07-11", "nav": 10.8})
+			nav_doc.insert(ignore_permissions=True)
 
 	def tearDown(self):
 		if frappe.db.exists("SIF Scheme Plan Performance", "INFTEST00001"):
 			frappe.delete_doc("SIF Scheme Plan Performance", "INFTEST00001", force=1)
 		if frappe.db.exists("SIF Scheme Plan", "INFTEST00001"):
 			frappe.delete_doc("SIF Scheme Plan", "INFTEST00001", force=1)
+		if frappe.db.exists("SIF NAV Historical Data", "SIF-TEST-1"):
+			frappe.delete_doc("SIF NAV Historical Data", "SIF-TEST-1", force=1)
 		existing_scheme = frappe.db.get_value("SIF Scheme", {"sebi_code": "TEST/PERF/001"}, "name")
 		if existing_scheme:
 			frappe.delete_doc("SIF Scheme", existing_scheme, force=1)
-		frappe.db.commit()
 		super().tearDown()
 
 	def test_mapper_and_importer_monthly_returns_flow(self):
@@ -256,7 +264,7 @@ class IntegrationTestSIFSchemePlanPerformance(IntegrationTestCase):
 			self.assertNotIn("portfolio", item)
 
 	def test_get_heatmap_filters_and_time_filtering(self):
-		"""Verifies get_heatmap_filters and DB-level time filtering in get_heatmap_data."""
+		"""Verifies get_heatmap_filters and DB-level monthly returns retrieval in get_heatmap_data."""
 		filter_res = get_heatmap_filters()
 		self.assertEqual(filter_res.get("status"), "success")
 		filter_data = filter_res.get("data", [])
@@ -265,11 +273,38 @@ class IntegrationTestSIFSchemePlanPerformance(IntegrationTestCase):
 			self.assertIn("schemeType", filter_data[0])
 			self.assertIn("category", filter_data[0])
 
-		# Heatmap with 3M time filter
-		res_3m = get_heatmap_data(time_filter="3M")
-		self.assertEqual(res_3m.get("status"), "success")
-		months_3m = res_3m.get("meta", {}).get("months", [])
-		self.assertLessEqual(len(months_3m), 4)
+		# Insert sample monthly returns for test scheme
+		importer = DataImporter(dry_run=False)
+		perf = SchemePlanPerformance(
+			sif_code="SIF-TEST-1",
+			performance_date=frappe.utils.getdate("2026-09-30"),
+			monthly_returns=[
+				MonthlyReturnEntry(month="2026-09", return_val=-1.90),
+				MonthlyReturnEntry(month="2026-08", return_val=-0.66),
+				MonthlyReturnEntry(month="2026-07", return_val=1.84),
+				MonthlyReturnEntry(month="2026-06", return_val=2.51),
+				MonthlyReturnEntry(month="2026-05", return_val=-1.34),
+				MonthlyReturnEntry(month="2026-04", return_val=2.64),
+				MonthlyReturnEntry(month="2026-03", return_val=0.0),
+			],
+		)
+		importer.import_dataset(SyncDataset(performances=[perf]))
+
+		# Heatmap with 12M time filter
+		res_12m = get_heatmap_data(time_filter="12M")
+		self.assertEqual(res_12m.get("status"), "success")
+		schemes_list = res_12m.get("data", [])
+		test_scheme = next((s for s in schemes_list if s.get("name") == "Test Scheme Perf 1"), None)
+		self.assertIsNotNone(test_scheme)
+		m_returns = test_scheme.get("monthlyReturns", {})
+		self.assertEqual(m_returns.get("2026-09"), -1.90)
+		self.assertEqual(m_returns.get("sep_26"), -1.90)
+		self.assertEqual(m_returns.get("2026-08"), -0.66)
+		self.assertEqual(m_returns.get("aug_26"), -0.66)
+		self.assertEqual(m_returns.get("2026-07"), 1.84)
+		self.assertEqual(m_returns.get("jul_26"), 1.84)
+		self.assertEqual(m_returns.get("2026-03"), 0.0)
+		self.assertEqual(m_returns.get("mar_26"), 0.0)
 
 	def test_memoized_historical_nav_for_multi_plan_scheme(self):
 		"""Verifies that schemes with multiple plans sharing a SIF code reuse cached historical NAV."""
@@ -285,7 +320,6 @@ class IntegrationTestSIFSchemePlanPerformance(IntegrationTestCase):
 			plan2.flags.ignore_mandatory = True
 			plan2.flags.ignore_links = True
 			plan2.insert(ignore_permissions=True)
-			frappe.db.commit()
 
 		try:
 			details = get_fund_details(scheme_id=scheme_name)
@@ -304,4 +338,3 @@ class IntegrationTestSIFSchemePlanPerformance(IntegrationTestCase):
 		finally:
 			if frappe.db.exists("SIF Scheme Plan", "INFTEST00002"):
 				frappe.delete_doc("SIF Scheme Plan", "INFTEST00002", force=1)
-				frappe.db.commit()

@@ -2,6 +2,8 @@ import frappe
 from frappe.query_builder import DocType, Order
 from frappe.rate_limiter import rate_limit
 
+from .helpers import get_default_plan
+
 
 # Heatmap ke liye monthly return data laata hai.
 @frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
@@ -20,7 +22,7 @@ def get_scheme_heatmap_performance(
 		query = (
 			frappe.qb.from_(Monthly)
 			.left_join(Plan)
-			.on(Monthly.parent == Plan.name)
+			.on((Monthly.parent == Plan.name) | (Monthly.parent == Plan.performance))
 			.select(
 				Monthly.parent.as_("scheme_plan"),
 				Plan.sif_code,
@@ -31,7 +33,7 @@ def get_scheme_heatmap_performance(
 		)
 
 		if scheme_plan:
-			query = query.where(Monthly.parent == scheme_plan)
+			query = query.where((Monthly.parent == scheme_plan) | (Plan.name == scheme_plan))
 		elif sif_code:
 			query = query.where(Plan.sif_code == sif_code)
 
@@ -141,6 +143,8 @@ def get_heatmap_data(time_filter: str = "12M", scheme_type: str | None = None, c
 				Scheme.nfo_start_date,
 				Scheme.nfo_allotment_date,
 				Plan.name.as_("plan_name"),
+				Plan.option.as_("plan_option"),
+				Plan.performance.as_("plan_performance"),
 			)
 			.where(Scheme.docstatus < 2)
 			.orderby(Scheme.scheme_name, order=Order.asc)
@@ -156,25 +160,49 @@ def get_heatmap_data(time_filter: str = "12M", scheme_type: str | None = None, c
 		if not schemes_rows:
 			return {"status": "success", "data": []}
 
-		# Deduplicate to default plan per scheme
+		# Group plans by scheme and select default Regular - Growth plan
 		schemes_by_id = {}
-		plan_names = []
-		for s in schemes_rows:
-			s_id = s["id"]
+		plans_by_scheme = {}
+		for row in schemes_rows:
+			s_id = row["id"]
 			if s_id not in schemes_by_id:
-				schemes_by_id[s_id] = s
-				if s.get("plan_name"):
-					plan_names.append(s["plan_name"])
+				schemes_by_id[s_id] = {
+					"id": row["id"],
+					"name": row.get("name"),
+					"schemeType": row.get("schemeType") or "Open Ended",
+					"category": row.get("category"),
+					"nfo_start_date": row.get("nfo_start_date"),
+					"nfo_allotment_date": row.get("nfo_allotment_date"),
+				}
+				plans_by_scheme[s_id] = []
+			plans_by_scheme[s_id].append(
+				{
+					"name": row.get("plan_name"),
+					"option": row.get("plan_option"),
+					"type": "Regular",
+					"performance": row.get("plan_performance"),
+				}
+			)
+
+		selected_plan_by_scheme = {}
+		plan_names_to_query = []
+		for s_id, s_plans in plans_by_scheme.items():
+			def_plan = get_default_plan(s_plans) or s_plans[0]
+			selected_plan_by_scheme[s_id] = def_plan
+			if def_plan.get("name"):
+				plan_names_to_query.append(def_plan["name"])
+			if def_plan.get("performance") and def_plan["performance"] != def_plan.get("name"):
+				plan_names_to_query.append(def_plan["performance"])
 
 		# 2. Fetch monthly returns for these plans using Query Builder with time window filtering
 		months_short = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
 		monthly_by_plan = {}
 
-		if plan_names:
+		if plan_names_to_query:
 			monthly_query = (
 				frappe.qb.from_(Monthly)
 				.select(Monthly.parent, Monthly.month, Monthly["return"].as_("return_val"))
-				.where(Monthly.parent.isin(plan_names))
+				.where(Monthly.parent.isin(plan_names_to_query))
 			)
 
 			tf_clean = str(time_filter).upper().strip()
@@ -200,9 +228,10 @@ def get_heatmap_data(time_filter: str = "12M", scheme_type: str | None = None, c
 				val = r.get("return_val")
 				if val is not None:
 					f_val = float(val)
-					monthly_by_plan[p_name][str(m_str).strip()] = f_val
+					m_clean = str(m_str).strip()
+					monthly_by_plan[p_name][m_clean] = f_val
 					try:
-						parts = str(m_str).strip().split("-")
+						parts = m_clean.split("-")
 						yr_suffix = parts[0][-2:]
 						m_idx = int(parts[1]) - 1
 						if 0 <= m_idx < 12:
@@ -212,10 +241,17 @@ def get_heatmap_data(time_filter: str = "12M", scheme_type: str | None = None, c
 
 		# 3. Assemble response list
 		result = []
-		for s in schemes_by_id.values():
+		for s_id, s in schemes_by_id.items():
 			launch_date = s.get("nfo_allotment_date") or s.get("nfo_start_date")
-			plan_name = s.get("plan_name")
-			m_returns = monthly_by_plan.get(plan_name, {})
+			plan = selected_plan_by_scheme.get(s_id, {})
+			p_name = plan.get("name")
+			p_perf = plan.get("performance")
+
+			m_returns = {}
+			if p_name and p_name in monthly_by_plan:
+				m_returns.update(monthly_by_plan[p_name])
+			if p_perf and p_perf in monthly_by_plan:
+				m_returns.update(monthly_by_plan[p_perf])
 
 			nav_date_str = (
 				launch_date.strftime("%Y-%m-%d")

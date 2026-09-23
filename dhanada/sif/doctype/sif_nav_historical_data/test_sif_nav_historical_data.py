@@ -152,6 +152,9 @@ class TestSIFNAVHistoricalData(IntegrationTestCase):
 
 	def test_invalid_historical_nav_rows_handled_safely(self):
 		"""Verifies that non-positive, malformed, or duplicate dates are handled cleanly."""
+		if frappe.db.exists("SIF NAV Historical Data", "SIF-TEST-1"):
+			frappe.delete_doc("SIF NAV Historical Data", "SIF-TEST-1", ignore_permissions=True, force=True)
+
 		dataset = [
 			{
 				"sif_code": "SIF-TEST-1",
