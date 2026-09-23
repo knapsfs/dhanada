@@ -351,7 +351,7 @@ export default function FundsTable({
       <div className="bg-white rounded-3xl border border-[#e8edf7] shadow-xl shadow-blue-900/5 overflow-hidden">
 
         {/* Table Container */}
-        <div className="w-full">
+        <div className="w-full overflow-x-auto [scrollbar-width:thin] [scrollbar-color:#cbd5e1_transparent] [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-slate-100/60 [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#032e92] pb-1">
           <table className="w-full text-left min-w-[950px] min-h-[280px] border-collapse">
             <thead>
               {/* Main Header / Top Filter Row */}
