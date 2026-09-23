@@ -23,13 +23,23 @@ export async function fetchFundsList(params = {}) {
 		}
 
 		for (const [k, v] of Object.entries(params)) {
-			if (k !== "page" && k !== "page_size" && k !== "all_records" && v !== undefined && v !== null && v !== "" && v !== "All") {
+			if (
+				k !== "page" &&
+				k !== "page_size" &&
+				k !== "all_records" &&
+				v !== undefined &&
+				v !== null &&
+				v !== "" &&
+				v !== "All"
+			) {
 				queryParams.set(k, String(v));
 			}
 		}
 
 		const queryString = queryParams.toString();
-		const url = `/api/method/dhanada.api.get_funds_list${queryString ? `?${queryString}` : ""}`;
+		const url = `/api/method/dhanada.api.get_funds_list${
+			queryString ? `?${queryString}` : ""
+		}`;
 		const response = await fetch(url);
 		if (!response.ok) {
 			if (response.status === 429) {
@@ -163,9 +173,9 @@ export async function fetchFundDetails(identifier, planId = null) {
 	}
 
 	try {
-		const url = `/api/method/dhanada.api.get_fund_details?identifier=${encodeURIComponent(identifier)}${
-			planId ? `&plan_id=${encodeURIComponent(planId)}` : ""
-		}`;
+		const url = `/api/method/dhanada.api.get_fund_details?identifier=${encodeURIComponent(
+			identifier
+		)}${planId ? `&plan_id=${encodeURIComponent(planId)}` : ""}`;
 		const response = await fetch(url);
 		if (!response.ok) {
 			if (response.status === 429) {
@@ -199,7 +209,9 @@ export async function fetchComparisonData(schemeIds = []) {
 	try {
 		const cleanIds = Array.isArray(schemeIds) ? schemeIds.join(",") : String(schemeIds);
 		const response = await fetch(
-			`/api/method/dhanada.api.get_comparison_data?scheme_ids=${encodeURIComponent(cleanIds)}`
+			`/api/method/dhanada.api.get_comparison_data?scheme_ids=${encodeURIComponent(
+				cleanIds
+			)}`
 		);
 		if (!response.ok) {
 			if (response.status === 429) {

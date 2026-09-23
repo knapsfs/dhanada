@@ -223,11 +223,7 @@ export const generateChartData = ({
 	};
 };
 
-export const calculateRequiredLumpsum = ({
-	targetFv,
-	annualRate,
-	years
-}) => {
+export const calculateRequiredLumpsum = ({ targetFv, annualRate, years }) => {
 	if (!targetFv || targetFv <= 0) return 0;
 	if (!years || years <= 0) return Math.round(targetFv);
 	const r = annualRate / 100;

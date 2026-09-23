@@ -57,17 +57,14 @@ export async function saveChatMessage({
 			phone: phone || undefined,
 		};
 
-		const response = await fetch(
-			"/api/method/dhanada.api.save_chat_message",
-			{
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					"X-Frappe-CSRF-Token": csrfToken,
-				},
-				body: JSON.stringify(payload),
-			}
-		);
+		const response = await fetch("/api/method/dhanada.api.save_chat_message", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				"X-Frappe-CSRF-Token": csrfToken,
+			},
+			body: JSON.stringify(payload),
+		});
 
 		if (!response.ok) {
 			if (response.status === 429) {
@@ -120,17 +117,14 @@ export async function updateChatContext({ conversationId, visitorId, chatContext
 			chat_context: chatContext,
 		};
 
-		const response = await fetch(
-			"/api/method/dhanada.api.update_chatbot_context",
-			{
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					"X-Frappe-CSRF-Token": csrfToken,
-				},
-				body: JSON.stringify(payload),
-			}
-		);
+		const response = await fetch("/api/method/dhanada.api.update_chatbot_context", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				"X-Frappe-CSRF-Token": csrfToken,
+			},
+			body: JSON.stringify(payload),
+		});
 
 		if (!response.ok) {
 			if (response.status === 429) {
