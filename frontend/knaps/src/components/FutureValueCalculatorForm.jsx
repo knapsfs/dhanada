@@ -1,6 +1,27 @@
 import { motion } from 'framer-motion'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
+import {
+  faCircleInfo,
+  faUmbrellaBeach,
+  faGraduationCap,
+  faHeart,
+  faHouse,
+  faCar,
+  faPlane,
+  faShieldHalved,
+  faBullseye
+} from '@fortawesome/free-solid-svg-icons'
+
+export const GOAL_OPTIONS = [
+  { id: 'Retirement', label: 'Retirement', icon: faUmbrellaBeach, defaultTarget: 10000000, defaultYears: 15, defaultRate: 12 },
+  { id: 'Child’s Education', label: 'Child’s Education', icon: faGraduationCap, defaultTarget: 3000000, defaultYears: 10, defaultRate: 12 },
+  { id: 'Child’s Marriage', label: 'Child’s Marriage', icon: faHeart, defaultTarget: 2500000, defaultYears: 12, defaultRate: 12 },
+  { id: 'Home', label: 'Home', icon: faHouse, defaultTarget: 5000000, defaultYears: 7, defaultRate: 12 },
+  { id: 'Car', label: 'Car', icon: faCar, defaultTarget: 1500000, defaultYears: 5, defaultRate: 12 },
+  { id: 'Travel', label: 'Travel', icon: faPlane, defaultTarget: 500000, defaultYears: 3, defaultRate: 12 },
+  { id: 'Emergency Fund', label: 'Emergency Fund', icon: faShieldHalved, defaultTarget: 600000, defaultYears: 2, defaultRate: 8 },
+  { id: 'Other', label: 'Other', icon: faBullseye, defaultTarget: 2000000, defaultYears: 5, defaultRate: 12 },
+]
 
 const formatIndianNumber = (val) => {
   if (val === '' || val === null || val === undefined) return ''
@@ -48,8 +69,9 @@ function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onCh
               onChange(isNaN(num) ? raw : num)
             }
           }}
-          className={`w-full py-3.5 rounded-xl border-2 border-[#e8edf7] bg-[#f7f9fc] text-gray-800 font-bold text-base focus:outline-none focus:border-[#032e92] focus:ring-4 focus:ring-[#032e92]/8 transition-all placeholder-gray-400 ${prefix ? 'pl-8 pr-4' : suffix ? 'pl-4 pr-12' : 'px-4'
-            }`}
+          className={`w-full py-3.5 rounded-xl border-2 border-[#e8edf7] bg-[#f7f9fc] text-gray-800 font-bold text-base focus:outline-none focus:border-[#032e92] focus:ring-4 focus:ring-[#032e92]/8 transition-all placeholder-gray-400 ${
+            prefix ? 'pl-8 pr-4' : suffix ? 'pl-4 pr-12' : 'px-4'
+          }`}
           placeholder={placeholder}
         />
         {suffix && (
@@ -80,6 +102,16 @@ export default function FutureValueCalculatorForm({
 }) {
   const handleChange = (key, val) => setInputs(prev => ({ ...prev, [key]: val }))
 
+  const handleSelectGoal = (goalItem) => {
+    setInputs(prev => ({
+      ...prev,
+      goal: goalItem.id,
+      targetFutureValue: goalItem.defaultTarget,
+      years: goalItem.defaultYears,
+      annualReturn: goalItem.defaultRate,
+    }))
+  }
+
   return (
     <section className="bg-[#f7f9fc] pb-6">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -89,11 +121,48 @@ export default function FutureValueCalculatorForm({
           transition={{ duration: 0.6 }}
           className="bg-white rounded-3xl shadow-xl shadow-blue-900/8 border border-[#e8edf7] p-6 lg:p-8"
         >
-          {/* Main Inputs: Find Your Monthly Investment */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Goal Selector */}
+          <div className="mb-8">
+            <label className="text-xs font-extrabold text-gray-500 uppercase tracking-wider block mb-3">
+              WHAT IS YOUR GOAL?
+            </label>
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5">
+              {GOAL_OPTIONS.map((g) => {
+                const isSelected = inputs.goal === g.id
+                return (
+                  <button
+                    key={g.id}
+                    type="button"
+                    onClick={() => handleSelectGoal(g)}
+                    className={`flex flex-col items-center justify-center p-3 rounded-2xl border-2 transition-all duration-200 cursor-pointer text-center group ${
+                      isSelected
+                        ? 'bg-[#032e92] border-[#032e92] text-white shadow-lg shadow-blue-900/20 scale-[1.02]'
+                        : 'bg-[#f7f9fc] border-transparent hover:border-blue-200 text-gray-700 hover:bg-blue-50/50'
+                    }`}
+                  >
+                    <div
+                      className={`w-9 h-9 rounded-xl flex items-center justify-center mb-1.5 transition-colors ${
+                        isSelected
+                          ? 'bg-white/20 text-white'
+                          : 'bg-white text-[#032e92] shadow-xs group-hover:bg-[#032e92] group-hover:text-white'
+                      }`}
+                    >
+                      <FontAwesomeIcon icon={g.icon} className="text-sm" />
+                    </div>
+                    <span className="text-xs font-bold leading-tight line-clamp-2">
+                      {g.label}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
+          {/* Main Inputs: Find Your Investment */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 border-t border-gray-100">
             <InputField
               id="target-future-value"
-              label="How Much Money Do You Need?"
+              label={`Target Amount for ${inputs.goal || 'Goal'}`}
               prefix="₹"
               value={inputs.targetFutureValue}
               min={100000}
@@ -124,7 +193,7 @@ export default function FutureValueCalculatorForm({
           </div>
 
           <p className="text-[10px] text-gray-400 italic mt-6 mb-0 leading-tight">
-            * Illustrative assumption only. Actual investment returns may vary and are not guaranteed.
+            * Illustrative calculation only. Actual mutual fund returns are subject to market conditions and not guaranteed.
           </p>
         </motion.div>
       </div>

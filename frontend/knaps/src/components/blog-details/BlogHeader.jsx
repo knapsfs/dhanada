@@ -21,7 +21,7 @@ export default function BlogHeader({ blog }) {
 
   return (
     <section className="bg-gradient-to-b from-[#f8fbff] via-white to-white pt-32 pb-10">
-      <div className="max-w-5xl mx-auto px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
 
         {/* Breadcrumb Navigation */}
         <motion.nav

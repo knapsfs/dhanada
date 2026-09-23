@@ -11,7 +11,7 @@ const faqs = [
   },
   {
     q: 'Is there any minimum amount to start SWP?',
-    a: 'In an SWP, units from your mutual fund are sold periodically to generate the fixed withdrawal amount. If your fund earns a return higher than your withdrawal rate, your invested capital may continue to grow even while you receive regular income.',
+    a: 'Yes. The minimum amount to start an SWP varies from one mutual fund scheme to another. For example, some schemes specify ₹500 per withdrawal, while others specify ₹1,000 or ₹200.',
   },
   {
     q: 'Is SWP better than dividend payout?',
