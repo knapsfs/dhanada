@@ -9,11 +9,11 @@ from .models import (
 	AMC,
 	FundManager,
 	HistoricalNavEntry,
+	MonthlyReturnEntry,
 	NavUpdate,
 	Scheme,
 	SchemeAllocation,
 	SchemeFundManager,
-	SchemeHeatmapPerformance,
 	SchemeHistoricalNav,
 	SchemePlan,
 	SchemePlanPerformance,
@@ -109,7 +109,7 @@ class DataMapper:
 			return None
 		try:
 			return float(str(val).replace(",", "").strip())
-		except (ValueError, TypeError):
+		except ValueError, TypeError:
 			return None
 
 	def map_subcategory(
@@ -602,6 +602,19 @@ class DataMapper:
 					log_warning("Source field '7_year' in performance is ignored (no matching Frappe field).")
 					self.unmapped_fields_log.add("7_year")
 
+				monthly_entries = []
+				raw_monthly = raw_perf.get("monthly_returns", {})
+				if isinstance(raw_monthly, dict):
+					for m_key, m_val in raw_monthly.items():
+						parsed_val = self._parse_float(m_val)
+						if parsed_val is not None and m_key:
+							monthly_entries.append(
+								MonthlyReturnEntry(
+									month=str(m_key).strip(),
+									return_val=parsed_val,
+								)
+							)
+
 				dataset.performances.append(
 					SchemePlanPerformance(
 						sif_code=raw_perf.get("sif_code"),
@@ -618,39 +631,11 @@ class DataMapper:
 						years_5=self._parse_float(ret.get("5_year")),  # Mismatch handled
 						years_10=self._parse_float(ret.get("10_year")),  # Mismatch handled
 						since_inception=self._parse_float(ret.get("since_launch")),  # Mismatch handled
+						monthly_returns=monthly_entries,
 					)
 				)
 
-		# 4. Heatmap Performance
-		for raw_hm in raw_data.get("heatmaps", []):
-			sif_code = raw_hm.get("sif_code")
-			year_val = raw_hm.get("year")
-			try:
-				year_int = int(year_val)
-			except (ValueError, TypeError):
-				year_int = None
-
-			if sif_code and year_int:
-				dataset.heatmaps.append(
-					SchemeHeatmapPerformance(
-						sif_code=str(sif_code).strip(),
-						year=year_int,
-						jan=self._parse_float(raw_hm.get("jan")),
-						feb=self._parse_float(raw_hm.get("feb")),
-						mar=self._parse_float(raw_hm.get("mar")),
-						apr=self._parse_float(raw_hm.get("apr")),
-						may=self._parse_float(raw_hm.get("may")),
-						jun=self._parse_float(raw_hm.get("jun")),
-						jul=self._parse_float(raw_hm.get("jul")),
-						aug=self._parse_float(raw_hm.get("aug")),
-						sep=self._parse_float(raw_hm.get("sep")),
-						oct=self._parse_float(raw_hm.get("oct")),
-						nov=self._parse_float(raw_hm.get("nov")),
-						dec=self._parse_float(raw_hm.get("dec")),
-					)
-				)
-
-		# 5. Historical NAV (Per Scheme)
+		# 4. Historical NAV (Per Scheme)
 		for raw_scheme_hist in raw_data.get("historical_nav", []):
 			sif_code_val = str(raw_scheme_hist.get("sif_code") or "").strip().upper()
 			if not sif_code_val:

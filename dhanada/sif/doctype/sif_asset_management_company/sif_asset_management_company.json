@@ -26,7 +26,8 @@
   {
    "fieldname": "amc_logo",
    "fieldtype": "Attach Image",
-   "label": "AMC Logo"
+   "label": "AMC Logo",
+   "make_attachment_public": 1
   },
   {
    "fieldname": "code",
@@ -68,9 +69,11 @@
   }
  ],
  "grid_page_length": 50,
+ "image_field": "amc_logo",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-15 16:52:09.047903",
+ "make_attachments_public": 1,
+ "modified": "2026-09-22 16:49:10.181810",
  "modified_by": "Administrator",
  "module": "SIF",
  "name": "SIF Asset Management Company",

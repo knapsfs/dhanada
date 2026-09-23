@@ -101,6 +101,12 @@ class NavUpdate:
 
 
 @dataclass
+class MonthlyReturnEntry:
+	month: str  # "YYYY-MM" e.g. "2026-09"
+	return_val: float
+
+
+@dataclass
 class SchemePlanPerformance:
 	sif_code: str  # Added sif_code for lookup in importer
 	performance_date: date
@@ -116,24 +122,7 @@ class SchemePlanPerformance:
 	years_5: float | None = None
 	years_10: float | None = None
 	since_inception: float | None = None
-
-
-@dataclass
-class SchemeHeatmapPerformance:
-	sif_code: str
-	year: int
-	jan: float | None = None
-	feb: float | None = None
-	mar: float | None = None
-	apr: float | None = None
-	may: float | None = None
-	jun: float | None = None
-	jul: float | None = None
-	aug: float | None = None
-	sep: float | None = None
-	oct: float | None = None
-	nov: float | None = None
-	dec: float | None = None
+	monthly_returns: list[MonthlyReturnEntry] = field(default_factory=list)
 
 
 @dataclass
@@ -157,5 +146,4 @@ class SyncDataset:
 	scheme_plans: list[SchemePlan] = field(default_factory=list)
 	nav_updates: list[NavUpdate] = field(default_factory=list)
 	performances: list[SchemePlanPerformance] = field(default_factory=list)
-	heatmaps: list[SchemeHeatmapPerformance] = field(default_factory=list)
 	historical_nav: list[SchemeHistoricalNav] = field(default_factory=list)

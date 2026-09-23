@@ -13,6 +13,10 @@
   "sebi_code",
   "is_active",
   "is_active_for_subscription",
+  "section_break_thpc",
+  "benchmark_tier_1",
+  "column_break_swxy",
+  "benchmark_tier_2",
   "section_break_uzsh",
   "nfo_start_date",
   "nfo_end_date",
@@ -41,8 +45,6 @@
   "column_break_etkx",
   "factsheet_url",
   "monthly_portfolio_disclosure_url",
-  "benchmark_tier_1",
-  "benchmark_tier_2",
   "face_value",
   "maturity_date",
   "registrar",
@@ -302,9 +304,18 @@
    "fieldname": "minimum_subscription_text",
    "fieldtype": "Small Text",
    "label": "Minimum Subscription Text"
+  },
+  {
+   "fieldname": "section_break_thpc",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_swxy",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
+ "in_create": 1,
  "index_web_pages_for_search": 1,
  "links": [
   {
@@ -312,7 +323,7 @@
    "link_fieldname": "scheme"
   }
  ],
- "modified": "2026-09-15 16:52:42.031887",
+ "modified": "2026-09-22 14:55:39.086236",
  "modified_by": "Administrator",
  "module": "SIF",
  "name": "SIF Scheme",

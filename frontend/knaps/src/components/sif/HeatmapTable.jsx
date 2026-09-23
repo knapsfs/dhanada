@@ -20,10 +20,7 @@ const monthsConfig = [
 ];
 
 const getCellColor = (val) => {
-  if (val === 'N/L' || val === 'NL') {
-    return 'bg-[repeating-linear-gradient(135deg,#f9fafb,#f9fafb_5px,#f1f5f9_5px,#f1f5f9_8px)] text-gray-400 font-semibold italic border border-gray-200/50';
-  }
-  if (val === undefined || val === null || val === 'N/A') {
+  if (val === undefined || val === null || val === 'N/A' || val === 'N/L' || val === 'NL') {
     return 'bg-gray-50 text-gray-400 font-medium border border-gray-100';
   }
   const num = typeof val === 'number' ? val : parseFloat(val);
@@ -47,44 +44,28 @@ const getCellColor = (val) => {
   return 'bg-[#881337] text-white font-bold shadow-sm';
 };
 
-// Compute deterministic month return or N/L if before launch
-function getFundMonthlyReturn(fund, month, mIndex) {
-  // If explicitly present on fund object
-  if (fund.monthlyReturns && fund.monthlyReturns[month.key] !== undefined) {
-    return fund.monthlyReturns[month.key];
-  }
-  if (fund[month.key] !== undefined) {
-    return fund[month.key];
-  }
-
-  // Check launch date if available
-  if (fund.launchDate) {
-    const launch = new Date(fund.launchDate);
-    const mDate = new Date(month.date);
-    if (
-      launch.getFullYear() > mDate.getFullYear() ||
-      (launch.getFullYear() === mDate.getFullYear() && launch.getMonth() > mDate.getMonth())
-    ) {
-      return 'N/L';
+// Return actual database month return or N/A if not in DB
+function getFundMonthlyReturn(fund, month) {
+  // 1. Check if present in database monthlyReturns map (supports "sep_26" and "2026-09" formats)
+  if (fund?.monthlyReturns) {
+    if (fund.monthlyReturns[month.key] !== undefined && fund.monthlyReturns[month.key] !== null) {
+      const val = fund.monthlyReturns[month.key];
+      return typeof val === 'number' ? val : parseFloat(val);
+    }
+    const datePrefix = month.date ? month.date.substring(0, 7) : null;
+    if (datePrefix && fund.monthlyReturns[datePrefix] !== undefined && fund.monthlyReturns[datePrefix] !== null) {
+      const val = fund.monthlyReturns[datePrefix];
+      return typeof val === 'number' ? val : parseFloat(val);
     }
   }
 
-  // Generate deterministic realistic monthly returns if backend does not provide historical month breakdown
-  const seed = (fund.name || fund.id || '').split('').reduce((acc, c, i) => acc + c.charCodeAt(0) * (i + 1), 0);
-  
-  // Chronological index (0 for oldest sep_25 to 12 for most recent sep_26)
-  const chronoIndex = (monthsConfig.length - 1) - mIndex;
-
-  // Staggered launch offset for realistic N/L display
-  const launchOffset = fund.launchDate ? 0 : (seed % 9);
-  if (chronoIndex < launchOffset) {
-    return 'N/L';
+  // 2. Direct property fallback
+  if (fund && fund[month.key] !== undefined && fund[month.key] !== null) {
+    const val = fund[month.key];
+    return typeof val === 'number' ? val : parseFloat(val);
   }
 
-  const baseReturn = fund.returns1M != null ? parseFloat(fund.returns1M) : (seed % 4 - 1);
-  const wave = Math.sin(seed * 19.3 + chronoIndex * 37.7) * 2.8;
-  const result = (baseReturn * 0.35 + wave).toFixed(2);
-  return parseFloat(result);
+  return 'N/A';
 }
 
 export default function HeatmapTable({ funds = [], timeFilter = '12M', activeSubCategoryLabel }) {
@@ -98,7 +79,7 @@ export default function HeatmapTable({ funds = [], timeFilter = '12M', activeSub
       fundName: fund.name,
       category: activeSubCategoryLabel || fund.category,
       month: monthLabel,
-      returnVal: returnVal != null ? returnVal : 'N/L',
+      returnVal: returnVal != null ? returnVal : 'N/A',
       isPositive: typeof returnVal === 'number' && returnVal > 0,
       isNegative: typeof returnVal === 'number' && returnVal < 0,
     });
@@ -171,9 +152,8 @@ export default function HeatmapTable({ funds = [], timeFilter = '12M', activeSub
 
                 {/* Monthly Return Cells */}
                 {displayMonths.map((m) => {
-                  const mIndex = monthsConfig.findIndex((orig) => orig.key === m.key);
-                  const val = getFundMonthlyReturn(fund, m, mIndex);
-                  const isNL = val === 'N/L';
+                  const val = getFundMonthlyReturn(fund, m);
+                  const isNA = val === 'N/A' || val === 'N/L';
 
                   return (
                     <td key={m.key} className="p-1 sm:p-1.5">
@@ -185,8 +165,8 @@ export default function HeatmapTable({ funds = [], timeFilter = '12M', activeSub
                           val
                         )}`}
                       >
-                        {isNL ? (
-                          <span className="text-gray-400 font-semibold italic text-[10px] sm:text-[11px]">N/L</span>
+                        {isNA ? (
+                          <span className="text-gray-400 font-medium text-[10px] sm:text-[11px]">N/A</span>
                         ) : (
                           <span>{typeof val === 'number' ? `${val > 0 ? '+' : ''}${val.toFixed(2)}%` : val}</span>
                         )}

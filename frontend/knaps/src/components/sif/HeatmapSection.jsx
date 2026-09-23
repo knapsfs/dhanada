@@ -1,44 +1,100 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import HeatmapHeader from './HeatmapHeader';
 import HeatmapTable from './HeatmapTable';
+import { fetchHeatmapFilters, fetchHeatmapData } from '../../api/funds';
 
-export default function HeatmapSection({ fundsData = [] }) {
+export default function HeatmapSection() {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef(null);
+
   const [timeFilter, setTimeFilter] = useState('12M'); 
-  const [activeCategory, setActiveCategory] = useState('');
+  const [filtersList, setFiltersList] = useState([]);
+  const [activeCategory, setActiveCategory] = useState('Open Ended');
   const [activeSubCategory, setActiveSubCategory] = useState('');
+  const [categoryFunds, setCategoryFunds] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  // Process live fundsData into a hierarchical structure
+  // Viewport intersection observer to lazy load only when scrolled into view
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    if (!('IntersectionObserver' in window)) {
+      setIsVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '100px' }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  // 1. Fetch distinct heatmap filters ONLY when visible in viewport
+  useEffect(() => {
+    if (!isVisible) return;
+
+    let isMounted = true;
+    async function loadFilters() {
+      try {
+        const rows = await fetchHeatmapFilters();
+        if (isMounted && Array.isArray(rows) && rows.length > 0) {
+          setFiltersList(rows);
+        }
+      } catch (err) {
+        console.error('Failed to load heatmap filters:', err);
+      }
+    }
+    loadFilters();
+    return () => { isMounted = false; };
+  }, [isVisible]);
+
+  // Process filters into hierarchical structure (schemeType -> subCategories)
   const groupedData = useMemo(() => {
     const dataMap = {};
-    fundsData.forEach(fund => {
-      // Use schemeType as parent, category as sub-category
-      const st = fund.schemeType || "Open Ended";
-      if (!fund.category) return;
-      
-      const ac = st;
-      const cat = fund.category;
+    const sourceRows = filtersList.length > 0 ? filtersList : [
+      { schemeType: 'Open Ended', category: 'Equity Long-Short Fund' },
+      { schemeType: 'Interval', category: 'Hybrid Long-Short Fund' }
+    ];
 
-      if (!dataMap[ac]) {
-        dataMap[ac] = { id: ac, label: ac, subCategories: {} };
+    sourceRows.forEach(item => {
+      const st = item.schemeType || "Open Ended";
+      const cat = item.category;
+      if (!cat) return;
+
+      if (!dataMap[st]) {
+        dataMap[st] = { id: st, label: st, subCategories: {} };
       }
-      if (!dataMap[ac].subCategories[cat]) {
-        dataMap[ac].subCategories[cat] = { id: cat, name: cat, funds: [] };
+      if (!dataMap[st].subCategories[cat]) {
+        dataMap[st].subCategories[cat] = { id: cat, name: cat };
       }
-      dataMap[ac].subCategories[cat].funds.push(fund);
     });
 
-    // Convert to sorted arrays
     const finalData = Object.values(dataMap).sort((a, b) => a.label.localeCompare(b.label));
     finalData.forEach(ac => {
       ac.subCategories = Object.values(ac.subCategories).sort((a, b) => a.name.localeCompare(b.name));
     });
 
     return finalData;
-  }, [fundsData]);
+  }, [filtersList]);
 
-  // Set default active tabs when data loads
+  // Set default active categories when filters load
   useEffect(() => {
+    if (!isVisible) return;
+
     if (groupedData.length > 0) {
       if (!activeCategory || !groupedData.find(g => g.id === activeCategory)) {
         const defaultCat = groupedData[0];
@@ -46,9 +102,42 @@ export default function HeatmapSection({ fundsData = [] }) {
         if (defaultCat.subCategories.length > 0) {
           setActiveSubCategory(defaultCat.subCategories[0].id);
         }
+      } else if (!activeSubCategory) {
+        const cat = groupedData.find(g => g.id === activeCategory);
+        if (cat && cat.subCategories.length > 0) {
+          setActiveSubCategory(cat.subCategories[0].id);
+        }
       }
     }
-  }, [groupedData, activeCategory]);
+  }, [isVisible, groupedData, activeCategory, activeSubCategory]);
+
+  // 2. Fetch targeted heatmap data when visible and active category, subcategory, or timeFilter changes
+  useEffect(() => {
+    if (!isVisible) return;
+    if (!activeCategory && !activeSubCategory) return;
+
+    let isMounted = true;
+    async function loadActiveHeatmap() {
+      try {
+        setLoading(true);
+        const data = await fetchHeatmapData({
+          time_filter: timeFilter,
+          scheme_type: activeCategory,
+          category: activeSubCategory,
+        });
+        if (isMounted && Array.isArray(data)) {
+          setCategoryFunds(data);
+        }
+      } catch (err) {
+        console.error('Failed to load active heatmap data:', err);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    }
+
+    loadActiveHeatmap();
+    return () => { isMounted = false; };
+  }, [isVisible, activeCategory, activeSubCategory, timeFilter]);
 
   const handleCategoryChange = (catId) => {
     setActiveCategory(catId);
@@ -62,12 +151,10 @@ export default function HeatmapSection({ fundsData = [] }) {
 
   const currentCategoryData = groupedData.find(g => g.id === activeCategory);
   const activeSubCatData = currentCategoryData?.subCategories.find(s => s.id === activeSubCategory);
-  const activeFunds = activeSubCatData ? activeSubCatData.funds : [];
-
-  if (groupedData.length === 0) return null; // Don't render if no data
+  const activeFunds = categoryFunds;
 
   return (
-    <section className="py-12 sm:py-16 bg-[#f7f9fc] relative overflow-hidden">
+    <section ref={sectionRef} className="py-12 sm:py-16 bg-[#f7f9fc] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

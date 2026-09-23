@@ -3,19 +3,40 @@ import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import FundSelector from './FundSelector'
 import InlineComparison from './InlineComparison'
+import { fetchFundsSelectorList } from '../../api/funds'
 
 const tabs = ['All', 'Equity', 'Debt', 'Hybrid']
 
 export default function TopFunds({
-  fundsData = [],
+  fundsData,
   selectedFunds = [null, null, null],
   onFundSelect,
   onReset
 }) {
   const [activeTab, setActiveTab] = useState('All')
   const [isComparisonVisible, setIsComparisonVisible] = useState(false)
+  const [selectorFunds, setSelectorFunds] = useState(fundsData || [])
   const comparisonRef = useRef(null)
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 })
+
+  // Load lightweight selector options once on mount if not passed
+  useEffect(() => {
+    let isMounted = true;
+    async function loadSelector() {
+      try {
+        const list = await fetchFundsSelectorList();
+        if (isMounted && Array.isArray(list)) {
+          setSelectorFunds(list);
+        }
+      } catch (e) {
+        console.error('Failed to load selector funds:', e);
+      }
+    }
+    if (!fundsData || fundsData.length === 0) {
+      loadSelector();
+    }
+    return () => { isMounted = false; };
+  }, []);
 
   const activeCount = useMemo(() => {
     return selectedFunds.filter(f => f !== null).length
@@ -29,12 +50,13 @@ export default function TopFunds({
   }, [activeCount, isComparisonVisible])
 
   const availableFundsForSelector = useMemo(() => {
-    if (activeTab === 'All') return fundsData
-    return fundsData.filter(f => {
+    const source = selectorFunds.length > 0 ? selectorFunds : fundsData;
+    if (activeTab === 'All') return source
+    return source.filter(f => {
       const textToSearch = `${f.schemeType || ''} ${f.category || ''} ${f.investmentStrategy || ''}`.toLowerCase()
       return textToSearch.includes(activeTab.toLowerCase())
     })
-  }, [activeTab, fundsData])
+  }, [activeTab, selectorFunds, fundsData])
 
   const handleCompare = () => {
     if (activeCount >= 2) {

@@ -1601,7 +1601,7 @@ Rules for contextSummary:
 10. NEVER include the word "Dhanada" in the summary.
 
 Rules for suggestions:
-1. Suggestions MUST directly correspond to your IMMEDIATELY PRECEDING response. 
+1. Suggestions MUST directly correspond to your IMMEDIATELY PRECEDING response.
 2. If you ask a question, suggestions MUST be realistic answers to it.
 3. Keep suggestions concise, unique, and actionable. Generate 1 to 4 options. If no natural replies exist, return [].
 

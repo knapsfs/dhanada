@@ -24,7 +24,9 @@ RUN apt-get update \
 
 USER frappe
 
-RUN bench get-app --branch develop https://github.com/frappe/crm.git
+RUN bench get-app --branch develop https://github.com/frappe/crm.git && \
+    git -C /home/frappe/frappe-bench/apps/crm fetch --depth=50 upstream develop && \
+    git -C /home/frappe/frappe-bench/apps/crm reset --hard cb46d9bf3a98aac794c40f849bf47321c1488e88
 
 # Copy backend application code
 COPY --chown=frappe:frappe . /home/frappe/frappe-bench/apps/dhanada

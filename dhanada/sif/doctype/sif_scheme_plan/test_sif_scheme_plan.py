@@ -72,7 +72,6 @@ class IntegrationTestSIFSchemePlan(IntegrationTestCase):
 		with patch("dhanada.sif.sync.scheduler.GitHubClient") as mock_client:
 			mock_client.return_value.fetch_latest_nav.return_value = []
 			mock_client.return_value.fetch_performance.return_value = {}
-			mock_client.return_value.fetch_heatmap_performance.return_value = []
 			with patch("dhanada.sif.sync.scheduler.DataMapper") as mock_mapper:
 				mock_mapper.return_value.map_dataset.return_value = {}
 				mock_mapper.return_value.validator.errors = []

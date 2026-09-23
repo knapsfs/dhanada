@@ -44,7 +44,7 @@ export default function FundSelector({ selectedFunds = [null, null, null], onFun
 
   const handleSelect = (index, selectedOption) => {
     if (onFundSelect) {
-      onFundSelect(index, selectedOption ? selectedOption.value : null);
+      onFundSelect(index, selectedOption ? (selectedOption.fund || { id: selectedOption.value, name: selectedOption.label }) : null);
     }
   };
 
