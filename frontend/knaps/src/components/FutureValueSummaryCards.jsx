@@ -56,7 +56,7 @@ export default function FutureValueSummaryCards({
   return (
     <section ref={ref} className="bg-[#f7f9fc] pb-6">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        
+
         {/* Goal Indicator Badge */}
         <div className="flex items-center justify-between gap-3 mb-4">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 text-[#032e92] border border-blue-200/60 text-xs font-bold">
@@ -69,8 +69,8 @@ export default function FutureValueSummaryCards({
         </div>
 
         {/* Two-Card Output Container matching uploaded sketch with brand calculator colors */}
-        <div className="relative grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-stretch gap-4 lg:gap-6">
-          
+        <div className="relative grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-stretch gap-2 lg:gap-2">
+
           {/* Card 1: Monthly Investment Needed */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -121,7 +121,7 @@ export default function FutureValueSummaryCards({
           <div className="flex md:flex-col items-center justify-center py-2 md:py-0 md:px-2 relative">
             <div className="hidden md:block w-px h-full bg-gradient-to-b from-transparent via-gray-300 to-transparent flex-1" />
             <div className="block md:hidden h-px w-full bg-gradient-to-r from-transparent via-gray-300 to-transparent flex-1" />
-            
+
             <div className="mx-3 md:my-3 px-4 py-2 rounded-full bg-white text-[#032e92] font-black text-xs tracking-widest shadow-lg shadow-blue-900/10 uppercase ring-4 ring-[#f7f9fc] border border-blue-200 select-none">
               OR
             </div>

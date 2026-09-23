@@ -69,9 +69,8 @@ function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onCh
               onChange(isNaN(num) ? raw : num)
             }
           }}
-          className={`w-full py-3.5 rounded-xl border-2 border-[#e8edf7] bg-[#f7f9fc] text-gray-800 font-bold text-base focus:outline-none focus:border-[#032e92] focus:ring-4 focus:ring-[#032e92]/8 transition-all placeholder-gray-400 ${
-            prefix ? 'pl-8 pr-4' : suffix ? 'pl-4 pr-12' : 'px-4'
-          }`}
+          className={`w-full py-3.5 rounded-xl border-2 border-[#e8edf7] bg-[#f7f9fc] text-gray-800 font-bold text-base focus:outline-none focus:border-[#032e92] focus:ring-4 focus:ring-[#032e92]/8 transition-all placeholder-gray-400 ${prefix ? 'pl-8 pr-4' : suffix ? 'pl-4 pr-12' : 'px-4'
+            }`}
           placeholder={placeholder}
         />
         {suffix && (
@@ -134,21 +133,12 @@ export default function FutureValueCalculatorForm({
                     key={g.id}
                     type="button"
                     onClick={() => handleSelectGoal(g)}
-                    className={`flex flex-col items-center justify-center p-3 rounded-2xl border-2 transition-all duration-200 cursor-pointer text-center group ${
-                      isSelected
-                        ? 'bg-[#032e92] border-[#032e92] text-white shadow-lg shadow-blue-900/20 scale-[1.02]'
-                        : 'bg-[#f7f9fc] border-transparent hover:border-blue-200 text-gray-700 hover:bg-blue-50/50'
-                    }`}
-                  >
-                    <div
-                      className={`w-9 h-9 rounded-xl flex items-center justify-center mb-1.5 transition-colors ${
-                        isSelected
-                          ? 'bg-white/20 text-white'
-                          : 'bg-white text-[#032e92] shadow-xs group-hover:bg-[#032e92] group-hover:text-white'
+                    className={`flex flex-col items-center justify-center p-3 rounded-2xl border-2 transition-all duration-200 cursor-pointer text-center group ${isSelected
+                      ? 'bg-[#032e92] border-[#032e92] text-white shadow-lg shadow-blue-900/20 scale-[1.02]'
+                      : 'bg-[#f7f9fc] border-transparent hover:border-blue-200 text-gray-700 hover:bg-blue-50/50'
                       }`}
-                    >
-                      <FontAwesomeIcon icon={g.icon} className="text-sm" />
-                    </div>
+                  >
+
                     <span className="text-xs font-bold leading-tight line-clamp-2">
                       {g.label}
                     </span>
@@ -196,7 +186,7 @@ export default function FutureValueCalculatorForm({
             * Illustrative calculation only. Actual mutual fund returns are subject to market conditions and not guaranteed.
           </p>
         </motion.div>
-      </div>
-    </section>
+      </div >
+    </section >
   )
 }
