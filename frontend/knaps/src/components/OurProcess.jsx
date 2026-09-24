@@ -102,17 +102,6 @@ export default function OurProcess() {
         {/* 5 Steps Process Grid */}
         <div className="relative">
 
-          {/* Connecting Wavy Dashed Line across Steps (Desktop) */}
-          <div className="hidden lg:block absolute top-4 left-[9%] right-[9%] h-6 pointer-events-none z-0">
-            <svg className="w-full h-full" viewBox="0 0 900 24" fill="none" preserveAspectRatio="none">
-              <path
-                d="M 10 12 Q 112 4, 225 12 T 450 12 T 675 12 T 890 12"
-                stroke="#cbd5e1"
-                strokeWidth="2"
-                strokeDasharray="6 6"
-              />
-            </svg>
-          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-6 lg:gap-4 relative z-10">
             {steps.map((item, idx) => (
@@ -125,12 +114,6 @@ export default function OurProcess() {
                 className="flex flex-col items-center text-center group cursor-pointer"
                 onClick={() => openLeadModal(`Process Step ${item.step}: ${item.title}`)}
               >
-                {/* Step Number Circle Badge */}
-                <div className="relative mb-2">
-                  <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center font-extrabold text-xs sm:text-sm transition-transform duration-300 group-hover:scale-115 ${item.badgeBg}`}>
-                    {item.step}
-                  </div>
-                </div>
 
                 {/* 3D Pedestal Illustration */}
                 <div className="w-32 sm:w-36 h-28 sm:h-30 flex items-center justify-center relative my-1">
