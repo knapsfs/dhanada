@@ -9,7 +9,6 @@ import {
   faSortDown,
   faSearch,
   faChevronDown,
-  faChevronUp,
   faCheck
 } from '@fortawesome/free-solid-svg-icons'
 import { getRiskLevelConfig } from '../../utils/risk'
@@ -114,7 +113,7 @@ function TableDropdown({ value, onChange, options, minWidth = 'min-w-[140px]' })
 
 import { fetchFundsList, fetchFundsSelectorList } from '../../api/funds'
 
-const INITIAL_VISIBLE_COUNT = 5
+const PAGE_SIZE = 50
 
 export default function FundsTable({
   funds = [],
@@ -133,7 +132,6 @@ export default function FundsTable({
     risk: 'All',
   })
   const [sortConfig, setSortConfig] = useState({ key: 'returns1M', direction: 'desc' })
-  const [isExpanded, setIsExpanded] = useState(false)
 
   // Load distinct filter metadata using cached selector list (0 additional network requests)
   useEffect(() => {
@@ -158,10 +156,9 @@ export default function FundsTable({
     async function loadTableData() {
       setTableLoading(true);
       try {
-        const pageSize = isExpanded ? 50 : INITIAL_VISIBLE_COUNT;
         const res = await fetchFundsList({
           page: 1,
-          page_size: pageSize,
+          page_size: PAGE_SIZE,
           search: filters.search,
           strategy: filters.investmentStrategy,
           subcategory: filters.schemeSubcategory,
@@ -187,7 +184,7 @@ export default function FundsTable({
 
     loadTableData();
     return () => { isMounted = false; };
-  }, [filters.search, filters.investmentStrategy, filters.schemeSubcategory, filters.risk, sortConfig.key, sortConfig.direction, isExpanded]);
+  }, [filters.search, filters.investmentStrategy, filters.schemeSubcategory, filters.risk, sortConfig.key, sortConfig.direction]);
 
   // Unique Investment Strategies dynamically derived from dataset
   const investmentStrategies = useMemo(() => {
@@ -350,10 +347,10 @@ export default function FundsTable({
       {/* Table Card */}
       <div className="bg-white rounded-3xl border border-[#e8edf7] shadow-xl shadow-blue-900/5 overflow-hidden">
 
-        {/* Table Container */}
-        <div className="w-full overflow-x-auto [scrollbar-width:thin] [scrollbar-color:#cbd5e1_transparent] [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-slate-100/60 [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#032e92] pb-1">
-          <table className="w-full text-left min-w-[950px] min-h-[280px] border-collapse">
-            <thead>
+        {/* Table Container with fixed header and internal vertical scroll */}
+        <div className="w-full overflow-x-auto max-h-[620px] overflow-y-auto [scrollbar-width:thin] [scrollbar-color:#cbd5e1_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-slate-100/60 [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#032e92]">
+          <table className="w-full text-left min-w-[950px] border-collapse">
+            <thead className="sticky top-0 z-20 shadow-xs">
               {/* Main Header / Top Filter Row */}
               <tr className="bg-white border-b border-[#e8edf7]">
 
@@ -494,7 +491,7 @@ export default function FundsTable({
             {/* Table Body */}
             <tbody className="divide-y divide-[#e8edf7]">
               {loading ? (
-                Array.from({ length: 5 }).map((_, idx) => (
+                Array.from({ length: 7 }).map((_, idx) => (
                   <tr key={idx} className="animate-pulse">
                     <td className="p-4"><div className="h-10 bg-gray-100 rounded-xl" /></td>
                     <td className="p-4"><div className="h-6 bg-gray-100 rounded-full" /></td>
@@ -623,23 +620,6 @@ export default function FundsTable({
         </div>
 
       </div>
-
-      {/* View All / Expand Button below the 5 funds */}
-      {!tableLoading && (totalCount > INITIAL_VISIBLE_COUNT || isExpanded || displayedFunds.length >= INITIAL_VISIBLE_COUNT) && (
-        <div className="flex justify-center items-center pt-2">
-          <button
-            type="button"
-            onClick={() => setIsExpanded(prev => !prev)}
-            className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center gap-2 cursor-pointer"
-          >
-            <span>{isExpanded ? 'Show Less' : 'View All Funds'}</span>
-            <FontAwesomeIcon
-              icon={isExpanded ? faChevronUp : faChevronDown}
-              className="text-[10px] transition-transform duration-300"
-            />
-          </button>
-        </div>
-      )}
 
     </div>
   )

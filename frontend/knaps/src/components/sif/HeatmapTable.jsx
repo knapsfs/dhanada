@@ -101,13 +101,13 @@ export default function HeatmapTable({ funds = [], timeFilter = '12M', activeSub
 
   return (
     <div className="flex-1 w-full bg-white relative">
-      <div className="overflow-x-auto w-full no-scrollbar pb-4">
+      <div className="overflow-x-auto max-h-[520px] overflow-y-auto w-full [scrollbar-width:thin] [scrollbar-color:#cbd5e1_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-slate-100/60 [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#032e92] pb-2">
         <table className="w-full min-w-[650px] border-collapse">
-          <thead>
+          <thead className="sticky top-0 z-30 bg-white shadow-xs">
             {/* Category label indicator header */}
             {activeSubCategoryLabel && (
               <tr className="bg-[#f8faff] border-b border-[#e8edf7]">
-                <th colSpan={displayMonths.length + 1} className="py-2.5 px-4 text-left">
+                <th colSpan={displayMonths.length + 1} className="py-2.5 px-4 text-left bg-[#f8faff]">
                   <span className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-700 tracking-wide uppercase">
                     <span className="w-2 h-2 rounded-full bg-indigo-600"></span>
                     {activeSubCategoryLabel}
@@ -115,14 +115,14 @@ export default function HeatmapTable({ funds = [], timeFilter = '12M', activeSub
                 </th>
               </tr>
             )}
-            <tr className="border-b border-[#e8edf7]">
-              <th className="sticky left-0 bg-white z-20 py-4 px-3 sm:px-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider min-w-[150px] sm:min-w-[220px] lg:min-w-[280px]">
+            <tr className="border-b border-[#e8edf7] bg-white">
+              <th className="sticky left-0 bg-white z-30 py-4 px-3 sm:px-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider min-w-[150px] sm:min-w-[220px] lg:min-w-[280px]">
                 FUND
               </th>
               {displayMonths.map((m) => (
                 <th
                   key={m.key}
-                  className="py-4 px-2 text-center text-[11px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider min-w-[75px] sm:min-w-[90px]"
+                  className="py-4 px-2 text-center text-[11px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider min-w-[75px] sm:min-w-[90px] bg-white"
                 >
                   {m.label}
                 </th>
