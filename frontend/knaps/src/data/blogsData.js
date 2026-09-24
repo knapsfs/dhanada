@@ -1,0 +1,216 @@
+import sevenMistakesImg from "../assets/blogs/seven-common-mistakes-begineer-makes-while-investing-in-mutual-funds.jpg";
+import mfSchemeIndiaImg from "../assets/blogs/mutual-fund-scheme-in-india.jpg";
+import sifVsMfImg from "../assets/blogs/sif-vs-mf.jpg";
+
+export const blogsData = [
+	{
+		id: 12,
+		slug: "7-common-mistakes-beginners-make-while-investing-in-mutual-funds",
+		category: "Mutual Funds Guide",
+		date: "Sep 23, 2026",
+		readTime: "7 min read",
+		title: "7 Common Mistakes Beginners Make While Investing in Mutual Funds",
+		description:
+			"Avoid costly mutual fund investing mistakes driven by fear, greed, FOMO, and lack of planning. Learn why chasing past returns, stopping SIPs during market dips, daily portfolio tracking, or investing without an emergency fund can derail long-term compounding.",
+		image: sevenMistakesImg,
+		author: "Saurabh Sharma",
+		authorRole: "Senior Financial Advisor, KNAPS",
+		authorImage:
+			"https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=200&auto=format&fit=crop",
+		featured: true,
+	},
+	{
+		id: 11,
+		slug: "how-to-choose-a-mutual-fund-scheme-in-india-2026",
+		category: "Mutual Funds Guide",
+		date: "Sep 23, 2026",
+		readTime: "8 min read",
+		title: "How to choose a Mutual fund scheme in India 2026?",
+		description:
+			"Choosing a mutual fund is simple. Learn how to shortlist across Equity, Debt, and Hybrid based on objective, horizon, riskometer, performance, expense ratio, and the 5 clear rules for when to exit.",
+		image: mfSchemeIndiaImg,
+		author: "Saurabh Sharma",
+		authorRole: "Senior Financial Advisor, KNAPS",
+		authorImage:
+			"https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=200&auto=format&fit=crop",
+		featured: true,
+	},
+	{
+		id: 1,
+		slug: "sif-vs-mutual-funds",
+		category: "Specialized Investment Funds (SIF)",
+		date: "Sep 22, 2026",
+		readTime: "7 min read",
+		title: "SIF vs Mutual Funds: What’s the Difference and Which One Should I Choose?",
+		description:
+			"Understand the critical differences between Specialized Investment Funds (SIFs) and Mutual Funds: minimum investment (₹10 lakh vs ₹500), derivatives, long-short strategies, and how to choose the right one.",
+		image: sifVsMfImg,
+		author: "Saurabh Sharma",
+		authorRole: "Senior Financial Advisor, KNAPS",
+		authorImage:
+			"https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=200&auto=format&fit=crop",
+		featured: true,
+	},
+	{
+		id: 2,
+		slug: "navigating-volatility-long-term-investors",
+		category: "Market Trends",
+		date: "Oct 24, 2026",
+		readTime: "6 min read",
+		title: "Navigating Volatility: A Guide for Long-Term Investors",
+		description:
+			"Discover strategies to protect your portfolio during market downturns and capitalize on emerging opportunities through disciplined asset allocation.",
+		image: "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?auto=format&fit=crop&w=1200&q=80",
+		author: "Rahul Verma",
+		authorRole: "Chief Market Strategist",
+		authorImage:
+			"https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop",
+		featured: false,
+	},
+	{
+		id: 3,
+		slug: "5-steps-to-bulletproof-retirement-plan",
+		category: "Personal Finance",
+		date: "Nov 02, 2026",
+		readTime: "8 min read",
+		title: "5 Steps to Building a Bulletproof Retirement Plan",
+		description:
+			"A comprehensive approach to ensuring you have the corpus needed for a comfortable and stress-free retirement with inflation-adjusted income.",
+		image: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1200&q=80",
+		author: "Neha Kapoor",
+		authorRole: "Retirement Planning Specialist",
+		authorImage:
+			"https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&auto=format&fit=crop",
+		featured: false,
+	},
+	{
+		id: 4,
+		slug: "understanding-alternative-investment-funds-aifs",
+		category: "Wealth Management",
+		date: "Nov 15, 2026",
+		readTime: "7 min read",
+		title: "Understanding Alternative Investment Funds (AIFs)",
+		description:
+			"An introductory guide to how high-net-worth individuals are diversifying beyond traditional stocks and bonds with Category I, II, and III AIFs.",
+		image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
+		author: "Vikram Singh",
+		authorRole: "Portfolio Manager",
+		authorImage:
+			"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop",
+		featured: false,
+	},
+	{
+		id: 5,
+		slug: "why-term-insurance-crucial-in-30s",
+		category: "Insurance",
+		date: "Dec 05, 2026",
+		readTime: "5 min read",
+		title: "Why Term Insurance is Crucial in Your 30s",
+		description:
+			"Learn why buying pure term life insurance early can lock in lower premiums for decades while creating an ironclad safety net for dependents.",
+		image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1200&q=80",
+		author: "Sneha Patel",
+		authorRole: "Insurance & Protection Advisor",
+		authorImage:
+			"https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200&auto=format&fit=crop",
+		featured: false,
+	},
+	{
+		id: 6,
+		slug: "sip-vs-lumpsum-bull-market",
+		category: "Mutual Funds",
+		date: "Dec 18, 2026",
+		readTime: "6 min read",
+		title: "SIP vs Lumpsum: Which is Better in a Bull Market?",
+		description:
+			"An analytical breakdown of investment strategies to help you maximize returns and manage timing risk depending on market valuation cycles.",
+		image: "https://images.unsplash.com/photo-1579532537598-459ecdaf39cc?auto=format&fit=crop&w=1200&q=80",
+		author: "Rahul Verma",
+		authorRole: "Chief Market Strategist",
+		authorImage:
+			"https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop",
+		featured: false,
+	},
+	{
+		id: 7,
+		slug: "smart-tax-saving-strategies-high-earners",
+		category: "Tax Planning",
+		date: "Jan 10, 2027",
+		readTime: "8 min read",
+		title: "Smart Tax Saving Strategies for High Earners",
+		description:
+			"Explore compliant and strategic avenues across ELSS, NPS, health deductions, and long-term capital gains structuring to maximize post-tax returns.",
+		image: "https://images.unsplash.com/photo-1554224154-26032ffc0d07?auto=format&fit=crop&w=1200&q=80",
+		author: "Amit Joshi",
+		authorRole: "Chartered Tax Consultant",
+		authorImage:
+			"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop",
+		featured: false,
+	},
+	{
+		id: 8,
+		slug: "how-nps-supercharges-retirement-corpus",
+		category: "Retirement",
+		date: "Jan 22, 2027",
+		readTime: "7 min read",
+		title: "How the NPS Can Supercharge Your Retirement Corpus",
+		description:
+			"A deep dive into the National Pension System, low fund management charges, auto-choice equity glide paths, and exclusive tax deductions under 80CCD.",
+		image: "https://images.unsplash.com/photo-1507206130118-b5907f817163?auto=format&fit=crop&w=1200&q=80",
+		author: "Vikram Singh",
+		authorRole: "Portfolio Manager",
+		authorImage:
+			"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop",
+		featured: false,
+	},
+	{
+		id: 9,
+		slug: "psychology-of-investing-common-traps",
+		category: "Investment",
+		date: "Feb 05, 2027",
+		readTime: "6 min read",
+		title: "The Psychology of Investing: Avoiding Common Traps",
+		description:
+			"Why do rational investors make impulsive market decisions? Understand loss aversion, recency bias, and herd mentality to build emotional discipline.",
+		image: "https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&w=1200&q=80",
+		author: "Neha Kapoor",
+		authorRole: "Behavioral Finance Specialist",
+		authorImage:
+			"https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&auto=format&fit=crop",
+		featured: false,
+	},
+	{
+		id: 10,
+		slug: "planning-for-child-higher-education",
+		category: "Financial Planning",
+		date: "Feb 14, 2027",
+		readTime: "6 min read",
+		title: "Planning for Your Child’s Higher Education",
+		description:
+			"With education inflation outpacing headline inflation, learn how to build an equity-backed targeted education fund early and systematically.",
+		image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1200&q=80",
+		author: "Sneha Patel",
+		authorRole: "Financial Advisor",
+		authorImage:
+			"https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200&auto=format&fit=crop",
+		featured: false,
+	},
+];
+
+export function getBlogByIdOrSlug(idOrSlug) {
+	if (!idOrSlug) return blogsData[0];
+	const normalized = String(idOrSlug).toLowerCase().trim();
+	const found = blogsData.find(
+		(b) => String(b.id) === normalized || b.slug.toLowerCase() === normalized
+	);
+	return found || blogsData[0];
+}
+
+export function getLatestBlogs(limit = 3) {
+	return blogsData.slice(0, limit);
+}
+
+export function getRelatedBlogs(currentIdOrSlug, limit = 3) {
+	const current = getBlogByIdOrSlug(currentIdOrSlug);
+	return blogsData.filter((b) => b.id !== current.id).slice(0, limit);
+}

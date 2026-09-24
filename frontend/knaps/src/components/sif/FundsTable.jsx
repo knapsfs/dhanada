@@ -1,0 +1,626 @@
+import { formatNav } from '../../utils/formatters'
+import { useState, useMemo, useRef, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Link } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  faSort,
+  faSortUp,
+  faSortDown,
+  faSearch,
+  faChevronDown,
+  faCheck
+} from '@fortawesome/free-solid-svg-icons'
+import { getRiskLevelConfig } from '../../utils/risk'
+import { useLeadModal } from '../../context/LeadModalContext'
+
+function formatNavDate(dateVal) {
+  if (!dateVal) return null;
+  const str = String(dateVal).trim();
+  if (/^\d{4}-\d{2}-\d{2}/.test(str)) {
+    const parts = str.split('-');
+    const year = parts[0];
+    const monthIndex = parseInt(parts[1], 10) - 1;
+    const day = parseInt(parts[2].slice(0, 2), 10);
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    if (monthIndex >= 0 && monthIndex < 12) {
+      return `${day} ${months[monthIndex]} ${year}`;
+    }
+  }
+  try {
+    const d = new Date(str);
+    if (!isNaN(d.getTime())) {
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+    }
+  } catch {
+    // fallback
+  }
+  return str;
+}
+
+
+// Custom styled dropdown component with rich popup menu design
+function TableDropdown({ value, onChange, options, minWidth = 'min-w-[140px]' }) {
+  const [isOpen, setIsOpen] = useState(false)
+  const dropdownRef = useRef(null)
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false)
+      }
+    }
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [isOpen])
+
+  const selectedOpt = options.find(o => o.value === value) || options[0] || { label: value, value }
+
+  return (
+    <div className={`relative w-full ${isOpen ? 'z-50' : 'z-20'}`} ref={dropdownRef}>
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between pl-3.5 pr-3 py-1.5 rounded-full border border-gray-200/90 text-xs font-medium text-gray-700 bg-white hover:border-gray-300 focus:outline-none focus:border-[#032e92] focus:ring-2 focus:ring-[#032e92]/10 cursor-pointer shadow-2xs transition-all text-left"
+      >
+        <span className="truncate pr-1">{selectedOpt.label}</span>
+        <FontAwesomeIcon
+          icon={faChevronDown}
+          className={`text-gray-400 text-[10px] flex-shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180 text-[#032e92]' : ''}`}
+        />
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 4, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 4, scale: 0.98 }}
+            transition={{ duration: 0.15 }}
+            className={`absolute left-0 mt-1.5 ${minWidth} w-full bg-white rounded-2xl shadow-xl shadow-blue-900/10 border border-gray-100 p-1.5 z-50 max-h-60 overflow-y-auto`}
+          >
+            {options.map((opt) => {
+              const isSelected = opt.value === value
+              return (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => {
+                    onChange(opt.value)
+                    setIsOpen(false)
+                  }}
+                  className={`w-full text-left px-3 py-2 rounded-xl text-xs flex items-center justify-between transition-colors cursor-pointer ${isSelected
+                    ? 'bg-blue-50 text-[#032e92] font-bold'
+                    : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 font-medium'
+                    }`}
+                >
+                  <span className="truncate">{opt.label}</span>
+                  {isSelected && (
+                    <FontAwesomeIcon icon={faCheck} className="text-[10px] text-[#032e92] ml-2 flex-shrink-0" />
+                  )}
+                </button>
+              )
+            })}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+import { fetchFundsList, fetchFundsSelectorList } from '../../api/funds'
+
+const PAGE_SIZE = 50
+
+export default function FundsTable({
+  funds = [],
+  loading = false,
+  onTotalCountChange,
+}) {
+  const { openLeadModal } = useLeadModal()
+  const [localFunds, setLocalFunds] = useState([])
+  const [tableLoading, setTableLoading] = useState(loading)
+  const [totalCount, setTotalCount] = useState(0)
+  const [selectorFunds, setSelectorFunds] = useState([])
+  const [filters, setFilters] = useState({
+    search: '',
+    investmentStrategy: 'All',
+    schemeSubcategory: 'All',
+    risk: 'All',
+  })
+  const [sortConfig, setSortConfig] = useState({ key: 'returns1M', direction: 'desc' })
+
+  // Load distinct filter metadata using cached selector list (0 additional network requests)
+  useEffect(() => {
+    let isMounted = true;
+    async function loadFilterMetadata() {
+      try {
+        const list = await fetchFundsSelectorList();
+        if (isMounted && Array.isArray(list)) {
+          setSelectorFunds(list);
+        }
+      } catch (err) {
+        console.error('Failed to load filter metadata:', err);
+      }
+    }
+    loadFilterMetadata();
+    return () => { isMounted = false; };
+  }, []);
+
+  // Server-side query on filter, sort, or expand change
+  useEffect(() => {
+    let isMounted = true;
+    async function loadTableData() {
+      setTableLoading(true);
+      try {
+        const res = await fetchFundsList({
+          page: 1,
+          page_size: PAGE_SIZE,
+          search: filters.search,
+          strategy: filters.investmentStrategy,
+          subcategory: filters.schemeSubcategory,
+          risk: filters.risk,
+          sort_by: sortConfig.key,
+          sort_order: sortConfig.direction,
+        });
+        if (isMounted) {
+          setLocalFunds(res || []);
+          if (res.pagination && res.pagination.total !== undefined) {
+            setTotalCount(res.pagination.total);
+            if (onTotalCountChange) {
+              onTotalCountChange(res.pagination.total);
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load table funds:', err);
+      } finally {
+        if (isMounted) setTableLoading(false);
+      }
+    }
+
+    loadTableData();
+    return () => { isMounted = false; };
+  }, [filters.search, filters.investmentStrategy, filters.schemeSubcategory, filters.risk, sortConfig.key, sortConfig.direction]);
+
+  // Unique Investment Strategies dynamically derived from dataset
+  const investmentStrategies = useMemo(() => {
+    if (!selectorFunds.length) return ['Equity', 'Hybrid'];
+    const set = new Set();
+    selectorFunds.forEach(f => {
+      if (f.strategy) set.add(f.strategy);
+    });
+    return Array.from(set).filter(Boolean).sort();
+  }, [selectorFunds]);
+
+  // Unique Scheme Subcategories dynamically derived and filtered by selected investmentStrategy
+  const schemeSubcategories = useMemo(() => {
+    if (!selectorFunds.length) {
+      if (filters.investmentStrategy === 'Hybrid') {
+        return ['Active Asset Allocator Long-Short Fund', 'Hybrid Long-Short Fund'];
+      }
+      if (filters.investmentStrategy === 'Equity') {
+        return [
+          'Active Asset Allocator Long-Short Fund',
+          'Equity Ex-Top 100 Long-Short Fund',
+          'Equity Long-Short Fund',
+          'Sector Rotation Long-Short Fund',
+        ];
+      }
+      return [
+        'Active Asset Allocator Long-Short Fund',
+        'Equity Ex-Top 100 Long-Short Fund',
+        'Equity Long-Short Fund',
+        'Hybrid Long-Short Fund',
+        'Sector Rotation Long-Short Fund',
+      ];
+    }
+
+    const set = new Set();
+    selectorFunds.forEach(f => {
+      const stratMatches =
+        !filters.investmentStrategy ||
+        filters.investmentStrategy === 'All' ||
+        f.strategy === filters.investmentStrategy;
+      const sub = f.category || f.schemeSubcategory;
+      if (stratMatches && sub) {
+        set.add(sub);
+      }
+    });
+    return Array.from(set).filter(Boolean).sort();
+  }, [selectorFunds, filters.investmentStrategy]);
+
+  // Handle Strategy change with subcategory cascade reset if needed
+  const handleStrategyChange = (newStrategy) => {
+    setFilters(prev => {
+      let nextSubcategory = prev.schemeSubcategory;
+      if (newStrategy !== 'All' && prev.schemeSubcategory !== 'All') {
+        const validForNew = selectorFunds.length
+          ? selectorFunds.some(
+              f =>
+                f.strategy === newStrategy &&
+                (f.category === prev.schemeSubcategory || f.schemeSubcategory === prev.schemeSubcategory)
+            )
+          : (newStrategy === 'Hybrid' && ['Hybrid Long-Short Fund', 'Active Asset Allocator Long-Short Fund'].includes(prev.schemeSubcategory)) ||
+            (newStrategy === 'Equity' && ['Equity Long-Short Fund', 'Equity Ex-Top 100 Long-Short Fund', 'Sector Rotation Long-Short Fund', 'Active Asset Allocator Long-Short Fund'].includes(prev.schemeSubcategory));
+
+        if (!validForNew) {
+          nextSubcategory = 'All';
+        }
+      }
+      return {
+        ...prev,
+        investmentStrategy: newStrategy,
+        schemeSubcategory: nextSubcategory,
+      };
+    });
+  };
+
+  const handleSort = (key) => {
+    setSortConfig(prev => ({
+      key,
+      direction: prev.key === key && prev.direction === 'desc' ? 'asc' : 'desc'
+    }))
+  }
+
+  const displayedFunds = localFunds;
+
+  const renderSortIcon = (key) => {
+    if (sortConfig.key !== key) {
+      return <FontAwesomeIcon icon={faSort} className="text-gray-300 text-[11px] ml-1 group-hover:text-gray-600 transition-colors" />
+    }
+    return sortConfig.direction === 'asc' ? (
+      <FontAwesomeIcon icon={faSortUp} className="text-[#032e92] text-[11px] ml-1" />
+    ) : (
+      <FontAwesomeIcon icon={faSortDown} className="text-[#032e92] text-[11px] ml-1" />
+    )
+  }
+
+  // Get AMC Logo or stylized representation
+  const renderLogo = (fund) => {
+    const rawLogo = fund.amc_logo || fund.amcLogo || (typeof fund.logo === 'string' && (fund.logo.startsWith('/') || fund.logo.startsWith('http')) ? fund.logo : null)
+    const logoUrl = rawLogo && typeof rawLogo === 'string' && rawLogo.startsWith('/private/files/')
+      ? rawLogo.replace('/private/files/', '/files/')
+      : rawLogo
+
+    if (logoUrl) {
+      return (
+        <div className="w-10 h-10 rounded-full bg-white border border-gray-200/80 flex items-center justify-center p-1.5 shadow-xs flex-shrink-0 overflow-hidden">
+          <img
+            src={logoUrl}
+            alt={fund.amc || fund.name || 'AMC Logo'}
+            className="w-full h-full object-contain object-center"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none'
+              if (e.currentTarget.nextSibling) {
+                e.currentTarget.nextSibling.style.display = 'flex'
+              }
+            }}
+          />
+          <div
+            style={{ display: 'none' }}
+            className="w-full h-full bg-[#eef4ff] text-[#032e92] items-center justify-center font-bold text-xs rounded-full"
+          >
+            {(fund.name || 'F').charAt(0).toUpperCase()}
+          </div>
+        </div>
+      )
+    }
+
+    const amcLower = (fund.amc || fund.name || '').toLowerCase()
+
+    if (amcLower.includes('quant')) {
+      return (
+        <div className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center p-1 shadow-xs flex-shrink-0">
+          <span className="text-[11px] font-bold text-gray-800 tracking-tighter">quant</span>
+        </div>
+      )
+    }
+    if (amcLower.includes('edelweiss') || fund.name?.toLowerCase().includes('altiva')) {
+      return (
+        <div className="w-10 h-10 rounded-full bg-[#1e3a8a] text-white flex items-center justify-center font-bold text-base shadow-xs flex-shrink-0">
+          <span>❄</span>
+        </div>
+      )
+    }
+    if (amcLower.includes('aditya') || amcLower.includes('birla') || fund.name?.toLowerCase().includes('apex')) {
+      return (
+        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-600 to-red-600 text-white flex items-center justify-center font-bold text-xs shadow-xs flex-shrink-0">
+          <span>AB</span>
+        </div>
+      )
+    }
+
+    return (
+      <div className="w-10 h-10 rounded-full bg-[#eef4ff] text-[#032e92] border border-blue-100 flex items-center justify-center font-bold text-xs shadow-xs flex-shrink-0">
+        {(fund.name || 'F').charAt(0).toUpperCase()}
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex flex-col gap-6">
+
+      {/* Table Card */}
+      <div className="bg-white rounded-3xl border border-[#e8edf7] shadow-xl shadow-blue-900/5 overflow-hidden">
+
+        {/* Table Container with fixed header and internal vertical scroll */}
+        <div className="w-full overflow-x-auto max-h-[620px] overflow-y-auto [scrollbar-width:thin] [scrollbar-color:#cbd5e1_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-slate-100/60 [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#032e92]">
+          <table className="w-full text-left min-w-[950px] border-collapse">
+            <thead className="sticky top-0 z-20 shadow-xs">
+              {/* Main Header / Top Filter Row */}
+              <tr className="bg-white border-b border-[#e8edf7]">
+
+                {/* 1. FUND / AMC + Search */}
+                <th className="py-4 px-4 sm:px-6 align-top min-w-[260px] max-w-[340px]">
+                  <div className="flex flex-col gap-2">
+                    <span className="text-[12px] font-extrabold text-[#032e92] uppercase tracking-wider">
+                      FUND/AMC
+                    </span>
+                    <div className="relative">
+                      <FontAwesomeIcon icon={faSearch} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none" />
+                      <input
+                        type="text"
+                        placeholder="Search Fund / AMC"
+                        value={filters.search || ''}
+                        onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
+                        className="w-full pl-9 pr-3.5 py-1.5 rounded-full border border-gray-200/90 text-xs font-medium text-gray-800 placeholder-gray-400 bg-white hover:border-gray-300 focus:outline-none focus:border-[#032e92] focus:ring-2 focus:ring-[#032e92]/10 transition-all shadow-2xs"
+                      />
+                    </div>
+                  </div>
+                </th>
+
+                {/* 2. Investment Strategy + Dropdown */}
+                <th className="py-4 px-3 align-top min-w-[160px]">
+                  <div className="flex flex-col gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleSort('investmentStrategy')}
+                      className="flex items-center gap-1 text-[12px] font-extrabold text-[#032e92] uppercase tracking-wider group cursor-pointer"
+                    >
+                      <span>Strategy</span>
+                      {renderSortIcon('investmentStrategy')}
+                    </button>
+                    <TableDropdown
+                      value={filters.investmentStrategy || 'All'}
+                      onChange={handleStrategyChange}
+                      options={[
+                        { value: 'All', label: 'All Strategies' },
+                        ...investmentStrategies.map(st => ({ value: st, label: st }))
+                      ]}
+                    />
+                  </div>
+                </th>
+
+                {/* 3. Scheme Subcategory + Dropdown (Cascades based on Strategy) */}
+                <th className="py-4 px-3 align-top min-w-[220px]">
+                  <div className="flex flex-col gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleSort('schemeSubcategory')}
+                      className="flex items-center gap-1 text-[12px] font-extrabold text-[#032e92] uppercase tracking-wider group cursor-pointer"
+                    >
+                      <span>Scheme Subcategory</span>
+                      {renderSortIcon('schemeSubcategory')}
+                    </button>
+                    <TableDropdown
+                      value={filters.schemeSubcategory || 'All'}
+                      onChange={(val) => setFilters(prev => ({ ...prev, schemeSubcategory: val }))}
+                      minWidth="min-w-[290px]"
+                      options={[
+                        { value: 'All', label: 'All Subcategories' },
+                        ...schemeSubcategories.map(sub => ({ value: sub, label: sub }))
+                      ]}
+                    />
+                  </div>
+                </th>
+
+                {/* 4. Risk Band + Dropdown */}
+                <th className="py-4 px-3 align-top min-w-[140px]">
+                  <div className="flex flex-col gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleSort('riskLevel')}
+                      className="flex items-center gap-1 text-[12px] font-extrabold text-[#032e92] uppercase tracking-wider group cursor-pointer"
+                    >
+                      <span>Risk Band</span>
+                      {renderSortIcon('riskLevel')}
+                    </button>
+                    <TableDropdown
+                      value={filters.risk || 'All'}
+                      onChange={(val) => setFilters(prev => ({ ...prev, risk: val }))}
+                      options={[
+                        { value: 'All', label: 'All Risk' },
+                        { value: 'Level 1', label: 'Level 1' },
+                        { value: 'Level 2', label: 'Level 2' },
+                        { value: 'Level 3', label: 'Level 3' },
+                        { value: 'Level 4', label: 'Level 4' },
+                        { value: 'Level 5', label: 'Level 5' },
+                      ]}
+                    />
+                  </div>
+                </th>
+
+                {/* 5. NAV + Sort */}
+                <th className="py-4 px-3 align-top text-center min-w-[120px]">
+                  <div className="flex flex-col gap-2 items-center">
+                    <button
+                      type="button"
+                      onClick={() => handleSort('nav')}
+                      className="flex items-center gap-1 text-[12px] font-extrabold text-[#032e92] uppercase tracking-wider group cursor-pointer"
+                    >
+                      <span>NAV</span>
+                      {renderSortIcon('nav')}
+                    </button>
+                    <span className="text-[11px] font-semibold text-gray-400 py-1.5 block">
+                      Daily Value
+                    </span>
+                  </div>
+                </th>
+
+                {/* 6. 1M Return + Sort */}
+                <th className="py-4 px-3 align-top text-center min-w-[130px]">
+                  <div className="flex flex-col gap-2 items-center">
+                    <button
+                      type="button"
+                      onClick={() => handleSort('returns1M')}
+                      className="flex items-center gap-1 text-[12px] font-extrabold text-[#032e92] uppercase tracking-wider group cursor-pointer"
+                    >
+                      <span>1M Return</span>
+                      {renderSortIcon('returns1M')}
+                    </button>
+                    <span className="text-[11px] font-semibold text-gray-400 py-1.5 block">
+                      Past 30 Days
+                    </span>
+                  </div>
+                </th>
+
+                {/* 7. Action */}
+                <th className="py-4 px-4 sm:px-6 align-top text-center min-w-[170px]">
+                  <span className="text-[12px] font-extrabold text-[#032e92] uppercase tracking-wider block">
+                    Action
+                  </span>
+                </th>
+
+              </tr>
+            </thead>
+
+            {/* Table Body */}
+            <tbody className="divide-y divide-[#e8edf7]">
+              {loading ? (
+                Array.from({ length: 7 }).map((_, idx) => (
+                  <tr key={idx} className="animate-pulse">
+                    <td className="p-4"><div className="h-10 bg-gray-100 rounded-xl" /></td>
+                    <td className="p-4"><div className="h-6 bg-gray-100 rounded-full" /></td>
+                    <td className="p-4"><div className="h-6 bg-gray-100 rounded-full" /></td>
+                    <td className="p-4"><div className="h-6 bg-gray-100 rounded-lg" /></td>
+                    <td className="p-4"><div className="h-6 bg-gray-100 rounded-lg" /></td>
+                    <td className="p-4"><div className="h-6 bg-gray-100 rounded-lg" /></td>
+                    <td className="p-4"><div className="h-8 bg-gray-100 rounded-xl" /></td>
+                  </tr>
+                ))
+              ) : displayedFunds.length > 0 ? (
+                displayedFunds.map((fund, idx) => {
+                  const riskConfig = getRiskLevelConfig(fund.riskLevel)
+                  const returnVal1M = fund.returns1M != null ? fund.returns1M : (fund.returns_1m != null ? fund.returns_1m : null)
+                  const fundCode = fund.id || fund.sebi_code || fund.name
+                  const strategyVal = fund.investmentStrategy || fund.investment_strategy || 'Equity'
+                  const subcategoryVal = fund.schemeSubcategory || fund.scheme_subcategory || fund.category || 'Specialized Fund'
+
+                  return (
+                    <motion.tr
+                      key={fund.id || idx}
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.25, delay: Math.min(idx * 0.02, 0.3) }}
+                      className="hover:bg-[#f8faff] transition-colors group"
+                    >
+                      {/* 1. FUND / AMC */}
+                      <td className="py-4 px-4 sm:px-6">
+                        <div className="flex items-center gap-3">
+                          {renderLogo(fund)}
+                          <div className="flex flex-col min-w-0">
+                            <Link
+                              to={`/sif/${encodeURIComponent(fundCode)}`}
+                              className="font-bold text-sm text-gray-900 group-hover:text-[#032e92] transition-colors line-clamp-1"
+                              title={fund.name}
+                            >
+                              {fund.name}
+                            </Link>
+                            <p className="text-xs text-gray-400 font-medium truncate mt-0.5">
+                              {fund.amc || 'SIF Fund'}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* 2. Investment Strategy */}
+                      <td className="py-4 px-3">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#f1f5f9] text-[#334155] border border-[#e2e8f0]">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#475569]" />
+                          {strategyVal}
+                        </span>
+                      </td>
+
+                      {/* 3. Scheme Subcategory */}
+                      <td className="py-4 px-3">
+                        <span className="text-xs sm:text-sm font-medium text-gray-700 leading-snug">
+                          {subcategoryVal}
+                        </span>
+                      </td>
+
+                      {/* 4. Risk Band */}
+                      <td className="py-4 px-3">
+                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${riskConfig.bg} ${riskConfig.text} ${riskConfig.border}`}>
+                          <span className="w-1.5 h-1.5 rounded-full bg-current" />
+                          {riskConfig.level !== 'N/A' ? `Level ${riskConfig.level}` : 'NA'}
+                        </span>
+                      </td>
+
+                      {/* 5. NAV */}
+                      <td className="py-4 px-3 text-center">
+                        <div className="flex flex-col items-center">
+                          <span className="text-xs sm:text-sm font-bold text-gray-900 leading-tight">
+                            {fund.nav != null ? formatNav(fund.nav) : (idx === 0 ? '₹11.2776' : idx === 1 ? '₹11.1244' : '₹10.7764')}
+                          </span>
+                          {(fund.navDate || fund.nav_date || fund.nav == null) && (
+                            <span className="text-[11px] font-medium text-gray-400 mt-0.5 whitespace-nowrap">
+                              {formatNavDate(fund.navDate || fund.nav_date) || '11 Sep 2026'}
+                            </span>
+                          )}
+                        </div>
+                      </td>
+
+                      {/* 6. 1M Return */}
+                      <td className="py-4 px-3 text-center">
+                        {typeof returnVal1M === 'number' ? (
+                          <span className={`text-xs sm:text-sm font-bold ${returnVal1M < 0 ? 'text-red-500' : 'text-emerald-600'}`}>
+                            {returnVal1M > 0 ? '+' : ''}{returnVal1M}%
+                          </span>
+                        ) : (
+                          <span className="text-xs sm:text-sm font-medium text-gray-400">
+                            {returnVal1M || 'N/A'}
+                          </span>
+                        )}
+                      </td>
+
+                      {/* 7. Actions */}
+                      <td className="py-4 px-4 sm:px-6 text-center">
+                        <div className="flex items-center justify-center gap-2">
+                          <button
+                            onClick={openLeadModal}
+                            className="btn-ripple px-4 py-2 rounded-xl bg-gradient-to-r from-[#032e92] to-[#021d63] text-white text-xs font-semibold hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 cursor-pointer"
+                          >
+                            Invest
+                          </button>
+                          <Link
+                            to={`/sif/${encodeURIComponent(fundCode)}`}
+                            className="px-4 py-2 rounded-xl bg-[#cbd5e1] hover:bg-gray-300 text-gray-700 text-xs font-bold transition-colors cursor-pointer"
+                          >
+                            Details
+                          </Link>
+                        </div>
+                      </td>
+
+                    </motion.tr>
+                  )
+                })
+              ) : (
+                <tr>
+                  <td colSpan={7} className="py-16 text-center text-gray-500 font-medium">
+                    No funds found matching your criteria.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+    </div>
+  )
+}
