@@ -1,25 +1,25 @@
-import { useState, useMemo, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import HeatmapHeader from './HeatmapHeader';
-import HeatmapTable from './HeatmapTable';
-import { fetchHeatmapFilters, fetchHeatmapData } from '../../api/funds';
+import { useState, useMemo, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import HeatmapHeader from "./HeatmapHeader";
+import HeatmapTable from "./HeatmapTable";
+import { fetchHeatmapFilters, fetchHeatmapData, fetchFundsSelectorList } from "../../api/funds";
 
 export default function HeatmapSection() {
+  const [timeFilter, setTimeFilter] = useState("12M");
+  const [activeStrategy, setActiveStrategy] = useState("All");
+  const [activeSubCategory, setActiveSubCategory] = useState("All");
+  const [filtersList, setFiltersList] = useState([]);
+  const [selectorFunds, setSelectorFunds] = useState([]);
+  const [categoryFunds, setCategoryFunds] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef(null);
 
-  const [timeFilter, setTimeFilter] = useState('12M'); 
-  const [filtersList, setFiltersList] = useState([]);
-  const [activeCategory, setActiveCategory] = useState('Open Ended');
-  const [activeSubCategory, setActiveSubCategory] = useState('');
-  const [categoryFunds, setCategoryFunds] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  // Viewport intersection observer to lazy load only when scrolled into view
+  // Lazy loading observer: Only activate when section is near viewport
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
-    if (!('IntersectionObserver' in window)) {
+    if (!("IntersectionObserver" in window)) {
       setIsVisible(true);
       return;
     }
@@ -31,7 +31,7 @@ export default function HeatmapSection() {
           observer.disconnect();
         }
       },
-      { rootMargin: '100px' }
+      { rootMargin: "100px" }
     );
 
     if (sectionRef.current) {
@@ -43,78 +43,142 @@ export default function HeatmapSection() {
     };
   }, []);
 
-  // 1. Fetch distinct heatmap filters ONLY when visible in viewport
+  // 1. Fetch heatmap filters AND selector list when visible
   useEffect(() => {
     if (!isVisible) return;
 
     let isMounted = true;
     async function loadFilters() {
       try {
-        const rows = await fetchHeatmapFilters();
-        if (isMounted && Array.isArray(rows) && rows.length > 0) {
-          setFiltersList(rows);
+        const [filtersRes, selectorRes] = await Promise.allSettled([
+          fetchHeatmapFilters(),
+          fetchFundsSelectorList(),
+        ]);
+
+        if (isMounted) {
+          if (filtersRes.status === "fulfilled" && Array.isArray(filtersRes.value)) {
+            setFiltersList(filtersRes.value);
+          }
+          if (selectorRes.status === "fulfilled" && Array.isArray(selectorRes.value)) {
+            setSelectorFunds(selectorRes.value);
+          }
         }
       } catch (err) {
-        console.error('Failed to load heatmap filters:', err);
+        console.error("Failed to load heatmap filters:", err);
       }
     }
     loadFilters();
-    return () => { isMounted = false; };
+    return () => {
+      isMounted = false;
+    };
   }, [isVisible]);
 
-  // Process filters into hierarchical structure (schemeType -> subCategories)
+  // Process filters into hierarchical structure:
+  // - "All" contains ALL distinct subcategories
+  // - "Equity" contains only Equity subcategories
+  // - "Hybrid" contains only Hybrid subcategories
   const groupedData = useMemo(() => {
-    const dataMap = {};
-    const sourceRows = filtersList.length > 0 ? filtersList : [
-      { schemeType: 'Open Ended', category: 'Equity Long-Short Fund' },
-      { schemeType: 'Interval', category: 'Hybrid Long-Short Fund' }
-    ];
+    const strategySubcatsMap = {
+      Equity: new Set(),
+      Hybrid: new Set(),
+    };
+    const allSubcatsSet = new Set();
 
-    sourceRows.forEach(item => {
-      const st = item.schemeType || "Open Ended";
+    // 1. Ingest from selectorFunds (comprehensive list of all active funds)
+    selectorFunds.forEach((f) => {
+      const strat = f.strategy || f.investmentStrategy || (f.category?.toLowerCase().includes("hybrid") ? "Hybrid" : "Equity");
+      const cat = f.category || f.schemeSubcategory;
+      if (cat) {
+        allSubcatsSet.add(cat);
+        if (!strategySubcatsMap[strat]) {
+          strategySubcatsMap[strat] = new Set();
+        }
+        strategySubcatsMap[strat].add(cat);
+      }
+    });
+
+    // 2. Ingest from filtersList (from SIF Scheme query)
+    filtersList.forEach((item) => {
+      const strat = item.investmentStrategy || item.strategy || (item.category?.toLowerCase().includes("hybrid") ? "Hybrid" : "Equity");
       const cat = item.category;
-      if (!cat) return;
-
-      if (!dataMap[st]) {
-        dataMap[st] = { id: st, label: st, subCategories: {} };
-      }
-      if (!dataMap[st].subCategories[cat]) {
-        dataMap[st].subCategories[cat] = { id: cat, name: cat };
+      if (cat) {
+        allSubcatsSet.add(cat);
+        if (!strategySubcatsMap[strat]) {
+          strategySubcatsMap[strat] = new Set();
+        }
+        strategySubcatsMap[strat].add(cat);
       }
     });
 
-    const finalData = Object.values(dataMap).sort((a, b) => a.label.localeCompare(b.label));
-    finalData.forEach(ac => {
-      ac.subCategories = Object.values(ac.subCategories).sort((a, b) => a.name.localeCompare(b.name));
+    // 3. Fallback defaults if API lists are not yet populated
+    if (allSubcatsSet.size === 0) {
+      allSubcatsSet.add("Active Asset Allocator Long-Short Fund");
+      allSubcatsSet.add("Equity Ex-Top 100 Long-Short Fund");
+      allSubcatsSet.add("Equity Long-Short Fund");
+      allSubcatsSet.add("Hybrid Long-Short Fund");
+      allSubcatsSet.add("Sector Rotation Long-Short Fund");
+    }
+
+    if (!strategySubcatsMap.Equity.size) {
+      strategySubcatsMap.Equity = new Set([
+        "Active Asset Allocator Long-Short Fund",
+        "Equity Ex-Top 100 Long-Short Fund",
+        "Equity Long-Short Fund",
+        "Sector Rotation Long-Short Fund",
+      ]);
+    }
+
+    if (!strategySubcatsMap.Hybrid.size) {
+      strategySubcatsMap.Hybrid = new Set([
+        "Active Asset Allocator Long-Short Fund",
+        "Hybrid Long-Short Fund",
+      ]);
+    }
+
+    // Build Strategy Items
+    const allStrategyGroup = {
+      id: "All",
+      label: "All",
+      subCategories: [
+        { id: "All", name: "All Categories" },
+        ...Array.from(allSubcatsSet)
+          .sort()
+          .map((c) => ({ id: c, name: c })),
+      ],
+    };
+
+    // Sort strategy keys (Equity, Hybrid, ...)
+    const strategyKeys = Object.keys(strategySubcatsMap).sort();
+    const strategyGroups = strategyKeys.map((strat) => {
+      const subcats = Array.from(strategySubcatsMap[strat]).sort();
+      return {
+        id: strat,
+        label: strat,
+        subCategories: [
+          { id: "All", name: `All ${strat} Categories` },
+          ...subcats.map((c) => ({ id: c, name: c })),
+        ],
+      };
     });
 
-    return finalData;
-  }, [filtersList]);
+    return [allStrategyGroup, ...strategyGroups];
+  }, [filtersList, selectorFunds]);
 
-  // Set default active categories when filters load
+  // Ensure active strategy & subcategory validity
   useEffect(() => {
     if (!isVisible) return;
 
     if (groupedData.length > 0) {
-      if (!activeCategory || !groupedData.find(g => g.id === activeCategory)) {
-        const defaultCat = groupedData[0];
-        setActiveCategory(defaultCat.id);
-        if (defaultCat.subCategories.length > 0) {
-          setActiveSubCategory(defaultCat.subCategories[0].id);
-        }
-      } else if (!activeSubCategory) {
-        const cat = groupedData.find(g => g.id === activeCategory);
-        if (cat && cat.subCategories.length > 0) {
-          setActiveSubCategory(cat.subCategories[0].id);
-        }
+      if (!activeStrategy || !groupedData.find((g) => g.id === activeStrategy)) {
+        setActiveStrategy("All");
+        setActiveSubCategory("All");
       }
     }
-  }, [isVisible, groupedData, activeCategory, activeSubCategory]);
+  }, [isVisible, groupedData, activeStrategy]);
 
-  // 2. Fetch targeted heatmap data when visible and active category, subcategory, or timeFilter changes
+  // 2. Fetch targeted heatmap data when visible and active strategy, subcategory, or timeFilter changes
   useEffect(() => {
     if (!isVisible) return;
-    if (!activeCategory && !activeSubCategory) return;
 
     let isMounted = true;
     async function loadActiveHeatmap() {
@@ -122,35 +186,33 @@ export default function HeatmapSection() {
         setLoading(true);
         const data = await fetchHeatmapData({
           time_filter: timeFilter,
-          scheme_type: activeCategory,
-          category: activeSubCategory,
+          strategy: activeStrategy === "All" ? undefined : activeStrategy,
+          investment_strategy: activeStrategy === "All" ? undefined : activeStrategy,
+          category: activeSubCategory === "All" ? undefined : activeSubCategory,
         });
         if (isMounted && Array.isArray(data)) {
           setCategoryFunds(data);
         }
       } catch (err) {
-        console.error('Failed to load active heatmap data:', err);
+        console.error("Failed to load active heatmap data:", err);
       } finally {
         if (isMounted) setLoading(false);
       }
     }
 
     loadActiveHeatmap();
-    return () => { isMounted = false; };
-  }, [isVisible, activeCategory, activeSubCategory, timeFilter]);
+    return () => {
+      isMounted = false;
+    };
+  }, [isVisible, activeStrategy, activeSubCategory, timeFilter]);
 
-  const handleCategoryChange = (catId) => {
-    setActiveCategory(catId);
-    const catData = groupedData.find(g => g.id === catId);
-    if (catData && catData.subCategories.length > 0) {
-      setActiveSubCategory(catData.subCategories[0].id);
-    } else {
-      setActiveSubCategory('');
-    }
+  const handleStrategyChange = (stratId) => {
+    setActiveStrategy(stratId);
+    setActiveSubCategory("All");
   };
 
-  const currentCategoryData = groupedData.find(g => g.id === activeCategory);
-  const activeSubCatData = currentCategoryData?.subCategories.find(s => s.id === activeSubCategory);
+  const currentStrategyData = groupedData.find((g) => g.id === activeStrategy) || groupedData[0];
+  const activeSubCatData = currentStrategyData?.subCategories.find((s) => s.id === activeSubCategory);
   const activeFunds = categoryFunds;
 
   return (
@@ -166,22 +228,22 @@ export default function HeatmapSection() {
           <HeatmapHeader timeFilter={timeFilter} setTimeFilter={setTimeFilter} />
 
           <div className="flex flex-col p-4 sm:p-6 lg:p-8 gap-6 bg-white w-full">
-            {/* Top Filter Bar with 2 sections: Asset Class and Category */}
+            {/* Top Filter Bar with 2 sections: Investment Strategy and Category */}
             <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6 lg:gap-10 pb-2 w-full">
-              {/* 1. SCHEME TYPE */}
+              {/* 1. INVESTMENT STRATEGY */}
               <div className="flex flex-col gap-2.5 flex-shrink-0">
                 <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
-                  Scheme Type
+                  Investment Strategy
                 </span>
                 <div className="flex flex-wrap items-center gap-2">
                   {groupedData.map((cat) => (
                     <button
                       key={cat.id}
-                      onClick={() => handleCategoryChange(cat.id)}
-                      className={`px-5 py-2 rounded-full text-xs sm:text-sm font-bold transition-all duration-200 ${
-                        activeCategory === cat.id
-                          ? 'bg-[#032e92] text-white shadow-md shadow-blue-900/20'
-                          : 'text-gray-500 hover:text-[#032e92] font-semibold'
+                      onClick={() => handleStrategyChange(cat.id)}
+                      className={`px-5 py-2 rounded-full text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
+                        activeStrategy === cat.id
+                          ? "bg-[#032e92] text-white shadow-md shadow-blue-900/20"
+                          : "text-gray-500 hover:text-[#032e92] font-semibold"
                       }`}
                     >
                       {cat.label}
@@ -191,20 +253,20 @@ export default function HeatmapSection() {
               </div>
 
               {/* 2. CATEGORY (Sub-Categories) */}
-              {currentCategoryData && currentCategoryData.subCategories.length > 0 && (
+              {currentStrategyData && currentStrategyData.subCategories.length > 0 && (
                 <div className="flex flex-col gap-2.5 lg:border-l lg:border-gray-100 lg:pl-10 flex-1">
                   <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
                     Category
                   </span>
                   <div className="flex flex-wrap items-center gap-2">
-                    {currentCategoryData.subCategories.map((sub) => (
+                    {currentStrategyData.subCategories.map((sub) => (
                       <button
                         key={sub.id}
                         onClick={() => setActiveSubCategory(sub.id)}
-                        className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 ${
+                        className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer ${
                           activeSubCategory === sub.id
-                            ? 'bg-[#032e92] text-white shadow-md shadow-blue-900/20'
-                            : 'bg-white border border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50'
+                            ? "bg-[#032e92] text-white shadow-md shadow-blue-900/20"
+                            : "bg-white border border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50"
                         }`}
                       >
                         {sub.name}
@@ -219,16 +281,16 @@ export default function HeatmapSection() {
             <div className="w-full overflow-hidden bg-white pt-2 border-t border-[#e8edf7]">
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={`${activeCategory}-${activeSubCategory}-${timeFilter}`}
+                  key={`${activeStrategy}-${activeSubCategory}-${timeFilter}`}
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -15 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <HeatmapTable 
-                    funds={activeFunds} 
-                    timeFilter={timeFilter} 
-                    activeSubCategoryLabel={activeSubCatData?.name} 
+                  <HeatmapTable
+                    funds={activeFunds}
+                    timeFilter={timeFilter}
+                    activeSubCategoryLabel={activeSubCategory !== "All" ? activeSubCatData?.name : undefined}
                   />
                 </motion.div>
               </AnimatePresence>

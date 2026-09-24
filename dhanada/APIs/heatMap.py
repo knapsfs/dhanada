@@ -41,7 +41,7 @@ def get_scheme_heatmap_performance(
 			try:
 				y_int = int(year)
 				query = query.where(Monthly.month.like(f"{y_int}-%"))
-			except ValueError, TypeError:
+			except (ValueError, TypeError):
 				pass
 
 		monthly_rows = query.run(as_dict=True)
@@ -57,7 +57,7 @@ def get_scheme_heatmap_performance(
 			try:
 				row_year = int(parts[0])
 				row_month = int(parts[1])
-			except ValueError, IndexError:
+			except (ValueError, IndexError):
 				continue
 
 			plan_name = r.get("scheme_plan")
@@ -97,13 +97,14 @@ def get_scheme_heatmap_performance(
 @rate_limit(limit=60, seconds=60, ip_based=True)
 def get_heatmap_filters():
 	"""
-	Lightweight distinct filter options for Heatmap (scheme types and categories).
+	Lightweight distinct filter options for Heatmap (investment strategies, scheme types, and categories).
 	"""
 	try:
 		Scheme = DocType("SIF Scheme")
 		query = (
 			frappe.qb.from_(Scheme)
 			.select(
+				Scheme.investment_strategy.as_("investmentStrategy"),
 				Scheme.scheme_type.as_("schemeType"),
 				Scheme.scheme_subcategory.as_("category"),
 			)
@@ -120,10 +121,16 @@ def get_heatmap_filters():
 # Heatmap UI component ke liye grouped schemes aur monthly returns laata hai.
 @frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
 @rate_limit(limit=120, seconds=60, ip_based=True)
-def get_heatmap_data(time_filter: str = "12M", scheme_type: str | None = None, category: str | None = None):
+def get_heatmap_data(
+	time_filter: str = "12M",
+	scheme_type: str | None = None,
+	category: str | None = None,
+	investment_strategy: str | None = None,
+	strategy: str | None = None,
+):
 	"""
 	Lightweight API tailored for the SIF Heatmap UI component.
-	Returns schemes grouped by scheme_type and category, populated with monthly returns.
+	Returns schemes grouped by strategy and category, populated with monthly returns.
 	"""
 	try:
 		Scheme = DocType("SIF Scheme")
@@ -138,6 +145,7 @@ def get_heatmap_data(time_filter: str = "12M", scheme_type: str | None = None, c
 			.select(
 				Scheme.name.as_("id"),
 				Scheme.scheme_name.as_("name"),
+				Scheme.investment_strategy.as_("investmentStrategy"),
 				Scheme.scheme_type.as_("schemeType"),
 				Scheme.scheme_subcategory.as_("category"),
 				Scheme.nfo_start_date,
@@ -149,6 +157,10 @@ def get_heatmap_data(time_filter: str = "12M", scheme_type: str | None = None, c
 			.where(Scheme.docstatus < 2)
 			.orderby(Scheme.scheme_name, order=Order.asc)
 		)
+
+		strat = investment_strategy or strategy
+		if strat and strat.strip() and strat.lower() != "all":
+			schemes_query = schemes_query.where(Scheme.investment_strategy == strat.strip())
 
 		if scheme_type and scheme_type.strip() and scheme_type.lower() != "all":
 			schemes_query = schemes_query.where(Scheme.scheme_type == scheme_type.strip())
@@ -169,6 +181,7 @@ def get_heatmap_data(time_filter: str = "12M", scheme_type: str | None = None, c
 				schemes_by_id[s_id] = {
 					"id": row["id"],
 					"name": row.get("name"),
+					"investmentStrategy": row.get("investmentStrategy") or "Equity",
 					"schemeType": row.get("schemeType") or "Open Ended",
 					"category": row.get("category"),
 					"nfo_start_date": row.get("nfo_start_date"),
@@ -236,7 +249,7 @@ def get_heatmap_data(time_filter: str = "12M", scheme_type: str | None = None, c
 						m_idx = int(parts[1]) - 1
 						if 0 <= m_idx < 12:
 							monthly_by_plan[p_name][f"{months_short[m_idx]}_{yr_suffix}"] = f_val
-					except ValueError, IndexError:
+					except (ValueError, IndexError):
 						pass
 
 		# 3. Assemble response list
@@ -263,6 +276,7 @@ def get_heatmap_data(time_filter: str = "12M", scheme_type: str | None = None, c
 				{
 					"id": s["id"],
 					"name": s.get("name"),
+					"investmentStrategy": s.get("investmentStrategy") or "Equity",
 					"schemeType": s.get("schemeType") or "Open Ended",
 					"category": s.get("category"),
 					"launchDate": nav_date_str,
