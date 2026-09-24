@@ -85,6 +85,7 @@ services:
     - sites-vol:/home/frappe/frappe-bench/sites
     - assets-vol:/home/frappe/frappe-bench/sites/assets
     - apps-vol:/home/frappe/frappe-bench/apps
+    - ./amfi_fetcher_repo:/home/frappe/amfi_fetcher_repo
     restart: unless-stopped
     depends_on:
       configurator:
@@ -171,6 +172,7 @@ services:
     - sites-vol:/home/frappe/frappe-bench/sites
     - assets-vol:/home/frappe/frappe-bench/sites/assets
     - apps-vol:/home/frappe/frappe-bench/apps
+    - ./amfi_fetcher_repo:/home/frappe/amfi_fetcher_repo
     restart: unless-stopped
     depends_on:
       configurator:
@@ -192,6 +194,7 @@ services:
     - sites-vol:/home/frappe/frappe-bench/sites
     - assets-vol:/home/frappe/frappe-bench/sites/assets
     - apps-vol:/home/frappe/frappe-bench/apps
+    - ./amfi_fetcher_repo:/home/frappe/amfi_fetcher_repo
     restart: unless-stopped
     depends_on:
       configurator:
@@ -211,6 +214,7 @@ services:
     - sites-vol:/home/frappe/frappe-bench/sites
     - assets-vol:/home/frappe/frappe-bench/sites/assets
     - apps-vol:/home/frappe/frappe-bench/apps
+    - ./amfi_fetcher_repo:/home/frappe/amfi_fetcher_repo
     restart: unless-stopped
     depends_on:
       configurator:

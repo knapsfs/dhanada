@@ -1,51 +1,56 @@
 import { motion } from 'framer-motion';
+import { useLeadModal } from '../../context/LeadModalContext';
 
-export default function RiskResult({ result, onRetake }) {
+export default function RiskResult({ result, onRetake, isModal = false }) {
+  const { openLeadModal } = useLeadModal ? useLeadModal() : { openLeadModal: () => {} };
   const categories = ['Conservative', 'Balanced', 'Moderately Aggressive', 'Aggressive', 'Very Aggressive'];
-  const profileIndex = categories.indexOf(result.profile);
+  const profileIndex = Math.max(0, categories.indexOf(result.profile));
   const positionPercentage = (profileIndex / (categories.length - 1)) * 100;
+
+  const waText = `Hi KNAPS Team, I completed my Investor Risk Profiler assessment. My indicative profile is ${result.profile} (Score: ${result.score}/${result.maxScore}). I would like to consult with an advisor.`;
+  const waUrl = `https://wa.me/+919990243143?text=${encodeURIComponent(waText)}`;
 
   return (
     <motion.div 
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      className="max-w-4xl mx-auto w-full"
+      transition={{ duration: 0.5 }}
+      className={`max-w-4xl mx-auto w-full ${isModal ? 'py-2 px-1' : ''}`}
     >
-      <div className="text-center mb-12">
-        <h2 className="text-[#032e92] font-bold tracking-widest uppercase text-sm mb-4">
+      <div className="text-center mb-8 sm:mb-10">
+        <h2 className="text-[#032e92] font-bold tracking-widest uppercase text-xs sm:text-sm mb-2">
           Your Indicative Risk Profile
         </h2>
-        <h3 className="text-4xl md:text-5xl font-black text-[#0a192f] mb-6">
+        <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#0a192f] mb-4">
           {result.profile}
         </h3>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-sm sm:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
           {result.description}
         </p>
       </div>
       
       {/* Risk Meter */}
-      <div className="bg-white rounded-3xl p-8 md:p-12 shadow-xl shadow-blue-900/5 border border-gray-100 mb-12 relative overflow-hidden">
+      <div className="bg-white rounded-3xl p-6 sm:p-10 shadow-xl shadow-blue-900/5 border border-gray-100 mb-8 sm:mb-10 relative overflow-hidden">
         <div className="relative pt-8 pb-4 w-full">
           {/* Base line */}
-          <div className="h-2 bg-gray-100 rounded-full w-full"></div>
+          <div className="h-2.5 bg-gray-100 rounded-full w-full"></div>
           
           {/* Fill line */}
           <motion.div 
             initial={{ width: 0 }}
             animate={{ width: `${positionPercentage}%` }}
-            transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
-            className="h-2 bg-gradient-to-r from-blue-300 to-[#032e92] rounded-full absolute top-8 left-0"
+            transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+            className="h-2.5 bg-gradient-to-r from-blue-300 via-indigo-600 to-[#032e92] rounded-full absolute top-8 left-0"
           ></motion.div>
           
           {/* Pointer */}
           <motion.div
             initial={{ left: 0 }}
             animate={{ left: `${positionPercentage}%` }}
-            transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
+            transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
             className="absolute top-0 -translate-x-1/2 flex flex-col items-center"
           >
-            <div className="bg-[#0a192f] text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded mb-1 whitespace-nowrap">
+            <div className="bg-[#0a192f] text-white text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded mb-1 whitespace-nowrap shadow-sm">
               YOU
             </div>
             <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-[#0a192f]"></div>
@@ -54,99 +59,110 @@ export default function RiskResult({ result, onRetake }) {
           
           {/* Labels */}
           <div className="flex justify-between mt-6 px-1">
-            <span className="text-[10px] md:text-xs font-bold text-gray-400 text-center w-1/5 -ml-2">Conservative</span>
-            <span className="text-[10px] md:text-xs font-bold text-gray-400 text-center w-1/5">Balanced</span>
-            <span className="text-[10px] md:text-xs font-bold text-gray-400 text-center w-1/5">Moderate</span>
-            <span className="text-[10px] md:text-xs font-bold text-gray-400 text-center w-1/5">Aggressive</span>
-            <span className="text-[10px] md:text-xs font-bold text-gray-400 text-center w-1/5 -mr-2">Very Aggressive</span>
+            <span className="text-[9px] sm:text-xs font-bold text-gray-400 text-center w-1/5 -ml-2">Conservative</span>
+            <span className="text-[9px] sm:text-xs font-bold text-gray-400 text-center w-1/5">Balanced</span>
+            <span className="text-[9px] sm:text-xs font-bold text-gray-400 text-center w-1/5">Mod. Aggressive</span>
+            <span className="text-[9px] sm:text-xs font-bold text-gray-400 text-center w-1/5">Aggressive</span>
+            <span className="text-[9px] sm:text-xs font-bold text-gray-400 text-center w-1/5 -mr-2">Very Aggressive</span>
           </div>
         </div>
       </div>
       
       {/* Assessment Breakdown */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-        <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100 text-center">
-          <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-2">Risk Comfort</p>
-          <p className="text-[#0a192f] font-black">{result.metrics.riskComfort}</p>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-8 sm:mb-10">
+        <div className="bg-gray-50 rounded-2xl p-4 sm:p-5 border border-gray-100 text-center">
+          <p className="text-gray-400 text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1">Risk Comfort</p>
+          <p className="text-[#0a192f] text-sm sm:text-base font-black">{result.metrics.riskComfort}</p>
         </div>
-        <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100 text-center">
-          <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-2">Flexibility</p>
-          <p className="text-[#0a192f] font-black">{result.metrics.financialFlexibility}</p>
+        <div className="bg-gray-50 rounded-2xl p-4 sm:p-5 border border-gray-100 text-center">
+          <p className="text-gray-400 text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1">Flexibility</p>
+          <p className="text-[#0a192f] text-sm sm:text-base font-black">{result.metrics.financialFlexibility}</p>
         </div>
-        <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100 text-center">
-          <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-2">Experience</p>
-          <p className="text-[#0a192f] font-black">{result.metrics.experience}</p>
+        <div className="bg-gray-50 rounded-2xl p-4 sm:p-5 border border-gray-100 text-center">
+          <p className="text-gray-400 text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1">Experience</p>
+          <p className="text-[#0a192f] text-sm sm:text-base font-black">{result.metrics.experience}</p>
         </div>
-        <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100 text-center">
-          <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-2">Horizon</p>
-          <p className="text-[#0a192f] font-black">{result.metrics.horizon}</p>
+        <div className="bg-gray-50 rounded-2xl p-4 sm:p-5 border border-gray-100 text-center">
+          <p className="text-gray-400 text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1">Horizon</p>
+          <p className="text-[#0a192f] text-sm sm:text-base font-black">{result.metrics.horizon}</p>
         </div>
       </div>
       
       {/* What it means */}
-      <div className="bg-[#032e92] text-white rounded-3xl p-8 md:p-12 mb-12 text-center md:text-left md:flex items-center gap-10">
-        <div className="md:w-1/3 mb-6 md:mb-0">
-          <h3 className="text-2xl font-black leading-tight">What Your Profile Means</h3>
+      <div className="bg-[#032e92] text-white rounded-3xl p-6 sm:p-10 mb-8 sm:mb-10 text-center md:text-left md:flex items-center gap-8">
+        <div className="md:w-1/3 mb-4 md:mb-0">
+          <h3 className="text-xl sm:text-2xl font-black leading-tight">What Your Profile Means</h3>
         </div>
         <div className="md:w-2/3">
-          <p className="text-blue-100 leading-relaxed text-lg">
-            Your responses suggest that you may be comfortable with {profileIndex > 2 ? 'a relatively higher level of investment volatility' : profileIndex < 2 ? 'prioritizing stability over aggressive growth' : 'a balanced approach to volatility and growth'}. However, risk tolerance is only one part of an investment decision. Your goals, liquidity needs, financial responsibilities, investment horizon and overall financial circumstances also matter.
+          <p className="text-blue-100 leading-relaxed text-sm sm:text-base m-0">
+            Your responses suggest that you may be comfortable with {profileIndex > 2 ? 'a relatively higher level of investment volatility to achieve superior long-term growth' : profileIndex < 2 ? 'prioritizing capital stability over aggressive equity growth' : 'a balanced approach between growth and stability'}. However, risk tolerance is only one part of an investment decision. Your goals, liquidity needs, financial responsibilities, and time horizon are equally critical.
           </p>
         </div>
       </div>
       
       {/* Explore Concepts */}
-      <h3 className="text-2xl font-black text-[#0a192f] mb-8 text-center">Explore Investment Concepts</h3>
-      <div className="grid md:grid-cols-2 gap-6 mb-10 sm:mb-12">
-        <div className="border border-gray-200 rounded-2xl p-8 hover:shadow-lg hover:border-[#032e92] transition-all bg-white group cursor-pointer">
-          <h4 className="text-xl font-bold text-[#0a192f] mb-3">Mutual Funds</h4>
-          <p className="text-gray-600 mb-6">Learn about diversified market-linked investment strategies tailored to various risk profiles.</p>
-          <span className="text-[#032e92] font-bold group-hover:underline">Explore &rarr;</span>
+      <h3 className="text-xl sm:text-2xl font-black text-[#0a192f] mb-6 text-center">Recommended Investment Concepts</h3>
+      <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-10">
+        <div className="border border-gray-200 rounded-2xl p-6 hover:shadow-lg hover:border-[#032e92] transition-all bg-white group">
+          <h4 className="text-lg font-bold text-[#0a192f] mb-2">Mutual Funds</h4>
+          <p className="text-gray-600 text-xs sm:text-sm mb-4">Diversified market-linked investment strategies tailored to your exact risk appetite and time horizon.</p>
+          <a href="/mutual-funds" className="text-[#032e92] font-bold text-xs sm:text-sm group-hover:underline">Explore Funds &rarr;</a>
         </div>
-        <div className="border border-gray-200 rounded-2xl p-8 hover:shadow-lg hover:border-[#032e92] transition-all bg-white group cursor-pointer">
-          <h4 className="text-xl font-bold text-[#0a192f] mb-3">NPS</h4>
-          <p className="text-gray-600 mb-6">Explore long-term retirement planning concepts and their associated benefits.</p>
-          <span className="text-[#032e92] font-bold group-hover:underline">Explore &rarr;</span>
+        <div className="border border-gray-200 rounded-2xl p-6 hover:shadow-lg hover:border-[#032e92] transition-all bg-white group">
+          <h4 className="text-lg font-bold text-[#0a192f] mb-2">National Pension System (NPS)</h4>
+          <p className="text-gray-600 text-xs sm:text-sm mb-4">Long-term retirement corpus creation with disciplined tax advantages and multi-asset allocation.</p>
+          <a href="/nps" className="text-[#032e92] font-bold text-xs sm:text-sm group-hover:underline">Explore NPS &rarr;</a>
         </div>
         {profileIndex >= 2 && (
           <>
-            <div className="border border-gray-200 rounded-2xl p-8 hover:shadow-lg hover:border-[#032e92] transition-all bg-white group cursor-pointer">
-              <h4 className="text-xl font-bold text-[#0a192f] mb-3">SIF</h4>
-              <p className="text-gray-600 mb-6">Understand Specialized Investment Funds and their applicable framework for sophisticated investors.</p>
-              <span className="text-[#032e92] font-bold group-hover:underline">Explore &rarr;</span>
+            <div className="border border-gray-200 rounded-2xl p-6 hover:shadow-lg hover:border-[#032e92] transition-all bg-white group">
+              <h4 className="text-lg font-bold text-[#0a192f] mb-2">Specialized Investment Funds (SIF)</h4>
+              <p className="text-gray-600 text-xs sm:text-sm mb-4">SEBI-regulated long-short derivative strategies starting from ₹10 lakh with built-in drawdown cushioning.</p>
+              <a href="/sif" className="text-[#032e92] font-bold text-xs sm:text-sm group-hover:underline">Explore SIF &rarr;</a>
             </div>
-            <div className="border border-gray-200 rounded-2xl p-8 hover:shadow-lg hover:border-[#032e92] transition-all bg-white group cursor-pointer">
-              <h4 className="text-xl font-bold text-[#0a192f] mb-3">AIF</h4>
-              <p className="text-gray-600 mb-6">Learn how Alternative Investment Funds and alternative strategies work.</p>
-              <span className="text-[#032e92] font-bold group-hover:underline">Explore &rarr;</span>
+            <div className="border border-gray-200 rounded-2xl p-6 hover:shadow-lg hover:border-[#032e92] transition-all bg-white group">
+              <h4 className="text-lg font-bold text-[#0a192f] mb-2">Hedging & Capital Cushioning</h4>
+              <p className="text-gray-600 text-xs sm:text-sm mb-4">Learn how institutional derivative hedging minimizes bear-market drawdowns while preserving upside.</p>
+              <a href="/sif-vs-mutual-funds" className="text-[#032e92] font-bold text-xs sm:text-sm group-hover:underline">Read Comparison &rarr;</a>
             </div>
           </>
         )}
       </div>
       
-      {/* CTA */}
-      <div className="bg-gray-50 rounded-3xl p-10 text-center border border-gray-200 mb-12">
-        <h3 className="text-2xl font-black text-[#0a192f] mb-4">Want to discuss your investment goals?</h3>
-        <p className="text-gray-600 mb-8 max-w-xl mx-auto">Our financial professionals can help you align your indicative risk profile with actionable investment solutions.</p>
+      {/* CTA Box */}
+      <div className="bg-gray-50 rounded-3xl p-6 sm:p-8 text-center border border-gray-200 mb-8">
+        <h3 className="text-xl sm:text-2xl font-black text-[#0a192f] mb-2">Discuss Your Investment Goals with KNAPS</h3>
+        <p className="text-gray-600 text-xs sm:text-sm mb-6 max-w-xl mx-auto">
+          Our financial advisors can help you align your indicative risk profile with actionable, goal-driven investment solutions.
+        </p>
         
-        <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <button className="btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer">
-            Talk to a Financial Professional &rarr;
-          </button>
-          <a href="#services" className="btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-white text-[#032e92] hover:bg-blue-50 border border-[#032e92]/20 shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer">
-            Explore Our Services &rarr;
+        <div className="flex flex-col sm:flex-row justify-center gap-3">
+          <a 
+            href={waUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="btn-ripple px-6 py-3 rounded-xl text-xs sm:text-sm font-bold bg-[#25D366] text-white hover:bg-[#20ba59] transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-emerald-900/10"
+          >
+            Chat on WhatsApp &rarr;
           </a>
+          <button 
+            type="button"
+            onClick={() => openLeadModal && openLeadModal()}
+            className="btn-ripple px-6 py-3 rounded-xl text-xs sm:text-sm font-bold bg-[#032e92] text-white hover:bg-[#021d63] transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-blue-900/20"
+          >
+            Request Advisor Callback &rarr;
+          </button>
         </div>
       </div>
       
-      <div className="text-center mb-8">
-        <button onClick={onRetake} className="text-gray-500 font-bold hover:text-[#032e92] transition-colors">
+      <div className="text-center mb-6">
+        <button onClick={onRetake} className="text-gray-500 text-xs sm:text-sm font-bold hover:text-[#032e92] transition-colors cursor-pointer">
           &#8634; Retake Assessment
         </button>
       </div>
       
-      <p className="text-[10px] text-gray-400 text-center leading-relaxed max-w-4xl mx-auto border-t border-gray-100 pt-8">
-        This assessment provides an indicative risk profile based on the information provided by you. It is intended for educational purposes and does not constitute investment, financial, tax or legal advice, or a recommendation or determination of suitability for any investment product. Your risk profile may change as your financial circumstances, goals and experience change. Investment products are subject to market risks and returns are not guaranteed.
+      <p className="text-[10px] text-gray-400 text-center leading-relaxed max-w-3xl mx-auto border-t border-gray-100 pt-6">
+        This assessment provides an indicative risk profile based on the information provided by you. It is intended strictly for educational purposes and does not constitute investment, financial, tax or legal advice, or a recommendation of suitability for any financial product. Investment products are subject to market risks.
       </p>
     </motion.div>
   );

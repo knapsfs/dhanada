@@ -1,13 +1,17 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { riskQuestions } from './riskQuestions';
+import { calculateRiskProfile } from './riskScoring';
 import RiskQuestion from './RiskQuestion';
 import LeadCapture from './LeadCapture';
+import RiskResult from './RiskResult';
 
 export default function RiskProfiler({ isModal = false, onClose }) {
-  const [phase, setPhase] = useState('intro'); // 'intro', 'questions', 'lead', 'success'
+  const [phase, setPhase] = useState('intro'); // 'intro', 'questions', 'lead', 'success', 'result'
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState([]);
+  const [result, setResult] = useState(null);
+  const [submittedUser, setSubmittedUser] = useState(null);
 
   const [currentScoreSelection, setCurrentScoreSelection] = useState(null);
 
@@ -21,27 +25,38 @@ export default function RiskProfiler({ isModal = false, onClose }) {
     // Auto-advance logic
     setTimeout(() => {
       const newAnswers = [...answers];
-      const qId = riskQuestions[currentQuestion].id;
+      const q = riskQuestions[currentQuestion];
+      const qId = q.id;
+      const selectedOption = q.options.find(opt => opt.score === score);
       const existingIndex = newAnswers.findIndex(a => a.questionId === qId);
 
+      const entry = {
+        questionId: qId,
+        score,
+        questionTitle: q.title,
+        selectedOptionText: selectedOption ? selectedOption.text : `Score ${score}`
+      };
+
       if (existingIndex >= 0) {
-        newAnswers[existingIndex] = { questionId: qId, score };
+        newAnswers[existingIndex] = entry;
       } else {
-        newAnswers.push({ questionId: qId, score });
+        newAnswers.push(entry);
       }
 
       setAnswers(newAnswers);
 
       if (currentQuestion < riskQuestions.length - 1) {
         setCurrentQuestion(prev => prev + 1);
-        // Load existing answer if they are re-visiting
         const nextQId = riskQuestions[currentQuestion + 1].id;
         const nextAnswer = newAnswers.find(a => a.questionId === nextQId);
         setCurrentScoreSelection(nextAnswer ? nextAnswer.score : null);
       } else {
+        // Calculate profile once all questions are answered
+        const computed = calculateRiskProfile(newAnswers);
+        setResult(computed);
         setPhase('lead');
       }
-    }, 400); // 400ms delay gives user time to see their selection before advancing
+    }, 400);
   };
 
   const handleBack = () => {
@@ -54,19 +69,31 @@ export default function RiskProfiler({ isModal = false, onClose }) {
     }
   };
 
-  const handleLeadSuccess = () => {
+  const handleLeadSuccess = (userData) => {
+    setSubmittedUser(userData);
     setPhase('success');
+  };
+
+  const handleViewResult = () => {
+    setPhase('result');
   };
 
   const handleRetake = () => {
     setPhase('intro');
     setCurrentQuestion(0);
     setAnswers([]);
+    setResult(null);
+    setSubmittedUser(null);
     setCurrentScoreSelection(null);
   };
 
+  const waText = result?.profile
+    ? `Hi KNAPS Team, I completed my Investor Risk Profiler assessment. My profile is ${result.profile}. I would like to consult with an advisor regarding my investments.`
+    : `Hi KNAPS Team, I would like to consult regarding my investment portfolio.`;
+  const waUrl = `https://wa.me/+919990243143?text=${encodeURIComponent(waText)}`;
+
   const content = (
-    <div className={`w-full max-w-3xl mx-auto ${isModal ? 'py-1' : 'max-w-7xl px-6 lg:px-8 relative z-10'}`}>
+    <div className={`w-full max-w-4xl mx-auto ${isModal ? 'py-1' : 'max-w-7xl px-6 lg:px-8 relative z-10'}`}>
       {phase === 'intro' && (
         <div className="text-center max-w-xl mx-auto">
           <p className={`inline-block rounded-full border border-[#032e92]/20 text-[#032e92] bg-[#eef5ff] font-semibold tracking-wide ${isModal ? 'px-3 py-1 text-xs mb-3' : 'px-4 py-2 text-sm mb-6'}`}>
@@ -121,32 +148,80 @@ export default function RiskProfiler({ isModal = false, onClose }) {
       )}
 
       {phase === 'lead' && (
-        <LeadCapture onSubmitSuccess={handleLeadSuccess} isModal={isModal} />
+        <LeadCapture
+          result={result}
+          answers={answers}
+          onSubmitSuccess={handleLeadSuccess}
+          isModal={isModal}
+        />
       )}
 
       {phase === 'success' && (
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
+          initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className={`max-w-xl mx-auto text-center bg-white rounded-2xl shadow-lg shadow-blue-900/5 border border-gray-100 ${isModal ? 'p-6 sm:p-8' : 'p-12 rounded-3xl shadow-xl'}`}
+          transition={{ duration: 0.4 }}
+          className={`max-w-xl mx-auto text-center bg-white rounded-2xl shadow-xl shadow-blue-900/5 border border-gray-100 ${isModal ? 'p-6 sm:p-8' : 'p-10 rounded-3xl shadow-2xl'}`}
         >
-          <div className={`bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 ${isModal ? 'w-14 h-14' : 'w-20 h-20 mb-6'}`}>
-            <svg className={`${isModal ? 'w-7 h-7' : 'w-10 h-10'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path>
+          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-emerald-50 border-2 border-emerald-200 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-5 shadow-sm">
+            <svg className="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7"></path>
             </svg>
           </div>
-          <h3 className={`font-black text-[#0a192f] mb-2 ${isModal ? 'text-xl sm:text-2xl' : 'text-2xl mb-4'}`}>Request Received!</h3>
-          <p className={`text-gray-600 leading-relaxed ${isModal ? 'text-xs sm:text-sm mb-6' : 'text-lg mb-10'}`}>
-            Your risk profile has been calculated and sent to your email. Please check your inbox.
+
+          <h3 className="font-black text-[#0a192f] text-xl sm:text-2xl mb-2">
+            Risk Profile Sent!
+          </h3>
+
+          <p className="text-gray-600 leading-relaxed text-xs sm:text-sm mb-5 max-w-md mx-auto">
+            Your comprehensive risk profile report has been generated and sent to:
           </p>
+
+          <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-200/80 rounded-xl px-4 py-2 mb-6 text-xs sm:text-sm font-bold text-[#032e92]">
+            <span>📧</span>
+            <span>{submittedUser?.email || 'your email'}</span>
+          </div>
+
+          {result?.profile && (
+            <div className="bg-gradient-to-br from-slate-50 to-blue-50/40 rounded-2xl p-4 sm:p-5 border border-blue-100 mb-6 text-left">
+              <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">Indicative Risk Profile</div>
+              <div className="text-xl sm:text-2xl font-black text-[#0a192f] mb-2">{result.profile}</div>
+              <p className="text-xs text-gray-600 leading-relaxed m-0">{result.description}</p>
+            </div>
+          )}
+
+          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-6">
+            <button
+              onClick={handleViewResult}
+              className="btn-ripple px-5 py-3 rounded-xl font-bold bg-[#032e92] text-white hover:bg-[#021d63] transition-all text-xs sm:text-sm shadow-md shadow-blue-900/20 cursor-pointer"
+            >
+              View Full Report On Screen →
+            </button>
+            <a
+              href={waUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="btn-ripple px-5 py-3 rounded-xl font-bold bg-[#25D366] text-white hover:bg-[#20ba59] transition-all text-xs sm:text-sm shadow-md shadow-emerald-900/10 inline-flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <span>Chat on WhatsApp</span>
+            </a>
+          </div>
+
           <button
             onClick={handleRetake}
-            className={`rounded-xl font-bold border-2 border-gray-200 text-gray-600 hover:border-[#032e92] hover:text-[#032e92] transition-colors ${isModal ? 'px-6 py-2.5 text-xs' : 'px-8 py-3'}`}
+            className="text-xs font-semibold text-gray-400 hover:text-[#032e92] transition-colors cursor-pointer"
           >
-            Take Assessment Again
+            ↺ Take Assessment Again
           </button>
         </motion.div>
+      )}
+
+      {phase === 'result' && result && (
+        <RiskResult
+          result={result}
+          onRetake={handleRetake}
+          isModal={isModal}
+        />
       )}
     </div>
   );

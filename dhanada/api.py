@@ -33,6 +33,10 @@ from dhanada.APIs.helpers import get_default_plan, get_performance_for_sif, mask
 # Website form se aayi lead ko save karta hai.
 from dhanada.APIs.leads import create_chatbot_lead, create_website_lead
 
+# Investor Risk Profiler se aayi lead save karta hai aur Brevo se personalized email bhejta hai.
+from dhanada.APIs.risk_profiler import submit_risk_profile
+
+
 # Ek specific SIF ki complete required details laata hai.
 # Fund selector ke liye minimal funds list (id, name, category, risk) laata hai.
 # SIF page ke liye required funds ka paginated data laata hai.
@@ -65,5 +69,6 @@ __all__ = [
 	"get_scheme_heatmap_performance",
 	"mask_invalid_returns",
 	"save_chat_message",
+	"submit_risk_profile",
 	"update_chatbot_context",
 ]

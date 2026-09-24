@@ -81,7 +81,7 @@ def chatbot_response():
 					try:
 						reply_text = data["candidates"][0]["content"]["parts"][0]["text"]
 						return {"success": True, "message": reply_text}
-					except KeyError, IndexError:
+					except (KeyError, IndexError):
 						return {"success": False, "message": "Invalid response format from Gemini"}
 				else:
 					last_error = f"{response.status_code}: {response.text}"
