@@ -41,7 +41,7 @@ def get_scheme_heatmap_performance(
 			try:
 				y_int = int(year)
 				query = query.where(Monthly.month.like(f"{y_int}-%"))
-			except (ValueError, TypeError):
+			except ValueError, TypeError:
 				pass
 
 		monthly_rows = query.run(as_dict=True)
@@ -57,7 +57,7 @@ def get_scheme_heatmap_performance(
 			try:
 				row_year = int(parts[0])
 				row_month = int(parts[1])
-			except (ValueError, IndexError):
+			except ValueError, IndexError:
 				continue
 
 			plan_name = r.get("scheme_plan")
@@ -249,7 +249,7 @@ def get_heatmap_data(
 						m_idx = int(parts[1]) - 1
 						if 0 <= m_idx < 12:
 							monthly_by_plan[p_name][f"{months_short[m_idx]}_{yr_suffix}"] = f_val
-					except (ValueError, IndexError):
+					except ValueError, IndexError:
 						pass
 
 		# 3. Assemble response list

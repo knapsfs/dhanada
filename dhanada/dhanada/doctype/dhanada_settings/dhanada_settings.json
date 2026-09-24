@@ -10,7 +10,15 @@
   "file_path_for_scheme_details",
   "column_break_fmup",
   "file_path_for_nav_data",
-  "file_path_for_nav_performance"
+  "file_path_for_nav_performance",
+  "brevo_credentials_section",
+  "brevo_smtp_server",
+  "brevo_smtp_port",
+  "brevo_smtp_user",
+  "brevo_smtp_password",
+  "sender_email",
+  "sender_name",
+  "admin_notification_email"
  ],
  "fields": [
   {
@@ -37,13 +45,53 @@
    "fieldname": "file_path_for_nav_performance",
    "fieldtype": "Data",
    "label": "File Path For NAV Performance"
+  },
+  {
+   "fieldname": "brevo_credentials_section",
+   "fieldtype": "Section Break",
+   "label": "Brevo Credentials"
+  },
+  {
+   "fieldname": "brevo_smtp_server",
+   "fieldtype": "Data",
+   "label": "BREVO SMTP SERVER"
+  },
+  {
+   "fieldname": "brevo_smtp_port",
+   "fieldtype": "Data",
+   "label": "BREVO SMTP PORT"
+  },
+  {
+   "fieldname": "brevo_smtp_user",
+   "fieldtype": "Data",
+   "label": "BREVO SMTP USER"
+  },
+  {
+   "fieldname": "brevo_smtp_password",
+   "fieldtype": "Password",
+   "label": "BREVO SMTP PASSWORD"
+  },
+  {
+   "fieldname": "sender_email",
+   "fieldtype": "Data",
+   "label": "SENDER EMAIL"
+  },
+  {
+   "fieldname": "sender_name",
+   "fieldtype": "Data",
+   "label": "SENDER NAME"
+  },
+  {
+   "fieldname": "admin_notification_email",
+   "fieldtype": "Data",
+   "label": "ADMIN NOTIFICATION EMAIL"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-09-23 17:40:08.775590",
+ "modified": "2026-09-24 16:17:44.696854",
  "modified_by": "Administrator",
  "module": "Dhanada",
  "name": "Dhanada Settings",

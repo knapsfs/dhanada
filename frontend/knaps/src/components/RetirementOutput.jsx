@@ -88,7 +88,7 @@ export default function RetirementOutput({ results }) {
                 />
               </p>
               <p className="text-xs font-semibold text-green-700 opacity-80 mt-1">
-                Amount to be invested monthly to reach your retirement corpus
+                Amount to be invested monthly from today to reach your retirement corpus
               </p>
             </div>
 

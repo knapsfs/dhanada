@@ -29,6 +29,7 @@ class TestAMFISchedulersArchitecture(IntegrationTestCase):
 	- NAV scheduler (sync_nav_data)
 	- NAV Performance + Monthly Heatmap scheduler (sync_nav_performance)
 	- Scheme Details scheduler (sync_scheme_details)
+	- Continuous DB reconciliation & change detection
 	- Scheduler registration in hooks.py
 	"""
 
@@ -37,6 +38,38 @@ class TestAMFISchedulersArchitecture(IntegrationTestCase):
 		self.test_dir = tempfile.mkdtemp(prefix="test_amfi_repo_")
 		frappe.cache().delete_keys("sif_sync_*")
 		frappe.cache().delete_keys("amfi_fetcher_*")
+
+		# Clean up any leftover test records
+		existing_schemes = frappe.db.get_all(
+			"SIF Scheme",
+			filters={
+				"sebi_code": [
+					"in",
+					["TEST/O/E/ELSF/26/01/0001/ABSL", "TEST/O/E/ELSF/26/01/0002/ABSL", "SIF-TEST-SCHED-2"],
+				]
+			},
+			pluck="name",
+		)
+		if existing_schemes:
+			frappe.db.delete("SIF Scheme Modification Request", {"scheme": ["in", existing_schemes]})
+			frappe.db.delete("SIF Scheme", {"name": ["in", existing_schemes]})
+
+		frappe.db.delete(
+			"SIF NAV Historical Data Entry", {"parent": ["in", ["SIF-TEST-SCHED-1", "SIF-TEST-SCHED-2"]]}
+		)
+		frappe.db.delete(
+			"SIF NAV Historical Data", {"name": ["in", ["SIF-TEST-SCHED-1", "SIF-TEST-SCHED-2"]]}
+		)
+		frappe.db.delete(
+			"SIF New Scheme Request",
+			{
+				"sebi_code": [
+					"in",
+					["TEST/O/E/ELSF/26/01/0001/ABSL", "TEST/O/E/ELSF/26/01/0002/ABSL", "SIF-TEST-SCHED-2"],
+				]
+			},
+		)
+		frappe.db.commit()
 
 		# Ensure Dhanada Settings exists
 		settings = frappe.get_single("Dhanada Settings")
@@ -58,20 +91,20 @@ class TestAMFISchedulersArchitecture(IntegrationTestCase):
 		details_dir = os.path.join(repo_path, "data", "sif", "scheme", "details")
 		os.makedirs(details_dir, exist_ok=True)
 		sample_scheme = {
-			"sif_code": "SIF-TEST-SCHED-1",
-			"scheme_name": "Test Scheduler Apex Scheme",
-			"sebi_registration_number": "TEST/O/E/ELSF/26/01/0001/ABSL",
-			"amc_name": "Aditya Birla Sun Life AMC",
+			"sebi_code": "TEST/O/E/ELSF/26/01/0001/ABSL",
+			"fund_name": "Test Scheduler Apex Scheme",
+			"category": "Equity Long-Short Fund",
+			"fund_type": "Open Ended",
+			"amc": "Aditya Birla Sun Life AMC",
 			"sif_name": "Apex SIF",
-			"investment_strategy": "Equity Long-Short Fund",
-			"risk_band": "High",
-			"plans": [
-				{
-					"plan_type": "Regular",
-					"plan_option": "Growth",
-					"isin": "INF123TEST01",
+			"plans": {
+				"Regular": {
+					"Growth": {
+						"isin": "INF123TEST01",
+						"sif_code": "SIF-TEST-SCHED-1",
+					}
 				}
-			],
+			},
 		}
 		with open(os.path.join(details_dir, "scheme1.json"), "w", encoding="utf-8") as f:
 			json.dump(sample_scheme, f)
@@ -117,7 +150,7 @@ class TestAMFISchedulersArchitecture(IntegrationTestCase):
 			"dhanada.scheduler.amfi_repository.get_local_amfi_repo_path",
 			return_value=non_existing_path,
 		):
-			# Mocking directory existence after clone
+
 			def side_effect(cmd, **kwargs):
 				os.makedirs(non_existing_path, exist_ok=True)
 				return MagicMock(returncode=0, stdout="Cloned", stderr="")
@@ -126,7 +159,6 @@ class TestAMFISchedulersArchitecture(IntegrationTestCase):
 			res_path = ensure_amfi_repository_updated()
 			self.assertEqual(res_path, non_existing_path)
 
-			# Verify git clone was invoked
 			cmd = mock_run.call_args_list[0][0][0]
 			self.assertEqual(cmd[0], "git")
 			self.assertEqual(cmd[1], "clone")
@@ -171,16 +203,13 @@ class TestAMFISchedulersArchitecture(IntegrationTestCase):
 
 	def test_04_repository_path_is_persistent(self):
 		"""4. Repository path resolves properly across production container and local dev."""
-		# Test configured override
 		with patch.dict(os.environ, {"AMFI_FETCHER_LOCAL_PATH": "/custom/persistent/path"}):
 			self.assertEqual(get_local_amfi_repo_path(), "/custom/persistent/path")
 
-		# Test container environment
 		with patch("os.path.exists") as mock_exists:
 			mock_exists.side_effect = lambda p: p == "/.dockerenv"
 			self.assertEqual(get_local_amfi_repo_path(), os.path.realpath("/home/frappe/amfi_fetcher_repo"))
 
-		# Test local dev environment
 		actual_path = get_local_amfi_repo_path()
 		self.assertTrue(os.path.basename(actual_path) == "amfi_fetcher_repo")
 
@@ -256,34 +285,65 @@ class TestAMFISchedulersArchitecture(IntegrationTestCase):
 		self._setup_mock_repo_files(repo_path)
 		mock_ensure.return_value = repo_path
 
-		# Run once to prime cache
-		sync_nav_data(dry_run=False, force=False)
+		# Run once
+		res1 = sync_nav_data(dry_run=False, force=False)
+		self.assertEqual(res1["status"], "success")
+		self.assertEqual(res1["stats"]["historical_nav_created"], 1)
 
-		# Add a new historical CSV file
+		# Add a second historical CSV file
 		nav_hist_dir = os.path.join(repo_path, "data", "sif", "scheme", "nav", "historical")
 		with open(os.path.join(nav_hist_dir, "SIF-TEST-SCHED-2.csv"), "w", encoding="utf-8") as f:
 			f.write("sif_code,nav_date,nav\n")
 			f.write("SIF-TEST-SCHED-2,20-Sep-2026,10.0000\n")
 
-		res = sync_nav_data(dry_run=False, force=False)
-		self.assertEqual(res["status"], "success")
-		self.assertTrue(res["historical_processed"])
+		res2 = sync_nav_data(dry_run=False, force=False)
+		self.assertEqual(res2["status"], "success")
+		self.assertEqual(res2["stats"]["historical_nav_created"], 1)
+		self.assertEqual(res2["stats"]["historical_nav_skipped"], 1)
 
 	@patch("dhanada.scheduler.sync_nav_data.ensure_amfi_repository_updated")
-	def test_10_unchanged_historical_nav_is_not_reprocessed(self, mock_ensure):
-		"""10. Unchanged historical NAV is not unnecessarily reprocessed."""
+	def test_10_unchanged_historical_nav_matching_db_skips_db_writes(self, mock_ensure):
+		"""10. Unchanged historical NAV matching DB skips unnecessary DB writes."""
 		repo_path = os.path.join(self.test_dir, "repo")
 		self._setup_mock_repo_files(repo_path)
 		mock_ensure.return_value = repo_path
 
-		# First run
+		# First run creates the historical NAV doc
 		res1 = sync_nav_data(dry_run=False, force=False)
 		self.assertEqual(res1["status"], "success")
+		self.assertEqual(res1["stats"]["historical_nav_created"], 1)
 
-		# Second run with unchanged files
+		# Second run with unchanged files and matching DB -> skips DB writes
 		res2 = sync_nav_data(dry_run=False, force=False)
-		self.assertEqual(res2["status"], "skipped")
-		self.assertEqual(res2["reason"], "unchanged")
+		self.assertEqual(res2["status"], "success")
+		self.assertEqual(res2["stats"]["historical_nav_skipped"], 1)
+		self.assertEqual(res2["stats"]["historical_nav_updated"], 0)
+		self.assertEqual(res2["stats"]["historical_nav_created"], 0)
+
+	@patch("dhanada.scheduler.sync_nav_data.ensure_amfi_repository_updated")
+	def test_10b_manually_modified_db_is_restored_from_unchanged_repo(self, mock_ensure):
+		"""10b. Unchanged repo + manually modified DB -> scheduler detects difference and restores DB."""
+		repo_path = os.path.join(self.test_dir, "repo")
+		self._setup_mock_repo_files(repo_path)
+		mock_ensure.return_value = repo_path
+
+		# First run: ingest historical NAV
+		sync_nav_data(dry_run=False, force=False)
+
+		# Manually modify DB record
+		doc = frappe.get_doc("SIF NAV Historical Data", "SIF-TEST-SCHED-1")
+		doc.historical_nav_data[0].nav = 999.9999
+		doc.save(ignore_permissions=True)
+		frappe.db.commit()
+
+		# Next scheduler run with unchanged repo -> detects difference and restores DB
+		res = sync_nav_data(dry_run=False, force=False)
+		self.assertEqual(res["status"], "success")
+		self.assertEqual(res["stats"]["historical_nav_updated"], 1)
+
+		# Verify restored value
+		doc.reload()
+		self.assertAlmostEqual(float(doc.historical_nav_data[0].nav), 15.4000, places=4)
 
 	# =========================================================================
 	# PERFORMANCE SCHEDULER TESTS (11 - 16)
@@ -357,7 +417,7 @@ class TestAMFISchedulersArchitecture(IntegrationTestCase):
 
 		with patch("dhanada.scheduler.sync_nav_performance.getdate") as mock_getdate:
 			mock_date = MagicMock()
-			mock_date.day = 15  # Middle of the month
+			mock_date.day = 15
 			mock_date.strftime.return_value = "2026_09"
 			mock_getdate.return_value = mock_date
 
@@ -409,25 +469,70 @@ class TestAMFISchedulersArchitecture(IntegrationTestCase):
 		# Add second scheme
 		details_dir = os.path.join(repo_path, "data", "sif", "scheme", "details")
 		with open(os.path.join(details_dir, "scheme2.json"), "w", encoding="utf-8") as f:
-			json.dump({"sif_code": "SIF-TEST-SCHED-2", "scheme_name": "Second Scheme"}, f)
+			json.dump(
+				{
+					"sebi_code": "TEST/O/E/ELSF/26/01/0002/ABSL",
+					"fund_name": "Second Scheme",
+					"category": "Equity Long-Short Fund",
+					"fund_type": "Open Ended",
+					"plans": {
+						"Regular": {
+							"Growth": {
+								"isin": "INF123TEST02",
+								"sif_code": "SIF-TEST-SCHED-2",
+							}
+						}
+					},
+				},
+				f,
+			)
 
 		res2 = sync_scheme_details(dry_run=False, force=False)
 		self.assertEqual(res2["status"], "success")
 		self.assertEqual(res2["files_count"], 2)
 
 	@patch("dhanada.scheduler.sync_scheme_details.ensure_amfi_repository_updated")
-	def test_20_unchanged_scheme_data_skips_processing(self, mock_ensure):
-		"""20. Unchanged scheme data skips processing."""
+	def test_20_unchanged_scheme_matching_db_skips_unnecessary_writes(self, mock_ensure):
+		"""20. Unchanged scheme data matching DB skips unnecessary writes."""
 		repo_path = os.path.join(self.test_dir, "repo")
 		self._setup_mock_repo_files(repo_path)
 		mock_ensure.return_value = repo_path
 
+		# Run first time -> creates approval request
 		res1 = sync_scheme_details(dry_run=False, force=False)
 		self.assertEqual(res1["status"], "success")
 
+		# Run second time while approval pending / unchanged -> skipped, no duplicate approval
 		res2 = sync_scheme_details(dry_run=False, force=False)
-		self.assertEqual(res2["status"], "skipped")
-		self.assertEqual(res2["reason"], "unchanged")
+		self.assertEqual(res2["status"], "success")
+		self.assertEqual(res2["stats"]["skipped"], 1)
+		self.assertEqual(res2["stats"]["approvals_requested"], 0)
+
+	@patch("dhanada.scheduler.sync_scheme_details.ensure_amfi_repository_updated")
+	def test_20b_manually_modified_scheme_db_is_reconciled(self, mock_ensure):
+		"""20b. Unchanged repo + manually modified scheme DB -> scheduler detects difference and reconciles."""
+		repo_path = os.path.join(self.test_dir, "repo")
+		self._setup_mock_repo_files(repo_path)
+		mock_ensure.return_value = repo_path
+
+		# Create SIF Scheme document in DB to simulate an existing active scheme
+		if not frappe.db.exists("SIF Scheme", {"sebi_code": "TEST/O/E/ELSF/26/01/0001/ABSL"}):
+			scheme_doc = frappe.new_doc("SIF Scheme")
+			scheme_doc.flags.from_approval = True
+			scheme_doc.flags.ignore_mandatory = True
+			scheme_doc.flags.ignore_links = True
+			scheme_doc.sebi_code = "TEST/O/E/ELSF/26/01/0001/ABSL"
+			scheme_doc.scheme_name = "Test Scheduler Apex Scheme"
+			scheme_doc.amc = "Aditya Birla Sun Life AMC"
+			scheme_doc.scheme_subcategory = "Equity Long-Short Fund"
+			scheme_doc.scheme_objective = "Capital appreciation"
+			scheme_doc.investment_strategy = "Debt"  # Different from repo (repo has Equity)
+			scheme_doc.insert(ignore_permissions=True)
+			frappe.db.commit()
+
+		res = sync_scheme_details(dry_run=False, force=False)
+		self.assertEqual(res["status"], "success")
+		self.assertEqual(res["stats"]["approvals_requested"], 1)
 
 	# =========================================================================
 	# SCHEDULER REGISTRATION TESTS (21 - 23)
@@ -437,27 +542,31 @@ class TestAMFISchedulersArchitecture(IntegrationTestCase):
 		"""21. Exactly three data schedulers are registered."""
 		from dhanada.hooks import scheduler_events
 
-		daily_tasks = scheduler_events.get("daily", [])
-		weekly_tasks = scheduler_events.get("weekly", [])
+		all_tasks = []
+		if "cron" in scheduler_events and isinstance(scheduler_events["cron"], dict):
+			for _, tasks in scheduler_events["cron"].items():
+				all_tasks.extend(tasks)
+		for key, tasks in scheduler_events.items():
+			if key != "cron" and isinstance(tasks, list):
+				all_tasks.extend(tasks)
 
-		self.assertIn("dhanada.scheduler.sync_nav_data.sync_nav_data", daily_tasks)
-		self.assertIn("dhanada.scheduler.sync_nav_performance.sync_nav_performance", daily_tasks)
-		self.assertIn("dhanada.scheduler.sync_scheme_details.sync_scheme_details", weekly_tasks)
-
-		total_schedulers = len(daily_tasks) + len(weekly_tasks)
-		self.assertEqual(total_schedulers, 3)
+		self.assertIn("dhanada.scheduler.sync_nav_data.sync_nav_data", all_tasks)
+		self.assertIn("dhanada.scheduler.sync_nav_performance.sync_nav_performance", all_tasks)
+		self.assertIn("dhanada.scheduler.sync_scheme_details.sync_scheme_details", all_tasks)
+		self.assertEqual(len(all_tasks), 3)
 
 	def test_22_no_separate_run_sync_pipeline_registration(self):
 		"""22. No separate run_sync_pipeline registration remains."""
 		from dhanada.hooks import scheduler_events
 
-		self.assertNotIn("cron", scheduler_events)
-		all_tasks = (
-			scheduler_events.get("daily", [])
-			+ scheduler_events.get("weekly", [])
-			+ scheduler_events.get("monthly", [])
-			+ scheduler_events.get("hourly", [])
-		)
+		all_tasks = []
+		if "cron" in scheduler_events and isinstance(scheduler_events["cron"], dict):
+			for _, tasks in scheduler_events["cron"].items():
+				all_tasks.extend(tasks)
+		for key, tasks in scheduler_events.items():
+			if key != "cron" and isinstance(tasks, list):
+				all_tasks.extend(tasks)
+
 		for task in all_tasks:
 			self.assertNotIn("run_sync_pipeline", task)
 			self.assertNotIn("clone_amfi_fetcher", task)
@@ -467,7 +576,11 @@ class TestAMFISchedulersArchitecture(IntegrationTestCase):
 		from dhanada.hooks import scheduler_events
 
 		all_tasks = []
-		for _, tasks in scheduler_events.items():
-			all_tasks.extend(tasks)
+		if "cron" in scheduler_events and isinstance(scheduler_events["cron"], dict):
+			for _, tasks in scheduler_events["cron"].items():
+				all_tasks.extend(tasks)
+		for key, tasks in scheduler_events.items():
+			if key != "cron" and isinstance(tasks, list):
+				all_tasks.extend(tasks)
 
 		self.assertEqual(len(all_tasks), len(set(all_tasks)))

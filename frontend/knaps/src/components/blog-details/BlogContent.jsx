@@ -24,6 +24,7 @@ import {
   faClock,
   faCalendarDays
 } from '@fortawesome/free-solid-svg-icons';
+import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 import { Link } from 'react-router-dom';
 import { useLeadModal } from '../../context/LeadModalContext';
 
@@ -912,9 +913,14 @@ export default function BlogContent({ blog }) {
         <div className="max-w-7xl mx-auto px-6 lg:px-8 text-gray-700 text-[17px] leading-[1.85]">
 
           {/* Lead Paragraph */}
-          <p className="text-xl sm:text-[22px] font-medium text-[#0a192f] leading-relaxed mb-8 border-l-4 border-[#032e92] pl-5 py-1">
-            When it comes to investing, mutual funds have long been a popular choice for Indian investors. But with the introduction of <strong>Specialized Investment Funds (SIFs)</strong>, investors now have another option that sits between traditional mutual funds and portfolio management services (PMS).
-          </p>
+          <div className="text-xl sm:text-[22px] font-medium text-[#0a192f] leading-relaxed mb-10 border-l-4 border-[#032e92] pl-5 py-1">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0a192f] mb-3">
+              What’s the Difference between SIF and Mutual Funds?
+            </h2>
+            <p className="m-0 text-gray-700 text-lg sm:text-xl font-normal leading-relaxed">
+              When it comes to investing, mutual funds have long been a popular choice for Indian investors. But with the introduction of <strong>Specialized Investment Funds (SIFs)</strong>, investors now have another option that sits between traditional mutual funds and portfolio management services (PMS).
+            </p>
+          </div>
 
           <p className="mb-6">
             While both SIFs and mutual funds pool money from multiple investors and are managed by professional fund managers, they differ in areas such as <strong>investment strategies, minimum investment, risk, flexibility, and regulatory framework</strong>.
@@ -924,203 +930,379 @@ export default function BlogContent({ blog }) {
             Understanding these differences can help investors assess which option may be more suitable for their investment goals, risk appetite, and portfolio needs. In this article, we compare SIFs vs mutual funds and look at their key features, benefits, risks, costs, and other important factors.
           </p>
 
-          {/* Section: Why Were SIFs Introduced? */}
-          <div className="mt-14 mb-10">
+          {/* Section 1: Why Were SIFs Introduced? */}
+          <div className="mt-12 mb-10">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0a192f] mb-6 flex items-center gap-3">
               <span className="w-9 h-9 rounded-xl bg-blue-100 text-[#032e92] flex items-center justify-center text-lg">
-                <FontAwesomeIcon icon={faBuildingColumns} />
+                <FontAwesomeIcon icon={faQuestionCircle} />
               </span>
               Why Were SIFs Introduced?
             </h2>
 
             <p className="mb-4">
-              SIFs were introduced because <strong>SEBI saw a clear gap between mutual funds and PMS</strong>. The easiest way to understand this gap is to look at what investors already had:
+              SIFs were introduced because SEBI saw a gap between mutual funds and PMS.
+            </p>
+            <p className="mb-6">
+              The easiest way to understand this gap is to look at what investors already had.
             </p>
 
-            {/* Visual Gap Bridge Cards */}
-            <div className="grid sm:grid-cols-3 gap-4 my-8">
-              <div className="bg-gray-50 border border-gray-200/80 rounded-2xl p-5 flex flex-col justify-between">
+            <div className="grid md:grid-cols-2 gap-6 my-8">
+              {/* Mutual Funds Framework */}
+              <div className="bg-[#f8faff] rounded-3xl p-7 border border-blue-100/80 shadow-sm flex flex-col justify-between">
                 <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-gray-500">Traditional</span>
-                  <h4 className="text-lg font-bold text-gray-900 mt-1 mb-2">Mutual Funds</h4>
-                  <p className="text-xs text-gray-600 leading-relaxed">
-                    Pools capital under defined limits. Strict single-stock exposure caps and restricted derivative usage.
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="w-8 h-8 rounded-lg bg-blue-100 text-[#032e92] flex items-center justify-center font-bold text-sm">
+                      1
+                    </span>
+                    <h3 className="text-xl font-extrabold text-[#0a192f]">Mutual Funds Framework</h3>
+                  </div>
+                  <p className="text-gray-700 text-sm leading-relaxed mb-4">
+                    Mutual funds allow investors to pool their money and invest through a professional fund manager, but in a specific investment framework. <strong>Unhedged positions in derivatives are not allowed</strong> in mutual funds.
                   </p>
                 </div>
-                <div className="mt-4 pt-3 border-t border-gray-200 text-xs font-semibold text-[#032e92]">
-                  Min: ₹500
+                <div className="px-3.5 py-2 rounded-xl bg-blue-50 text-[#032e92] text-xs font-bold w-fit">
+                  Entry: From ₹500
                 </div>
               </div>
 
-              <div className="bg-blue-50/70 border-2 border-[#032e92]/30 rounded-2xl p-5 flex flex-col justify-between relative shadow-md shadow-blue-900/5">
-                <div className="absolute -top-3 right-4 bg-[#032e92] text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-                  New Gap Bridge
-                </div>
+              {/* PMS Framework */}
+              <div className="bg-[#f8faff] rounded-3xl p-7 border border-blue-100/80 shadow-sm flex flex-col justify-between">
                 <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#032e92]">New Alternative</span>
-                  <h4 className="text-lg font-bold text-[#032e92] mt-1 mb-2">Specialized Funds (SIF)</h4>
-                  <p className="text-xs text-gray-700 leading-relaxed">
-                    Combines mutual fund pooling with advanced long-short strategies, hedging & active exposure management.
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-sm">
+                      2
+                    </span>
+                    <h3 className="text-xl font-extrabold text-[#0a192f]">Portfolio Management Services (PMS)</h3>
+                  </div>
+                  <p className="text-gray-700 text-sm leading-relaxed mb-4">
+                    On the other end, there is PMS (Portfolio management Service). PMS allows the portfolio manager more freedom with the use of derivatives and to decide what to buy and sell for the investor. But the entry point to PMS is much higher and requires a <strong>minimum investment of ₹50 lakh</strong>. These advanced investment strategies are aimed at enhancing potential returns for the investors.
                   </p>
                 </div>
-                <div className="mt-4 pt-3 border-t border-blue-200 text-xs font-bold text-[#032e92]">
-                  Min: ₹10 Lakh
-                </div>
-              </div>
-
-              <div className="bg-gray-50 border border-gray-200/80 rounded-2xl p-5 flex flex-col justify-between">
-                <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-gray-500">High Net Worth</span>
-                  <h4 className="text-lg font-bold text-gray-900 mt-1 mb-2">PMS Solutions</h4>
-                  <p className="text-xs text-gray-600 leading-relaxed">
-                    Custom portfolio in investor demat account with full derivative freedom and concentrated sector bets.
-                  </p>
-                </div>
-                <div className="mt-4 pt-3 border-t border-gray-200 text-xs font-semibold text-gray-700">
-                  Min: ₹50 Lakh
+                <div className="px-3.5 py-2 rounded-xl bg-indigo-50 text-indigo-700 text-xs font-bold w-fit">
+                  Entry: Min ₹50 Lakh
                 </div>
               </div>
             </div>
 
             <p className="mb-4">
-              <strong>Mutual funds</strong> allow investors to pool their money and invest through a professional fund manager, but in a specific investment framework. There are limits on how much the scheme can invest in a particular stock or use certain derivative strategies.
+              This created a gap between mutual funds and PMS. Some investors wanted more flexibility in their investments, but ₹50 lakh was a much higher entry point.
             </p>
 
-            <p className="mb-4">
-              On the other end, there is <strong>PMS (Portfolio Management Service)</strong>. PMS allows the portfolio manager more freedom to decide what to buy and sell for the investor. But the entry point to PMS is much higher and requires a minimum investment of <strong>₹50 lakh</strong>.
-            </p>
-
-            <p className="mb-4">
-              Each investor’s money is managed separately in their demat accounts. The strategy allows the use of derivatives and greater flexibility to invest in specific sectors or stocks. These advanced investment strategies are aimed at enhancing potential returns for the investors.
-            </p>
-
-            <p className="mb-6">
-              This created a gap between mutual funds and PMS. Some investors wanted more flexibility in their investments, but ₹50 lakh was a much higher entry point. <strong>This is where Specialized Investment Funds (SIFs) were introduced</strong> — giving investors access to more flexible investment strategies, while keeping the minimum investment at <strong>₹10 lakh</strong>.
-            </p>
+            <div className="bg-[#eef4ff] border-l-4 border-[#032e92] p-5 rounded-r-2xl my-6">
+              <p className="text-base text-gray-800 font-medium leading-relaxed m-0">
+                <strong>This is where Specialized Investment Funds (SIFs) were introduced</strong> — giving investors access to more flexible investment strategies, while keeping the minimum investment at <strong>₹10 lakh</strong>.
+              </p>
+            </div>
           </div>
 
-          {/* Section: How Do SIFs Work? */}
+          {/* Section 2: How Do Specialized Investment Funds (SIFs) Work? */}
           <div className="mt-14 mb-10">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0a192f] mb-6 flex items-center gap-3">
               <span className="w-9 h-9 rounded-xl bg-blue-100 text-[#032e92] flex items-center justify-center text-lg">
-                <FontAwesomeIcon icon={faScaleUnbalancedFlip} />
+                <FontAwesomeIcon icon={faArrowsRotate} />
               </span>
               How Do Specialized Investment Funds (SIFs) Work?
             </h2>
 
             <p className="mb-4">
-              SIFs bring a wider range of investment strategies into the mutual fund structure. Instead of being limited to conventional long-only investing, SIFs can use strategies such as <strong>long-short equity</strong>, <strong>equity ex-top 100 long-short</strong>, <strong>hybrid long-short</strong>, and more.
+              SIFs bring a wider range of investment strategies into the mutual fund structure.
+            </p>
+            <p className="mb-6">
+              Instead of being limited to conventional long-only investing, SIFs can use strategies such as <strong>long-short equity</strong>, <strong>equity ex-top 100 long-short</strong>, <strong>hybrid long-short</strong>, and more.
             </p>
 
-            {/* Three Strategy Showcase Cards */}
-            <div className="space-y-4 my-8">
-              {/* Strategy 1 */}
-              <div className="p-6 rounded-2xl bg-gradient-to-r from-blue-50/60 to-white border border-blue-100">
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="w-8 h-8 rounded-lg bg-[#032e92] text-white flex items-center justify-center text-sm font-bold">
-                    1
-                  </span>
-                  <h4 className="text-lg font-bold text-[#0a192f]">Equity Long-Short Strategy</h4>
-                </div>
-                <p className="text-sm leading-relaxed text-gray-700">
-                  The fund can go long on stocks it finds attractive, and short stocks through futures and options if it expects that stock to underperform. For instance, if the manager prefers <strong>HDFC Bank over ICICI Bank</strong>, the fund could go long HDFC Bank and short ICICI Bank. The trade is then driven by the expected relative performance of the two stocks, rather than simply by whether the overall market goes up.
+            <div className="space-y-5 my-8">
+              {/* Strategy 1: Equity Long-Short */}
+              <div className="bg-white rounded-2xl p-6 border border-gray-200/90 shadow-sm hover:border-[#032e92]/40 transition-all">
+                <h3 className="text-lg font-bold text-[#032e92] mb-2 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#032e92]" />
+                  Equity Long-Short
+                </h3>
+                <p className="text-sm leading-relaxed text-gray-700 m-0">
+                  The fund can go long on stocks it finds attractive, and short stocks through futures and options if it expects that stock to underperform. For instance, if the manager prefers HDFC Bank over ICICI Bank, the fund could go long HDFC Bank and short ICICI Bank. The trade is then driven by the expected relative performance of the two stocks, rather than simply by whether the overall market goes up.
                 </p>
               </div>
 
-              {/* Strategy 2 */}
-              <div className="p-6 rounded-2xl bg-gradient-to-r from-emerald-50/60 to-white border border-emerald-100">
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-sm font-bold">
-                    2
-                  </span>
-                  <h4 className="text-lg font-bold text-[#0a192f]">Equity Ex-Top 100 Long-Short</h4>
-                </div>
-                <p className="text-sm leading-relaxed text-gray-700">
+              {/* Strategy 2: Equity Ex-Top 100 Long-Short */}
+              <div className="bg-white rounded-2xl p-6 border border-gray-200/90 shadow-sm hover:border-[#032e92]/40 transition-all">
+                <h3 className="text-lg font-bold text-[#032e92] mb-2 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#032e92]" />
+                  Equity Ex-Top 100 Long-Short
+                </h3>
+                <p className="text-sm leading-relaxed text-gray-700 m-0">
                   Here, the idea is to invest in companies outside the top 100 by market capitalisation. This gives the manager access to a broader mid- and small-cap universe while retaining the ability to take both long and short positions. For example, the manager could go long on a mid-cap company with strong earnings prospects and short another company where valuations appear stretched.
                 </p>
               </div>
 
-              {/* Strategy 3 */}
-              <div className="p-6 rounded-2xl bg-gradient-to-r from-purple-50/60 to-white border border-purple-100">
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="w-8 h-8 rounded-lg bg-purple-600 text-white flex items-center justify-center text-sm font-bold">
-                    3
-                  </span>
-                  <h4 className="text-lg font-bold text-[#0a192f]">Hybrid Long-Short Strategy</h4>
-                </div>
-                <p className="text-sm leading-relaxed text-gray-700">
-                  This combines equity and debt exposure with the ability to take long and short positions. For example, the manager can buy shares of companies that are expected to grow, while using other positions, like short, to protect (hedge) the portfolio if the market falls.
+              {/* Strategy 3: Hybrid Long-Short */}
+              <div className="bg-white rounded-2xl p-6 border border-gray-200/90 shadow-sm hover:border-[#032e92]/40 transition-all">
+                <h3 className="text-lg font-bold text-[#032e92] mb-2 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#032e92]" />
+                  Hybrid Long-Short
+                </h3>
+                <p className="text-sm leading-relaxed text-gray-700 m-0">
+                  This combines equity and debt exposure with the ability to take long and short positions. For example, the manager can buy shares of companies that are expected to grow, while using other positions, like short or hedge to protect the portfolio if the market falls.
                 </p>
               </div>
             </div>
 
-            <div className="bg-[#eef5ff] border-l-4 border-[#032e92] p-6 rounded-r-2xl my-6">
-              <div className="flex items-center gap-2.5 mb-2 text-[#032e92] font-bold text-base">
-                <FontAwesomeIcon icon={faCircleInfo} />
-                <span>The Core Advantage</span>
-              </div>
-              <p className="text-sm text-gray-700 leading-relaxed m-0">
-                The important distinction is therefore not simply that SIFs are "more flexible". They expand the toolkit available to the fund manager — particularly the ability to take hedged and unhedged positions through futures & options, and actively manage market exposure within a defined, transparent strategy.
+            {/* Other Strategies Links Card */}
+            <div className="bg-[#f8faff] rounded-2xl p-6 border border-blue-100 my-6">
+              <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
+                See other strategies here:
               </p>
+              <div className="flex flex-wrap gap-2.5">
+                {[
+                  "Active Asset Allocator Long-Short Fund",
+                  "Sector Rotation Long-Short Fund",
+                  "Debt Long-Short Fund",
+                  "Sectoral Debt Long-Short Fund",
+                ].map((strat) => (
+                  <Link
+                    key={strat}
+                    to="/sif"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white border border-gray-200 text-xs font-bold text-[#032e92] hover:bg-blue-50 hover:border-blue-200 shadow-2xs transition-all"
+                  >
+                    <span>{strat}</span>
+                    <FontAwesomeIcon icon={faArrowRight} className="text-[10px]" />
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Section: Comparison Table */}
+          {/* Section 3: How are SIFs different from Mutual Funds? */}
           <div className="mt-14 mb-10">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0a192f] mb-6 flex items-center gap-3">
               <span className="w-9 h-9 rounded-xl bg-blue-100 text-[#032e92] flex items-center justify-center text-lg">
                 <FontAwesomeIcon icon={faArrowsUpDown} />
               </span>
-              Differences Between SIF and Mutual Funds
+              How are SIFs different from Mutual Funds?
             </h2>
 
-            <p className="mb-6">
-              Let us understand the basic differences between Mutual Funds and SIF through this comparison table:
+            <p className="mb-8">
+              Here are 4 key differences between SIFs and traditional Mutual Funds:
             </p>
 
-            <div className="overflow-x-auto rounded-2xl border border-gray-200 shadow-sm my-8">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-[#032e92] text-white">
-                    <th className="py-4 px-5 font-bold text-sm tracking-wider uppercase">Differences</th>
-                    <th className="py-4 px-5 font-bold text-sm tracking-wider uppercase bg-[#021d63] text-cyan-200">
-                      SIF (Specialized Fund)
-                    </th>
-                    <th className="py-4 px-5 font-bold text-sm tracking-wider uppercase">Mutual Funds</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100 text-sm">
-                  <tr className="hover:bg-blue-50/30 transition-colors">
-                    <td className="py-4 px-5 font-bold text-gray-900">Minimum Investment</td>
-                    <td className="py-4 px-5 font-semibold text-[#032e92] bg-blue-50/40">₹10 Lakh</td>
-                    <td className="py-4 px-5 text-gray-600">₹500</td>
-                  </tr>
-                  <tr className="hover:bg-blue-50/30 transition-colors">
-                    <td className="py-4 px-5 font-bold text-gray-900">Buying & Selling</td>
-                    <td className="py-4 px-5 font-semibold text-[#032e92] bg-blue-50/40">Can buy and sell stocks via derivatives</td>
-                    <td className="py-4 px-5 text-gray-600">Mainly buys stocks</td>
-                  </tr>
-                  <tr className="hover:bg-blue-50/30 transition-colors">
-                    <td className="py-4 px-5 font-bold text-gray-900">Use of Derivatives</td>
-                    <td className="py-4 px-5 font-semibold text-[#032e92] bg-blue-50/40">Can take hedged and unhedged long/short positions</td>
-                    <td className="py-4 px-5 text-gray-600">Can use derivatives only for hedging and portfolio balancing</td>
-                  </tr>
-                  <tr className="hover:bg-blue-50/30 transition-colors">
-                    <td className="py-4 px-5 font-bold text-gray-900">Portfolio Changes</td>
-                    <td className="py-4 px-5 font-semibold text-[#032e92] bg-blue-50/40">Can increase or reduce market exposure using long-short positions</td>
-                    <td className="py-4 px-5 text-gray-600">Must stay within the scheme’s stated investment limits</td>
-                  </tr>
-                  <tr className="hover:bg-blue-50/30 transition-colors">
-                    <td className="py-4 px-5 font-bold text-gray-900">Suitable for</td>
-                    <td className="py-4 px-5 font-semibold text-[#032e92] bg-blue-50/40">Investors seeking more market exposure beyond just buying</td>
-                    <td className="py-4 px-5 text-gray-600">Suitable for a wider range of retail investors</td>
-                  </tr>
-                </tbody>
-              </table>
+            {/* Difference 1: Entry point */}
+            <div className="mb-10 bg-white rounded-3xl p-6 sm:p-8 border border-gray-200 shadow-sm">
+              <h3 className="text-xl font-extrabold text-[#0a192f] mb-4 flex items-center gap-3">
+                <span className="w-8 h-8 rounded-full bg-[#032e92] text-white flex items-center justify-center text-sm font-bold flex-shrink-0">
+                  1
+                </span>
+                Entry point
+              </h3>
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="bg-[#eef4ff] rounded-2xl p-5 border border-blue-100">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#032e92] block mb-1">
+                    SIF
+                  </span>
+                  <p className="text-2xl font-black text-[#032e92] mb-1">₹10 Lakh</p>
+                  <p className="text-xs text-gray-600 m-0">Minimum investment required.</p>
+                </div>
+                <div className="bg-gray-50 rounded-2xl p-5 border border-gray-200">
+                  <span className="text-xs font-bold uppercase tracking-wider text-gray-500 block mb-1">
+                    Mutual Fund
+                  </span>
+                  <p className="text-2xl font-black text-gray-800 mb-1">From ₹500</p>
+                  <p className="text-xs text-gray-600 m-0">Can start from ₹500 through SIP or around ₹5,000 through lump sum, depending on the scheme.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Difference 2: Potential of better risk adjusted returns */}
+            <div className="mb-10 bg-white rounded-3xl p-6 sm:p-8 border border-gray-200 shadow-sm">
+              <h3 className="text-xl font-extrabold text-[#0a192f] mb-4 flex items-center gap-3">
+                <span className="w-8 h-8 rounded-full bg-[#032e92] text-white flex items-center justify-center text-sm font-bold flex-shrink-0">
+                  2
+                </span>
+                Potential of better risk adjusted returns
+              </h3>
+
+              <p className="mb-3 text-sm sm:text-base leading-relaxed">
+                Suppose an SIF holds <strong>₹1 crore in Nifty 50 stocks</strong>. The fund manager expects a short-term market fall but still wants to keep the stocks.
+              </p>
+              <p className="mb-4 text-sm sm:text-base leading-relaxed">
+                The manager can use derivatives and sell Nifty 50 futures to protect the portfolio from the market downfall.
+              </p>
+              <p className="mb-5 text-sm sm:text-base font-semibold text-gray-800">
+                For simplicity, assume the manager hedges ₹50 lakh of the ₹1 crore equity exposure.
+              </p>
+
+              {/* Table for Risk Adjusted Returns Example */}
+              <div className="overflow-x-auto rounded-2xl border border-gray-200 shadow-2xs my-6">
+                <table className="w-full text-left border-collapse text-sm">
+                  <thead>
+                    <tr className="bg-[#032e92] text-white">
+                      <th className="py-3.5 px-4 font-bold">Market movement</th>
+                      <th className="py-3.5 px-4 font-bold bg-[#021d63]">
+                        Without hedge:<br /><span className="text-xs font-normal text-blue-200">₹1 Cr stocks</span>
+                      </th>
+                      <th className="py-3.5 px-4 font-bold bg-[#032e92]">
+                        With hedge:<br /><span className="text-xs font-normal text-blue-200">₹1 Cr stocks + ₹50 Lakh short Nifty futures</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    <tr className="hover:bg-red-50/30 transition-colors">
+                      <td className="py-3.5 px-4 font-bold text-gray-900">Market falls 10%</td>
+                      <td className="py-3.5 px-4 text-red-600 font-semibold bg-gray-50/50">
+                        −₹10 lakh <span className="text-gray-700 block text-xs">→ ₹90 lakh</span>
+                      </td>
+                      <td className="py-3.5 px-4 text-gray-800 font-semibold bg-blue-50/30">
+                        Stocks −₹10 lakh + futures +₹5 lakh <span className="text-[#032e92] block font-bold text-xs">→ ₹95 lakh</span>
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-gray-50/60 transition-colors">
+                      <td className="py-3.5 px-4 font-bold text-gray-900">Market stays flat</td>
+                      <td className="py-3.5 px-4 text-gray-700 font-semibold bg-gray-50/50">
+                        ₹0 gain/loss <span className="text-gray-700 block text-xs">→ ₹1 Cr</span>
+                      </td>
+                      <td className="py-3.5 px-4 text-gray-800 font-semibold bg-blue-50/30">
+                        Stocks ₹0 + futures ₹0 <span className="text-[#032e92] block font-bold text-xs">→ ₹1 Cr</span>
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-green-50/30 transition-colors">
+                      <td className="py-3.5 px-4 font-bold text-gray-900">Market rises 10%</td>
+                      <td className="py-3.5 px-4 text-emerald-600 font-semibold bg-gray-50/50">
+                        +₹10 lakh <span className="text-gray-700 block text-xs">→ ₹1.10 Cr</span>
+                      </td>
+                      <td className="py-3.5 px-4 text-gray-800 font-semibold bg-blue-50/30">
+                        Stocks +₹10 lakh − futures ₹5 lakh <span className="text-[#032e92] block font-bold text-xs">→ ₹1.05 Cr</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <p className="text-sm text-gray-700 leading-relaxed mb-3">
+                That is what hedging means here: the derivative position moves in the opposite direction to the investment, helping offset part of the loss.
+              </p>
+              <p className="text-sm text-gray-700 leading-relaxed mb-4">
+                SEBI’s SIF framework permits derivatives for hedging and portfolio rebalancing, and also permits specified unhedged short exposure.
+              </p>
+              <p className="text-xs text-gray-500 italic m-0">
+                <strong>Disclaimer:</strong> This example uses a 50% hedge purely to explain the mechanism. The actual hedge ratio, derivative used, timing and outcome depend on the SIF’s investment strategy.
+              </p>
+            </div>
+
+            {/* Difference 3: Limiting drawdowns in bear markets */}
+            <div className="mb-10 bg-white rounded-3xl p-6 sm:p-8 border border-gray-200 shadow-sm">
+              <h3 className="text-xl font-extrabold text-[#0a192f] mb-4 flex items-center gap-3">
+                <span className="w-8 h-8 rounded-full bg-[#032e92] text-white flex items-center justify-center text-sm font-bold flex-shrink-0">
+                  3
+                </span>
+                Limiting drawdowns in bear markets
+              </h3>
+
+              <p className="mb-4 text-sm sm:text-base leading-relaxed">
+                Limiting drawdowns in bear markets means trying to make the portfolio fall less when the market is falling.
+              </p>
+              <p className="mb-5 text-sm sm:text-base leading-relaxed font-semibold text-gray-800">
+                Here is a simple example using the same ₹1 crore portfolio:
+              </p>
+
+              {/* Table for Drawdown Limiting Example */}
+              <div className="overflow-x-auto rounded-2xl border border-gray-200 shadow-2xs my-6">
+                <table className="w-full text-left border-collapse text-sm">
+                  <thead>
+                    <tr className="bg-[#032e92] text-white">
+                      <th className="py-3.5 px-4 font-bold">Market situation</th>
+                      <th className="py-3.5 px-4 font-bold bg-[#021d63]">Without hedge</th>
+                      <th className="py-3.5 px-4 font-bold bg-[#032e92]">With a 50% hedge</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    <tr className="hover:bg-gray-50 transition-colors">
+                      <td className="py-3.5 px-4 font-bold text-gray-900">Portfolio before fall</td>
+                      <td className="py-3.5 px-4 text-gray-700 font-semibold bg-gray-50/50">₹1 crore</td>
+                      <td className="py-3.5 px-4 text-[#032e92] font-semibold bg-blue-50/30">₹1 crore</td>
+                    </tr>
+                    <tr className="hover:bg-red-50/30 transition-colors">
+                      <td className="py-3.5 px-4 font-bold text-gray-900">Market falls 20%</td>
+                      <td className="py-3.5 px-4 text-red-600 font-semibold bg-gray-50/50">₹80 lakh</td>
+                      <td className="py-3.5 px-4 text-gray-700 bg-blue-50/30">
+                        ₹80 lakh from stocks
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-green-50/30 transition-colors">
+                      <td className="py-3.5 px-4 font-bold text-gray-900">Gain from ₹50 lakh short Nifty futures</td>
+                      <td className="py-3.5 px-4 text-gray-400 bg-gray-50/50">—</td>
+                      <td className="py-3.5 px-4 text-emerald-600 font-bold bg-blue-50/30">+₹10 lakh</td>
+                    </tr>
+                    <tr className="hover:bg-blue-50/40 transition-colors bg-blue-50/20 font-bold">
+                      <td className="py-3.5 px-4 text-gray-900">Portfolio after fall</td>
+                      <td className="py-3.5 px-4 text-gray-800 bg-gray-50/50">₹80 lakh</td>
+                      <td className="py-3.5 px-4 text-[#032e92] bg-blue-50/30 text-base">₹90 lakh</td>
+                    </tr>
+                    <tr className="hover:bg-gray-50 transition-colors font-bold">
+                      <td className="py-3.5 px-4 text-gray-900">Drawdown</td>
+                      <td className="py-3.5 px-4 text-red-600 bg-gray-50/50">−20%</td>
+                      <td className="py-3.5 px-4 text-emerald-700 bg-blue-50/30 text-base">−10%</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <p className="text-sm text-gray-700 leading-relaxed m-0">
+                That is the basic idea behind limiting drawdowns — the hedge acts as a cushion during a market fall. This does not mean every SIF will limit every bear-market loss. The actual result depends on the strategy, hedge size, instrument, timing and how closely the hedge moves with the portfolio.
+              </p>
+            </div>
+
+            {/* Difference 4: Potential to make return in any market */}
+            <div className="mb-10 bg-white rounded-3xl p-6 sm:p-8 border border-gray-200 shadow-sm">
+              <h3 className="text-xl font-extrabold text-[#0a192f] mb-4 flex items-center gap-3">
+                <span className="w-8 h-8 rounded-full bg-[#032e92] text-white flex items-center justify-center text-sm font-bold flex-shrink-0">
+                  4
+                </span>
+                Potential to make return in any market
+              </h3>
+
+              <p className="mb-4 text-sm sm:text-base leading-relaxed">
+                SIF strategies can seek opportunities in rising, falling and sideways markets by using long and short positions.
+              </p>
+              <p className="mb-5 text-sm sm:text-base leading-relaxed font-semibold text-gray-800">
+                Assume the SIF manager has ₹1 crore and uses ₹50 lakh in Nifty futures to take a market view. These numbers are purely illustrative:
+              </p>
+
+              {/* Table for Return in Any Market */}
+              <div className="overflow-x-auto rounded-2xl border border-gray-200 shadow-2xs my-6">
+                <table className="w-full text-left border-collapse text-sm">
+                  <thead>
+                    <tr className="bg-[#032e92] text-white">
+                      <th className="py-3.5 px-4 font-bold">Market condition</th>
+                      <th className="py-3.5 px-4 font-bold">Manager’s action</th>
+                      <th className="py-3.5 px-4 font-bold">What happens</th>
+                      <th className="py-3.5 px-4 font-bold bg-[#021d63] text-cyan-200">Result</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    <tr className="hover:bg-green-50/30 transition-colors">
+                      <td className="py-3.5 px-4 font-bold text-gray-900">Market rises 10%</td>
+                      <td className="py-3.5 px-4 text-gray-700">Takes a long Nifty futures position of ₹50 lakh</td>
+                      <td className="py-3.5 px-4 text-gray-700">Nifty rises → futures position gains</td>
+                      <td className="py-3.5 px-4 text-emerald-600 font-extrabold bg-blue-50/30">+₹5 lakh</td>
+                    </tr>
+                    <tr className="hover:bg-red-50/30 transition-colors">
+                      <td className="py-3.5 px-4 font-bold text-gray-900">Market falls 10%</td>
+                      <td className="py-3.5 px-4 text-gray-700">Takes a short Nifty futures position of ₹50 lakh</td>
+                      <td className="py-3.5 px-4 text-gray-700">Nifty falls → short position gains</td>
+                      <td className="py-3.5 px-4 text-emerald-600 font-extrabold bg-blue-50/30">+₹5 lakh</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <p className="text-sm text-gray-700 leading-relaxed mb-3">
+                Now assuming that the markets are <strong>sideways</strong> (Prices keep moving up and down within a range, without a clear overall rise or fall). The fund manager believes that Bank A will rise 5% while Bank B will fall 5%, he could potentially profit by being <strong>long Bank A and short Bank B</strong>.
+              </p>
+              <p className="text-sm text-gray-700 leading-relaxed m-0">
+                That is what “potential to make returns in different market conditions” actually means. It means the manager has more ways to express an investment view than simply buying an asset and waiting for its price to rise.
+              </p>
             </div>
           </div>
 
-          {/* Section: Mutual Fund or SIF: Which One Is Right for You? */}
+          {/* Section 4: Mutual Fund or SIF: Which One Is Right for You? */}
           <div className="mt-14 mb-10">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0a192f] mb-4 flex items-center gap-3">
               <span className="w-9 h-9 rounded-xl bg-blue-100 text-[#032e92] flex items-center justify-center text-lg">
@@ -1139,7 +1321,7 @@ export default function BlogContent({ blog }) {
             </div>
 
             <p className="mb-6 font-medium text-gray-800">
-              Not sure whether you should invest in a mutual fund or a SIF? Let us help you get clarity on this:
+              Not sure whether you should invest in a mutual fund or a SIF? Let us help you get clarity on this.
             </p>
 
             <div className="grid md:grid-cols-2 gap-6 my-8">
@@ -1149,31 +1331,24 @@ export default function BlogContent({ blog }) {
                   <span className="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center text-sm font-bold">
                     MF
                   </span>
-                  <h3 className="text-lg font-bold text-[#0a192f]">
-                    A Mutual Fund is better for you if:
-                  </h3>
+                  <div>
+                    <h3 className="text-xl font-extrabold text-emerald-950">Mutual Fund</h3>
+                    <span className="text-xs text-emerald-700 font-semibold uppercase tracking-wider">A Mutual Fund is better for you if:</span>
+                  </div>
                 </div>
-                <ul className="space-y-3.5 text-sm text-gray-700">
-                  <li className="flex items-start gap-3">
-                    <FontAwesomeIcon icon={faCircleCheck} className="text-emerald-600 mt-1 shrink-0" />
-                    <span>You want to start investing with a smaller amount (starting from ₹500 via SIP).</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <FontAwesomeIcon icon={faCircleCheck} className="text-emerald-600 mt-1 shrink-0" />
-                    <span>You are new to investing and prefer familiar, established investment plans.</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <FontAwesomeIcon icon={faCircleCheck} className="text-emerald-600 mt-1 shrink-0" />
-                    <span>You mainly want to participate when the market grows (long-only approach).</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <FontAwesomeIcon icon={faCircleCheck} className="text-emerald-600 mt-1 shrink-0" />
-                    <span>You want pure diversification across stocks rather than complex derivative trades.</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <FontAwesomeIcon icon={faCircleCheck} className="text-emerald-600 mt-1 shrink-0" />
-                    <span>You want to invest in traditional equity, debt, or hybrid strategies.</span>
-                  </li>
+                <ul className="space-y-3 text-sm text-gray-700">
+                  {[
+                    "You want to start investing with a smaller amount.",
+                    "You are new to investing and prefer familiar investment plans.",
+                    "You mainly want to participate when the market grows (not when it falls).",
+                    "You want diversification across stocks rather than derivatives.",
+                    "You want to invest in traditional equity, debt or hybrid strategies.",
+                  ].map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-2.5">
+                      <FontAwesomeIcon icon={faCircleCheck} className="text-emerald-600 mt-1 flex-shrink-0 text-sm" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
 
@@ -1183,88 +1358,101 @@ export default function BlogContent({ blog }) {
                   <span className="w-10 h-10 rounded-full bg-[#032e92] text-white flex items-center justify-center text-sm font-bold">
                     SIF
                   </span>
-                  <h3 className="text-lg font-bold text-[#0a192f]">
-                    A SIF is better for you if:
-                  </h3>
+                  <div>
+                    <h3 className="text-xl font-extrabold text-[#0a192f]">SIF</h3>
+                    <span className="text-xs text-blue-700 font-semibold uppercase tracking-wider">An SIF is better for you if:</span>
+                  </div>
                 </div>
-                <ul className="space-y-3.5 text-sm text-gray-700">
-                  <li className="flex items-start gap-3">
-                    <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] mt-1 shrink-0" />
-                    <span>You can comfortably invest <strong>₹10 lakh or more</strong> in specialized strategies.</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] mt-1 shrink-0" />
-                    <span>You are comfortable with the fund taking short positions when the strategy allows it.</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] mt-1 shrink-0" />
-                    <span>You want the opportunity to benefit even when specific stocks or sectors fall.</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] mt-1 shrink-0" />
-                    <span>You already hold traditional investments and want an un-correlated strategy in your portfolio.</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] mt-1 shrink-0" />
-                    <span>You understand and accept the additional risks that come with active derivative strategies.</span>
-                  </li>
+                <ul className="space-y-3 text-sm text-gray-700">
+                  {[
+                    "You can invest ₹10 lakh or more in SIF strategies.",
+                    "You are comfortable with the fund taking short positions when the strategy allows it.",
+                    "You want to benefit even when some stocks or sectors are expected to fall.",
+                    "You already have traditional investments and want to add a different type of strategy to my portfolio.",
+                  ].map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-2.5">
+                      <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] mt-1 flex-shrink-0 text-sm" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
-          </div>
-
-          {/* Section: Key Evaluation Questions */}
-          <div className="mt-14 mb-10">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0a192f] mb-4 flex items-center gap-3">
-              <span className="w-9 h-9 rounded-xl bg-blue-100 text-[#032e92] flex items-center justify-center text-lg">
-                <FontAwesomeIcon icon={faQuestionCircle} />
-              </span>
-              Questions to Ask Before Making a Decision
-            </h2>
 
             <p className="mb-4">
-              Choosing between a mutual fund and SIF is not about finding which one is "better". It is about finding which one <strong>fits your investment needs</strong>.
+              Choosing between a mutual fund and SIF is not about finding which one is better. It is about finding which one <strong>fits your investment needs</strong>.
             </p>
-
             <p className="mb-6">
-              Before making a decision, look at your investment goals, time horizon, existing portfolio, and risk appetite. Ask yourself:
+              Before making a decision, look at your investment goals, time horizon, existing portfolio and risk appetite. Ask yourself:
             </p>
 
             <div className="bg-gray-50 rounded-3xl p-7 border border-gray-200/80 my-6">
               <div className="grid sm:grid-cols-2 gap-4 text-sm font-medium text-gray-800">
-                <div className="flex items-center gap-3 bg-white p-3.5 rounded-xl border border-gray-100 shadow-sm">
-                  <span className="w-6 h-6 rounded-full bg-blue-100 text-[#032e92] flex items-center justify-center text-xs font-bold">1</span>
-                  <span>How much money can you invest?</span>
-                </div>
-                <div className="flex items-center gap-3 bg-white p-3.5 rounded-xl border border-gray-100 shadow-sm">
-                  <span className="w-6 h-6 rounded-full bg-blue-100 text-[#032e92] flex items-center justify-center text-xs font-bold">2</span>
-                  <span>For how long can you stay invested?</span>
-                </div>
-                <div className="flex items-center gap-3 bg-white p-3.5 rounded-xl border border-gray-100 shadow-sm">
-                  <span className="w-6 h-6 rounded-full bg-blue-100 text-[#032e92] flex items-center justify-center text-xs font-bold">3</span>
-                  <span>Will you need this money in the next 5 years?</span>
-                </div>
-                <div className="flex items-center gap-3 bg-white p-3.5 rounded-xl border border-gray-100 shadow-sm">
-                  <span className="w-6 h-6 rounded-full bg-blue-100 text-[#032e92] flex items-center justify-center text-xs font-bold">4</span>
-                  <span>What are you investing for?</span>
-                </div>
-                <div className="flex items-center gap-3 bg-white p-3.5 rounded-xl border border-gray-100 shadow-sm">
-                  <span className="w-6 h-6 rounded-full bg-blue-100 text-[#032e92] flex items-center justify-center text-xs font-bold">5</span>
-                  <span>What is your true risk appetite?</span>
-                </div>
-                <div className="flex items-center gap-3 bg-white p-3.5 rounded-xl border border-gray-100 shadow-sm">
-                  <span className="w-6 h-6 rounded-full bg-blue-100 text-[#032e92] flex items-center justify-center text-xs font-bold">6</span>
-                  <span>How much loss can you comfortably handle if markets drop?</span>
-                </div>
-                <div className="flex items-center gap-3 bg-white p-3.5 rounded-xl border border-gray-100 shadow-sm sm:col-span-2">
-                  <span className="w-6 h-6 rounded-full bg-blue-100 text-[#032e92] flex items-center justify-center text-xs font-bold">7</span>
-                  <span>Do you need regular liquidity or cash flow from this investment?</span>
-                </div>
+                {[
+                  "How much money can you invest?",
+                  "For how long can you stay invested?",
+                  "Will you need this money in the next 5 years?",
+                  "What are you investing for?",
+                  "What is your risk appetite?",
+                  "How much loss can you comfortably handle if markets fall?",
+                  "Do you need regular income from this investment?",
+                ].map((q, i) => (
+                  <div key={i} className={`flex items-center gap-3 bg-white p-3.5 rounded-xl border border-gray-100 shadow-sm ${i === 6 ? 'sm:col-span-2' : ''}`}>
+                    <span className="w-6 h-6 rounded-full bg-blue-100 text-[#032e92] flex items-center justify-center text-xs font-bold flex-shrink-0">
+                      {i + 1}
+                    </span>
+                    <span>{q}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
             <p className="mt-6 mb-4">
-              Once you have clear answers to these questions, the choice between a mutual fund and SIF becomes much more evident.
+              Once you have answers to these questions, the choice between a mutual fund and SIF becomes much clearer.
+            </p>
+          </div>
+
+          {/* Section 5: Should you invest in only one (Mutual Fund or SIF) or both? */}
+          <div className="mt-14 mb-10">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0a192f] mb-6 flex items-center gap-3">
+              <span className="w-9 h-9 rounded-xl bg-blue-100 text-[#032e92] flex items-center justify-center text-lg">
+                <FontAwesomeIcon icon={faScaleUnbalancedFlip} />
+              </span>
+              Should you invest in only one (Mutual Fund or SIF) or both?
+            </h2>
+
+            <p className="mb-4">
+              You usually don’t need to invest in both. Start with the product that matches your objectives and risk tolerance.
+            </p>
+            <p className="mb-4">
+              If the goal is to build long-term wealth through a diversified portfolio, a Mutual Fund can be sufficient. If you have ₹10 lakh or more available to invest and you are comfortable with market movements in either direction, you can consider a SIF.
+            </p>
+            <p className="mb-6">
+              You can consider investing in both mutual funds and SIF when they have different roles in your portfolio. For example, you could use Mutual Funds for my core long-term goals and add a SIF for a specific strategy that fits your risk profile and a different investment objective.
+            </p>
+
+            <div className="bg-[#f0fdf4] border-l-4 border-emerald-600 p-5 rounded-r-2xl my-6">
+              <p className="text-base text-gray-800 font-semibold leading-relaxed m-0">
+                So the real questions would be: <br />
+                <span className="font-normal text-gray-700">What is the goal? How much do you want to invest? How long can you stay invested? How much risk can you take?</span>
+              </p>
+            </div>
+
+            <p className="mb-4">
+              Once these things are clear, choosing between MF, SIF, or a combination becomes much more straightforward.
+            </p>
+            <p className="mb-4">
+              And if you are still unsure, speak with us at KNAPS{" "}
+              <a
+                href="https://wa.me/+919990243143?text=I%20want%20to%20understand%20difference%20between%20Mutual%20Funds%20and%20SIFs"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 font-bold border border-emerald-200 hover:bg-emerald-100 transition-colors"
+              >
+                <FontAwesomeIcon icon={faWhatsapp} className="text-emerald-600 text-sm" />
+                <span>(whatsapp)</span>
+              </a>{" "}
+              who can guide you based on your personal objectives and financial situation.
             </p>
           </div>
 
@@ -1272,42 +1460,37 @@ export default function BlogContent({ blog }) {
           <blockquote className="relative p-8 sm:p-10 bg-gradient-to-r from-blue-50/50 via-gray-50 to-blue-50/50 rounded-3xl border border-blue-100/80 my-12 text-center shadow-sm">
             <FontAwesomeIcon icon={faQuoteLeft} className="absolute top-6 left-8 text-3xl text-blue-200" />
             <p className="relative z-10 text-xl sm:text-2xl text-[#0a192f] font-bold italic leading-relaxed m-0">
-              "The right investment is not the one that sounds more advanced. It is the one that fulfills your goals."
+              “The right investment is not the one that sounds more advanced. It is the one that fulfills your goals.”
             </p>
           </blockquote>
 
-          {/* KNAPS AMFI Registered Callout Box */}
+          {/* KNAPS Consultation Callout Box */}
           <div className="bg-gradient-to-br from-[#032e92] to-[#021d63] text-white p-8 sm:p-10 rounded-3xl shadow-xl my-12">
             <div className="flex items-center gap-2.5 text-cyan-300 font-bold text-xs uppercase tracking-wider mb-2">
               <FontAwesomeIcon icon={faCompass} />
               <span>Expert Financial Guidance</span>
             </div>
             <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-4">
-              Speak with an AMFI-Registered Advisor
+              Speak with a KNAPS Advisor
             </h3>
             <p className="text-blue-100 text-sm sm:text-base leading-relaxed mb-6">
-              And if you are still unsure, speak with an AMFI-registered mutual fund advisor who can guide you based on your personal objectives and financial situation.
-            </p>
-            <p className="text-blue-100 text-sm sm:text-base leading-relaxed mb-8">
-              <a href="https://knaps.in" target="_blank" rel="noopener noreferrer" className="text-white font-bold underline hover:text-cyan-200 transition-colors">
-                KNAPS Private Limited
-              </a>{' '}
-              is a leading AMFI-registered Mutual Fund Distributor in India. You can contact the experts and get more clarity on which type of investment works best as per your financial objectives, time horizon, and risk appetite.
+              Get personalized clarity on which type of investment works best as per your financial objectives, time horizon, and risk appetite.
             </p>
             <div className="flex flex-wrap gap-4 items-center">
               <button
-                onClick={() => openLeadModal('Blog: SIF vs Mutual Funds')}
+                onClick={() => openLeadModal("Blog: SIF vs Mutual Funds")}
                 className="btn-ripple px-6 py-3.5 rounded-xl font-bold text-sm bg-white text-[#032e92] hover:bg-blue-50 shadow-lg hover:shadow-xl transition-all cursor-pointer"
               >
                 Schedule Free Consultation
               </button>
               <a
-                href="https://knaps.in"
+                href="https://wa.me/+919990243143?text=I%20want%20to%20understand%20difference%20between%20Mutual%20Funds%20and%20SIFs"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-ripple px-6 py-3.5 rounded-xl font-semibold text-sm bg-white/10 hover:bg-white/20 text-white border border-white/30 transition-all"
+                className="btn-ripple px-6 py-3.5 rounded-xl font-semibold text-sm bg-emerald-600 hover:bg-emerald-500 text-white shadow-md transition-all flex items-center gap-2"
               >
-                Visit knaps.in
+                <FontAwesomeIcon icon={faWhatsapp} className="text-base" />
+                <span>Chat on WhatsApp</span>
               </a>
             </div>
           </div>

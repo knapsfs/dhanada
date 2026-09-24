@@ -367,7 +367,8 @@ class DataImporter:
 			return False
 		for r, e in zip(current_rows, entries, strict=True):
 			r_date = getdate(r.nav_date) if r.nav_date else None
-			if r_date != e.nav_date:
+			e_date = getdate(e.nav_date) if e.nav_date else None
+			if r_date != e_date:
 				return False
 			if abs(float(r.nav or 0) - float(e.nav or 0)) > 1e-6:
 				return False
@@ -402,6 +403,7 @@ class DataImporter:
 							doc.save(ignore_permissions=True)
 						self.stats["historical_nav_updated"] += 1
 				else:
+					frappe.db.delete("SIF NAV Historical Data Entry", {"parent": sif_code})
 					doc = frappe.new_doc("SIF NAV Historical Data")
 					doc.sif_code = sif_code
 					for entry in entries:
