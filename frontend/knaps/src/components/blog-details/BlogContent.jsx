@@ -487,15 +487,20 @@ export default function BlogContent({ blog }) {
       <article className="bg-white pb-20 pt-4">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 text-gray-700 text-[17px] leading-[1.85]">
 
-          {/* Lead Paragraph */}
-          <p className="text-xl sm:text-[22px] font-medium text-[#0a192f] leading-relaxed mb-8 border-l-4 border-[#032e92] pl-5 py-1">
-            Choosing a mutual fund is simple. Start by shortlisting which category you want to invest in — <strong>Equity, Debt, or Hybrid</strong> based on these <strong>4 foundational parameters</strong>:
-          </p>
+          {/* Lead Section */}
+          <div className="text-xl sm:text-[22px] font-medium text-[#0a192f] leading-relaxed mb-8 border-l-4 border-[#032e92] pl-5 py-2 bg-blue-50/30 rounded-r-2xl">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0a192f] mb-3">
+              How to choose a Mutual fund scheme in India 2026?
+            </h2>
+            <p className="m-0 text-gray-700 text-lg sm:text-xl font-normal leading-relaxed">
+              Choosing a mutual fund is simple. Start with shortlisting which category you want to invest in — <strong>Equity, debt, or hybrid</strong> based on these <strong>4 parameters</strong>:
+            </p>
+          </div>
 
-          {/* 4 Parameters Section */}
+          {/* 4 Parameters Cards */}
           <div className="space-y-8 my-10">
 
-            {/* Parameter 1: Investment Objective */}
+            {/* 1. Investment Objective */}
             <div className="p-7 sm:p-8 rounded-3xl bg-gradient-to-br from-blue-50/50 via-white to-blue-50/30 border border-blue-100/80 shadow-sm">
               <div className="flex items-center gap-3.5 mb-4">
                 <span className="w-10 h-10 rounded-2xl bg-[#032e92] text-white flex items-center justify-center text-base font-bold shadow-md shadow-blue-900/20">
@@ -507,74 +512,75 @@ export default function BlogContent({ blog }) {
               </div>
 
               <p className="mb-6 font-medium text-gray-800">
-                First, ask yourself: what are you investing for? <strong>Income generation, capital preservation, or long-term wealth creation?</strong>
+                First, ask yourself what are you investing for? <strong>Income generation, capital preservation, or long-term wealth creation?</strong>
               </p>
 
               <div className="space-y-4">
-                {/* Income Generation */}
+                {/* Income generation */}
                 <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
                   <h4 className="font-bold text-[#032e92] text-base mb-1.5 flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-[#032e92]"></span>
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#032e92]"></span>
                     Income Generation
                   </h4>
-                  <p className="text-sm text-gray-600 leading-relaxed">
-                    If your objective is to generate income from your investment, you can consider an <strong>SWP (Systematic Withdrawal Plan)</strong>, where you withdraw a fixed amount at regular intervals (mostly monthly), or the <strong>IDCW Payout option</strong>, where the fund may distribute dividend income when declared. <em>(Note: The amount and frequency of IDCW are not guaranteed.)</em>
+                  <p className="text-sm text-gray-600 leading-relaxed m-0">
+                    If your objective is to generate income from your investment, you can consider an <strong>SWP (Systematic Withdrawal Plan)</strong>, where you withdraw a fixed amount at regular intervals (mostly on a monthly basis), or the <strong>IDCW Payout option</strong>, where the fund may distribute dividend income to investors when declared. <em>The amount and frequency of IDCW are not guaranteed.</em>
                   </p>
                 </div>
 
-                {/* Capital Preservation */}
+                {/* Capital preservation */}
                 <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
                   <h4 className="font-bold text-[#032e92] text-base mb-1.5 flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-[#032e92]"></span>
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#032e92]"></span>
                     Capital Preservation
                   </h4>
-                  <p className="text-sm text-gray-600 leading-relaxed">
-                    If your objective is capital preservation, consider suitable debt-oriented categories, such as <strong>Liquid, Ultra Short Duration, Short Duration, Corporate Bond, or Gilt Funds</strong>.
+                  <p className="text-sm text-gray-600 leading-relaxed m-0">
+                    If your objective is capital preservation, you can consider suitable debt-oriented categories, such as <strong>Liquid, Ultra Short Duration, Short Duration, Corporate Bond or Gilt Funds</strong>.
                   </p>
                 </div>
 
-                {/* Long-term Wealth Creation */}
+                {/* Long-term wealth creation */}
                 <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
                   <h4 className="font-bold text-[#032e92] text-base mb-2 flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-[#032e92]"></span>
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#032e92]"></span>
                     Long-Term Wealth Creation
                   </h4>
                   <p className="text-sm text-gray-600 leading-relaxed mb-3">
                     If your objective is long-term wealth creation, you can consider equity mutual funds. The category can be chosen based on the type of companies or investment style you want:
                   </p>
+
                   <ul className="grid sm:grid-cols-2 gap-2.5 text-xs sm:text-sm text-gray-700">
                     <li className="flex items-center gap-2 bg-blue-50/50 p-2.5 rounded-xl border border-blue-100/50">
                       <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] shrink-0" />
-                      <span><strong>Large Cap:</strong> Top 100 companies by market cap</span>
+                      <span><strong>Large Cap Funds:</strong> focus on the top 100 companies by market cap</span>
                     </li>
                     <li className="flex items-center gap-2 bg-blue-50/50 p-2.5 rounded-xl border border-blue-100/50">
                       <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] shrink-0" />
-                      <span><strong>Large & Mid Cap:</strong> Top 100 + mid-sized firms</span>
+                      <span><strong>Large &amp; Mid Cap Funds:</strong> combine large and mid-sized companies</span>
                     </li>
                     <li className="flex items-center gap-2 bg-blue-50/50 p-2.5 rounded-xl border border-blue-100/50">
                       <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] shrink-0" />
-                      <span><strong>Mid Cap:</strong> Companies ranked 101st–250th</span>
+                      <span><strong>Mid Cap Funds:</strong> focus on companies ranked 101st–250th by market cap</span>
                     </li>
                     <li className="flex items-center gap-2 bg-blue-50/50 p-2.5 rounded-xl border border-blue-100/50">
                       <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] shrink-0" />
-                      <span><strong>Small Cap:</strong> Companies ranked 251st onwards</span>
+                      <span><strong>Small Cap Funds:</strong> focus on companies ranked 251st onwards</span>
                     </li>
                     <li className="flex items-center gap-2 bg-blue-50/50 p-2.5 rounded-xl border border-blue-100/50 sm:col-span-2">
                       <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] shrink-0" />
-                      <span><strong>Multi Cap / Flexi Cap:</strong> Dynamic exposure across large, mid, and small cap sizes</span>
+                      <span><strong>Multi Cap or Flexi Cap Funds:</strong> give you exposure across different company sizes</span>
                     </li>
                   </ul>
-                  <div className="mt-3.5 pt-3 border-t border-gray-100 text-xs font-semibold text-[#032e92]">
-                    <Link to="/blogs/sif-vs-mutual-funds" className="inline-flex items-center gap-1.5 hover:underline">
-                      <span>To know more about specialized advanced strategies, read our SIF vs Mutual Funds Guide</span>
-                      <FontAwesomeIcon icon={faArrowRight} className="text-[10px]" />
+
+                  <div className="mt-4 pt-3 border-t border-gray-100 text-xs font-semibold text-[#032e92]">
+                    <Link to="/blogs" className="inline-flex items-center gap-1.5 hover:underline">
+                      <span>To know more about the different strategies, you can read this Blog &rarr;</span>
                     </Link>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Parameter 2: Investment Horizon */}
+            {/* 2. Investment Horizon */}
             <div className="p-7 sm:p-8 rounded-3xl bg-gradient-to-br from-emerald-50/50 via-white to-emerald-50/30 border border-emerald-100/80 shadow-sm">
               <div className="flex items-center gap-3.5 mb-4">
                 <span className="w-10 h-10 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-base font-bold shadow-md shadow-emerald-900/20">
@@ -584,220 +590,179 @@ export default function BlogContent({ blog }) {
                   Investment Horizon
                 </h3>
               </div>
-              <p className="mb-4">
-                When will you need the money? Your timeline determines how much market fluctuation your portfolio can absorb:
+              <p className="text-gray-700 leading-relaxed mb-4">
+                When will you need the money? If you are investing for the long term, you can consider equity-oriented mutual funds (a typical equity cycle lasts for 4-5 years usually) as you have more time to stay invested through market ups and downs. If you need to park money for a few months you can go for short term debt funds. Hybrids give the advantage of both words by having a combination of stocks and debt in your portfolio and can be used for medium term investments.
               </p>
-              <div className="grid sm:grid-cols-3 gap-3.5 mt-4 text-sm">
-                <div className="bg-white p-4 rounded-2xl border border-gray-100">
-                  <span className="text-xs font-bold uppercase tracking-wider text-emerald-600">Long Term (4-5+ Years)</span>
-                  <p className="text-xs text-gray-600 mt-1 leading-relaxed">
-                    <strong>Equity-oriented mutual funds</strong> are ideal because a typical equity cycle lasts 4–5 years, giving investments time to ride out cyclical dips.
-                  </p>
-                </div>
-                <div className="bg-white p-4 rounded-2xl border border-gray-100">
-                  <span className="text-xs font-bold uppercase tracking-wider text-emerald-600">Short Term (Few Months)</span>
-                  <p className="text-xs text-gray-600 mt-1 leading-relaxed">
-                    Park capital in <strong>short-term debt or liquid funds</strong> for stability and quick liquidity without risking market drawdowns.
-                  </p>
-                </div>
-                <div className="bg-white p-4 rounded-2xl border border-gray-100">
-                  <span className="text-xs font-bold uppercase tracking-wider text-emerald-600">Medium Term (2-4 Years)</span>
-                  <p className="text-xs text-gray-600 mt-1 leading-relaxed">
-                    <strong>Hybrid funds</strong> provide the best of both worlds by combining equities for growth and debt securities for a cushion.
-                  </p>
-                </div>
-              </div>
             </div>
 
-            {/* Parameter 3: Risk Level */}
+            {/* 3. Risk Level */}
             <div className="p-7 sm:p-8 rounded-3xl bg-gradient-to-br from-amber-50/50 via-white to-amber-50/30 border border-amber-100/80 shadow-sm">
               <div className="flex items-center gap-3.5 mb-4">
                 <span className="w-10 h-10 rounded-2xl bg-amber-600 text-white flex items-center justify-center text-base font-bold shadow-md shadow-amber-900/20">
                   3
                 </span>
                 <h3 className="text-xl sm:text-2xl font-bold text-[#0a192f]">
-                  Risk Level & The Riskometer
+                  Risk Level
                 </h3>
               </div>
-              <p className="mb-4">
-                Check the risk level of the fund and ask yourself how much risk you are willing to take:
+              <p className="text-gray-700 leading-relaxed mb-4">
+                Check the risk level of the fund and ask yourself how much risk you are willing to take. Debt mutual funds carry a risk of interest-rate and credit risk, while equity and equity-oriented hybrid funds are mainly affected by market movements and changes in stock prices.
               </p>
-              <ul className="space-y-2.5 text-sm text-gray-700 mb-4">
-                <li className="flex items-start gap-2.5">
-                  <FontAwesomeIcon icon={faCircleCheck} className="text-amber-600 mt-1 shrink-0" />
-                  <span><strong>Debt mutual funds</strong> carry interest-rate risk (bond price shifts) and credit risk (issuer default risk).</span>
-                </li>
-                <li className="flex items-start gap-2.5">
-                  <FontAwesomeIcon icon={faCircleCheck} className="text-amber-600 mt-1 shrink-0" />
-                  <span><strong>Equity and equity-oriented hybrid funds</strong> are mainly affected by market movements, corporate earnings, and stock price swings.</span>
-                </li>
-              </ul>
               <div className="bg-white p-4 rounded-2xl border border-amber-200/80 text-xs sm:text-sm text-gray-700">
-                <strong>The Scheme Riskometer:</strong> Every mutual fund features an official Riskometer ranging from <strong>1 (Low)</strong> to <strong>5 (Very High)</strong>. Always select a scheme whose risk level matches both your financial ability and psychological willingness to handle drawdowns.
+                <strong>The Riskometer:</strong> Every mutual fund has a Riskometer, which indicates the scheme’s risk level from <strong>1 (Low) to 5 (Very High)</strong>. Choose a fund whose risk level matches your ability and willingness to take risk.
               </div>
             </div>
 
-            {/* Parameter 4: Performance Evaluation */}
+            {/* 4. Performance */}
             <div className="p-7 sm:p-8 rounded-3xl bg-gradient-to-br from-purple-50/50 via-white to-purple-50/30 border border-purple-100/80 shadow-sm">
               <div className="flex items-center gap-3.5 mb-4">
                 <span className="w-10 h-10 rounded-2xl bg-purple-600 text-white flex items-center justify-center text-base font-bold shadow-md shadow-purple-900/20">
                   4
                 </span>
                 <h3 className="text-xl sm:text-2xl font-bold text-[#0a192f]">
-                  Performance & Consistency
+                  Performance
                 </h3>
               </div>
-              <p className="mb-4">
-                Evaluate the fund's performance over multiple trailing and rolling periods: <strong>1 month, 3 months, 6 months, 1 year, and since inception</strong>.
+              <p className="text-gray-700 leading-relaxed mb-4">
+                Next, evaluate the fund’s performance over different periods (1month, 3 months, 6 months, 1 year, since inception) and look for consistency rather than choosing a fund simply because it delivered the highest return in the previous year, as higher return funds tends to have deeper cycles during market downturns.
               </p>
-              <div className="bg-[#fff9e6] border-l-4 border-amber-500 p-4 rounded-r-2xl text-sm text-gray-800">
-                <strong>Crucial Insight:</strong> Look for <em>consistency</em> across bull and bear phases rather than simply picking the fund that delivered the highest return in the previous year. High-flying outlier funds often suffer the deepest cycles during market downturns.
-              </div>
             </div>
 
           </div>
 
-          {/* Infographic Section Image */}
-          <div className="my-12 rounded-3xl overflow-hidden shadow-xl border border-gray-100 bg-white">
-            <img
-              src={mutualFundsRisksImg}
-              alt="Mutual Funds Risk, Goals, and Returns Framework in India"
-              className="w-full h-auto object-contain hover:scale-[1.01] transition-transform duration-500"
-            />
-          </div>
-
-          {/* Section: Scheme Selection Checkpoints */}
+          {/* Scheme Selection Checkpoints */}
           <div className="mt-14 mb-10">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0a192f] mb-4 flex items-center gap-3">
               <span className="w-9 h-9 rounded-xl bg-blue-100 text-[#032e92] flex items-center justify-center text-lg">
                 <FontAwesomeIcon icon={faCircleCheck} />
               </span>
-              Checkpoints to Choose a Particular Scheme
+              Checkpoints to Choose a Particular Mutual Fund Scheme
             </h2>
 
-            <p className="mb-6">
-              Once you have shortlisted the right category, pick <strong>3–4 peer schemes</strong> with similar mandates and compare them on these essential metrics:
+            <p className="mb-4">
+              Once you have shortlisted the right category, you can use these checkpoints to choose a particular mutual fund scheme:
+            </p>
+
+            <p className="mb-6 font-medium text-gray-800">
+              Compare funds within the same category. You can pick <strong>3 - 4 schemes</strong> that follow a similar investment style and compare them on the following metrics:
             </p>
 
             <div className="grid sm:grid-cols-2 gap-4 my-8">
-              {/* Checkpoint 1 */}
-              <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200/80 flex flex-col justify-between">
-                <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#032e92]">Metric 1</span>
-                  <h4 className="text-base font-bold text-[#0a192f] mt-1 mb-2">Check Long-Term Performance</h4>
-                  <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                    Look at 3-year and 5-year annualized returns. Check whether returns were delivered consistently across cycles rather than in a single lucky year.
-                  </p>
-                </div>
+              {/* Metric 1 */}
+              <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200/80">
+                <h4 className="text-base font-bold text-[#0a192f] mb-2 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#032e92]"></span>
+                  Check long-term performance
+                </h4>
+                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed m-0">
+                  Look at the fund’s 3-year and 5-year returns and check if they have delivered consistent returns in the long term rather than just looking at the highest returns.
+                </p>
               </div>
 
-              {/* Checkpoint 2 */}
-              <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200/80 flex flex-col justify-between">
-                <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#032e92]">Metric 2</span>
-                  <h4 className="text-base font-bold text-[#0a192f] mt-1 mb-2">Compare with Benchmark</h4>
-                  <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                    Check whether the fund consistently performs in line with or outperforms its benchmark index (e.g. NIFTY 50 TRI, NIFTY Midcap 150 TRI).
-                  </p>
-                </div>
+              {/* Metric 2 */}
+              <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200/80">
+                <h4 className="text-base font-bold text-[#0a192f] mb-2 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#032e92]"></span>
+                  Compare performance with the benchmark
+                </h4>
+                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed m-0">
+                  Check whether the fund has consistently performed in line with or better than its benchmark.
+                </p>
               </div>
 
-              {/* Checkpoint 3 */}
-              <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200/80 flex flex-col justify-between">
-                <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#032e92]">Metric 3</span>
-                  <h4 className="text-base font-bold text-[#0a192f] mt-1 mb-2">Risk-Adjusted Returns (Sharpe Ratio)</h4>
-                  <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                    If two funds delivered similar returns, check which took less volatility. A higher <strong>Sharpe Ratio</strong> indicates superior returns per unit of total risk.
-                  </p>
-                </div>
+              {/* Metric 3 */}
+              <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200/80">
+                <h4 className="text-base font-bold text-[#0a192f] mb-2 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#032e92]"></span>
+                  Look at risk along with returns
+                </h4>
+                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed m-0">
+                  If two funds have delivered similar returns, check which one has taken less risk to achieve them. You can refer to the sharpe ratio for that. A higher Sharpe Ratio generally means that the fund has generated better returns for the level of risk taken.
+                </p>
               </div>
 
-              {/* Checkpoint 4 */}
-              <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200/80 flex flex-col justify-between">
-                <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#032e92]">Metric 4</span>
-                  <h4 className="text-base font-bold text-[#0a192f] mt-1 mb-2">Inspect the Underlying Portfolio</h4>
-                  <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                    See where the fund invests. Check top 10 company holdings, sector concentration, and market-cap mix to ensure genuine diversification.
-                  </p>
-                </div>
+              {/* Metric 4 */}
+              <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200/80">
+                <h4 className="text-base font-bold text-[#0a192f] mb-2 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#032e92]"></span>
+                  Check the portfolio
+                </h4>
+                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed m-0">
+                  See where the fund is investing. Check the top holdings, sectors, and allocation to understand where your money is actually being invested.
+                </p>
               </div>
 
-              {/* Checkpoint 5 */}
+              {/* Metric 5 */}
               <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200/80 sm:col-span-2">
-                <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#032e92]">Metric 5</span>
-                  <h4 className="text-base font-bold text-[#0a192f] mt-1 mb-2">Check the Cost (Expense Ratio)</h4>
-                  <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                    Compare the Total Expense Ratio (TER) with peer funds in the exact same category. A lower expense ratio directly helps you keep more compounding returns over decades.
-                  </p>
-                </div>
+                <h4 className="text-base font-bold text-[#0a192f] mb-2 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#032e92]"></span>
+                  Check the cost
+                </h4>
+                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed m-0">
+                  Compare the expense ratio with other funds in the same category. A lower expense ratio can help you keep more of your investment returns.
+                </p>
               </div>
             </div>
 
-            {/* Remove schemes box */}
-            <div className="bg-[#fff5f5] border-l-4 border-[#c10000] p-6 rounded-r-2xl my-6">
-              <div className="flex items-center gap-2.5 mb-2 text-[#c10000] font-bold text-base">
+            {/* Remove schemes that don't fit */}
+            <div className="bg-[#fff9e6] border-l-4 border-amber-500 p-5 rounded-r-2xl my-6">
+              <div className="flex items-center gap-2.5 mb-1.5 text-[#b45309] font-bold text-base">
                 <FontAwesomeIcon icon={faTriangleExclamation} />
-                <span>Remove Schemes That Don't Fit</span>
+                <span>Remove schemes that don’t fit</span>
               </div>
               <p className="text-sm text-gray-700 leading-relaxed m-0">
-                Eliminate schemes with erratic performance swings, unsuitable asset allocation, style drift, or elevated risk without a corresponding difference in returns.
+                Eliminate funds with inconsistent performance, unsuitable asset allocation, or higher risk without a corresponding difference in returns.
               </p>
             </div>
 
-            {/* Advisory note */}
+            {/* KNAPS Consultation Callout */}
             <div className="bg-[#eef5ff] border border-blue-200/70 p-6 rounded-2xl my-6 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
-                <h4 className="font-bold text-[#032e92] text-base mb-1">Need personalized guidance?</h4>
-                <p className="text-xs sm:text-sm text-gray-600">
-                  Discuss your personal financial goals with an AMFI-registered mutual fund distributor. KNAPS Pvt Ltd is a leading AMFI-registered distributor with over <strong>1,000+ happy investors</strong>.
+                <p className="text-sm sm:text-base text-gray-700 m-0">
+                  If you think you need to discuss further about your personal goals and objectives, you can talk to us at <strong>KNAPS</strong>.
                 </p>
               </div>
               <button
                 onClick={() => openLeadModal('Blog: Choose Mutual Fund 2026')}
                 className="btn-ripple px-5 py-2.5 rounded-xl font-bold text-xs bg-[#032e92] text-white hover:bg-[#021d63] whitespace-nowrap shadow-md cursor-pointer shrink-0"
               >
-                Book Consultation
+                Book a consultation here &rarr;
               </button>
             </div>
           </div>
 
-          {/* Section: How to Review Your Mutual Fund Scheme? */}
+          {/* Section: How to review your mutual fund scheme? */}
           <div className="mt-14 mb-10">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0a192f] mb-4 flex items-center gap-3">
               <span className="w-9 h-9 rounded-xl bg-blue-100 text-[#032e92] flex items-center justify-center text-lg">
                 <FontAwesomeIcon icon={faCompass} />
               </span>
-              How to Review Your Mutual Fund Scheme?
+              How to review your mutual fund scheme?
             </h2>
 
-            {/* Quote Box */}
-            <blockquote className="relative p-8 sm:p-10 bg-gradient-to-r from-blue-50/40 via-gray-50 to-blue-50/40 rounded-3xl border border-blue-100 my-8 text-center shadow-sm">
-              <FontAwesomeIcon icon={faQuoteLeft} className="absolute top-6 left-8 text-3xl text-blue-200" />
-              <p className="relative z-10 text-xl sm:text-2xl text-[#0a192f] font-bold italic leading-relaxed m-0">
-                "The best way to review your mutual fund scheme is to forget that you have invested in it."
+            <blockquote className="relative p-6 sm:p-8 bg-gradient-to-r from-blue-50/40 via-gray-50 to-blue-50/40 rounded-3xl border border-blue-100 my-6 text-center shadow-sm">
+              <p className="text-lg sm:text-xl text-[#0a192f] font-bold leading-relaxed m-0">
+                "The best way to review your mutual fund scheme is to give it enough time to work and avoid checking it too frequently."
               </p>
             </blockquote>
 
             <p className="mb-4">
-              Mutual funds are meant for the long term. Checking your portfolio every day, week, or month can cause emotional reactions to everyday market volatility and lead to costly, unnecessary changes.
+              Mutual funds are meant for the long term, so checking your portfolio every day, week, or month can make you react to normal market movements and make unnecessary changes.
             </p>
 
             <p className="mb-4">
-              Instead, give your investments time to compound. A <strong>review once a year</strong> is generally enough for a long-term portfolio, or whenever there is a major shift in your financial goals, income, or time horizon.
+              Instead, give your investments time to work. A <strong>review once a year</strong> is generally enough for a long-term portfolio, or whenever there is a major change in your financial goal, income, or time horizon.
             </p>
 
             <div className="bg-gray-50 p-6 rounded-2xl border border-gray-200/80 my-6 text-sm">
-              <h4 className="font-bold text-gray-900 mb-2">Example: Evolving Life Goals</h4>
-              <p className="text-gray-600 leading-relaxed">
-                You may have started investing to build an emergency fund when your income was uncertain. A few years later, your income has stabilized and your emergency fund is already sufficient. You now want to focus on long-term wealth creation. In that case, your portfolio allocation should be realigned to match your new goal.
+              <h4 className="font-bold text-gray-900 mb-2">Example: Changing Goals &amp; Life Stages</h4>
+              <p className="text-gray-600 leading-relaxed m-0">
+                If your goal, income or time period has changed, your investments may also need to change. For example, you may have started investing to build an emergency fund when your income was uncertain. A few years later, your income may have become more stable and your emergency fund may already be sufficient. You may now want to focus on long-term wealth creation. In that case, your investments should be reviewed based on your new goal.
               </p>
             </div>
 
             <p className="mb-4 font-medium text-gray-800">
-              During the annual review, simply ask yourself one golden question:
+              During the annual review, simply ask:
             </p>
 
             <div className="p-5 rounded-2xl bg-[#eef5ff] border-2 border-[#032e92]/30 text-center font-bold text-base sm:text-lg text-[#032e92] my-4 shadow-sm">
@@ -805,98 +770,106 @@ export default function BlogContent({ blog }) {
             </div>
 
             <p className="text-sm text-gray-600">
-              If the answer is <strong>yes</strong>, there may be no reason to make any change at all.
+              If the answer is <strong>yes</strong>, there may be no reason to make a change.
             </p>
           </div>
 
-          {/* Section: When to Exit? (The 5 Cases) */}
+          {/* Section: When to exit? */}
           <div className="mt-14 mb-10">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0a192f] mb-4 flex items-center gap-3">
               <span className="w-9 h-9 rounded-xl bg-blue-100 text-[#032e92] flex items-center justify-center text-lg">
                 <FontAwesomeIcon icon={faShieldHalved} />
               </span>
-              When to Exit? (5 Legitimate Reasons)
+              When to exit?
             </h2>
 
             <p className="mb-6">
-              You should only take an exit or withdraw money from a mutual fund scheme in any of the following <strong>5 specific cases</strong>:
+              You can take an exit or withdraw money from a mutual fund scheme in any of the following <strong>5 cases</strong>:
             </p>
 
             <div className="space-y-3.5 my-8">
               <div className="p-4 sm:p-5 rounded-2xl bg-white border border-gray-200/80 shadow-sm flex items-start gap-4">
                 <span className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm shrink-0">1</span>
                 <div>
-                  <h4 className="font-bold text-[#0a192f] text-base mb-1">Your Goal is Complete</h4>
-                  <p className="text-xs sm:text-sm text-gray-600">If you have reached the target amount you need for your milestone (child education, home down payment, retirement), start systematic withdrawal.</p>
+                  <h4 className="font-bold text-[#0a192f] text-base mb-1">Your goal is complete</h4>
+                  <p className="text-xs sm:text-sm text-gray-600 m-0">If you have reached the amount you need for your goal, you can start withdrawing the money.</p>
                 </div>
               </div>
 
               <div className="p-4 sm:p-5 rounded-2xl bg-white border border-gray-200/80 shadow-sm flex items-start gap-4">
                 <span className="w-8 h-8 rounded-xl bg-blue-100 text-[#032e92] flex items-center justify-center font-bold text-sm shrink-0">2</span>
                 <div>
-                  <h4 className="font-bold text-[#0a192f] text-base mb-1">Your Goal Has Changed</h4>
-                  <p className="text-xs sm:text-sm text-gray-600">If you originally invested for a 10-year goal but now need the capital within 1–2 years, de-risk by shifting to debt or liquid instruments.</p>
+                  <h4 className="font-bold text-[#0a192f] text-base mb-1">Your goal has changed</h4>
+                  <p className="text-xs sm:text-sm text-gray-600 m-0">If you originally invested for a long-term goal but now need the money much sooner, you may need to withdraw your investment.</p>
                 </div>
               </div>
 
               <div className="p-4 sm:p-5 rounded-2xl bg-white border border-gray-200/80 shadow-sm flex items-start gap-4">
                 <span className="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-sm shrink-0">3</span>
                 <div>
-                  <h4 className="font-bold text-[#0a192f] text-base mb-1">The Fund is Consistently Underperforming</h4>
-                  <p className="text-xs sm:text-sm text-gray-600">One bad year is not enough. If a fund continuously lags behind its category peers and benchmark across 2–3 consecutive years, it deserves a replacement.</p>
+                  <h4 className="font-bold text-[#0a192f] text-base mb-1">The fund is consistently underperforming</h4>
+                  <p className="text-xs sm:text-sm text-gray-600 m-0">One bad year is not enough. If a fund keeps performing poorly against its category and benchmark over a longer period, it deserves a review.</p>
                 </div>
               </div>
 
               <div className="p-4 sm:p-5 rounded-2xl bg-white border border-gray-200/80 shadow-sm flex items-start gap-4">
                 <span className="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-sm shrink-0">4</span>
                 <div>
-                  <h4 className="font-bold text-[#0a192f] text-base mb-1">The Fund's Strategy Has Changed</h4>
-                  <p className="text-xs sm:text-sm text-gray-600">If the fund changes its mandate, merger occurs, or begins investing in assets that no longer align with why you bought it, reconsider holding it.</p>
+                  <h4 className="font-bold text-[#0a192f] text-base mb-1">The fund’s strategy has changed</h4>
+                  <p className="text-xs sm:text-sm text-gray-600 m-0">If the fund starts investing in a way that no longer aligns with why you bought it earlier, you can reconsider holding it.</p>
                 </div>
               </div>
 
               <div className="p-4 sm:p-5 rounded-2xl bg-white border border-gray-200/80 shadow-sm flex items-start gap-4">
                 <span className="w-8 h-8 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center font-bold text-sm shrink-0">5</span>
                 <div>
-                  <h4 className="font-bold text-[#0a192f] text-base mb-1">You Have Taken More Risk Than You Can Handle</h4>
-                  <p className="text-xs sm:text-sm text-gray-600">If market volatility causes persistent anxiety or your financial situation requires more stability, rebalancing to a safer category makes sense.</p>
+                  <h4 className="font-bold text-[#0a192f] text-base mb-1">You have taken more risk than you can handle</h4>
+                  <p className="text-xs sm:text-sm text-gray-600 m-0">If market falls are causing panic or the portfolio has become too risky for your current situation, reducing risk, and switching to a safer fund may make sense.</p>
                 </div>
               </div>
             </div>
 
-            {/* Warning Box on Market Falls */}
-            <div className="bg-[#fff5f5] border-l-4 border-[#c10000] p-7 rounded-r-3xl my-8 shadow-sm">
-              <div className="flex items-center gap-2.5 mb-2.5 text-[#c10000] font-bold text-lg">
-                <FontAwesomeIcon icon={faTriangleExclamation} />
-                <span>The Golden Rule: Don't Panic Exit in Falling Markets</span>
+            {/* Panic Exit Warning Callout */}
+            <div className="bg-[#fff5f5] border-l-4 border-[#c10000] p-6 sm:p-7 rounded-r-3xl my-8 shadow-sm">
+              <p className="text-base sm:text-lg text-gray-800 leading-relaxed mb-3 font-medium">
+                Most of the investors panic and exit when the market is falling. But is that a good time to exit? <strong>No! Not at all.</strong> You should consider taking an exit when there is a good reason to.
+              </p>
+              <div className="bg-red-100/70 p-4 rounded-xl border border-red-200">
+                <p className="text-sm sm:text-base text-gray-900 font-semibold leading-relaxed m-0">
+                  In fact, falling markets are the best time to enter the markets and start investing as you can get a low price for the units you are investing in. Markets are cyclical in nature, you will be profitable when prices rise again.
+                </p>
               </div>
-              <p className="text-sm sm:text-base text-gray-700 leading-relaxed mb-3">
-                Most investors panic and exit when the market is falling. But is that a good time to exit? <strong>No! Not at all.</strong> You should only exit when there is a strategic, objective reason to.
-              </p>
-              <p className="text-sm sm:text-base text-gray-800 font-semibold leading-relaxed m-0 bg-red-100/60 p-3.5 rounded-xl border border-red-200">
-                In fact, falling markets are the best time to enter the markets and accumulate units at discount prices. Markets are cyclical in nature — staying disciplined ensures you profit when prices rebound.
-              </p>
             </div>
           </div>
 
-          {/* KNAPS Consultation Callout Box */}
-          <div className="bg-gradient-to-br from-[#032e92] to-[#021d63] text-white p-8 sm:p-10 rounded-3xl shadow-xl my-12">
-            <div className="flex items-center gap-2.5 text-cyan-300 font-bold text-xs uppercase tracking-wider mb-2">
-              <FontAwesomeIcon icon={faCompass} />
-              <span>Personalized Portfolio Advice</span>
+          {/* Contact KNAPS WhatsApp / Consultation Banner */}
+          <div className="bg-gradient-to-br from-[#032e92] via-[#021d63] to-[#011442] text-white p-8 sm:p-10 rounded-3xl shadow-xl my-12 text-center sm:text-left sm:flex items-center justify-between gap-8">
+            <div className="sm:max-w-xl mb-6 sm:mb-0">
+              <span className="inline-block text-cyan-300 font-bold text-xs uppercase tracking-wider mb-2">
+                Expert Guidance
+              </span>
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-3">
+                Get Clarity on Your Investment Strategy
+              </h3>
+              <p className="text-blue-100 text-sm sm:text-base leading-relaxed m-0">
+                You can contact <strong>KNAPS</strong> and get more clarity on How to choose a Mutual fund scheme in India 2026 as per your financial objectives, time horizon, and risk appetite.
+              </p>
             </div>
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-4">
-              Get Clarity on Choosing Your Mutual Funds
-            </h3>
-            <p className="text-blue-100 text-sm sm:text-base leading-relaxed mb-6">
-              You can contact <strong>KNAPS</strong> and get complete clarity on how to choose a Mutual Fund scheme in India 2026 tailored to your financial objectives, time horizon, and risk appetite.
-            </p>
-            <div className="flex flex-wrap gap-4 items-center">
+            <div className="flex flex-col sm:flex-row gap-3 shrink-0">
+              <a
+                href="https://wa.me/+919990243143?text=How%20to%20choose%20a%20mutual%20fund%20scheme%20?"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-ripple px-6 py-3.5 rounded-xl font-bold text-sm bg-[#25D366] text-white hover:bg-[#20ba59] shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer"
+              >
+                <FontAwesomeIcon icon={faWhatsapp} className="text-base" />
+                <span>Chat on WhatsApp &rarr;</span>
+              </a>
               <button
                 onClick={() => openLeadModal('Blog: Choose Mutual Fund 2026')}
-                className="btn-ripple px-6 py-3.5 rounded-xl font-bold text-sm bg-white text-[#032e92] hover:bg-blue-50 shadow-lg hover:shadow-xl transition-all cursor-pointer"
+                className="btn-ripple px-6 py-3.5 rounded-xl font-bold text-sm bg-white text-[#032e92] hover:bg-blue-50 shadow-lg transition-all cursor-pointer"
               >
-                Schedule Free Consultation
+                Book Consultation
               </button>
             </div>
           </div>
@@ -905,6 +878,7 @@ export default function BlogContent({ blog }) {
       </article>
     );
   }
+
 
   // 2. If blog is SIF vs Mutual Funds (id: 1 or matching slug)
   if (blog?.id === 1 || blog?.slug === 'sif-vs-mutual-funds') {

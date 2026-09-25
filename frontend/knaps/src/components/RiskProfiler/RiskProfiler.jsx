@@ -190,20 +190,14 @@ export default function RiskProfiler({ isModal = false, onClose }) {
             </div>
           )}
 
-          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-6">
-            <button
-              onClick={handleViewResult}
-              className="btn-ripple px-5 py-3 rounded-xl font-bold bg-[#032e92] text-white hover:bg-[#021d63] transition-all text-xs sm:text-sm shadow-md shadow-blue-900/20 cursor-pointer"
-            >
-              View Full Report On Screen →
-            </button>
+          <div className="flex justify-center mb-6">
             <a
               href={waUrl}
               target="_blank"
               rel="noreferrer"
-              className="btn-ripple px-5 py-3 rounded-xl font-bold bg-[#25D366] text-white hover:bg-[#20ba59] transition-all text-xs sm:text-sm shadow-md shadow-emerald-900/10 inline-flex items-center justify-center gap-2 cursor-pointer"
+              className="btn-ripple px-6 py-3 rounded-xl font-bold bg-[#25D366] text-white hover:bg-[#20ba59] transition-all text-xs sm:text-sm shadow-md shadow-emerald-900/10 inline-flex items-center justify-center gap-2 cursor-pointer"
             >
-              <span>Chat on WhatsApp</span>
+              <span>Chat on WhatsApp &rarr;</span>
             </a>
           </div>
 

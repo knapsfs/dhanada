@@ -28,15 +28,19 @@ export default function BlogHeader({ blog }) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="flex items-center gap-2 text-xs sm:text-sm text-gray-500 mb-8 overflow-x-auto whitespace-nowrap hide-scrollbar"
+          className="flex items-center gap-3 text-[15px] font-medium text-gray-500 mb-8 flex-wrap"
         >
           <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
-          <FontAwesomeIcon icon={faChevronRight} className="text-gray-300 text-[10px]" />
-          <Link to="/blogs" className="hover:text-[#032e92] transition-colors">Blogs & Insights</Link>
-          <FontAwesomeIcon icon={faChevronRight} className="text-gray-300 text-[10px]" />
-          <span className="text-[#032e92] font-semibold truncate max-w-[280px] sm:max-w-md">
-            {blog?.title}
-          </span>
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+          <Link to="/blogs" className="hover:text-[#032e92] transition-colors">Blogs</Link>
+          {blog?.title && (
+            <>
+              <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+              <span className="text-[#032e92] truncate max-w-[280px] sm:max-w-md lg:max-w-xl">
+                {blog.title}
+              </span>
+            </>
+          )}
         </motion.nav>
 
         {/* Top Meta Info */}
@@ -50,7 +54,7 @@ export default function BlogHeader({ blog }) {
             {blog?.category || 'Investment Insights'}
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-[44px] font-extrabold text-[#0a192f] tracking-tight leading-tight mb-6">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0a192f] tracking-tight leading-tight mb-6">
             {blog?.title}
           </h1>
 

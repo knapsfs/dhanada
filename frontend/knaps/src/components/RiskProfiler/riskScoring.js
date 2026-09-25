@@ -1,74 +1,63 @@
 export function calculateRiskProfile(answers) {
   // answers is an array of objects: { questionId, score, questionTitle?, selectedOptionText? }
   const totalScore = answers.reduce((acc, curr) => acc + (Number(curr.score) || 0), 0);
-  const maxScore = answers.length > 0 ? answers.length * 5 : 25;
-
-  // With 5 questions, score range is 10 to 25.
-  // We use percentage to support both 5-question and custom question counts seamlessly.
-  const scorePct = maxScore > 0 ? (totalScore / maxScore) * 100 : 50;
+  const maxScore = 50; // Score kept out of 50
 
   // Risk Band categorization:
-  // <= 48% (score 10-12 out of 25) => Conservative
-  // 49% - 60% (score 13-15 out of 25) => Balanced
-  // 61% - 72% (score 16-18 out of 25) => Moderately Aggressive
-  // 73% - 84% (score 19-21 out of 25) => Aggressive
-  // > 84% (score 22-25 out of 25) => Very Aggressive
+  // ( score 10-16 out of 50 ) => Balanced
+  // ( score 18-30 out of 50 ) => Moderate
+  // ( score 32-40 out of 50 ) => Aggressive
 
-  let profile = "Conservative";
+  let profile = "Balanced";
   let description =
-    "Your responses indicate a strong preference for capital stability and a lower tolerance for market fluctuations. Preserving capital is your top priority.";
+    "Your responses reflect a balanced approach—seeking steady wealth accumulation while maintaining a dependable cushion against market pullbacks.";
 
-  if (scorePct > 84) {
-    profile = "Very Aggressive";
-    description =
-      "Your responses indicate a strong appetite for sophisticated, high-growth investment strategies, asymmetric upside, and flexible long-short derivative frameworks.";
-  } else if (scorePct > 72) {
+  if (totalScore > 30) {
     profile = "Aggressive";
     description =
-      "Your responses indicate a high comfort with substantial market fluctuations in pursuit of superior long-term wealth compounding.";
-  } else if (scorePct > 60) {
-    profile = "Moderately Aggressive";
+      "Your responses indicate high risk tolerance and a primary focus on substantial long-term capital compounding and specialized alpha strategies.";
+  } else if (totalScore >= 17) {
+    profile = "Moderate";
     description =
       "Your responses indicate that you are comfortable accepting moderate market fluctuations in pursuit of healthy, inflation-beating long-term growth.";
-  } else if (scorePct > 48) {
+  } else {
     profile = "Balanced";
     description =
-      "Your responses indicate a preference for balancing steady wealth accumulation with an emphasis on capital protection during market pullbacks.";
+      "Your responses reflect a balanced approach—seeking steady wealth accumulation while maintaining a dependable cushion against market pullbacks.";
   }
 
-  // Derived sub-metrics based on actual 5 questions
-  const q1Score = answers.find(a => a.questionId === 1)?.score || 3; // Age
-  const q2Score = answers.find(a => a.questionId === 2)?.score || 3; // Dependents
-  const q3Score = answers.find(a => a.questionId === 3)?.score || 3; // Expenses/EMI
-  const q5Score = answers.find(a => a.questionId === 5)?.score || 3; // Emergency withdrawal
-  const q14Score = answers.find(a => a.questionId === 14)?.score || 3; // Investment Priority
+  // Derived sub-metrics based on actual 5 questions (scores: 8, 6, 4, 2)
+  const q1Score = answers.find(a => a.questionId === 1)?.score || 4; // Age
+  const q2Score = answers.find(a => a.questionId === 2)?.score || 4; // Dependents
+  const q3Score = answers.find(a => a.questionId === 3)?.score || 4; // Expenses/EMI
+  const q5Score = answers.find(a => a.questionId === 5)?.score || 4; // Emergency withdrawal
+  const q14Score = answers.find(a => a.questionId === 14)?.score || 4; // Investment Priority
 
   const getRiskComfort = () => {
-    const comfortScore = q14Score + q5Score; // Max 10, Min 4
-    if (comfortScore >= 9) return "Very High";
-    if (comfortScore >= 8) return "High";
-    if (comfortScore >= 7) return "Moderate to High";
-    if (comfortScore >= 5) return "Moderate";
+    const comfortScore = q14Score + q5Score; // Max 16, Min 4
+    if (comfortScore >= 14) return "High";
+    if (comfortScore >= 10) return "Moderate to High";
+    if (comfortScore >= 8) return "Moderate";
     return "Conservative";
   };
 
   const getFlexibility = () => {
-    const flexScore = q2Score + q3Score; // Max 10, Min 4
-    if (flexScore >= 9) return "High";
-    if (flexScore >= 7) return "Moderate";
+    const flexScore = q2Score + q3Score; // Max 16, Min 4
+    if (flexScore >= 14) return "High";
+    if (flexScore >= 10) return "Moderate";
     return "Cautious";
   };
 
   const getHorizon = () => {
-    if (q1Score >= 5) return "Long-term (7+ Years)";
-    if (q1Score === 4) return "Long-term (5-7 Years)";
-    if (q1Score === 3) return "Medium-term (3-5 Years)";
+    if (q1Score >= 8) return "Long-term (7+ Years)";
+    if (q1Score >= 6) return "Long-term (5-7 Years)";
+    if (q1Score >= 4) return "Medium-term (3-5 Years)";
     return "Short-term (1-3 Years)";
   };
 
   const getExperience = () => {
-    if (scorePct > 75) return "Advanced / Market-Ready";
-    if (scorePct > 55) return "Intermediate";
+    if (totalScore >= 32) return "Advanced / Market-Ready";
+    if (totalScore >= 18) return "Intermediate";
     return "Foundational";
   };
 

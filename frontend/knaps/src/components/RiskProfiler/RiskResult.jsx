@@ -3,9 +3,10 @@ import { useLeadModal } from '../../context/LeadModalContext';
 
 export default function RiskResult({ result, onRetake, isModal = false }) {
   const { openLeadModal } = useLeadModal ? useLeadModal() : { openLeadModal: () => {} };
-  const categories = ['Conservative', 'Balanced', 'Moderately Aggressive', 'Aggressive', 'Very Aggressive'];
+  const categories = ['Balanced', 'Moderate', 'Aggressive'];
   const profileIndex = Math.max(0, categories.indexOf(result.profile));
-  const positionPercentage = (profileIndex / (categories.length - 1)) * 100;
+  // Spread position across 3 bands: Balanced (10%), Moderate (50%), Aggressive (90%)
+  const positionPercentage = profileIndex === 0 ? 12 : profileIndex === 1 ? 50 : 88;
 
   const waText = `Hi KNAPS Team, I completed my Investor Risk Profiler assessment. My indicative profile is ${result.profile} (Score: ${result.score}/${result.maxScore}). I would like to consult with an advisor.`;
   const waUrl = `https://wa.me/+919990243143?text=${encodeURIComponent(waText)}`;
@@ -40,7 +41,7 @@ export default function RiskResult({ result, onRetake, isModal = false }) {
             initial={{ width: 0 }}
             animate={{ width: `${positionPercentage}%` }}
             transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
-            className="h-2.5 bg-gradient-to-r from-blue-300 via-indigo-600 to-[#032e92] rounded-full absolute top-8 left-0"
+            className="h-2.5 bg-gradient-to-r from-blue-400 via-indigo-600 to-[#032e92] rounded-full absolute top-8 left-0"
           ></motion.div>
           
           {/* Pointer */}
@@ -57,13 +58,11 @@ export default function RiskResult({ result, onRetake, isModal = false }) {
             <div className="w-5 h-5 rounded-full bg-white border-4 border-[#032e92] mt-1 shadow-md"></div>
           </motion.div>
           
-          {/* Labels */}
+          {/* 3 Risk Band Labels */}
           <div className="flex justify-between mt-6 px-1">
-            <span className="text-[9px] sm:text-xs font-bold text-gray-400 text-center w-1/5 -ml-2">Conservative</span>
-            <span className="text-[9px] sm:text-xs font-bold text-gray-400 text-center w-1/5">Balanced</span>
-            <span className="text-[9px] sm:text-xs font-bold text-gray-400 text-center w-1/5">Mod. Aggressive</span>
-            <span className="text-[9px] sm:text-xs font-bold text-gray-400 text-center w-1/5">Aggressive</span>
-            <span className="text-[9px] sm:text-xs font-bold text-gray-400 text-center w-1/5 -mr-2">Very Aggressive</span>
+            <span className="text-[10px] sm:text-xs font-bold text-gray-500 text-left w-1/3">Balanced (10–16)</span>
+            <span className="text-[10px] sm:text-xs font-bold text-gray-500 text-center w-1/3">Moderate (18–30)</span>
+            <span className="text-[10px] sm:text-xs font-bold text-gray-500 text-right w-1/3">Aggressive (32–40)</span>
           </div>
         </div>
       </div>
@@ -95,7 +94,7 @@ export default function RiskResult({ result, onRetake, isModal = false }) {
         </div>
         <div className="md:w-2/3">
           <p className="text-blue-100 leading-relaxed text-sm sm:text-base m-0">
-            Your responses suggest that you may be comfortable with {profileIndex > 2 ? 'a relatively higher level of investment volatility to achieve superior long-term growth' : profileIndex < 2 ? 'prioritizing capital stability over aggressive equity growth' : 'a balanced approach between growth and stability'}. However, risk tolerance is only one part of an investment decision. Your goals, liquidity needs, financial responsibilities, and time horizon are equally critical.
+            Your responses suggest that you may be comfortable with {profileIndex === 2 ? 'a higher level of investment volatility to achieve superior long-term growth and specialized alpha strategies' : profileIndex === 0 ? 'prioritizing capital protection, steady income, and balanced growth' : 'a balanced approach between growth and stability with moderate equity exposure'}. However, risk tolerance is only one part of an investment decision. Your goals, liquidity needs, financial responsibilities, and time horizon are equally critical.
           </p>
         </div>
       </div>
@@ -113,7 +112,7 @@ export default function RiskResult({ result, onRetake, isModal = false }) {
           <p className="text-gray-600 text-xs sm:text-sm mb-4">Long-term retirement corpus creation with disciplined tax advantages and multi-asset allocation.</p>
           <a href="/nps" className="text-[#032e92] font-bold text-xs sm:text-sm group-hover:underline">Explore NPS &rarr;</a>
         </div>
-        {profileIndex >= 2 && (
+        {profileIndex >= 1 && (
           <>
             <div className="border border-gray-200 rounded-2xl p-6 hover:shadow-lg hover:border-[#032e92] transition-all bg-white group">
               <h4 className="text-lg font-bold text-[#0a192f] mb-2">Specialized Investment Funds (SIF)</h4>

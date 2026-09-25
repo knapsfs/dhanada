@@ -66,146 +66,97 @@ def get_brevo_config():
 
 
 BAND_CONFIG = {
-	"Conservative": {
-		"title": "Conservative Investor Profile",
-		"badge_bg": "#dbeafe",
-		"badge_color": "#1e40af",
-		"badge_border": "#93c5fd",
-		"summary": "Your responses indicate a preference for stability, capital preservation, and minimal exposure to market volatility. You prioritize safeguarding your capital over chasing aggressive returns.",
-		"allocations": [
-			{"label": "Debt & Fixed Income", "pct": 75, "color": "#2563eb"},
-			{"label": "Large-Cap Equities", "pct": 20, "color": "#0ea5e9"},
-			{"label": "Gold / Liquid Cash", "pct": 5, "color": "#f59e0b"},
-		],
-		"products": [
-			{
-				"name": "Low Duration & Short Term Debt Funds",
-				"desc": "Capital stability with better yields than savings accounts.",
-			},
-			{
-				"name": "Banking & PSU Debt Funds",
-				"desc": "High credit-quality sovereign and top-tier PSU exposure.",
-			},
-			{
-				"name": "Conservative Hybrid Funds",
-				"desc": "75-80% debt with 20-25% equity for steady growth.",
-			},
-		],
-		"advice": "Focus on beating inflation while preserving your principal. Maintain 6-12 months of emergency savings in liquid funds before taking any market exposure.",
-	},
 	"Balanced": {
 		"title": "Balanced Investor Profile",
 		"badge_bg": "#ccfbf1",
 		"badge_color": "#0f766e",
 		"badge_border": "#5eead4",
-		"summary": "Your responses reflect a balanced approach—seeking moderate wealth creation while maintaining a dependable cushion against sharp market downturns.",
+		"summary": "Your responses reflect a balanced approach—seeking steady wealth accumulation while maintaining a dependable cushion against sharp market pullbacks.",
 		"allocations": [
-			{"label": "Equities (Large & Flexi-Cap)", "pct": 50, "color": "#0d9488"},
-			{"label": "Debt & Fixed Income", "pct": 40, "color": "#3b82f6"},
-			{"label": "Gold & Multi-Asset", "pct": 10, "color": "#eab308"},
+			{"label": "Debt & Fixed Income", "pct": 50, "color": "#2563eb"},
+			{"label": "Equities (Large & Flexi-Cap)", "pct": 40, "color": "#0ea5e9"},
+			{"label": "Gold / Liquid Cash", "pct": 10, "color": "#f59e0b"},
 		],
 		"products": [
 			{
-				"name": "Balanced Advantage / Dynamic Asset Allocation",
-				"desc": "Automatically buys more equity when markets dip and books profit in rallies.",
+				"name": "Balanced Advantage & Dynamic Asset Allocation Funds",
+				"desc": "Automatically rebalances equity and debt to protect capital in dips and capture upside in rallies.",
 			},
 			{
-				"name": "Multi-Asset Allocation Funds",
-				"desc": "Combines equity, debt, and gold under a single portfolio.",
+				"name": "High Quality Short-Term & Corporate Bond Funds",
+				"desc": "Provides steady yield with minimal credit and interest rate risk.",
 			},
 			{
-				"name": "Corporate Bond & Medium Duration Funds",
-				"desc": "Generates steady regular cash flows with low volatility.",
+				"name": "Large-Cap & Flexi-Cap Mutual Funds",
+				"desc": "Disciplined exposure to India's top industry leaders for long-term compounding.",
 			},
 		],
-		"advice": "Rely on automatic asset allocation to ride out market cycles without emotional stress. Ideal for 3 to 5 year investment horizons.",
+		"advice": "Focus on consistent asset allocation. Maintain a balanced mix of debt for liquidity and high-quality equity for beating inflation.",
 	},
-	"Moderately Aggressive": {
-		"title": "Moderately Aggressive Investor Profile",
-		"badge_bg": "#e0e7ff",
-		"badge_color": "#3730a3",
-		"badge_border": "#a5b4fc",
-		"summary": "Your responses show solid comfort with market fluctuations in pursuit of healthy, inflation-beating capital growth over medium to long horizons.",
+	"Moderate": {
+		"title": "Moderate Investor Profile",
+		"badge_bg": "#fef3c7",
+		"badge_color": "#b45309",
+		"badge_border": "#fde68a",
+		"summary": "Your responses indicate that you are comfortable accepting moderate market fluctuations in pursuit of healthy, inflation-beating long-term growth.",
 		"allocations": [
-			{"label": "Equities (Large, Mid & Flexi-Cap)", "pct": 70, "color": "#032e92"},
-			{"label": "SIF / Hybrid Long-Short / Debt", "pct": 25, "color": "#6366f1"},
-			{"label": "Gold / Tactical Cash", "pct": 5, "color": "#f59e0b"},
+			{"label": "Equities (Large, Mid & Multi-Cap)", "pct": 65, "color": "#0d9488"},
+			{"label": "Debt & Fixed Income", "pct": 25, "color": "#3b82f6"},
+			{"label": "SIF / Alternative Multi-Asset", "pct": 10, "color": "#f59e0b"},
 		],
 		"products": [
 			{
-				"name": "Flexi-Cap & Large & Mid-Cap Mutual Funds",
-				"desc": "High long-term wealth potential across top Indian companies.",
+				"name": "Multi-Cap & Large & Mid-Cap Funds",
+				"desc": "Balanced growth engine across market capitalizations for superior risk-adjusted returns.",
 			},
 			{
-				"name": "Specialized Investment Funds (SIF) - Hybrid Long-Short",
-				"desc": "Captures growth while using derivative hedging to cushion drawdowns.",
+				"name": "SIF - Long-Short Derivative Strategies",
+				"desc": "Access innovative hedging strategies designed to generate alpha while dampening equity drawdowns.",
 			},
 			{
-				"name": "Active Asset Allocator Funds",
-				"desc": "Tactical asset shifting between equities and debt based on market conditions.",
+				"name": "Dynamic Bond & Banking Debt Funds",
+				"desc": "Active duration management for safety, liquidity, and periodic rebalancing ammunition.",
 			},
 		],
-		"advice": "Remain committed to systematic SIPs during corrections. Long-short hedging strategies in SIFs can offer significant risk-adjusted advantages.",
+		"advice": "Hold an investment horizon of 3-5+ years. Tactical asset allocation and hedging allow you to ride out volatility without panic.",
 	},
 	"Aggressive": {
 		"title": "Aggressive Investor Profile",
 		"badge_bg": "#f3e8ff",
 		"badge_color": "#6b21a8",
 		"badge_border": "#d8b4fe",
-		"summary": "Your responses indicate high risk tolerance and a primary focus on substantial long-term capital compounding. You have the patience to navigate multi-year equity cycles.",
+		"summary": "Your responses indicate high risk tolerance and a primary focus on substantial long-term capital compounding and specialized alpha strategies.",
 		"allocations": [
-			{"label": "Equities (Mid, Small & High-Growth)", "pct": 80, "color": "#7e22ce"},
-			{"label": "SIF (Long-Short Derivative Funds)", "pct": 15, "color": "#3b82f6"},
+			{"label": "Equities (Mid, Small & High-Growth)", "pct": 75, "color": "#7e22ce"},
+			{"label": "SIF (Long-Short Derivative Funds)", "pct": 20, "color": "#3b82f6"},
 			{"label": "Cash / Tactical Buffer", "pct": 5, "color": "#64748b"},
 		],
 		"products": [
 			{
 				"name": "Mid-Cap & Small-Cap Mutual Funds",
-				"desc": "Rapid earnings growth potential in fast-expanding companies.",
+				"desc": "Rapid earnings growth potential in emerging market leaders.",
 			},
 			{
-				"name": "SIF - Equity Long-Short Funds",
-				"desc": "Goes long attractive stocks and shorts underperformers for alpha in any market.",
+				"name": "SIF - Equity Long-Short & Sector Rotation",
+				"desc": "Uses long and short derivative positions to generate alpha in bull, bear, and sideways regimes.",
 			},
 			{
-				"name": "SIF - Sector Rotation Long-Short",
-				"desc": "Capitalizes on sector momentum and cyclical shifts with hedging.",
+				"name": "SIF - Ex-Top 100 Long-Short Strategies",
+				"desc": "Unlocks high-conviction opportunities outside mega-caps with institutional hedging.",
 			},
 		],
-		"advice": "Maintain a minimum 5 to 7 year horizon. Advanced derivative strategies in SIFs help manage bear-market drawdowns while maximizing upside.",
-	},
-	"Very Aggressive": {
-		"title": "Very Aggressive Investor Profile",
-		"badge_bg": "#ffe4e6",
-		"badge_color": "#9f1239",
-		"badge_border": "#fecdd3",
-		"summary": "Your responses indicate a sophisticated appetite for asymmetric upside, non-directional market strategies, and advanced long-short derivative frameworks.",
-		"allocations": [
-			{"label": "High-Beta Mid & Small-Cap Equities", "pct": 70, "color": "#be123c"},
-			{"label": "SIF Long-Short & Ex-Top 100", "pct": 25, "color": "#9333ea"},
-			{"label": "Alternative Investments / AIF", "pct": 5, "color": "#0ea5e9"},
-		],
-		"products": [
-			{
-				"name": "SIF - Equity Ex-Top 100 Long-Short",
-				"desc": "Unlocks high-alpha opportunities outside top 100 companies with both long and short positions.",
-			},
-			{
-				"name": "SIF - Active Asset Allocator Long-Short",
-				"desc": "Flexible derivative exposure across rising, falling and range-bound markets.",
-			},
-			{
-				"name": "AIF Category III & Concentrated Portfolios",
-				"desc": "Sophisticated alternative vehicles designed for high-net-worth investors.",
-			},
-		],
-		"advice": "Leverage specialized investment vehicles that profit from relative stock dispersion. Derivatives allow you to generate returns across bull, bear, and sideways regimes.",
+		"advice": "Maintain a minimum 5 to 7 year horizon. Advanced derivative strategies in SIFs help manage drawdowns while maximizing long-term upside.",
 	},
 }
 
+# Compatibility aliases
+BAND_CONFIG["Conservative"] = BAND_CONFIG["Balanced"]
+BAND_CONFIG["Moderately Aggressive"] = BAND_CONFIG["Moderate"]
+BAND_CONFIG["Very Aggressive"] = BAND_CONFIG["Aggressive"]
+
 
 def generate_risk_email_html(name, profile, score, max_score, metrics):
-	band = BAND_CONFIG.get(profile, BAND_CONFIG["Moderately Aggressive"])
+	band = BAND_CONFIG.get(profile, BAND_CONFIG["Moderate"])
 	clean_name = (name or "Investor").strip().title()
 	pct_score = int(round((score / max_score) * 100)) if max_score else 70
 

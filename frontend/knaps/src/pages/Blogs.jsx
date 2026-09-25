@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 // Blogs Components
-import ServicesHero from "../components/services/ServicesHero";
+import BlogsHero from "../components/blogs/BlogsHero";
 import BlogsGrid from "../components/blogs/BlogsGrid";
 import Pagination from "../components/blogs/Pagination";
 import CTA from "../components/CTA";
@@ -36,15 +36,8 @@ export default function Blogs() {
       <Navbar />
 
       <main>
-        {/* Reusing ServicesHero with Blogs specific content */}
-        <ServicesHero
-          label="Our Blogs"
-          title="Insights, Investment Ideas & Financial "
-          titleHighlight="Knowledge"
-          description="Stay informed with expert insights on wealth management, retirement planning, insurance, mutual funds, and investment strategies to help you make confident financial decisions."
-          breadcrumbText="Blogs"
-          breadcrumbLink="/blogs"
-        />
+        {/* Breadcrumb Hero matching website design layout */}
+        <BlogsHero />
 
         {/* Blogs Grid (Shows up to 9 blogs per page) */}
         <BlogsGrid blogs={displayedBlogs} />
