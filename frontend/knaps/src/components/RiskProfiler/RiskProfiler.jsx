@@ -174,39 +174,46 @@ export default function RiskProfiler({ isModal = false, onClose }) {
           </h3>
 
           <p className="text-gray-600 leading-relaxed text-xs sm:text-sm mb-5 max-w-md mx-auto">
-            Your comprehensive risk profile report has been generated and sent to:
+            Your comprehensive risk profile report has been generated and sent to: <span className='text-xs sm:text-sm font-bold text-[#032e92]'>{submittedUser?.email || 'your email'}</span>
           </p>
 
-          <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-200/80 rounded-xl px-4 py-2 mb-6 text-xs sm:text-sm font-bold text-[#032e92]">
-            <span>📧</span>
-            <span>{submittedUser?.email || 'your email'}</span>
-          </div>
-
           {result?.profile && (
-            <div className="bg-gradient-to-br from-slate-50 to-blue-50/40 rounded-2xl p-4 sm:p-5 border border-blue-100 mb-6 text-left">
-              <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">Indicative Risk Profile</div>
-              <div className="text-xl sm:text-2xl font-black text-[#0a192f] mb-2">{result.profile}</div>
-              <p className="text-xs text-gray-600 leading-relaxed m-0">{result.description}</p>
+            <div className={`rounded-2xl p-4 sm:p-5 border mb-6 text-left ${
+              result.profile === 'Conservative'
+                ? 'bg-gradient-to-br from-emerald-50/80 to-emerald-50/30 border-emerald-200'
+                : result.profile === 'Aggressive'
+                ? 'bg-gradient-to-br from-rose-50/80 to-rose-50/30 border-rose-200'
+                : 'bg-gradient-to-br from-amber-50/80 to-amber-50/30 border-amber-200'
+            }`}>
+              <div className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">Your risk profile is</div>
+              <div className={`text-xl sm:text-2xl font-black mb-2 ${
+                result.profile === 'Conservative'
+                  ? 'text-emerald-700'
+                  : result.profile === 'Aggressive'
+                  ? 'text-rose-700'
+                  : 'text-amber-700'
+              }`}>{result.profile}</div>
+              <p className="text-xs text-gray-700 leading-relaxed m-0">{result.description}</p>
             </div>
           )}
 
-          <div className="flex justify-center mb-6">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 mb-2">
             <a
               href={waUrl}
               target="_blank"
               rel="noreferrer"
-              className="btn-ripple px-6 py-3 rounded-xl font-bold bg-[#25D366] text-white hover:bg-[#20ba59] transition-all text-xs sm:text-sm shadow-md shadow-emerald-900/10 inline-flex items-center justify-center gap-2 cursor-pointer"
+              className="btn-ripple px-6 py-3 rounded-xl font-bold bg-[#25D366] text-white hover:bg-[#20ba59] transition-all text-xs sm:text-sm shadow-md shadow-emerald-900/10 inline-flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto"
             >
-              <span>Chat on WhatsApp &rarr;</span>
+              <span>Chat on WhatsApp</span>
             </a>
+            <button
+              type="button"
+              onClick={handleRetake}
+              className="btn-ripple px-6 py-3 rounded-xl font-bold bg-white text-[#0a192f] border border-gray-300 hover:border-[#032e92] hover:text-[#032e92] hover:bg-gray-50 transition-all text-xs sm:text-sm shadow-xs inline-flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto"
+            >
+              <span>Take Assessment Again</span>
+            </button>
           </div>
-
-          <button
-            onClick={handleRetake}
-            className="text-xs font-semibold text-gray-400 hover:text-[#032e92] transition-colors cursor-pointer"
-          >
-            ↺ Take Assessment Again
-          </button>
         </motion.div>
       )}
 

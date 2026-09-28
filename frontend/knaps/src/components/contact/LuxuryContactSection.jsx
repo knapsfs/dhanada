@@ -40,7 +40,7 @@ export default function LuxuryContactSection() {
                 {/* Gradient Overlay for Text Readability */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a192f]/90 via-[#0a192f]/20 to-transparent"></div>
                 <div className="absolute bottom-6 left-8 lg:left-10 text-left">
-                  <h3 className="text-white text-2xl font-bold tracking-wide">Knaps Financial Services</h3>
+                  <h3 className="text-white text-2xl font-bold tracking-wide">KNAPS Private Limited</h3>
                   <p className="text-blue-200 text-sm mt-1 font-medium tracking-wider uppercase">New Delhi, India</p>
                 </div>
               </div>

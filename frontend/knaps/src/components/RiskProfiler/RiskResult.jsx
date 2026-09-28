@@ -3,9 +3,9 @@ import { useLeadModal } from '../../context/LeadModalContext';
 
 export default function RiskResult({ result, onRetake, isModal = false }) {
   const { openLeadModal } = useLeadModal ? useLeadModal() : { openLeadModal: () => {} };
-  const categories = ['Balanced', 'Moderate', 'Aggressive'];
+  const categories = ['Conservative', 'Moderate', 'Aggressive'];
   const profileIndex = Math.max(0, categories.indexOf(result.profile));
-  // Spread position across 3 bands: Balanced (10%), Moderate (50%), Aggressive (90%)
+  // Spread position across 3 bands: Conservative (10%), Moderate (50%), Aggressive (90%)
   const positionPercentage = profileIndex === 0 ? 12 : profileIndex === 1 ? 50 : 88;
 
   const waText = `Hi KNAPS Team, I completed my Investor Risk Profiler assessment. My indicative profile is ${result.profile} (Score: ${result.score}/${result.maxScore}). I would like to consult with an advisor.`;
@@ -20,7 +20,7 @@ export default function RiskResult({ result, onRetake, isModal = false }) {
     >
       <div className="text-center mb-8 sm:mb-10">
         <h2 className="text-[#032e92] font-bold tracking-widest uppercase text-xs sm:text-sm mb-2">
-          Your Indicative Risk Profile
+          Your risk profile is
         </h2>
         <h3 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#0a192f] mb-4">
           {result.profile}
@@ -60,7 +60,7 @@ export default function RiskResult({ result, onRetake, isModal = false }) {
           
           {/* 3 Risk Band Labels */}
           <div className="flex justify-between mt-6 px-1">
-            <span className="text-[10px] sm:text-xs font-bold text-gray-500 text-left w-1/3">Balanced (10–16)</span>
+            <span className="text-[10px] sm:text-xs font-bold text-gray-500 text-left w-1/3">Conservative (10–16)</span>
             <span className="text-[10px] sm:text-xs font-bold text-gray-500 text-center w-1/3">Moderate (18–30)</span>
             <span className="text-[10px] sm:text-xs font-bold text-gray-500 text-right w-1/3">Aggressive (32–40)</span>
           </div>
@@ -68,24 +68,26 @@ export default function RiskResult({ result, onRetake, isModal = false }) {
       </div>
       
       {/* Assessment Breakdown */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-8 sm:mb-10">
-        <div className="bg-gray-50 rounded-2xl p-4 sm:p-5 border border-gray-100 text-center">
-          <p className="text-gray-400 text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1">Risk Comfort</p>
-          <p className="text-[#0a192f] text-sm sm:text-base font-black">{result.metrics.riskComfort}</p>
+      {result?.metrics && (
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-8 sm:mb-10">
+          <div className="bg-gray-50 rounded-2xl p-4 sm:p-5 border border-gray-100 text-center">
+            <p className="text-gray-400 text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1">Risk Comfort</p>
+            <p className="text-[#0a192f] text-sm sm:text-base font-black">{result.metrics.riskComfort}</p>
+          </div>
+          <div className="bg-gray-50 rounded-2xl p-4 sm:p-5 border border-gray-100 text-center">
+            <p className="text-gray-400 text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1">Flexibility</p>
+            <p className="text-[#0a192f] text-sm sm:text-base font-black">{result.metrics.financialFlexibility}</p>
+          </div>
+          <div className="bg-gray-50 rounded-2xl p-4 sm:p-5 border border-gray-100 text-center">
+            <p className="text-gray-400 text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1">Experience</p>
+            <p className="text-[#0a192f] text-sm sm:text-base font-black">{result.metrics.experience}</p>
+          </div>
+          <div className="bg-gray-50 rounded-2xl p-4 sm:p-5 border border-gray-100 text-center">
+            <p className="text-gray-400 text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1">Horizon</p>
+            <p className="text-[#0a192f] text-sm sm:text-base font-black">{result.metrics.horizon}</p>
+          </div>
         </div>
-        <div className="bg-gray-50 rounded-2xl p-4 sm:p-5 border border-gray-100 text-center">
-          <p className="text-gray-400 text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1">Flexibility</p>
-          <p className="text-[#0a192f] text-sm sm:text-base font-black">{result.metrics.financialFlexibility}</p>
-        </div>
-        <div className="bg-gray-50 rounded-2xl p-4 sm:p-5 border border-gray-100 text-center">
-          <p className="text-gray-400 text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1">Experience</p>
-          <p className="text-[#0a192f] text-sm sm:text-base font-black">{result.metrics.experience}</p>
-        </div>
-        <div className="bg-gray-50 rounded-2xl p-4 sm:p-5 border border-gray-100 text-center">
-          <p className="text-gray-400 text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1">Horizon</p>
-          <p className="text-[#0a192f] text-sm sm:text-base font-black">{result.metrics.horizon}</p>
-        </div>
-      </div>
+      )}
       
       {/* What it means */}
       <div className="bg-[#032e92] text-white rounded-3xl p-6 sm:p-10 mb-8 sm:mb-10 text-center md:text-left md:flex items-center gap-8">
@@ -146,10 +148,17 @@ export default function RiskResult({ result, onRetake, isModal = false }) {
           </a>
           <button 
             type="button"
+            onClick={onRetake}
+            className="btn-ripple px-6 py-3 rounded-xl text-xs sm:text-sm font-bold bg-white text-[#0a192f] border border-gray-300 hover:border-[#032e92] hover:text-[#032e92] hover:bg-gray-50 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs"
+          >
+            &#8634; Take Assessment Again
+          </button>
+          <button 
+            type="button"
             onClick={() => openLeadModal && openLeadModal()}
             className="btn-ripple px-6 py-3 rounded-xl text-xs sm:text-sm font-bold bg-[#032e92] text-white hover:bg-[#021d63] transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-blue-900/20"
           >
-            Request Advisor Callback &rarr;
+            Request Callback &rarr;
           </button>
         </div>
       </div>
