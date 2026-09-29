@@ -80,7 +80,7 @@ export default function BlogHeader({ blog }) {
           </div>
 
           {/* Main Title */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0a192f] tracking-tight leading-[1.25] mb-6 max-w-4xl mx-auto">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0a192f] tracking-tight leading-[1.25] mb-6 max-w-5xl mx-auto">
             {blog?.title}
           </h1>
 
@@ -98,7 +98,7 @@ export default function BlogHeader({ blog }) {
           </div>
 
           {/* Author & Share Card */}
-          <div className="bg-white/90 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-gray-100 shadow-sm max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 mb-10">
+          <div className="bg-white/90 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-gray-100 shadow-sm max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 mb-10">
             {/* Author */}
             <Link
               to={`/author/${authorSlug}`}
@@ -161,11 +161,10 @@ export default function BlogHeader({ blog }) {
               <button
                 onClick={handleCopyLink}
                 title="Copy Link"
-                className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all shadow-sm ${
-                  copied
+                className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all shadow-sm ${copied
                     ? 'bg-emerald-500 text-white'
                     : 'bg-gray-50 text-gray-600 hover:bg-[#032e92] hover:text-white'
-                }`}
+                  }`}
               >
                 <FontAwesomeIcon icon={copied ? faCheck : faLink} />
               </button>

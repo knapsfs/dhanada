@@ -13,7 +13,7 @@ export default function LuxuryContactSection() {
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#f0f4fd] text-[#032e92] font-semibold text-xs tracking-widest uppercase mb-4">
             Get In Touch
           </div>
-          <h2 className="text-4xl lg:text-[52px] font-bold text-[#0a192f] leading-[1.1] tracking-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-extrabold text-[#0f172a] leading-[1.1] tracking-tight">
             Talk To Our <span className="text-[#032e92]">Financial Experts</span>
           </h2>
         </div>
