@@ -6,11 +6,11 @@
 import json
 
 import frappe
-from frappe.rate_limiter import rate_limit
 
 from dhanada.sif.conversation_service import (
 	create_conversation,
 )
+from dhanada.utils.rate_limiter import rate_limit
 
 
 # Conversation me lead ki details aur contact information link karta hai.

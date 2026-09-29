@@ -1,7 +1,6 @@
 # Copyright (c) 2026, KNAPS Private Limited and contributors
 # For license information, please see license.txt
 
-import hashlib
 import json
 import logging
 import os
@@ -13,7 +12,6 @@ from frappe.utils import getdate, today
 
 from dhanada.scheduler.amfi_repository import (
 	clean_repo_subpath,
-	compute_files_hash,
 	ensure_amfi_repository_updated,
 )
 from dhanada.sif.sync.github_client import GitHubClient
@@ -66,6 +64,7 @@ def sync_nav_performance(
 	2. Reads configured file_path_for_nav_performance from Dhanada Settings.
 	3. Daily run: processes NAV performance metrics only (excludes heatmap).
 	4. 1st day of month (or include_heatmap=True): processes NAV performance AND monthly heatmap.
+	5. Always reconciles DB against repo data.
 	"""
 	start_time = time.time()
 	log_sync_start()
@@ -93,7 +92,6 @@ def sync_nav_performance(
 		if is_mocked:
 			mock_mode = True
 			perf_rows = mock_client.fetch_performance() or []
-			force = True
 	except Exception:
 		pass
 
@@ -118,34 +116,8 @@ def sync_nav_performance(
 			logger.warning(f"No performance JSON files found in {perf_dir}")
 			return {"status": "skipped", "reason": "no_files_found"}
 
-		# Change detection
-		current_hash = compute_files_hash(perf_files)
-		cache_key = f"sif_sync_nav_perf_hash_{hashlib.md5(perf_dir.encode()).hexdigest()}"
-		last_hash = frappe.cache().get_value(cache_key)
-
-		# If heatmap run (1st of month), also check heatmap sync cache
-		heatmap_cache_key = f"sif_sync_heatmap_month_{getdate(today()).strftime('%Y_%m')}"
-		heatmap_already_synced = frappe.cache().get_value(heatmap_cache_key)
-
-		if not force and not dry_run and last_hash == current_hash:
-			# If it's day 1 and heatmap was not yet synced this month, we proceed with heatmap
-			if include_heatmap and not heatmap_already_synced:
-				logger.info("Day 1 heatmap update scheduled for performance data.")
-			else:
-				logger.info(
-					f"Performance data in {perf_dir} is unchanged (hash: {current_hash[:8]}). Skipping ingestion."
-				)
-				return {
-					"status": "skipped",
-					"reason": "unchanged",
-					"files_count": len(perf_files),
-					"hash": current_hash,
-				}
-
 		files_count = len(perf_files)
 	else:
-		current_hash = "mock_hash"
-		cache_key = "sif_sync_nav_perf_hash_mock"
 		files_count = len(perf_rows)
 
 	try:
@@ -158,7 +130,7 @@ def sync_nav_performance(
 		dataset = mapper.map_dataset(raw_data)
 		validation_errors = mapper.validator.errors
 
-		# 3. Import data with existing DataImporter
+		# 3. Import data with existing DataImporter (reconciles DB against repo)
 		importer = DataImporter(dry_run=dry_run)
 		importer.import_dataset(dataset)
 
@@ -168,11 +140,6 @@ def sync_nav_performance(
 			stats=importer.stats,
 			validation_errors=validation_errors,
 		)
-
-		if not dry_run and not mock_mode:
-			frappe.cache().set_value(cache_key, current_hash)
-			if include_heatmap:
-				frappe.cache().set_value(heatmap_cache_key, 1)
 
 		return {
 			"status": "success",

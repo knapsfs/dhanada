@@ -4,7 +4,8 @@ import re
 import frappe
 from frappe.query_builder import DocType, Order
 from frappe.query_builder.functions import Count
-from frappe.rate_limiter import rate_limit
+
+from dhanada.utils.rate_limiter import rate_limit
 
 from .helpers import get_default_plan, mask_invalid_returns
 

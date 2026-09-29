@@ -2,7 +2,8 @@ import json
 
 import frappe
 import requests
-from frappe.rate_limiter import rate_limit
+
+from dhanada.utils.rate_limiter import rate_limit
 
 
 # Chatbot configuration return karta hai.

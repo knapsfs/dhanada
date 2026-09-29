@@ -2,7 +2,6 @@
 # For license information, please see license.txt
 
 import csv
-import hashlib
 import logging
 import os
 import re
@@ -13,7 +12,6 @@ import frappe
 
 from dhanada.scheduler.amfi_repository import (
 	clean_repo_subpath,
-	compute_files_hash,
 	ensure_amfi_repository_updated,
 )
 from dhanada.sif.sync.github_client import GitHubClient
@@ -131,8 +129,8 @@ def sync_nav_data(dry_run: bool = False, force: bool = False) -> dict[str, Any]:
 	NAV Scheduler (DAILY):
 	1. Updates/validates local AMFI_Fetcher repo using shared ensure_amfi_repository_updated().
 	2. Reads configured file_path_for_nav_data from Dhanada Settings.
-	3. Ingests latest daily NAV.
-	4. Ingests historical NAV only if changed (skips historical reprocessing if unchanged).
+	3. Ingests latest daily NAV and reconciles against database.
+	4. Reconciles historical NAV against database (restoring DB if modified, skipping DB writes if matching).
 	"""
 	start_time = time.time()
 	log_sync_start()
@@ -161,7 +159,6 @@ def sync_nav_data(dry_run: bool = False, force: bool = False) -> dict[str, Any]:
 			mock_mode = True
 			daily_rows = mock_client.fetch_latest_nav() or []
 			hist_rows = mock_client.fetch_historical_nav() or []
-			force = True
 	except Exception:
 		pass
 
@@ -182,55 +179,16 @@ def sync_nav_data(dry_run: bool = False, force: bool = False) -> dict[str, Any]:
 			return {"status": "error", "message": err}
 
 		# Discover daily and historical files
-		parsed_daily, latest_nav_file = _read_latest_daily_nav(nav_dir)
-		parsed_hist, hist_files = _read_historical_nav(nav_dir)
+		daily_rows, latest_nav_file = _read_latest_daily_nav(nav_dir)
+		hist_rows, hist_files = _read_historical_nav(nav_dir)
 
 		if not latest_nav_file and not hist_files:
 			logger.warning(f"No NAV files found in {nav_dir}")
 			return {"status": "skipped", "reason": "no_files_found"}
 
-		# Change detection: Daily NAV
-		daily_changed = False
-		daily_hash = ""
-		if latest_nav_file:
-			daily_hash = compute_files_hash([latest_nav_file])
-			daily_cache_key = f"sif_sync_daily_nav_hash_{hashlib.md5(latest_nav_file.encode()).hexdigest()}"
-			last_daily_hash = frappe.cache().get_value(daily_cache_key)
-			if force or last_daily_hash != daily_hash:
-				daily_changed = True
-				daily_rows = parsed_daily
-
-		# Change detection: Historical NAV
-		hist_changed = False
-		hist_hash = ""
-		if hist_files:
-			hist_hash = compute_files_hash(hist_files)
-			hist_cache_key = f"sif_sync_hist_nav_hash_{hashlib.md5(nav_dir.encode()).hexdigest()}"
-			last_hist_hash = frappe.cache().get_value(hist_cache_key)
-			if force or last_hist_hash != hist_hash:
-				hist_changed = True
-				hist_rows = parsed_hist
-			else:
-				logger.info(
-					f"Historical NAV in {nav_dir} is unchanged (hash: {hist_hash[:8]}). Skipping historical reprocessing."
-				)
-
-		if not daily_changed and not hist_changed and not force:
-			logger.info(f"NAV data in {nav_dir} is unchanged. Skipping ingestion.")
-			return {
-				"status": "skipped",
-				"reason": "unchanged",
-				"daily_file": latest_nav_file,
-				"historical_files_count": len(hist_files),
-			}
-
-		files_count = (1 if latest_nav_file and daily_changed else 0) + (
-			len(hist_files) if hist_changed else 0
-		)
+		files_count = (1 if latest_nav_file else 0) + len(hist_files)
 	else:
 		files_count = len(daily_rows) + len(hist_rows)
-		daily_changed = bool(daily_rows)
-		hist_changed = bool(hist_rows)
 
 	try:
 		raw_data = {
@@ -243,7 +201,7 @@ def sync_nav_data(dry_run: bool = False, force: bool = False) -> dict[str, Any]:
 		dataset = mapper.map_dataset(raw_data)
 		validation_errors = mapper.validator.errors
 
-		# 3. Import data with existing DataImporter
+		# 3. Import data with existing DataImporter (reconciles DB against repo)
 		importer = DataImporter(dry_run=dry_run)
 		importer.import_dataset(dataset)
 
@@ -254,12 +212,6 @@ def sync_nav_data(dry_run: bool = False, force: bool = False) -> dict[str, Any]:
 			validation_errors=validation_errors,
 		)
 
-		if not dry_run and not mock_mode:
-			if latest_nav_file and daily_hash:
-				frappe.cache().set_value(daily_cache_key, daily_hash)
-			if hist_files and hist_hash and hist_changed:
-				frappe.cache().set_value(hist_cache_key, hist_hash)
-
 		return {
 			"status": "success",
 			"type": "nav_data",
@@ -268,8 +220,8 @@ def sync_nav_data(dry_run: bool = False, force: bool = False) -> dict[str, Any]:
 			"stats": importer.stats,
 			"validation_errors_count": len(validation_errors),
 			"files_count": files_count,
-			"daily_processed": daily_changed,
-			"historical_processed": hist_changed,
+			"daily_processed": bool(daily_rows),
+			"historical_processed": bool(hist_rows),
 		}
 
 	except Exception as e:

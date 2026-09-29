@@ -1,7 +1,6 @@
 # Copyright (c) 2026, KNAPS Private Limited and contributors
 # For license information, please see license.txt
 
-import hashlib
 import json
 import logging
 import os
@@ -12,7 +11,6 @@ import frappe
 
 from dhanada.scheduler.amfi_repository import (
 	clean_repo_subpath,
-	compute_files_hash,
 	ensure_amfi_repository_updated,
 	load_local_amfi_isin_mapping,
 )
@@ -29,8 +27,7 @@ def sync_scheme_details(dry_run: bool = False, force: bool = False) -> dict[str,
 	Scheme Details Scheduler (WEEKLY):
 	1. Updates/validates local AMFI_Fetcher repo using shared ensure_amfi_repository_updated().
 	2. Reads configured file_path_for_scheme_details from Dhanada Settings.
-	3. Detects source changes (skips processing if unchanged).
-	4. Ingests all SIF scheme details using existing mapper/importer logic.
+	3. Reconciles all SIF scheme details against database using existing mapper/importer logic.
 	"""
 	start_time = time.time()
 	log_sync_start()
@@ -58,7 +55,6 @@ def sync_scheme_details(dry_run: bool = False, force: bool = False) -> dict[str,
 				and mock_client.fetch_amfi_isin_mapping.return_value is not None
 			):
 				isin_map = mock_client.fetch_amfi_isin_mapping()
-			force = True
 	except Exception:
 		pass
 
@@ -93,21 +89,6 @@ def sync_scheme_details(dry_run: bool = False, force: bool = False) -> dict[str,
 			logger.warning(f"No scheme detail JSON files found in {target_dir}")
 			return {"status": "skipped", "reason": "no_files_found", "target_dir": target_dir}
 
-		current_hash = compute_files_hash(json_files)
-		cache_key = f"sif_sync_scheme_details_hash_{hashlib.md5(target_dir.encode()).hexdigest()}"
-		last_hash = frappe.cache().get_value(cache_key)
-
-		if not force and not dry_run and last_hash == current_hash:
-			logger.info(
-				f"Scheme details at {target_dir} are unchanged (hash: {current_hash[:8]}). Skipping ingestion."
-			)
-			return {
-				"status": "skipped",
-				"reason": "unchanged",
-				"files_count": len(json_files),
-				"hash": current_hash,
-			}
-
 		parsed_schemes = []
 		skipped = 0
 		for fpath in json_files:
@@ -121,8 +102,6 @@ def sync_scheme_details(dry_run: bool = False, force: bool = False) -> dict[str,
 		logger.info(f"Parsed {len(parsed_schemes)} scheme records (skipped {skipped}).")
 		files_count = len(json_files)
 	else:
-		current_hash = "mock_hash"
-		cache_key = "sif_sync_scheme_details_hash_mock"
 		files_count = len(parsed_schemes)
 
 	try:
@@ -136,7 +115,7 @@ def sync_scheme_details(dry_run: bool = False, force: bool = False) -> dict[str,
 		dataset = mapper.map_dataset(raw_data)
 		validation_errors = mapper.validator.errors
 
-		# 3. Import data with existing DataImporter
+		# 3. Import data with existing DataImporter (reconciles DB against repo)
 		importer = DataImporter(dry_run=dry_run)
 		importer.import_dataset(dataset)
 
@@ -146,9 +125,6 @@ def sync_scheme_details(dry_run: bool = False, force: bool = False) -> dict[str,
 			stats=importer.stats,
 			validation_errors=validation_errors,
 		)
-
-		if not dry_run and current_hash != "mock_hash":
-			frappe.cache().set_value(cache_key, current_hash)
 
 		return {
 			"status": "success",

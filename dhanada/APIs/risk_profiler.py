@@ -14,7 +14,8 @@ from email.mime.text import MIMEText
 from email.utils import formataddr
 
 import frappe
-from frappe.rate_limiter import rate_limit
+
+from dhanada.utils.rate_limiter import rate_limit
 
 
 def get_brevo_config():
@@ -24,7 +25,9 @@ def get_brevo_config():
 	"""
 	try:
 		if not frappe.db.exists("DocType", "Dhanada Settings"):
-			frappe.log_error(title="Brevo Settings Error", message="DocType 'Dhanada Settings' does not exist.")
+			frappe.log_error(
+				title="Brevo Settings Error", message="DocType 'Dhanada Settings' does not exist."
+			)
 			return None
 
 		settings = frappe.get_single("Dhanada Settings")
@@ -167,7 +170,7 @@ BAND_CONFIG["Very Aggressive"] = BAND_CONFIG["Aggressive"]
 def generate_risk_email_html(name, profile, score, max_score, metrics):
 	band = BAND_CONFIG.get(profile, BAND_CONFIG["Moderate"])
 	clean_name = (name or "Investor").strip().title()
-	pct_score = int(round((score / max_score) * 100)) if max_score else 70
+	pct_score = round((score / max_score) * 100) if max_score else 70
 
 	wa_text = f"Hi KNAPS Team, I completed my Investor Risk Profiler assessment. My indicative profile is {profile} (Score: {score}/{max_score}). I would like to consult with an advisor regarding my portfolio."
 	wa_url = f"https://wa.me/+919990243143?text={urllib.parse.quote(wa_text)}"
@@ -182,7 +185,7 @@ def generate_risk_email_html(name, profile, score, max_score, metrics):
         <tr>
           <td colspan="2" style="padding-bottom: 10px;">
             <div style="background-color: #f1f5f9; border-radius: 999px; height: 8px; overflow: hidden; width: 100%;">
-              <div style="background-color: {item['color']}; height: 8px; width: {item['pct']}%; border-radius: 999px;"></div>
+              <div style="background-color: {item["color"]}; height: 8px; width: {item["pct"]}%; border-radius: 999px;"></div>
             </div>
           </td>
         </tr>
@@ -197,11 +200,6 @@ def generate_risk_email_html(name, profile, score, max_score, metrics):
         </div>
         """
 
-	risk_comfort = (metrics or {}).get("riskComfort", "Moderate to High")
-	flexibility = (metrics or {}).get("financialFlexibility", "High")
-	experience = (metrics or {}).get("experience", "Intermediate")
-	horizon = (metrics or {}).get("horizon", "Long-term (5+ Years)")
-
 	return f"""<!DOCTYPE html>
 <html>
 <head>
@@ -215,7 +213,7 @@ def generate_risk_email_html(name, profile, score, max_score, metrics):
       <td align="center">
         <!-- Container -->
         <table width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 620px; background-color: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(3, 46, 146, 0.08); border: 1px solid #e2e8f0;">
-          
+
           <!-- Header Banner -->
           <tr>
             <td style="background: linear-gradient(135deg, #021d63 0%, #032e92 100%); padding: 32px 30px; text-align: center;">
@@ -235,7 +233,7 @@ def generate_risk_email_html(name, profile, score, max_score, metrics):
           <!-- Main Content -->
           <tr>
             <td style="padding: 32px 30px 20px 30px;">
-              
+
               <!-- Greeting -->
               <p style="font-size: 16px; color: #0a192f; margin: 0 0 16px 0; font-weight: 600;">Dear {clean_name},</p>
               <p style="font-size: 14px; color: #475569; line-height: 1.6; margin: 0 0 24px 0;">
@@ -243,25 +241,25 @@ def generate_risk_email_html(name, profile, score, max_score, metrics):
               </p>
 
               <!-- Profile Result Card -->
-              <div style="background-color: {band.get('card_bg', '#f8fafc')}; border: 2px solid {band.get('card_border', band['badge_border'])}; border-radius: 16px; padding: 24px; margin-bottom: 26px;">
+              <div style="background-color: {band.get("card_bg", "#f8fafc")}; border: 2px solid {band.get("card_border", band["badge_border"])}; border-radius: 16px; padding: 24px; margin-bottom: 26px;">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                   <tr>
                     <td>
-                      <span style="display: inline-block; background-color: {band['badge_bg']}; color: {band['badge_color']}; border: 1px solid {band['badge_border']}; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; padding: 4px 12px; border-radius: 999px; margin-bottom: 8px;">
+                      <span style="display: inline-block; background-color: {band["badge_bg"]}; color: {band["badge_color"]}; border: 1px solid {band["badge_border"]}; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; padding: 4px 12px; border-radius: 999px; margin-bottom: 8px;">
                         YOUR INDICATIVE PROFILE
                       </span>
-                      <h2 style="font-size: 26px; font-weight: 900; color: {band.get('profile_color', band['badge_color'])}; margin: 6px 0 10px 0; letter-spacing: -0.5px;">
+                      <h2 style="font-size: 26px; font-weight: 900; color: {band.get("profile_color", band["badge_color"])}; margin: 6px 0 10px 0; letter-spacing: -0.5px;">
                         {profile}
                       </h2>
                       <p style="font-size: 13px; color: #334155; line-height: 1.6; margin: 0 0 16px 0;">
-                        {band['summary']}
+                        {band["summary"]}
                       </p>
-                      
+
                       <!-- Score Badge -->
                       <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 14px;">
                         <tr>
                           <td style="font-size: 12px; color: #64748b; font-weight: 600;">Assessment Score</td>
-                          <td style="font-size: 13px; color: {band.get('profile_color', band['badge_color'])}; font-weight: 800; text-align: right;">{score} / {max_score} points ({pct_score}%)</td>
+                          <td style="font-size: 13px; color: {band.get("profile_color", band["badge_color"])}; font-weight: 800; text-align: right;">{score} / {max_score} points ({pct_score}%)</td>
                         </tr>
                       </table>
                     </td>
@@ -275,7 +273,7 @@ def generate_risk_email_html(name, profile, score, max_score, metrics):
               <h3 style="font-size: 15px; font-weight: 800; color: #0a192f; margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 0.5px;">
                 Tailored Strategies for Your Profile
               </h3>
-              
+
               <div style="margin-bottom: 26px;">
                 {product_cards}
               </div>
@@ -290,7 +288,7 @@ def generate_risk_email_html(name, profile, score, max_score, metrics):
                 <p style="font-size: 13px; color: #64748b; margin: 0 0 18px 0; line-height: 1.5;">
                   Speak with our certified financial planners at KNAPS to build a custom-crafted portfolio combining Mutual Funds, Specialized Investment Funds (SIFs), and retirement solutions.
                 </p>
-                
+
                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                   <tr>
                     <td align="center">
@@ -459,10 +457,12 @@ def submit_risk_profile():
 				source = "Investor Risk Profiler"
 			else:
 				try:
-					src_doc = frappe.get_doc({
-						"doctype": "CRM Lead Source",
-						"source_name": "Investor Risk Profiler",
-					})
+					src_doc = frappe.get_doc(
+						{
+							"doctype": "CRM Lead Source",
+							"source_name": "Investor Risk Profiler",
+						}
+					)
 					src_doc.insert(ignore_permissions=True)
 					frappe.db.commit()
 					source = "Investor Risk Profiler"

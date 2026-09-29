@@ -91,7 +91,7 @@ async function generateContentWithFallback(params) {
 
 async function analyzeContextForSuggestionsAndLeads(state, latestBotReply) {
 	try {
-		const systemInstruction = `You are an AI assistant evaluating the current conversational context. 
+		const systemInstruction = `You are an AI assistant evaluating the current conversational context.
 Your task is to generate highly relevant quick-reply suggestions for the user, evaluate if this is an appropriate time to offer an advisor connection, and provide a concise 1-sentence factual summary synthesizing the user's overall actual intent across the entire conversation.
 
 Respond in valid JSON format ONLY, exactly matching this schema:
