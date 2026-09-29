@@ -95,7 +95,7 @@ export default function BlogDetails() {
     <div className="font-sans text-gray-900 bg-white min-h-screen relative">
       {/* Top Reading Progress Bar */}
       <motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#032e92] via-[#2563eb] to-[#38bdf8] z-50 origin-left"
+        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#032e92] via-[#2563eb] to-[#38bdf8] z-50 origin-left pointer-events-none"
         style={{ scaleX }}
       />
 

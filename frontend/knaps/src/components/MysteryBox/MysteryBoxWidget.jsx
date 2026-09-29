@@ -185,50 +185,50 @@ export default function MysteryBoxWidget() {
       `}</style>
 
       {/* 1. Fullscreen Dimmed Pop-up Backdrop Overlay covering ENTIRE Screen (including Navbar) */}
-      <motion.div
-        initial={false}
-        animate={{
-          opacity: isOpened ? 1 : 0,
-          pointerEvents: isOpened ? 'auto' : 'none',
-        }}
-        transition={{ duration: 0.4, ease: 'easeInOut' }}
-        className="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-sm cursor-pointer select-none overflow-hidden"
-        onClick={handleClose}
-      >
-        {/* Ambient Radial Lighting */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[950px] h-[950px] rounded-full bg-blue-600/20 blur-[170px] pointer-events-none" />
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] rounded-full bg-amber-500/15 blur-[150px] pointer-events-none" />
+      <AnimatePresence>
+        {isOpened && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            className="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-sm cursor-pointer select-none overflow-hidden"
+            onClick={handleClose}
+          >
+            {/* Ambient Radial Lighting */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[950px] h-[950px] rounded-full bg-blue-600/20 blur-[170px] pointer-events-none" />
+            <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] rounded-full bg-amber-500/15 blur-[150px] pointer-events-none" />
 
-        {/* Top Header Card */}
-        <motion.div
-          animate={{
-            opacity: isOpened ? 1 : 0,
-            y: isOpened ? 0 : -30,
-          }}
-          transition={{ duration: 0.4, delay: isOpened ? 0.25 : 0 }}
-          className="absolute top-6 sm:top-8 left-1/2 -translate-x-1/2 text-center pointer-events-none z-40 px-4"
-        >
-          <div className="inline-flex items-center gap-2.5 px-6 py-2 rounded-full bg-white/10 border border-white/20 text-white text-sm sm:text-base font-bold backdrop-blur-md shadow-2xl mb-1">
-            <FontAwesomeIcon icon={faGift} className="text-amber-300 text-base" />
-            <span>Your Interactive Financial Toolkit</span>
-          </div>
-        </motion.div>
+            {/* Top Header Card */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3, delay: 0.15 }}
+              className="absolute top-6 sm:top-8 left-1/2 -translate-x-1/2 text-center pointer-events-none z-40 px-4"
+            >
+              <div className="inline-flex items-center gap-2.5 px-6 py-2 rounded-full bg-white/10 border border-white/20 text-white text-sm sm:text-base font-bold backdrop-blur-md shadow-2xl mb-1">
+                <FontAwesomeIcon icon={faGift} className="text-amber-300 text-base" />
+                <span>Your Interactive Financial Toolkit</span>
+              </div>
+            </motion.div>
 
-        {/* Close Button Top Right */}
-        <motion.button
-          type="button"
-          onClick={handleClose}
-          aria-label="Close interactive hub"
-          animate={{
-            opacity: isOpened ? 1 : 0,
-            scale: isOpened ? 1 : 0.8,
-          }}
-          transition={{ duration: 0.3, delay: isOpened ? 0.3 : 0 }}
-          className="absolute top-6 right-6 z-50 w-11 h-11 rounded-full bg-white/15 hover:bg-white/30 border border-white/25 flex items-center justify-center text-white/90 hover:text-white backdrop-blur-md transition-all duration-200 pointer-events-auto cursor-pointer shadow-lg hover:rotate-90"
-        >
-          <FontAwesomeIcon icon={faXmark} className="text-xl" />
-        </motion.button>
-      </motion.div>
+            {/* Close Button Top Right */}
+            <motion.button
+              type="button"
+              onClick={handleClose}
+              aria-label="Close interactive hub"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.2, delay: 0.1 }}
+              className="absolute top-6 right-6 z-50 w-11 h-11 rounded-full bg-white/15 hover:bg-white/30 border border-white/25 flex items-center justify-center text-white/90 hover:text-white backdrop-blur-md transition-all duration-200 pointer-events-auto cursor-pointer shadow-lg hover:rotate-90"
+            >
+              <FontAwesomeIcon icon={faXmark} className="text-xl" />
+            </motion.button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* 2. Compact 3D Gift Box & Animated Spheres Layer (Fixed Bottom-Left with high z-index) */}
       <div className="fixed bottom-10 left-6 sm:bottom-12 sm:left-8 z-[10000] pointer-events-none flex flex-col items-center select-none">
@@ -287,7 +287,8 @@ export default function MysteryBoxWidget() {
         </motion.div>
 
         {/* 3. The 3 Big Spheres Emerge from Open Box & Settle in the Vertical Center Arc */}
-        {options.map((opt) => {
+        <AnimatePresence>
+          {isOpened && options.map((opt) => {
           const isMobile = typeof window !== 'undefined' && window.innerWidth < 640
           const trajectory = isMobile ? opt.mobilePos : opt.desktopPos
 
@@ -381,6 +382,7 @@ export default function MysteryBoxWidget() {
             </motion.div>
           )
         })}
+        </AnimatePresence>
       </div>
 
       {/* 4. Dedicated Interactive Popups for the Selected Module */}
