@@ -3,6 +3,13 @@ Public Whitelisted API Entrypoint for Dhanada App.
 Re-exports modularized APIs from dhanada.APIs for complete backward compatibility.
 """
 
+# Dynamic Blogs & Authors APIs
+from dhanada.APIs.blogs import (
+	get_author_details,
+	get_blog_details,
+	get_blog_posts,
+)
+
 # Chatbot ke user question ka response generate karta hai.
 # Chatbot configuration return karta hai.
 from dhanada.APIs.chatbot import chatbot_response, get_chatbot_config
@@ -36,7 +43,6 @@ from dhanada.APIs.leads import create_chatbot_lead, create_website_lead
 # Investor Risk Profiler se aayi lead save karta hai aur Brevo se personalized email bhejta hai.
 from dhanada.APIs.risk_profiler import submit_risk_profile
 
-
 # Ek specific SIF ki complete required details laata hai.
 # Fund selector ke liye minimal funds list (id, name, category, risk) laata hai.
 # SIF page ke liye required funds ka paginated data laata hai.
@@ -55,6 +61,9 @@ __all__ = [
 	"chatbot_response",
 	"create_chatbot_lead",
 	"create_website_lead",
+	"get_author_details",
+	"get_blog_details",
+	"get_blog_posts",
 	"get_chatbot_config",
 	"get_comparison_data",
 	"get_default_plan",

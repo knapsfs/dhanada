@@ -18,6 +18,7 @@ export default function BlogHeader({ blog }) {
 
   const shareUrl = encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '');
   const shareTitle = encodeURIComponent(blog?.title || 'Check out this article on KNAPS');
+  const authorSlug = blog?.author_slug || blog?.authorSlug || 'nitin';
 
   return (
     <section className="bg-gradient-to-b from-[#f8fbff] via-white to-white pt-32 pb-10">
@@ -66,26 +67,30 @@ export default function BlogHeader({ blog }) {
             <span className="w-1.5 h-1.5 rounded-full bg-gray-300"></span>
             <span className="flex items-center gap-2">
               <FontAwesomeIcon icon={faClock} className="text-[#032e92]" />
-              {blog?.readTime || '6 min read'}
+              {blog?.read_time || blog?.readTime || '6 min read'}
             </span>
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-between w-full border-t border-b border-gray-100 py-5 gap-4">
             {/* Author */}
-            <div className="flex items-center gap-3.5">
+            <Link
+              to={`/author/${authorSlug}`}
+              className="flex items-center gap-3.5 group text-left hover:opacity-95 transition-opacity"
+              title={`View ${blog?.author || 'Author'}'s profile`}
+            >
               <img
-                src={blog?.authorImage || 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=200&auto=format&fit=crop'}
+                src={blog?.author_image || blog?.authorImage || 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=200&auto=format&fit=crop'}
                 alt={blog?.author || 'Author'}
-                className="w-12 h-12 rounded-full object-cover shadow-sm ring-2 ring-blue-100"
+                className="w-12 h-12 rounded-full object-cover shadow-sm ring-2 ring-blue-100 group-hover:ring-[#032e92] transition-all"
               />
               <div className="text-left">
-                <p className="text-[#0a192f] font-bold text-base">{blog?.author || 'KNAPS Research'}</p>
+                <p className="text-[#0a192f] font-bold text-base group-hover:text-[#032e92] transition-colors">{blog?.author || 'KNAPS Research'}</p>
                 <p className="text-gray-500 text-xs flex items-center gap-1.5">
                   <FontAwesomeIcon icon={faUserTie} className="text-[#032e92]" />
-                  {blog?.authorRole || 'AMFI-Registered Financial Advisor'}
+                  {blog?.author_role || blog?.authorRole || 'AMFI-Registered Financial Advisor'}
                 </p>
               </div>
-            </div>
+            </Link>
 
             {/* Share Icons */}
             <div className="flex items-center gap-2.5">
@@ -136,7 +141,7 @@ export default function BlogHeader({ blog }) {
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.15 }}
-          className="relative w-full rounded-3xl overflow-hidden shadow-xl border border-gray-100"
+          className="relative w-full rounded-3xl overflow-hidden shadow-xl border border-gray-100 max-h-[520px]"
         >
           <img
             src={blog?.image || 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?q=80&w=1600&auto=format&fit=crop'}

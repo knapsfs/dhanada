@@ -5,6 +5,7 @@ import AboutUs from './pages/AboutUs';
 import Services from './pages/Services';
 import Blogs from './pages/Blogs';
 import BlogDetails from './pages/BlogDetails';
+import AuthorPage from './pages/AuthorPage';
 import SifVsMutualFunds from './pages/sif-vs-mutual-funds';
 import HowToChooseMutualFundScheme from './pages/how-to-choose-a-mutual-fund-scheme-in-india-2026';
 import SevenCommonMistakesMutualFunds from './pages/7-common-mistakes-beginners-make-while-investing-in-mutual-funds';
@@ -57,6 +58,9 @@ function App() {
             <Route path="/blogs/sif-vs-mutual-funds" element={<SifVsMutualFunds />} />
             <Route path="/sif-vs-mutual-funds" element={<SifVsMutualFunds />} />
             <Route path="/blogs/:id" element={<BlogDetails />} />
+            <Route path="/author" element={<AuthorPage />} />
+            <Route path="/author/:slug" element={<AuthorPage />} />
+            <Route path="/blogs/author/:slug" element={<AuthorPage />} />
             <Route path="/contact" element={<ContactUs />} />
 
             {/* SIF Routes */}

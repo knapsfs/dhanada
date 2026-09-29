@@ -1,7 +1,8 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import BlogCard from './BlogCard';
-import { getLatestBlogs } from '../data/blogsData';
+import { fetchBlogPosts } from '../api/blogs';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -12,7 +13,34 @@ const containerVariants = {
 };
 
 export default function BlogSection() {
-  const blogs = getLatestBlogs(3);
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadBlogs() {
+      setLoading(true);
+      try {
+        const data = await fetchBlogPosts({ limit: 3 });
+        if (isMounted) {
+          if (data && data.posts && data.posts.length > 0) {
+            setBlogs(data.posts);
+          } else {
+            setBlogs([]);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load homepage blogs:", err);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    }
+
+    loadBlogs();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return (
     <section id="blogs" className="py-12 sm:py-16 bg-gray-50 relative">
@@ -50,17 +78,35 @@ export default function BlogSection() {
           </motion.div>
         </div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
-          {blogs.map((blog) => (
-            <BlogCard key={blog.id} blog={blog} />
-          ))}
-        </motion.div>
+        {loading ? (
+          <div className="py-16 flex flex-col items-center justify-center">
+            <div className="w-10 h-10 border-4 border-[#032e92] border-t-transparent rounded-full animate-spin mb-3"></div>
+            <p className="text-gray-500 text-sm font-medium">Loading latest articles...</p>
+          </div>
+        ) : blogs.length === 0 ? (
+          <div className="py-12 text-center bg-white rounded-3xl p-8 border border-gray-100 shadow-sm max-w-md mx-auto">
+            <p className="text-gray-700 font-semibold mb-1">No articles available</p>
+            <p className="text-gray-400 text-xs">Stay tuned for new insights and research articles.</p>
+          </div>
+        ) : (
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            className={`grid gap-8 ${
+              blogs.length === 1
+                ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+                : blogs.length === 2
+                ? "grid-cols-1 md:grid-cols-2"
+                : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+            }`}
+          >
+            {blogs.map((blog) => (
+              <BlogCard key={blog.id} blog={blog} />
+            ))}
+          </motion.div>
+        )}
       </div>
     </section>
   );

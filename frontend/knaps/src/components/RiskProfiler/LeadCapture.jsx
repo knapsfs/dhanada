@@ -9,7 +9,7 @@ export default function LeadCapture({ result, answers = [], onSubmitSuccess, isM
     phone: '',
     consent: false
   });
-  
+
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [apiError, setApiError] = useState(null);
@@ -19,11 +19,11 @@ export default function LeadCapture({ result, answers = [], onSubmitSuccess, isM
     if (!formData.name.trim()) {
       newErrors.name = 'Please enter your full name.';
     }
-    
+
     if (!formData.email.trim() || !/^\S+@\S+\.\S+$/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address.';
     }
-    
+
     const phoneClean = formData.phone.replace(/[^0-9+]/g, '');
     if (!phoneClean || (phoneClean.startsWith('+91') ? phoneClean.length !== 13 : phoneClean.length !== 10)) {
       newErrors.phone = 'Please enter a valid 10-digit mobile number.';
@@ -40,7 +40,7 @@ export default function LeadCapture({ result, answers = [], onSubmitSuccess, isM
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-    
+
     setIsSubmitting(true);
     setApiError(null);
 
@@ -104,7 +104,7 @@ export default function LeadCapture({ result, answers = [], onSubmitSuccess, isM
   };
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
@@ -113,9 +113,9 @@ export default function LeadCapture({ result, answers = [], onSubmitSuccess, isM
       <div className={`md:w-5/12 bg-[#032e92] text-white flex flex-col justify-center ${isModal ? 'p-5 sm:p-6' : 'p-8 md:p-12'}`}>
         <h3 className={`font-black mb-2 ${isModal ? 'text-xl sm:text-2xl' : 'text-3xl mb-4'}`}>Your Risk Profile Is Ready</h3>
         <p className={`text-blue-100 leading-relaxed ${isModal ? 'text-xs sm:text-sm mb-4' : 'text-lg mb-6'}`}>
-          Enter your details below to receive your assessment result via email.
+          Enter your details below to receive your risk profile result via email.
         </p>
-        
+
         <div className={isModal ? 'space-y-2 text-xs' : 'space-y-3 text-sm'}>
           <div className="flex items-center gap-2 text-blue-200">
             <span className="w-4 h-4 rounded-full bg-blue-500/30 flex items-center justify-center text-[10px]">✓</span>
@@ -123,55 +123,55 @@ export default function LeadCapture({ result, answers = [], onSubmitSuccess, isM
           </div>
           <div className="flex items-center gap-2 text-blue-200">
             <span className="w-4 h-4 rounded-full bg-blue-500/30 flex items-center justify-center text-[10px]">✓</span>
-            <span>Assessment ready</span>
+            <span>Risk profile is ready</span>
           </div>
         </div>
 
 
       </div>
-      
+
       <div className={`md:w-7/12 ${isModal ? 'p-5 sm:p-6' : 'p-8 md:p-12'}`}>
         {apiError && (
           <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-100 text-red-600 text-xs font-medium">
             {apiError}
           </div>
         )}
-        
+
         <form onSubmit={handleSubmit} className={isModal ? 'space-y-3' : 'space-y-5'}>
           <div>
             <label className="block text-xs font-bold text-gray-700 mb-1">Full Name *</label>
-            <input 
+            <input
               type="text"
               value={formData.name}
-              onChange={(e) => setFormData({...formData, name: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               className={`w-full rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-[#032e92] focus:ring-2 focus:ring-blue-50 outline-none transition-all ${isModal ? 'px-3.5 py-2.5 text-xs sm:text-sm' : 'px-5 py-3.5'}`}
               placeholder="Enter your full name"
               disabled={isSubmitting}
             />
             {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
           </div>
-          
+
           <div>
             <label className="block text-xs font-bold text-gray-700 mb-1">Email Address *</label>
-            <input 
+            <input
               type="email"
               value={formData.email}
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               className={`w-full rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-[#032e92] focus:ring-2 focus:ring-blue-50 outline-none transition-all ${isModal ? 'px-3.5 py-2.5 text-xs sm:text-sm' : 'px-5 py-3.5'}`}
               placeholder="Enter your email address"
               disabled={isSubmitting}
             />
             {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
           </div>
-          
+
           <div>
             <label className="block text-xs font-bold text-gray-700 mb-1">Mobile Number *</label>
             <div className="flex relative">
               <span className={`absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 font-bold ${isModal ? 'text-xs' : 'text-sm'}`}>+91</span>
-              <input 
+              <input
                 type="tel"
                 value={formData.phone}
-                onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                 className={`w-full pl-11 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-[#032e92] focus:ring-2 focus:ring-blue-50 outline-none transition-all ${isModal ? 'pr-3.5 py-2.5 text-xs sm:text-sm' : 'pr-5 py-3.5'}`}
                 placeholder="10-digit mobile number"
                 maxLength={10}
@@ -180,20 +180,20 @@ export default function LeadCapture({ result, answers = [], onSubmitSuccess, isM
             </div>
             {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
           </div>
-          
+
           <div className="pt-1">
             <label className="flex items-start gap-2.5 cursor-pointer group">
               <div className="relative flex items-center justify-center mt-0.5">
-                <input 
+                <input
                   type="checkbox"
                   checked={formData.consent}
-                  onChange={(e) => setFormData({...formData, consent: e.target.checked})}
+                  onChange={(e) => setFormData({ ...formData, consent: e.target.checked })}
                   className="w-4 h-4 border-2 border-gray-300 rounded appearance-none checked:bg-[#032e92] checked:border-[#032e92] transition-colors"
                   disabled={isSubmitting}
                 />
                 {formData.consent && (
                   <svg className="w-2.5 h-2.5 text-white absolute pointer-events-none" viewBox="0 0 14 14" fill="none">
-                    <path d="M2 7.5L5.5 11L12 3" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M2 7.5L5.5 11L12 3" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 )}
               </div>
@@ -203,15 +203,13 @@ export default function LeadCapture({ result, answers = [], onSubmitSuccess, isM
             </label>
             {errors.consent && <p className="text-red-500 text-xs mt-1">{errors.consent}</p>}
           </div>
-          
-          <button 
+
+          <button
             type="submit"
             disabled={isSubmitting}
-            className={`w-full btn-ripple rounded-xl font-semibold text-white transition-all duration-300 cursor-pointer flex items-center justify-center gap-2 ${
-              isModal ? 'py-3 px-6 text-[14px]' : 'py-3.5 px-6 text-[15px]'
-            } ${
-              isSubmitting ? 'bg-gray-400 opacity-70 cursor-wait' : 'bg-gradient-to-r from-[#032e92] to-[#021d63] hover:shadow-lg hover:shadow-[#032e92]/30'
-            }`}
+            className={`w-full btn-ripple rounded-xl font-semibold text-white transition-all duration-300 cursor-pointer flex items-center justify-center gap-2 ${isModal ? 'py-3 px-6 text-[14px]' : 'py-3.5 px-6 text-[15px]'
+              } ${isSubmitting ? 'bg-gray-400 opacity-70 cursor-wait' : 'bg-gradient-to-r from-[#032e92] to-[#021d63] hover:shadow-lg hover:shadow-[#032e92]/30'
+              }`}
           >
             {isSubmitting ? (
               <>
