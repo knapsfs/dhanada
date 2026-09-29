@@ -1,18 +1,26 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { motion, useScroll, useSpring } from 'framer-motion';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import BlogHeader from '../components/blog-details/BlogHeader';
 import BlogContent from '../components/blog-details/BlogContent';
 import CTA from '../components/CTA';
 import { fetchBlogDetails } from '../api/blogs';
-import { getBlogByIdOrSlug } from '../data/blogsData';
 
 export default function BlogDetails() {
   const { id } = useParams();
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Reading progress indicator
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
 
   // Scroll to top on page load or when article changes
   useEffect(() => {
@@ -31,22 +39,11 @@ export default function BlogDetails() {
         if (data && data.blog) {
           setBlog(data.blog);
         } else {
-          // Fallback to legacy blogsData if present
-          const fallback = getBlogByIdOrSlug(id);
-          if (fallback) {
-            setBlog(fallback);
-          } else {
-            setError(data?.message || 'Article not found');
-          }
+          setError(data?.message || 'Article not found');
         }
       } catch (err) {
         if (!isMounted) return;
-        const fallback = getBlogByIdOrSlug(id);
-        if (fallback) {
-          setBlog(fallback);
-        } else {
-          setError('Failed to load article');
-        }
+        setError('Failed to load article');
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -79,7 +76,7 @@ export default function BlogDetails() {
           <div className="bg-white rounded-3xl p-10 border border-gray-100 shadow-sm w-full">
             <h2 className="text-2xl font-bold text-[#0a192f] mb-3">Article Not Found</h2>
             <p className="text-gray-500 text-sm mb-6 leading-relaxed">
-              The article you are trying to access does not exist or may have been unpublished.
+              The article you are trying to access does not exist or may have been unpublished in Frappe Desk.
             </p>
             <Link
               to="/blogs"
@@ -95,17 +92,23 @@ export default function BlogDetails() {
   }
 
   return (
-    <div className="font-sans text-gray-900 bg-white min-h-screen">
+    <div className="font-sans text-gray-900 bg-white min-h-screen relative">
+      {/* Top Reading Progress Bar */}
+      <motion.div
+        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#032e92] via-[#2563eb] to-[#38bdf8] z-50 origin-left"
+        style={{ scaleX }}
+      />
+
       <Navbar />
 
       <main>
         {/* Dynamic Blog Header */}
         <BlogHeader blog={blog} />
 
-        {/* Dynamic Blog Content */}
+        {/* Dynamic Blog Content from Frappe */}
         <BlogContent blog={blog} />
 
-        {/* Bottom CTA */}
+        {/* Unified Bottom CTA */}
         <CTA />
       </main>
 
