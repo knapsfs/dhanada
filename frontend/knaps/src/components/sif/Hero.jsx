@@ -125,8 +125,7 @@ export default function Hero() {
                 </svg>
               </div>
               <div>
-                <p className="text-[11px] font-bold tracking-wider uppercase text-cyan-300">Regulated Framework</p>
-                <p className="text-xs font-semibold text-white">SEBI Approved Structure</p>
+                <p className="text-[11px] font-bold tracking-wider uppercase text-cyan-300">SEBI Regulated Framework</p>
               </div>
             </motion.div>
 
@@ -144,7 +143,6 @@ export default function Hero() {
               </div>
               <div>
                 <p className="text-[11px] font-bold tracking-wider uppercase text-blue-300">Long-Short Edge</p>
-                <p className="text-xs font-semibold text-white">Dynamic Hedging</p>
               </div>
             </motion.div>
 

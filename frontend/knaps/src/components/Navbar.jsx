@@ -103,7 +103,7 @@ export default function Navbar() {
           <Link to="/" className="flex items-center gap-3 group">
             <img
               src={logo}
-              alt="KNAPS Financial Services"
+              alt="KNAPS Private Limited"
               className="h-10 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
             />
           </Link>

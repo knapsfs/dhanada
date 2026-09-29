@@ -127,14 +127,7 @@ export default function LeadCapture({ result, answers = [], onSubmitSuccess, isM
           </div>
         </div>
 
-        {result?.profile && (
-          <div className="mt-5 pt-4 border-t border-blue-400/20">
-            <span className="text-[10px] text-blue-300 uppercase tracking-wider font-bold block mb-1">Indicative Result</span>
-            <div className="inline-block bg-white/10 backdrop-blur-md border border-white/20 rounded-xl px-3 py-1.5 text-xs sm:text-sm font-black text-white">
-              {result.profile}
-            </div>
-          </div>
-        )}
+
       </div>
       
       <div className={`md:w-7/12 ${isModal ? 'p-5 sm:p-6' : 'p-8 md:p-12'}`}>

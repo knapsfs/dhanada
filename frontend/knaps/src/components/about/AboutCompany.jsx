@@ -61,7 +61,7 @@ export default function AboutCompany() {
             
             <div className="space-y-6 text-gray-600 text-[17px] leading-relaxed mb-10">
               <p>
-                At Knaps Financial Services, we are dedicated to securing your financial future through strategic, disciplined, and personalized investment planning. With over 15 years of industry experience, we navigate complex market cycles to deliver consistent growth and absolute peace of mind.
+                At KNAPS Private Limited, we are dedicated to securing your financial future through strategic, disciplined, and personalized investment planning. With over 15 years of industry experience, we navigate complex market cycles to deliver consistent growth and absolute peace of mind.
               </p>
               <p>
                 We believe that wealth management is not a one-size-fits-all approach. Our certified experts take the time to understand your unique aspirations, risk tolerance, and time horizon, crafting bespoke portfolios that turn your financial goals into reality.

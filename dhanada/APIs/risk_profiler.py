@@ -43,7 +43,7 @@ def get_brevo_config():
 			password = getattr(settings, "brevo_smtp_password", None)
 
 		sender_email = (getattr(settings, "sender_email", None) or "").strip()
-		sender_name = (getattr(settings, "sender_name", None) or "").strip() or "KNAPS Financial Services"
+		sender_name = (getattr(settings, "sender_name", None) or "").strip() or "KNAPS Private Limited"
 		admin_email = (getattr(settings, "admin_notification_email", None) or "").strip() or sender_email
 
 		if not server or not user or not password:
@@ -70,144 +70,104 @@ def get_brevo_config():
 BAND_CONFIG = {
 	"Conservative": {
 		"title": "Conservative Investor Profile",
-		"badge_bg": "#dbeafe",
-		"badge_color": "#1e40af",
-		"badge_border": "#93c5fd",
-		"summary": "Your responses indicate a preference for stability, capital preservation, and minimal exposure to market volatility. You prioritize safeguarding your capital over chasing aggressive returns.",
+		"badge_bg": "#dcfce7",
+		"badge_color": "#15803d",
+		"badge_border": "#86efac",
+		"profile_color": "#15803d",
+		"card_bg": "#f0fdf4",
+		"card_border": "#bbf7d0",
+		"summary": "You are an investor who has expectations of low to moderate kind of returns with lower levels of risk in order to preserve your capital. As a conservative investor, you might expect your portfolio to be allocated approximately 15% in growth assets, with the remainder in defensive assets and an allocation to gold.",
 		"allocations": [
-			{"label": "Debt & Fixed Income", "pct": 75, "color": "#2563eb"},
-			{"label": "Large-Cap Equities", "pct": 20, "color": "#0ea5e9"},
-			{"label": "Gold / Liquid Cash", "pct": 5, "color": "#f59e0b"},
+			{"label": "Defensive Assets (Debt & Fixed Income)", "pct": 80, "color": "#2563eb"},
+			{"label": "Growth Assets (Equities)", "pct": 15, "color": "#16a34a"},
+			{"label": "Gold Allocation", "pct": 5, "color": "#eab308"},
 		],
 		"products": [
 			{
-				"name": "Low Duration & Short Term Debt Funds",
-				"desc": "Capital stability with better yields than savings accounts.",
+				"name": "Balanced Advantage & Dynamic Asset Allocation Funds",
+				"desc": "Automatically rebalances equity and debt to protect capital in dips and capture upside in rallies.",
 			},
 			{
-				"name": "Banking & PSU Debt Funds",
-				"desc": "High credit-quality sovereign and top-tier PSU exposure.",
+				"name": "High Quality Short-Term & Corporate Bond Funds",
+				"desc": "Provides steady yield with minimal credit and interest rate risk.",
 			},
 			{
-				"name": "Conservative Hybrid Funds",
-				"desc": "75-80% debt with 20-25% equity for steady growth.",
+				"name": "Large-Cap Mutual Funds & Gold ETFs",
+				"desc": "Disciplined exposure to top blue-chips and gold for capital preservation with inflation protection.",
 			},
 		],
-		"advice": "Focus on beating inflation while preserving your principal. Maintain 6-12 months of emergency savings in liquid funds before taking any market exposure.",
+		"advice": "Focus on capital preservation and steady income. Maintain strong defensive allocations with disciplined growth cushions.",
 	},
-	"Balanced": {
-		"title": "Balanced Investor Profile",
-		"badge_bg": "#ccfbf1",
-		"badge_color": "#0f766e",
-		"badge_border": "#5eead4",
-		"summary": "Your responses reflect a balanced approach—seeking moderate wealth creation while maintaining a dependable cushion against sharp market downturns.",
+	"Moderate": {
+		"title": "Moderate Investor Profile",
+		"badge_bg": "#fef3c7",
+		"badge_color": "#b45309",
+		"badge_border": "#fde68a",
+		"profile_color": "#b45309",
+		"card_bg": "#fffbeb",
+		"card_border": "#fde68a",
+		"summary": "You are an investor who would like to invest in both income and growth assets. You will be comfortable with calculated risks to achieve good returns, however, you require an investment strategy that adequately deals with the effects of inflation and tax. As a moderate investor, you might expect your portfolio to be allocated approximately 45% in growth assets, with the remainder in defensive assets and an allocation to gold.",
 		"allocations": [
-			{"label": "Equities (Large & Flexi-Cap)", "pct": 50, "color": "#0d9488"},
-			{"label": "Debt & Fixed Income", "pct": 40, "color": "#3b82f6"},
-			{"label": "Gold & Multi-Asset", "pct": 10, "color": "#eab308"},
+			{"label": "Growth Assets (Equities)", "pct": 45, "color": "#d97706"},
+			{"label": "Defensive Assets (Debt & Fixed Income)", "pct": 45, "color": "#3b82f6"},
+			{"label": "Gold Allocation", "pct": 10, "color": "#eab308"},
 		],
 		"products": [
 			{
-				"name": "Balanced Advantage / Dynamic Asset Allocation",
-				"desc": "Automatically buys more equity when markets dip and books profit in rallies.",
+				"name": "Multi-Cap & Large & Mid-Cap Funds",
+				"desc": "Balanced growth engine across market capitalizations for superior risk-adjusted returns.",
 			},
 			{
-				"name": "Multi-Asset Allocation Funds",
-				"desc": "Combines equity, debt, and gold under a single portfolio.",
+				"name": "SIF - Long-Short Derivative Strategies",
+				"desc": "Access innovative hedging strategies designed to generate alpha while dampening equity drawdowns.",
 			},
 			{
-				"name": "Corporate Bond & Medium Duration Funds",
-				"desc": "Generates steady regular cash flows with low volatility.",
+				"name": "Dynamic Bond & Banking Debt Funds",
+				"desc": "Active duration management for safety, liquidity, and periodic rebalancing ammunition.",
 			},
 		],
-		"advice": "Rely on automatic asset allocation to ride out market cycles without emotional stress. Ideal for 3 to 5 year investment horizons.",
-	},
-	"Moderately Aggressive": {
-		"title": "Moderately Aggressive Investor Profile",
-		"badge_bg": "#e0e7ff",
-		"badge_color": "#3730a3",
-		"badge_border": "#a5b4fc",
-		"summary": "Your responses show solid comfort with market fluctuations in pursuit of healthy, inflation-beating capital growth over medium to long horizons.",
-		"allocations": [
-			{"label": "Equities (Large, Mid & Flexi-Cap)", "pct": 70, "color": "#032e92"},
-			{"label": "SIF / Hybrid Long-Short / Debt", "pct": 25, "color": "#6366f1"},
-			{"label": "Gold / Tactical Cash", "pct": 5, "color": "#f59e0b"},
-		],
-		"products": [
-			{
-				"name": "Flexi-Cap & Large & Mid-Cap Mutual Funds",
-				"desc": "High long-term wealth potential across top Indian companies.",
-			},
-			{
-				"name": "Specialized Investment Funds (SIF) - Hybrid Long-Short",
-				"desc": "Captures growth while using derivative hedging to cushion drawdowns.",
-			},
-			{
-				"name": "Active Asset Allocator Funds",
-				"desc": "Tactical asset shifting between equities and debt based on market conditions.",
-			},
-		],
-		"advice": "Remain committed to systematic SIPs during corrections. Long-short hedging strategies in SIFs can offer significant risk-adjusted advantages.",
+		"advice": "Hold an investment horizon of 3-5+ years. Tactical asset allocation and hedging allow you to ride out volatility without panic.",
 	},
 	"Aggressive": {
 		"title": "Aggressive Investor Profile",
-		"badge_bg": "#f3e8ff",
-		"badge_color": "#6b21a8",
-		"badge_border": "#d8b4fe",
-		"summary": "Your responses indicate high risk tolerance and a primary focus on substantial long-term capital compounding. You have the patience to navigate multi-year equity cycles.",
+		"badge_bg": "#fee2e2",
+		"badge_color": "#b91c1c",
+		"badge_border": "#fca5a5",
+		"profile_color": "#b91c1c",
+		"card_bg": "#fff5f5",
+		"card_border": "#fecaca",
+		"summary": "You are an investor who is comfortable with a high volatility and high level of risk in order to achieve relatively higher returns over long term. Your objective is to accumulate assets over long term by primarily investing in growth assets. As an aggressive investor, you might expect your portfolio to be allocated up to 75% in growth assets and an allocation to gold.",
 		"allocations": [
-			{"label": "Equities (Mid, Small & High-Growth)", "pct": 80, "color": "#7e22ce"},
-			{"label": "SIF (Long-Short Derivative Funds)", "pct": 15, "color": "#3b82f6"},
-			{"label": "Cash / Tactical Buffer", "pct": 5, "color": "#64748b"},
+			{"label": "Growth Assets (Equities & High-Growth)", "pct": 75, "color": "#dc2626"},
+			{"label": "SIF (Long-Short Derivative Funds)", "pct": 20, "color": "#3b82f6"},
+			{"label": "Gold & Tactical Cash", "pct": 5, "color": "#eab308"},
 		],
 		"products": [
 			{
 				"name": "Mid-Cap & Small-Cap Mutual Funds",
-				"desc": "Rapid earnings growth potential in fast-expanding companies.",
+				"desc": "Rapid earnings growth potential in emerging market leaders.",
 			},
 			{
-				"name": "SIF - Equity Long-Short Funds",
-				"desc": "Goes long attractive stocks and shorts underperformers for alpha in any market.",
+				"name": "SIF - Equity Long-Short & Sector Rotation",
+				"desc": "Uses long and short derivative positions to generate alpha in bull, bear, and sideways regimes.",
 			},
 			{
-				"name": "SIF - Sector Rotation Long-Short",
-				"desc": "Capitalizes on sector momentum and cyclical shifts with hedging.",
+				"name": "SIF - Ex-Top 100 Long-Short Strategies",
+				"desc": "Unlocks high-conviction opportunities outside mega-caps with institutional hedging.",
 			},
 		],
-		"advice": "Maintain a minimum 5 to 7 year horizon. Advanced derivative strategies in SIFs help manage bear-market drawdowns while maximizing upside.",
-	},
-	"Very Aggressive": {
-		"title": "Very Aggressive Investor Profile",
-		"badge_bg": "#ffe4e6",
-		"badge_color": "#9f1239",
-		"badge_border": "#fecdd3",
-		"summary": "Your responses indicate a sophisticated appetite for asymmetric upside, non-directional market strategies, and advanced long-short derivative frameworks.",
-		"allocations": [
-			{"label": "High-Beta Mid & Small-Cap Equities", "pct": 70, "color": "#be123c"},
-			{"label": "SIF Long-Short & Ex-Top 100", "pct": 25, "color": "#9333ea"},
-			{"label": "Alternative Investments / AIF", "pct": 5, "color": "#0ea5e9"},
-		],
-		"products": [
-			{
-				"name": "SIF - Equity Ex-Top 100 Long-Short",
-				"desc": "Unlocks high-alpha opportunities outside top 100 companies with both long and short positions.",
-			},
-			{
-				"name": "SIF - Active Asset Allocator Long-Short",
-				"desc": "Flexible derivative exposure across rising, falling and range-bound markets.",
-			},
-			{
-				"name": "AIF Category III & Concentrated Portfolios",
-				"desc": "Sophisticated alternative vehicles designed for high-net-worth investors.",
-			},
-		],
-		"advice": "Leverage specialized investment vehicles that profit from relative stock dispersion. Derivatives allow you to generate returns across bull, bear, and sideways regimes.",
+		"advice": "Maintain a minimum 5 to 7 year horizon. Advanced derivative strategies in SIFs help manage drawdowns while maximizing long-term upside.",
 	},
 }
 
+# Compatibility aliases
+BAND_CONFIG["Balanced"] = BAND_CONFIG["Conservative"]
+BAND_CONFIG["Moderately Aggressive"] = BAND_CONFIG["Moderate"]
+BAND_CONFIG["Very Aggressive"] = BAND_CONFIG["Aggressive"]
+
 
 def generate_risk_email_html(name, profile, score, max_score, metrics):
-	band = BAND_CONFIG.get(profile, BAND_CONFIG["Moderately Aggressive"])
+	band = BAND_CONFIG.get(profile, BAND_CONFIG["Moderate"])
 	clean_name = (name or "Investor").strip().title()
 	pct_score = round((score / max_score) * 100) if max_score else 70
 
@@ -239,17 +199,12 @@ def generate_risk_email_html(name, profile, score, max_score, metrics):
         </div>
         """
 
-	risk_comfort = (metrics or {}).get("riskComfort", "Moderate to High")
-	flexibility = (metrics or {}).get("financialFlexibility", "High")
-	experience = (metrics or {}).get("experience", "Intermediate")
-	horizon = (metrics or {}).get("horizon", "Long-term (5+ Years)")
-
 	return f"""<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Investor Risk Profile - KNAPS Financial Services</title>
+  <title>Your Investor Risk Profile - KNAPS Private Limited</title>
 </head>
 <body style="margin: 0; padding: 0; background-color: #f4f7fb; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased;">
   <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f4f7fb; padding: 30px 10px;">
@@ -265,10 +220,9 @@ def generate_risk_email_html(name, profile, score, max_score, metrics):
                 <tr>
                   <td align="center">
                     <div style="display: inline-block; background-color: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 999px; padding: 5px 16px; margin-bottom: 12px;">
-                      <span style="color: #ffffff; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;">KNAPS FINANCIAL SERVICES</span>
+                      <span style="color: #ffffff; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;">KNAPS Private Limited</span>
                     </div>
                     <h1 style="color: #ffffff; font-size: 24px; font-weight: 800; margin: 0 0 6px 0; letter-spacing: -0.5px;">Investor Risk Profile Report</h1>
-                    <p style="color: #bfdbfe; font-size: 13px; margin: 0;">Comprehensive diagnostic assessment prepared for {clean_name}</p>
                   </td>
                 </tr>
               </table>
@@ -286,14 +240,14 @@ def generate_risk_email_html(name, profile, score, max_score, metrics):
               </p>
 
               <!-- Profile Result Card -->
-              <div style="background-color: #f8fafc; border: 2px solid {band["badge_border"]}; border-radius: 16px; padding: 24px; margin-bottom: 26px;">
+              <div style="background-color: {band.get("card_bg", "#f8fafc")}; border: 2px solid {band.get("card_border", band["badge_border"])}; border-radius: 16px; padding: 24px; margin-bottom: 26px;">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                   <tr>
                     <td>
                       <span style="display: inline-block; background-color: {band["badge_bg"]}; color: {band["badge_color"]}; border: 1px solid {band["badge_border"]}; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; padding: 4px 12px; border-radius: 999px; margin-bottom: 8px;">
                         YOUR INDICATIVE PROFILE
                       </span>
-                      <h2 style="font-size: 26px; font-weight: 900; color: #0a192f; margin: 6px 0 10px 0; letter-spacing: -0.5px;">
+                      <h2 style="font-size: 26px; font-weight: 900; color: {band.get("profile_color", band["badge_color"])}; margin: 6px 0 10px 0; letter-spacing: -0.5px;">
                         {profile}
                       </h2>
                       <p style="font-size: 13px; color: #334155; line-height: 1.6; margin: 0 0 16px 0;">
@@ -304,7 +258,7 @@ def generate_risk_email_html(name, profile, score, max_score, metrics):
                       <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 14px;">
                         <tr>
                           <td style="font-size: 12px; color: #64748b; font-weight: 600;">Assessment Score</td>
-                          <td style="font-size: 13px; color: #032e92; font-weight: 800; text-align: right;">{score} / {max_score} points ({pct_score}%)</td>
+                          <td style="font-size: 13px; color: {band.get("profile_color", band["badge_color"])}; font-weight: 800; text-align: right;">{score} / {max_score} points ({pct_score}%)</td>
                         </tr>
                       </table>
                     </td>
@@ -312,47 +266,7 @@ def generate_risk_email_html(name, profile, score, max_score, metrics):
                 </table>
               </div>
 
-              <!-- Diagnostic Metrics Grid -->
-              <h3 style="font-size: 15px; font-weight: 800; color: #0a192f; margin: 0 0 14px 0; text-transform: uppercase; letter-spacing: 0.5px;">
-                Key Profile Diagnostics
-              </h3>
 
-              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 26px;">
-                <tr>
-                  <td width="48%" style="vertical-align: top; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 16px;">
-                    <div style="font-size: 11px; color: #64748b; font-weight: 700; text-transform: uppercase; margin-bottom: 4px;">Risk Comfort</div>
-                    <div style="font-size: 14px; color: #0a192f; font-weight: 800;">{risk_comfort}</div>
-                  </td>
-                  <td width="4%"></td>
-                  <td width="48%" style="vertical-align: top; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 16px;">
-                    <div style="font-size: 11px; color: #64748b; font-weight: 700; text-transform: uppercase; margin-bottom: 4px;">Financial Flexibility</div>
-                    <div style="font-size: 14px; color: #0a192f; font-weight: 800;">{flexibility}</div>
-                  </td>
-                </tr>
-                <tr><td colspan="3" height="10"></td></tr>
-                <tr>
-                  <td width="48%" style="vertical-align: top; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 16px;">
-                    <div style="font-size: 11px; color: #64748b; font-weight: 700; text-transform: uppercase; margin-bottom: 4px;">Investment Horizon</div>
-                    <div style="font-size: 14px; color: #0a192f; font-weight: 800;">{horizon}</div>
-                  </td>
-                  <td width="4%"></td>
-                  <td width="48%" style="vertical-align: top; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 16px;">
-                    <div style="font-size: 11px; color: #64748b; font-weight: 700; text-transform: uppercase; margin-bottom: 4px;">Experience Level</div>
-                    <div style="font-size: 14px; color: #0a192f; font-weight: 800;">{experience}</div>
-                  </td>
-                </tr>
-              </table>
-
-              <!-- Suggested Asset Allocation -->
-              <h3 style="font-size: 15px; font-weight: 800; color: #0a192f; margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 0.5px;">
-                Indicative Strategic Asset Allocation
-              </h3>
-
-              <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px 20px; margin-bottom: 26px;">
-                <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                  {alloc_bars}
-                </table>
-              </div>
 
               <!-- Recommended Instruments & Strategies -->
               <h3 style="font-size: 15px; font-weight: 800; color: #0a192f; margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 0.5px;">
@@ -363,13 +277,7 @@ def generate_risk_email_html(name, profile, score, max_score, metrics):
                 {product_cards}
               </div>
 
-              <!-- Advisor Guidance Box -->
-              <div style="background-color: #eff6ff; border-left: 4px solid #032e92; border-radius: 8px; padding: 14px 18px; margin-bottom: 28px;">
-                <div style="font-size: 13px; font-weight: 800; color: #032e92; margin-bottom: 4px;">Advisory Note</div>
-                <div style="font-size: 12px; color: #1e3a8a; line-height: 1.6;">
-                  {band["advice"]}
-                </div>
-              </div>
+
 
               <!-- CTA Buttons Section -->
               <div style="background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%); border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; text-align: center; margin-bottom: 24px;">
@@ -398,7 +306,7 @@ def generate_risk_email_html(name, profile, score, max_score, metrics):
           <tr>
             <td style="background-color: #0a192f; padding: 24px 30px; text-align: center;">
               <p style="color: #94a3b8; font-size: 12px; margin: 0 0 10px 0;">
-                <strong>KNAPS Financial Services</strong> &bull; Wealth Management &bull; Specialized Investment Funds &bull; Mutual Funds
+                <strong>KNAPS Private Limited</strong> &bull; Wealth Management &bull; Specialized Investment Funds &bull; Mutual Funds
               </p>
               <p style="color: #64748b; font-size: 11px; line-height: 1.6; margin: 0 0 12px 0;">
                 Need assistance? Call us at <strong>+91 99902 43143</strong> or email <a href="mailto:contact@knaps.com" style="color: #60a5fa; text-decoration: none;">contact@knaps.com</a>
@@ -609,7 +517,7 @@ def submit_risk_profile():
 		email_sent = False
 		try:
 			html_body = generate_risk_email_html(full_name, profile, score, max_score, metrics)
-			email_subject = f"Your Investor Risk Profile: {profile} | KNAPS Financial Services"
+			email_subject = f"Your Investor Risk Profile: {profile} | KNAPS Private Limited"
 			send_brevo_smtp_email(email, email_subject, html_body)
 			email_sent = True
 		except Exception as mail_err:
