@@ -1,4 +1,5 @@
 import math
+
 import frappe
 from frappe.rate_limiter import rate_limit
 
@@ -30,7 +31,7 @@ def calculate_read_time(content_or_desc: str) -> str:
 
 
 @frappe.whitelist(allow_guest=True)
-def get_blog_posts(category: str = None, limit: int = 20, offset: int = 0):
+def get_blog_posts(category: str | None = None, limit: int = 20, offset: int = 0):
 	"""
 	Returns published blog posts ordered by publish_date DESC.
 	Optionally filters by category.
@@ -72,7 +73,16 @@ def get_blog_posts(category: str = None, limit: int = 20, offset: int = 0):
 			authors = frappe.get_all(
 				"Blog Author",
 				filters={"name": ["in", author_ids]},
-				fields=["name", "author_name", "slug", "profile_image", "designation", "biography", "linkedin", "email"],
+				fields=[
+					"name",
+					"author_name",
+					"slug",
+					"profile_image",
+					"designation",
+					"biography",
+					"linkedin",
+					"email",
+				],
 			)
 			for a in authors:
 				authors_by_id[str(a.name)] = a
@@ -82,21 +92,23 @@ def get_blog_posts(category: str = None, limit: int = 20, offset: int = 0):
 			author_info = authors_by_id.get(str(p.author)) if p.author else None
 			read_time = calculate_read_time(p.content or p.short_description)
 
-			formatted_posts.append({
-				"id": p.name,
-				"title": p.blog_title,
-				"slug": p.slug,
-				"category": p.category,
-				"date": frappe.utils.format_date(p.publish_date, "dd MMM yyyy") if p.publish_date else "",
-				"publish_date": str(p.publish_date) if p.publish_date else "",
-				"image": p.featured_image or "",
-				"description": p.short_description or "",
-				"author": author_info.author_name if author_info else "KNAPS Research",
-				"author_slug": author_info.slug if author_info else "",
-				"author_role": author_info.designation if author_info else "Financial Advisor",
-				"author_image": author_info.profile_image if author_info else "",
-				"read_time": read_time,
-			})
+			formatted_posts.append(
+				{
+					"id": p.name,
+					"title": p.blog_title,
+					"slug": p.slug,
+					"category": p.category,
+					"date": frappe.utils.format_date(p.publish_date, "dd MMM yyyy") if p.publish_date else "",
+					"publish_date": str(p.publish_date) if p.publish_date else "",
+					"image": p.featured_image or "",
+					"description": p.short_description or "",
+					"author": author_info.author_name if author_info else "KNAPS Research",
+					"author_slug": author_info.slug if author_info else "",
+					"author_role": author_info.designation if author_info else "Financial Advisor",
+					"author_image": author_info.profile_image if author_info else "",
+					"read_time": read_time,
+				}
+			)
 
 		return {
 			"status": "success",
@@ -155,20 +167,32 @@ def get_blog_details(slug_or_id: str):
 			related_posts = frappe.get_all(
 				"Blog Post",
 				filters={"published": 1, "name": ["!=", post.name]},
-				fields=["name", "blog_title", "slug", "category", "publish_date", "featured_image", "short_description"],
+				fields=[
+					"name",
+					"blog_title",
+					"slug",
+					"category",
+					"publish_date",
+					"featured_image",
+					"short_description",
+				],
 				order_by="publish_date desc",
 				limit_page_length=3,
 			)
 			for rp in related_posts:
-				related.append({
-					"id": rp.name,
-					"title": rp.blog_title,
-					"slug": rp.slug,
-					"category": rp.category,
-					"date": frappe.utils.format_date(rp.publish_date, "dd MMM yyyy") if rp.publish_date else "",
-					"image": rp.featured_image or "",
-					"description": rp.short_description or "",
-				})
+				related.append(
+					{
+						"id": rp.name,
+						"title": rp.blog_title,
+						"slug": rp.slug,
+						"category": rp.category,
+						"date": frappe.utils.format_date(rp.publish_date, "dd MMM yyyy")
+						if rp.publish_date
+						else "",
+						"image": rp.featured_image or "",
+						"description": rp.short_description or "",
+					}
+				)
 		except Exception:
 			related = []
 
@@ -179,7 +203,9 @@ def get_blog_details(slug_or_id: str):
 				"title": post.blog_title,
 				"slug": post.slug,
 				"category": post.category,
-				"date": frappe.utils.format_date(post.publish_date, "dd MMM yyyy") if post.publish_date else "",
+				"date": frappe.utils.format_date(post.publish_date, "dd MMM yyyy")
+				if post.publish_date
+				else "",
 				"publish_date": str(post.publish_date) if post.publish_date else "",
 				"image": post.featured_image or "",
 				"description": post.short_description or "",
@@ -250,21 +276,23 @@ def get_author_details(slug_or_id: str):
 		formatted_posts = []
 		for p in posts:
 			read_time = calculate_read_time(p.content or p.short_description)
-			formatted_posts.append({
-				"id": p.name,
-				"title": p.blog_title,
-				"slug": p.slug,
-				"category": p.category,
-				"date": frappe.utils.format_date(p.publish_date, "dd MMM yyyy") if p.publish_date else "",
-				"publish_date": str(p.publish_date) if p.publish_date else "",
-				"image": p.featured_image or "",
-				"description": p.short_description or "",
-				"author": author.author_name,
-				"author_slug": author.slug,
-				"author_role": author.designation or "",
-				"author_image": author.profile_image or "",
-				"read_time": read_time,
-			})
+			formatted_posts.append(
+				{
+					"id": p.name,
+					"title": p.blog_title,
+					"slug": p.slug,
+					"category": p.category,
+					"date": frappe.utils.format_date(p.publish_date, "dd MMM yyyy") if p.publish_date else "",
+					"publish_date": str(p.publish_date) if p.publish_date else "",
+					"image": p.featured_image or "",
+					"description": p.short_description or "",
+					"author": author.author_name,
+					"author_slug": author.slug,
+					"author_role": author.designation or "",
+					"author_image": author.profile_image or "",
+					"read_time": read_time,
+				}
+			)
 
 		return {
 			"status": "success",
