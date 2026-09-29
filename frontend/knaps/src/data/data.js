@@ -265,12 +265,7 @@ export const comparisonData = {
 		},
 		{
 			feature: "Unhedged Short Exposure",
-			values: [
-				"Up to 25%",
-				"Not Permitted",
-				"Yes, subject to applicant rules",
-				"yes, mainly cat III",
-			],
+			values: ["Up to 25%", "Not Permitted", "Yes, subject to applicant rules", "yes, mainly cat III"],
 		},
 		{
 			feature: "Portfolio Customisation",

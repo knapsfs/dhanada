@@ -14,7 +14,8 @@ from email.mime.text import MIMEText
 from email.utils import formataddr
 
 import frappe
-from frappe.rate_limiter import rate_limit
+
+from dhanada.utils.rate_limiter import rate_limit
 
 
 def get_brevo_config():

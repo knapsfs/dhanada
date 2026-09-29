@@ -2,7 +2,8 @@ import json
 
 import frappe
 from frappe.query_builder import DocType
-from frappe.rate_limiter import rate_limit
+
+from dhanada.utils.rate_limiter import rate_limit
 
 from .helpers import get_default_plan, mask_invalid_returns
 from .scheme_details import get_historical_nav_for_sif

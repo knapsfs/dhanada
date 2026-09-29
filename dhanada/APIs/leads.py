@@ -1,7 +1,8 @@
 import json
 
 import frappe
-from frappe.rate_limiter import rate_limit
+
+from dhanada.utils.rate_limiter import rate_limit
 
 
 # Chatbot se aayi lead ko save karta hai.

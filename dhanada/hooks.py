@@ -74,6 +74,8 @@ website_route_rules = [
 	{"from_route": "/calculators", "to_route": "knaps"},
 	{"from_route": "/calculators/<path:app_path>", "to_route": "knaps"},
 	{"from_route": "/contact", "to_route": "knaps"},
+	{"from_route": "/author", "to_route": "knaps"},
+	{"from_route": "/author/<path:app_path>", "to_route": "knaps"},
 	{"from_route": "/sif", "to_route": "knaps"},
 	{"from_route": "/sif/<path:app_path>", "to_route": "knaps"},
 	{"from_route": "/funds", "to_route": "knaps"},
@@ -179,15 +181,15 @@ get_desktop_icons = "dhanada.config.desktop.get_data"
 # ---------------
 
 scheduler_events = {
-	"cron": {
-		"0 12 * * *": [
-			"dhanada.scheduler.sync_nav_data.sync_nav_data",
-			"dhanada.scheduler.sync_nav_performance.sync_nav_performance",
-		],
-		"0 12 * * 0": [
-			"dhanada.scheduler.sync_scheme_details.sync_scheme_details",
-		],
-	},
+    "cron": {
+        "0 12 * * *": [
+            "dhanada.scheduler.sync_nav_data.sync_nav_data",
+            "dhanada.scheduler.sync_nav_performance.sync_nav_performance",
+        ],
+        "0 12 * * 0": [
+            "dhanada.scheduler.sync_scheme_details.sync_scheme_details",
+        ],
+    },
 }
 
 # Testing

@@ -7,23 +7,51 @@ import BlogsHero from "../components/blogs/BlogsHero";
 import BlogsGrid from "../components/blogs/BlogsGrid";
 import Pagination from "../components/blogs/Pagination";
 import CTA from "../components/CTA";
-import { blogsData } from "../data/blogsData";
+import { fetchBlogPosts } from "../api/blogs";
 
 const BLOGS_PER_PAGE = 9;
 
 export default function Blogs() {
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [currentPage]);
 
-  const totalPages = Math.ceil(blogsData.length / BLOGS_PER_PAGE);
+  useEffect(() => {
+    let isMounted = true;
+    async function loadBlogs() {
+      setLoading(true);
+      try {
+        const data = await fetchBlogPosts();
+        if (isMounted) {
+          if (data && data.posts && data.posts.length > 0) {
+            setBlogs(data.posts);
+          } else {
+            setBlogs([]);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load blogs:", err);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    }
+
+    loadBlogs();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const totalPages = Math.ceil(blogs.length / BLOGS_PER_PAGE);
 
   const displayedBlogs = useMemo(() => {
     const startIndex = (currentPage - 1) * BLOGS_PER_PAGE;
-    return blogsData.slice(startIndex, startIndex + BLOGS_PER_PAGE);
-  }, [currentPage]);
+    return blogs.slice(startIndex, startIndex + BLOGS_PER_PAGE);
+  }, [blogs, currentPage]);
 
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
@@ -36,11 +64,23 @@ export default function Blogs() {
       <Navbar />
 
       <main>
-        {/* Breadcrumb Hero matching website design layout */}
+        {/* Breadcrumb Hero */}
         <BlogsHero />
 
-        {/* Blogs Grid (Shows up to 9 blogs per page) */}
-        <BlogsGrid blogs={displayedBlogs} />
+        {/* Blogs Grid */}
+        {loading ? (
+          <div className="py-24 flex flex-col items-center justify-center">
+            <div className="w-12 h-12 border-4 border-[#032e92] border-t-transparent rounded-full animate-spin mb-4"></div>
+            <p className="text-gray-500 text-sm font-medium">Loading published articles...</p>
+          </div>
+        ) : blogs.length === 0 ? (
+          <div className="py-20 text-center max-w-lg mx-auto bg-white rounded-3xl p-8 border border-gray-100 shadow-sm my-10">
+            <p className="text-gray-700 font-semibold mb-2">No blogs available</p>
+            <p className="text-gray-400 text-sm">Please check back soon for our latest articles.</p>
+          </div>
+        ) : (
+          <BlogsGrid blogs={displayedBlogs} />
+        )}
 
         {/* Dynamic Pagination - Only shown when totalPages > 1 */}
         {totalPages > 1 && (

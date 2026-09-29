@@ -7,8 +7,9 @@ import json
 import uuid
 
 import frappe
-from frappe.rate_limiter import rate_limit
 from frappe.utils import get_url, now_datetime
+
+from dhanada.utils.rate_limiter import rate_limit
 
 
 # Database se Chatbot Conversation document laata hai.

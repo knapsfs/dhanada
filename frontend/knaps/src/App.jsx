@@ -1,13 +1,11 @@
 import MysteryBoxWidget from './components/MysteryBox/MysteryBoxWidget';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import AboutUs from './pages/AboutUs';
 import Services from './pages/Services';
 import Blogs from './pages/Blogs';
 import BlogDetails from './pages/BlogDetails';
-import SifVsMutualFunds from './pages/sif-vs-mutual-funds';
-import HowToChooseMutualFundScheme from './pages/how-to-choose-a-mutual-fund-scheme-in-india-2026';
-import SevenCommonMistakesMutualFunds from './pages/7-common-mistakes-beginners-make-while-investing-in-mutual-funds';
+import AuthorPage from './pages/AuthorPage';
 import ContactUs from './pages/ContactUs';
 
 // SIF Pages
@@ -49,14 +47,21 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/services" element={<Services />} />
+            
+            {/* Unified Dynamic Blog Routes - any slug is dynamically loaded from Frappe */}
             <Route path="/blogs" element={<Blogs />} />
-            <Route path="/blogs/how-to-choose-a-mutual-fund-scheme-in-india-2026" element={<HowToChooseMutualFundScheme />} />
-            <Route path="/blogs/7-common-mistakes-beginners-make-while-investing-in-mutual-funds" element={<SevenCommonMistakesMutualFunds />} />
-            <Route path="/7-common-mistakes-beginners-make-while-investing-in-mutual-funds" element={<SevenCommonMistakesMutualFunds />} />
-            <Route path="/how-to-choose-a-mutual-fund-scheme-in-india-2026" element={<HowToChooseMutualFundScheme />} />
-            <Route path="/blogs/sif-vs-mutual-funds" element={<SifVsMutualFunds />} />
-            <Route path="/sif-vs-mutual-funds" element={<SifVsMutualFunds />} />
             <Route path="/blogs/:id" element={<BlogDetails />} />
+            
+            {/* Fallback redirects for URLs visited without the /blogs/ prefix */}
+            <Route path="/sif-vs-mutual-funds" element={<Navigate to="/blogs/what-is-the-difference-between-sif-and-mutual-funds" replace />} />
+            <Route path="/how-to-choose-a-mutual-fund-scheme-in-india-2026" element={<Navigate to="/blogs/how-to-choose-a-mutual-fund-scheme-in-india-2026" replace />} />
+            <Route path="/7-common-mistakes-beginners-make-while-investing-in-mutual-funds" element={<Navigate to="/blogs/7-common-mistakes-beginners-make-while-investing-in-mutual-funds" replace />} />
+
+            {/* Author Routes */}
+            <Route path="/author" element={<AuthorPage />} />
+            <Route path="/author/:slug" element={<AuthorPage />} />
+            <Route path="/blogs/author/:slug" element={<AuthorPage />} />
+
             <Route path="/contact" element={<ContactUs />} />
 
             {/* SIF Routes */}
