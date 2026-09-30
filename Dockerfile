@@ -30,6 +30,11 @@ RUN git clone https://github.com/frappe/crm.git /home/frappe/frappe-bench/apps/c
     cd /home/frappe/frappe-bench/apps/crm && yarn install --check-files && \
     python3 -c "from pathlib import Path; p=Path('/home/frappe/frappe-bench/sites/apps.txt'); names=p.read_text().splitlines(); names=[n for n in names if n]; names.append('crm') if 'crm' not in names else None; p.write_text('\n'.join(names) + '\n')"
 
+RUN git clone https://github.com/frappe/blog.git /home/frappe/frappe-bench/apps/blog && \
+    git -C /home/frappe/frappe-bench/apps/blog checkout ed1ed4019c7f167c41b80f8ea92da60680c2112d && \
+    /home/frappe/frappe-bench/env/bin/pip install -e /home/frappe/frappe-bench/apps/blog && \
+    python3 -c "from pathlib import Path; p=Path('/home/frappe/frappe-bench/sites/apps.txt'); names=p.read_text().splitlines(); names=[n for n in names if n]; names.append('blog') if 'blog' not in names else None; p.write_text('\n'.join(names) + '\n')"
+
 # Copy backend application code
 COPY --chown=frappe:frappe . /home/frappe/frappe-bench/apps/dhanada
 
