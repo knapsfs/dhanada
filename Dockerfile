@@ -24,9 +24,11 @@ RUN apt-get update \
 
 USER frappe
 
-RUN bench get-app --branch develop https://github.com/frappe/crm.git && \
-    git -C /home/frappe/frappe-bench/apps/crm fetch --depth=50 upstream develop && \
-    git -C /home/frappe/frappe-bench/apps/crm reset --hard cb46d9bf3a98aac794c40f849bf47321c1488e88
+RUN git clone https://github.com/frappe/crm.git /home/frappe/frappe-bench/apps/crm && \
+    git -C /home/frappe/frappe-bench/apps/crm checkout cb46d9bf3a98aac794c40f849bf47321c1488e88 && \
+    /home/frappe/frappe-bench/env/bin/pip install -e /home/frappe/frappe-bench/apps/crm && \
+    cd /home/frappe/frappe-bench/apps/crm && yarn install --check-files && \
+    python3 -c "from pathlib import Path; p=Path('/home/frappe/frappe-bench/sites/apps.txt'); names=p.read_text().splitlines(); names=[n for n in names if n]; names.append('crm') if 'crm' not in names else None; p.write_text('\n'.join(names) + '\n')"
 
 # Copy backend application code
 COPY --chown=frappe:frappe . /home/frappe/frappe-bench/apps/dhanada
