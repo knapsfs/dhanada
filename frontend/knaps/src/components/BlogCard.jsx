@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight, faCalendarAlt, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight, faCalendarAlt, faUser, faClock } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 
 const itemVariants = {
@@ -9,20 +9,29 @@ const itemVariants = {
 };
 
 export default function BlogCard({ blog }) {
-  const targetUrl = `/blogs/${blog.slug || blog.id}`;
-  const authorSlug = blog.author_slug || blog.authorSlug || 'nitin';
+  if (!blog) return null;
+
+  // Use the canonical Frappe route e.g. /blog/mutual-funds/what’s-the-difference-between-sif-and-mutual-funds
+  const targetUrl = blog.targetUrl || (blog.route ? `/${blog.route.replace(/^\//, '')}` : `/blogs/${blog.name || blog.id}`);
+  const authorSlug = blog.author_slug || blog.authorSlug || blog.blogger || 'Shivangi';
+  const authorName = blog.author || blog.blogger || 'KNAPS Research';
+  const categoryName = blog.category || 'Mutual Funds';
+  const displayImage = blog.image || 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?q=80&w=1600&auto=format&fit=crop';
 
   return (
     <motion.div variants={itemVariants} className="h-full">
       <div className="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-2xl hover:shadow-[#032e92]/10 transition-all duration-300 group h-full flex flex-col">
         <Link to={targetUrl} className="relative h-60 overflow-hidden block">
           <img 
-            src={blog.image || 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?q=80&w=1600&auto=format&fit=crop'} 
-            alt={blog.title} 
+            src={displayImage} 
+            alt={blog.title || 'Blog post image'} 
             className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700"
+            onError={(e) => {
+              e.currentTarget.src = 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?q=80&w=1600&auto=format&fit=crop';
+            }}
           />
           <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold text-[#c10000] uppercase tracking-wider shadow-sm">
-            {blog.category || 'Insights'}
+            {categoryName}
           </div>
         </Link>
         
@@ -32,14 +41,20 @@ export default function BlogCard({ blog }) {
               <FontAwesomeIcon icon={faCalendarAlt} className="text-[#032e92]" />
               {blog.date}
             </span>
+            {blog.read_time && (
+              <span className="flex items-center gap-1.5">
+                <FontAwesomeIcon icon={faClock} className="text-[#032e92]" />
+                {blog.read_time}
+              </span>
+            )}
             <Link
-              to={`/author/${authorSlug}`}
+              to={`/author/${encodeURIComponent(authorSlug)}`}
               className="flex items-center gap-1.5 hover:text-[#032e92] transition-colors"
-              title={`View ${blog.author}'s profile`}
+              title={`View ${authorName}'s profile`}
             >
               <FontAwesomeIcon icon={faUser} className="text-[#032e92]" />
               <span className="underline decoration-dotted decoration-gray-300 underline-offset-2 hover:decoration-[#032e92]">
-                {blog.author}
+                {authorName}
               </span>
             </Link>
           </div>

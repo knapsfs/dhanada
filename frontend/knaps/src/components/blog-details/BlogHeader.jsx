@@ -31,9 +31,9 @@ export default function BlogHeader({ blog }) {
 
   const shareUrl = encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '');
   const shareTitle = encodeURIComponent(blog?.title || 'Check out this article on KNAPS');
-  const authorSlug = blog?.author_slug || blog?.authorSlug || 'nitin';
+  const authorSlug = blog?.author_slug || blog?.authorSlug || 'Shivangi';
   const authorName = blog?.author || 'KNAPS Research';
-  const authorRole = blog?.author_role || blog?.authorRole || 'AMFI-Registered Financial Advisor';
+  const authorRole = blog?.author_role || blog?.authorRole || 'Financial Content Writer';
   const authorImg = blog?.author_image || blog?.authorImage || 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=200&auto=format&fit=crop';
 
   return (
@@ -53,7 +53,12 @@ export default function BlogHeader({ blog }) {
           {blog?.category && (
             <>
               <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-300" />
-              <span className="text-gray-400">{blog.category}</span>
+              <Link
+                to={`/blogs/${encodeURIComponent(blog.category_slug || blog.category)}`}
+                className="text-gray-500 hover:text-[#032e92] transition-colors"
+              >
+                {blog.category}
+              </Link>
             </>
           )}
           {blog?.title && (
@@ -76,11 +81,11 @@ export default function BlogHeader({ blog }) {
           {/* Category Pill */}
           <div className="inline-flex items-center gap-2 bg-[#eef5ff] text-[#032e92] font-bold text-xs px-4 py-1.5 rounded-full uppercase tracking-wider mb-6 border border-blue-100 shadow-sm">
             <span className="w-1.5 h-1.5 rounded-full bg-[#032e92]"></span>
-            <span>{blog?.category || 'Investment Insights'}</span>
+            <span>{blog?.category || 'Mutual Funds'}</span>
           </div>
 
           {/* Main Title */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0a192f] tracking-tight leading-[1.25] mb-6 max-w-4xl mx-auto">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0a192f] tracking-tight leading-[1.25] mb-6 max-w-5xl mx-auto">
             {blog?.title}
           </h1>
 
@@ -98,10 +103,10 @@ export default function BlogHeader({ blog }) {
           </div>
 
           {/* Author & Share Card */}
-          <div className="bg-white/90 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-gray-100 shadow-sm max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 mb-10">
+          <div className="bg-white/90 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-gray-100 shadow-sm max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 mb-10">
             {/* Author */}
             <Link
-              to={`/author/${authorSlug}`}
+              to={`/author/${encodeURIComponent(authorSlug)}`}
               className="flex items-center gap-3.5 group text-left hover:opacity-95 transition-opacity"
               title={`View ${authorName}'s profile`}
             >
@@ -110,6 +115,9 @@ export default function BlogHeader({ blog }) {
                   src={authorImg}
                   alt={authorName}
                   className="w-12 h-12 rounded-full object-cover shadow-sm ring-2 ring-blue-100 group-hover:ring-[#032e92] transition-all"
+                  onError={(e) => {
+                    e.currentTarget.src = 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=200&auto=format&fit=crop';
+                  }}
                 />
                 <span className="absolute -bottom-1 -right-1 bg-emerald-500 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px] border-2 border-white">
                   <FontAwesomeIcon icon={faCheck} />
@@ -159,13 +167,13 @@ export default function BlogHeader({ blog }) {
                 <FontAwesomeIcon icon={faXTwitter} />
               </a>
               <button
+                type="button"
                 onClick={handleCopyLink}
                 title="Copy Link"
-                className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all shadow-sm ${
-                  copied
+                className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all shadow-sm cursor-pointer ${copied
                     ? 'bg-emerald-500 text-white'
                     : 'bg-gray-50 text-gray-600 hover:bg-[#032e92] hover:text-white'
-                }`}
+                  }`}
               >
                 <FontAwesomeIcon icon={copied ? faCheck : faLink} />
               </button>
@@ -185,6 +193,9 @@ export default function BlogHeader({ blog }) {
               src={blog.image}
               alt={blog.title || 'Blog Banner'}
               className="w-full h-full object-cover"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
             />
           </motion.div>
         )}

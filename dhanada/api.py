@@ -3,12 +3,6 @@ Public Whitelisted API Entrypoint for Dhanada App.
 Re-exports modularized APIs from dhanada.APIs for complete backward compatibility.
 """
 
-# Dynamic Blogs & Authors APIs
-from dhanada.APIs.blogs import (
-	get_author_details,
-	get_blog_details,
-	get_blog_posts,
-)
 
 # Chatbot ke user question ka response generate karta hai.
 # Chatbot configuration return karta hai.
@@ -61,9 +55,6 @@ __all__ = [
 	"chatbot_response",
 	"create_chatbot_lead",
 	"create_website_lead",
-	"get_author_details",
-	"get_blog_details",
-	"get_blog_posts",
 	"get_chatbot_config",
 	"get_comparison_data",
 	"get_default_plan",
