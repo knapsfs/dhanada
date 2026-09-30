@@ -13,8 +13,6 @@ const navLinks = [
     href: '/sif',
   },
   { label: 'Mutual Fund', href: '/funds' },
-  // { label: 'PMS', href: '/#pms' },
-  // { label: 'AIF', href: '/#aif' },
   {
     label: 'Services',
     href: '/services',
@@ -52,6 +50,8 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
+  const [mobileLoginOpen, setMobileLoginOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -60,102 +60,92 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Close mobile dropdowns when mobile menu closes or location changes
+  useEffect(() => {
+    if (!mobileOpen) {
+      setOpenMobileDropdown(null);
+      setMobileLoginOpen(false);
+    }
+  }, [mobileOpen]);
+
+  useEffect(() => {
+    setMobileOpen(false);
+    setOpenMobileDropdown(null);
+    setMobileLoginOpen(false);
+  }, [location.pathname]);
+
+  const toggleMobileDropdown = (label) => {
+    setOpenMobileDropdown((prev) => (prev === label ? null : label));
+  };
+
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-lg shadow-blue-900/5' : 'bg-white shadow-lg shadow-blue-900/5'
-        }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled ? 'bg-white shadow-lg shadow-blue-900/5' : 'bg-white shadow-lg shadow-blue-900/5'
+      }`}
     >
-      {/* Top Banner */}
-      {/* <div className="bg-[#000080] py-1.5 w-full overflow-hidden flex">
-        <div className="flex whitespace-nowrap animate-marquee">
-          <span className="text-white text-xs font-semibold uppercase tracking-wider flex items-center gap-2 mx-6">
-            <FontAwesomeIcon icon={faChartLine} className="text-[#a3e635]" />
-            Smart Investing, Confident Living - AMFI Registered Mutual Fund Distributor
-          </span>
-          <span className="text-white text-xs font-semibold uppercase tracking-wider flex items-center gap-2 mx-6">
-            <FontAwesomeIcon icon={faChartLine} className="text-[#a3e635]" />
-            Grow Your Wealth with Expert Guidance
-          </span>
-          <span className="text-white text-xs font-semibold uppercase tracking-wider flex items-center gap-2 mx-6">
-            <FontAwesomeIcon icon={faChartLine} className="text-[#a3e635]" />
-            Over 500+ Cr AUM Managed
-          </span>
-        </div>
-        <div className="flex whitespace-nowrap animate-marquee2" aria-hidden="true">
-          <span className="text-white text-xs font-semibold uppercase tracking-wider flex items-center gap-2 mx-6">
-            <FontAwesomeIcon icon={faChartLine} className="text-[#a3e635]" />
-            Smart Investing, Confident Living - AMFI Registered Mutual Fund Distributor
-          </span>
-          <span className="text-white text-xs font-semibold uppercase tracking-wider flex items-center gap-2 mx-6">
-            <FontAwesomeIcon icon={faChartLine} className="text-[#a3e635]" />
-            Grow Your Wealth with Expert Guidance
-          </span>
-          <span className="text-white text-xs font-semibold uppercase tracking-wider flex items-center gap-2 mx-6">
-            <FontAwesomeIcon icon={faChartLine} className="text-[#a3e635]" />
-            Over 500+ Cr AUM Managed
-          </span>
-        </div>
-      </div> */}
-
-      <nav className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+      <nav className="max-w-7xl mx-auto px-6 lg:px-8 py-3.5 sm:py-4">
+        <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group">
-            <img
-              src={logo}
-              alt="KNAPS Private Limited"
-              className="h-10 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-            />
+            <div className="relative">
+              <img
+                src={logo}
+                alt="KNAPS Logo"
+                className="h-9 sm:h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              />
+            </div>
           </Link>
 
-          {/* Desktop Navigation Links */}
-          <ul className="hidden xl:flex items-center gap-1">
+          {/* Desktop Nav Links */}
+          <ul className="hidden xl:flex items-center gap-1 2xl:gap-2">
             {navLinks.map((link) => (
               <li
                 key={link.label}
                 className="relative"
                 onMouseEnter={() => link.dropdown && setActiveDropdown(link.label)}
-                onMouseLeave={() => setActiveDropdown(null)}
+                onMouseLeave={() => link.dropdown && setActiveDropdown(null)}
               >
                 {link.href.startsWith('http') ? (
                   <a
                     href={link.href}
-                    className={`relative flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-[14px] 2xl:text-[15px] font-medium transition-all duration-300 group ${activeDropdown === link.label
-                      ? 'text-[#032e92] bg-[#eef5ff]'
-                      : 'text-gray-700 hover:text-[#032e92] hover:bg-[#eef5ff]/60'
-                      }`}
+                    className="relative flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-[14px] 2xl:text-[15px] font-medium text-gray-700 hover:text-[#032e92] hover:bg-[#eef5ff]/60 transition-all duration-300 group"
                   >
                     {link.label}
                     {link.dropdown && (
                       <FontAwesomeIcon
                         icon={faChevronDown}
-                        className={`text-[10px] transition-transform duration-300 ${activeDropdown === link.label ? 'rotate-180 text-[#032e92]' : ''
-                          }`}
+                        className={`text-[10px] transition-transform duration-300 ${
+                          activeDropdown === link.label ? 'rotate-180 text-[#032e92]' : ''
+                        }`}
                       />
                     )}
                   </a>
                 ) : (
                   <Link
                     to={link.href}
-                    className={`relative flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-[14px] 2xl:text-[15px] font-medium transition-all duration-300 group ${activeDropdown === link.label || location.pathname === link.href
-                      ? 'text-[#032e92] bg-[#eef5ff]'
-                      : 'text-gray-700 hover:text-[#032e92] hover:bg-[#eef5ff]/60'
-                      }`}
+                    className={`relative flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-[14px] 2xl:text-[15px] font-medium transition-all duration-300 group ${
+                      activeDropdown === link.label || location.pathname === link.href
+                        ? 'text-[#032e92] bg-[#eef5ff]'
+                        : 'text-gray-700 hover:text-[#032e92] hover:bg-[#eef5ff]/60'
+                    }`}
                   >
                     {link.label}
                     {link.dropdown && (
                       <FontAwesomeIcon
                         icon={faChevronDown}
-                        className={`text-[10px] transition-transform duration-300 ${activeDropdown === link.label ? 'rotate-180 text-[#032e92]' : ''
-                          }`}
+                        className={`text-[10px] transition-transform duration-300 ${
+                          activeDropdown === link.label ? 'rotate-180 text-[#032e92]' : ''
+                        }`}
                       />
                     )}
                     {/* Animated underline */}
                     <span
-                      className={`absolute bottom-1 left-3.5 right-3.5 h-0.5 bg-[#c10000] transform origin-left scale-x-0 transition-transform duration-300 ease-out ${activeDropdown === link.label || location.pathname === link.href
-                        ? 'scale-x-100'
-                        : 'group-hover:scale-x-100'
-                        }`}
+                      className={`absolute bottom-1 left-3.5 right-3.5 h-0.5 bg-[#c10000] transform origin-left scale-x-0 transition-transform duration-300 ease-out ${
+                        activeDropdown === link.label || location.pathname === link.href
+                          ? 'scale-x-100'
+                          : 'group-hover:scale-x-100'
+                      }`}
                     ></span>
                   </Link>
                 )}
@@ -205,7 +195,7 @@ export default function Navbar() {
             onMouseLeave={() => setActiveDropdown(null)}
           >
             <button
-              className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center gap-2"
+              className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center gap-2 cursor-pointer"
             >
               Login
               <FontAwesomeIcon icon={faChevronDown} className={`text-[10px] transition-transform duration-300 ${activeDropdown === 'LoginBtn' ? 'rotate-180' : ''}`} />
@@ -229,10 +219,12 @@ export default function Navbar() {
 
           {/* Mobile Toggle */}
           <button
+            type="button"
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="xl:hidden w-11 h-11 flex items-center justify-center rounded-xl bg-[#eef5ff] text-[#032e92] z-50 transition-transform hover:scale-105"
+            className="xl:hidden w-11 h-11 flex items-center justify-center rounded-xl bg-[#eef5ff] text-[#032e92] relative z-50 transition-transform hover:scale-105 active:scale-95 cursor-pointer pointer-events-auto select-none shrink-0"
+            aria-label="Toggle navigation menu"
           >
-            <FontAwesomeIcon icon={mobileOpen ? faXmark : faBars} className="text-lg" />
+            <FontAwesomeIcon icon={mobileOpen ? faXmark : faBars} className="text-lg pointer-events-none" />
           </button>
         </div>
 
@@ -246,42 +238,75 @@ export default function Navbar() {
               transition={{ duration: 0.3, ease: "easeInOut" }}
               className="xl:hidden bg-white rounded-3xl mt-4 shadow-2xl border border-gray-100 overflow-hidden absolute left-4 right-4"
             >
-              <div className="p-5 space-y-2 max-h-[80vh] overflow-y-auto">
+              <div className="p-4 sm:p-5 space-y-1 max-h-[75vh] overflow-y-auto">
                 {navLinks.map((link) => (
                   <div key={link.label}>
                     {link.dropdown ? (
-                      <div className="space-y-1">
-                        <div className="px-4 py-3 text-sm font-bold text-gray-400 uppercase tracking-wider">
-                          {link.label}
-                        </div>
-                        {link.dropdown.map((item) => (
-                          item.href.startsWith('http') ? (
-                            <a
-                              key={item.label}
-                              href={item.href}
-                              onClick={() => setMobileOpen(false)}
-                              className="block px-4 py-2.5 ml-4 rounded-xl text-[15px] font-medium text-gray-700 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors"
+                      <div>
+                        {/* Collapsible Dropdown Header Button */}
+                        <button
+                          type="button"
+                          onClick={() => toggleMobileDropdown(link.label)}
+                          className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-[15px] font-semibold transition-all cursor-pointer ${
+                            openMobileDropdown === link.label
+                              ? 'bg-[#eef5ff] text-[#032e92]'
+                              : 'text-gray-800 hover:bg-gray-50'
+                          }`}
+                        >
+                          <span>{link.label}</span>
+                          <FontAwesomeIcon
+                            icon={faChevronDown}
+                            className={`text-xs transition-transform duration-300 ${
+                              openMobileDropdown === link.label ? 'rotate-180 text-[#032e92]' : 'text-gray-400'
+                            }`}
+                          />
+                        </button>
+
+                        {/* Collapsible Dropdown Items */}
+                        <AnimatePresence>
+                          {openMobileDropdown === link.label && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.25, ease: "easeInOut" }}
+                              className="overflow-hidden bg-[#f8fbff] rounded-2xl my-1 p-2 border border-blue-50/80 space-y-0.5"
                             >
-                              {item.label}
-                            </a>
-                          ) : (
-                            <Link
-                              key={item.label}
-                              to={item.href}
-                              onClick={() => setMobileOpen(false)}
-                              className="block px-4 py-2.5 ml-4 rounded-xl text-[15px] font-medium text-gray-700 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors"
-                            >
-                              {item.label}
-                            </Link>
-                          )
-                        ))}
+                              {link.dropdown.map((item) => (
+                                item.href.startsWith('http') ? (
+                                  <a
+                                    key={item.label}
+                                    href={item.href}
+                                    onClick={() => setMobileOpen(false)}
+                                    className="block px-3.5 py-2 text-[14px] font-medium text-gray-600 hover:bg-white hover:text-[#032e92] hover:shadow-xs rounded-xl transition-all"
+                                  >
+                                    {item.label}
+                                  </a>
+                                ) : (
+                                  <Link
+                                    key={item.label}
+                                    to={item.href}
+                                    onClick={() => setMobileOpen(false)}
+                                    className={`block px-3.5 py-2 text-[14px] font-medium rounded-xl transition-all ${
+                                      location.pathname === item.href
+                                        ? 'bg-white text-[#032e92] font-semibold shadow-xs'
+                                        : 'text-gray-600 hover:bg-white hover:text-[#032e92]'
+                                    }`}
+                                  >
+                                    {item.label}
+                                  </Link>
+                                )
+                              ))}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
                       </div>
                     ) : (
                       link.href.startsWith('http') ? (
                         <a
                           href={link.href}
                           onClick={() => setMobileOpen(false)}
-                          className="block px-4 py-3 rounded-xl text-[15px] font-medium text-gray-800 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors"
+                          className="block px-4 py-3 rounded-2xl text-[15px] font-semibold text-gray-800 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors"
                         >
                           {link.label}
                         </a>
@@ -289,7 +314,11 @@ export default function Navbar() {
                         <Link
                           to={link.href}
                           onClick={() => setMobileOpen(false)}
-                          className="block px-4 py-3 rounded-xl text-[15px] font-medium text-gray-800 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors"
+                          className={`block px-4 py-3 rounded-2xl text-[15px] font-semibold transition-colors ${
+                            location.pathname === link.href
+                              ? 'text-[#032e92] bg-[#eef5ff]'
+                              : 'text-gray-800 hover:bg-[#eef5ff] hover:text-[#032e92]'
+                          }`}
                         >
                           {link.label}
                         </Link>
@@ -297,31 +326,56 @@ export default function Navbar() {
                     )}
                   </div>
                 ))}
-                <div className="pt-5 mt-2 border-t border-gray-100 flex flex-col gap-2">
-                  <div className="px-4 py-2 text-sm font-bold text-gray-400 uppercase tracking-wider">
-                    Access Portal
-                  </div>
-                  <Link
-                    to="/#login-investor"
-                    onClick={() => setMobileOpen(false)}
-                    className="block px-4 py-2.5 ml-4 rounded-xl text-[15px] font-medium text-gray-700 hover:bg-[#eef5ff] hover:text-[#032e92]"
+
+                {/* Mobile Login Button with Collapsible Portal Options */}
+                <div className="pt-3 mt-2 border-t border-gray-100">
+                  <button
+                    type="button"
+                    onClick={() => setMobileLoginOpen(!mobileLoginOpen)}
+                    className="w-full py-3.5 px-5 rounded-2xl text-[15px] font-bold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-lg shadow-[#032e92]/20 flex items-center justify-between transition-all cursor-pointer hover:shadow-xl"
                   >
-                    Investor Login
-                  </Link>
-                  <Link
-                    to="/#login-admin"
-                    onClick={() => setMobileOpen(false)}
-                    className="block px-4 py-2.5 ml-4 rounded-xl text-[15px] font-medium text-gray-700 hover:bg-[#eef5ff] hover:text-[#032e92]"
-                  >
-                    Admin Login
-                  </Link>
-                  <Link
-                    to="/#login-employee"
-                    onClick={() => setMobileOpen(false)}
-                    className="block px-4 py-2.5 ml-4 rounded-xl text-[15px] font-medium text-gray-700 hover:bg-[#eef5ff] hover:text-[#032e92]"
-                  >
-                    Employee Login
-                  </Link>
+                    <span>Login</span>
+                    <FontAwesomeIcon
+                      icon={faChevronDown}
+                      className={`text-xs transition-transform duration-300 ${
+                        mobileLoginOpen ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
+
+                  <AnimatePresence>
+                    {mobileLoginOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="overflow-hidden bg-[#f8fbff] rounded-2xl mt-2 p-2 border border-blue-100/80 space-y-1"
+                      >
+                        <Link
+                          to="/#login-investor"
+                          onClick={() => setMobileOpen(false)}
+                          className="block px-4 py-2.5 rounded-xl text-[14px] font-semibold text-gray-700 hover:bg-white hover:text-[#032e92] hover:shadow-xs transition-all"
+                        >
+                          Investor Login
+                        </Link>
+                        <Link
+                          to="/#login-admin"
+                          onClick={() => setMobileOpen(false)}
+                          className="block px-4 py-2.5 rounded-xl text-[14px] font-semibold text-gray-700 hover:bg-white hover:text-[#032e92] hover:shadow-xs transition-all"
+                        >
+                          Admin Login
+                        </Link>
+                        <Link
+                          to="/#login-employee"
+                          onClick={() => setMobileOpen(false)}
+                          className="block px-4 py-2.5 rounded-xl text-[14px] font-semibold text-gray-700 hover:bg-white hover:text-[#032e92] hover:shadow-xs transition-all"
+                        >
+                          Employee Login
+                        </Link>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </div>
             </motion.div>
