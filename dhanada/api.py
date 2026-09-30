@@ -3,7 +3,6 @@ Public Whitelisted API Entrypoint for Dhanada App.
 Re-exports modularized APIs from dhanada.APIs for complete backward compatibility.
 """
 
-
 # Chatbot ke user question ka response generate karta hai.
 # Chatbot configuration return karta hai.
 from dhanada.APIs.chatbot import chatbot_response, get_chatbot_config
