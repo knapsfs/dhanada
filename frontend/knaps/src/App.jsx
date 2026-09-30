@@ -48,14 +48,20 @@ function App() {
             <Route path="/about" element={<AboutUs />} />
             <Route path="/services" element={<Services />} />
             
-            {/* Unified Dynamic Blog Routes - any slug is dynamically loaded from Frappe */}
-            <Route path="/blogs" element={<Blogs />} />
+            {/* Official Frappe Blog Post Routes (e.g. /blog/mutual-funds/what’s-the-difference-between-sif-and-mutual-funds) */}
+            <Route path="/blog/:category/:slug" element={<BlogDetails />} />
+            <Route path="/blogs/:category/:slug" element={<BlogDetails />} />
             <Route path="/blogs/:id" element={<BlogDetails />} />
+            <Route path="/blog/:id" element={<BlogDetails />} />
+
+            {/* Official Frappe Blog Listing & Category Filtering Routes */}
+            <Route path="/blogs" element={<Blogs />} />
+            <Route path="/blog" element={<Blogs />} />
+            <Route path="/blog/:category" element={<Blogs />} />
+            <Route path="/blogs/category/:category" element={<Blogs />} />
             
-            {/* Fallback redirects for URLs visited without the /blogs/ prefix */}
-            <Route path="/sif-vs-mutual-funds" element={<Navigate to="/blogs/what-is-the-difference-between-sif-and-mutual-funds" replace />} />
-            <Route path="/how-to-choose-a-mutual-fund-scheme-in-india-2026" element={<Navigate to="/blogs/how-to-choose-a-mutual-fund-scheme-in-india-2026" replace />} />
-            <Route path="/7-common-mistakes-beginners-make-while-investing-in-mutual-funds" element={<Navigate to="/blogs/7-common-mistakes-beginners-make-while-investing-in-mutual-funds" replace />} />
+            {/* Fallback redirects for legacy URLs to official Frappe route */}
+            <Route path="/sif-vs-mutual-funds" element={<Navigate to="/blog/mutual-funds/what’s-the-difference-between-sif-and-mutual-funds" replace />} />
 
             {/* Author Routes */}
             <Route path="/author" element={<AuthorPage />} />

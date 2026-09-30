@@ -201,43 +201,6 @@ export const faqs = [
 	},
 ];
 
-// Blog Data
-export const blogs = [
-	{
-		id: 1,
-		category: "Investment Strategy",
-		date: "July 15, 2026",
-		title: "SIP vs Lump Sum: Which Investment Strategy Wins in a Volatile Market?",
-		description:
-			"Discover how systematic investment plans can outperform lump sum investments during market volatility through rupee cost averaging.",
-		image: null,
-		readTime: "5 min read",
-		author: "Ananya Mehta",
-	},
-	{
-		id: 2,
-		category: "Market Insights",
-		date: "July 10, 2026",
-		title: "India's Mid Cap Rally: Is Now the Right Time to Invest?",
-		description:
-			"An in-depth analysis of India's mid cap sector performance and why analysts are bullish on continued growth through 2027.",
-		image: null,
-		readTime: "7 min read",
-		author: "Rohit Kapoor",
-	},
-	{
-		id: 3,
-		category: "Financial Planning",
-		date: "July 5, 2026",
-		title: "Building a Retirement Corpus with Mutual Funds: A Complete Guide",
-		description:
-			"Step-by-step guide to creating a robust retirement plan using a mix of equity, hybrid, and debt mutual funds for long-term wealth.",
-		image: null,
-		readTime: "10 min read",
-		author: "Deepika Nair",
-	},
-];
-
 // Stats Data
 export const stats = [
 	{ value: 100, suffix: " Cr+", label: "Assets Managed", prefix: "₹" },

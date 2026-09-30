@@ -15,7 +15,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import CTA from "../components/CTA";
 import BlogCard from "../components/BlogCard";
-import { fetchAuthorDetails } from "../api/blogs";
+import { getAuthorProfile } from "../services/blogService";
 
 export default function AuthorPage() {
   const { slug } = useParams();
@@ -32,7 +32,7 @@ export default function AuthorPage() {
       setLoading(true);
       setError(null);
       try {
-        const data = await fetchAuthorDetails(slug || "nitin");
+        const data = await getAuthorProfile(slug || "Shivangi");
         if (!isMounted) return;
 
         if (data.author) {
