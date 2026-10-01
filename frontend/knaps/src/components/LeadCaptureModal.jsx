@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faCircleCheck, faCircleExclamation, faSpinner, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { getCsrfToken } from '../utils/csrf';
+import { productOptions, findProductOption } from '../data/productOptions';
 
 const COUNTRIES = [
   { code: '+91', name: 'India', flag: '🇮🇳', iso: 'IN', placeholder: '98765 43210', minDigits: 10, maxDigits: 10 },
@@ -29,29 +30,35 @@ const COUNTRIES = [
 
 const DEFAULT_COUNTRY = COUNTRIES[0]; // +91 India by default
 
-export default function LeadCaptureModal({ isOpen, onClose }) {
+export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }) {
+  const [selectedProduct, setSelectedProduct] = useState('');
+  const [productOpen, setProductOpen] = useState(false);
   const [formData, setFormData] = useState({ full_name: '', email: '', phone: '' });
   const [selectedCountry, setSelectedCountry] = useState(DEFAULT_COUNTRY);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const dropdownRef = useRef(null);
+  const productDropdownRef = useRef(null);
 
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState('idle'); // idle, submitting, success, error
   const [errorMessage, setErrorMessage] = useState('');
 
-  // Close dropdown on click outside
+  // Close dropdowns on click outside
   useEffect(() => {
     function handleClickOutside(e) {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setIsDropdownOpen(false);
+      }
+      if (productDropdownRef.current && !productDropdownRef.current.contains(e.target)) {
+        setProductOpen(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Reset form when opened
+  // Reset or pre-fill form when opened
   useEffect(() => {
     if (isOpen) {
       setStatus('idle');
@@ -60,9 +67,23 @@ export default function LeadCaptureModal({ isOpen, onClose }) {
       setFormData({ full_name: '', email: '', phone: '' });
       setSelectedCountry(DEFAULT_COUNTRY);
       setIsDropdownOpen(false);
+      setProductOpen(false);
       setSearchQuery('');
+
+      if (defaultSource) {
+        const matched = findProductOption(
+          typeof defaultSource === 'string'
+            ? defaultSource
+            : defaultSource?.defaultProduct || defaultSource?.defaultService || defaultSource?.title || ''
+        );
+        setSelectedProduct(matched ? matched.value : '');
+      } else {
+        setSelectedProduct('');
+      }
     }
-  }, [isOpen]);
+  }, [isOpen, defaultSource]);
+
+  const selectedProductObj = productOptions.find((p) => p.value === selectedProduct);
 
   const filteredCountries = COUNTRIES.filter(
     (c) =>
@@ -72,6 +93,9 @@ export default function LeadCaptureModal({ isOpen, onClose }) {
 
   const validateField = (name, value, country = selectedCountry) => {
     switch (name) {
+      case 'product':
+        if (!value) return 'Please select a product';
+        return '';
       case 'full_name': {
         const trimmed = value.trim();
         if (!trimmed) return 'Please enter your full name';
@@ -109,6 +133,7 @@ export default function LeadCaptureModal({ isOpen, onClose }) {
 
   const validateForm = () => {
     const newErrors = {
+      product: validateField('product', selectedProduct),
       full_name: validateField('full_name', formData.full_name),
       email: validateField('email', formData.email),
       phone: validateField('phone', formData.phone),
@@ -185,6 +210,7 @@ export default function LeadCaptureModal({ isOpen, onClose }) {
           full_name: formData.full_name.trim(),
           email: formData.email.trim(),
           phone: formattedPhone,
+          product: selectedProductObj?.label || selectedProduct || 'Website Modal',
           csrf_token: csrfToken || undefined,
         })
       });
@@ -279,6 +305,92 @@ export default function LeadCaptureModal({ isOpen, onClose }) {
                     </div>
                   )}
 
+                  {/* Standardized Product Field */}
+                  <div className="relative" ref={productDropdownRef}>
+                    <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                      Product <span className="text-red-500">*</span>
+                    </label>
+
+                    <div
+                      onClick={() => setProductOpen(!productOpen)}
+                      role="button"
+                      tabIndex={0}
+                      aria-haspopup="listbox"
+                      aria-expanded={productOpen}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          setProductOpen(!productOpen);
+                        } else if (e.key === 'Escape') {
+                          setProductOpen(false);
+                        }
+                      }}
+                      className={`w-full px-4 py-3 rounded-xl border text-sm flex items-center justify-between cursor-pointer transition-all select-none ${
+                        errors.product
+                          ? 'border-red-400 bg-red-50/20'
+                          : productOpen
+                            ? 'border-[#032e92] ring-2 ring-blue-900/10 bg-white'
+                            : 'border-gray-200 bg-white hover:border-gray-300'
+                      }`}
+                    >
+                      <span className={selectedProduct ? 'text-gray-800 font-medium' : 'text-gray-400 font-normal'}>
+                        {selectedProductObj ? selectedProductObj.label : 'Select a product'}
+                      </span>
+
+                      <FontAwesomeIcon
+                        icon={faChevronDown}
+                        className={`text-gray-400 text-xs transition-transform duration-200 ${
+                          productOpen ? 'rotate-180 text-[#032e92]' : ''
+                        }`}
+                      />
+                    </div>
+
+                    {errors.product && (
+                      <p className="text-red-500 text-xs mt-1 font-medium">{errors.product}</p>
+                    )}
+
+                    {/* Styled Floating Dropdown Menu */}
+                    <AnimatePresence>
+                      {productOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -4 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -4 }}
+                          transition={{ duration: 0.15 }}
+                          className="absolute left-0 right-0 top-full mt-1.5 bg-white rounded-xl shadow-xl shadow-blue-950/10 border border-gray-100 p-1.5 z-50 overflow-hidden"
+                        >
+                          {productOptions.map((option) => {
+                            const isSelected = selectedProduct === option.value;
+                            return (
+                              <div
+                                key={option.value}
+                                onClick={() => {
+                                  setSelectedProduct(option.value);
+                                  setProductOpen(false);
+                                  if (errors.product) {
+                                    setErrors((prev) => ({ ...prev, product: '' }));
+                                  }
+                                }}
+                                className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg cursor-pointer text-sm transition-colors ${
+                                  isSelected
+                                    ? 'bg-[#eef4ff] text-[#032e92] font-semibold'
+                                    : 'text-gray-700 hover:bg-gray-50 hover:text-[#032e92]'
+                                }`}
+                              >
+                                <span>{option.label}</span>
+                                {isSelected && (
+                                  <svg className="w-4 h-4 text-[#032e92]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
+                                  </svg>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
                   <div>
                     <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
                       Full Name <span className="text-red-500">*</span>
@@ -333,10 +445,10 @@ export default function LeadCaptureModal({ isOpen, onClose }) {
 
                     <div
                       className={`relative flex items-stretch rounded-xl border transition-all bg-white shadow-sm ${errors.phone
-                          ? 'border-red-400 ring-2 ring-red-500/10'
-                          : isDropdownOpen
-                            ? 'border-[#032e92] ring-2 ring-blue-900/10'
-                            : 'border-gray-200 focus-within:border-[#032e92] focus-within:ring-2 focus-within:ring-blue-900/10'
+                        ? 'border-red-400 ring-2 ring-red-500/10'
+                        : isDropdownOpen
+                          ? 'border-[#032e92] ring-2 ring-blue-900/10'
+                          : 'border-gray-200 focus-within:border-[#032e92] focus-within:ring-2 focus-within:ring-blue-900/10'
                         } ${status === 'submitting' ? 'bg-gray-50 opacity-80' : ''}`}
                     >
                       {/* Country Code Dropdown */}
@@ -423,8 +535,8 @@ export default function LeadCaptureModal({ isOpen, onClose }) {
                                       setSearchQuery('');
                                     }}
                                     className={`w-full flex items-center justify-between px-3.5 py-2.5 text-left text-xs transition-colors hover:bg-blue-50/80 cursor-pointer ${isSelected
-                                        ? 'bg-blue-50/70 font-semibold text-[#032e92]'
-                                        : 'text-gray-700'
+                                      ? 'bg-blue-50/70 font-semibold text-[#032e92]'
+                                      : 'text-gray-700'
                                       }`}
                                   >
                                     <div className="flex items-center gap-2.5 truncate pr-2">

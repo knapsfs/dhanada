@@ -1,8 +1,13 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { getCsrfToken } from '../../utils/csrf';
+import { productOptions } from '../../data/productOptions';
 
 export default function LeadCapture({ result, answers = [], onSubmitSuccess, isModal = false }) {
+  const [selectedProduct, setSelectedProduct] = useState('');
+  const [productOpen, setProductOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -13,9 +18,28 @@ export default function LeadCapture({ result, answers = [], onSubmitSuccess, isM
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [apiError, setApiError] = useState(null);
+  const dropdownRef = useRef(null);
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setProductOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const selectedProductObj = productOptions.find((p) => p.value === selectedProduct);
 
   const validate = () => {
     const newErrors = {};
+
+    if (!selectedProduct) {
+      newErrors.product = 'Please select a product';
+    }
+
     if (!formData.name.trim()) {
       newErrors.name = 'Please enter your full name.';
     }
@@ -55,6 +79,7 @@ export default function LeadCapture({ result, answers = [], onSubmitSuccess, isM
       }
 
       const payload = {
+        product: selectedProductObj?.label || selectedProduct || 'Risk Profiler',
         full_name: formData.name.trim(),
         name: formData.name.trim(),
         email: formData.email.trim(),
@@ -78,6 +103,7 @@ export default function LeadCapture({ result, answers = [], onSubmitSuccess, isM
       if (response.ok && (data?.message?.success || data?.success)) {
         if (onSubmitSuccess) {
           onSubmitSuccess({
+            product: selectedProductObj?.label || selectedProduct,
             name: formData.name.trim(),
             email: formData.email.trim(),
             phone: formData.phone.trim(),
@@ -126,8 +152,6 @@ export default function LeadCapture({ result, answers = [], onSubmitSuccess, isM
             <span>Risk profile is ready</span>
           </div>
         </div>
-
-
       </div>
 
       <div className={`md:w-7/12 ${isModal ? 'p-5 sm:p-6' : 'p-8 md:p-12'}`}>
@@ -137,13 +161,99 @@ export default function LeadCapture({ result, answers = [], onSubmitSuccess, isM
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className={isModal ? 'space-y-3' : 'space-y-5'}>
+        <form onSubmit={handleSubmit} className={isModal ? 'space-y-3' : 'space-y-4'}>
+          {/* Product Dropdown Field */}
+          <div className="relative" ref={dropdownRef}>
+            <label className="block text-xs font-bold text-gray-700 mb-1">Product *</label>
+            <div
+              onClick={() => !isSubmitting && setProductOpen(!productOpen)}
+              role="button"
+              tabIndex={0}
+              aria-haspopup="listbox"
+              aria-expanded={productOpen}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setProductOpen(!productOpen);
+                } else if (e.key === 'Escape') {
+                  setProductOpen(false);
+                }
+              }}
+              className={`w-full rounded-xl border flex items-center justify-between cursor-pointer transition-all ${
+                isModal ? 'px-3.5 py-2.5 text-xs sm:text-sm' : 'px-5 py-3.5 text-sm'
+              } ${
+                errors.product
+                  ? 'border-red-400 bg-red-50/30'
+                  : productOpen
+                    ? 'border-[#032e92] ring-2 ring-blue-50 bg-white'
+                    : 'border-gray-200 bg-gray-50 hover:border-gray-300'
+              }`}
+            >
+              <span className={selectedProduct ? 'text-gray-800 font-medium' : 'text-gray-400 font-normal'}>
+                {selectedProductObj ? selectedProductObj.label : 'Select a product'}
+              </span>
+
+              <FontAwesomeIcon
+                icon={faChevronDown}
+                className={`text-gray-400 text-xs transition-transform duration-200 ${
+                  productOpen ? 'rotate-180 text-[#032e92]' : ''
+                }`}
+              />
+            </div>
+
+            {errors.product && <p className="text-red-500 text-xs mt-1">{errors.product}</p>}
+
+            {/* Floating Options Menu */}
+            <AnimatePresence>
+              {productOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute left-0 right-0 top-full mt-1 bg-white rounded-xl shadow-xl shadow-blue-950/10 border border-gray-100 p-1.5 z-50 overflow-hidden"
+                >
+                  {productOptions.map((option) => {
+                    const isSelected = selectedProduct === option.value;
+                    return (
+                      <div
+                        key={option.value}
+                        onClick={() => {
+                          setSelectedProduct(option.value);
+                          setProductOpen(false);
+                          if (errors.product) {
+                            setErrors((prev) => ({ ...prev, product: '' }));
+                          }
+                        }}
+                        className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg cursor-pointer text-xs sm:text-sm transition-colors ${
+                          isSelected
+                            ? 'bg-[#eef4ff] text-[#032e92] font-semibold'
+                            : 'text-gray-700 hover:bg-gray-50 hover:text-[#032e92]'
+                        }`}
+                      >
+                        <span>{option.label}</span>
+                        {isSelected && (
+                          <svg className="w-4 h-4 text-[#032e92]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
+                          </svg>
+                        )}
+                      </div>
+                    );
+                  })}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
           <div>
             <label className="block text-xs font-bold text-gray-700 mb-1">Full Name *</label>
             <input
               type="text"
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={(e) => {
+                setFormData({ ...formData, name: e.target.value });
+                if (errors.name) setErrors((prev) => ({ ...prev, name: '' }));
+              }}
               className={`w-full rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-[#032e92] focus:ring-2 focus:ring-blue-50 outline-none transition-all ${isModal ? 'px-3.5 py-2.5 text-xs sm:text-sm' : 'px-5 py-3.5'}`}
               placeholder="Enter your full name"
               disabled={isSubmitting}
@@ -156,7 +266,10 @@ export default function LeadCapture({ result, answers = [], onSubmitSuccess, isM
             <input
               type="email"
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onChange={(e) => {
+                setFormData({ ...formData, email: e.target.value });
+                if (errors.email) setErrors((prev) => ({ ...prev, email: '' }));
+              }}
               className={`w-full rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-[#032e92] focus:ring-2 focus:ring-blue-50 outline-none transition-all ${isModal ? 'px-3.5 py-2.5 text-xs sm:text-sm' : 'px-5 py-3.5'}`}
               placeholder="Enter your email address"
               disabled={isSubmitting}
@@ -171,7 +284,11 @@ export default function LeadCapture({ result, answers = [], onSubmitSuccess, isM
               <input
                 type="tel"
                 value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                onChange={(e) => {
+                  const val = e.target.value.replace(/\D/g, '').slice(0, 10);
+                  setFormData({ ...formData, phone: val });
+                  if (errors.phone) setErrors((prev) => ({ ...prev, phone: '' }));
+                }}
                 className={`w-full pl-11 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-[#032e92] focus:ring-2 focus:ring-blue-50 outline-none transition-all ${isModal ? 'pr-3.5 py-2.5 text-xs sm:text-sm' : 'pr-5 py-3.5'}`}
                 placeholder="10-digit mobile number"
                 maxLength={10}
@@ -187,7 +304,10 @@ export default function LeadCapture({ result, answers = [], onSubmitSuccess, isM
                 <input
                   type="checkbox"
                   checked={formData.consent}
-                  onChange={(e) => setFormData({ ...formData, consent: e.target.checked })}
+                  onChange={(e) => {
+                    setFormData({ ...formData, consent: e.target.checked });
+                    if (errors.consent) setErrors((prev) => ({ ...prev, consent: '' }));
+                  }}
                   className="w-4 h-4 border-2 border-gray-300 rounded appearance-none checked:bg-[#032e92] checked:border-[#032e92] transition-colors"
                   disabled={isSubmitting}
                 />

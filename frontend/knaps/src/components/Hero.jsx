@@ -4,14 +4,7 @@ import knapsBanner from '../assets/knaps-banner.png';
 import knapsBannerGlassCards from '../assets/knaps-banner-glass-cards.png';
 import { getCsrfToken } from '../utils/csrf';
 
-const productOptions = [
-  { value: 'mutual-funds', label: 'Mutual Funds (Lumpsum / SIP)' },
-  { value: 'sif', label: 'Specialized Investment Fund (SIF)' },
-  { value: 'pms', label: 'Portfolio Management Services (PMS)' },
-  { value: 'aif', label: 'Alternative Investment Funds (AIF)' },
-  { value: 'nps', label: 'National Pension System (NPS)' },
-  { value: 'others', label: 'Others' },
-];
+import { productOptions } from '../data/productOptions';
 
 export default function Hero() {
   const [productOpen, setProductOpen] = useState(false);

@@ -1,10 +1,11 @@
 app_name = "dhanada"
-app_title = "Dhanada"
+app_title = "SIF"
 app_publisher = "KNAPS Private Limited"
 app_description = "Investment Platform for KNAPS "
 app_email = "piyush.sawhney@knaps.in"
 app_license = "mit"
 
+app_home = "/desk/sif"
 
 add_to_apps_screen = [
 	{
@@ -292,6 +293,7 @@ fixtures = [
 	"Workflow State",
 	{"dt": "Custom Field", "filters": [["dt", "=", "CRM Lead"]]},
 	{"dt": "CRM Form Script", "filters": [["name", "=", "CRM Lead UI Fix"]]},
+	{"dt": "CRM Fields Layout", "filters": [["dt", "=", "CRM Lead"]]},
 	{
 		"dt": "SIF Investment Strategy Subcategory",
 		"filters": [

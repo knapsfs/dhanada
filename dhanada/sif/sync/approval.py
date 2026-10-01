@@ -205,6 +205,7 @@ def process_approval(approval_doc):
 			_write_field_to_scheme(scheme_doc, item.field_name, raw_value)
 
 	scheme_doc.flags.ignore_version = True
+	scheme_doc.flags.from_approval = True
 	scheme_doc.save(ignore_permissions=True)
 
 	return approval_doc
@@ -226,6 +227,7 @@ def revert_approval(approval_doc):
 			_write_field_to_scheme(scheme_doc, item.field_name, raw_value)
 
 	scheme_doc.flags.ignore_version = True
+	scheme_doc.flags.from_approval = True
 	scheme_doc.save(ignore_permissions=True)
 
 	return approval_doc

@@ -32,7 +32,7 @@ export function LeadModalProvider({ children }) {
   return (
     <LeadModalContext.Provider value={{ isOpen, openLeadModal, closeLeadModal, leadSource }}>
       {children}
-      <LeadCaptureModal isOpen={isOpen} onClose={closeLeadModal} />
+      <LeadCaptureModal isOpen={isOpen} onClose={closeLeadModal} defaultSource={leadSource} />
     </LeadModalContext.Provider>
   );
 }

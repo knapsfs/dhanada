@@ -47,20 +47,49 @@ def compare_scheme(existing_doc, incoming_scheme: Scheme) -> list:
 			for a in existing_doc.get("allocations", []):
 				old_allocs.append(
 					{
-						"allocation_type": normalize_str(a.allocation_type),
-						"minimum_allocation_percentage": normalize_float(a.minimum_allocation_percentage),
-						"maximum_allocation_percentage": normalize_float(a.maximum_allocation_percentage),
+						"allocation_type": normalize_str(
+							a.get("allocation_type")
+							if hasattr(a, "get")
+							else getattr(a, "allocation_type", None)
+						),
+						"minimum_allocation_percentage": normalize_float(
+							a.get("minimum_allocation_percentage")
+							if hasattr(a, "get")
+							else getattr(a, "minimum_allocation_percentage", None)
+						),
+						"maximum_allocation_percentage": normalize_float(
+							a.get("maximum_allocation_percentage")
+							if hasattr(a, "get")
+							else getattr(a, "maximum_allocation_percentage", None)
+						),
 					}
 				)
 			old_allocs.sort(key=lambda x: x["allocation_type"])
 
 			new_allocs = []
-			for a in incoming_scheme.allocations:
+			incoming_allocs = (
+				incoming_scheme.get("allocations", [])
+				if hasattr(incoming_scheme, "get")
+				else getattr(incoming_scheme, "allocations", [])
+			)
+			for a in incoming_allocs:
 				new_allocs.append(
 					{
-						"allocation_type": normalize_str(a.allocation_type),
-						"minimum_allocation_percentage": normalize_float(a.minimum_allocation_percentage),
-						"maximum_allocation_percentage": normalize_float(a.maximum_allocation_percentage),
+						"allocation_type": normalize_str(
+							a.get("allocation_type")
+							if hasattr(a, "get")
+							else getattr(a, "allocation_type", None)
+						),
+						"minimum_allocation_percentage": normalize_float(
+							a.get("minimum_allocation_percentage")
+							if hasattr(a, "get")
+							else getattr(a, "minimum_allocation_percentage", None)
+						),
+						"maximum_allocation_percentage": normalize_float(
+							a.get("maximum_allocation_percentage")
+							if hasattr(a, "get")
+							else getattr(a, "maximum_allocation_percentage", None)
+						),
 					}
 				)
 			new_allocs.sort(key=lambda x: x["allocation_type"])
@@ -81,41 +110,90 @@ def compare_scheme(existing_doc, incoming_scheme: Scheme) -> list:
 			for m in existing_doc.get("managers", []):
 				old_mgrs.append(
 					{
-						"manager_name": normalize_str(m.manager_name),
-						"from_date": str(normalize_date(m.get("from")))
-						if normalize_date(m.get("from"))
+						"manager_name": normalize_str(
+							m.get("manager_name") if hasattr(m, "get") else getattr(m, "manager_name", None)
+						),
+						"from_date": str(
+							normalize_date(
+								m.get("from") or m.get("from_date")
+								if hasattr(m, "get")
+								else (getattr(m, "from_date", None) or getattr(m, "from", None))
+							)
+						)
+						if (
+							m.get("from") or m.get("from_date")
+							if hasattr(m, "get")
+							else (getattr(m, "from_date", None) or getattr(m, "from", None))
+						)
 						else "",
-						"to_date": str(normalize_date(m.get("to"))) if normalize_date(m.get("to")) else "",
-						"is_active": normalize_bool(m.is_active),
+						"to_date": str(
+							normalize_date(
+								m.get("to") or m.get("to_date")
+								if hasattr(m, "get")
+								else (getattr(m, "to_date", None) or getattr(m, "to", None))
+							)
+						)
+						if (
+							m.get("to") or m.get("to_date")
+							if hasattr(m, "get")
+							else (getattr(m, "to_date", None) or getattr(m, "to", None))
+						)
+						else "",
+						"is_active": normalize_bool(
+							m.get("is_active") if hasattr(m, "get") else getattr(m, "is_active", None)
+						),
 					}
 				)
 			old_mgrs.sort(key=lambda x: x["manager_name"])
 
 			new_mgrs = []
-			for m in incoming_scheme.managers:
-				# Resolve manager_name identical to how importer maps it
+			incoming_mgrs = (
+				incoming_scheme.get("managers", [])
+				if hasattr(incoming_scheme, "get")
+				else getattr(incoming_scheme, "managers", [])
+			)
+			for m in incoming_mgrs:
+				raw_m_name = m.get("manager_name") if hasattr(m, "get") else getattr(m, "manager_name", None)
+				raw_from = (
+					m.get("from") or m.get("from_date")
+					if hasattr(m, "get")
+					else (getattr(m, "from_date", None) or getattr(m, "from", None))
+				)
+				raw_to = (
+					m.get("to") or m.get("to_date")
+					if hasattr(m, "get")
+					else (getattr(m, "to_date", None) or getattr(m, "to", None))
+				)
+				raw_active = m.get("is_active") if hasattr(m, "get") else getattr(m, "is_active", None)
+
 				fm_doc = None
 				import re
 
-				norm = re.sub(r"[^a-z0-9]", "", str(m.manager_name).lower())
+				norm = re.sub(r"[^a-z0-9]", "", str(raw_m_name).lower())
 				if norm:
-					managers_in_db = frappe.db.get_all(
-						"SIF Fund Manager", fields=["name", "manager_name"], order_by="creation asc"
-					)
-					for db_m in managers_in_db:
-						if re.sub(r"[^a-z0-9]", "", str(db_m.manager_name).lower()) == norm:
-							fm_doc = db_m.name
-							break
+					if frappe.db.exists("SIF Fund Manager", raw_m_name):
+						fm_doc = raw_m_name
+					else:
+						managers_in_db = frappe.db.get_all(
+							"SIF Fund Manager", fields=["name", "manager_name"], order_by="creation asc"
+						)
+						for db_m in managers_in_db:
+							if (
+								re.sub(r"[^a-z0-9]", "", str(db_m.manager_name).lower()) == norm
+								or re.sub(r"[^a-z0-9]", "", str(db_m.name).lower()) == norm
+							):
+								fm_doc = db_m.name
+								break
+						if not fm_doc:
+							fm_doc = raw_m_name
 
 				if fm_doc:
 					new_mgrs.append(
 						{
 							"manager_name": normalize_str(fm_doc),
-							"from_date": str(normalize_date(m.from_date))
-							if normalize_date(m.from_date)
-							else "",
-							"to_date": str(normalize_date(m.to_date)) if normalize_date(m.to_date) else "",
-							"is_active": normalize_bool(m.is_active),
+							"from_date": str(normalize_date(raw_from)) if normalize_date(raw_from) else "",
+							"to_date": str(normalize_date(raw_to)) if normalize_date(raw_to) else "",
+							"is_active": normalize_bool(raw_active),
 						}
 					)
 			new_mgrs.sort(key=lambda x: x["manager_name"])
@@ -164,17 +242,37 @@ def compare_scheme(existing_doc, incoming_scheme: Scheme) -> list:
 
 		else:
 			old_raw = existing_doc.get(field)
-			new_raw = getattr(incoming_scheme, field, None)
+			new_raw = (
+				incoming_scheme.get(field)
+				if hasattr(incoming_scheme, "get")
+				else getattr(incoming_scheme, field, None)
+			)
 
 			if field == "amc":
 				old_val = normalize_str(old_raw)
-				new_val = normalize_str(
-					getattr(incoming_scheme, "amc", None)
-					or getattr(incoming_scheme, "amc_registration_number", None)
-					or getattr(incoming_scheme, "sif_name", None)
+				incoming_amc = (
+					incoming_scheme.get("amc")
+					if hasattr(incoming_scheme, "get")
+					else getattr(incoming_scheme, "amc", None)
 				)
+				incoming_amc_reg = getattr(incoming_scheme, "amc_registration_number", None) or (
+					incoming_scheme.get("amc_registration_number")
+					if hasattr(incoming_scheme, "get")
+					else None
+				)
+				incoming_sif = getattr(incoming_scheme, "sif_name", None) or (
+					incoming_scheme.get("sif_name") if hasattr(incoming_scheme, "get") else None
+				)
+				new_val = normalize_str(incoming_amc or incoming_amc_reg or incoming_sif)
 
 			elif field in ["amc_name", "sif_name"]:
+				if hasattr(incoming_scheme, "doctype") or isinstance(
+					incoming_scheme, frappe.model.document.Document
+				):
+					# When comparing SIF Scheme documents directly, amc_name and sif_name are attributes
+					# of the linked SIF Asset Management Company, which is governed by the 'amc' link field.
+					continue
+
 				current_amc_docname = existing_doc.get("amc")
 				old_val = ""
 				if current_amc_docname and frappe.db.exists(
