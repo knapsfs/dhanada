@@ -916,3 +916,412 @@ class IntegrationTestSIFScheme(IntegrationTestCase):
 
 		current_name = frappe.db.get_value("SIF Asset Management Company", "UNIN", "amc_name")
 		self.assertEqual(current_name, "Old Union Entity")
+
+	def _get_or_create_test_amc(self):
+		amc_name = frappe.db.get_value("SIF Asset Management Company", {}, "name")
+		if not amc_name:
+			amc_doc = frappe.get_doc(
+				{
+					"doctype": "SIF Asset Management Company",
+					"code": "TEST",
+					"amc_name": "Test AMC",
+					"sif_name": "Test",
+					"registration_number": "TEST",
+					"rta": "CAMS",
+					"is_active": 1,
+				}
+			).insert(ignore_permissions=True)
+			amc_name = amc_doc.name
+		return amc_name
+
+	def test_manual_single_field_edit_creates_modification_and_preserves_scheme(self):
+		"""
+		Verifies:
+		1. Admin edits a single governed field (risk_band) directly.
+		2. SIF Scheme in database retains its original value.
+		3. Exactly one SIF Scheme Modification Request is created in Draft.
+		"""
+		test_code = "TEST/O/E/ELSF/26/MOD/MANUAL/001"
+		# Cleanup
+		existing = frappe.db.get_value("SIF Scheme", {"sebi_code": test_code}, "name")
+		if existing:
+			frappe.delete_doc("SIF Scheme", existing, force=True)
+
+		scheme = frappe.get_doc(
+			{
+				"doctype": "SIF Scheme",
+				"sebi_code": test_code,
+				"scheme_name": "Manual Single Field Test",
+				"investment_strategy": "Equity",
+				"scheme_subcategory": "Equity Long-Short Fund",
+				"scheme_objective": "Initial Objective",
+				"amc": self._get_or_create_test_amc(),
+				"risk_band": 2,
+			}
+		)
+		scheme.flags.from_approval = True
+		scheme.insert(ignore_permissions=True)
+
+		# Admin directly modifies risk_band
+		scheme.risk_band = 5
+		scheme.save(ignore_permissions=True)
+
+		# SIF Scheme in DB must NOT have updated to 5
+		scheme.reload()
+		self.assertEqual(scheme.risk_band, 2)
+
+		# Exactly one Modification Request must exist
+		mod_name = frappe.db.get_value(
+			"SIF Scheme Modification Request", {"scheme": scheme.name, "docstatus": 0}, "name"
+		)
+		self.assertTrue(mod_name, "Modification request must be created")
+		mod_doc = frappe.get_doc("SIF Scheme Modification Request", mod_name)
+		self.assertEqual(len(mod_doc.changed_fields), 1)
+		self.assertEqual(mod_doc.changed_fields[0].field_name, "risk_band")
+		self.assertEqual(str(mod_doc.changed_fields[0].old_value), "2")
+		self.assertEqual(str(mod_doc.changed_fields[0].new_value), "5")
+
+	def test_manual_multiple_fields_edit_captures_all_changes(self):
+		"""
+		Verifies:
+		Admin modifies multiple governed fields at once (scheme_objective, minimum_subscription, isid_url).
+		All changes are captured in a single SIF Scheme Modification Request, and the scheme remains unchanged.
+		"""
+		test_code = "TEST/O/E/ELSF/26/MOD/MANUAL/002"
+		existing = frappe.db.get_value("SIF Scheme", {"sebi_code": test_code}, "name")
+		if existing:
+			frappe.delete_doc("SIF Scheme", existing, force=True)
+
+		scheme = frappe.get_doc(
+			{
+				"doctype": "SIF Scheme",
+				"sebi_code": test_code,
+				"scheme_name": "Manual Multi Field Test",
+				"investment_strategy": "Equity",
+				"scheme_subcategory": "Equity Long-Short Fund",
+				"scheme_objective": "Old Objective",
+				"amc": self._get_or_create_test_amc(),
+				"minimum_subscription": 1000000.0,
+				"isid_url": "https://example.com/old_isid.pdf",
+			}
+		)
+		scheme.flags.from_approval = True
+		scheme.insert(ignore_permissions=True)
+
+		# Admin modifies multiple fields
+		scheme.scheme_objective = "New Objective"
+		scheme.minimum_subscription = 2500000.0
+		scheme.isid_url = "https://example.com/new_isid.pdf"
+		scheme.save(ignore_permissions=True)
+
+		# Scheme must remain unchanged in DB
+		scheme.reload()
+		self.assertEqual(scheme.scheme_objective, "Old Objective")
+		self.assertEqual(float(scheme.minimum_subscription), 1000000.0)
+		self.assertEqual(scheme.isid_url, "https://example.com/old_isid.pdf")
+
+		# Check modification request
+		mod_name = frappe.db.get_value(
+			"SIF Scheme Modification Request", {"scheme": scheme.name, "docstatus": 0}, "name"
+		)
+		self.assertTrue(mod_name)
+		mod_doc = frappe.get_doc("SIF Scheme Modification Request", mod_name)
+		field_map = {row.field_name: row for row in mod_doc.changed_fields}
+		self.assertIn("scheme_objective", field_map)
+		self.assertEqual(field_map["scheme_objective"].old_value, "Old Objective")
+		self.assertEqual(field_map["scheme_objective"].new_value, "New Objective")
+
+		self.assertIn("minimum_subscription", field_map)
+		self.assertEqual(float(field_map["minimum_subscription"].old_value), 1000000.0)
+		self.assertEqual(float(field_map["minimum_subscription"].new_value), 2500000.0)
+
+		self.assertIn("isid_url", field_map)
+		self.assertEqual(field_map["isid_url"].old_value, "https://example.com/old_isid.pdf")
+		self.assertEqual(field_map["isid_url"].new_value, "https://example.com/new_isid.pdf")
+
+	def test_manual_child_table_edit_allocations_and_managers(self):
+		"""
+		Verifies:
+		Manual edits to child tables (allocations, managers) are captured with old_value_json and new_value_json,
+		and the original child table rows are preserved on the SIF Scheme.
+		"""
+		test_code = "TEST/O/E/ELSF/26/MOD/MANUAL/003"
+		existing = frappe.db.get_value("SIF Scheme", {"sebi_code": test_code}, "name")
+		if existing:
+			frappe.delete_doc("SIF Scheme", existing, force=True)
+
+		# Ensure a manager exists
+		fm_name = "Test Manual Manager"
+		if not frappe.db.exists("SIF Fund Manager", {"manager_name": fm_name}):
+			fm = frappe.get_doc({"doctype": "SIF Fund Manager", "manager_name": fm_name}).insert(
+				ignore_permissions=True
+			)
+			fm_id = fm.name
+		else:
+			fm_id = frappe.db.get_value("SIF Fund Manager", {"manager_name": fm_name}, "name")
+
+		scheme = frappe.get_doc(
+			{
+				"doctype": "SIF Scheme",
+				"sebi_code": test_code,
+				"scheme_name": "Manual Child Table Test",
+				"investment_strategy": "Equity",
+				"scheme_subcategory": "Equity Long-Short Fund",
+				"scheme_objective": "Child Table Objective",
+				"amc": self._get_or_create_test_amc(),
+				"allocations": [
+					{
+						"allocation_type": "Equity",
+						"minimum_allocation_percentage": 65.0,
+						"maximum_allocation_percentage": 100.0,
+					}
+				],
+				"managers": [
+					{
+						"manager_name": fm_id,
+						"from": "2025-01-01",
+						"is_active": 1,
+					}
+				],
+			}
+		)
+		scheme.flags.from_approval = True
+		scheme.insert(ignore_permissions=True)
+
+		# Admin modifies allocations: adds Debt allocation
+		scheme.append(
+			"allocations",
+			{
+				"allocation_type": "Debt",
+				"minimum_allocation_percentage": 0.0,
+				"maximum_allocation_percentage": 35.0,
+			},
+		)
+		scheme.save(ignore_permissions=True)
+
+		# Scheme must still have only 1 allocation in DB
+		scheme.reload()
+		self.assertEqual(len(scheme.allocations), 1)
+		self.assertEqual(scheme.allocations[0].allocation_type, "Equity")
+
+		# Modification request captures the addition
+		mod_name = frappe.db.get_value(
+			"SIF Scheme Modification Request", {"scheme": scheme.name, "docstatus": 0}, "name"
+		)
+		self.assertTrue(mod_name)
+		mod_doc = frappe.get_doc("SIF Scheme Modification Request", mod_name)
+		alloc_row = next(r for r in mod_doc.changed_fields if r.field_name == "allocations")
+		self.assertTrue(alloc_row.new_value_json)
+		new_allocs = json.loads(alloc_row.new_value_json)
+		self.assertEqual(len(new_allocs), 2)
+
+	def test_noop_save_creates_no_modification_request(self):
+		"""
+		Verifies:
+		Saving an existing SIF Scheme without changing any governed fields does not create a Modification Request.
+		"""
+		test_code = "TEST/O/E/ELSF/26/MOD/MANUAL/004"
+		existing = frappe.db.get_value("SIF Scheme", {"sebi_code": test_code}, "name")
+		if existing:
+			frappe.delete_doc("SIF Scheme", existing, force=True)
+
+		scheme = frappe.get_doc(
+			{
+				"doctype": "SIF Scheme",
+				"sebi_code": test_code,
+				"scheme_name": "No-op Save Test",
+				"investment_strategy": "Equity",
+				"scheme_subcategory": "Equity Long-Short Fund",
+				"scheme_objective": "No-op Objective",
+				"amc": self._get_or_create_test_amc(),
+				"risk_band": 3,
+			}
+		)
+		scheme.flags.from_approval = True
+		scheme.insert(ignore_permissions=True)
+
+		# Save without changes
+		scheme.save(ignore_permissions=True)
+
+		mod_exists = frappe.db.exists(
+			"SIF Scheme Modification Request", {"scheme": scheme.name, "docstatus": 0}
+		)
+		self.assertFalse(mod_exists, "No modification request should be created on no-op save")
+
+	def test_duplicate_pending_request_deduplication(self):
+		"""
+		Verifies:
+		Repeatedly saving the same modification does not spawn duplicate pending requests.
+		"""
+		test_code = "TEST/O/E/ELSF/26/MOD/MANUAL/005"
+		existing = frappe.db.get_value("SIF Scheme", {"sebi_code": test_code}, "name")
+		if existing:
+			frappe.delete_doc("SIF Scheme", existing, force=True)
+
+		scheme = frappe.get_doc(
+			{
+				"doctype": "SIF Scheme",
+				"sebi_code": test_code,
+				"scheme_name": "Deduplication Test",
+				"investment_strategy": "Equity",
+				"scheme_subcategory": "Equity Long-Short Fund",
+				"scheme_objective": "Initial Objective",
+				"amc": self._get_or_create_test_amc(),
+				"risk_band": 1,
+			}
+		)
+		scheme.flags.from_approval = True
+		scheme.insert(ignore_permissions=True)
+
+		# First manual change
+		scheme.risk_band = 4
+		scheme.save(ignore_permissions=True)
+
+		first_mod = frappe.db.get_value(
+			"SIF Scheme Modification Request", {"scheme": scheme.name, "docstatus": 0}, "name"
+		)
+		self.assertTrue(first_mod)
+
+		# Second identical manual change
+		scheme.reload()
+		scheme.risk_band = 4
+		scheme.save(ignore_permissions=True)
+
+		total_mods = frappe.db.count(
+			"SIF Scheme Modification Request", {"scheme": scheme.name, "docstatus": 0}
+		)
+		self.assertEqual(total_mods, 1, "Duplicate pending modification requests must not be created")
+
+	def test_approval_applies_change_without_recursion(self):
+		"""
+		Verifies:
+		1. Modification request is approved & submitted.
+		2. SIF Scheme in database is updated with approved values.
+		3. No second/recursive modification request is created.
+		"""
+		test_code = "TEST/O/E/ELSF/26/MOD/MANUAL/006"
+		existing = frappe.db.get_value("SIF Scheme", {"sebi_code": test_code}, "name")
+		if existing:
+			frappe.delete_doc("SIF Scheme", existing, force=True)
+
+		scheme = frappe.get_doc(
+			{
+				"doctype": "SIF Scheme",
+				"sebi_code": test_code,
+				"scheme_name": "Approval Flow Test",
+				"investment_strategy": "Equity",
+				"scheme_subcategory": "Equity Long-Short Fund",
+				"scheme_objective": "Original Objective",
+				"amc": self._get_or_create_test_amc(),
+				"risk_band": 2,
+			}
+		)
+		scheme.flags.from_approval = True
+		scheme.insert(ignore_permissions=True)
+
+		# Manual edit
+		scheme.risk_band = 5
+		scheme.save(ignore_permissions=True)
+
+		mod_name = frappe.db.get_value(
+			"SIF Scheme Modification Request", {"scheme": scheme.name, "docstatus": 0}, "name"
+		)
+		mod_doc = frappe.get_doc("SIF Scheme Modification Request", mod_name)
+		for row in mod_doc.changed_fields:
+			row.apply_change = 1
+		mod_doc.save(ignore_permissions=True)
+		mod_doc.submit()
+
+		# Check SIF Scheme updated to 5
+		scheme.reload()
+		self.assertEqual(scheme.risk_band, 5)
+
+		# Check no new pending modification request was created
+		new_pending = frappe.db.exists(
+			"SIF Scheme Modification Request", {"scheme": scheme.name, "docstatus": 0}
+		)
+		self.assertFalse(new_pending, "Approval execution must not trigger recursive modification requests")
+
+	def test_rejection_cancellation_leaves_scheme_unchanged(self):
+		"""
+		Verifies:
+		Cancelling or rejecting a draft modification request leaves SIF Scheme in its original state.
+		"""
+		test_code = "TEST/O/E/ELSF/26/MOD/MANUAL/007"
+		existing = frappe.db.get_value("SIF Scheme", {"sebi_code": test_code}, "name")
+		if existing:
+			frappe.delete_doc("SIF Scheme", existing, force=True)
+
+		scheme = frappe.get_doc(
+			{
+				"doctype": "SIF Scheme",
+				"sebi_code": test_code,
+				"scheme_name": "Rejection Flow Test",
+				"investment_strategy": "Equity",
+				"scheme_subcategory": "Equity Long-Short Fund",
+				"scheme_objective": "Immutable Objective",
+				"amc": self._get_or_create_test_amc(),
+				"risk_band": 1,
+			}
+		)
+		scheme.flags.from_approval = True
+		scheme.insert(ignore_permissions=True)
+
+		# Manual edit
+		scheme.risk_band = 6
+		scheme.save(ignore_permissions=True)
+
+		mod_name = frappe.db.get_value(
+			"SIF Scheme Modification Request", {"scheme": scheme.name, "docstatus": 0}, "name"
+		)
+		mod_doc = frappe.get_doc("SIF Scheme Modification Request", mod_name)
+		# Submit with 0 checked rows -> automatically determined as Cancelled
+		mod_doc.submit()
+		self.assertEqual(mod_doc.workflow_state, "Cancelled")
+
+		scheme.reload()
+		self.assertEqual(scheme.risk_band, 1, "Scheme must remain unchanged on rejected/cancelled request")
+
+	def test_transaction_rollback_when_modification_creation_fails(self):
+		"""
+		Verifies that if creating the modification request fails mid-transaction,
+		the entire transaction rolls back and SIF Scheme is not corrupted.
+		"""
+		from unittest.mock import patch
+
+		test_code = "TEST/O/E/ELSF/26/MOD/MANUAL/008"
+		existing = frappe.db.get_value("SIF Scheme", {"sebi_code": test_code}, "name")
+		if existing:
+			frappe.delete_doc("SIF Scheme", existing, force=True)
+
+		scheme = frappe.get_doc(
+			{
+				"doctype": "SIF Scheme",
+				"sebi_code": test_code,
+				"scheme_name": "Rollback Test",
+				"investment_strategy": "Equity",
+				"scheme_subcategory": "Equity Long-Short Fund",
+				"scheme_objective": "Rollback Objective",
+				"amc": self._get_or_create_test_amc(),
+				"risk_band": 2,
+			}
+		)
+		scheme.flags.from_approval = True
+		scheme.insert(ignore_permissions=True)
+
+		frappe.db.savepoint("before_mod_fail")
+
+		def failing_create_approval(existing_doc, changes):
+			raise RuntimeError("Simulated failure creating modification request")
+
+		with patch(
+			"dhanada.sif.doctype.sif_scheme.sif_scheme.create_approval_request", new=failing_create_approval
+		):
+			scheme.risk_band = 4
+			with self.assertRaises(RuntimeError):
+				scheme.save(ignore_permissions=True)
+
+		frappe.db.rollback(save_point="before_mod_fail")
+
+		scheme.reload()
+		self.assertEqual(scheme.risk_band, 2)

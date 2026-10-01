@@ -17,7 +17,7 @@ export default function Blogs() {
   const { category: routeCategory } = useParams();
   const navigate = useNavigate();
 
-  const [selectedCategory, setSelectedCategory] = useState(routeCategory || "All");
+  const [selectedCategory, setSelectedCategory] = useState(routeCategory ? decodeURIComponent(routeCategory) : "All");
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,7 +26,7 @@ export default function Blogs() {
   // Sync category if URL parameter changes
   useEffect(() => {
     if (routeCategory) {
-      setSelectedCategory(routeCategory);
+      setSelectedCategory(decodeURIComponent(routeCategory));
     } else {
       setSelectedCategory("All");
     }
@@ -95,7 +95,7 @@ export default function Blogs() {
 
       <main>
         {/* Breadcrumb Hero */}
-        <BlogsHero />
+        <BlogsHero selectedCategory={selectedCategory} />
 
         {/* Dynamic Category Filter Bar from Frappe */}
         <BlogCategories

@@ -126,6 +126,10 @@ def create_chatbot_lead():
 		lead_full_name = f"{first_name} {last_name}".strip() if last_name else first_name
 		source = payload.get("source") or "Website Chatbot"
 
+		product = (
+			payload.get("product") or payload.get("interest") or payload.get("requirement") or ""
+		).strip()
+
 		# 10. Update existing Lead if found
 		if lead_id and frappe.db.exists("CRM Lead", lead_id):
 			lead_doc = frappe.get_doc("CRM Lead", lead_id)
@@ -140,6 +144,11 @@ def create_chatbot_lead():
 			if phone and not lead_doc.mobile_no:
 				lead_doc.mobile_no = phone
 				lead_doc.phone = phone
+			if product:
+				if frappe.db.has_column("CRM Lead", "custom_product"):
+					lead_doc.custom_product = product
+				if frappe.db.has_column("CRM Lead", "product"):
+					lead_doc.product = product
 			if final_context:
 				if frappe.db.has_column("CRM Lead", "chat_summary"):
 					lead_doc.chat_summary = final_context
@@ -163,6 +172,12 @@ def create_chatbot_lead():
 				"phone": phone,
 				"source": source,
 			}
+
+			if product:
+				if frappe.db.has_column("CRM Lead", "custom_product"):
+					doc_data["custom_product"] = product
+				if frappe.db.has_column("CRM Lead", "product"):
+					doc_data["product"] = product
 
 			if frappe.db.has_column("CRM Lead", "chat_summary"):
 				doc_data["chat_summary"] = final_context
@@ -220,6 +235,15 @@ def create_website_lead():
 		full_name = (payload.get("full_name") or payload.get("name") or "").strip()
 		email = (payload.get("email") or "").strip()
 		phone = (payload.get("phone") or payload.get("mobile") or "").strip()
+		product = (
+			payload.get("product")
+			or payload.get("product_name")
+			or payload.get("service")
+			or payload.get("service_interested")
+			or ""
+		).strip()
+		source = (payload.get("source") or "Website Form").strip()
+		notes = (payload.get("notes") or payload.get("message") or "").strip()
 
 		if not full_name:
 			frappe.throw(frappe._("Full Name is a required field."))
@@ -241,8 +265,21 @@ def create_website_lead():
 			"last_name": last_name,
 			"email": email,
 			"mobile_no": phone,
-			"source": "Website Form",
+			"source": source,
 		}
+
+		if product:
+			if frappe.db.has_column("CRM Lead", "custom_product"):
+				doc_data["custom_product"] = product
+			if frappe.db.has_column("CRM Lead", "product"):
+				doc_data["product"] = product
+
+		if notes:
+			context_msg = f"Enquiry Note: {notes}"
+			if frappe.db.has_column("CRM Lead", "custom_chat_context"):
+				doc_data["custom_chat_context"] = context_msg
+			elif frappe.db.has_column("CRM Lead", "chat_summary"):
+				doc_data["chat_summary"] = context_msg
 
 		lead = frappe.get_doc(doc_data)
 		lead.insert(ignore_permissions=True)

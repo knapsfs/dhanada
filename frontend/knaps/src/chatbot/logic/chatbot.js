@@ -1785,13 +1785,19 @@ Rules for leadOpportunity:
 			return "I need either a phone number or an email to connect you with an advisor. Let me know if you change your mind.";
 		}
 
+		const productVal =
+			state.currentTopic && state.currentTopic !== "unknown"
+				? formatTopicName(state.currentTopic)
+				: "General Inquiry";
+
 		const chatSummary = generateChatSummary(state);
 
 		const leadData = {
 			name: state.collected.name,
 			phone: state.collected.phone,
 			email: state.collected.email,
-			interest: state.currentTopic || "General Inquiry",
+			product: productVal,
+			interest: productVal,
 			chat_summary: chatSummary,
 			source: "Website Chatbot",
 			conversation_id:
@@ -1822,12 +1828,17 @@ Rules for leadOpportunity:
 
 	async updateLeadSummary(state) {
 		const chatSummary = generateChatSummary(state);
+		const productVal =
+			state.currentTopic && state.currentTopic !== "unknown"
+				? formatTopicName(state.currentTopic)
+				: "";
 
 		const leadData = {
 			name: state.collected.name,
 			phone: state.collected.phone,
 			email: state.collected.email,
-			interest: state.currentTopic !== "unknown" ? formatTopicName(state.currentTopic) : "",
+			product: productVal,
+			interest: productVal,
 			chat_summary: chatSummary,
 			existing_lead_name: state.crmLeadName,
 			conversation_id:

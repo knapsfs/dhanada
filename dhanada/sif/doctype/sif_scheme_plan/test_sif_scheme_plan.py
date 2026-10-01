@@ -121,6 +121,7 @@ class IntegrationTestSIFSchemePlan(IntegrationTestCase):
 				"full_name": "Execution Identity Test User",
 				"email": "test_exec_user@example.com",
 				"phone": "9999988888",
+				"product": "Specialized Investment Fund (SIF)",
 			}
 		)
 
@@ -133,6 +134,7 @@ class IntegrationTestSIFSchemePlan(IntegrationTestCase):
 			lead = frappe.get_doc("CRM Lead", lead_name)
 			self.assertEqual(lead.first_name, "Execution")
 			self.assertEqual(lead.email, "test_exec_user@example.com")
+			self.assertEqual(lead.custom_product, "Specialized Investment Fund (SIF)")
 			# Cleanup test record
 			frappe.delete_doc("CRM Lead", lead_name, ignore_permissions=True, force=True)
 
@@ -177,13 +179,45 @@ class IntegrationTestSIFSchemePlan(IntegrationTestCase):
 		self.assertEqual(lead.lead_name, "Priya Sharma")
 		self.assertEqual(lead.email, "priya.sharma@example.com")
 		self.assertEqual(lead.mobile_no, "9876543210")
-		self.assertEqual(lead.source, "Website Chatbot")
+		self.assertEqual(lead.custom_product, "Long-Short Hybrid SIF")
 		self.assertEqual(lead.custom_conversation, conv["name"])
 		self.assertIn("Long-Short Hybrid SIF", lead.custom_chat_context or lead.chat_summary or "")
 
 		# Cleanup
 		frappe.delete_doc("CRM Lead", lead_name, ignore_permissions=True, force=True)
 		frappe.delete_doc("Chatbot Conversation", conv["name"], ignore_permissions=True, force=True)
+
+	def test_submit_risk_profile_creates_lead_with_product(self):
+		from dhanada.api import submit_risk_profile
+
+		frappe.local.form_dict = frappe._dict(
+			{
+				"full_name": "Aarav Mehta",
+				"email": "aarav.mehta.test@example.com",
+				"phone": "9812345678",
+				"product": "Alternative Investment Funds (AIF)",
+				"profile": "Aggressive Growth",
+				"score": 22,
+				"max_score": 25,
+			}
+		)
+
+		res = submit_risk_profile()
+		self.assertTrue(res.get("success"))
+
+		lead = frappe.db.get_value(
+			"CRM Lead",
+			{"email": "aarav.mehta.test@example.com"},
+			["name", "lead_name", "custom_product", "source"],
+			as_dict=True,
+		)
+		self.assertTrue(lead)
+		self.assertEqual(lead.lead_name, "Aarav Mehta")
+		self.assertEqual(lead.custom_product, "Alternative Investment Funds (AIF)")
+
+		# Cleanup
+		if lead:
+			frappe.delete_doc("CRM Lead", lead.name, ignore_permissions=True, force=True)
 
 	def test_create_chatbot_lead_from_conversation_fallback_when_name_omitted(self):
 		from dhanada.api import create_chatbot_lead

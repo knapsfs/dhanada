@@ -24,7 +24,7 @@ export default function AboutWhyInvestors() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-3xl md:text-4xl lg:text-[42px] font-bold text-[#0a192f] leading-tight mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-black tracking-tight leading-tight max-w-4xl mx-auto mb-6">
               Why Thousands of Investors Trust Us
             </h2>
             

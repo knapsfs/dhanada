@@ -1,0 +1,29 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "CRM Fields Layout",
+  "dt": "CRM Lead",
+  "layout": "[{\"name\": \"person_section\", \"columns\": [{\"name\": \"column_5jrk\", \"fields\": [\"salutation\", \"email\"]}, {\"name\": \"column_5CPV\", \"fields\": [\"first_name\", \"mobile_no\"]}, {\"name\": \"column_gXOy\", \"fields\": [\"last_name\", \"gender\"]}]}, {\"name\": \"organization_section\", \"columns\": [{\"name\": \"column_GHfX\", \"fields\": [\"organization\", \"territory\"]}, {\"name\": \"column_hXjS\", \"fields\": [\"website\", \"annual_revenue\", \"company_description\"]}, {\"name\": \"column_RDNA\", \"fields\": [\"no_of_employees\", \"industry\", \"linkedin\", \"twitter\", \"facebook\"]}]}, {\"name\": \"lead_section\", \"columns\": [{\"name\": \"column_EO1H\", \"fields\": [\"status\"]}, {\"name\": \"column_RWBe\", \"fields\": [\"lead_owner\"]}]}]",
+  "modified": "2026-10-01 11:48:10.024475",
+  "name": "CRM Lead-Quick Entry",
+  "type": "Quick Entry"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "CRM Fields Layout",
+  "dt": "CRM Lead",
+  "layout": "[{\"label\": \"Details\", \"name\": \"details_section\", \"opened\": true, \"columns\": [{\"name\": \"column_kl92\", \"fields\": [\"organization\", \"company_description\", \"website\", \"territory\", \"industry\", \"no_of_employees\", \"job_title\", \"source\", \"custom_product\", \"lead_owner\", \"linkedin\", \"twitter\", \"facebook\"]}]}, {\"label\": \"Person\", \"name\": \"person_section\", \"opened\": true, \"columns\": [{\"name\": \"column_XmW2\", \"fields\": [\"salutation\", \"first_name\", \"last_name\", \"email\", \"mobile_no\"]}]}]",
+  "modified": "2026-10-01 13:53:11.587765",
+  "name": "CRM Lead-Side Panel",
+  "type": "Side Panel"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "CRM Fields Layout",
+  "dt": "CRM Lead",
+  "layout": "[{\"label\": \"Details\", \"name\": \"details_section\", \"opened\": true, \"columns\": [{\"name\": \"column_ZgLG\", \"fields\": [\"organization\", \"company_description\", \"industry\", \"no_of_employees\"]}, {\"name\": \"column_TbYq\", \"fields\": [\"website\", \"linkedin\", \"twitter\", \"facebook\", \"job_title\"]}, {\"name\": \"column_OKSX\", \"fields\": [\"territory\", \"source\", \"custom_product\", \"lead_owner\", \"custom_chat_context\", \"custom_conversation\"]}]}, {\"label\": \"Person\", \"name\": \"person_section\", \"opened\": true, \"columns\": [{\"name\": \"column_6c5g\", \"fields\": [\"salutation\", \"email\"]}, {\"name\": \"column_1n7Q\", \"fields\": [\"first_name\", \"mobile_no\"]}, {\"name\": \"column_cT6C\", \"fields\": [\"last_name\"]}]}]",
+  "modified": "2026-10-01 13:53:11.577163",
+  "name": "CRM Lead-Data Fields",
+  "type": "Data Fields"
+ }
+]

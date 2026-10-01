@@ -419,6 +419,7 @@ def submit_risk_profile():
 			frappe.throw(frappe._("A valid 10-digit Mobile Number is required."))
 
 		profile = (payload.get("profile") or "Moderately Aggressive").strip()
+		product = (payload.get("product") or payload.get("product_name") or "Investor Risk Profiler").strip()
 		score = int(payload.get("score") or 18)
 		max_score = int(payload.get("max_score") or 25)
 		metrics = payload.get("metrics") or {}
@@ -435,6 +436,7 @@ def submit_risk_profile():
 		# Build summary context for CRM lead
 		answers_summary_lines = [
 			f"Investor Risk Profile: {profile}",
+			f"Product: {product}",
 			f"Score: {score}/{max_score}",
 			f"Diagnostics: Comfort={metrics.get('riskComfort', 'N/A')}, Flexibility={metrics.get('financialFlexibility', 'N/A')}, Horizon={metrics.get('horizon', 'N/A')}, Experience={metrics.get('experience', 'N/A')}",
 		]
@@ -484,6 +486,11 @@ def submit_risk_profile():
 				lead_doc.mobile_no = clean_phone
 				lead_doc.phone = clean_phone
 				lead_doc.source = source
+				if product:
+					if frappe.db.has_column("CRM Lead", "custom_product"):
+						lead_doc.custom_product = product
+					if frappe.db.has_column("CRM Lead", "product"):
+						lead_doc.product = product
 				if frappe.db.has_column("CRM Lead", "chat_summary"):
 					lead_doc.chat_summary = lead_context
 				if frappe.db.has_column("CRM Lead", "custom_chat_context"):
@@ -502,6 +509,11 @@ def submit_risk_profile():
 					"phone": clean_phone,
 					"source": source,
 				}
+				if product:
+					if frappe.db.has_column("CRM Lead", "custom_product"):
+						doc_data["custom_product"] = product
+					if frappe.db.has_column("CRM Lead", "product"):
+						doc_data["product"] = product
 				if frappe.db.has_column("CRM Lead", "chat_summary"):
 					doc_data["chat_summary"] = lead_context
 				if frappe.db.has_column("CRM Lead", "custom_chat_context"):

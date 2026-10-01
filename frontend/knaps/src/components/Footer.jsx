@@ -23,7 +23,7 @@ export default function Footer() {
             </Link>
 
             <p className="text-gray-400 text-sm leading-relaxed mb-8 pr-4">
-              Premium financial institution dedicated to building, protecting, and growing wealth for individuals and businesses through expert guidance and personalized strategies.
+              At KNAPS, we believe investing should be simple, transparent, and focused on helping investors achieve their financial goals. With a wide range of investment products across Mutual Funds, SIF, PMS, AIF, NPS, Post Office Deposits, and more, we help investors find products that align with their goals, risk profile, and investment horizon.
             </p>
 
             <div className="flex gap-4">

@@ -17,7 +17,7 @@ export default function AboutJourney() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-4xl lg:text-[42px] font-bold text-[#0a192f] mb-6"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-black tracking-tight leading-tight max-w-4xl mx-auto mb-6"
           >
             Our Journey
           </motion.h2>

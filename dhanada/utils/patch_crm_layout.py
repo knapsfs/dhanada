@@ -12,7 +12,7 @@ def patch_layout():
 	"""
 	setup_crm_lead_custom_fields()
 	patch_crm_lead_data_layout()
-	cleanup_crm_side_panel_layout()
+	patch_crm_lead_side_panel_layout()
 	setup_crm_form_scripts()
 
 
@@ -77,7 +77,7 @@ def setup_crm_form_scripts():
 
 def setup_crm_lead_custom_fields():
 	"""
-	Provisions custom_chat_context and custom_conversation custom fields on CRM Lead.
+	Provisions custom_product, custom_chat_context, and custom_conversation custom fields on CRM Lead.
 	Idempotent: uses create_custom_fields which skips existing fields.
 	"""
 	if not frappe.db.exists("DocType", "CRM Lead"):
@@ -86,10 +86,20 @@ def setup_crm_lead_custom_fields():
 	custom_fields = {
 		"CRM Lead": [
 			{
+				"fieldname": "custom_product",
+				"label": "Product",
+				"fieldtype": "Data",
+				"insert_after": "lead_owner",
+				"in_list_view": 1,
+				"in_standard_filter": 1,
+				"search_index": 1,
+				"description": "Selected investment product or service of interest.",
+			},
+			{
 				"fieldname": "custom_chat_context",
 				"label": "Chat Context",
 				"fieldtype": "Small Text",
-				"insert_after": "lead_owner",
+				"insert_after": "custom_product",
 				"read_only": 1,
 				"description": "Short summary of the chatbot conversation.",
 			},
@@ -110,7 +120,7 @@ def setup_crm_lead_custom_fields():
 
 def patch_crm_lead_data_layout():
 	"""
-	Ensures custom_chat_context and custom_conversation are included in
+	Ensures custom_product, custom_chat_context, and custom_conversation are included in
 	the CRM Lead 'Data Fields' layout inside the Details section.
 	"""
 	if not frappe.db.exists("CRM Fields Layout", {"dt": "CRM Lead", "type": "Data Fields"}):
@@ -121,9 +131,9 @@ def patch_crm_lead_data_layout():
 		return
 
 	layout = json.loads(doc.layout)
-	target_fields = ["custom_chat_context", "custom_conversation"]
+	target_fields = ["custom_product", "custom_chat_context", "custom_conversation"]
 
-	# Check if both fields already exist anywhere in the Data Fields layout
+	# Check if all target fields already exist anywhere in the Data Fields layout
 	all_fields = set()
 	for section in layout:
 		for column in section.get("columns", []):
@@ -131,10 +141,9 @@ def patch_crm_lead_data_layout():
 
 	missing_fields = [f for f in target_fields if f not in all_fields]
 	if not missing_fields:
-		# Idempotent: both fields already present
 		return
 
-	# Insert into details_section (preferably into the last column or column with lead_owner)
+	# Insert into details_section (preferably into the column containing lead_owner or source)
 	details_section = None
 	for section in layout:
 		if section.get("name") == "details_section" or section.get("label") == "Details":
@@ -147,25 +156,29 @@ def patch_crm_lead_data_layout():
 	if details_section:
 		columns = details_section.get("columns", [])
 		if columns:
-			# Find column containing lead_owner or use the last column
 			target_col = columns[-1]
 			for col in columns:
-				if "lead_owner" in col.get("fields", []) or "source" in col.get("fields", []):
+				fields_in_col = col.get("fields", [])
+				if "lead_owner" in fields_in_col or "source" in fields_in_col:
 					target_col = col
 					break
 
 			for field_to_add in missing_fields:
 				if field_to_add not in target_col.get("fields", []):
-					target_col.setdefault("fields", []).append(field_to_add)
+					if "source" in target_col.get("fields", []) and field_to_add == "custom_product":
+						src_idx = target_col["fields"].index("source")
+						target_col["fields"].insert(src_idx + 1, field_to_add)
+					else:
+						target_col.setdefault("fields", []).append(field_to_add)
 
 			doc.layout = json.dumps(layout)
 			doc.save(ignore_permissions=True)
 
 
-def cleanup_crm_side_panel_layout():
+def patch_crm_lead_side_panel_layout():
 	"""
-	Ensures chatbot fields are NOT present in the Side Panel layout,
-	keeping the sidebar clean and adhering to the Data-section requirement.
+	Ensures custom_product is present in the Side Panel details section,
+	while keeping chatbot context fields out of the sidebar.
 	"""
 	if not frappe.db.exists("CRM Fields Layout", {"dt": "CRM Lead", "type": "Side Panel"}):
 		return
@@ -179,7 +192,7 @@ def cleanup_crm_side_panel_layout():
 	modified = False
 
 	for section in layout:
-		# Remove custom chatbot context sections or fields from side panel
+		# Remove custom chatbot context sections from side panel
 		if section.get("label") == "Chatbot Context" or "context_section" in str(section.get("name", "")):
 			modified = True
 			continue
@@ -192,7 +205,16 @@ def cleanup_crm_side_panel_layout():
 				if f
 				not in ("chat_summary_html", "chat_summary", "custom_chat_context", "custom_conversation")
 			]
-			if len(filtered_fields) != len(col.get("fields", [])):
+			if section.get("name") == "details_section" or section.get("label") == "Details":
+				if "custom_product" not in filtered_fields:
+					if "source" in filtered_fields:
+						src_idx = filtered_fields.index("source")
+						filtered_fields.insert(src_idx + 1, "custom_product")
+					else:
+						filtered_fields.append("custom_product")
+					modified = True
+
+			if filtered_fields != col.get("fields", []):
 				modified = True
 			col["fields"] = filtered_fields
 			new_cols.append(col)

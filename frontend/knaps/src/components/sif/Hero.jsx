@@ -17,7 +17,7 @@ export default function Hero() {
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-center min-h-[75vh]">
 
           {/* Left Column */}
-          <div className="lg:col-span-7 xl:col-span-6 text-left">
+          <div className="lg:col-span-7 xl:col-span-5 text-left relative z-20">
             {/* Pill Tag */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -34,7 +34,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.1 }}
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-[1.15] mb-6 font-serif tracking-tight"
+              className="text-3xl lg:text-[40px] font-bold text-white leading-[1.15] mb-6 font-serif tracking-tight"
             >
               Specialized Investment Funds with <span className=" text-transparent bg-clip-text bg-gradient-to-r from-blue-100 via-cyan-200 to-white">
                 Advanced Derivative Strategies.
@@ -111,7 +111,7 @@ export default function Hero() {
           </div>
 
           {/* Right Column - Hero 3D Graphic with Grounded Pedestal & Badges */}
-          <div className="lg:col-span-5 xl:col-span-6 relative hidden lg:flex items-center justify-center">
+          <div className="lg:col-span-5 xl:col-span-7 relative hidden lg:flex items-center justify-end">
             {/* Glass Badge: Top-Left */}
             <motion.div
               initial={{ opacity: 0, y: -20, x: -20 }}
@@ -142,7 +142,7 @@ export default function Hero() {
                 </svg>
               </div>
               <div>
-                <p className="text-[11px] font-bold tracking-wider uppercase text-blue-300">Long-Short Edge</p>
+                <p className="text-[11px] font-bold tracking-wider uppercase text-blue-300">Bridges gap between Mutual Funds and PMS</p>
               </div>
             </motion.div>
 
@@ -151,15 +151,14 @@ export default function Hero() {
               initial={{ opacity: 0, scale: 0.92, y: 25 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.9, delay: 0.25 }}
-              className="relative w-full max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl mx-auto flex flex-col items-center justify-center"
+              className="relative w-full max-w-xl lg:max-w-2xl xl:max-w-3xl 2xl:max-w-4xl lg:-ml-12 xl:-ml-24 2xl:-ml-32 flex flex-col items-center justify-center"
             >
               {/* Image */}
-              <div className="relative z-10 group">
+              <div className="relative z-10 group w-full">
                 <img
                   src={heroImg}
                   alt="KNAPS Specialized Investment Funds"
-                  className="w-full h-auto object-contain max-h-[500px] xl:max-h-[560px] filter drop-shadow-[0_20px_35px_rgba(2,108,245,0.35)] drop-shadow-[0_40px_60px_rgba(2,9,25,0.8)] group-hover:scale-[1.02] transition-transform duration-500"
-
+                  className="w-full h-auto object-contain max-h-[580px] lg:max-h-[640px] xl:max-h-[720px] 2xl:max-h-[780px] filter drop-shadow-[0_20px_35px_rgba(2,108,245,0.35)] drop-shadow-[0_40px_60px_rgba(2,9,25,0.8)] group-hover:scale-[1.02] transition-transform duration-500 ml-10"
                 />
               </div>
 
