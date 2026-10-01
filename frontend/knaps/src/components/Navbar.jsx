@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faChevronDown, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import logo from '../assets/knaps-logo.png';
+import { useLeadModal } from '../context/LeadModalContext';
 
 const navLinks = [
   { label: 'Home', href: '/' },
@@ -53,6 +54,7 @@ export default function Navbar() {
   const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
   const [mobileLoginOpen, setMobileLoginOpen] = useState(false);
   const location = useLocation();
+  const { openLeadModal } = useLeadModal();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -188,33 +190,46 @@ export default function Navbar() {
             ))}
           </ul>
 
-          {/* Right CTA */}
-          <div
-            className="hidden xl:flex items-center relative"
-            onMouseEnter={() => setActiveDropdown('LoginBtn')}
-            onMouseLeave={() => setActiveDropdown(null)}
-          >
+          {/* Right CTAs */}
+          <div className="hidden xl:flex items-center gap-2.5 2xl:gap-3">
+            {/* Invest Now Button */}
             <button
-              className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center gap-2 cursor-pointer"
+              type="button"
+              onClick={() => openLeadModal('Navbar Invest Now')}
+              className="btn-ripple px-5 py-2.5 2xl:px-6 2xl:py-3 rounded-xl text-[14px] 2xl:text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center gap-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
             >
-              Login
-              <FontAwesomeIcon icon={faChevronDown} className={`text-[10px] transition-transform duration-300 ${activeDropdown === 'LoginBtn' ? 'rotate-180' : ''}`} />
+              Invest Now
             </button>
-            <AnimatePresence>
-              {activeDropdown === 'LoginBtn' && (
-                <motion.div
-                  initial={{ opacity: 0, y: 15, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                  transition={{ duration: 0.2, ease: "easeOut" }}
-                  className="absolute top-full right-0 mt-2 w-48 bg-white rounded-2xl shadow-xl shadow-blue-900/10 border border-gray-100 py-3 overflow-hidden origin-top-right"
-                >
-                  <Link to="/#login-investor" className="block px-5 py-2.5 text-[14px] text-gray-600 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors font-medium">Investor Login</Link>
-                  <Link to="/#login-admin" className="block px-5 py-2.5 text-[14px] text-gray-600 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors font-medium">Admin Login</Link>
-                  <Link to="/#login-employee" className="block px-5 py-2.5 text-[14px] text-gray-600 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors font-medium">Employee Login</Link>
-                </motion.div>
-              )}
-            </AnimatePresence>
+
+            {/* Login Button */}
+            <div
+              className="relative"
+              onMouseEnter={() => setActiveDropdown('LoginBtn')}
+              onMouseLeave={() => setActiveDropdown(null)}
+            >
+              <button
+                type="button"
+                className="btn-ripple px-5 py-2.5 2xl:px-6 2xl:py-3 rounded-xl text-[14px] 2xl:text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center gap-2 cursor-pointer"
+              >
+                Login
+                <FontAwesomeIcon icon={faChevronDown} className={`text-[10px] transition-transform duration-300 ${activeDropdown === 'LoginBtn' ? 'rotate-180' : ''}`} />
+              </button>
+              <AnimatePresence>
+                {activeDropdown === 'LoginBtn' && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                    className="absolute top-full right-0 mt-2 w-48 bg-white rounded-2xl shadow-xl shadow-blue-900/10 border border-gray-100 py-3 overflow-hidden origin-top-right z-50"
+                  >
+                    <Link to="/#login-investor" className="block px-5 py-2.5 text-[14px] text-gray-600 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors font-medium">Investor Login</Link>
+                    <Link to="/#login-admin" className="block px-5 py-2.5 text-[14px] text-gray-600 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors font-medium">Admin Login</Link>
+                    <Link to="/#login-employee" className="block px-5 py-2.5 text-[14px] text-gray-600 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors font-medium">Employee Login</Link>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
 
           {/* Mobile Toggle */}
@@ -327,8 +342,19 @@ export default function Navbar() {
                   </div>
                 ))}
 
-                {/* Mobile Login Button with Collapsible Portal Options */}
-                <div className="pt-3 mt-2 border-t border-gray-100">
+                {/* Mobile Action Buttons */}
+                <div className="pt-3 mt-2 border-t border-gray-100 space-y-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileOpen(false);
+                      openLeadModal('Navbar Mobile: Invest Now');
+                    }}
+                    className="w-full py-3.5 px-5 rounded-2xl text-[15px] font-bold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-lg shadow-[#032e92]/20 flex items-center justify-center transition-all cursor-pointer hover:shadow-xl active:scale-[0.99]"
+                  >
+                    Invest Now
+                  </button>
+
                   <button
                     type="button"
                     onClick={() => setMobileLoginOpen(!mobileLoginOpen)}

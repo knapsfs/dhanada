@@ -87,7 +87,7 @@ export default function Newsletter() {
                 className="btn-ripple w-full sm:w-auto px-6 py-3 rounded-xl text-[15px] font-semibold bg-transparent border border-white/30 text-white hover:bg-white/10 hover:border-white/50 transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer"
               >
                 <FontAwesomeIcon icon={faPhone} className="text-xs text-green-400" />
-                <span>Call us - +91-9990243143</span>
+                <span>Call us  (+91) 9990243143</span>
               </a>
             </motion.div>
 

@@ -48,15 +48,14 @@ function App() {
             <Route path="/about" element={<AboutUs />} />
             <Route path="/services" element={<Services />} />
             
-            {/* Official Frappe Blog Post Routes (e.g. /blog/mutual-funds/what’s-the-difference-between-sif-and-mutual-funds) */}
+            {/* Official Frappe Blog Post Detail Routes (2 segments: /blog/:category/:slug or /blogs/:category/:slug) */}
             <Route path="/blog/:category/:slug" element={<BlogDetails />} />
             <Route path="/blogs/:category/:slug" element={<BlogDetails />} />
-            <Route path="/blogs/:id" element={<BlogDetails />} />
-            <Route path="/blog/:id" element={<BlogDetails />} />
 
-            {/* Official Frappe Blog Listing & Category Filtering Routes */}
+            {/* Official Frappe Blog Listing & Category Filtering Routes (1 segment: /blogs/:category or /blog/:category) */}
             <Route path="/blogs" element={<Blogs />} />
             <Route path="/blog" element={<Blogs />} />
+            <Route path="/blogs/:category" element={<Blogs />} />
             <Route path="/blog/:category" element={<Blogs />} />
             <Route path="/blogs/category/:category" element={<Blogs />} />
             
