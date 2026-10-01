@@ -5,7 +5,7 @@ import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 export default function ContactHero() {
   return (
-    <section className="relative pt-[120px] lg:pt-[140px] overflow-hidden bg-gradient-to-b from-[#eef4ff] to-white">
+    <section className="relative pt-[80px] lg:pt-[80px] overflow-hidden bg-gradient-to-b from-[#eef4ff] to-white">
       <div className="max-w-7xl mx-auto px-6 lg:py-8 lg:px-8 relative z-10">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           {/* Left Content */}
@@ -20,7 +20,7 @@ export default function ContactHero() {
             </div>
 
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-extrabold text-black tracking-tight leading-tight max-w-4xl">
-              Let's Build Your Financial Future <span className="text-[#032e92]">Together</span>
+              Talk To Our Financial <span className="text-[#032e92]">Experts</span>
             </h1>
 
             {/* Breadcrumb Navigation */}

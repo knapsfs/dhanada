@@ -42,7 +42,7 @@ export default function WhyInvestWithUs() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-extrabold text-black tracking-tight leading-tight max-w-4xl mx-auto"
+          className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-black tracking-tight leading-tight max-w-4xl mx-auto"
         >
           Build, protect, and grow your <span className="text-[#032e92] block sm:inline">wealth with confidence</span>
         </motion.h2>

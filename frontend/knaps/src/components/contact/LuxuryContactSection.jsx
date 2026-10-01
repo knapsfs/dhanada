@@ -4,19 +4,19 @@ import { faLocationDot, faPhone, faEnvelope, faClock, faArrowRight } from '@fort
 
 export default function LuxuryContactSection() {
   return (
-    <section className="relative pt-24 pb-16 overflow-hidden ">
+    <section className="relative pt-4 pb-16 overflow-hidden ">
 
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
 
-        <div className="text-center mb-10 sm:mb-12">
+        {/* <div className="text-center mb-10 sm:mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#f0f4fd] text-[#032e92] font-semibold text-xs tracking-widest uppercase mb-4">
             Get In Touch
           </div>
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-extrabold text-[#0f172a] leading-[1.1] tracking-tight">
             Talk To Our <span className="text-[#032e92]">Financial Experts</span>
           </h2>
-        </div>
+        </div> */}
 
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-8 items-start">
 
@@ -54,7 +54,7 @@ export default function LuxuryContactSection() {
                   </div>
                   <div>
                     <h5 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5">Office</h5>
-                    <p className="text-[#0a192f] font-medium text-[17px] leading-relaxed max-w-[250px]">123 Financial District, Suite 500 New Delhi, India 110001</p>
+                    <p className="text-[#0a192f] font-medium text-[17px] leading-relaxed max-w-[250px]">DG-206A, DLF Galleria, Plot No 1B, Mayur Vihar Phase - 1, East Delhi, Delhi - 110091</p>
                   </div>
                 </div>
 
@@ -66,7 +66,7 @@ export default function LuxuryContactSection() {
                   </div>
                   <div>
                     <h5 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1.5">Phone</h5>
-                    <p className="text-[#0a192f] font-medium text-[17px] leading-relaxed">+91 98765 43210</p>
+                    <p className="text-[#0a192f] font-medium text-[17px] leading-relaxed">+91-9990243143</p>
                   </div>
                 </div>
 
