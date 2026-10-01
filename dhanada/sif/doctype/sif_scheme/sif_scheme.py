@@ -69,10 +69,7 @@ class SIFScheme(Document):
 				self.flags.modification_request = mod_doc.name
 				frappe.msgprint(
 					frappe._(
-						"Direct modifications to SIF Scheme are not applied directly. "
-						"SIF Scheme Modification Request <a href='/desk/sif-scheme-modification-request/{0}'><b>{0}</b></a> "
-						"has been created for approval."
-					).format(mod_doc.name),
-					title=frappe._("Modification Request Created"),
+						"The changes you made are now sent for verification, and will update after the Permissions Manager approves them."
+					),
 					indicator="orange",
 				)
