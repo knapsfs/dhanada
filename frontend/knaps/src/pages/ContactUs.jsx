@@ -1,11 +1,9 @@
 import { useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import ServicesHero from '../components/services/ServicesHero';
+import ContactHero from '../components/contact/ContactHero';
 import LuxuryContactSection from '../components/contact/LuxuryContactSection';
 import OfficeExperience from '../components/contact/OfficeExperience';
-import PremiumFAQ from '../components/contact/PremiumFAQ';
-import ContactCTA from '../components/contact/ContactCTA';
 import CTA from '../components/CTA';
 
 export default function ContactUs() {
@@ -20,22 +18,13 @@ export default function ContactUs() {
       <Navbar />
 
       <main>
-        {/* Reusing ServicesHero with Contact context */}
-        <ServicesHero
-          label="CONTACT US"
-          title="Let's Build Your Financial Future "
-          titleHighlight="Together"
-          description="Whether you're planning investments, retirement, insurance, or wealth creation, our experienced advisors are here to guide you every step of the way."
-          breadcrumbText="Contact Us"
-          breadcrumbLink="/contact"
-        />
+        {/* Contact Hero matching Blogs breadcrumb hero layout */}
+        <ContactHero />
 
-        {/* The new premium sections */}
+        {/* The premium contact sections */}
         <LuxuryContactSection />
 
         <OfficeExperience />
-
-        {/* <PremiumFAQ /> */}
 
         <CTA />
       </main>
