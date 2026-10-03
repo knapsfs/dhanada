@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faTimesCircle, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 export default function QuizQuestion({
   question,
@@ -13,9 +13,12 @@ export default function QuizQuestion({
   isModal = false
 }) {
   const isAnswered = selectedAnswer !== null;
-  const isCorrect = selectedAnswer === question.answer;
+  const normalizedSelected = (selectedAnswer || '').trim().toUpperCase();
+  const normalizedAnswer = (question.answer || '').trim().toUpperCase();
+  const isCorrect = isAnswered && normalizedSelected === normalizedAnswer;
 
   const getButtonClass = (answerType) => {
+    const typeUpper = answerType.toUpperCase();
     const base = `w-full rounded-xl border-2 font-bold transition-all duration-200 cursor-pointer ${
       isModal ? 'py-3 sm:py-3.5 px-4 text-base sm:text-lg' : 'py-6 px-4 rounded-2xl text-xl'
     } `;
@@ -24,13 +27,18 @@ export default function QuizQuestion({
       return base + "bg-white border-gray-100 text-[#0a192f] hover:border-[#032e92] hover:bg-blue-50/50 hover:shadow-md";
     }
 
-    if (answerType === selectedAnswer) {
+    if (typeUpper === normalizedSelected) {
       return base + (isCorrect
         ? "bg-[#eef5ff] border-[#032e92] text-[#032e92] shadow-sm"
         : "bg-red-50 border-red-200 text-[#c10000]");
     }
 
-    // Unselected button after answering
+    // Highlight the actual correct answer if user got it wrong
+    if (typeUpper === normalizedAnswer && !isCorrect) {
+      return base + "bg-emerald-50 border-emerald-400 text-emerald-700 shadow-sm";
+    }
+
+    // Other unselected button after answering
     return base + "bg-white border-gray-100 text-gray-400 opacity-50 cursor-not-allowed";
   };
 
@@ -72,6 +80,7 @@ export default function QuizQuestion({
       {/* Answer Buttons */}
       <div className={`grid grid-cols-2 gap-3 ${isModal ? 'mb-3' : 'mb-8'}`}>
         <button
+          type="button"
           onClick={() => !isAnswered && onAnswer('MYTH')}
           disabled={isAnswered}
           className={getButtonClass('MYTH')}
@@ -79,6 +88,7 @@ export default function QuizQuestion({
           MYTH
         </button>
         <button
+          type="button"
           onClick={() => !isAnswered && onAnswer('FACT')}
           disabled={isAnswered}
           className={getButtonClass('FACT')}
@@ -102,10 +112,13 @@ export default function QuizQuestion({
                 {isCorrect ? (
                   <>
                     <FontAwesomeIcon icon={faCheckCircle} className="text-[#032e92] text-base" />
-                    <span className="font-bold text-[#032e92] text-sm sm:text-base">Correct</span>
+                    <span className="font-bold text-[#032e92] text-sm sm:text-base">Correct!</span>
                   </>
                 ) : (
-                  <span className="font-bold text-[#c10000] text-sm sm:text-base">Not quite. Let's look at the facts.</span>
+                  <>
+                    <FontAwesomeIcon icon={faTimesCircle} className="text-[#c10000] text-base" />
+                    <span className="font-bold text-[#c10000] text-sm sm:text-base">Not quite. Let's look at the facts.</span>
+                  </>
                 )}
               </div>
 
@@ -113,7 +126,9 @@ export default function QuizQuestion({
                 <span className="font-black text-gray-400 uppercase tracking-wider">
                   Correct Answer:
                 </span>
-                <span className="ml-1.5 font-black text-[#0a192f]">{question.answer}</span>
+                <span className={`ml-1.5 font-black uppercase ${normalizedAnswer === 'FACT' ? 'text-emerald-700' : 'text-[#032e92]'}`}>
+                  {normalizedAnswer}
+                </span>
               </div>
 
               <p className={`text-gray-600 leading-relaxed ${isModal ? 'text-xs mb-3' : 'text-sm mb-8'}`}>
@@ -122,6 +137,7 @@ export default function QuizQuestion({
 
               <div className="flex justify-end">
                 <button
+                  type="button"
                   onClick={onNext}
                   className={`inline-flex items-center gap-1.5 rounded-xl font-bold bg-[#0a192f] text-white hover:bg-[#032e92] transition-colors cursor-pointer ${
                     isModal ? 'px-5 py-2 text-xs sm:text-sm' : 'px-6 py-3 text-base'
