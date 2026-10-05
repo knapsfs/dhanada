@@ -19,7 +19,7 @@ export default function ContactHero() {
               <span className="text-[#032e92] text-xs font-bold tracking-widest uppercase">Contact Us</span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-extrabold text-black tracking-tight leading-tight max-w-4xl">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold font-bold text-black tracking-tight leading-tight max-w-4xl">
               Talk To Our Financial <span className="text-[#032e92]">Experts</span>
             </h1>
 

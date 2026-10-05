@@ -34,7 +34,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.1 }}
-              className="text-3xl lg:text-[40px] font-bold text-white leading-[1.15] mb-6 font-serif tracking-tight"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-white leading-[1.15] mb-6 font-serif"
             >
               Specialized Investment Funds with <span className=" text-transparent bg-clip-text bg-gradient-to-r from-blue-100 via-cyan-200 to-white">
                 Advanced Derivative Strategies.

@@ -1,8 +1,10 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQuoteLeft } from '@fortawesome/free-solid-svg-icons';
+import { fetchTestimonials, getFrappeImageUrl } from '../api/testimonials';
 
-const testimonialsRow1 = [
+const defaultTestimonialsRow1 = [
   {
     id: 1,
     name: 'Rajesh Sharma',
@@ -33,7 +35,7 @@ const testimonialsRow1 = [
   },
 ];
 
-const testimonialsRow2 = [
+const defaultTestimonialsRow2 = [
   {
     id: 5,
     name: 'Vikram Singh',
@@ -46,7 +48,7 @@ const testimonialsRow2 = [
     name: 'Anjali Desai',
     designation: 'Tech Lead',
     image: 'https://randomuser.me/api/portraits/women/33.jpg',
-    text: 'From concept to execution, their financial strategy knows no bounds - a true game-changer for our family\'s long-term success.'
+    text: "From concept to execution, their financial strategy knows no bounds - a true game-changer for our family's long-term success."
   },
   {
     id: 7,
@@ -64,6 +66,18 @@ const testimonialsRow2 = [
   },
 ];
 
+const mapDocToTestimonial = (doc) => {
+  const fallbackImg = `https://ui-avatars.com/api/?name=${encodeURIComponent(doc.name1 || 'Client')}&background=032e92&color=fff`;
+  return {
+    id: doc.name,
+    name: doc.name1 || 'Valued Client',
+    designation: doc.position || '',
+    image: doc.photo ? getFrappeImageUrl(doc.photo) : fallbackImg,
+    fallbackImage: fallbackImg,
+    text: doc.description || '',
+  };
+};
+
 const TestimonialCard = ({ testimonial }) => (
   <div className="w-[400px] flex-shrink-0 bg-[#f8f9fc] rounded-[24px] p-8 mx-3 border border-gray-100 flex flex-col justify-between hover:shadow-lg transition-shadow duration-300">
     <div>
@@ -80,7 +94,12 @@ const TestimonialCard = ({ testimonial }) => (
       <img
         src={testimonial.image}
         alt={testimonial.name}
-        className="w-12 h-12 rounded-full object-cover shadow-sm"
+        onError={(e) => {
+          if (testimonial.fallbackImage && e.target.src !== testimonial.fallbackImage) {
+            e.target.src = testimonial.fallbackImage;
+          }
+        }}
+        className="w-12 h-12 rounded-full object-cover shadow-sm bg-gray-100"
       />
       <div>
         <h4 className="font-bold text-gray-900 text-sm">{testimonial.name}</h4>
@@ -91,6 +110,35 @@ const TestimonialCard = ({ testimonial }) => (
 );
 
 export default function Testimonials() {
+  const [row1, setRow1] = useState(defaultTestimonialsRow1);
+  const [row2, setRow2] = useState(defaultTestimonialsRow2);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadTestimonials() {
+      const data = await fetchTestimonials();
+      if (isMounted && data && Array.isArray(data) && data.length > 0) {
+        const mapped = data.map(mapDocToTestimonial);
+        if (mapped.length === 1) {
+          setRow1(mapped);
+          setRow2(mapped);
+        } else {
+          const mid = Math.ceil(mapped.length / 2);
+          setRow1(mapped.slice(0, mid));
+          setRow2(mapped.slice(mid));
+        }
+      }
+    }
+
+    loadTestimonials();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const displayRow1 = row1.length < 4 ? [...row1, ...row1, ...row1, ...row1] : [...row1, ...row1];
+  const displayRow2 = row2.length < 4 ? [...row2, ...row2, ...row2, ...row2] : [...row2, ...row2];
+
   return (
     <section className="py-12 sm:py-16 bg-white relative overflow-hidden">
 
@@ -131,21 +179,19 @@ export default function Testimonials() {
             animate={{ x: ["-50%", "0%"] }}
             transition={{ repeat: Infinity, ease: "linear", duration: 45 }}
           >
-            {/* We duplicate the array to create the seamless loop */}
-            {[...testimonialsRow1, ...testimonialsRow1].map((t, idx) => (
-              <TestimonialCard key={`row1-${idx}`} testimonial={t} />
+            {displayRow1.map((t, idx) => (
+              <TestimonialCard key={`row1-${t.id || idx}-${idx}`} testimonial={t} />
             ))}
           </motion.div>
 
-          {/* Bottom Row: Right to Left (Starts at 0%, moves to -50%) */}
+          {/* Bottom Row: Right to Left (Starts at 0%, moves to -50%) - Hidden on mobile screens */}
           <motion.div
-            className="flex w-max"
+            className="hidden md:flex w-max"
             animate={{ x: ["0%", "-50%"] }}
             transition={{ repeat: Infinity, ease: "linear", duration: 55 }}
           >
-            {/* We duplicate the array to create the seamless loop */}
-            {[...testimonialsRow2, ...testimonialsRow2].map((t, idx) => (
-              <TestimonialCard key={`row2-${idx}`} testimonial={t} />
+            {displayRow2.map((t, idx) => (
+              <TestimonialCard key={`row2-${t.id || idx}-${idx}`} testimonial={t} />
             ))}
           </motion.div>
 

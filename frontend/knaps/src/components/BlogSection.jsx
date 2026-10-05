@@ -46,7 +46,7 @@ export default function BlogSection() {
     <section id="blogs" className="py-12 sm:py-16 bg-gray-50 relative">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
 
-        <div className="flex flex-col md:flex-row justify-between items-end mb-10 sm:mb-12 gap-6">
+        <div className="flex flex-col items-center text-center md:flex-row md:justify-between md:items-end md:text-left mb-10 sm:mb-12 gap-6">
           <div className="max-w-2xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -61,16 +61,17 @@ export default function BlogSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-black tracking-tight leading-tight max-w-4xl mx-auto"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-black tracking-tight leading-tight max-w-4xl"
             >
               Blogs and <span className="text-[#032e92]">Resources</span>
             </motion.h2>
           </div>
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
+            className="w-full sm:w-auto flex justify-center"
           >
             <Link to="/blogs" className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center justify-center cursor-pointer">
               View All Articles

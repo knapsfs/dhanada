@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../assets/style.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 import { Chatbot } from '../logic/chatbot.js';
 import { saveChatMessage } from '../logic/conversationPersistence.js';
 
@@ -151,13 +153,13 @@ export default function ChatbotWidget() {
     if (historyRef.current && lastMessageRef.current) {
       const container = historyRef.current;
       const lastMsg = lastMessageRef.current;
-      
+
       const childRect = lastMsg.getBoundingClientRect();
       const containerRect = container.getBoundingClientRect();
       const relativeTop = childRect.top - containerRect.top + container.scrollTop;
-      
+
       const targetScrollTop = relativeTop - 20; // 20px padding
-      
+
       container.scrollTo({
         top: targetScrollTop,
         behavior: 'smooth'
@@ -350,6 +352,24 @@ export default function ChatbotWidget() {
 
   return (
     <>
+      {/* Interactive WhatsApp Floating Button */}
+      <a
+        href="https://wa.me/919990243143?text=Hi%20KNAPS%2C%20I%20would%20like%20to%20know%20more%20about%20your%20financial%20services."
+        target="_blank"
+        rel="noopener noreferrer"
+        id="whatsappLauncher"
+        className={`whatsapp-launcher ${isOpen ? 'is-open' : ''}`}
+        aria-label="Chat with us on WhatsApp"
+      >
+        <span className="whatsapp-pulse-ring" aria-hidden="true" />
+        <FontAwesomeIcon icon={faWhatsapp} className="whatsapp-icon" />
+        <span className="whatsapp-online-dot" aria-hidden="true" />
+        <span className="whatsapp-tooltip" role="tooltip">
+          <span className="whatsapp-tooltip-dot" aria-hidden="true" />
+          Chat on WhatsApp
+        </span>
+      </a>
+
       <button
         id="widgetLauncher"
         className={`widget-launcher ${isOpen ? 'is-open' : ''} ${isInverted ? 'inverted' : ''}`}
@@ -403,36 +423,36 @@ export default function ChatbotWidget() {
           {messages.map((msg, idx) => {
             const isLastMessage = idx === messages.length - 1 && !isTyping;
             return (
-            <div 
-              key={idx} 
-              className={`message-row ${msg.role}`}
-              ref={isLastMessage ? lastMessageRef : null}
-            >
-              <div className={`message ${msg.role}`}>
-                {msg.role === 'bot' && (
-                  <div className="message-meta">
-                    <span className="message-avatar">R</span>
-                    <span>Riddhi</span>
-                  </div>
-                )}
-                <div>{msg.text}</div>
-                {msg.quickReplies && msg.quickReplies.length > 0 && (
-                  <div className="quick-replies-container">
-                    {msg.quickReplies.map((qr, qrIdx) => (
-                      <button
-                        key={qrIdx}
-                        type="button"
-                        className="quick-reply-btn"
-                        onClick={() => handleSend(qr)}
-                        disabled={isBusy}
-                      >
-                        {qr}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div >
+              <div
+                key={idx}
+                className={`message-row ${msg.role}`}
+                ref={isLastMessage ? lastMessageRef : null}
+              >
+                <div className={`message ${msg.role}`}>
+                  {msg.role === 'bot' && (
+                    <div className="message-meta">
+                      <span className="message-avatar">R</span>
+                      <span>Riddhi</span>
+                    </div>
+                  )}
+                  <div>{msg.text}</div>
+                  {msg.quickReplies && msg.quickReplies.length > 0 && (
+                    <div className="quick-replies-container">
+                      {msg.quickReplies.map((qr, qrIdx) => (
+                        <button
+                          key={qrIdx}
+                          type="button"
+                          className="quick-reply-btn"
+                          onClick={() => handleSend(qr)}
+                          disabled={isBusy}
+                        >
+                          {qr}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div >
             );
           })
           }

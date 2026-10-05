@@ -4,7 +4,7 @@ import { useInView } from 'react-intersection-observer';
 
 const stats = [
   { id: 1, value: 1000, suffix: '+', label: 'Happy Investors' },
-  { id: 2, value: 200, prefix: '₹', suffix: 'Cr+', label: 'Assets Managed' },
+  { id: 2, value: 200, suffix: 'cr+', label: 'Assets Managed' },
   { id: 3, value: 30, suffix: '+', label: 'Years Experience' },
   { id: 4, value: 98, suffix: '%', label: 'Client Satisfaction' },
 ];
@@ -52,9 +52,9 @@ export default function Stats({ className = "py-12 sm:py-16" }) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className={`flex flex-col items-center justify-center text-center ${idx > 1 ? 'pt-8 md:pt-0' : idx > 0 && idx < 2 ? 'pt-8 sm:pt-0 md:pt-0' : ''}`}
+                className={`flex flex-col items-center justify-center text-center`}
               >
-                <div className="text-4xl md:text-5xl font-semibold text-white mb-2 tracking-tight">
+                <div className="text-3xl md:text-5xl font-semibold text-white mb-2 tracking-tight">
                   {inView ? (
                     <AnimatedCounter
                       value={stat.value}

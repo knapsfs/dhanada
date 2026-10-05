@@ -24,7 +24,7 @@ export default function BlogsHero({ selectedCategory = 'All' }) {
               </span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-extrabold text-black tracking-tight leading-tight max-w-4xl mx-auto">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold font-bold text-black tracking-tight leading-tight max-w-4xl mx-auto">
               Insights, Investment Ideas &amp; <span className="text-[#032e92]">Financial Knowledge</span>
             </h1>
 
