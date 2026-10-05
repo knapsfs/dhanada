@@ -69,7 +69,7 @@ class TestAMFISchedulersArchitecture(IntegrationTestCase):
 				]
 			},
 		)
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep: frappe-manual-commit - required to persist test setup across scheduler runs
 
 		# Ensure Dhanada Settings exists
 		settings = frappe.get_single("Dhanada Settings")
@@ -334,7 +334,7 @@ class TestAMFISchedulersArchitecture(IntegrationTestCase):
 		doc = frappe.get_doc("SIF NAV Historical Data", "SIF-TEST-SCHED-1")
 		doc.historical_nav_data[0].nav = 999.9999
 		doc.save(ignore_permissions=True)
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep: frappe-manual-commit - required to persist manual modification across scheduler runs
 
 		# Next scheduler run with unchanged repo -> detects difference and restores DB
 		res = sync_nav_data(dry_run=False, force=False)
@@ -528,7 +528,7 @@ class TestAMFISchedulersArchitecture(IntegrationTestCase):
 			scheme_doc.scheme_objective = "Capital appreciation"
 			scheme_doc.investment_strategy = "Debt"  # Different from repo (repo has Equity)
 			scheme_doc.insert(ignore_permissions=True)
-			frappe.db.commit()
+			frappe.db.commit()  # nosemgrep: frappe-manual-commit - required to persist test scheme across scheduler runs
 
 		res = sync_scheme_details(dry_run=False, force=False)
 		self.assertEqual(res["status"], "success")

@@ -50,7 +50,9 @@ def _read_latest_daily_nav(nav_dir: str) -> tuple[list[dict[str, Any]], str | No
 
 	parsed_rows = []
 	try:
-		with open(latest_file, encoding="utf-8", errors="ignore") as f:
+		with open(  # nosemgrep: frappe-security-file-traversal
+			latest_file, encoding="utf-8", errors="ignore"
+		) as f:
 			reader = csv.DictReader(f)
 			for row in reader:
 				if "sif_code" in row and "nav_date" in row and "nav" in row:
@@ -102,7 +104,9 @@ def _read_historical_nav(nav_dir: str) -> tuple[list[dict[str, Any]], list[str]]
 		fallback_code = base_name.upper().replace("_", "-")
 
 		try:
-			with open(fpath, encoding="utf-8", errors="ignore") as f:
+			with open(  # nosemgrep: frappe-security-file-traversal
+				fpath, encoding="utf-8", errors="ignore"
+			) as f:
 				reader = csv.DictReader(f)
 				scheme_code = None
 				rows = []

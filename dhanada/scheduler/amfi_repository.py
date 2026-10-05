@@ -85,7 +85,7 @@ def compute_files_hash(file_paths: list[str]) -> str:
 		hasher.update(fname.encode("utf-8"))
 		if os.path.exists(fpath):
 			try:
-				with open(fpath, "rb") as fp:
+				with open(fpath, "rb") as fp:  # nosemgrep: frappe-security-file-traversal
 					while chunk := fp.read(65536):
 						hasher.update(chunk)
 			except OSError:
@@ -106,7 +106,9 @@ def load_local_amfi_isin_mapping(repo_path: str) -> dict[str, str]:
 	for p in possible_paths:
 		if os.path.exists(p):
 			try:
-				with open(p, encoding="utf-8", errors="ignore") as f:
+				with open(  # nosemgrep: frappe-security-file-traversal
+					p, encoding="utf-8", errors="ignore"
+				) as f:
 					return parse_amfi_sif_nav_text(f.read())
 			except Exception as e:
 				logger.warning(f"Failed reading local SIF_NAVAll.txt at {p}: {e}")

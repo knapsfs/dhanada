@@ -1,5 +1,9 @@
 import frappe
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> f070b7edc9ae5094e44ee4b2e0daab04bfef2b2e
 @frappe.whitelist(allow_guest=True)
 def get_testimonials():
 	"""
