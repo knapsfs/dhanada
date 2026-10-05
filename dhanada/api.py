@@ -50,7 +50,12 @@ from dhanada.APIs.scheme_details import (
 	get_historical_nav_for_sif,
 )
 
+
+# Website testimonials laata hai.
+from dhanada.APIs.testimonials import get_testimonials
+
 __all__ = [
+	"get_testimonials",
 	"associate_lead_to_conversation",
 	"chatbot_response",
 	"create_chatbot_lead",

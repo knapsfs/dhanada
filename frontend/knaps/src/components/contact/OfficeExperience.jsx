@@ -9,7 +9,7 @@ export default function OfficeExperience() {
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#f0f4fd] text-[#032e92] font-semibold text-xs tracking-widest uppercase mb-6">
             Visit Our Office
           </div>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-extrabold text-[#0f172a] leading-tight mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-[#0f172a] leading-tight mb-4">
             Visit Our Office for <span className="text-[#032e92]">Personalised Wealth Guidance</span>
           </h2>
         </div>

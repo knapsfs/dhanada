@@ -35,6 +35,172 @@ body {
   CHATBOT LAUNCHER
   ====================================================
 */
+/* 
+  ====================================================
+  WHATSAPP FLOATING LAUNCHER (Above Widget Launcher)
+  ====================================================
+*/
+.whatsapp-launcher {
+  position: fixed;
+  right: 26px;
+  bottom: 100px;
+  z-index: 999997;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.4);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  animation: floatWhatsapp 3s ease-in-out infinite 0.5s;
+}
+
+@keyframes floatWhatsapp {
+  0% {
+    transform: translateY(0);
+    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.4);
+  }
+  50% {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 22px rgba(37, 211, 102, 0.55);
+  }
+  100% {
+    transform: translateY(0);
+    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.4);
+  }
+}
+
+.whatsapp-launcher:hover {
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 8px 25px rgba(37, 211, 102, 0.65), 0 0 0 4px rgba(37, 211, 102, 0.2);
+  animation-play-state: paused;
+}
+
+.whatsapp-launcher:active {
+  transform: scale(0.95);
+}
+
+.whatsapp-launcher.is-open {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(14px) scale(0.9) !important;
+  animation: none;
+}
+
+/* Pulsing radar ring */
+.whatsapp-pulse-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(37, 211, 102, 0.4) 0%, rgba(37, 211, 102, 0) 75%);
+  animation: whatsappRadar 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+@keyframes whatsappRadar {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.9;
+  }
+  70% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+/* Icon */
+.whatsapp-icon {
+  font-size: 32px;
+  color: #ffffff;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.whatsapp-launcher:hover .whatsapp-icon {
+  transform: scale(1.12) rotate(-8deg);
+}
+
+.whatsapp-launcher:active .whatsapp-icon {
+  transform: scale(0.95);
+}
+
+/* Online status dot */
+.whatsapp-online-dot {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 14px;
+  height: 14px;
+  background-color: #22c55e;
+  border: 2.5px solid #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Tooltip on hover */
+.whatsapp-tooltip {
+  position: absolute;
+  right: calc(100% + 14px);
+  top: 50%;
+  transform: translateY(-50%) translateX(8px);
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  padding: 7px 14px;
+  border-radius: 9999px;
+  white-space: nowrap;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: inherit;
+}
+
+.whatsapp-tooltip::after {
+  content: '';
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent transparent #0f172a;
+}
+
+.whatsapp-tooltip-dot {
+  width: 7px;
+  height: 7px;
+  background-color: #22c55e;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #22c55e;
+  animation: pulseDot 2s infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.whatsapp-launcher:hover .whatsapp-tooltip {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
 .widget-launcher {
   --launcher-bg: var(--color-blue-900);
   --morph-base: var(--color-white);
@@ -664,6 +830,21 @@ body {
 
 /* Responsive */
 @media (max-width: 640px) {
+  .whatsapp-launcher {
+    right: 20px;
+    bottom: 90px;
+    width: 56px;
+    height: 56px;
+  }
+
+  .whatsapp-icon {
+    font-size: 28px;
+  }
+
+  .whatsapp-tooltip {
+    display: none;
+  }
+
   .widget-launcher {
     right: 16px;
     bottom: 16px;
