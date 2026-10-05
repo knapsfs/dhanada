@@ -49,12 +49,10 @@ from dhanada.APIs.scheme_details import (
 	get_historical_nav_for_sif,
 )
 
-
 # Website testimonials laata hai.
 from dhanada.APIs.testimonials import get_testimonials
 
 __all__ = [
-	"get_testimonials",
 	"associate_lead_to_conversation",
 	"chatbot_response",
 	"create_chatbot_lead",
@@ -71,6 +69,7 @@ __all__ = [
 	"get_historical_nav_for_sif",
 	"get_performance_for_sif",
 	"get_scheme_heatmap_performance",
+	"get_testimonials",
 	"mask_invalid_returns",
 	"save_chat_message",
 	"submit_risk_profile",
