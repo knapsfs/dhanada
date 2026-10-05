@@ -17,6 +17,20 @@ EXTRA_TEST_RECORD_DEPENDENCIES = []
 IGNORE_TEST_RECORD_DEPENDENCIES = []
 
 
+def _safe_delete_doc(doctype, name):
+	if frappe.db.exists(doctype, name):
+		try:
+			doc = frappe.get_doc(doctype, name)
+			if getattr(doc, "docstatus", 0) == 1:
+				doc.cancel()
+			frappe.delete_doc(doctype, name, ignore_permissions=True, force=True, delete_permanently=True)
+		except Exception:
+			try:
+				frappe.db.delete(doctype, {"name": name})
+			except Exception:
+				pass
+
+
 class IntegrationTestSIFScheme(IntegrationTestCase):
 	"""
 	Integration tests for SIFScheme and SIF Scheme Request document URL lifecycle.
@@ -29,8 +43,25 @@ class IntegrationTestSIFScheme(IntegrationTestCase):
 
 		before_tests()
 
+	def setUp(self):
+		super().setUp()
+		# Clean up any leftover test schemes and modification requests
+		for name in frappe.get_all("SIF Scheme", filters={"sebi_code": ["like", "TEST/%"]}, pluck="name"):
+			for mod in frappe.get_all(
+				"SIF Scheme Modification Request", filters={"scheme": name}, pluck="name"
+			):
+				_safe_delete_doc("SIF Scheme Modification Request", mod)
+			_safe_delete_doc("SIF Scheme", name)
+
 	def tearDown(self):
-		frappe.db.rollback()
+		for name in frappe.get_all("SIF Scheme", filters={"sebi_code": ["like", "TEST/%"]}, pluck="name"):
+			for mod in frappe.get_all(
+				"SIF Scheme Modification Request", filters={"scheme": name}, pluck="name"
+			):
+				_safe_delete_doc("SIF Scheme Modification Request", mod)
+			_safe_delete_doc("SIF Scheme", name)
+		frappe.db.after_rollback.reset()
+		super().tearDown()
 
 	def _sample_scheme_payload(self, sebi_code="TEST/O/E/ELSF/26/01/0001/TEST", isid_url=None):
 		return {
@@ -1000,21 +1031,20 @@ class IntegrationTestSIFScheme(IntegrationTestCase):
 		self.assertEqual(current_name, "Old Union Entity")
 
 	def _get_or_create_test_amc(self):
-		amc_name = frappe.db.get_value("SIF Asset Management Company", {}, "name")
-		if not amc_name:
+		if not frappe.db.exists("SIF Asset Management Company", "TEST"):
 			amc_doc = frappe.get_doc(
 				{
 					"doctype": "SIF Asset Management Company",
 					"code": "TEST",
 					"amc_name": "Test AMC",
-					"sif_name": "Test",
+					"sif_name": "Test SIF",
 					"registration_number": "TEST",
 					"rta": "CAMS",
 					"is_active": 1,
 				}
 			).insert(ignore_permissions=True)
-			amc_name = amc_doc.name
-		return amc_name
+			return amc_doc.name
+		return "TEST"
 
 	def test_manual_single_field_edit_creates_modification_and_preserves_scheme(self):
 		"""
