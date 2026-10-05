@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import lottie from 'lottie-web/build/player/lottie_light';
+import giftBoxAnimationData from '../assets/Gift Box White.json';
 import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faChevronDown, faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -55,6 +57,49 @@ export default function Navbar() {
   const [mobileLoginOpen, setMobileLoginOpen] = useState(false);
   const location = useLocation();
   const { openLeadModal } = useLeadModal();
+
+  const mobileGiftRef = useRef(null);
+  const mobileGiftAnim = useRef(null);
+
+  useEffect(() => {
+    if (!mobileGiftRef.current) return;
+    mobileGiftAnim.current = lottie.loadAnimation({
+      container: mobileGiftRef.current,
+      renderer: 'svg',
+      loop: false,
+      autoplay: false,
+      animationData: giftBoxAnimationData,
+    });
+    mobileGiftAnim.current.goToAndStop(0, true);
+
+    const playWobble = () => {
+      if (mobileGiftAnim.current) {
+        mobileGiftAnim.current.playSegments([0, 35], true);
+      }
+    };
+    const interval = setInterval(playWobble, 3400);
+
+    const handleReset = () => {
+      if (mobileGiftAnim.current) {
+        mobileGiftAnim.current.goToAndStop(0, true);
+      }
+    };
+    window.addEventListener('mystery-box-closed', handleReset);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('mystery-box-closed', handleReset);
+      mobileGiftAnim.current?.destroy();
+    };
+  }, []);
+
+  const handleOpenGiftFromNavbar = () => {
+    setMobileOpen(false);
+    if (mobileGiftAnim.current) {
+      mobileGiftAnim.current.playSegments([35, 55], true);
+    }
+    window.dispatchEvent(new CustomEvent('open-mystery-box'));
+  };
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -232,15 +277,31 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Mobile Toggle */}
-          <button
-            type="button"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="xl:hidden w-11 h-11 flex items-center justify-center rounded-xl bg-[#eef5ff] text-[#032e92] relative z-50 transition-transform hover:scale-105 active:scale-95 cursor-pointer pointer-events-auto select-none shrink-0"
-            aria-label="Toggle navigation menu"
-          >
-            <FontAwesomeIcon icon={mobileOpen ? faXmark : faBars} className="text-lg pointer-events-none" />
-          </button>
+          {/* Mobile Right Controls: Gift Box & Toggle */}
+          <div className="xl:hidden flex items-center gap-3 sm:gap-4 relative z-50">
+            {/* Gift Box Mobile Trigger (shifted left with bottom breathing room) */}
+            <button
+              type="button"
+              onClick={handleOpenGiftFromNavbar}
+              aria-label="Open financial toolkit mystery box"
+              className="w-11 h-11 flex items-center justify-center relative transition-transform hover:scale-110 active:scale-90 cursor-pointer select-none shrink-0 mr-1.5"
+            >
+              <div
+                ref={mobileGiftRef}
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[57%] w-[114px] h-[68px] flex items-center justify-center filter drop-shadow-[0_3px_8px_rgba(0,0,0,0.15)] pointer-events-none"
+              />
+            </button>
+
+            {/* Mobile Toggle */}
+            <button
+              type="button"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="w-11 h-11 flex items-center justify-center rounded-xl bg-[#eef5ff] text-[#032e92] relative transition-transform hover:scale-105 active:scale-95 cursor-pointer pointer-events-auto select-none shrink-0"
+              aria-label="Toggle navigation menu"
+            >
+              <FontAwesomeIcon icon={mobileOpen ? faXmark : faBars} className="text-lg pointer-events-none" />
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu */}
