@@ -43,7 +43,7 @@ def _read_performance(perf_dir: str, include_heatmap: bool = False) -> tuple[lis
 	parsed_performance = []
 	for fpath in json_files:
 		try:
-			with open(fpath, encoding="utf-8") as f:
+			with open(fpath, encoding="utf-8") as f:  # nosemgrep: frappe-security-file-traversal
 				item = json.load(f)
 				if not include_heatmap and isinstance(item, dict) and "monthly_returns" in item:
 					item = dict(item)

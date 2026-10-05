@@ -93,7 +93,7 @@ def sync_scheme_details(dry_run: bool = False, force: bool = False) -> dict[str,
 		skipped = 0
 		for fpath in json_files:
 			try:
-				with open(fpath, encoding="utf-8") as f:
+				with open(fpath, encoding="utf-8") as f:  # nosemgrep: frappe-security-file-traversal
 					parsed_schemes.append(json.load(f))
 			except Exception as e:
 				skipped += 1

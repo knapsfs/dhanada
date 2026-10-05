@@ -759,6 +759,88 @@ class IntegrationTestSIFScheme(IntegrationTestCase):
 		if frappe.db.exists("SIF Asset Management Company", "OLDAMC"):
 			frappe.delete_doc("SIF Asset Management Company", "OLDAMC", ignore_permissions=True, force=True)
 
+	def test_scheme_with_direct_amc_link_creates_modification_request(self):
+		"""
+		Verifies:
+		1. Admin edits the 'amc' link field directly on an existing SIF Scheme.
+		2. SIF Scheme in database retains its original AMC link value until approval.
+		3. A SIF Scheme Modification Request is created with the AMC change.
+		4. Approving and submitting the modification request applies the updated AMC link.
+		"""
+		test_code = "TEST/O/E/ELSF/26/MODAMC/DIRECT/001"
+		existing_sif = frappe.db.get_value("SIF Scheme", {"sebi_code": test_code}, "name")
+		if existing_sif:
+			frappe.delete_doc("SIF Scheme", existing_sif, ignore_permissions=True, force=True)
+
+		# Ensure old and new AMCs exist
+		for code, name, brand in [
+			("OLDAMC", "Old Asset Management", "Old SIF"),
+			("ABSL", "Aditya Birla Sun Life AMC", "Apex SIF"),
+		]:
+			if not frappe.db.exists("SIF Asset Management Company", code):
+				frappe.get_doc(
+					{
+						"doctype": "SIF Asset Management Company",
+						"code": code,
+						"amc_name": name,
+						"sif_name": brand,
+						"registration_number": code,
+						"rta": "CAMS",
+						"is_active": 1,
+					}
+				).insert(ignore_permissions=True)
+
+		scheme_doc = frappe.get_doc(
+			{
+				"doctype": "SIF Scheme",
+				"sebi_code": test_code,
+				"scheme_name": "Apex Direct AMC Test Fund",
+				"investment_strategy": "Equity",
+				"scheme_subcategory": "Equity Long-Short Fund",
+				"amc": "OLDAMC",
+				"scheme_objective": "Test",
+			}
+		)
+		scheme_doc.flags.from_approval = True
+		scheme_doc.insert(ignore_permissions=True)
+
+		# Admin directly edits amc
+		scheme_doc.amc = "ABSL"
+		scheme_doc.save(ignore_permissions=True)
+
+		# Verify scheme retains old AMC in DB
+		scheme_doc.reload()
+		self.assertEqual(scheme_doc.amc, "OLDAMC")
+
+		mod_name = frappe.db.get_value(
+			"SIF Scheme Modification Request", {"scheme": scheme_doc.name, "docstatus": 0}, "name"
+		)
+		self.assertTrue(mod_name, "Modification request must be created for AMC change")
+		mod_doc = frappe.get_doc("SIF Scheme Modification Request", mod_name)
+
+		# Approve and apply the change
+		for row in mod_doc.changed_fields:
+			if row.field_name == "amc":
+				row.apply_change = 1
+		mod_doc.save(ignore_permissions=True)
+		mod_doc.submit()
+
+		# Verify master SIF Scheme has updated amc link
+		scheme_doc.reload()
+		self.assertEqual(scheme_doc.amc, "ABSL")
+
+		# Teardown
+		if frappe.db.exists("SIF Scheme Modification Request", mod_name):
+			mod_doc.reload()
+			if mod_doc.docstatus == 1:
+				mod_doc.cancel()
+			frappe.delete_doc(
+				"SIF Scheme Modification Request", mod_name, ignore_permissions=True, force=True
+			)
+		frappe.delete_doc("SIF Scheme", scheme_doc.name, ignore_permissions=True, force=True)
+		if frappe.db.exists("SIF Asset Management Company", "OLDAMC"):
+			frappe.delete_doc("SIF Asset Management Company", "OLDAMC", ignore_permissions=True, force=True)
+
 	def test_existing_stale_amc_metadata_creates_modification_request(self):
 		"""
 		Tests Scenario A:

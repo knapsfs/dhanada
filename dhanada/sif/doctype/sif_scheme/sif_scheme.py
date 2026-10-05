@@ -19,7 +19,7 @@ class SIFScheme(Document):
 	def after_insert(self):
 		self.flags.from_approval = False
 
-	def after_save(self):
+	def on_update(self):
 		self.flags.from_approval = False
 
 	def before_save(self):
