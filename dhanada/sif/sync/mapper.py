@@ -273,6 +273,49 @@ class DataMapper:
 								add_plan, sebi_code, mapped_type, mapped_option, mapped_sub, dataset
 							)
 
+	def _is_valid_mgr_name(self, n: Any) -> bool:
+		if not n or not isinstance(n, str):
+			return False
+		s = n.strip().rstrip(".,;")
+		if len(s) < 2:
+			return False
+		letters = re.findall(r"[a-zA-Z]", s)
+		if len(letters) < 2:
+			return False
+		if (
+			re.search(r"^\d{4}-\d{2}-\d{2}", s)
+			or re.search(r"\d{1,2}T\d{2}:\d{2}", s)
+			or re.search(r"^\d{1,2}T\d{2}", s)
+		):
+			return False
+		if re.search(r"^(?:00|05T00|00\.000|\d{1,2}:\d{2}(?::\d{2})?(?:\.\d+)?)$", s, re.IGNORECASE):
+			return False
+		if self._parse_date(s) is not None:
+			return False
+		if s.lower() in (
+			"primary",
+			"comanage",
+			"co manage",
+			"co-manage",
+			"description",
+			"fields",
+			"field",
+			"col0",
+			"val",
+			"none",
+			"null",
+			"nan",
+			"n.a.",
+			"na",
+			"-",
+			"--",
+			"managing since inception",
+			"fund manager",
+			"manager",
+		):
+			return False
+		return True
+
 	def _parse_managers(self, raw_managers_list: list[dict], dataset: SyncDataset) -> list[SchemeFundManager]:
 		parsed_managers = []
 
@@ -336,7 +379,7 @@ class DataMapper:
 				clean_name = title_pattern.sub("", clean_name).strip()
 				clean_name = re.sub(r"\s+", " ", clean_name).strip()
 
-				if not clean_name:
+				if not clean_name or not self._is_valid_mgr_name(clean_name):
 					continue
 
 				# Truncate to 140 chars to satisfy Frappe Link field limits for malformed upstream data
