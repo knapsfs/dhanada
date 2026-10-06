@@ -526,19 +526,7 @@ def submit_risk_profile():
 		except Exception as lead_err:
 			frappe.log_error(title="CRM Lead Save Failed in Risk Profiler", message=str(lead_err))
 
-		# 4. Send Brevo SMTP Email to the User using Dhanada Settings
-		email_sent = False
-		try:
-			html_body = generate_risk_email_html(full_name, profile, score, max_score, metrics)
-			email_subject = f"Your Investor Risk Profile: {profile} | KNAPS Private Limited"
-			send_brevo_smtp_email(email, email_subject, html_body)
-			email_sent = True
-		except Exception as mail_err:
-			frappe.log_error(
-				title="Brevo Email Dispatch Failed",
-				message=f"Error sending to {email}: {mail_err!s}\n{frappe.get_traceback()}",
-			)
-
+		# 4. User email report dispatch disabled as requested (results shown directly on screen)
 		# 5. Send Admin Notification using Dhanada Settings
 		try:
 			send_admin_alert(
@@ -554,19 +542,12 @@ def submit_risk_profile():
 		except Exception:
 			pass
 
-		if not email_sent:
-			return {
-				"success": True,
-				"lead_name": created_lead_name,
-				"warning": "Lead saved, but email could not be delivered. Please verify Brevo credentials in Dhanada Settings.",
-			}
-
 		return {
 			"success": True,
 			"lead_name": created_lead_name,
 			"profile": profile,
 			"score": score,
-			"message": f"Risk profile email successfully sent to {email}",
+			"message": "Risk profile submitted successfully.",
 		}
 
 	except Exception as e:

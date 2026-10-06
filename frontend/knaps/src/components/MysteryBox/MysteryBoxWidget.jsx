@@ -359,7 +359,7 @@ export default function MysteryBoxWidget() {
                   <span className="w-2.5 h-2.5 rounded-full bg-[#032e92]" />
                   <span className="text-sm font-bold text-gray-800">
                     {activeModal === 'risk' && 'Investor Risk Profiler'}
-                    {activeModal === 'myth' && 'Myth or Fact? Finance Quiz'}
+                    {activeModal === 'myth' && 'Myth or Fact?'}
                     {activeModal === 'sif' && 'Is SIF Right For You?'}
                   </span>
                 </div>

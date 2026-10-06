@@ -5,7 +5,6 @@ import {
   faCircleCheck, faArrowRight, faArrowLeft, faRotateRight,
   faClock, faChartLine, faPhone, faCircleInfo
 } from '@fortawesome/free-solid-svg-icons'
-import { useLeadModal } from '../../context/LeadModalContext'
 
 export const quizQuestions = [
   {
@@ -61,7 +60,6 @@ export const quizQuestions = [
 ]
 
 export default function SifSuitabilityQuiz({ isModal = false, onClose }) {
-  const { openLeadModal } = useLeadModal()
   const [quizState, setQuizState] = useState('intro') // 'intro' | 'question' | 'result'
   const [currentIdx, setCurrentIdx] = useState(0)
   const [answers, setAnswers] = useState({})
@@ -225,10 +223,6 @@ export default function SifSuitabilityQuiz({ isModal = false, onClose }) {
                   <FontAwesomeIcon icon={faArrowLeft} />
                   <span>Back</span>
                 </button>
-
-                <span className="text-[11px] font-medium text-gray-400">
-                  Select an option to proceed
-                </span>
               </div>
             </motion.div>
           )}
@@ -272,42 +266,26 @@ export default function SifSuitabilityQuiz({ isModal = false, onClose }) {
                 </div>
               </div>
 
-              <div className="flex flex-row items-center justify-center gap-3 mb-3">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-3">
                 <button
                   type="button"
-                  onClick={() => {
-                    if (onClose) onClose()
-                    openLeadModal()
-                  }}
-                  className={`rounded-xl bg-[#c10000] hover:bg-[#9d0000] text-white font-bold shadow-md flex items-center justify-center gap-1.5 transition-all hover:scale-105 active:scale-95 cursor-pointer ${isModal ? 'px-6 py-2.5 text-xs sm:text-sm' : 'px-8 py-3.5 text-base'
+                  onClick={handleRestart}
+                  className={`rounded-xl bg-white hover:bg-blue-50/50 border-2 border-[#032e92] text-[#032e92] font-bold shadow-sm flex items-center justify-center gap-2 transition-all hover:scale-105 active:scale-95 cursor-pointer ${isModal ? 'px-5 py-2.5 text-xs sm:text-sm' : 'px-7 py-3 text-sm sm:text-base'
                     }`}
                 >
-                  <span>Invest Now</span>
-                  <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+                  <FontAwesomeIcon icon={faRotateRight} className="text-xs" />
+                  <span>Retake Quiz</span>
                 </button>
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (onClose) onClose()
-                    openLeadModal()
-                  }}
-                  className={`rounded-xl bg-white hover:bg-gray-50 border-2 border-[#032e92] text-[#032e92] font-bold shadow-sm flex items-center justify-center gap-1.5 transition-all hover:scale-105 active:scale-95 cursor-pointer ${isModal ? 'px-6 py-2.5 text-xs sm:text-sm' : 'px-8 py-3.5 text-base'
+                <a
+                  href="tel:+919990243143"
+                  className={`rounded-xl bg-[#032e92] hover:bg-[#022169] text-white font-bold shadow-md flex items-center justify-center gap-2 transition-all hover:scale-105 active:scale-95 cursor-pointer ${isModal ? 'px-5 py-2.5 text-xs sm:text-sm' : 'px-7 py-3 text-sm sm:text-base'
                     }`}
                 >
                   <FontAwesomeIcon icon={faPhone} className="text-xs" />
                   <span>Talk to Us</span>
-                </button>
+                </a>
               </div>
-
-              <button
-                type="button"
-                onClick={handleRestart}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-gray-500 hover:text-[#032e92] transition-colors cursor-pointer py-1"
-              >
-                <FontAwesomeIcon icon={faRotateRight} className="text-xs" />
-                <span>Retake Quiz</span>
-              </button>
             </motion.div>
           )}
         </AnimatePresence>

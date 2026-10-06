@@ -35,7 +35,7 @@ export default function CTA() {
             <button
               type="button"
               onClick={openLeadModal}
-              className="btn-ripple px-8 py-3.5 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white border border-white/30 hover:border-white/60 hover:shadow-xl hover:shadow-[#032e92]/50 transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
+              className="btn-ripple px-8 py-3.5 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:border-white/60 hover:shadow-xl hover:shadow-[#032e92]/50 transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
             >
               Start Investing Now
             </button>
