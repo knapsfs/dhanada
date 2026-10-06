@@ -354,7 +354,7 @@ export default function ChatbotWidget() {
     <>
       {/* Interactive WhatsApp Floating Button */}
       <a
-        href="https://wa.me/919990243143?text=Hi%20KNAPS%2C%20I%20would%20like%20to%20know%20more%20about%20your%20financial%20services."
+        href="https://wa.me/919990243143?text=Hii%2C%20I%20would%20like%20to%20invest."
         target="_blank"
         rel="noopener noreferrer"
         id="whatsappLauncher"

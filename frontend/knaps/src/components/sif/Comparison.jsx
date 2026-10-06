@@ -44,8 +44,8 @@ export default function Comparison() {
                   return (
                     <th key={header}
                       className={`px-5 py-5 text-center text-sm font-bold ${isSIF
-                          ? 'bg-[#032e92] text-white rounded-t-2xl shadow-lg'
-                          : 'bg-gray-50 text-gray-700'
+                        ? 'bg-[#032e92] text-white rounded-t-2xl shadow-lg'
+                        : 'bg-gray-50 text-gray-700'
                         }`}>
                       {header}
                     </th>
@@ -60,7 +60,6 @@ export default function Comparison() {
                     }`}>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
-                      <FontAwesomeIcon icon={faCircleInfo} className="text-gray-300 text-xs" />
                       <span className="text-sm font-semibold text-gray-600">{row.feature}</span>
                     </div>
                   </td>

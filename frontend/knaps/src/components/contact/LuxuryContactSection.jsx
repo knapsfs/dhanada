@@ -403,11 +403,7 @@ export default function LuxuryContactSection() {
                       className="mt-1.5 w-5 h-5 accent-[#032e92] cursor-pointer"
                     />
                     <label htmlFor="privacy-policy" className="text-[14px] text-gray-500 leading-relaxed cursor-pointer select-none">
-                      I acknowledge that I have read and agree to the{' '}
-                      <a href="/terms" className="text-[#032e92] font-semibold hover:underline">
-                        Privacy Policy
-                      </a>
-                      . I understand that my information will be handled with strict confidentiality.
+                      By submitting the details, you consent to be contacted by KNAPS team.
                     </label>
                   </div>
                   {errors.consent && <p className="text-red-500 text-xs">{errors.consent}</p>}
@@ -426,8 +422,7 @@ export default function LuxuryContactSection() {
                         </>
                       ) : (
                         <>
-                          <span className="relative z-10 text-[15px] tracking-wide">Schedule Consultation</span>
-                          <FontAwesomeIcon icon={faArrowRight} className="relative z-10 group-hover:translate-x-1 transition-transform" />
+                          <span className="relative z-10 text-[15px] tracking-wide">Talk to Us</span>
                         </>
                       )}
                       <div className="absolute inset-0 bg-[#021d63] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500 ease-out z-0"></div>

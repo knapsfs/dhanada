@@ -10,7 +10,7 @@ export default function OfficeExperience() {
             Visit Our Office
           </div>
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-[#0f172a] leading-tight mb-4">
-            Visit Our Office for <span className="text-[#032e92]">Personalised Wealth Guidance</span>
+            Visit Our Office for <span className="text-[#032e92]">One to One Discussion</span>
           </h2>
         </div>
 
