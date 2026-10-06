@@ -50,10 +50,6 @@ from dhanada.APIs.scheme_details import (
 	get_historical_nav_for_sif,
 )
 
-<<<<<<< HEAD
-
-=======
->>>>>>> f070b7edc9ae5094e44ee4b2e0daab04bfef2b2e
 # Website testimonials laata hai.
 from dhanada.APIs.testimonials import get_testimonials
 

@@ -24,11 +24,11 @@ export default function CTA() {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-white mb-6 leading-tight">
-            Ready to Grow Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-white">Wealth?</span>
+            Ready to Start Investing <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-white">for Your Goals?</span>
           </h2>
 
           <p className="text-lg md:text-xl text-blue-100 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Take the first step towards financial freedom. Schedule a one-on-one session with our expert advisors to discuss your customized wealth strategy.
+            Take the first step towards financial freedom. Schedule a one-on-one session with us to discuss your investment goals.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
