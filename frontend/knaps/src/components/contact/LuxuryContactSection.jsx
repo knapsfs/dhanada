@@ -122,7 +122,7 @@ export default function LuxuryContactSection() {
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#f0f4fd] text-[#032e92] font-semibold text-xs tracking-widest uppercase mb-4">
             Get In Touch
           </div>
-          <h2 className="text-4xl lg:text-[52px] font-bold text-[#0a192f] leading-[1.1] tracking-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-extrabold text-[#0f172a] leading-[1.1] tracking-tight">
             Talk To Our <span className="text-[#032e92]">Financial Experts</span>
           </h2>
         </div> */}
@@ -403,7 +403,11 @@ export default function LuxuryContactSection() {
                       className="mt-1.5 w-5 h-5 accent-[#032e92] cursor-pointer"
                     />
                     <label htmlFor="privacy-policy" className="text-[14px] text-gray-500 leading-relaxed cursor-pointer select-none">
-                      By submitting the details, you consent to be contacted by KNAPS team.
+                      I acknowledge that I have read and agree to the{' '}
+                      <a href="/terms" className="text-[#032e92] font-semibold hover:underline">
+                        Privacy Policy
+                      </a>
+                      . I understand that my information will be handled with strict confidentiality.
                     </label>
                   </div>
                   {errors.consent && <p className="text-red-500 text-xs">{errors.consent}</p>}
@@ -422,7 +426,8 @@ export default function LuxuryContactSection() {
                         </>
                       ) : (
                         <>
-                          <span className="relative z-10 text-[15px] tracking-wide">Talk to Us</span>
+                          <span className="relative z-10 text-[15px] tracking-wide">Schedule Consultation</span>
+                          <FontAwesomeIcon icon={faArrowRight} className="relative z-10 group-hover:translate-x-1 transition-transform" />
                         </>
                       )}
                       <div className="absolute inset-0 bg-[#021d63] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500 ease-out z-0"></div>

@@ -564,11 +564,11 @@ export default function FundsTable({
                       <td className="py-4 px-3 text-center">
                         <div className="flex flex-col items-center">
                           <span className="text-xs sm:text-sm font-bold text-gray-900 leading-tight">
-                            {fund.nav != null ? formatNav(fund.nav) : (idx === 0 ? '₹11.2776' : idx === 1 ? '₹11.1244' : '₹10.7764')}
+                            {fund.nav != null ? formatNav(fund.nav) : 'N/A'}
                           </span>
-                          {(fund.navDate || fund.nav_date || fund.nav == null) && (
+                          {(fund.navDate || fund.nav_date) && (
                             <span className="text-[11px] font-medium text-gray-400 mt-0.5 whitespace-nowrap">
-                              {formatNavDate(fund.navDate || fund.nav_date) || '11 Sep 2026'}
+                              {formatNavDate(fund.navDate || fund.nav_date)}
                             </span>
                           )}
                         </div>

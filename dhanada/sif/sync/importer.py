@@ -33,6 +33,9 @@ class DataImporter:
 		for scheme in dataset.schemes:
 			self._process_scheme(scheme)
 
+		for plan in dataset.scheme_plans:
+			self._process_scheme_plan(plan)
+
 		matched_plan_names = set()
 		for nav_update in dataset.nav_updates:
 			updated_plans = self._update_nav(nav_update)
@@ -215,6 +218,78 @@ class DataImporter:
 					"is_active": int(mgr.is_active),
 				},
 			)
+
+	def _process_scheme_plan(self, plan):
+		try:
+			if plan.type != "Regular":
+				return
+
+			isin = plan.isin
+			if not isin:
+				return
+
+			scheme_doc_name = frappe.db.get_value("SIF Scheme", {"sebi_code": plan.sebi_code}, "name")
+			if not scheme_doc_name:
+				return
+
+			plan_exists = frappe.db.exists("SIF Scheme Plan", isin)
+			if plan_exists:
+				if not self.dry_run:
+					doc = frappe.get_doc("SIF Scheme Plan", plan_exists)
+					changed = False
+					if doc.scheme != scheme_doc_name:
+						doc.scheme = scheme_doc_name
+						changed = True
+					if doc.type != plan.type:
+						doc.type = plan.type
+						changed = True
+					if doc.option != plan.option:
+						doc.option = plan.option
+						changed = True
+					if doc.sub_option != plan.sub_option:
+						doc.sub_option = plan.sub_option
+						changed = True
+					if doc.period != plan.period:
+						doc.period = plan.period
+						changed = True
+					if plan.sif_code and doc.sif_code != plan.sif_code:
+						doc.sif_code = plan.sif_code
+						changed = True
+					if plan.rta_code and doc.rta_code != plan.rta_code:
+						doc.rta_code = plan.rta_code
+						changed = True
+					if changed:
+						doc.save(ignore_permissions=True)
+						self.stats["updated"] += 1
+					else:
+						self.stats["skipped"] += 1
+			else:
+				if not self.dry_run:
+					doc = frappe.new_doc("SIF Scheme Plan")
+					doc.isin = isin
+					doc.scheme = scheme_doc_name
+					doc.type = plan.type
+					doc.option = plan.option
+					doc.sub_option = plan.sub_option
+					doc.period = plan.period
+					doc.sif_code = plan.sif_code
+					doc.rta_code = plan.rta_code
+					if plan.nav is not None:
+						doc.nav = plan.nav
+					if plan.nav_date is not None:
+						doc.nav_date = plan.nav_date
+					if plan.aum is not None:
+						doc.aum = plan.aum
+					doc.insert(ignore_permissions=True)
+				self.stats["created"] += 1
+
+			if not self.dry_run:
+				frappe.db.commit()
+		except Exception as e:
+			if not self.dry_run:
+				frappe.db.rollback()
+			self.stats["errors"] += 1
+			log_error(f"Failed to process Scheme Plan {plan.isin}: {e}", exc_info=True)
 
 	def _get_matching_plans(self, sif_code: str) -> list[str]:
 		if not sif_code:

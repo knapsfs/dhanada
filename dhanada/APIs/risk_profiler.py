@@ -379,7 +379,7 @@ def send_admin_alert(name, email, phone, profile, score, max_score, metrics, ans
 		frappe.log_error(title="Admin Alert Email Failed", message=str(err))
 
 
-@frappe.whitelist(allow_guest=True, methods=["POST"])  # nosemgrep: guest-whitelisted-method
+@frappe.whitelist(allow_guest=True, methods=["POST"])
 @rate_limit(limit=10, seconds=60, ip_based=True, methods="POST")
 def submit_risk_profile():
 	"""
