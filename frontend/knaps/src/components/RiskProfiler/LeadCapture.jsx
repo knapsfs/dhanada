@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { getCsrfToken } from '../../utils/csrf';
 import { productOptions } from '../../data/productOptions';
+import { COUNTRIES, DEFAULT_COUNTRY } from '../../data/countries';
 
 export default function LeadCapture({ result, answers = [], onRetake, onClose, onSubmitSuccess, isModal = false }) {
   const [selectedProduct, setSelectedProduct] = useState('');
@@ -21,6 +22,10 @@ export default function LeadCapture({ result, answers = [], onRetake, onClose, o
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submittedUser, setSubmittedUser] = useState(null);
   const dropdownRef = useRef(null);
+  const [selectedCountry, setSelectedCountry] = useState(DEFAULT_COUNTRY);
+  const [isCountryOpen, setIsCountryOpen] = useState(false);
+  const [countrySearch, setCountrySearch] = useState('');
+  const countryDropdownRef = useRef(null);
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -28,10 +33,30 @@ export default function LeadCapture({ result, answers = [], onRetake, onClose, o
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setProductOpen(false);
       }
+      if (countryDropdownRef.current && !countryDropdownRef.current.contains(event.target)) {
+        setIsCountryOpen(false);
+      }
     }
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const filteredCountries = COUNTRIES.filter(
+    (c) =>
+      c.name.toLowerCase().includes(countrySearch.toLowerCase()) ||
+      c.code.includes(countrySearch)
+  );
+
+  const handleCountryChange = (iso) => {
+    const country = COUNTRIES.find((c) => c.iso === iso) || DEFAULT_COUNTRY;
+    setSelectedCountry(country);
+    if (formData.phone.length > country.maxDigits) {
+      setFormData((prev) => ({ ...prev, phone: prev.phone.slice(0, country.maxDigits) }));
+    }
+    if (errors.phone) {
+      setErrors((prev) => ({ ...prev, phone: '' }));
+    }
+  };
 
   const selectedProductObj = productOptions.find((p) => p.value === selectedProduct);
 
@@ -50,9 +75,23 @@ export default function LeadCapture({ result, answers = [], onRetake, onClose, o
       newErrors.email = 'Please enter a valid email address.';
     }
 
-    const phoneClean = formData.phone.replace(/[^0-9+]/g, '');
-    if (!phoneClean || (phoneClean.startsWith('+91') ? phoneClean.length !== 13 : phoneClean.length !== 10)) {
-      newErrors.phone = 'Please enter a valid 10-digit mobile number.';
+    const phoneDigits = formData.phone.replace(/\D/g, '');
+    if (!phoneDigits) {
+      newErrors.phone = 'Please enter your mobile number.';
+    } else if (selectedCountry.iso === 'IN') {
+      if (phoneDigits.length !== 10) {
+        newErrors.phone = `Mobile number must be exactly 10 digits (${phoneDigits.length}/10 entered).`;
+      } else if (!/^[6-9]\d{9}$/.test(phoneDigits)) {
+        newErrors.phone = 'Please enter a valid Indian mobile number starting with 6, 7, 8, or 9.';
+      }
+    } else {
+      if (phoneDigits.length < selectedCountry.minDigits || phoneDigits.length > selectedCountry.maxDigits) {
+        if (selectedCountry.minDigits === selectedCountry.maxDigits) {
+          newErrors.phone = `Phone number must be ${selectedCountry.minDigits} digits (${phoneDigits.length} entered).`;
+        } else {
+          newErrors.phone = `Phone number must be between ${selectedCountry.minDigits} and ${selectedCountry.maxDigits} digits.`;
+        }
+      }
     }
 
     if (!formData.consent) {
@@ -85,7 +124,7 @@ export default function LeadCapture({ result, answers = [], onRetake, onClose, o
         full_name: formData.name.trim(),
         name: formData.name.trim(),
         email: formData.email.trim(),
-        phone: formData.phone.trim(),
+        phone: `${selectedCountry.code} ${formData.phone.trim()}`,
         profile: result?.profile || 'Moderately Aggressive',
         score: result?.score || 18,
         max_score: result?.maxScore || 25,
@@ -107,7 +146,7 @@ export default function LeadCapture({ result, answers = [], onRetake, onClose, o
         setSubmittedUser({
           name: formData.name.trim(),
           email: formData.email.trim(),
-          phone: formData.phone.trim(),
+          phone: `${selectedCountry.code} ${formData.phone.trim()}`,
           profile: result?.profile
         });
         if (onSubmitSuccess) {
@@ -115,7 +154,7 @@ export default function LeadCapture({ result, answers = [], onRetake, onClose, o
             product: selectedProductObj?.label || selectedProduct,
             name: formData.name.trim(),
             email: formData.email.trim(),
-            phone: formData.phone.trim(),
+            phone: `${selectedCountry.code} ${formData.phone.trim()}`,
             profile: result?.profile
           });
         }
@@ -364,25 +403,114 @@ export default function LeadCapture({ result, answers = [], onRetake, onClose, o
                 {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
               </div>
 
-              <div>
+              <div className="relative" ref={countryDropdownRef}>
                 <label className="block text-xs font-bold text-gray-700 mb-1">Mobile Number *</label>
-                <div className="flex relative">
-                  <span className={`absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 font-bold ${isModal ? 'text-xs' : 'text-sm'}`}>+91</span>
+                <div className={`flex rounded-xl border border-gray-200 bg-gray-50 focus-within:bg-white focus-within:border-[#032e92] focus-within:ring-2 focus-within:ring-blue-50 transition-all ${errors.phone ? 'border-red-400' : ''}`}>
+                  {/* Country Code Dropdown Trigger */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (!isSubmitting) {
+                        setIsCountryOpen((prev) => !prev);
+                        setCountrySearch('');
+                      }
+                    }}
+                    disabled={isSubmitting}
+                    aria-label="Select Country Code"
+                    className="flex items-center gap-1.5 px-3 border-r border-gray-200 bg-gray-100/70 hover:bg-blue-50/60 rounded-l-xl transition-all cursor-pointer select-none group flex-shrink-0 disabled:cursor-not-allowed focus:outline-none"
+                  >
+                    <span className="text-xs font-bold text-gray-800 font-mono tracking-tight">
+                      {selectedCountry.code}
+                    </span>
+                    <FontAwesomeIcon
+                      icon={faChevronDown}
+                      className={`text-[9px] text-gray-400 group-hover:text-[#032e92] transition-transform duration-200 ${
+                        isCountryOpen ? 'rotate-180 text-[#032e92]' : ''
+                      }`}
+                    />
+                  </button>
+
+                  {/* Phone Input */}
                   <input
                     type="tel"
+                    inputMode="numeric"
+                    maxLength={selectedCountry.maxDigits}
+                    placeholder={selectedCountry.placeholder || '98765 43210'}
                     value={formData.phone}
                     onChange={(e) => {
-                      const val = e.target.value.replace(/\D/g, '').slice(0, 10);
+                      const maxLen = selectedCountry.maxDigits || 15;
+                      const val = e.target.value.replace(/\D/g, '').slice(0, maxLen);
                       setFormData({ ...formData, phone: val });
                       if (errors.phone) setErrors((prev) => ({ ...prev, phone: '' }));
                     }}
-                    className={`w-full pl-11 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:border-[#032e92] focus:ring-2 focus:ring-blue-50 outline-none transition-all ${isModal ? 'pr-3.5 py-2.5 text-xs sm:text-sm' : 'pr-5 py-3.5'}`}
-                    placeholder="10-digit mobile number"
-                    maxLength={10}
                     disabled={isSubmitting}
+                    className={`w-full bg-transparent outline-none tracking-wider text-gray-900 placeholder:text-gray-400 rounded-r-xl ${
+                      isModal ? 'px-3 py-2.5 text-xs sm:text-sm' : 'px-4 py-3.5 text-sm'
+                    }`}
                   />
                 </div>
                 {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+
+                {/* Country Code Dropdown Menu */}
+                <AnimatePresence>
+                  {isCountryOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -4, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -4, scale: 0.98 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute left-0 bottom-full mb-1.5 w-full sm:w-72 bg-white rounded-xl shadow-2xl border border-gray-100 z-50 overflow-hidden flex flex-col"
+                      style={{ boxShadow: '0 15px 35px -5px rgba(3, 46, 146, 0.2)' }}
+                    >
+                      {/* Search Header */}
+                      <div className="p-2 border-b border-gray-100 bg-gray-50/80">
+                        <input
+                          type="text"
+                          placeholder="Search country or code..."
+                          value={countrySearch}
+                          onChange={(e) => setCountrySearch(e.target.value)}
+                          className="w-full px-2.5 py-1 text-xs bg-white border border-gray-200 rounded-lg outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/20 text-gray-800 placeholder:text-gray-400"
+                          autoFocus
+                        />
+                      </div>
+
+                      {/* Country List */}
+                      <div className="max-h-48 overflow-y-auto divide-y divide-gray-50 py-1">
+                        {filteredCountries.length === 0 ? (
+                          <div className="p-3 text-center text-xs text-gray-400 font-medium">
+                            No countries found
+                          </div>
+                        ) : (
+                          filteredCountries.map((c) => {
+                            const isSelected = selectedCountry.iso === c.iso;
+                            return (
+                              <button
+                                key={c.iso}
+                                type="button"
+                                onClick={() => {
+                                  handleCountryChange(c.iso);
+                                  setIsCountryOpen(false);
+                                  setCountrySearch('');
+                                }}
+                                className={`w-full flex items-center justify-between px-3 py-2 text-left text-xs transition-colors hover:bg-blue-50/80 cursor-pointer ${
+                                  isSelected ? 'bg-blue-50/70 font-semibold text-[#032e92]' : 'text-gray-700'
+                                }`}
+                              >
+                                <div className="flex items-center gap-2 truncate pr-2">
+                                  <span className="text-sm flex-shrink-0 leading-none">{c.flag}</span>
+                                  <span className="truncate">{c.name}</span>
+                                </div>
+                                <span className={`font-mono text-xs flex-shrink-0 ${isSelected ? 'text-[#032e92] font-bold' : 'text-gray-400'}`}>
+                                  {c.code}
+                                </span>
+                              </button>
+                            );
+                          })
+                        )}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
               <div className="pt-1">

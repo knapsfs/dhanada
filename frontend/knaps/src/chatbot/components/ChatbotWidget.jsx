@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import '../assets/style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
+import { faCommentDots } from '@fortawesome/free-solid-svg-icons';
 import { Chatbot } from '../logic/chatbot.js';
 import { saveChatMessage } from '../logic/conversationPersistence.js';
 
@@ -379,13 +380,8 @@ export default function ChatbotWidget() {
         aria-label="Open Riddhi Chat"
         onClick={() => setIsOpen(true)}
       >
-        <div className="morph-container">
-          <div className="morph-part extra"></div>
-          <div className="morph-part stem"></div>
-          <div className="morph-part arm-top"></div>
-          <div className="morph-part arm-bot"></div>
-        </div>
-      </button >
+        <FontAwesomeIcon icon={faCommentDots} className="chat-launcher-icon" />
+      </button>
 
       <section id="chatWidget" className={`chat-widget ${isOpen ? 'is-open' : ''}`} aria-hidden={!isOpen}>
         <header className="chat-widget-header">

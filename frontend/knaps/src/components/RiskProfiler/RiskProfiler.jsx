@@ -125,9 +125,7 @@ export default function RiskProfiler({ isModal = false, onClose }) {
             >
               Start Risk Assessment
             </button>
-            <p className={`text-gray-400 ${isModal ? 'text-[11px] mt-3' : 'text-xs mt-6'}`}>
-              Your responses help us generate an indicative risk profile.
-            </p>
+
           </div>
         </div>
       )}

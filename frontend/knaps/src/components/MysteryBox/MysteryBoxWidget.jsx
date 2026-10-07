@@ -185,7 +185,7 @@ export default function MysteryBoxWidget() {
               transition={{ duration: 0.3, delay: 0.15 }}
               className="absolute top-4 sm:top-6 md:top-8 left-1/2 -translate-x-1/2 text-center pointer-events-none z-40 px-4"
             >
-              <div className="inline-flex items-center gap-2.5 px-5 sm:px-6 py-1.5 sm:py-2 rounded-full bg-white/10 border border-white/20 text-white text-xs sm:text-sm md:text-base font-bold backdrop-blur-md shadow-2xl mb-1">
+              <div className="inline-flex items-center justify-center w-75 sm:w-75 lg:w-100 mx-auto gap-2.5 px-3 sm:px-6 py-1.5 sm:py-2 rounded-full bg-white/10 border border-white/20 text-white text-xs sm:text-sm md:text-base font-bold backdrop-blur-md shadow-2xl mb-1">
                 <FontAwesomeIcon icon={faGift} className="text-amber-300 text-sm sm:text-base" />
                 <span>Your Interactive Financial Toolkit</span>
               </div>
