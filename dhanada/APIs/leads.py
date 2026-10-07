@@ -242,7 +242,24 @@ def create_website_lead():
 			or payload.get("service_interested")
 			or ""
 		).strip()
-		source = (payload.get("source") or "Website Form").strip()
+		raw_source = (payload.get("source") or "Website Form").strip()
+		source = "Website Form"
+		if raw_source:
+			if frappe.db.exists("CRM Lead Source", raw_source):
+				source = raw_source
+			else:
+				try:
+					src_doc = frappe.get_doc(
+						{
+							"doctype": "CRM Lead Source",
+							"source_name": raw_source,
+						}
+					)
+					src_doc.insert(ignore_permissions=True)
+					frappe.db.commit()
+					source = raw_source
+				except Exception:
+					source = "Website Form"
 		notes = (payload.get("notes") or payload.get("message") or "").strip()
 
 		if not full_name:

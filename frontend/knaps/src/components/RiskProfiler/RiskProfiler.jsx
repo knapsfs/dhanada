@@ -71,7 +71,7 @@ export default function RiskProfiler({ isModal = false, onClose }) {
 
   const handleLeadSuccess = (userData) => {
     setSubmittedUser(userData);
-    setPhase('success');
+    // In-place thank you is rendered directly inside LeadCapture
   };
 
   const handleViewResult = () => {
@@ -151,6 +151,8 @@ export default function RiskProfiler({ isModal = false, onClose }) {
         <LeadCapture
           result={result}
           answers={answers}
+          onRetake={handleRetake}
+          onClose={onClose}
           onSubmitSuccess={handleLeadSuccess}
           isModal={isModal}
         />
@@ -170,32 +172,12 @@ export default function RiskProfiler({ isModal = false, onClose }) {
           </div>
 
           <h3 className="font-black text-[#0a192f] text-xl sm:text-2xl mb-2">
-            Risk Profile Sent!
+            Enquiry Received!
           </h3>
 
           <p className="text-gray-600 leading-relaxed text-xs sm:text-sm mb-5 max-w-md mx-auto">
-            Your comprehensive risk profile report has been generated and sent to: <span className='text-xs sm:text-sm font-bold text-[#032e92]'>{submittedUser?.email || 'your email'}</span>
+            Thank you, <span className='font-bold text-[#032e92]'>{submittedUser?.name || 'Investor'}</span>! Our Team will connect with you shortly with suitable investment strategies for your <span className='font-bold text-[#032e92]'>{result?.profile || ''}</span> risk profile.
           </p>
-
-          {result?.profile && (
-            <div className={`rounded-2xl p-4 sm:p-5 border mb-6 text-left ${
-              result.profile === 'Conservative'
-                ? 'bg-gradient-to-br from-emerald-50/80 to-emerald-50/30 border-emerald-200'
-                : result.profile === 'Aggressive'
-                ? 'bg-gradient-to-br from-rose-50/80 to-rose-50/30 border-rose-200'
-                : 'bg-gradient-to-br from-amber-50/80 to-amber-50/30 border-amber-200'
-            }`}>
-              <div className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">Your risk profile is</div>
-              <div className={`text-xl sm:text-2xl font-black mb-2 ${
-                result.profile === 'Conservative'
-                  ? 'text-emerald-700'
-                  : result.profile === 'Aggressive'
-                  ? 'text-rose-700'
-                  : 'text-amber-700'
-              }`}>{result.profile}</div>
-              <p className="text-xs text-gray-700 leading-relaxed m-0">{result.description}</p>
-            </div>
-          )}
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 mb-2">
             <a
