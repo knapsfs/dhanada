@@ -23,19 +23,19 @@ export default function CTA() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-2xl sm:text-4xl lg:text-[42px] font-extrabold text-white mb-6 leading-tight">
-            Ready to Grow Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-white">Wealth?</span>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-white mb-6 leading-tight">
+            Ready to Start Investing <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-white">for Your Goals?</span>
           </h2>
 
           <p className="text-lg md:text-xl text-blue-100 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Take the first step towards financial freedom. Schedule a one-on-one session with our expert advisors to discuss your customized wealth strategy.
+            Take the first step towards financial freedom. Schedule a one-on-one session with us to discuss your investment goals.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
             <button
               type="button"
               onClick={openLeadModal}
-              className="btn-ripple px-8 py-3.5 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white border border-white/30 hover:border-white/60 hover:shadow-xl hover:shadow-[#032e92]/50 transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
+              className="btn-ripple px-8 py-3.5 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:border-white/60 hover:shadow-xl hover:shadow-[#032e92]/50 transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
             >
               Start Investing Now
             </button>

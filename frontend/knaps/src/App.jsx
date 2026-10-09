@@ -7,6 +7,8 @@ import Blogs from './pages/Blogs';
 import BlogDetails from './pages/BlogDetails';
 import AuthorPage from './pages/AuthorPage';
 import ContactUs from './pages/ContactUs';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsAndConditions from './pages/TermsAndConditions';
 
 // SIF Pages
 import SifHome from './pages/sif/SifHome';
@@ -23,7 +25,6 @@ import SipLumpsumCalculator from './pages/SipLumpsumCalculator';
 import LifeInsurance from './pages/LifeInsurance';
 import GeneralInsurance from './pages/GeneralInsurance';
 import HealthInsurance from './pages/HealthInsurance';
-import ELSS from './pages/ELSS';
 import FixedDeposit from './pages/FixedDeposit';
 import RecurringDeposits from './pages/RecurringDeposits';
 import NationalPensionSystem from './pages/NationalPensionSystem';
@@ -68,6 +69,13 @@ function App() {
             <Route path="/blogs/author/:slug" element={<AuthorPage />} />
 
             <Route path="/contact" element={<ContactUs />} />
+            <Route path="/contact-us" element={<ContactUs />} />
+
+            {/* Legal & Compliance Routes */}
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/privacy" element={<Navigate to="/privacy-policy" replace />} />
+            <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+            <Route path="/terms" element={<Navigate to="/terms-and-conditions" replace />} />
 
             {/* SIF Routes */}
             <Route path="/sif" element={<SifHome />} />
@@ -88,9 +96,6 @@ function App() {
             <Route path="/services/general-insurance" element={<GeneralInsurance />} />
             <Route path="/health-insurance" element={<HealthInsurance />} />
             <Route path="/services/health-insurance" element={<HealthInsurance />} />
-            {/* ELSS Routes */}
-            <Route path="/elss" element={<ELSS />} />
-            <Route path="/services/elss" element={<ELSS />} />
             {/* Fixed Deposit Routes */}
             <Route path="/fixed-deposits" element={<FixedDeposit />} />
             <Route path="/services/fixed-deposits" element={<FixedDeposit />} />

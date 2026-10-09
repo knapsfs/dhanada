@@ -36,20 +36,12 @@ const SERVICES_DATA = [
     link: "/sif"
   },
   {
-    id: "pms",
-    title: "PMS (Portfolio Management Services)",
-    desc: "Personalised portfolio management tailored exclusively for high-net-worth investors. Enjoy direct stock ownership, bespoke risk-reward mandates, dedicated fund manager attention, and institutional-grade research.",
-    image: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=800&auto=format&fit=crop",
-    icon: faUserTie,
-    link: null
-  },
-  {
-    id: "aif",
-    title: "AIF (Alternative Investment Funds)",
-    desc: "Access exclusive, high-alpha opportunities beyond traditional public markets. Participate in private equity, private debt, real estate, and venture capital designed for sophisticated investors seeking uncorrelated returns.",
-    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=800&auto=format&fit=crop",
-    icon: faBuildingColumns,
-    link: null
+    id: "nps",
+    title: "National Pension System (NPS)",
+    desc: "Plan for a secure, comfortable, and tax-efficient retirement. Accumulate a disciplined pension corpus with market-linked growth across equity and debt, enjoy an additional ₹50,000 tax deduction under 80CCD(1B), and secure lifelong annuity.",
+    image: "https://images.unsplash.com/photo-1507206130118-b5907f817163?q=80&w=800&auto=format&fit=crop",
+    icon: faPiggyBank,
+    link: "/services/nps"
   },
   {
     id: "life-insurance",
@@ -76,14 +68,6 @@ const SERVICES_DATA = [
     link: "/services/health-insurance"
   },
   {
-    id: "elss",
-    title: "ELSS",
-    desc: "Save tax under Section 80C while investing in high-growth equity funds. Benefit from the shortest lock-in period among all tax-saving instruments (just 3 years) combined with the long-term wealth compounding power of equities.",
-    image: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=800&auto=format&fit=crop",
-    icon: faFileInvoiceDollar,
-    link: "/services/elss"
-  },
-  {
     id: "fixed-deposits",
     title: "Fixed Deposits (FD)",
     desc: "A safe and steady investment option offering predictable interest income and capital stability. Choose flexible tenures ranging from 7 days to 10 years with assured interest payouts and preferential rates for senior citizens.",
@@ -100,14 +84,6 @@ const SERVICES_DATA = [
     link: "/services/recurring-deposits"
   },
   {
-    id: "nps",
-    title: "National Pension System (NPS)",
-    desc: "Plan for a secure, comfortable, and tax-efficient retirement. Accumulate a disciplined pension corpus with market-linked growth across equity and debt, enjoy an additional ₹50,000 tax deduction under 80CCD(1B), and secure lifelong annuity.",
-    image: "https://images.unsplash.com/photo-1507206130118-b5907f817163?q=80&w=800&auto=format&fit=crop",
-    icon: faPiggyBank,
-    link: "/services/nps"
-  },
-  {
     id: "small-savings",
     title: "Small Savings Schemes",
     desc: "Government-backed savings instruments offering sovereign safety and assured returns. Invest in popular avenues like Public Provident Fund (PPF), Sukanya Samriddhi Yojana (SSY), and SCSS to enjoy tax-free compounding and capital security.",
@@ -121,8 +97,8 @@ export default function ServicesGrid() {
   const { openLeadModal } = useLeadModal();
 
   return (
-    <section className="py-12 sm:py-16 bg-[#f7f9fc] relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <section className="pt-2 pb-12 sm:pt-4 sm:pb-16 bg-[#f7f9fc] relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {SERVICES_DATA.map((service, index) => (
             <motion.div
@@ -168,11 +144,7 @@ export default function ServicesGrid() {
                       to={service.link}
                       className="btn-ripple inline-flex items-center justify-center gap-2 w-full py-3 px-5 rounded-xl text-sm font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-md hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 group/btn"
                     >
-                      <span>Explore {service.title.split(' ')[0]}</span>
-                      <FontAwesomeIcon
-                        icon={faArrowRight}
-                        className="text-xs group-hover/btn:translate-x-1 transition-transform"
-                      />
+                      <span>Learn More</span>
                     </Link>
                   ) : (
                     <button
@@ -180,11 +152,7 @@ export default function ServicesGrid() {
                       onClick={openLeadModal}
                       className="btn-ripple inline-flex items-center justify-center gap-2 w-full py-3 px-5 rounded-xl text-sm font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-md hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 group/btn cursor-pointer"
                     >
-                      <span>Get Started</span>
-                      <FontAwesomeIcon
-                        icon={faArrowRight}
-                        className="text-xs group-hover/btn:translate-x-1 transition-transform"
-                      />
+                      <span>Learn More</span>
                     </button>
                   )}
                 </div>

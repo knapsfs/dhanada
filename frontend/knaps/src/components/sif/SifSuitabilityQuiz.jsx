@@ -5,7 +5,6 @@ import {
   faCircleCheck, faArrowRight, faArrowLeft, faRotateRight,
   faClock, faChartLine, faPhone, faCircleInfo
 } from '@fortawesome/free-solid-svg-icons'
-import { useLeadModal } from '../../context/LeadModalContext'
 
 export const quizQuestions = [
   {
@@ -61,7 +60,6 @@ export const quizQuestions = [
 ]
 
 export default function SifSuitabilityQuiz({ isModal = false, onClose }) {
-  const { openLeadModal } = useLeadModal()
   const [quizState, setQuizState] = useState('intro') // 'intro' | 'question' | 'result'
   const [currentIdx, setCurrentIdx] = useState(0)
   const [answers, setAnswers] = useState({})
@@ -111,9 +109,8 @@ export default function SifSuitabilityQuiz({ isModal = false, onClose }) {
               transition={{ duration: 0.3 }}
               className={`text-center ${isModal ? 'py-1 sm:py-2' : 'py-4 sm:py-6'}`}
             >
-              <div className={`mx-auto rounded-2xl bg-gradient-to-br from-[#032e92] to-[#0a4fd4] text-white flex items-center justify-center shadow-lg shadow-blue-900/20 ${
-                isModal ? 'w-12 h-12 text-xl mb-3' : 'w-16 h-16 sm:w-20 sm:h-20 text-2xl sm:text-3xl mb-6'
-              }`}>
+              <div className={`mx-auto rounded-2xl bg-gradient-to-br from-[#032e92] to-[#0a4fd4] text-white flex items-center justify-center shadow-lg shadow-blue-900/20 ${isModal ? 'w-12 h-12 text-xl mb-3' : 'w-16 h-16 sm:w-20 sm:h-20 text-2xl sm:text-3xl mb-6'
+                }`}>
                 <FontAwesomeIcon icon={faChartLine} />
               </div>
 
@@ -135,33 +132,13 @@ export default function SifSuitabilityQuiz({ isModal = false, onClose }) {
                   <FontAwesomeIcon icon={faClock} className="text-[#c10000]" />
                   <span>1 Minute</span>
                 </div>
-                <span className="w-1 h-1 rounded-full bg-gray-300" />
-                <div className="flex items-center gap-1.5 text-gray-700 font-semibold text-xs">
-                  <span>Min ₹10 Lakhs</span>
-                </div>
-              </div>
-
-              <div className={`grid grid-cols-1 sm:grid-cols-3 gap-2.5 max-w-xl mx-auto text-left ${isModal ? 'mb-4' : 'mb-8'}`}>
-                <div className={`bg-white rounded-xl border border-gray-100 shadow-sm ${isModal ? 'p-2.5' : 'p-3.5'}`}>
-                  <p className="text-[11px] font-bold text-[#032e92]">Targeted Themes</p>
-                  <p className="text-[10px] text-gray-500 mt-0.5">High-conviction strategies</p>
-                </div>
-                <div className={`bg-white rounded-xl border border-gray-100 shadow-sm ${isModal ? 'p-2.5' : 'p-3.5'}`}>
-                  <p className="text-[11px] font-bold text-[#032e92]">Disciplined Process</p>
-                  <p className="text-[10px] text-gray-500 mt-0.5">Structured portfolio execution</p>
-                </div>
-                <div className={`bg-white rounded-xl border border-gray-100 shadow-sm ${isModal ? 'p-2.5' : 'p-3.5'}`}>
-                  <p className="text-[11px] font-bold text-[#032e92]">Long-Term Focus</p>
-                  <p className="text-[10px] text-gray-500 mt-0.5">For ₹10L+ allocation</p>
-                </div>
               </div>
 
               <button
                 type="button"
                 onClick={() => setQuizState('question')}
-                className={`rounded-xl bg-[#032e92] hover:bg-[#022169] text-white font-bold shadow-lg shadow-blue-900/20 inline-flex items-center justify-center gap-2 transition-all hover:scale-105 active:scale-95 cursor-pointer ${
-                  isModal ? 'px-8 py-3 text-xs sm:text-sm' : 'px-10 py-4 text-base'
-                }`}
+                className={`rounded-xl bg-[#032e92] hover:bg-[#022169] text-white font-bold shadow-lg shadow-blue-900/20 inline-flex items-center justify-center gap-2 transition-all hover:scale-105 active:scale-95 cursor-pointer ${isModal ? 'px-8 py-3 text-xs sm:text-sm' : 'px-10 py-4 text-base'
+                  }`}
               >
                 <span>Start Assessment</span>
                 <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
@@ -209,21 +186,18 @@ export default function SifSuitabilityQuiz({ isModal = false, onClose }) {
                       key={opt.key}
                       type="button"
                       onClick={() => handleSelectOption(currentQ.id, opt)}
-                      className={`rounded-xl border text-left transition-all duration-200 flex items-center justify-between gap-2.5 group cursor-pointer ${
-                        isModal ? 'p-3' : 'p-4 sm:p-5 rounded-2xl'
-                      } ${
-                        isSelected
+                      className={`rounded-xl border text-left transition-all duration-200 flex items-center justify-between gap-2.5 group cursor-pointer ${isModal ? 'p-3' : 'p-4 sm:p-5 rounded-2xl'
+                        } ${isSelected
                           ? 'bg-[#032e92] border-[#032e92] text-white shadow-md shadow-blue-900/15 ring-2 ring-[#032e92]/30 scale-[1.01]'
                           : 'bg-white border-gray-200 hover:border-[#032e92]/50 hover:bg-blue-50/40 text-gray-800 shadow-sm'
-                      }`}
+                        }`}
                     >
                       <div className="flex items-center gap-2.5">
                         <span
-                          className={`w-6 h-6 rounded-lg text-xs font-bold flex items-center justify-center transition-colors ${
-                            isSelected
-                              ? 'bg-white/20 text-white'
-                              : 'bg-gray-100 text-gray-600 group-hover:bg-[#eef4ff] group-hover:text-[#032e92]'
-                          }`}
+                          className={`w-6 h-6 rounded-lg text-xs font-bold flex items-center justify-center transition-colors ${isSelected
+                            ? 'bg-white/20 text-white'
+                            : 'bg-gray-100 text-gray-600 group-hover:bg-[#eef4ff] group-hover:text-[#032e92]'
+                            }`}
                         >
                           {opt.key}
                         </span>
@@ -249,10 +223,6 @@ export default function SifSuitabilityQuiz({ isModal = false, onClose }) {
                   <FontAwesomeIcon icon={faArrowLeft} />
                   <span>Back</span>
                 </button>
-
-                <span className="text-[11px] font-medium text-gray-400">
-                  Select an option to proceed
-                </span>
               </div>
             </motion.div>
           )}
@@ -296,44 +266,26 @@ export default function SifSuitabilityQuiz({ isModal = false, onClose }) {
                 </div>
               </div>
 
-              <div className="flex flex-row items-center justify-center gap-3 mb-3">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-3">
                 <button
                   type="button"
-                  onClick={() => {
-                    if (onClose) onClose()
-                    openLeadModal()
-                  }}
-                  className={`rounded-xl bg-[#c10000] hover:bg-[#9d0000] text-white font-bold shadow-md flex items-center justify-center gap-1.5 transition-all hover:scale-105 active:scale-95 cursor-pointer ${
-                    isModal ? 'px-6 py-2.5 text-xs sm:text-sm' : 'px-8 py-3.5 text-base'
-                  }`}
+                  onClick={handleRestart}
+                  className={`rounded-xl bg-white hover:bg-blue-50/50 border-2 border-[#032e92] text-[#032e92] font-bold shadow-sm flex items-center justify-center gap-2 transition-all hover:scale-105 active:scale-95 cursor-pointer ${isModal ? 'px-5 py-2.5 text-xs sm:text-sm' : 'px-7 py-3 text-sm sm:text-base'
+                    }`}
                 >
-                  <span>Invest Now</span>
-                  <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+                  <FontAwesomeIcon icon={faRotateRight} className="text-xs" />
+                  <span>Retake Quiz</span>
                 </button>
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (onClose) onClose()
-                    openLeadModal()
-                  }}
-                  className={`rounded-xl bg-white hover:bg-gray-50 border-2 border-[#032e92] text-[#032e92] font-bold shadow-sm flex items-center justify-center gap-1.5 transition-all hover:scale-105 active:scale-95 cursor-pointer ${
-                    isModal ? 'px-6 py-2.5 text-xs sm:text-sm' : 'px-8 py-3.5 text-base'
-                  }`}
+                <a
+                  href="tel:+919990243143"
+                  className={`rounded-xl bg-[#032e92] hover:bg-[#022169] text-white font-bold shadow-md flex items-center justify-center gap-2 transition-all hover:scale-105 active:scale-95 cursor-pointer ${isModal ? 'px-5 py-2.5 text-xs sm:text-sm' : 'px-7 py-3 text-sm sm:text-base'
+                    }`}
                 >
                   <FontAwesomeIcon icon={faPhone} className="text-xs" />
                   <span>Talk to Us</span>
-                </button>
+                </a>
               </div>
-
-              <button
-                type="button"
-                onClick={handleRestart}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-gray-500 hover:text-[#032e92] transition-colors cursor-pointer py-1"
-              >
-                <FontAwesomeIcon icon={faRotateRight} className="text-xs" />
-                <span>Retake Quiz</span>
-              </button>
             </motion.div>
           )}
         </AnimatePresence>

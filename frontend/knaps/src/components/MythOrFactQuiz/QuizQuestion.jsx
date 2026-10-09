@@ -19,9 +19,8 @@ export default function QuizQuestion({
 
   const getButtonClass = (answerType) => {
     const typeUpper = answerType.toUpperCase();
-    const base = `w-full rounded-xl border-2 font-bold transition-all duration-200 cursor-pointer ${
-      isModal ? 'py-3 sm:py-3.5 px-4 text-base sm:text-lg' : 'py-6 px-4 rounded-2xl text-xl'
-    } `;
+    const base = `w-full rounded-xl border-2 font-bold transition-all duration-200 cursor-pointer ${isModal ? 'py-3 sm:py-3.5 px-4 text-base sm:text-lg' : 'py-6 px-4 rounded-2xl text-xl'
+      } `;
 
     if (!isAnswered) {
       return base + "bg-white border-gray-100 text-[#0a192f] hover:border-[#032e92] hover:bg-blue-50/50 hover:shadow-md";
@@ -67,9 +66,7 @@ export default function QuizQuestion({
           </div>
         </div>
 
-        <div className="inline-block px-2.5 py-0.5 rounded-full bg-gray-50 text-gray-600 font-bold text-[10px] uppercase tracking-wider border border-gray-200">
-          {question.category}
-        </div>
+
       </div>
 
       {/* Question */}
@@ -111,27 +108,27 @@ export default function QuizQuestion({
               <div className="flex items-center gap-2 mb-2">
                 {isCorrect ? (
                   <>
-                    <FontAwesomeIcon icon={faCheckCircle} className="text-[#032e92] text-base" />
-                    <span className="font-bold text-[#032e92] text-sm sm:text-base">Correct!</span>
+                    <FontAwesomeIcon icon={faCheckCircle} className="text-[#007a55] text-base" />
+                    <span className="font-bold text-[#007a55] text-sm sm:text-base">Correct!</span>
                   </>
                 ) : (
                   <>
                     <FontAwesomeIcon icon={faTimesCircle} className="text-[#c10000] text-base" />
-                    <span className="font-bold text-[#c10000] text-sm sm:text-base">Not quite. Let's look at the facts.</span>
+                    <span className="font-bold text-[#c10000] text-sm sm:text-base">Incorrect</span>
                   </>
                 )}
               </div>
 
               <div className="mb-1.5 text-xs">
-                <span className="font-black text-gray-400 uppercase tracking-wider">
+                <span className="font-black text-gray-600 uppercase tracking-wider">
                   Correct Answer:
                 </span>
-                <span className={`ml-1.5 font-black uppercase ${normalizedAnswer === 'FACT' ? 'text-emerald-700' : 'text-[#032e92]'}`}>
+                <span className={`ml-1.5 font-black text-gray-600 uppercase`}>
                   {normalizedAnswer}
                 </span>
               </div>
 
-              <p className={`text-gray-600 leading-relaxed ${isModal ? 'text-xs mb-3' : 'text-sm mb-8'}`}>
+              <p className={`text-gray-600 leading-relaxed ${isModal ? 'text-sm mb-3' : 'text-sm mb-8'}`}>
                 {question.explanation}
               </p>
 
@@ -139,9 +136,8 @@ export default function QuizQuestion({
                 <button
                   type="button"
                   onClick={onNext}
-                  className={`inline-flex items-center gap-1.5 rounded-xl font-bold bg-[#0a192f] text-white hover:bg-[#032e92] transition-colors cursor-pointer ${
-                    isModal ? 'px-5 py-2 text-xs sm:text-sm' : 'px-6 py-3 text-base'
-                  }`}
+                  className={`inline-flex items-center gap-1.5 rounded-xl font-bold bg-[#0a192f] text-white hover:bg-[#032e92] transition-colors cursor-pointer ${isModal ? 'px-5 py-2 text-xs sm:text-sm' : 'px-6 py-3 text-base'
+                    }`}
                 >
                   <span>{currentIdx === total - 1 ? 'See Results' : 'Next Question'}</span>
                   <FontAwesomeIcon icon={faArrowRight} className="text-xs" />

@@ -5,6 +5,9 @@ import knapsBannerGlassCards from '../assets/knaps-banner-glass-cards.png';
 import { getCsrfToken } from '../utils/csrf';
 
 import { productOptions } from '../data/productOptions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { COUNTRIES, DEFAULT_COUNTRY } from '../data/countries';
 
 export default function Hero() {
   const [productOpen, setProductOpen] = useState(false);
@@ -14,17 +17,24 @@ export default function Hero() {
     email: '',
     mobile: '',
   });
-  const [agreedToTerms, setAgreedToTerms] = useState(true);
+  const [selectedCountry, setSelectedCountry] = useState(DEFAULT_COUNTRY);
+  const [isCountryOpen, setIsCountryOpen] = useState(false);
+  const [countrySearch, setCountrySearch] = useState('');
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState('idle'); // 'idle' | 'submitting' | 'success' | 'error'
   const [errorMessage, setErrorMessage] = useState('');
   const dropdownRef = useRef(null);
+  const countryDropdownRef = useRef(null);
 
   // Close dropdown on click outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setProductOpen(false);
+      }
+      if (countryDropdownRef.current && !countryDropdownRef.current.contains(event.target)) {
+        setIsCountryOpen(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -33,7 +43,24 @@ export default function Hero() {
 
   const selectedProductObj = productOptions.find((p) => p.value === selectedProduct);
 
-  const validateField = (name, value) => {
+  const filteredCountries = COUNTRIES.filter(
+    (c) =>
+      c.name.toLowerCase().includes(countrySearch.toLowerCase()) ||
+      c.code.includes(countrySearch)
+  );
+
+  const handleCountryChange = (iso) => {
+    const country = COUNTRIES.find((c) => c.iso === iso) || DEFAULT_COUNTRY;
+    setSelectedCountry(country);
+    if (formData.mobile.length > country.maxDigits) {
+      setFormData((prev) => ({ ...prev, mobile: prev.mobile.slice(0, country.maxDigits) }));
+    }
+    if (errors.mobile) {
+      setErrors((prev) => ({ ...prev, mobile: '' }));
+    }
+  };
+
+  const validateField = (name, value, country = selectedCountry) => {
     switch (name) {
       case 'product':
         if (!value) return 'Please select a product';
@@ -54,9 +81,18 @@ export default function Hero() {
       }
       case 'mobile': {
         const digits = value.replace(/\D/g, '');
-        if (!digits) return 'Please enter your 10-digit mobile number';
-        if (digits.length !== 10) return `Mobile number must be exactly 10 digits (${digits.length}/10 entered)`;
-        if (!/^[6-9]\d{9}$/.test(digits)) return 'Please enter a valid mobile number starting with 6, 7, 8, or 9';
+        if (!digits) return 'Please enter your mobile number';
+        if (country.iso === 'IN') {
+          if (digits.length !== 10) return `Mobile number must be exactly 10 digits (${digits.length}/10 entered)`;
+          if (!/^[6-9]\d{9}$/.test(digits)) return 'Please enter a valid Indian mobile number starting with 6, 7, 8, or 9';
+        } else {
+          if (digits.length < country.minDigits || digits.length > country.maxDigits) {
+            if (country.minDigits === country.maxDigits) {
+              return `Phone number must be ${country.minDigits} digits (${digits.length} entered)`;
+            }
+            return `Phone number must be between ${country.minDigits} and ${country.maxDigits} digits`;
+          }
+        }
         return '';
       }
       default:
@@ -88,8 +124,8 @@ export default function Hero() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === 'mobile') {
-      // Only allow numeric digits and limit to 10 digits
-      const digitsOnly = value.replace(/\D/g, '').slice(0, 10);
+      const maxLen = selectedCountry.maxDigits || 15;
+      const digitsOnly = value.replace(/\D/g, '').slice(0, maxLen);
       setFormData((prev) => ({ ...prev, mobile: digitsOnly }));
       if (errors.mobile) {
         setErrors((prev) => ({ ...prev, mobile: '' }));
@@ -133,7 +169,7 @@ export default function Hero() {
         body: JSON.stringify({
           full_name: formData.name.trim(),
           email: formData.email.trim(),
-          phone: formData.mobile.trim(),
+          phone: `${selectedCountry.code} ${formData.mobile.trim()}`,
           product: selectedProductObj?.label || selectedProduct || 'Hero Form',
           csrf_token: csrfToken || undefined,
         }),
@@ -257,7 +293,7 @@ export default function Hero() {
                       setFormData({ name: '', email: '', mobile: '' });
                       setSelectedProduct('');
                       setErrors({});
-                      setAgreedToTerms(true);
+                      setAgreedToTerms(false);
                     }}
                     className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer"
                   >
@@ -408,42 +444,137 @@ export default function Hero() {
                   </div>
 
                   {/* Mobile */}
-                  <div>
+                  <div className="relative" ref={countryDropdownRef}>
                     <div className="flex items-center justify-between mb-1">
                       <label className="block text-[11px] font-bold text-gray-600 uppercase tracking-wider">
                         Mobile Number <span className="text-red-500">*</span>
                       </label>
-                      <span className={`text-[10px] font-medium transition-colors ${formData.mobile.length === 10
+                      {/* <span className={`text-[10px] font-medium transition-colors ${formData.mobile.length === selectedCountry.maxDigits
                         ? 'text-emerald-600 font-semibold'
                         : formData.mobile.length > 0
                           ? 'text-blue-600'
                           : 'text-gray-400'
                         }`}>
-                        {formData.mobile.length}/10 digits
-                      </span>
+                        {formData.mobile.length}/{selectedCountry.maxDigits} digits
+                      </span> */}
                     </div>
-                    <div className="flex items-center">
-                      <span className="text-sm font-semibold text-gray-400 pb-2 mr-1.5 select-none">
-                        +91
-                      </span>
+                    <div
+                      className={`flex items-center border-b-2 pb-1.5 transition-colors ${errors.mobile
+                        ? 'border-red-400 focus-within:border-red-500'
+                        : isCountryOpen
+                          ? 'border-[#032e92]'
+                          : 'border-gray-300 focus-within:border-[#032e92]'
+                        }`}
+                    >
+                      {/* Country Code Button */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (status !== 'submitting') {
+                            setIsCountryOpen((prev) => !prev);
+                            setCountrySearch('');
+                          }
+                        }}
+                        disabled={status === 'submitting'}
+                        aria-label="Select Country Code"
+                        className="flex items-center gap-1.5 pr-2 mr-2 border-r border-gray-300 hover:text-[#032e92] transition-colors cursor-pointer select-none group flex-shrink-0 disabled:cursor-not-allowed focus:outline-none"
+                      >
+                        <span className="text-sm font-semibold text-gray-700 font-mono tracking-tight group-hover:text-[#032e92]">
+                          {selectedCountry.code}
+                        </span>
+                        <FontAwesomeIcon
+                          icon={faChevronDown}
+                          className={`text-[9px] text-gray-400 group-hover:text-[#032e92] transition-transform duration-200 ${isCountryOpen ? 'rotate-180 text-[#032e92]' : ''
+                            }`}
+                        />
+                      </button>
+
+                      {/* Phone Input */}
                       <input
                         type="tel"
                         name="mobile"
                         inputMode="numeric"
-                        maxLength={10}
+                        maxLength={selectedCountry.maxDigits}
                         value={formData.mobile}
                         onChange={handleChange}
                         disabled={status === 'submitting'}
-                        placeholder="Enter 10-digit mobile number"
-                        className={`w-full bg-transparent border-b-2 pb-2 text-sm text-gray-800 placeholder-gray-400 focus:outline-none transition-colors disabled:opacity-60 tracking-wider ${errors.mobile
-                          ? 'border-red-400 focus:border-red-500'
-                          : 'border-gray-300 focus:border-[#032e92]'
-                          }`}
+                        placeholder={selectedCountry.placeholder || 'Enter mobile number'}
+                        className="w-full bg-transparent text-sm text-gray-800 placeholder-gray-400 focus:outline-none disabled:opacity-60 tracking-wider"
                       />
                     </div>
                     {errors.mobile && (
                       <p className="text-red-500 text-[11px] mt-1 font-medium">{errors.mobile}</p>
                     )}
+
+                    {/* Country Code Dropdown Menu */}
+                    <AnimatePresence>
+                      {isCountryOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -6, scale: 0.98 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: -6, scale: 0.98 }}
+                          transition={{ duration: 0.15 }}
+                          className="absolute left-0 bottom-full mb-2 w-full sm:w-80 bg-white rounded-2xl shadow-2xl border border-gray-100 z-50 overflow-hidden flex flex-col"
+                          style={{ boxShadow: '0 20px 40px -10px rgba(3, 46, 146, 0.22)' }}
+                        >
+                          {/* Search Header */}
+                          <div className="p-2.5 border-b border-gray-100 bg-gray-50/80">
+                            <input
+                              type="text"
+                              placeholder="Search country or code..."
+                              value={countrySearch}
+                              onChange={(e) => setCountrySearch(e.target.value)}
+                              className="w-full px-3 py-1.5 text-xs bg-white border border-gray-200 rounded-lg outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/20 text-gray-800 placeholder:text-gray-400"
+                              autoFocus
+                            />
+                          </div>
+
+                          {/* Country List */}
+                          <div className="max-h-52 overflow-y-auto divide-y divide-gray-50 py-1">
+                            {filteredCountries.length === 0 ? (
+                              <div className="p-4 text-center text-xs text-gray-400 font-medium">
+                                No countries found
+                              </div>
+                            ) : (
+                              filteredCountries.map((c) => {
+                                const isSelected = selectedCountry.iso === c.iso;
+                                return (
+                                  <button
+                                    key={c.iso}
+                                    type="button"
+                                    onClick={() => {
+                                      handleCountryChange(c.iso);
+                                      setIsCountryOpen(false);
+                                      setCountrySearch('');
+                                    }}
+                                    className={`w-full flex items-center justify-between px-3.5 py-2.5 text-left text-xs transition-colors hover:bg-blue-50/80 cursor-pointer ${isSelected
+                                      ? 'bg-blue-50/70 font-semibold text-[#032e92]'
+                                      : 'text-gray-700'
+                                      }`}
+                                  >
+                                    <div className="flex items-center gap-2.5 truncate pr-2">
+                                      <span className="text-base flex-shrink-0 leading-none">{c.flag}</span>
+                                      <span className="truncate">{c.name}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 flex-shrink-0">
+                                      <span
+                                        className={`font-mono text-xs ${isSelected ? 'text-[#032e92] font-bold' : 'text-gray-400'
+                                          }`}
+                                      >
+                                        {c.code}
+                                      </span>
+                                      {isSelected && (
+                                        <span className="w-1.5 h-1.5 rounded-full bg-[#032e92]" />
+                                      )}
+                                    </div>
+                                  </button>
+                                );
+                              })
+                            )}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
 
                   {/* Checkbox */}
@@ -462,10 +593,12 @@ export default function Hero() {
                         className="mt-1 w-4 h-4 text-[#0665d0] rounded border-gray-300 focus:ring-[#0665d0] cursor-pointer"
                       />
                       <label htmlFor="terms" className="text-[12px] sm:text-[13px] text-gray-500 leading-relaxed cursor-pointer select-none">
-                        By continuing, you provide consent and agree to our{' '}
-                        <a href="/terms" className="text-[#0665d0] hover:underline">
-                          Terms & Conditions
+                        I agree to be contacted by a KNAPS representative and accept the
+                        {' '}
+                        <a href="/terms-and-conditions" className="text-[#0665d0] hover:underline">
+                          Terms & Conditions.
                         </a>
+
                       </label>
                     </div>
                     {errors.terms && (

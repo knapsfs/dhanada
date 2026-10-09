@@ -15,20 +15,17 @@ export default function ContactHero() {
             transition={{ duration: 0.8 }}
             className="lg:col-span-8"
           >
-            <div className="inline-block px-4 py-1.5 rounded-full bg-white border border-blue-100 shadow-sm mb-6">
-              <span className="text-[#032e92] text-xs font-bold tracking-widest uppercase">Contact Us</span>
-            </div>
-
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-extrabold text-black tracking-tight leading-tight max-w-4xl">
-              Talk To Our Financial <span className="text-[#032e92]">Experts</span>
-            </h1>
-
             {/* Breadcrumb Navigation */}
-            <div className="flex items-center pt-5 gap-3 text-[15px] font-medium text-gray-500">
+            <div className="flex items-center pb-5 gap-3 text-[15px] font-medium text-gray-500">
               <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
               <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
               <span className="text-[#032e92]">Contact Us</span>
             </div>
+
+            {/* Main Headline */}
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-black tracking-tight leading-tight max-w-4xl">
+              Talk To Our Financial <span className="text-[#032e92]">Experts</span>
+            </h1>
           </motion.div>
         </div>
       </div>

@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot, faPhone, faEnvelope, faClock, faArrowRight, faCircleCheck, faChevronDown, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { getCsrfToken } from '../../utils/csrf';
 import { productOptions } from '../../data/productOptions';
+import { COUNTRIES, DEFAULT_COUNTRY } from '../../data/countries';
 
 export default function LuxuryContactSection() {
   const [selectedProduct, setSelectedProduct] = useState('');
@@ -13,22 +14,47 @@ export default function LuxuryContactSection() {
     phone: '',
     email: '',
     message: '',
-    consent: true,
+    consent: false,
   });
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState('idle'); // idle, submitting, success, error
   const [errorMessage, setErrorMessage] = useState('');
   const dropdownRef = useRef(null);
+  const [selectedCountry, setSelectedCountry] = useState(DEFAULT_COUNTRY);
+  const [isCountryOpen, setIsCountryOpen] = useState(false);
+  const [countrySearch, setCountrySearch] = useState('');
+  const countryDropdownRef = useRef(null);
 
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setProductOpen(false);
       }
+      if (countryDropdownRef.current && !countryDropdownRef.current.contains(event.target)) {
+        setIsCountryOpen(false);
+      }
     }
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const filteredCountries = COUNTRIES.filter(
+    (c) =>
+      c.name.toLowerCase().includes(countrySearch.toLowerCase()) ||
+      c.code.includes(countrySearch) ||
+      c.iso.toLowerCase().includes(countrySearch.toLowerCase())
+  );
+
+  const handleCountryChange = (iso) => {
+    const country = COUNTRIES.find((c) => c.iso === iso) || DEFAULT_COUNTRY;
+    setSelectedCountry(country);
+    if (formData.phone.length > country.maxDigits) {
+      setFormData((prev) => ({ ...prev, phone: prev.phone.slice(0, country.maxDigits) }));
+    }
+    if (errors.phone) {
+      setErrors((prev) => ({ ...prev, phone: '' }));
+    }
+  };
 
   const selectedProductObj = productOptions.find((p) => p.value === selectedProduct);
 
@@ -48,11 +74,25 @@ export default function LuxuryContactSection() {
       newErrors.email = 'Please enter a valid email address';
     }
     const cleanPhone = formData.phone.replace(/\D/g, '');
-    if (!cleanPhone || cleanPhone.length !== 10) {
-      newErrors.phone = 'Please enter a valid 10-digit mobile number';
+    if (!cleanPhone) {
+      newErrors.phone = 'Please enter your mobile number';
+    } else if (selectedCountry.iso === 'IN') {
+      if (cleanPhone.length !== 10) {
+        newErrors.phone = `Mobile number must be exactly 10 digits (${cleanPhone.length}/10 entered)`;
+      } else if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
+        newErrors.phone = 'Please enter a valid Indian mobile number starting with 6, 7, 8, or 9';
+      }
+    } else {
+      if (cleanPhone.length < selectedCountry.minDigits || cleanPhone.length > selectedCountry.maxDigits) {
+        if (selectedCountry.minDigits === selectedCountry.maxDigits) {
+          newErrors.phone = `Phone number must be ${selectedCountry.minDigits} digits (${cleanPhone.length} entered)`;
+        } else {
+          newErrors.phone = `Phone number must be between ${selectedCountry.minDigits} and ${selectedCountry.maxDigits} digits`;
+        }
+      }
     }
     if (!formData.consent) {
-      newErrors.consent = 'Please agree to the Privacy Policy to proceed';
+      newErrors.consent = 'Please accept Terms & Conditions to proceed';
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -88,7 +128,7 @@ export default function LuxuryContactSection() {
         body: JSON.stringify({
           full_name: formData.fullName.trim(),
           email: formData.email.trim(),
-          phone: formData.phone.trim(),
+          phone: `${selectedCountry.code} ${formData.phone.trim()}`,
           product: selectedProductObj?.label || selectedProduct || 'Contact Us',
           notes: formData.message.trim(),
           csrf_token: csrfToken || undefined,
@@ -222,7 +262,10 @@ export default function LuxuryContactSection() {
                     onClick={() => {
                       setStatus('idle');
                       setSelectedProduct('');
-                      setFormData({ fullName: '', phone: '', email: '', message: '', consent: true });
+                      setSelectedCountry(DEFAULT_COUNTRY);
+                      setIsCountryOpen(false);
+                      setCountrySearch('');
+                      setFormData({ fullName: '', phone: '', email: '', message: '', consent: false });
                     }}
                     className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all cursor-pointer"
                   >
@@ -335,27 +378,129 @@ export default function LuxuryContactSection() {
                     </div>
 
                     {/* Phone */}
-                    <div className="group">
+                    <div className="group relative" ref={countryDropdownRef}>
                       <label className="block text-[11px] font-bold text-[#0a192f] uppercase tracking-widest mb-2">
                         Phone Number <span className="text-red-500">*</span>
                       </label>
-                      <div className="flex items-center">
-                        <span className="text-sm font-semibold text-gray-400 pb-0 mr-2 select-none">+91</span>
+                      <div
+                        className={`flex items-center bg-[#f8fafc] border rounded-xl transition-all focus-within:border-[#032e92] focus-within:ring-1 focus-within:ring-[#032e92] ${
+                          errors.phone ? 'border-red-400' : 'border-gray-200'
+                        }`}
+                      >
+                        {/* Country Code Dropdown Trigger */}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (status !== 'submitting') {
+                              setIsCountryOpen((prev) => !prev);
+                              setCountrySearch('');
+                            }
+                          }}
+                          disabled={status === 'submitting'}
+                          aria-label="Select Country Code"
+                          className="flex items-center gap-1.5 px-3.5 py-4 border-r border-gray-200 bg-gray-50/80 hover:bg-blue-50/60 rounded-l-xl transition-all cursor-pointer select-none group/btn flex-shrink-0 disabled:cursor-not-allowed focus:outline-none"
+                        >
+                          <span className="text-xs font-bold text-gray-800 font-mono tracking-tight">
+                            {selectedCountry.code}
+                          </span>
+                          <FontAwesomeIcon
+                            icon={faChevronDown}
+                            className={`text-[9px] text-gray-400 group-hover/btn:text-[#032e92] transition-transform duration-200 ${
+                              isCountryOpen ? 'rotate-180 text-[#032e92]' : ''
+                            }`}
+                          />
+                        </button>
+
+                        {/* Phone Input */}
                         <input
                           type="tel"
-                          maxLength={10}
-                          placeholder="9990243143"
+                          inputMode="numeric"
+                          maxLength={selectedCountry.maxDigits}
+                          placeholder={selectedCountry.placeholder || '9990243143'}
                           value={formData.phone}
                           onChange={(e) => {
-                            const val = e.target.value.replace(/\D/g, '').slice(0, 10);
+                            const maxLen = selectedCountry.maxDigits || 15;
+                            const val = e.target.value.replace(/\D/g, '').slice(0, maxLen);
                             setFormData({ ...formData, phone: val });
                             if (errors.phone) setErrors((prev) => ({ ...prev, phone: '' }));
                           }}
-                          className={`w-full bg-[#f8fafc] border rounded-xl px-5 py-4 focus:outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92] transition-colors placeholder-gray-400 ${errors.phone ? 'border-red-400' : 'border-gray-200 text-gray-900'
-                            }`}
+                          disabled={status === 'submitting'}
+                          className="w-full bg-transparent px-4 py-4 outline-none text-sm text-gray-900 placeholder-gray-400 disabled:bg-gray-50 tracking-wider rounded-r-xl"
                         />
                       </div>
                       {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+
+                      {/* Country Code Dropdown Menu */}
+                      <AnimatePresence>
+                        {isCountryOpen && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -6, scale: 0.98 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: -6, scale: 0.98 }}
+                            transition={{ duration: 0.15 }}
+                            className="absolute left-0 top-full mt-2 w-full sm:w-80 bg-white rounded-2xl shadow-2xl border border-gray-100 z-50 overflow-hidden flex flex-col"
+                            style={{ boxShadow: '0 20px 40px -10px rgba(3, 46, 146, 0.22)' }}
+                          >
+                            {/* Search Header */}
+                            <div className="p-2.5 border-b border-gray-100 bg-gray-50/80">
+                              <input
+                                type="text"
+                                placeholder="Search country or code..."
+                                value={countrySearch}
+                                onChange={(e) => setCountrySearch(e.target.value)}
+                                className="w-full px-3 py-1.5 text-xs bg-white border border-gray-200 rounded-lg outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/20 text-gray-800 placeholder:text-gray-400"
+                                autoFocus
+                              />
+                            </div>
+
+                            {/* Country List */}
+                            <div className="max-h-52 overflow-y-auto divide-y divide-gray-50 py-1">
+                              {filteredCountries.length === 0 ? (
+                                <div className="p-4 text-center text-xs text-gray-400 font-medium">
+                                  No countries found
+                                </div>
+                              ) : (
+                                filteredCountries.map((c) => {
+                                  const isSelected = selectedCountry.iso === c.iso;
+                                  return (
+                                    <button
+                                      key={c.iso}
+                                      type="button"
+                                      onClick={() => {
+                                        handleCountryChange(c.iso);
+                                        setIsCountryOpen(false);
+                                        setCountrySearch('');
+                                      }}
+                                      className={`w-full flex items-center justify-between px-3.5 py-2.5 text-left text-xs transition-colors hover:bg-blue-50/80 cursor-pointer ${
+                                        isSelected
+                                          ? 'bg-blue-50/70 font-semibold text-[#032e92]'
+                                          : 'text-gray-700'
+                                      }`}
+                                    >
+                                      <div className="flex items-center gap-2.5 truncate pr-2">
+                                        <span className="text-base flex-shrink-0 leading-none">{c.flag}</span>
+                                        <span className="truncate">{c.name}</span>
+                                      </div>
+                                      <div className="flex items-center gap-2 flex-shrink-0">
+                                        <span
+                                          className={`font-mono text-xs ${
+                                            isSelected ? 'text-[#032e92] font-bold' : 'text-gray-400'
+                                          }`}
+                                        >
+                                          {c.code}
+                                        </span>
+                                        {isSelected && (
+                                          <span className="w-1.5 h-1.5 rounded-full bg-[#032e92]" />
+                                        )}
+                                      </div>
+                                    </button>
+                                  );
+                                })
+                              )}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
                   </div>
 
@@ -390,27 +535,29 @@ export default function LuxuryContactSection() {
                     ></textarea>
                   </div>
 
-                  {/* Privacy Checkbox */}
-                  <div className="flex items-start gap-4 pt-1">
-                    <input
-                      type="checkbox"
-                      id="privacy-policy"
-                      checked={formData.consent}
-                      onChange={(e) => {
-                        setFormData({ ...formData, consent: e.target.checked });
-                        if (errors.consent) setErrors((prev) => ({ ...prev, consent: '' }));
-                      }}
-                      className="mt-1.5 w-5 h-5 accent-[#032e92] cursor-pointer"
-                    />
-                    <label htmlFor="privacy-policy" className="text-[14px] text-gray-500 leading-relaxed cursor-pointer select-none">
-                      I acknowledge that I have read and agree to the{' '}
-                      <a href="/terms" className="text-[#032e92] font-semibold hover:underline">
-                        Privacy Policy
-                      </a>
-                      . I understand that my information will be handled with strict confidentiality.
-                    </label>
+                  {/* Terms & Conditions Checkbox */}
+                  <div>
+                    <div className="flex items-start gap-2.5 pt-1">
+                      <input
+                        type="checkbox"
+                        id="contact-terms"
+                        checked={formData.consent}
+                        onChange={(e) => {
+                          setFormData({ ...formData, consent: e.target.checked });
+                          if (e.target.checked && errors.consent) setErrors((prev) => ({ ...prev, consent: '' }));
+                        }}
+                        className="mt-1 w-4 h-4 text-[#0665d0] rounded border-gray-300 focus:ring-[#0665d0] cursor-pointer"
+                      />
+                      <label htmlFor="contact-terms" className="text-[12px] sm:text-[13px] text-gray-500 leading-relaxed cursor-pointer select-none">
+                        I agree to be contacted by a KNAPS representative and accept the
+                        {' '}
+                        <a href="/terms-and-conditions" className="text-[#0665d0] hover:underline" target="_blank" rel="noopener noreferrer">
+                          Terms & Conditions.
+                        </a>
+                      </label>
+                    </div>
+                    {errors.consent && <p className="text-red-500 text-[11px] mt-1 font-medium pl-6.5">{errors.consent}</p>}
                   </div>
-                  {errors.consent && <p className="text-red-500 text-xs">{errors.consent}</p>}
 
                   {/* Submit Button */}
                   <div>
@@ -426,8 +573,7 @@ export default function LuxuryContactSection() {
                         </>
                       ) : (
                         <>
-                          <span className="relative z-10 text-[15px] tracking-wide">Schedule Consultation</span>
-                          <FontAwesomeIcon icon={faArrowRight} className="relative z-10 group-hover:translate-x-1 transition-transform" />
+                          <span className="relative z-10 text-[15px] tracking-wide">Talk to Us</span>
                         </>
                       )}
                       <div className="absolute inset-0 bg-[#021d63] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500 ease-out z-0"></div>

@@ -34,7 +34,7 @@ export default function FundsHero({ totalFunds = 33 }) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="text-3xl lg:text-4xl font-bold text-[#1e293b] leading-tight mb-4 font-serif"
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-[#1e293b] leading-tight mb-4 font-serif"
               >
                 Explore Specialized <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#032e92] to-[#c10000]">

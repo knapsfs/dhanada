@@ -25,7 +25,6 @@ const navLinks = [
       { label: 'Life Insurance', href: '/services/life-insurance' },
       { label: 'Health Insurance', href: '/services/health-insurance' },
       { label: 'General Insurance', href: '/services/general-insurance' },
-      { label: 'ELSS Funds', href: '/services/elss' },
       { label: 'Fixed Deposits', href: '/services/fixed-deposits' },
       { label: 'Recurring Deposits', href: '/services/recurring-deposits' },
       { label: 'Child Marriage Planning', href: '/services#child-planning' },
@@ -419,7 +418,7 @@ export default function Navbar() {
                   <button
                     type="button"
                     onClick={() => setMobileLoginOpen(!mobileLoginOpen)}
-                    className="w-full py-3.5 px-5 rounded-2xl text-[15px] font-bold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-lg shadow-[#032e92]/20 flex items-center justify-between transition-all cursor-pointer hover:shadow-xl"
+                    className="w-full py-3.5 px-5 rounded-2xl text-[15px] font-bold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-lg shadow-[#032e92]/20 flex items-center justify-center gap-2.5 transition-all cursor-pointer hover:shadow-xl active:scale-[0.99]"
                   >
                     <span>Login</span>
                     <FontAwesomeIcon

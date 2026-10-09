@@ -36,7 +36,8 @@ export default function FinanceMythQuiz({ isModal = false, onClose }) {
               explanation: (item.reason || item.explanation || '').trim()
             };
           });
-          setQuizQuestions(formatted);
+          // Only show 5 questions for now
+          setQuizQuestions(formatted.slice(0, 5));
         } else {
           setQuizQuestions([]);
         }
@@ -109,7 +110,7 @@ export default function FinanceMythQuiz({ isModal = false, onClose }) {
       <AnimatePresence mode="wait">
         {!quizStarted && !quizFinished && (
           <motion.div key="intro" className="w-full">
-            <QuizIntro onStart={handleStart} isModal={isModal} />
+            <QuizIntro onStart={handleStart} isModal={isModal} totalQuestions={quizQuestions.length || 5} />
           </motion.div>
         )}
 

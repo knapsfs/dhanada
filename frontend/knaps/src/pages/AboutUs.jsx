@@ -1,15 +1,11 @@
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-
-// New Minimal Components
-import AboutBreadcrumbHero from '../components/about/AboutBreadcrumbHero';
-import AboutCompany from '../components/about/AboutCompany';
-import AboutValues from '../components/about/AboutValues';
-import AboutWhyInvestors from '../components/about/AboutWhyInvestors';
-import AboutJourney from '../components/about/AboutJourney';
-import Stats from '../components/Stats';
+import AboutHero from '../components/about/AboutHero';
+import AboutStory from '../components/about/AboutStory';
+import AboutTimeline from '../components/about/AboutTimeline';
+import AboutWhyTrust from '../components/about/AboutWhyTrust';
 import AboutLeadership from '../components/about/AboutLeadership';
-import AboutCallToAction from '../components/about/AboutCallToAction';
+import Stats from '../components/Stats';
 import CTA from '../components/CTA';
 
 export default function AboutUs() {
@@ -18,14 +14,11 @@ export default function AboutUs() {
       <Navbar />
 
       <main>
-        <AboutBreadcrumbHero />
-        <AboutCompany />
-        <AboutValues />
-        <AboutWhyInvestors />
-        <AboutJourney />
-        <Stats />
-        <AboutLeadership />
-        {/* <AboutCallToAction /> */}
+        <AboutHero />
+        <AboutStory />
+        <AboutTimeline />
+        <AboutWhyTrust />
+        <Stats className="pt-8 pb-16 sm:pt-10 sm:pb-20" />
         <CTA />
       </main>
 
