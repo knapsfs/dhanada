@@ -1,158 +1,185 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faCircleInfo,
-  faAddressCard,
-  faChartPie,
-  faHandHoldingDollar,
-  faBuildingColumns,
+  faUserTie,
+  faChild,
+  faBuilding,
+  faLandmark,
   faArrowRight,
-  faShieldHalved
+  faCalculator,
+  faCheckCircle
 } from '@fortawesome/free-solid-svg-icons';
 import { useLeadModal } from '../../context/LeadModalContext';
-
-const pillars = [
-  {
-    icon: faAddressCard,
-    title: '1. Individual PRAN Account',
-    description:
-      'Every subscriber receives a unique 12-digit Permanent Retirement Account Number (PRAN). Your account remains 100% portable across jobs, cities, and sectors (government, corporate, or all-citizens).'
-  },
-  {
-    icon: faChartPie,
-    title: '2. Multi-Asset Diversification',
-    description:
-      'Contributions are invested across four distinct asset classes—Equity (E), Corporate Bonds (C), Government Securities (G), and Alternative Assets (A)—managed by professional Pension Fund Managers.'
-  },
-  {
-    icon: faHandHoldingDollar,
-    title: '3. Lump-Sum & Lifetime Annuity',
-    description:
-      'At age 60, up to 60% of your accumulated corpus can be withdrawn completely tax-free as a lump sum, while a minimum 40% is utilized to purchase an annuity guaranteeing lifelong regular pension.'
-  }
-];
 
 export default function WhatIsNps() {
   const { openLeadModal } = useLeadModal();
 
+  const scrollToCalculator = () => {
+    const el = document.getElementById('nps-calculator');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const npsVariants = [
+    {
+      icon: faUserTie,
+      title: 'Regular NPS',
+      subtitle: 'For Your Retirement',
+      badge: 'Individual Tier I & II',
+      description:
+        'Designed for all Indian citizens (18-70 years) to systematically build a retirement corpus with flexible asset allocation (up to 75% equity) and exclusive tax benefits.',
+      highlights: ['Extra ₹50,000 u/s 80CCD(1B)', 'Lowest expense ratios globally', '60% tax-free lump sum exit']
+    },
+    {
+      icon: faChild,
+      title: 'NPS Vatsalya',
+      subtitle: "For Your Child's Future",
+      badge: 'Minors (< 18 Years)',
+      description:
+        'A dedicated long-term wealth initiative started by parents or guardians for minor children, compounding wealth from childhood and seamlessly transitioning into adulthood.',
+      highlights: ['Early compounding advantage', 'Seamless conversion at age 18', 'PFRDA regulated architecture']
+    },
+    {
+      icon: faBuilding,
+      title: 'Corporate NPS',
+      subtitle: 'For Companies & Employees',
+      badge: 'Employer - Employee Benefit',
+      description:
+        'A structured retirement benefit program adopted by corporations, allowing employees to claim additional tax deductions on employer contributions under Section 80CCD(2).',
+      highlights: ['Tax deduction u/s 80CCD(2)', 'Zero cost setup for employers', 'Enhanced employee retention']
+    },
+    {
+      icon: faLandmark,
+      title: 'Govt. Sector NPS',
+      subtitle: 'For Central & State Govt Employees',
+      badge: 'Govt Employees',
+      description:
+        'Applicable to employees of Central, State Governments, and autonomous bodies, featuring an enhanced 14% government contribution and defined investment choices.',
+      highlights: ['14% Govt. contribution matching', 'Sec 80CCD(2) tax exemption', 'Structured sovereign safety']
+    }
+  ];
+
   return (
     <section className="py-12 sm:py-16 bg-white relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#032e92]/10 border border-[#032e92]/20 text-[#032e92] text-xs font-semibold uppercase tracking-wider mb-4">
-            <FontAwesomeIcon icon={faCircleInfo} />
-            <span>Retirement Framework</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#032e92] tracking-tight mb-4">
-            What is the National Pension System (NPS)?
-          </h2>
-          <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
-            The National Pension System is a government-sponsored, voluntary, defined-contribution retirement savings scheme regulated by the Pension Fund Regulatory and Development Authority (PFRDA), designed to instill long-term disciplined investing and secure post-retirement income.
-          </p>
-        </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
-        {/* 3 Pillars Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10 sm:mb-12">
-          {pillars.map((pillar, idx) => (
-            <div
+        {/* Section Header: Left (Titles) & Right (Tax-Free Investment) */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="border-b border-gray-100 pb-8 sm:pb-10"
+        >
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3 sm:gap-6">
+            <div>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#032e92] tracking-tight">
+                National Pension System (NPS)
+              </h2>
+              <p className="text-xl sm:text-2xl md:text-3xl font-medium text-[#032e92] mt-1">
+                Pension for All
+              </p>
+            </div>
+
+            <div className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 tracking-tight shrink-0 md:text-right">
+              Tax- Free Investment
+            </div>
+          </div>
+
+          {/* Description Paragraph directly from reference design */}
+          <p className="text-sm sm:text-base md:text-[17px] text-gray-700 font-normal leading-relaxed mt-6 max-w-6xl">
+            NPS is a market-linked retirement investment that helps build a corpus over the years - Regular NPS for your retirement, NPS Vatsalya for your child’s future, and Corporate NPS for companies looking to provide a structured retirement benefit to their employees. You invest over time, let the corpus compound, and at eligible exit, withdraw your corpus as a combination of lumpsum/ annuity.
+          </p>
+        </motion.div>
+
+        {/* 4 NPS Streams (Regular, Vatsalya, Corporate, Government) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-6 mt-10 sm:mt-12">
+          {npsVariants.map((item, idx) => (
+            <motion.div
               key={idx}
-              className="p-8 rounded-2xl bg-[#f7f9fc] border border-slate-200/80 hover:border-[#032e92]/30 hover:shadow-lg transition-all duration-300 flex flex-col justify-between group"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.08, duration: 0.5 }}
+              className="rounded-2xl p-6 sm:p-7 bg-[#f8fafc] border border-gray-100 hover:border-[#032e92]/30 hover:shadow-md transition-all duration-300 flex flex-col justify-between group"
             >
               <div>
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#032e92] to-[#021d63] text-white flex items-center justify-center text-xl mb-6 shadow-md shadow-[#032e92]/20 group-hover:scale-105 transition-transform">
-                  <FontAwesomeIcon icon={pillar.icon} />
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-11 h-11 rounded-xl bg-[#eef5ff] text-[#032e92] group-hover:bg-[#032e92] group-hover:text-white transition-all duration-300 flex items-center justify-center text-lg shadow-sm">
+                    <FontAwesomeIcon icon={item.icon} />
+                  </div>
+                  <span className="text-[11px] font-semibold text-[#032e92] bg-[#eef5ff] px-2.5 py-1 rounded-full uppercase tracking-wider">
+                    {item.badge}
+                  </span>
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-3">{pillar.title}</h3>
-                <p className="text-sm text-slate-600 leading-relaxed">{pillar.description}</p>
-              </div>
-            </div>
-          ))}
-        </div>
 
-        {/* Detailed Explanatory Panel */}
-        <div className="p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-blue-50/70 via-indigo-50/40 to-slate-50 border border-blue-100 shadow-sm">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-7 space-y-4">
-              <span className="text-xs font-bold text-[#032e92] tracking-wider uppercase">
-                Regulatory Architecture
-              </span>
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-                PFRDA Governance & Ultra-Low Institutional Costs
-              </h3>
-              <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-                Initially instituted for central and state government employees, NPS was opened to all Indian citizens (both resident and non-resident) between the ages of 18 and 70 in 2009. Key operational highlights include:
-              </p>
-              <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700">
-                <li className="flex items-start gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-[#032e92] text-white text-[11px] font-bold flex items-center justify-center shrink-0 mt-0.5">
-                    ✓
-                  </span>
-                  <span><strong>Lowest Expense Ratio Globally:</strong> Fund management fees are capped at roughly 0.09% p.a., ensuring the vast majority of your compounding remains inside your corpus.</span>
-                </li>
-                <li className="flex items-start gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-[#032e92] text-white text-[11px] font-bold flex items-center justify-center shrink-0 mt-0.5">
-                    ✓
-                  </span>
-                  <span><strong>Top-Tier Pension Fund Managers (PFMs):</strong> Choose between trusted institutions like SBI Pension Funds, LIC Pension Fund, HDFC Pension Fund, ICICI Prudential, and UTI.</span>
-                </li>
-                <li className="flex items-start gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-[#032e92] text-white text-[11px] font-bold flex items-center justify-center shrink-0 mt-0.5">
-                    ✓
-                  </span>
-                  <span><strong>Strict Fiduciary Safety:</strong> Securities are held by an independent custodian (Stock Holding Corporation of India), safeguarding assets against PFM insolvencies.</span>
-                </li>
-              </ul>
-              <div className="pt-2">
+                <h3 className="text-base sm:text-lg font-bold text-black mb-0.5 leading-snug">
+                  {item.title}
+                </h3>
+                <p className="text-xs font-semibold text-[#032e92] mb-3">
+                  {item.subtitle}
+                </p>
+
+                <p className="text-xs sm:text-[13px] text-gray-600 leading-relaxed font-normal mb-5">
+                  {item.description}
+                </p>
+
+                <ul className="space-y-2 pt-2 border-t border-gray-200/60">
+                  {item.highlights.map((point, pIdx) => (
+                    <li key={pIdx} className="flex items-center gap-2 text-xs font-medium text-gray-700">
+                      <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-500 text-[11px] shrink-0" />
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-gray-200/60">
                 <button
+                  type="button"
                   onClick={() =>
                     openLeadModal({
-                      title: 'Start NPS Account Advisory',
+                      title: `Explore ${item.title}`,
                       defaultService: 'National Pension System (NPS)'
                     })
                   }
-                  className="inline-flex items-center gap-2 text-sm font-bold text-[#032e92] hover:text-blue-700 cursor-pointer"
+                  className="w-full py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-[#032e92] bg-white hover:bg-[#032e92] hover:text-white border border-blue-100 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-sm"
                 >
-                  <span>Request an NPS Onboarding Consultation</span>
-                  <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+                  <span>Inquire for {item.title}</span>
                 </button>
               </div>
-            </div>
-
-            <div className="lg:col-span-5">
-              <div className="bg-white p-6 sm:p-7 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                  <span className="text-xs font-bold text-slate-400 uppercase">Product Feature</span>
-                  <span className="text-xs font-bold text-slate-400 uppercase">NPS Framework</span>
-                </div>
-
-                <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 text-xs sm:text-sm">
-                  <span className="text-slate-600 font-medium">Regulatory Authority</span>
-                  <span className="font-bold text-slate-900">PFRDA (Govt. of India)</span>
-                </div>
-
-                <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 text-xs sm:text-sm">
-                  <span className="text-slate-600 font-medium">Eligible Age Bracket</span>
-                  <span className="font-bold text-slate-900">18 to 70 Years</span>
-                </div>
-
-                <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 text-xs sm:text-sm">
-                  <span className="text-slate-600 font-medium">Min. Annual Contribution</span>
-                  <span className="font-bold text-slate-900">₹1,000 (Tier I)</span>
-                </div>
-
-                <div className="flex items-center justify-between p-3 rounded-xl bg-blue-50/80 border border-blue-200 text-xs sm:text-sm">
-                  <span className="text-[#032e92] font-semibold">Special Tax Deduction</span>
-                  <span className="font-extrabold text-[#032e92]">₹50,000 u/s 80CCD(1B)</span>
-                </div>
-
-                <p className="text-[11px] text-slate-400 leading-relaxed pt-1">
-                  * Applicable terms, contribution minimums, and tax laws are governed by PFRDA guidelines and Income Tax Act provisions.
-                </p>
-              </div>
-            </div>
-          </div>
+            </motion.div>
+          ))}
         </div>
+
+        {/* Action Buttons Strip */}
+        <div className="mt-10 sm:mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <button
+            type="button"
+            onClick={() =>
+              openLeadModal({
+                title: 'Start National Pension System (NPS)',
+                defaultService: 'National Pension System (NPS)'
+              })
+            }
+            className="btn-ripple w-full sm:w-auto px-8 py-3.5 rounded-xl text-[15px] font-semibold bg-[#032e92] hover:bg-[#022169] text-white shadow-md hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center gap-2.5 cursor-pointer"
+          >
+            <span>Start Your NPS Investment</span>
+            <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+          </button>
+
+          <button
+            type="button"
+            onClick={scrollToCalculator}
+            className="w-full sm:w-auto px-8 py-3.5 rounded-xl text-[15px] font-semibold bg-white hover:bg-blue-50 text-[#032e92] border border-[#032e92]/20 shadow-sm hover:shadow-md transition-all duration-300 inline-flex items-center justify-center gap-2.5 cursor-pointer"
+          >
+            <FontAwesomeIcon icon={faCalculator} className="text-xs" />
+            <span>Calculate Retirement Corpus</span>
+          </button>
+        </div>
+
       </div>
     </section>
   );

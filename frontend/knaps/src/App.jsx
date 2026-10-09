@@ -25,7 +25,6 @@ import SipLumpsumCalculator from './pages/SipLumpsumCalculator';
 import LifeInsurance from './pages/LifeInsurance';
 import GeneralInsurance from './pages/GeneralInsurance';
 import HealthInsurance from './pages/HealthInsurance';
-import ELSS from './pages/ELSS';
 import FixedDeposit from './pages/FixedDeposit';
 import RecurringDeposits from './pages/RecurringDeposits';
 import NationalPensionSystem from './pages/NationalPensionSystem';
@@ -97,9 +96,6 @@ function App() {
             <Route path="/services/general-insurance" element={<GeneralInsurance />} />
             <Route path="/health-insurance" element={<HealthInsurance />} />
             <Route path="/services/health-insurance" element={<HealthInsurance />} />
-            {/* ELSS Routes */}
-            <Route path="/elss" element={<ELSS />} />
-            <Route path="/services/elss" element={<ELSS />} />
             {/* Fixed Deposit Routes */}
             <Route path="/fixed-deposits" element={<FixedDeposit />} />
             <Route path="/services/fixed-deposits" element={<FixedDeposit />} />

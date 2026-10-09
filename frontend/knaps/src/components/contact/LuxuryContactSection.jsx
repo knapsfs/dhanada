@@ -14,7 +14,7 @@ export default function LuxuryContactSection() {
     phone: '',
     email: '',
     message: '',
-    consent: true,
+    consent: false,
   });
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState('idle'); // idle, submitting, success, error
@@ -92,7 +92,7 @@ export default function LuxuryContactSection() {
       }
     }
     if (!formData.consent) {
-      newErrors.consent = 'Please agree to the Privacy Policy to proceed';
+      newErrors.consent = 'Please accept Terms & Conditions to proceed';
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -265,7 +265,7 @@ export default function LuxuryContactSection() {
                       setSelectedCountry(DEFAULT_COUNTRY);
                       setIsCountryOpen(false);
                       setCountrySearch('');
-                      setFormData({ fullName: '', phone: '', email: '', message: '', consent: true });
+                      setFormData({ fullName: '', phone: '', email: '', message: '', consent: false });
                     }}
                     className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all cursor-pointer"
                   >
@@ -535,23 +535,29 @@ export default function LuxuryContactSection() {
                     ></textarea>
                   </div>
 
-                  {/* Privacy Checkbox */}
-                  <div className="flex items-start gap-4 pt-1">
-                    <input
-                      type="checkbox"
-                      id="privacy-policy"
-                      checked={formData.consent}
-                      onChange={(e) => {
-                        setFormData({ ...formData, consent: e.target.checked });
-                        if (errors.consent) setErrors((prev) => ({ ...prev, consent: '' }));
-                      }}
-                      className="mt-1.5 w-5 h-5 accent-[#032e92] cursor-pointer"
-                    />
-                    <label htmlFor="privacy-policy" className="text-[14px] text-gray-500 leading-relaxed cursor-pointer select-none">
-                      By submitting the details, you consent to be contacted by KNAPS team.
-                    </label>
+                  {/* Terms & Conditions Checkbox */}
+                  <div>
+                    <div className="flex items-start gap-2.5 pt-1">
+                      <input
+                        type="checkbox"
+                        id="contact-terms"
+                        checked={formData.consent}
+                        onChange={(e) => {
+                          setFormData({ ...formData, consent: e.target.checked });
+                          if (e.target.checked && errors.consent) setErrors((prev) => ({ ...prev, consent: '' }));
+                        }}
+                        className="mt-1 w-4 h-4 text-[#0665d0] rounded border-gray-300 focus:ring-[#0665d0] cursor-pointer"
+                      />
+                      <label htmlFor="contact-terms" className="text-[12px] sm:text-[13px] text-gray-500 leading-relaxed cursor-pointer select-none">
+                        I agree to be contacted by a KNAPS representative and accept the
+                        {' '}
+                        <a href="/terms-and-conditions" className="text-[#0665d0] hover:underline" target="_blank" rel="noopener noreferrer">
+                          Terms & Conditions.
+                        </a>
+                      </label>
+                    </div>
+                    {errors.consent && <p className="text-red-500 text-[11px] mt-1 font-medium pl-6.5">{errors.consent}</p>}
                   </div>
-                  {errors.consent && <p className="text-red-500 text-xs">{errors.consent}</p>}
 
                   {/* Submit Button */}
                   <div>

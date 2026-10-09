@@ -4,10 +4,7 @@ import Footer from '../components/Footer';
 
 // Service Components
 import ServicesHero from '../components/services/ServicesHero';
-import ServicesIntro from '../components/services/ServicesIntro';
 import ServicesGrid from '../components/services/ServicesGrid';
-import ServicesProcess from '../components/services/ServicesProcess';
-import WhyChooseServices from '../components/services/WhyChooseServices';
 import CTA from '../components/CTA';
 
 export default function Services() {
@@ -21,10 +18,7 @@ export default function Services() {
 
       <main>
         <ServicesHero />
-        <ServicesIntro />
         <ServicesGrid />
-        <ServicesProcess />
-        <WhyChooseServices />
         <CTA />
       </main>
 

@@ -18,8 +18,7 @@ export default function AboutUs() {
         <AboutStory />
         <AboutTimeline />
         <AboutWhyTrust />
-        <Stats className="pt-8 sm:pt-10" />
-        <AboutLeadership />
+        <Stats className="pt-8 pb-16 sm:pt-10 sm:pb-20" />
         <CTA />
       </main>
 

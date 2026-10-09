@@ -32,20 +32,20 @@ const products = [
     iconBg: 'bg-emerald-50 text-emerald-600',
     route: '/sif',
   },
-  {
-    title: 'PMS (Portfolio Management Services)',
-    description: 'Personalised portfolio management for high-net-worth investors.',
-    icon: faLayerGroup,
-    iconBg: 'bg-sky-50 text-sky-600',
-    route: '/services',
-  },
-  {
-    title: 'AIF (Alternative Investment Funds)',
-    description: 'Access unique opportunities beyond traditional markets.',
-    icon: faUsers,
-    iconBg: 'bg-amber-50 text-amber-600',
-    route: '/services',
-  },
+  // {
+  //   title: 'PMS (Portfolio Management Services)',
+  //   description: 'Personalised portfolio management for high-net-worth investors.',
+  //   icon: faLayerGroup,
+  //   iconBg: 'bg-sky-50 text-sky-600',
+  //   route: '/services',
+  // },
+  // {
+  //   title: 'AIF (Alternative Investment Funds)',
+  //   description: 'Access unique opportunities beyond traditional markets.',
+  //   icon: faUsers,
+  //   iconBg: 'bg-amber-50 text-amber-600',
+  //   route: '/services',
+  // },
   {
     title: 'Life Insurance',
     description: "Comprehensive life cover to ensure your family's financial security.",
@@ -66,13 +66,6 @@ const products = [
     icon: faHeartPulse,
     iconBg: 'bg-emerald-50 text-emerald-600',
     route: '/services/health-insurance',
-  },
-  {
-    title: 'ELSS',
-    description: 'Save tax while investing in equity for long-term growth.',
-    icon: faPercent,
-    iconBg: 'bg-violet-50 text-violet-600',
-    route: '/services/elss',
   },
   {
     title: 'Fixed Deposits (FD)',

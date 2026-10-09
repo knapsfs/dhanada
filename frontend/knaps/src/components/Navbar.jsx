@@ -25,7 +25,6 @@ const navLinks = [
       { label: 'Life Insurance', href: '/services/life-insurance' },
       { label: 'Health Insurance', href: '/services/health-insurance' },
       { label: 'General Insurance', href: '/services/general-insurance' },
-      { label: 'ELSS Funds', href: '/services/elss' },
       { label: 'Fixed Deposits', href: '/services/fixed-deposits' },
       { label: 'Recurring Deposits', href: '/services/recurring-deposits' },
       { label: 'Child Marriage Planning', href: '/services#child-planning' },

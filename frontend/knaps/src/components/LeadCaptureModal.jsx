@@ -14,6 +14,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
   const [selectedCountry, setSelectedCountry] = useState(DEFAULT_COUNTRY);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const dropdownRef = useRef(null);
   const productDropdownRef = useRef(null);
 
@@ -46,6 +47,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
       setIsDropdownOpen(false);
       setProductOpen(false);
       setSearchQuery('');
+      setAgreedToTerms(false);
 
       if (defaultSource) {
         const matched = findProductOption(
@@ -115,6 +117,10 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
       email: validateField('email', formData.email),
       phone: validateField('phone', formData.phone),
     };
+
+    if (!agreedToTerms) {
+      newErrors.terms = 'Please accept Terms & Conditions to proceed';
+    }
 
     const activeErrors = Object.fromEntries(
       Object.entries(newErrors).filter(([, msg]) => Boolean(msg))
@@ -541,6 +547,34 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                     </AnimatePresence>
                   </div>
 
+                  {/* Terms & Conditions Checkbox */}
+                  <div>
+                    <div className="flex items-start gap-2.5 pt-1">
+                      <input
+                        type="checkbox"
+                        id="modal-terms"
+                        checked={agreedToTerms}
+                        onChange={(e) => {
+                          setAgreedToTerms(e.target.checked);
+                          if (e.target.checked && errors.terms) {
+                            setErrors((prev) => ({ ...prev, terms: '' }));
+                          }
+                        }}
+                        className="mt-1 w-4 h-4 text-[#0665d0] rounded border-gray-300 focus:ring-[#0665d0] cursor-pointer"
+                      />
+                      <label htmlFor="modal-terms" className="text-[12px] sm:text-[13px] text-gray-500 leading-relaxed cursor-pointer select-none">
+                        I agree to be contacted by a KNAPS representative and accept the
+                        {' '}
+                        <a href="/terms-and-conditions" className="text-[#0665d0] hover:underline" target="_blank" rel="noopener noreferrer">
+                          Terms & Conditions.
+                        </a>
+                      </label>
+                    </div>
+                    {errors.terms && (
+                      <p className="text-red-500 text-[11px] mt-1 font-medium pl-6.5">{errors.terms}</p>
+                    )}
+                  </div>
+
                   <button
                     type="submit"
                     disabled={status === 'submitting'}
@@ -553,9 +587,6 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                       </>
                     ) : 'Get Started'}
                   </button>
-                  <p className="text-center text-[10px] text-gray-400 font-medium mt-3">
-                    By submitting the details, you consent to be contacted by KNAPS team.
-                  </p>
                 </form>
               )}
             </div>

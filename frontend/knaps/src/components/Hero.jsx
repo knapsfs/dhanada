@@ -20,7 +20,7 @@ export default function Hero() {
   const [selectedCountry, setSelectedCountry] = useState(DEFAULT_COUNTRY);
   const [isCountryOpen, setIsCountryOpen] = useState(false);
   const [countrySearch, setCountrySearch] = useState('');
-  const [agreedToTerms, setAgreedToTerms] = useState(true);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState('idle'); // 'idle' | 'submitting' | 'success' | 'error'
   const [errorMessage, setErrorMessage] = useState('');
@@ -293,7 +293,7 @@ export default function Hero() {
                       setFormData({ name: '', email: '', mobile: '' });
                       setSelectedProduct('');
                       setErrors({});
-                      setAgreedToTerms(true);
+                      setAgreedToTerms(false);
                     }}
                     className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer"
                   >
@@ -593,10 +593,12 @@ export default function Hero() {
                         className="mt-1 w-4 h-4 text-[#0665d0] rounded border-gray-300 focus:ring-[#0665d0] cursor-pointer"
                       />
                       <label htmlFor="terms" className="text-[12px] sm:text-[13px] text-gray-500 leading-relaxed cursor-pointer select-none">
-                        By continuing, you provide consent and agree to our{' '}
-                        <a href="/terms" className="text-[#0665d0] hover:underline">
-                          Terms & Conditions
+                        I agree to be contacted by a KNAPS representative and accept the
+                        {' '}
+                        <a href="/terms-and-conditions" className="text-[#0665d0] hover:underline">
+                          Terms & Conditions.
                         </a>
+
                       </label>
                     </div>
                     {errors.terms && (

@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 // NPS Modular Components
 import NpsHero from '../components/NationalPensionSystem/NpsHero';
 import WhatIsNps from '../components/NationalPensionSystem/WhatIsNps';
+import NpsModelExplorer from '../components/NationalPensionSystem/NpsModelExplorer';
 import WhyConsiderNps from '../components/NationalPensionSystem/WhyConsiderNps';
 import HowNpsWorks from '../components/NationalPensionSystem/HowNpsWorks';
 import NpsKeyFeatures from '../components/NationalPensionSystem/NpsKeyFeatures';
@@ -39,47 +40,50 @@ export default function NationalPensionSystem() {
         {/* 2. What is NPS? */}
         <WhatIsNps />
 
+        {/* 2.1. NPS Models & Categories Explorer (Master-Detail Navigational Tabs) */}
+        <NpsModelExplorer />
+
         {/* 3. Why Consider NPS? */}
         <WhyConsiderNps />
 
         {/* 4. How NPS Works (4-step visual journey) */}
-        <HowNpsWorks />
+        {/* <HowNpsWorks /> */}
 
         {/* 5. Key Features */}
-        <NpsKeyFeatures />
+        {/* <NpsKeyFeatures /> */}
 
         {/* 6. NPS Account Types (Tier I vs Tier II) */}
-        <NpsAccountTypes />
+        {/* <NpsAccountTypes /> */}
 
         {/* 7. Investment Choices (E, C, G, A) */}
-        <NpsInvestmentChoices />
+        {/* <NpsInvestmentChoices /> */}
 
         {/* 8. Active Choice vs Auto Choice */}
-        <ActiveVsAutoChoice />
+        {/* <ActiveVsAutoChoice /> */}
 
         {/* 9. Interactive NPS Retirement Calculator */}
         <NpsCalculator />
 
         {/* 10. Retirement Corpus Growth */}
-        <RetirementCorpusGrowth />
+        {/* <RetirementCorpusGrowth /> */}
 
         {/* 11. NPS Tax Benefits */}
-        <NpsTaxBenefits />
+        {/* <NpsTaxBenefits /> */}
 
         {/* 12. NPS at Retirement / Exit */}
-        <NpsExitAndRetirement />
+        {/* <NpsExitAndRetirement /> */}
 
         {/* 13. NPS vs Mutual Funds vs Fixed Deposits */}
-        <NpsComparisonTable />
+        {/* <NpsComparisonTable /> */}
 
         {/* 14. Who May Consider NPS? */}
-        <WhoShouldConsiderNps />
+        {/* <WhoShouldConsiderNps /> */}
 
         {/* 15. Risks & Things to Know */}
-        <NpsRisks />
+        {/* <NpsRisks /> */}
 
         {/* 16. Important NPS Considerations */}
-        <NpsImportantConsiderations />
+        {/* <NpsImportantConsiderations /> */}
 
         {/* 17. FAQ Section */}
         <NpsFAQ />
