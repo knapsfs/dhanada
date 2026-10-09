@@ -128,7 +128,7 @@ export default function QuizQuestion({
                 </span>
               </div>
 
-              <p className={`text-gray-600 leading-relaxed ${isModal ? 'text-xs mb-3' : 'text-sm mb-8'}`}>
+              <p className={`text-gray-600 leading-relaxed ${isModal ? 'text-sm mb-3' : 'text-sm mb-8'}`}>
                 {question.explanation}
               </p>
 
