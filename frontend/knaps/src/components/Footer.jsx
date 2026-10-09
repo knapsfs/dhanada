@@ -104,20 +104,14 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-gray-400 text-xs text-center md:text-left">
-            &copy; {currentYear} Knaps Private Limited. All rights reserved. AMFI Registered : ARN-367144.
+          <p className="text-gray-500 text-xs text-center md:text-left">
+            &copy; {currentYear} Knaps Private Limited. All rights reserved. AMFI Registered.
           </p>
           <div className="flex gap-6 text-xs text-gray-500">
-            <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
-            <Link to="/terms-and-conditions" className="hover:text-white transition-colors">Terms &amp; Conditions</Link>
+            <Link to="/#privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link to="/#terms" className="hover:text-white transition-colors">Terms of Use</Link>
+            <Link to="/#disclaimer" className="hover:text-white transition-colors">Disclaimer</Link>
           </div>
-        </div>
-
-        {/* Regulatory Disclaimer */}
-        <div id="disclaimer" className="pt-6 mt-6 border-t border-white/5  max-w-7xl">
-          <p className="text-[11px] sm:text-xs text-gray-400 leading-relaxed">
-            <span className="font-semibold text-gray-400">Disclaimer:</span> The information, data, tools, and analytics provided on this website are for informational and educational purposes only and do not constitute investment advice or recommendations. Investments in mutual funds and capital market instruments are subject to market risks. Please read all scheme-related documents carefully before investing.
-          </p>
         </div>
 
       </div>

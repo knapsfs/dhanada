@@ -28,7 +28,7 @@ export default function HeatmapHeader({ timeFilter, setTimeFilter }) {
         <motion.h2
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold mb-2 font-serif">
+          className="text-2xl lg:text-3xl font-bold mb-2 font-serif">
           SIF Performance Heatmap
         </motion.h2>
         <motion.p
@@ -49,10 +49,11 @@ export default function HeatmapHeader({ timeFilter, setTimeFilter }) {
           <button
             key={tab.value}
             onClick={() => setTimeFilter(tab.value)}
-            className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-300 ${timeFilter === tab.value
+            className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-300 ${
+              timeFilter === tab.value
                 ? 'bg-white text-[#032e92] shadow-md'
                 : 'text-blue-100 hover:text-white hover:bg-white/10'
-              }`}>
+            }`}>
             {tab.label}
           </button>
         ))}

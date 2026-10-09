@@ -5,7 +5,30 @@ import { faXmark, faCircleCheck, faCircleExclamation, faSpinner, faChevronDown }
 import { getCsrfToken } from '../utils/csrf';
 import { productOptions, findProductOption } from '../data/productOptions';
 
-import { COUNTRIES, DEFAULT_COUNTRY } from '../data/countries';
+const COUNTRIES = [
+  { code: '+91', name: 'India', flag: '🇮🇳', iso: 'IN', placeholder: '98765 43210', minDigits: 10, maxDigits: 10 },
+  { code: '+1', name: 'United States', flag: '🇺🇸', iso: 'US', placeholder: '202 555 0143', minDigits: 10, maxDigits: 10 },
+  { code: '+86', name: 'China', flag: '🇨🇳', iso: 'CN', placeholder: '138 0013 8000', minDigits: 11, maxDigits: 11 },
+  { code: '+81', name: 'Japan', flag: '🇯🇵', iso: 'JP', placeholder: '90 1234 5678', minDigits: 10, maxDigits: 10 },
+  { code: '+44', name: 'United Kingdom', flag: '🇬🇧', iso: 'GB', placeholder: '7911 123456', minDigits: 10, maxDigits: 10 },
+  { code: '+33', name: 'France', flag: '🇫🇷', iso: 'FR', placeholder: '6 12 34 56 78', minDigits: 9, maxDigits: 9 },
+  { code: '+49', name: 'Germany', flag: '🇩🇪', iso: 'DE', placeholder: '151 23456789', minDigits: 10, maxDigits: 11 },
+  { code: '+39', name: 'Italy', flag: '🇮🇹', iso: 'IT', placeholder: '312 345 6789', minDigits: 9, maxDigits: 10 },
+  { code: '+1', name: 'Canada', flag: '🇨🇦', iso: 'CA', placeholder: '416 555 0198', minDigits: 10, maxDigits: 10 },
+  { code: '+61', name: 'Australia', flag: '🇦🇺', iso: 'AU', placeholder: '412 345 678', minDigits: 9, maxDigits: 9 },
+  { code: '+55', name: 'Brazil', flag: '🇧🇷', iso: 'BR', placeholder: '11 91234 5678', minDigits: 10, maxDigits: 11 },
+  { code: '+7', name: 'Russia', flag: '🇷🇺', iso: 'RU', placeholder: '912 345 67 89', minDigits: 10, maxDigits: 10 },
+  { code: '+34', name: 'Spain', flag: '🇪🇸', iso: 'ES', placeholder: '612 34 56 78', minDigits: 9, maxDigits: 9 },
+  { code: '+971', name: 'United Arab Emirates', flag: '🇦🇪', iso: 'AE', placeholder: '50 123 4567', minDigits: 9, maxDigits: 9 },
+  { code: '+966', name: 'Saudi Arabia', flag: '🇸🇦', iso: 'SA', placeholder: '50 123 4567', minDigits: 9, maxDigits: 9 },
+  { code: '+82', name: 'South Korea', flag: '🇰🇷', iso: 'KR', placeholder: '10 1234 5678', minDigits: 9, maxDigits: 10 },
+  { code: '+65', name: 'Singapore', flag: '🇸🇬', iso: 'SG', placeholder: '8123 4567', minDigits: 8, maxDigits: 8 },
+  { code: '+90', name: 'Türkiye', flag: '🇹🇷', iso: 'TR', placeholder: '501 234 56 78', minDigits: 10, maxDigits: 10 },
+  { code: '+52', name: 'Mexico', flag: '🇲🇽', iso: 'MX', placeholder: '55 1234 5678', minDigits: 10, maxDigits: 10 },
+  { code: '+66', name: 'Thailand', flag: '🇹🇭', iso: 'TH', placeholder: '81 234 5678', minDigits: 9, maxDigits: 9 },
+];
+
+const DEFAULT_COUNTRY = COUNTRIES[0]; // +91 India by default
 
 export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }) {
   const [selectedProduct, setSelectedProduct] = useState('');

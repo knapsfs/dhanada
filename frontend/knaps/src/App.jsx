@@ -7,8 +7,6 @@ import Blogs from './pages/Blogs';
 import BlogDetails from './pages/BlogDetails';
 import AuthorPage from './pages/AuthorPage';
 import ContactUs from './pages/ContactUs';
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import TermsAndConditions from './pages/TermsAndConditions';
 
 // SIF Pages
 import SifHome from './pages/sif/SifHome';
@@ -70,13 +68,6 @@ function App() {
             <Route path="/blogs/author/:slug" element={<AuthorPage />} />
 
             <Route path="/contact" element={<ContactUs />} />
-            <Route path="/contact-us" element={<ContactUs />} />
-
-            {/* Legal & Compliance Routes */}
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="/privacy" element={<Navigate to="/privacy-policy" replace />} />
-            <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
-            <Route path="/terms" element={<Navigate to="/terms-and-conditions" replace />} />
 
             {/* SIF Routes */}
             <Route path="/sif" element={<SifHome />} />

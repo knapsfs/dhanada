@@ -419,7 +419,7 @@ export default function Navbar() {
                   <button
                     type="button"
                     onClick={() => setMobileLoginOpen(!mobileLoginOpen)}
-                    className="w-full py-3.5 px-5 rounded-2xl text-[15px] font-bold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-lg shadow-[#032e92]/20 flex items-center justify-center gap-2.5 transition-all cursor-pointer hover:shadow-xl active:scale-[0.99]"
+                    className="w-full py-3.5 px-5 rounded-2xl text-[15px] font-bold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-lg shadow-[#032e92]/20 flex items-center justify-between transition-all cursor-pointer hover:shadow-xl"
                   >
                     <span>Login</span>
                     <FontAwesomeIcon

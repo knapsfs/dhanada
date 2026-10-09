@@ -20,7 +20,7 @@ export default function Comparison() {
           <span className="inline-block px-4 py-1.5 rounded-full bg-[#eef4ff] text-[#032e92] text-sm font-semibold mb-4">
             ⚖️ Smart Comparison
           </span>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">
             Why SIF <span className="gradient-text">Stands Out</span>
           </h2>
           <p className="text-gray-500 font-medium max-w-xl mx-auto">
@@ -44,8 +44,8 @@ export default function Comparison() {
                   return (
                     <th key={header}
                       className={`px-5 py-5 text-center text-sm font-bold ${isSIF
-                        ? 'bg-[#032e92] text-white rounded-t-2xl shadow-lg'
-                        : 'bg-gray-50 text-gray-700'
+                          ? 'bg-[#032e92] text-white rounded-t-2xl shadow-lg'
+                          : 'bg-gray-50 text-gray-700'
                         }`}>
                       {header}
                     </th>
@@ -60,6 +60,7 @@ export default function Comparison() {
                     }`}>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
+                      <FontAwesomeIcon icon={faCircleInfo} className="text-gray-300 text-xs" />
                       <span className="text-sm font-semibold text-gray-600">{row.feature}</span>
                     </div>
                   </td>

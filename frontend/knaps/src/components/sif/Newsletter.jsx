@@ -42,7 +42,7 @@ export default function Newsletter() {
           </div>
 
           <div className="relative py-16 px-8 lg:px-16 text-center">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-white mb-4">
+            <h2 className="text-4xl font-bold text-white mb-4">
               Start Investing in SIF
             </h2>
             <p className="text-blue-200 font-medium mb-10 max-w-xl mx-auto text-base leading-relaxed">

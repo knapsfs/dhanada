@@ -24,7 +24,7 @@ export default function InvestmentPhilosophy() {
               <span>💡</span> Our Philosophy
             </span>
 
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
               Invest with a plan, <span className="gradient-text"> not with emotions </span>
             </h2>
 

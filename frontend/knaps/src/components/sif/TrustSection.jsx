@@ -86,7 +86,7 @@ export default function TrustSection() {
           <span className="inline-block px-4 py-1.5 rounded-full bg-[#eef4ff] text-[#032e92] text-sm font-semibold mb-4">
             🛡️ Understanding SIF
           </span>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">
             Why Consider a <span className="gradient-text">Specialized Investment Fund?</span>
           </h2>
           <p className="text-gray-500 font-medium max-w-xl mx-auto">

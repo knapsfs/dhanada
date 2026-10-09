@@ -25,7 +25,7 @@ export default function FAQ() {
             <span className="inline-block px-4 py-1.5 rounded-full bg-[#eef4ff] text-[#032e92] text-sm font-semibold mb-4">
               ❓ FAQs
             </span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-gray-900 mb-5">
+            <h2 className="text-4xl font-bold text-gray-900 mb-5">
               Frequently Asked
               <br />
               <span className="gradient-text">Questions</span>

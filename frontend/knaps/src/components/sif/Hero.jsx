@@ -14,7 +14,7 @@ export default function Hero() {
   return (
     <section id="home" className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#021d63] via-[#032e92] to-[#0a4fd4]">
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8 pt-36 sm:pt-40 lg:pt-44 pb-20 lg:pb-28 z-10">
-        <div className="grid lg:grid-cols-12 gap-6 lg:gap-8 items-center min-h-[75vh]">
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-center min-h-[75vh]">
 
           {/* Left Column */}
           <div className="lg:col-span-7 xl:col-span-5 text-left relative z-20">
@@ -34,7 +34,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.1 }}
-              className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-white leading-[1.15] mb-6 font-serif"
+              className="text-3xl lg:text-[40px] font-bold text-white leading-[1.15] mb-6 font-serif tracking-tight"
             >
               Specialized Investment Funds with <span className=" text-transparent bg-clip-text bg-gradient-to-r from-blue-100 via-cyan-200 to-white">
                 Advanced Derivative Strategies.
@@ -117,7 +117,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: -20, x: -20 }}
               animate={{ opacity: 1, y: 0, x: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="absolute z-20 bg-slate-900/60 backdrop-blur-xl border border-cyan-400/30 rounded-2xl p-3.5 shadow-[0_12px_32px_rgba(2,108,245,0.3)] flex items-center gap-3" style={{ left: "70px", top: "80px" }}
+              className="absolute -top-2 left-0 xl:-left-6 z-20 bg-slate-900/60 backdrop-blur-xl border border-cyan-400/30 rounded-2xl p-3.5 shadow-[0_12px_32px_rgba(2,108,245,0.3)] flex items-center gap-3"
             >
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center text-white shadow-md flex-shrink-0">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
