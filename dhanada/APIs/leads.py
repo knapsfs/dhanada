@@ -249,15 +249,17 @@ def create_website_lead():
 				source = raw_source
 			else:
 				try:
-					src_doc = frappe.get_doc({
-						"doctype": "CRM Lead Source",
-						"source_name": raw_source,
-					})
+					src_doc = frappe.get_doc(
+						{
+							"doctype": "CRM Lead Source",
+							"source_name": raw_source,
+						}
+					)
 					src_doc.insert(ignore_permissions=True)
 					frappe.db.commit()
 					source = raw_source
 				except Exception:
-					source = "Website Form" 
+					source = "Website Form"
 		notes = (payload.get("notes") or payload.get("message") or "").strip()
 
 		if not full_name:

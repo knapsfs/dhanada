@@ -116,14 +116,19 @@ def _write_field_to_scheme(scheme_doc, field_name, raw_value):
 		if raw_value:
 			for m in json.loads(raw_value):
 				mgr_name = m.get("manager_name")
-				if mgr_name and not frappe.db.exists("SIF Fund Manager", mgr_name):
+				if not mgr_name:
+					continue
+				existing_fm = frappe.db.get_value("SIF Fund Manager", {"manager_name": mgr_name}, "name")
+				if not existing_fm and frappe.db.exists("SIF Fund Manager", mgr_name):
+					existing_fm = mgr_name
+				if not existing_fm:
 					fm_doc = frappe.get_doc({"doctype": "SIF Fund Manager", "manager_name": mgr_name})
 					fm_doc.insert(ignore_permissions=True)
-					mgr_name = fm_doc.name
+					existing_fm = fm_doc.name
 				scheme_doc.append(
 					"managers",
 					{
-						"manager_name": mgr_name,
+						"manager_name": existing_fm,
 						"from": m.get("from_date") or None,
 						"to": m.get("to_date") or None,
 						"is_active": 1 if m.get("is_active") else 0,

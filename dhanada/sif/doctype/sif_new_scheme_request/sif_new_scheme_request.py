@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 import json
+import os
 
 import frappe
 from frappe.model.document import Document
@@ -241,12 +242,31 @@ class SIFNewSchemeRequest(Document):
 			]
 
 		try:
-			from dhanada.sif.sync.github_client import GitHubClient
+			import json
+
+			from dhanada.scheduler.amfi_repository import (
+				clean_repo_subpath,
+				ensure_amfi_repository_updated,
+				load_local_amfi_isin_mapping,
+			)
 			from dhanada.sif.sync.mapper import DataMapper
 
-			client = GitHubClient()
-			scheme_data = client.fetch_scheme_details()
-			isin_map = client.fetch_amfi_isin_mapping()
+			repo_path = ensure_amfi_repository_updated()
+			settings = frappe.get_single("Dhanada Settings")
+			subpath = (
+				clean_repo_subpath(getattr(settings, "file_path_for_scheme_details", None))
+				or "data/sif/scheme/details"
+			)
+			target_dir = os.path.realpath(os.path.join(repo_path, subpath))
+
+			scheme_data = []
+			if os.path.exists(target_dir):
+				for f in sorted(os.listdir(target_dir)):
+					if f.endswith(".json"):
+						with open(os.path.join(target_dir, f), encoding="utf-8") as fp:
+							scheme_data.append(json.load(fp))
+
+			isin_map = load_local_amfi_isin_mapping(repo_path)
 			mapper = DataMapper(isin_sif_map=isin_map)
 			dataset = mapper.map_dataset({"scheme_details": scheme_data})
 
