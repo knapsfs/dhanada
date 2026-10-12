@@ -1,109 +1,93 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faQuoteLeft } from '@fortawesome/free-solid-svg-icons';
-import { fetchTestimonials, getFrappeImageUrl } from '../api/testimonials';
+import { faQuoteLeft, faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { fetchTestimonials } from '../api/testimonials';
 
 const defaultTestimonialsRow1 = [
   {
     id: 1,
-    name: 'Rajesh Sharma',
-    designation: 'Business Owner',
-    image: 'https://randomuser.me/api/portraits/men/32.jpg',
-    text: 'Knaps has completely transformed how I manage my wealth. Their personalized approach and expert advice have helped my portfolio grow by 25% in just two years.'
+    name: 'Priyanshu',
+    location: 'Uttar Pradesh',
+    text: 'A refreshing and imaginative team that consistently delivers exceptional results - highly recommended for any complex financial planning.'
   },
   {
     id: 2,
-    name: 'Priya Patel',
-    designation: 'IT Executive',
-    image: 'https://randomuser.me/api/portraits/women/44.jpg',
-    text: 'The transparency and dedication of my relationship manager have been outstanding. I finally feel secure about my retirement planning and mutual fund investments.'
+    name: 'Nidhi',
+    location: 'Rajasthan',
+    text: "From concept to execution, their financial strategy knows no bounds - a true game-changer for our family's long-term success."
   },
   {
     id: 3,
-    name: 'Amit Deshmukh',
-    designation: 'Doctor',
-    image: 'https://randomuser.me/api/portraits/men/86.jpg',
-    text: 'As a busy professional, I never had time to actively manage my finances. The PMS services here are exceptional. They delivered beyond expectations.'
+    name: 'Yash Bansal',
+    location: 'Haryana',
+    text: 'Exceeded our expectations with innovative strategies that brought our vision to life - a truly remarkable and reliable wealth partner.'
   },
   {
     id: 4,
-    name: 'Sneha Reddy',
-    designation: 'Entrepreneur',
-    image: 'https://randomuser.me/api/portraits/women/68.jpg',
-    text: 'Their holistic approach to wealth management, including insurance and AIFs, gives me complete peace of mind. The digital dashboard is also incredibly intuitive.'
+    name: 'Satyam',
+    location: 'Bihar',
+    text: 'A refreshing and imaginative team that consistently delivers exceptional results - highly recommended for any complex financial planning.'
   },
 ];
 
 const defaultTestimonialsRow2 = [
   {
     id: 5,
-    name: 'Vikram Singh',
-    designation: 'Corporate Director',
-    image: 'https://randomuser.me/api/portraits/men/22.jpg',
-    text: 'A refreshing and imaginative team that consistently delivers exceptional results - highly recommended for any complex financial planning.'
+    name: 'Rajesh',
+    location: 'Bengaluru',
+    text: 'Knaps has completely transformed how I manage my wealth. Their personalized approach and expert advice have helped my portfolio grow by 25% in just two years.'
   },
   {
     id: 6,
-    name: 'Anjali Desai',
-    designation: 'Tech Lead',
-    image: 'https://randomuser.me/api/portraits/women/33.jpg',
-    text: "From concept to execution, their financial strategy knows no bounds - a true game-changer for our family's long-term success."
+    name: 'Rajshree Pradhan',
+    location: 'Odisha',
+    text: 'Their holistic approach to wealth management, including insurance and AIFs, gives me complete peace of mind. The digital dashboard is also incredibly intuitive.'
   },
   {
     id: 7,
-    name: 'Rohan Mehta',
-    designation: 'Startup Founder',
-    image: 'https://randomuser.me/api/portraits/men/45.jpg',
-    text: 'Creative advisors who listen, understand, and craft captivating portfolios - a wealth partner that truly understands our startup needs.'
+    name: 'Nitin Khandpa',
+    location: 'New Delhi',
+    text: 'As a busy professional, I never had time to actively manage my finances. The PMS services here are exceptional. They delivered beyond expectations.'
   },
   {
     id: 8,
-    name: 'Neha Kapoor',
-    designation: 'Marketing Head',
-    image: 'https://randomuser.me/api/portraits/women/12.jpg',
-    text: 'Exceeded our expectations with innovative strategies that brought our vision to life - a truly remarkable and reliable wealth partner.'
+    name: 'Priya Patel',
+    location: 'New Delhi',
+    text: 'The transparency and dedication of my relationship manager have been outstanding. I finally feel secure about my retirement planning and mutual fund investments.'
   },
 ];
 
 const mapDocToTestimonial = (doc) => {
-  const fallbackImg = `https://ui-avatars.com/api/?name=${encodeURIComponent(doc.name1 || 'Client')}&background=032e92&color=fff`;
   return {
     id: doc.name,
     name: doc.name1 || 'Valued Client',
-    designation: doc.position || '',
-    image: doc.photo ? getFrappeImageUrl(doc.photo) : fallbackImg,
-    fallbackImage: fallbackImg,
+    location: doc.location || '',
     text: doc.description || '',
   };
 };
 
 const TestimonialCard = ({ testimonial }) => (
-  <div className="w-[400px] flex-shrink-0 bg-[#f8f9fc] rounded-[24px] p-8 mx-3 border border-gray-100 flex flex-col justify-between hover:shadow-lg transition-shadow duration-300">
+  <div className="w-[380px] sm:w-[400px] flex-shrink-0 bg-[#f8f9fc] rounded-[24px] p-7 sm:p-8 mx-3 border border-gray-100 flex flex-col justify-between hover:shadow-lg transition-shadow duration-300">
     <div>
       {/* Huge Quote Icon */}
-      <div className="text-5xl text-[#032e92] mb-6">
+      <div className="text-4xl sm:text-5xl text-[#032e92] mb-5 sm:mb-6">
         <FontAwesomeIcon icon={faQuoteLeft} />
       </div>
-      <p className="text-[#1a1a1a] text-[17px] leading-relaxed mb-8">
+      <p className="text-[#1a1a1a] text-[15px] sm:text-[16px] leading-relaxed mb-6 sm:mb-8 font-normal">
         {testimonial.text}
       </p>
     </div>
 
-    <div className="flex items-center gap-4">
-      <img
-        src={testimonial.image}
-        alt={testimonial.name}
-        onError={(e) => {
-          if (testimonial.fallbackImage && e.target.src !== testimonial.fallbackImage) {
-            e.target.src = testimonial.fallbackImage;
-          }
-        }}
-        className="w-12 h-12 rounded-full object-cover shadow-sm bg-gray-100"
-      />
+    <div className="pt-4 border-t border-gray-200/60 flex items-center justify-between">
       <div>
-        <h4 className="font-bold text-gray-900 text-sm">{testimonial.name}</h4>
-        <p className="text-xs text-gray-500 font-medium">{testimonial.designation}</p>
+        <h4 className="font-bold text-gray-900 text-sm sm:text-[15px] tracking-tight">{testimonial.name}</h4>
+        {testimonial.location && (
+          <p className="text-xs text-gray-500 font-medium flex items-center gap-1.5 mt-1">
+            <FontAwesomeIcon icon={faLocationDot} className="text-[#032e92] text-[11px]" />
+            <span>{testimonial.location}</span>
+          </p>
+        )}
       </div>
     </div>
   </div>

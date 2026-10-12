@@ -93,7 +93,7 @@ export default function OurProcess() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-sm sm:text-base text-gray-500 font-normal max-w-xl mx-auto mt-2.5 leading-relaxed"
+            className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl mx-auto leading-relaxed mt-3.5 text-center"
           >
             A simple, step-by-step process to help you invest with clarity and confidence.
           </motion.p>
@@ -111,8 +111,7 @@ export default function OurProcess() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.45, delay: 0.08 * idx }}
-                className="flex flex-col items-center text-center group cursor-pointer"
-                onClick={() => openLeadModal(`Process Step ${item.step}: ${item.title}`)}
+                className="flex flex-col items-center text-center group"
               >
 
                 {/* 3D Pedestal Illustration */}
@@ -120,19 +119,19 @@ export default function OurProcess() {
                   <motion.img
                     src={item.image}
                     alt={item.title}
-                    whileHover={{ scale: 1.08, y: -4 }}
+                    whileHover={{ scale: 1.05, y: -2 }}
                     transition={{ type: 'spring', stiffness: 300, damping: 18 }}
-                    className="w-full h-full object-contain filter drop-shadow-md group-hover:drop-shadow-xl transition-all duration-300"
+                    className="w-full h-full object-contain filter drop-shadow-md group-hover:drop-shadow-lg transition-all duration-300"
                   />
                 </div>
 
                 {/* Step Title */}
-                <h3 className="text-[16px] sm:text-[17px] font-bold text-[#0f172a] leading-snug group-hover:text-[#032e92] transition-colors mt-2">
+                <h3 className="text-[16px] sm:text-[17px] font-bold text-[#0f172a] leading-snug mt-2">
                   {item.title}
                 </h3>
 
                 {/* Step Description */}
-                <p className="text-xs sm:text-[13px] text-gray-500 font-normal leading-relaxed mt-2 max-w-[220px]">
+                <p className="text-sm sm:text-[14px] text-gray-600 font-normal leading-relaxed mt-2 max-w-[220px]">
                   {item.desc}
                 </p>
               </motion.div>
