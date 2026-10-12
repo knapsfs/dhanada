@@ -3,18 +3,6 @@
  * Fetches dynamic testimonials from Frappe DocType 'Testimonials'
  */
 
-export function getFrappeImageUrl(imagePath) {
-	if (!imagePath) return "";
-	if (
-		imagePath.startsWith("http://") ||
-		imagePath.startsWith("https://") ||
-		imagePath.startsWith("data:")
-	) {
-		return imagePath;
-	}
-	return imagePath.startsWith("/") ? imagePath : `/${imagePath}`;
-}
-
 export async function fetchTestimonials() {
 	try {
 		// 1. Try whitelisted method
@@ -29,7 +17,7 @@ export async function fetchTestimonials() {
 		}
 
 		// 2. Fallback to Frappe REST resource API
-		const fields = JSON.stringify(["name", "name1", "position", "photo", "description"]);
+		const fields = JSON.stringify(["name", "name1", "location", "description"]);
 		const resResource = await fetch(
 			`/api/resource/Testimonials?fields=${encodeURIComponent(
 				fields

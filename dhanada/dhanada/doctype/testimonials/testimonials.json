@@ -9,8 +9,7 @@
  "field_order": [
   "testimonial_section",
   "name1",
-  "position",
-  "photo",
+  "location",
   "description"
  ],
  "fields": [
@@ -27,29 +26,24 @@
    "reqd": 1
   },
   {
-   "fieldname": "position",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Position",
-   "reqd": 1
-  },
-  {
-   "fieldname": "photo",
-   "fieldtype": "Attach Image",
-   "label": "Photo"
-  },
-  {
    "fieldname": "description",
    "fieldtype": "Long Text",
    "in_list_view": 1,
    "label": "Testimonial",
+   "reqd": 1
+  },
+  {
+   "fieldname": "location",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Location",
    "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-05 16:46:28.336430",
+ "modified": "2026-10-09 17:33:29.414546",
  "modified_by": "Administrator",
  "module": "Dhanada",
  "name": "Testimonials",
