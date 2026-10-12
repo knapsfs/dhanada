@@ -1,20 +1,20 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChartSimple,
   faSeedling,
-  faLayerGroup,
-  faUsers,
   faShieldHalved,
   faShield,
   faHeartPulse,
-  faPercent,
   faCoins,
   faPiggyBank,
   faUser,
   faFileLines,
   faArrowRight,
+  faChevronDown,
+  faChevronUp,
 } from '@fortawesome/free-solid-svg-icons';
 
 const products = [
@@ -32,20 +32,6 @@ const products = [
     iconBg: 'bg-emerald-50 text-emerald-600',
     route: '/sif',
   },
-  // {
-  //   title: 'PMS (Portfolio Management Services)',
-  //   description: 'Personalised portfolio management for high-net-worth investors.',
-  //   icon: faLayerGroup,
-  //   iconBg: 'bg-sky-50 text-sky-600',
-  //   route: '/services',
-  // },
-  // {
-  //   title: 'AIF (Alternative Investment Funds)',
-  //   description: 'Access unique opportunities beyond traditional markets.',
-  //   icon: faUsers,
-  //   iconBg: 'bg-amber-50 text-amber-600',
-  //   route: '/services',
-  // },
   {
     title: 'Life Insurance',
     description: "Comprehensive life cover to ensure your family's financial security.",
@@ -99,6 +85,7 @@ const products = [
 
 export default function OurProducts() {
   const navigate = useNavigate();
+  const [showAllMobile, setShowAllMobile] = useState(false);
 
   const handleCardClick = (product) => {
     if (product.route) {
@@ -143,47 +130,75 @@ export default function OurProducts() {
           From growing your wealth to protecting what matters, we offer a wide range of trusted financial products to support every stage of your life.
         </motion.p>
 
-        {/* 3-Column Grid of 12 Products */}
+        {/* 3-Column Grid of Products */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 mt-10 sm:mt-12 text-left">
-          {products.map((item, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.05 * (idx % 3) }}
-              whileHover={{ y: -4, scale: 1.015 }}
-              onClick={() => handleCardClick(item)}
-              className="bg-white rounded-2xl border border-gray-100 shadow-md shadow-blue-900/4 p-5 sm:p-6 flex items-center justify-between gap-4 hover:shadow-xl hover:border-blue-100 transition-all duration-300 group cursor-pointer"
-            >
-              {/* Left Content */}
-              <div className="flex items-center gap-4 min-w-0">
-                {/* Icon Box */}
-                <div className={`w-12 h-12 sm:w-13 sm:h-13 rounded-2xl flex items-center justify-center text-lg sm:text-xl flex-shrink-0 transition-transform group-hover:scale-110 ${item.iconBg}`}>
-                  <FontAwesomeIcon icon={item.icon} />
+          {products.map((item, idx) => {
+            const isHiddenOnMobile = !showAllMobile && idx >= 3;
+            return (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: 0.05 * (idx % 3) }}
+                whileHover={{ y: -4, scale: 1.015 }}
+                onClick={() => handleCardClick(item)}
+                className={`${
+                  isHiddenOnMobile ? 'hidden sm:flex' : 'flex'
+                } bg-white rounded-2xl border border-gray-100 shadow-md shadow-blue-900/4 p-5 sm:p-6 items-center justify-between gap-4 hover:shadow-xl hover:border-blue-100 transition-all duration-300 group cursor-pointer`}
+              >
+                {/* Left Content */}
+                <div className="flex items-center gap-4 min-w-0">
+                  {/* Icon Box */}
+                  <div className={`w-12 h-12 sm:w-13 sm:h-13 rounded-2xl flex items-center justify-center text-lg sm:text-xl flex-shrink-0 transition-transform group-hover:scale-110 ${item.iconBg}`}>
+                    <FontAwesomeIcon icon={item.icon} />
+                  </div>
+
+                  {/* Text */}
+                  <div className="min-w-0">
+                    <h3 className="text-sm sm:text-base font-bold text-gray-900 leading-snug group-hover:text-[#032e92] transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs sm:text-[13.5px] text-gray-500 font-normal leading-relaxed mt-1 line-clamp-2">
+                      {item.description}
+                    </p>
+                  </div>
                 </div>
 
-                {/* Text */}
-                <div className="min-w-0">
-                  <h3 className="text-sm sm:text-base font-bold text-gray-900 leading-snug group-hover:text-[#032e92] transition-colors">
-                    {item.title}
-                  </h3>
-                  <p className="text-xs sm:text-[13.5px] text-gray-500 font-normal leading-relaxed mt-1 line-clamp-2">
-                    {item.description}
-                  </p>
+                {/* Arrow Pill */}
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-50 group-hover:bg-[#032e92] text-gray-400 group-hover:text-white flex items-center justify-center text-xs sm:text-sm transition-all flex-shrink-0 ml-1 shadow-2xs">
+                  <FontAwesomeIcon icon={faArrowRight} />
                 </div>
-              </div>
-
-              {/* Arrow Pill */}
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-50 group-hover:bg-[#032e92] text-gray-400 group-hover:text-white flex items-center justify-center text-xs sm:text-sm transition-all flex-shrink-0 ml-1 shadow-2xs">
-                <FontAwesomeIcon icon={faArrowRight} />
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
 
-        {/* Bottom CTA Button */}
-        <div className="mt-12 text-center">
+        {/* Mobile View All / View Less Button */}
+        <div className="mt-8 text-center sm:hidden">
+          {!showAllMobile ? (
+            <button
+              type="button"
+              onClick={() => setShowAllMobile(true)}
+              className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <span>View All</span>
+              <FontAwesomeIcon icon={faChevronDown} className="text-xs" />
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setShowAllMobile(false)}
+              className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <span>View Less</span>
+              <FontAwesomeIcon icon={faChevronUp} className="text-xs" />
+            </button>
+          )}
+        </div>
+
+        {/* Desktop CTA Button */}
+        <div className="mt-12 text-center hidden sm:block">
           <button
             type="button"
             onClick={() => navigate('/services')}

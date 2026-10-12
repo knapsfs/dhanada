@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import npsHeroImg from '../../assets/nps/hero.png';
+import npsHeroImg from '../../assets/nps/hero.webp';
 
 export default function NpsHero() {
   return (

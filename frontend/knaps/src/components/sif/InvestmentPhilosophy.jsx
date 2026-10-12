@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { useLeadModal } from '../../context/LeadModalContext';
-import patienceDisciplineImg from '../../assets/sif/patience-discipline.png';
+import patienceDisciplineImg from '../../assets/sif/patience-discipline.webp';
 
 export default function InvestmentPhilosophy() {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });

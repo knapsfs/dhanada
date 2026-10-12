@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import knapsBanner from '../assets/knaps-banner.png';
-import knapsBannerGlassCards from '../assets/knaps-banner-glass-cards.png';
+import knapsBanner from '../assets/knaps-banner.webp';
+import knapsBannerGlassCards from '../assets/knaps-banner-glass-cards.webp';
 import { getCsrfToken } from '../utils/csrf';
 
 import { productOptions } from '../data/productOptions';

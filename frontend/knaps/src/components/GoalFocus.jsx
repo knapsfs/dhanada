@@ -2,12 +2,12 @@ import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowTrendUp } from '@fortawesome/free-solid-svg-icons';
 
-import homeImg from '../assets/goals/goal_dream_home.jpg';
-import marriageImg from '../assets/goals/goal_child_marriage.jpg';
-import educationImg from '../assets/goals/goal_higher_education.jpg';
-import retirementImg from '../assets/goals/goal_retirement.jpg';
-import freedomImg from '../assets/goals/goal_financial_freedom.jpg';
-import tourImg from '../assets/goals/goal_world_tour.jpg';
+import homeImg from '../assets/goals/goal_dream_home.webp';
+import marriageImg from '../assets/goals/goal_child_marriage.webp';
+import educationImg from '../assets/goals/goal_higher_education.webp';
+import retirementImg from '../assets/goals/goal_retirement.webp';
+import freedomImg from '../assets/goals/goal_financial_freedom.webp';
+import tourImg from '../assets/goals/goal_world_tour.webp';
 
 const goals = [
   {
