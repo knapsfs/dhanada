@@ -5,7 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faChevronDown, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { motion, AnimatePresence } from 'framer-motion';
-import logo from '../assets/knaps-logo.png';
+import logo from '../assets/knaps-logo.webp';
 import { useLeadModal } from '../context/LeadModalContext';
 
 const navLinks = [

@@ -14,7 +14,7 @@ ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarEle
 export function AllocationChart({ fund }) {
   const { ref, inView } = useInView({ triggerOnce: true })
   const allocations = fund.allocations || []
-  
+
   if (!allocations || allocations.length === 0) {
     return (
       <motion.div
@@ -79,11 +79,11 @@ export function AllocationChart({ fund }) {
         </div>
         <h3 className="font-bold text-gray-900">Asset Allocation Limits</h3>
       </div>
-      
+
       <div className="h-56 relative">
         {inView && <Doughnut data={data} options={options} />}
       </div>
-      
+
       {/* Allocation bars */}
       <div className="mt-4 space-y-3">
         {allocations.map((item, idx) => (
@@ -97,7 +97,7 @@ export function AllocationChart({ fund }) {
                  initial={{ width: 0 }}
                  animate={inView ? { width: `${item.max}%` } : {}}
                  transition={{ duration: 1, delay: 0.3 }}
-                 className="h-full rounded-full" 
+                 className="h-full rounded-full"
                  style={{ backgroundColor: bgColors[idx % bgColors.length] }} />
              </div>
           </div>
@@ -110,7 +110,7 @@ export function AllocationChart({ fund }) {
 // ─── Sector Bar Chart ───
 export function SectorChart({ fund }) {
   const { ref, inView } = useInView({ triggerOnce: true })
-  
+
   const sectors = fund.sectors || []
 
   if (!sectors || sectors.length === 0) {

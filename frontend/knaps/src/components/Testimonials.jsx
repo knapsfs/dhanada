@@ -151,9 +151,9 @@ export default function Testimonials() {
       {/* Marquee Container */}
       <div className="relative">
 
-        {/* White gradient overlays for the edges to make the marquee fade in/out seamlessly */}
-        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
-        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+        {/* White gradient overlays for the edges on desktop, hidden on mobile */}
+        <div className="hidden sm:block absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+        <div className="hidden sm:block absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
 
         <div className="flex flex-col gap-6 overflow-hidden max-w-[100vw]">
 

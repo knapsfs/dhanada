@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion';
 import { useLeadModal } from '../context/LeadModalContext';
 
-import step1Img from '../assets/process/step_1_3d.png';
-import step2Img from '../assets/process/step_2_3d.png';
-import step3Img from '../assets/process/step_3_3d.png';
-import step4Img from '../assets/process/step_4_3d.png';
-import step5Img from '../assets/process/step_5_3d.png';
+import step1Img from '../assets/process/step_1_3d.webp';
+import step2Img from '../assets/process/step_2_3d.webp';
+import step3Img from '../assets/process/step_3_3d.webp';
+import step4Img from '../assets/process/step_4_3d.webp';
+import step5Img from '../assets/process/step_5_3d.webp';
 
 const steps = [
   {

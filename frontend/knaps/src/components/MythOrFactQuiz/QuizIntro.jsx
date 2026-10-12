@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import mythFactImg from '../../assets/myth-fact.png';
+import mythFactImg from '../../assets/myth-fact.webp';
 
 export default function QuizIntro({ onStart, isModal = false, totalQuestions = 5 }) {
   return (

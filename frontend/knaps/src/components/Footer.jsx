@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faLinkedinIn, faInstagram, faXTwitter } from '@fortawesome/free-brands-svg-icons';
 import { faLocationDot, faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import logo from '../assets/knaps-logo.png';
+import logo from '../assets/knaps-logo.webp';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();

@@ -116,7 +116,7 @@ export default function Riskometer({ fund }) {
 
         {/* Risk Level Output Badge */}
         <div className="mt-2 text-center flex flex-col items-center">
-          <motion.p 
+          <motion.p
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2, duration: 0.4 }}

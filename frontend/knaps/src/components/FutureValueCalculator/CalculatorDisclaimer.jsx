@@ -28,12 +28,12 @@ export default function CalculatorDisclaimer({ initialInvestment, recurringInves
         <p className="text-[10px] text-gray-500 mb-6 leading-relaxed">
           <strong className="text-gray-700">Disclaimer:</strong> This calculator is for illustrative and educational purposes only. It does not constitute investment, financial, or tax advice. The assumed rate of return is hypothetical and is not guaranteed. Actual investment returns may be higher or lower and can vary over time.
         </p>
-        
+
         <div>
           <h4 className="font-bold text-gray-800 text-sm mb-3">Explore Investment Planning</h4>
           <div className="flex flex-wrap gap-3">
             {exploreLinks.map(link => (
-              <a 
+              <a
                 key={link.label}
                 href={link.href}
                 className="flex items-center gap-2 px-4 py-2 rounded-full border border-[#e8edf7] text-xs font-bold text-gray-700 hover:border-[#032e92] hover:text-[#032e92] transition-colors"
