@@ -22,19 +22,24 @@ export default function NpsHero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
-          className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border border-gray-100 aspect-[16/9] sm:aspect-[2.1/1] md:aspect-[2.235/1] min-h-[250px] sm:min-h-[340px]"
+          className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border border-gray-100 aspect-[16/9] sm:aspect-[2.1/1] md:aspect-[2.235/1] min-h-[220px] sm:min-h-[320px]"
         >
           {/* Background Image */}
           <img
             src={npsHeroImg}
-            alt="Retirement in real is closer than it appears"
+            alt="How do you see your Retirement?"
             className="w-full h-full object-cover object-center"
           />
 
-          {/* Text Overlay on Top Left */}
-          <div className="absolute top-6 sm:top-10 md:top-12 lg:top-16 left-6 sm:left-10 md:left-12 lg:left-16 max-w-xs sm:max-w-md md:max-w-lg z-10">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-semibold text-gray-900 tracking-tight leading-tight sm:leading-snug drop-shadow-sm">
-              Retirement in real<br />is closer than it appears
+          {/* Text Overlay matching reference design */}
+          <div className="absolute top-[18%] sm:top-[20%] md:top-[23%] left-[6%] sm:left-[8%] md:left-[8.5%] z-10 select-none">
+            <h1 className="flex flex-col tracking-tight">
+              <span className="text-base sm:text-2xl md:text-3xl lg:text-[32px] font-semibold text-[#0b2e75] leading-snug drop-shadow-xs">
+                How do you see your
+              </span>
+              <span className="text-2xl sm:text-4xl md:text-5xl lg:text-[52px] font-bold sm:font-extrabold text-[#d31424] leading-[1.05] mt-0.5 sm:mt-1.5 drop-shadow-xs">
+                Retirement?
+              </span>
             </h1>
           </div>
         </motion.div>

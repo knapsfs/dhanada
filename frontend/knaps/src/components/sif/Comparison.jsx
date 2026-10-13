@@ -24,7 +24,7 @@ export default function Comparison() {
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-gray-900 mb-4">
             Why SIF <span className="gradient-text">Stands Out</span>
           </h2>
-          <p className="text-gray-500 font-medium max-w-xl mx-auto text-sm sm:text-base">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed">
             Compare investment options side by side and understand how SIF differs from Mutual Funds, PMS and AIFs.
           </p>
         </motion.div>
@@ -57,11 +57,10 @@ export default function Comparison() {
                   return (
                     <th
                       key={header}
-                      className={`px-4 sm:px-5 py-4 sm:py-5 text-center text-xs sm:text-sm font-bold border-b border-[#e8edf7] ${
-                        isSIF
-                          ? 'bg-[#032e92] text-white rounded-t-2xl shadow-lg min-w-[140px] sm:min-w-[180px]'
-                          : 'bg-gray-50 text-gray-700 min-w-[100px] sm:min-w-[130px]'
-                      }`}
+                      className={`px-4 sm:px-5 py-4 sm:py-5 text-center text-xs sm:text-sm font-bold border-b border-[#e8edf7] ${isSIF
+                        ? 'bg-[#032e92] text-white rounded-t-2xl shadow-lg min-w-[140px] sm:min-w-[180px]'
+                        : 'bg-gray-50 text-gray-700 min-w-[100px] sm:min-w-[130px]'
+                        }`}
                     >
                       {header}
                     </th>
@@ -77,11 +76,10 @@ export default function Comparison() {
                 >
                   {/* Fixed "Feature" Column Cell */}
                   <td
-                    className={`sticky left-0 z-10 px-4 sm:px-6 py-4 border-b border-r border-[#e8edf7] shadow-[4px_0_10px_-2px_rgba(0,0,0,0.06)] transition-colors ${
-                      ri % 2 === 0
-                        ? 'bg-white group-hover:bg-[#f1f5fa]'
-                        : 'bg-[#f7f9fc] group-hover:bg-[#f1f5fa]'
-                    }`}
+                    className={`sticky left-0 z-10 px-4 sm:px-6 py-4 border-b border-r border-[#e8edf7] shadow-[4px_0_10px_-2px_rgba(0,0,0,0.06)] transition-colors ${ri % 2 === 0
+                      ? 'bg-white group-hover:bg-[#f1f5fa]'
+                      : 'bg-[#f7f9fc] group-hover:bg-[#f1f5fa]'
+                      }`}
                   >
                     <div className="flex items-center gap-2">
                       <span className="text-xs sm:text-sm font-semibold text-gray-700 leading-snug">
@@ -96,13 +94,12 @@ export default function Comparison() {
                     return (
                       <td
                         key={vi}
-                        className={`px-4 sm:px-5 py-4 text-center border-b border-[#e8edf7] transition-colors ${
-                          isSIF
-                            ? 'bg-[#032e92]/5 group-hover:bg-[#032e92]/10 border-x border-[#032e92]/10'
-                            : ri % 2 === 0
+                        className={`px-4 sm:px-5 py-4 text-center border-b border-[#e8edf7] transition-colors ${isSIF
+                          ? 'bg-[#032e92]/5 group-hover:bg-[#032e92]/10 border-x border-[#032e92]/10'
+                          : ri % 2 === 0
                             ? 'bg-white group-hover:bg-[#f7f9fc]'
                             : 'bg-gray-50/50 group-hover:bg-[#f7f9fc]'
-                        }`}
+                          }`}
                       >
                         {val === 'Yes' ? (
                           <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-green-100">
@@ -114,9 +111,8 @@ export default function Comparison() {
                           </span>
                         ) : (
                           <span
-                            className={`text-xs sm:text-sm font-semibold ${
-                              isSIF ? 'text-[#032e92]' : 'text-gray-600'
-                            }`}
+                            className={`text-xs sm:text-sm font-semibold ${isSIF ? 'text-[#032e92]' : 'text-gray-600'
+                              }`}
                           >
                             {val}
                           </span>

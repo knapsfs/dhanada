@@ -27,7 +27,7 @@ export default function CTA() {
             Ready to Start Investing <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-white">for Your Goals?</span>
           </h2>
 
-          <p className="text-lg md:text-xl text-blue-100 mb-10 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-sm md:text-lg lg:text-xl text-blue-100 mb-10 max-w-2xl mx-auto leading-relaxed">
             Take the first step towards financial freedom. Schedule a one-on-one session with us to discuss your investment goals.
           </p>
 

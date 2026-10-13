@@ -46,7 +46,7 @@ export default function FundsHero({ totalFunds = 33 }) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
-                className="text-[#64748b] text-sm lg:text-base font-medium leading-relaxed max-w-md"
+                className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed"
               >
                 Choose the right SIF for your financial goals.
               </motion.p>

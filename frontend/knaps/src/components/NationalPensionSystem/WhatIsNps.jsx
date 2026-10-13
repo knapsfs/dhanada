@@ -25,39 +25,39 @@ export default function WhatIsNps() {
   const npsVariants = [
     {
       icon: faUserTie,
-      title: 'Regular NPS',
+      title: 'All Citizen NPS',
       subtitle: 'For Your Retirement',
-      badge: 'Individual Tier I & II',
+      // badge: 'Individual Tier I & II',
       description:
-        'Designed for all Indian citizens (18-70 years) to systematically build a retirement corpus with flexible asset allocation (up to 75% equity) and exclusive tax benefits.',
-      highlights: ['Extra ₹50,000 u/s 80CCD(1B)', 'Lowest expense ratios globally', '60% tax-free lump sum exit']
+        'For Indian citizens aged 18-85 to build a retirement corpus through market-linked investments, with equity exposure of up to 100%.',
+      highlights: ['Tax-Free exit', 'Regular income after retirement', 'Government of India Regulated Scheme']
     },
     {
       icon: faChild,
       title: 'NPS Vatsalya',
       subtitle: "For Your Child's Future",
-      badge: 'Minors (< 18 Years)',
+      // badge: 'Minors (< 18 Years)',
       description:
-        'A dedicated long-term wealth initiative started by parents or guardians for minor children, compounding wealth from childhood and seamlessly transitioning into adulthood.',
-      highlights: ['Early compounding advantage', 'Seamless conversion at age 18', 'PFRDA regulated architecture']
+        'A long-term investment scheme for children below 18, started and managed by a parent or legal guardian.',
+      highlights: ['Tax-free exit', 'Start investing from ₹250', 'Plan for key milestones like education & marriage.']
     },
     {
       icon: faBuilding,
       title: 'Corporate NPS',
       subtitle: 'For Companies & Employees',
-      badge: 'Employer - Employee Benefit',
+      // badge: 'Employer - Employee Benefit',
       description:
-        'A structured retirement benefit program adopted by corporations, allowing employees to claim additional tax deductions on employer contributions under Section 80CCD(2).',
-      highlights: ['Tax deduction u/s 80CCD(2)', 'Zero cost setup for employers', 'Enhanced employee retention']
+        'A retirement benefit that allows employers to contribute to employees’ NPS accounts and may offer tax benefits.',
+      highlights: ['Tax benefits for employer', 'Retirement benefit for employees', 'Improve employee retention']
     },
     {
       icon: faLandmark,
       title: 'Govt. Sector NPS',
       subtitle: 'For Central & State Govt Employees',
-      badge: 'Govt Employees',
+      // badge: 'Govt Employees',
       description:
-        'Applicable to employees of Central, State Governments, and autonomous bodies, featuring an enhanced 14% government contribution and defined investment choices.',
-      highlights: ['14% Govt. contribution matching', 'Sec 80CCD(2) tax exemption', 'Structured sovereign safety']
+        'NPS for Central and State Government employees, with employer contributions and structured retirement benefits. ',
+      highlights: ['Tax-efficient retirement planning', 'Government contribution supports retirement savings', 'Financial independence after retirement']
     }
   ];
 
@@ -89,7 +89,7 @@ export default function WhatIsNps() {
           </div>
 
           {/* Description Paragraph directly from reference design */}
-          <p className="text-sm sm:text-base md:text-[17px] text-gray-700 font-normal leading-relaxed mt-6 max-w-6xl">
+          <p className="text-sm sm:text-base text-gray-600 font-normal mx-auto leading-relaxed mt-5 max-w-7xl">
             NPS is a market-linked retirement investment that helps build a corpus over the years - Regular NPS for your retirement, NPS Vatsalya for your child’s future, and Corporate NPS for companies looking to provide a structured retirement benefit to their employees. You invest over time, let the corpus compound, and at eligible exit, withdraw your corpus as a combination of lumpsum/ annuity.
           </p>
         </motion.div>
@@ -105,28 +105,32 @@ export default function WhatIsNps() {
               transition={{ delay: idx * 0.08, duration: 0.5 }}
               className="rounded-2xl p-6 sm:p-7 bg-[#f8fafc] border border-gray-100 hover:border-[#032e92]/30 hover:shadow-md transition-all duration-300 flex flex-col justify-between group"
             >
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-11 h-11 rounded-xl bg-[#eef5ff] text-[#032e92] group-hover:bg-[#032e92] group-hover:text-white transition-all duration-300 flex items-center justify-center text-lg shadow-sm">
-                    <FontAwesomeIcon icon={item.icon} />
+              <div className="flex-1 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-11 h-11 rounded-xl bg-[#eef5ff] text-[#032e92] group-hover:bg-[#032e92] group-hover:text-white transition-all duration-300 flex items-center justify-center text-lg shadow-sm">
+                      <FontAwesomeIcon icon={item.icon} />
+                    </div>
+                    {item.badge && (
+                      <span className="text-[11px] font-semibold text-[#032e92] bg-[#eef5ff] px-2.5 py-1 rounded-full uppercase tracking-wider">
+                        {item.badge}
+                      </span>
+                    )}
                   </div>
-                  <span className="text-[11px] font-semibold text-[#032e92] bg-[#eef5ff] px-2.5 py-1 rounded-full uppercase tracking-wider">
-                    {item.badge}
-                  </span>
+
+                  <h3 className="text-base sm:text-lg font-bold text-black mb-0.5 leading-snug">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs font-semibold text-[#032e92] mb-3">
+                    {item.subtitle}
+                  </p>
+
+                  <p className="text-xs sm:text-[13px] text-gray-600 leading-relaxed font-normal mb-5">
+                    {item.description}
+                  </p>
                 </div>
 
-                <h3 className="text-base sm:text-lg font-bold text-black mb-0.5 leading-snug">
-                  {item.title}
-                </h3>
-                <p className="text-xs font-semibold text-[#032e92] mb-3">
-                  {item.subtitle}
-                </p>
-
-                <p className="text-xs sm:text-[13px] text-gray-600 leading-relaxed font-normal mb-5">
-                  {item.description}
-                </p>
-
-                <ul className="space-y-2 pt-2 border-t border-gray-200/60">
+                <ul className="space-y-2.5 pt-4 border-t border-gray-200/60">
                   {item.highlights.map((point, pIdx) => (
                     <li key={pIdx} className="flex items-center gap-2 text-xs font-medium text-gray-700">
                       <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-500 text-[11px] shrink-0" />
@@ -134,21 +138,6 @@ export default function WhatIsNps() {
                     </li>
                   ))}
                 </ul>
-              </div>
-
-              <div className="mt-6 pt-4 border-t border-gray-200/60">
-                <button
-                  type="button"
-                  onClick={() =>
-                    openLeadModal({
-                      title: `Explore ${item.title}`,
-                      defaultService: 'National Pension System (NPS)'
-                    })
-                  }
-                  className="w-full py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-[#032e92] bg-white hover:bg-[#032e92] hover:text-white border border-blue-100 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-sm"
-                >
-                  <span>Inquire for {item.title}</span>
-                </button>
               </div>
             </motion.div>
           ))}
@@ -167,17 +156,16 @@ export default function WhatIsNps() {
             className="btn-ripple w-full sm:w-auto px-8 py-3.5 rounded-xl text-[15px] font-semibold bg-[#032e92] hover:bg-[#022169] text-white shadow-md hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center gap-2.5 cursor-pointer"
           >
             <span>Start Your NPS Investment</span>
-            <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
           </button>
 
-          <button
+          {/* <button
             type="button"
             onClick={scrollToCalculator}
             className="w-full sm:w-auto px-8 py-3.5 rounded-xl text-[15px] font-semibold bg-white hover:bg-blue-50 text-[#032e92] border border-[#032e92]/20 shadow-sm hover:shadow-md transition-all duration-300 inline-flex items-center justify-center gap-2.5 cursor-pointer"
           >
             <FontAwesomeIcon icon={faCalculator} className="text-xs" />
             <span>Calculate Retirement Corpus</span>
-          </button>
+          </button> */}
         </div>
 
       </div>

@@ -175,7 +175,7 @@ export default function GoalFocus() {
                 Disciplined Investing.
               </span>
               <span className="text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-widest block mt-1">
-                The Power of Time
+                The Power of Compounding
               </span>
             </div>
 

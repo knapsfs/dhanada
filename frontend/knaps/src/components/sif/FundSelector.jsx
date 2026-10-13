@@ -121,7 +121,7 @@ export default function FundSelector({ selectedFunds = [null, null, null], onFun
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <div>
           <h2 className="text-2xl font-bold text-[#1e293b] font-serif mb-1">Select Funds</h2>
-          <p className="text-[#64748b] text-sm font-medium">Choose up to 3 funds across any category to compare them side-by-side.</p>
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed">Choose up to 3 funds across any category to compare them side-by-side.</p>
         </div>
       </div>
 
@@ -203,8 +203,8 @@ export default function FundSelector({ selectedFunds = [null, null, null], onFun
           onClick={onCompare}
           disabled={!canCompare}
           className={`px-6 py-3 rounded-xl text-[15px] font-semibold transition-all duration-300 inline-flex items-center justify-center ${canCompare
-              ? 'btn-ripple bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 cursor-pointer'
-              : 'bg-gray-200 text-gray-400 border border-gray-200 cursor-not-allowed shadow-none'
+            ? 'btn-ripple bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 cursor-pointer'
+            : 'bg-gray-200 text-gray-400 border border-gray-200 cursor-not-allowed shadow-none'
             }`}
         >
           Compare

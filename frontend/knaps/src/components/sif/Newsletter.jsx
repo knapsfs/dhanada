@@ -45,7 +45,7 @@ export default function Newsletter() {
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-white mb-4">
               Start Investing in SIF
             </h2>
-            <p className="text-blue-200 font-medium mb-10 max-w-xl mx-auto text-base leading-relaxed">
+            <p className="text-sm md:text-lg lg:text-xl text-blue-100 mb-10 max-w-2xl mx-auto leading-relaxed">
               Discuss your investment objectives and learn more about Specialised Investment Fund (SIF) strategies.
             </p>
 
