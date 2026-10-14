@@ -172,13 +172,20 @@ get_desktop_icons = "dhanada.config.desktop.get_data"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+	"SIF Scheme": {
+		"after_insert": "dhanada.APIs.financial_retriever.on_scheme_document_change",
+		"on_update": "dhanada.APIs.financial_retriever.on_scheme_document_change",
+		"on_trash": "dhanada.APIs.financial_retriever.on_scheme_document_change",
+		"after_delete": "dhanada.APIs.financial_retriever.on_scheme_document_change",
+	},
+	"SIF Scheme Plan": {
+		"after_insert": "dhanada.APIs.financial_retriever.on_scheme_document_change",
+		"on_update": "dhanada.APIs.financial_retriever.on_scheme_document_change",
+		"on_trash": "dhanada.APIs.financial_retriever.on_scheme_document_change",
+		"after_delete": "dhanada.APIs.financial_retriever.on_scheme_document_change",
+	},
+}
 
 # Scheduled Tasks
 # ---------------

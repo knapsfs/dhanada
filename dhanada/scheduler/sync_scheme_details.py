@@ -119,6 +119,16 @@ def sync_scheme_details(dry_run: bool = False, force: bool = False) -> dict[str,
 		importer = DataImporter(dry_run=dry_run)
 		importer.import_dataset(dataset)
 
+		if not dry_run:
+			try:
+				from dhanada.APIs.financial_retriever import schedule_scheme_index_invalidation
+
+				schedule_scheme_index_invalidation()
+				if getattr(frappe, "db", None) and hasattr(frappe.db, "commit"):
+					frappe.db.commit()
+			except Exception as e:
+				logger.warning(f"Failed to schedule scheme index cache invalidation after sync: {e}")
+
 		duration = time.time() - start_time
 		log_sync_completed(
 			duration_seconds=round(duration, 2),

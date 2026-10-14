@@ -6,7 +6,23 @@ export const RATE_LIMIT_USER_MESSAGE =
 
 let cachedCsrfToken = null;
 
-async function getCsrfToken() {
+export function cleanSuggestionChip(text) {
+	if (!text || typeof text !== "string") return null;
+	let s = text.trim();
+	s = s.replace(/^[\s\d.\-*•]+/g, "").trim();
+	s = s.replace(/^["']|["']$/g, "").trim();
+	s = s.replace(/[.,:;]+$/g, "").trim();
+
+	if (!s || s.includes("\n")) return null;
+	if (/[.!?]\s+[A-Z]/.test(s)) return null;
+
+	const words = s.split(/\s+/).filter(Boolean);
+	if (words.length < 1 || words.length > 5 || s.length > 40) return null;
+
+	return s;
+}
+
+export async function getCsrfToken() {
 	if (cachedCsrfToken !== null) return cachedCsrfToken;
 
 	// First check if it's injected in the window (e.g. Frappe Web Pages)
@@ -298,57 +314,57 @@ const TOPIC_PATTERNS = [
 	},
 ];
 
-const CONTEXTUAL_QUICK_REPLIES = {
+export const CONTEXTUAL_QUICK_REPLIES = {
 	mutualFunds: [
-		"How do mutual funds work?",
-		"What are the different types?",
-		"What are the risks?",
-		"How do I start investing?",
+		"Types of Funds",
+		"Mutual Fund Risks",
+		"Start Investing",
+		"Talk to Advisor",
 	],
 	sip: [
-		"How does SIP work?",
-		"SIP vs lump sum",
-		"What SIP amount should I choose?",
-		"Calculate SIP returns",
+		"SIP vs Lumpsum",
+		"Calculate SIP",
+		"How SIP Works",
+		"Talk to Advisor",
 	],
 	lumpsum: [
-		"SIP vs lump sum",
-		"How should I invest a lump sum?",
-		"What are the risks?",
-		"Calculate expected returns",
+		"Lumpsum Investing",
+		"SIP vs Lumpsum",
+		"Investment Risks",
+		"Talk to Advisor",
 	],
 	fundDetails: [
-		"Show fund details",
-		"Compare with another fund",
-		"Show latest NAV",
-		"What are the risks?",
+		"Latest NAV",
+		"View Returns",
+		"Compare Funds",
+		"Talk to Advisor",
 	],
-	nav: ["What is NAV?", "Show latest NAV", "How is NAV calculated?", "Compare fund performance"],
+	nav: ["Latest NAV", "Historical NAV", "How NAV Works", "View Returns"],
 	taxation: [
-		"How is mutual fund taxation calculated?",
-		"What is LTCG?",
-		"What is STCG?",
-		"Show a tax example",
+		"Mutual Fund Taxes",
+		"LTCG Rules",
+		"STCG Rules",
+		"Tax Saving",
 	],
 	risk: [
-		"Explain low-risk options",
-		"Explain moderate-risk options",
-		"Explain high-risk options",
-		"How should I choose my risk level?",
+		"Low Risk Options",
+		"Moderate Risk",
+		"High Risk Options",
+		"Risk Profile",
 	],
 	recommendation: [
-		"Help me choose an investment",
-		"SIP or lump sum?",
-		"What investment horizon should I choose?",
-		"How should I diversify?",
+		"Choose Investment",
+		"SIP vs Lumpsum",
+		"Portfolio Mix",
+		"Talk to Advisor",
 	],
 };
 
-const DEFAULT_QUICK_REPLIES = [
-	"Help me choose an investment",
-	"Explain SIP vs lumpsum",
-	"Compare two funds",
-	"What is NAV?",
+export const DEFAULT_QUICK_REPLIES = [
+	"Latest NAV",
+	"View Returns",
+	"Compare Funds",
+	"Talk to Advisor",
 ];
 
 function normalizeText(value) {
@@ -1014,6 +1030,7 @@ export class Chatbot {
 		if (isAdvisor) {
 			isLeadTurn = true;
 			state.advisorOffered = true;
+			state.advisorDeclined = false;
 			if (!state.collected.name) {
 				state.leadStep = LEAD_STEPS.NAME;
 				reply = "Great! To start, what name should I tell our advisor?";
@@ -1037,7 +1054,8 @@ export class Chatbot {
 				if (intent === "negative") {
 					state.leadStep = LEAD_STEPS.NONE;
 					state.advisorOffered = false;
-					state.leadEvaluationCooldown = 4;
+					state.advisorDeclined = true;
+					state.leadEvaluationCooldown = 6;
 					reply = "Alright! What else would you like to know about investing?";
 				} else if (intent === "affirmative") {
 					if (!state.collected.name) {
@@ -1048,15 +1066,28 @@ export class Chatbot {
 						reply = `Nice to meet you, ${state.collected.name}! To help our advisor connect with you, what would you like to share?`;
 					}
 				} else {
+					// User ignored the offer and asked another question:
+					// Reset advisorOffered and set reasonable cooldown so future offers are not permanently disabled
 					state.leadStep = LEAD_STEPS.NONE;
+					state.advisorOffered = false;
+					state.leadEvaluationCooldown = 3;
 					isLeadTurn = false;
 				}
 			} else {
 				const lower = cleanMessage.toLowerCase();
 				if (lower === "cancel" || lower === "stop" || lower === "exit") {
 					state.leadStep = LEAD_STEPS.NONE;
+					state.advisorOffered = false;
+					state.leadEvaluationCooldown = 3;
 					reply =
 						"Alright, I have cancelled the advisor request. What else would you like to know?";
+				} else if (this.isLeadInterruption(state, cleanMessage, intent, explicitEntity)) {
+					// Unrelated question during name or contact collection step:
+					// Untrap user and let their question be handled normally
+					state.leadStep = LEAD_STEPS.NONE;
+					state.advisorOffered = false;
+					state.leadEvaluationCooldown = 3;
+					isLeadTurn = false;
 				} else {
 					reply = await this.continueLeadFlow(state, cleanMessage, intent);
 				}
@@ -1104,26 +1135,29 @@ export class Chatbot {
 			quickReplies = DEFAULT_QUICK_REPLIES;
 		} else {
 			if (state.latestSuggestions) {
-				quickReplies = state.latestSuggestions;
+				const cleaned = state.latestSuggestions
+					.map(cleanSuggestionChip)
+					.filter(Boolean);
+				quickReplies = cleaned.length > 0 ? cleaned.slice(0, 4) : DEFAULT_QUICK_REPLIES;
 				leadOpportunity = state.latestLeadOpportunity;
 				state.latestSuggestions = null;
 				state.latestLeadOpportunity = null;
 			} else {
-				// Local rule-based responses
-				const analysis = await analyzeContextForSuggestionsAndLeads(state, reply);
-				quickReplies = analysis.suggestions;
-				leadOpportunity = analysis.leadOpportunity;
+				// Local rule-based responses: fast static quick replies without redundant Ollama calls
+				quickReplies = getQuickReplies(state);
+				leadOpportunity = { isAppropriateNow: false, offerMessage: null };
 			}
 
-			// If Gemini completely failed to provide suggestions, keep them as []
-			if (!Array.isArray(quickReplies)) {
-				quickReplies = [];
+			// If completely failed to provide suggestions, keep as fallback
+			if (!Array.isArray(quickReplies) || quickReplies.length === 0) {
+				quickReplies = DEFAULT_QUICK_REPLIES;
 			}
 
 			// Process proactive lead opportunity
 			if (
 				!state.advisorOffered &&
 				!state.leadCaptured &&
+				!state.advisorDeclined &&
 				state.leadEvaluationCooldown <= 0 &&
 				leadOpportunity &&
 				leadOpportunity.isAppropriateNow &&
@@ -1182,6 +1216,16 @@ export class Chatbot {
 		if (matchesShortReply(text, AFFIRMATIVE)) return "affirmative";
 		if (matchesShortReply(text, NEGATIVE)) return "negative";
 
+		// Scheme names, NAV, returns, comparisons, and fund-specific queries must always be routed to Frappe backend!
+		const lowerText = text.toLowerCase();
+		const isFinancialDataQuery =
+			/\b(nav|return|returns|performance|cagr|compare|comparison|vs|fund details|scheme details|sif|amc|holding|holdings|portfolio)\b/i.test(
+				lowerText
+			);
+		if (isFinancialDataQuery) {
+			return "unknown";
+		}
+
 		// Classify user intent before routing
 		const words = text.split(/\s+/);
 		const isShortQuery = words.length <= 2;
@@ -1190,14 +1234,17 @@ export class Chatbot {
 				text
 			);
 
-		// If it's asking for guidance, recommendations, actions, comparisons, etc., route to Gemini
+		// If it's asking for guidance, recommendations, actions, comparisons, etc., route to backend
 		if (!isInformational && !isShortQuery) {
 			return "unknown";
 		}
 
 		// If it's a purely informational definition or a short keyword lookup, use the local knowledge base
-		const lowerText = text.toLowerCase();
 		for (const item of TOPIC_PATTERNS) {
+			// Skip topics that require live financial data from Frappe
+			if (["comparison", "nav", "performance", "fundDetails", "sif", "amc", "recommendation"].includes(item.type)) {
+				continue;
+			}
 			for (const pattern of item.patterns) {
 				if (pattern.length <= 3) {
 					if (new RegExp(`\\b${pattern}\\b`, "i").test(text)) return item.type;
@@ -1205,10 +1252,6 @@ export class Chatbot {
 					if (lowerText.includes(pattern)) return item.type;
 				}
 			}
-		}
-
-		if (knowledgeService.getFundDetails(message).status === "ok") {
-			return "fundDetails";
 		}
 
 		return "unknown";

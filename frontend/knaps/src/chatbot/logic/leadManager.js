@@ -1,3 +1,5 @@
+import { getCsrfToken } from "./chatbot.js";
+
 const ValidationRules = {
 	phone: /^[6-9]\d{9}$/,
 	email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
@@ -159,27 +161,7 @@ export async function saveLead({
 		console.log("[STEP 3] Sending payload to Frappe");
 		console.log(payload);
 
-		let apiBaseUrl = "";
-		let csrfToken =
-			typeof window !== "undefined" && window.frappe ? window.frappe.csrf_token : "";
-		try {
-			const confRes = await fetch("/api/method/dhanada.api.get_chatbot_config");
-			if (confRes.ok) {
-				const confData = await confRes.json();
-				apiBaseUrl = confData.message?.api_base_url || "";
-				if (!csrfToken) {
-					csrfToken = confData.message?.csrf_token || "";
-				}
-			}
-		} catch (e) {
-			console.warn("Failed to fetch chatbot config", e);
-		}
-
-		// Remove trailing slash if any
-		if (apiBaseUrl.endsWith("/")) {
-			apiBaseUrl = apiBaseUrl.slice(0, -1);
-		}
-
+		const csrfToken = await getCsrfToken();
 		const endpoint = `/api/method/dhanada.api.create_chatbot_lead`;
 
 		const response = await fetch(endpoint, {

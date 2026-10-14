@@ -206,43 +206,50 @@ export default function ChatbotWidget() {
 
     let activeConvId = conversationId;
 
-    // 1. Persist user message to Dhanada backend
-    try {
-      let userPersistRes = await saveChatMessage({
-        conversationId: activeConvId,
-        visitorId: sessionId,
-        role: 'user',
-        message: text,
-      });
-
-      // Handle stale/invalid conversation ID (404/403) by clearing and retrying
-      if (!userPersistRes?.success && (userPersistRes?.status === 404 || userPersistRes?.status === 403 || userPersistRes?.error?.includes('404') || userPersistRes?.error?.includes('403'))) {
-        localStorage.removeItem(STORAGE_KEYS.conversationId);
-        activeConvId = null;
-        userPersistRes = await saveChatMessage({
-          conversationId: null,
+    // 1. Concurrently persist user message to Dhanada backend
+    const userPersistPromise = (async () => {
+      try {
+        let res = await saveChatMessage({
+          conversationId: activeConvId,
           visitorId: sessionId,
           role: 'user',
           message: text,
         });
-      }
 
-      if (userPersistRes?.success && userPersistRes.conversation_id) {
-        activeConvId = userPersistRes.conversation_id;
-        if (activeConvId !== conversationId) {
-          setConversationId(activeConvId);
-          localStorage.setItem(STORAGE_KEYS.conversationId, activeConvId);
+        // Handle stale/invalid conversation ID (404/403) by clearing and retrying
+        if (!res?.success && (res?.status === 404 || res?.status === 403 || res?.error?.includes('404') || res?.error?.includes('403'))) {
+          localStorage.removeItem(STORAGE_KEYS.conversationId);
+          activeConvId = null;
+          res = await saveChatMessage({
+            conversationId: null,
+            visitorId: sessionId,
+            role: 'user',
+            message: text,
+          });
         }
+
+        if (res?.success && res.conversation_id) {
+          activeConvId = res.conversation_id;
+          if (activeConvId !== conversationId) {
+            setConversationId(activeConvId);
+            localStorage.setItem(STORAGE_KEYS.conversationId, activeConvId);
+          }
+        }
+        return res;
+      } catch (persistErr) {
+        console.warn("Failed to persist user message:", persistErr);
+        return null;
       }
-    } catch (persistErr) {
-      console.warn("Failed to persist user message:", persistErr);
-    }
+    })();
 
     try {
-      // 2. Generate response via Riddhi logic
+      // 2. Generate response via Riddhi logic concurrently with user persistence
       const data = await chatbotInstance.processMessage(sessionId, text, { conversationId: activeConvId });
       pushMessage('bot', data.reply, data.quickReplies);
       updateStateAndSuggestions(data.state, data.quickReplies);
+
+      // Strictly ensure user message persistence has completed before persisting assistant message
+      await userPersistPromise;
 
       // 3. Persist assistant response to Dhanada backend
       try {
