@@ -5,7 +5,6 @@ import {
   faUserTie,
   faChild,
   faBuilding,
-  faLandmark,
   faReceipt,
   faMoneyBillTransfer,
   faSliders,
@@ -450,113 +449,6 @@ export default function NpsModelExplorer() {
           ]
         }
       }
-    },
-    {
-      id: 'government',
-      name: 'Government NPS',
-      subtitle: 'Central & State Government personnel',
-      badge: 'Govt Sector',
-      icon: faLandmark,
-      pfrdaUrl: 'https://pfrda.org.in/en/schemes/national-pension-system/nps-for-central-government',
-      sections: {
-        audience: {
-          title: 'Who is it for?',
-          targetSubtitle: 'Recommended for:',
-          targetList: [
-            'Central Government employees covered under NPS',
-            'Eligible State Government employees covered under NPS',
-            'Government employees looking for structured retirement savings',
-            'Employees who benefit from both personal (10%) and government (14%) contributions',
-            'Government-sector employees building a long-term retirement corpus'
-          ]
-        },
-        tax: {
-          title: 'Tax Benefits',
-          points: [
-            {
-              label: 'Employee Contribution',
-              desc: 'Mandatory employee contributions (10% of Basic + DA) qualify for applicable NPS tax deductions.'
-            },
-            {
-              label: '14% Government Contribution',
-              desc: 'For Central Government employees, employer/government contribution is currently 14% of Basic + DA into Tier I.'
-            },
-            {
-              label: 'Section 80CCD(2) Exemption',
-              desc: 'Government contribution is eligible for full tax exemption under Section 80CCD(2).'
-            },
-            {
-              label: 'Exit Tax Provisions',
-              desc: 'Applicable tax treatment depends on prevailing Income-tax provisions and superannuation exit rules.'
-            }
-          ]
-        },
-        withdrawals: {
-          title: 'Withdrawals and Exit',
-          points: [
-            {
-              label: 'Tier I Account',
-              desc: 'Primary retirement account with withdrawals governed strictly by government-sector NPS rules.'
-            },
-            {
-              label: 'Normal Superannuation Exit',
-              desc: 'Normal retirement exit provides for a lump-sum component and annuity component according to applicable PFRDA rules.'
-            },
-            {
-              label: 'Partial Withdrawals',
-              desc: 'Partial withdrawals are permitted subject to prescribed government-sector conditions.'
-            },
-            {
-              label: 'Tier II Account',
-              desc: 'Provides flexible access to funds while Tier I remains active; on Tier I exit, Tier II is generally closed along with it.'
-            }
-          ]
-        },
-        choices: {
-          title: 'Scheme Choices',
-          points: [
-            {
-              label: 'Default Scheme',
-              desc: 'Statutory default investment scheme managed by designated public sector PFMs.'
-            },
-            {
-              label: 'G-100 Scheme',
-              desc: '100% investment in Government Securities for complete sovereign capital preservation.'
-            },
-            {
-              label: 'LC-25 (Conservative)',
-              desc: 'Conservative Life Cycle option with a maximum of 25% equity exposure.'
-            },
-            {
-              label: 'LC-50 (Moderate)',
-              desc: 'Moderate Life Cycle option with up to 50% equity allocation.'
-            }
-          ]
-        },
-        tiers: {
-          title: 'Tier I and Tier II Accounts',
-          subCards: [
-            {
-              name: 'Tier I — Government Retirement Account',
-              tag: 'Mandatory Sovereign Pension',
-              items: [
-                'Mandatory/core pension account for covered government employees.',
-                'Employee (10%) and Government (14%) both contribute every month.',
-                'Designed for long-term retirement accumulation under government regulations.'
-              ]
-            },
-            {
-              name: 'Tier II — Voluntary Account',
-              tag: 'Liquidity & Tax Saver',
-              items: [
-                'Optional investment account providing greater liquidity than Tier I.',
-                'Withdrawals can be made as permitted under the applicable rules.',
-                'Central Government employees also have access to the Tier II Tax Saver Scheme (3-year lock-in).'
-              ]
-            }
-          ]
-        }
-      }
     }
   ];
 
@@ -613,7 +505,7 @@ export default function NpsModelExplorer() {
             </div>
 
             {/* Model Buttons Stack */}
-            <div className="flex-1 flex flex-col justify-between gap-3 sm:gap-3.5">
+            <div className="flex-1 flex flex-col justify-start gap-3 sm:gap-3.5">
               {models.map((model) => {
                 const isActive = model.id === activeModelId;
                 return (
@@ -678,14 +570,14 @@ export default function NpsModelExplorer() {
               </div>
 
               {/* CURRENT MODEL BADGE / HEADER */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
                 <div>
                   <h3 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
                     {currentSection.title}
                   </h3>
                 </div>
 
-                <a
+                {/* <a
                   href={currentModel.pfrdaUrl}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -694,7 +586,7 @@ export default function NpsModelExplorer() {
                 >
                   <span>PFRDA Reference</span>
                   <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[10px]" />
-                </a>
+                </a> */}
               </div>
 
               {/* ACTIVE TAB CONTENT DISPLAY */}
@@ -708,7 +600,7 @@ export default function NpsModelExplorer() {
                 >
                   {/* Top Section Description */}
                   {currentSection.description && (
-                    <div className="mb-6 p-4 sm:p-5 rounded-2xl bg-blue-50/40 border border-blue-100/70 text-gray-700 text-xs sm:text-sm md:text-[15px] leading-relaxed shadow-xs">
+                    <div className="mb-5 p-1 text-gray-700 text-xs sm:text-sm md:text-[15px] leading-relaxed">
                       <p>{currentSection.description}</p>
                     </div>
                   )}

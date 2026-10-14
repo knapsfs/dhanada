@@ -5,7 +5,6 @@ import {
   faUserTie,
   faChild,
   faBuilding,
-  faLandmark,
   faArrowRight,
   faCalculator,
   faCheckCircle
@@ -25,12 +24,12 @@ export default function WhatIsNps() {
   const npsVariants = [
     {
       icon: faUserTie,
-      title: 'All Citizen NPS',
+      title: 'Regular NPS',
       subtitle: 'For Your Retirement',
       // badge: 'Individual Tier I & II',
       description:
-        'For Indian citizens aged 18-85 to build a retirement corpus through market-linked investments, with equity exposure of up to 100%.',
-      highlights: ['Tax-Free exit', 'Regular income after retirement', 'Government of India Regulated Scheme']
+        'Designed for all Indian citizens (18-70 years) to systematically build a retirement corpus with flexible asset allocation (up to 75% equity) and exclusive tax benefits.',
+      highlights: ['Extra ₹50,000 u/s 80CCD(1B)', 'Lowest expense ratios globally', '60% tax-free lump sum exit']
     },
     {
       icon: faChild,
@@ -38,8 +37,8 @@ export default function WhatIsNps() {
       subtitle: "For Your Child's Future",
       // badge: 'Minors (< 18 Years)',
       description:
-        'A long-term investment scheme for children below 18, started and managed by a parent or legal guardian.',
-      highlights: ['Tax-free exit', 'Start investing from ₹250', 'Plan for key milestones like education & marriage.']
+        'A dedicated long-term wealth initiative started by parents or guardians for minor children, compounding wealth from childhood and seamlessly transitioning into adulthood.',
+      highlights: ['Early compounding advantage', 'Seamless conversion at age 18', 'PFRDA regulated architecture']
     },
     {
       icon: faBuilding,
@@ -47,17 +46,8 @@ export default function WhatIsNps() {
       subtitle: 'For Companies & Employees',
       // badge: 'Employer - Employee Benefit',
       description:
-        'A retirement benefit that allows employers to contribute to employees’ NPS accounts and may offer tax benefits.',
-      highlights: ['Tax benefits for employer', 'Retirement benefit for employees', 'Improve employee retention']
-    },
-    {
-      icon: faLandmark,
-      title: 'Govt. Sector NPS',
-      subtitle: 'For Central & State Govt Employees',
-      // badge: 'Govt Employees',
-      description:
-        'NPS for Central and State Government employees, with employer contributions and structured retirement benefits. ',
-      highlights: ['Tax-efficient retirement planning', 'Government contribution supports retirement savings', 'Financial independence after retirement']
+        'A structured retirement benefit program adopted by corporations, allowing employees to claim additional tax deductions on employer contributions under Section 80CCD(2).',
+      highlights: ['Tax deduction u/s 80CCD(2)', 'Zero cost setup for employers', 'Enhanced employee retention']
     }
   ];
 
@@ -94,8 +84,8 @@ export default function WhatIsNps() {
           </p>
         </motion.div>
 
-        {/* 4 NPS Streams (Regular, Vatsalya, Corporate, Government) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-6 mt-10 sm:mt-12">
+        {/* 3 NPS Streams (Regular, Vatsalya, Corporate) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-6 mt-10 sm:mt-12">
           {npsVariants.map((item, idx) => (
             <motion.div
               key={idx}
@@ -157,8 +147,8 @@ export default function WhatIsNps() {
           >
             <span>Start Your NPS Investment</span>
           </button>
-
-          {/* <button
+          {/* 
+          <button
             type="button"
             onClick={scrollToCalculator}
             className="w-full sm:w-auto px-8 py-3.5 rounded-xl text-[15px] font-semibold bg-white hover:bg-blue-50 text-[#032e92] border border-[#032e92]/20 shadow-sm hover:shadow-md transition-all duration-300 inline-flex items-center justify-center gap-2.5 cursor-pointer"
