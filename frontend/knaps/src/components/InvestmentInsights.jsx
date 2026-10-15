@@ -34,18 +34,18 @@ function doublingYears(rate) {
 
 export default function InvestmentInsights({ inputs = {}, results = {} }) {
   const { ref, inView } = useInView({ triggerOnce: true })
-
+  
   const safeInputs = inputs || {}
   const safeResults = results || {}
 
-  const sipAmount = safeInputs.sipAmount === '' || safeInputs.sipAmount == null
-    ? (Number(safeInputs.recurringInvestment) || 0)
+  const sipAmount = safeInputs.sipAmount === '' || safeInputs.sipAmount == null 
+    ? (Number(safeInputs.recurringInvestment) || 0) 
     : Number(safeInputs.sipAmount)
-  const annualReturn = safeInputs.annualReturn === '' || safeInputs.annualReturn == null
-    ? 0
+  const annualReturn = safeInputs.annualReturn === '' || safeInputs.annualReturn == null 
+    ? 0 
     : Number(safeInputs.annualReturn)
-  const duration = safeInputs.duration === '' || safeInputs.duration == null
-    ? (Number(safeInputs.years) || 0)
+  const duration = safeInputs.duration === '' || safeInputs.duration == null 
+    ? (Number(safeInputs.years) || 0) 
     : Number(safeInputs.duration)
 
   const totalInvested = safeResults.totalInvested || 0
@@ -65,7 +65,7 @@ export default function InvestmentInsights({ inputs = {}, results = {} }) {
       color: 'text-[#032e92]',
       bg: 'bg-[#eef4ff]',
       title: 'Doubling Rule',
-      text: annualReturn > 0
+      text: annualReturn > 0 
         ? `At ${annualReturn}% annual return, your investment doubles approximately every ${doubling} years (Rule of 72).`
         : `Enter expected annual return to see doubling timeline.`,
     },

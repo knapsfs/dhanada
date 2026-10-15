@@ -11,7 +11,7 @@ const ratingColors = {
 
 export default function HoldingsTable({ fund }) {
   const { ref, inView } = useInView({ triggerOnce: true })
-
+  
   if (!fund.holdings || fund.holdings.length === 0) {
     return (
       <motion.div

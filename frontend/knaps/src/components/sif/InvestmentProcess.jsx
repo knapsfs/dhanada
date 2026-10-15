@@ -93,7 +93,7 @@ export default function InvestmentProcess() {
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ delay: i * 0.15, duration: 0.7 }}
                 className={`relative ${step.bg} rounded-3xl p-7 border ${step.borderColor} hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group`}>
-
+                
                 {/* Step number badge */}
                 <div className={`absolute -top-4 left-6 w-8 h-8 rounded-full bg-gradient-to-br ${step.color} flex items-center justify-center text-white text-xs font-bold shadow-lg`}>
                   {i + 1}

@@ -5,7 +5,7 @@ export default function AdvancedTVM({ calcMode, advancedMode, setAdvancedMode, i
   if (!advancedMode) {
     return (
       <div className="flex justify-center mt-8">
-        <button
+        <button 
           onClick={() => setAdvancedMode(true)}
           className="text-sm font-bold text-[#032e92] hover:underline"
         >
@@ -22,7 +22,7 @@ export default function AdvancedTVM({ calcMode, advancedMode, setAdvancedMode, i
     <div className="mt-8 border-t border-[#e8edf7] pt-8">
       <div className="flex justify-between items-center mb-6">
         <h3 className="font-bold text-gray-800 text-lg">Advanced TVM</h3>
-        <button
+        <button 
           onClick={() => setAdvancedMode(false)}
           className="text-xs font-semibold text-gray-500 hover:text-gray-700"
         >
