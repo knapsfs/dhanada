@@ -1,11 +1,48 @@
 import json
+import re
 
 import frappe
+from frappe import _
 
 from dhanada.utils.rate_limiter import rate_limit
 
 
-# Chatbot se aayi lead ko save karta hai.
+def _clean_phone_number(raw_phone: str) -> str:
+	if not raw_phone:
+		return ""
+	cleaned = re.sub(r"[\s\-\(\)]", "", str(raw_phone).strip())
+	if cleaned.startswith("+91"):
+		cleaned = cleaned[3:]
+	elif cleaned.startswith("91") and len(cleaned) == 12:
+		cleaned = cleaned[2:]
+	elif cleaned.startswith("0") and len(cleaned) == 11:
+		cleaned = cleaned[1:]
+	return cleaned
+
+
+def _resolve_lead_source(raw_source: str, default_source: str) -> str:
+	source = (raw_source or default_source).strip()
+	if not source:
+		source = default_source
+
+	if frappe.db.exists("Lead Source", source):
+		return source
+
+	try:
+		src_doc = frappe.get_doc({
+			"doctype": "Lead Source",
+			"source_name": source,
+			"is_active": 1,
+			"details": f"Acquisition source: {source}",
+		})
+		src_doc.insert(ignore_permissions=True)
+		frappe.db.commit()
+		return source
+	except Exception:
+		return default_source if frappe.db.exists("Lead Source", default_source) else source
+
+
+# Chatbot se aayi lead ko native Lead me save karta hai.
 @frappe.whitelist(allow_guest=True, methods=["POST"])  # nosemgrep: guest-whitelisted-method
 @rate_limit(limit=5, seconds=60, ip_based=True, methods="POST")
 def create_chatbot_lead():
@@ -62,7 +99,7 @@ def create_chatbot_lead():
 			email = str(email).strip().lower()
 
 		# 6. Resolve Phone with fallbacks: payload -> conversation doc -> None
-		phone = (
+		raw_phone = (
 			payload.get("phone")
 			or payload.get("mobile")
 			or payload.get("mobile_no")
@@ -70,8 +107,7 @@ def create_chatbot_lead():
 			or payload.get("contact_no")
 			or (conv_doc.phone if conv_doc and conv_doc.phone else None)
 		)
-		if phone:
-			phone = str(phone).strip()
+		phone = _clean_phone_number(raw_phone) if raw_phone else ""
 
 		# 7. Resolve Interest / Requirement
 		interest = (
@@ -81,7 +117,7 @@ def create_chatbot_lead():
 			or payload.get("notes")
 			or payload.get("message")
 			or ""
-		)
+		).strip()
 
 		# 8. Resolve Chat Context / Summary
 		chat_summary_value = (
@@ -91,7 +127,7 @@ def create_chatbot_lead():
 			or payload.get("chatContext")
 			or payload.get("summary")
 			or ""
-		)
+		).strip()
 		conversation_context = conv_doc.chat_context if conv_doc and conv_doc.chat_context else ""
 		final_context = conversation_context or chat_summary_value
 
@@ -103,7 +139,7 @@ def create_chatbot_lead():
 
 		# 9. Clean and partition name parts
 		clean_name = str(raw_name).strip() if raw_name else ""
-		if clean_name.lower() in ("unknown", "none", "null", ""):
+		if clean_name.lower() in ("unknown", "none", "null", "website visitor", "prospective investor", ""):
 			clean_name = ""
 
 		first_name = ""
@@ -124,17 +160,56 @@ def create_chatbot_lead():
 			first_name = "Website Visitor"
 
 		lead_full_name = f"{first_name} {last_name}".strip() if last_name else first_name
-		source = payload.get("source") or "Website Chatbot"
+		source = _resolve_lead_source(payload.get("source"), "Website Chatbot")
 
 		product = (
 			payload.get("product") or payload.get("interest") or payload.get("requirement") or ""
 		).strip()
 
-		# 10. Update existing Lead if found
-		if lead_id and frappe.db.exists("CRM Lead", lead_id):
-			lead_doc = frappe.get_doc("CRM Lead", lead_id)
-			if first_name and (
-				not lead_doc.first_name or lead_doc.first_name.lower() in ("unknown", "website visitor")
+		# 10. Existing Lead Matching / Duplicate Prevention
+		target_lead = None
+
+		# (a) Match by explicit lead identifier
+		if lead_id and frappe.db.exists("Lead", lead_id):
+			target_lead = lead_id
+
+		# (b) Match by linked conversation record
+		if not target_lead and conv_doc:
+			conv_lead = conv_doc.conversation_url or conv_doc.lead_id
+			if conv_lead and frappe.db.exists("Lead", conv_lead):
+				target_lead = conv_lead
+
+		# (c) Match by email against active leads
+		if not target_lead and email:
+			matches = frappe.get_all(
+				"Lead",
+				filters={"email": email, "status": ["not in", ["Junk", "Converted"]]},
+				order_by="creation desc",
+				fields=["name"],
+				limit=1,
+			)
+			if matches:
+				target_lead = matches[0].name
+
+		# (d) Match by mobile number against active leads
+		if not target_lead and phone and len(phone) >= 10:
+			last_10 = phone[-10:]
+			matches = frappe.get_all(
+				"Lead",
+				filters={"mobile_no": ["like", f"%{last_10}"], "status": ["not in", ["Junk", "Converted"]]},
+				order_by="creation desc",
+				fields=["name"],
+				limit=1,
+			)
+			if matches:
+				target_lead = matches[0].name
+
+		# 11. Update existing Lead or insert new native Lead
+		if target_lead:
+			lead_doc = frappe.get_doc("Lead", target_lead)
+			if clean_name and (
+				not lead_doc.first_name
+				or lead_doc.first_name.lower() in ("unknown", "website visitor", "prospective")
 			):
 				lead_doc.first_name = first_name
 				lead_doc.last_name = last_name
@@ -143,49 +218,33 @@ def create_chatbot_lead():
 				lead_doc.email = email
 			if phone and not lead_doc.mobile_no:
 				lead_doc.mobile_no = phone
-				lead_doc.phone = phone
 			if product:
-				if frappe.db.has_column("CRM Lead", "custom_product"):
-					lead_doc.custom_product = product
-				if frappe.db.has_column("CRM Lead", "product"):
-					lead_doc.product = product
+				lead_doc.product_interest = product
 			if final_context:
-				if frappe.db.has_column("CRM Lead", "chat_summary"):
-					lead_doc.chat_summary = final_context
-				if frappe.db.has_column("CRM Lead", "custom_chat_context"):
-					lead_doc.custom_chat_context = final_context
-			if conversation_id and frappe.db.has_column("CRM Lead", "custom_conversation"):
-				lead_doc.custom_conversation = conversation_id
+				if not lead_doc.chat_context:
+					lead_doc.chat_context = final_context
+				elif final_context not in lead_doc.chat_context:
+					lead_doc.chat_context = f"{lead_doc.chat_context}\n{final_context}".strip()
+			if conversation_id and not lead_doc.chatbot_conversation:
+				lead_doc.chatbot_conversation = conversation_id
 
 			lead_doc.save(ignore_permissions=True)
 			frappe.db.commit()
 			created_lead_name = lead_doc.name
 		else:
-			# 11. Create new CRM Lead
 			doc_data = {
-				"doctype": "CRM Lead",
+				"doctype": "Lead",
 				"first_name": first_name,
 				"last_name": last_name,
 				"lead_name": lead_full_name,
-				"email": email,
-				"mobile_no": phone,
-				"phone": phone,
+				"email": email or None,
+				"mobile_no": phone or None,
 				"source": source,
+				"status": "New",
+				"product_interest": product or None,
+				"chat_context": final_context or None,
+				"chatbot_conversation": conversation_id or None,
 			}
-
-			if product:
-				if frappe.db.has_column("CRM Lead", "custom_product"):
-					doc_data["custom_product"] = product
-				if frappe.db.has_column("CRM Lead", "product"):
-					doc_data["product"] = product
-
-			if frappe.db.has_column("CRM Lead", "chat_summary"):
-				doc_data["chat_summary"] = final_context
-			if frappe.db.has_column("CRM Lead", "custom_chat_context"):
-				doc_data["custom_chat_context"] = final_context
-			if conversation_id and frappe.db.has_column("CRM Lead", "custom_conversation"):
-				doc_data["custom_conversation"] = conversation_id
-
 			lead = frappe.get_doc(doc_data)
 			lead.insert(ignore_permissions=True)
 			frappe.db.commit()
@@ -214,7 +273,7 @@ def create_chatbot_lead():
 		frappe.throw(f"Failed to create Lead: {e!s}")
 
 
-# Website form se aayi lead ko save karta hai.
+# Website form se aayi lead ko native Lead me save karta hai.
 @frappe.whitelist(allow_guest=True, methods=["POST"])  # nosemgrep: guest-whitelisted-method
 @rate_limit(limit=3, seconds=60, ip_based=True, methods="POST")
 def create_website_lead():
@@ -233,8 +292,10 @@ def create_website_lead():
 			payload = frappe.form_dict
 
 		full_name = (payload.get("full_name") or payload.get("name") or "").strip()
-		email = (payload.get("email") or "").strip()
-		phone = (payload.get("phone") or payload.get("mobile") or "").strip()
+		email = (payload.get("email") or "").strip().lower()
+		raw_phone = (payload.get("phone") or payload.get("mobile") or "").strip()
+		phone = _clean_phone_number(raw_phone) if raw_phone else ""
+
 		product = (
 			payload.get("product")
 			or payload.get("product_name")
@@ -242,67 +303,99 @@ def create_website_lead():
 			or payload.get("service_interested")
 			or ""
 		).strip()
-		raw_source = (payload.get("source") or "Website Form").strip()
-		source = "Website Form"
-		if raw_source:
-			if frappe.db.exists("CRM Lead Source", raw_source):
-				source = raw_source
-			else:
-				try:
-					src_doc = frappe.get_doc(
-						{
-							"doctype": "CRM Lead Source",
-							"source_name": raw_source,
-						}
-					)
-					src_doc.insert(ignore_permissions=True)
-					frappe.db.commit()
-					source = raw_source
-				except Exception:
-					source = "Website Form"
+		source = _resolve_lead_source(payload.get("source"), "Website Form")
 		notes = (payload.get("notes") or payload.get("message") or "").strip()
 
 		if not full_name:
-			frappe.throw(frappe._("Full Name is a required field."))
+			frappe.throw(_("Full Name is a required field."))
 
 		if not email and not phone:
-			frappe.throw(frappe._("Please provide either your email address or phone number."))
+			frappe.throw(_("Please provide either your email address or phone number."))
 
 		first_name = full_name
 		last_name = ""
 
 		if " " in full_name:
 			parts = full_name.split(" ", 1)
-			first_name = parts[0]
-			last_name = parts[1]
+			first_name = parts[0].strip()
+			last_name = parts[1].strip()
 
-		doc_data = {
-			"doctype": "CRM Lead",
-			"first_name": first_name,
-			"last_name": last_name,
-			"email": email,
-			"mobile_no": phone,
-			"source": source,
-		}
+		context_msg = f"Enquiry Note: {notes}" if notes else ""
 
-		if product:
-			if frappe.db.has_column("CRM Lead", "custom_product"):
-				doc_data["custom_product"] = product
-			if frappe.db.has_column("CRM Lead", "product"):
-				doc_data["product"] = product
+		# Duplicate prevention / matching against active leads
+		target_lead = None
+		if email:
+			matches = frappe.get_all(
+				"Lead",
+				filters={"email": email, "status": ["not in", ["Junk", "Converted"]]},
+				order_by="creation desc",
+				fields=["name"],
+				limit=1,
+			)
+			if matches:
+				target_lead = matches[0].name
 
-		if notes:
-			context_msg = f"Enquiry Note: {notes}"
-			if frappe.db.has_column("CRM Lead", "custom_chat_context"):
-				doc_data["custom_chat_context"] = context_msg
-			elif frappe.db.has_column("CRM Lead", "chat_summary"):
-				doc_data["chat_summary"] = context_msg
+		if not target_lead and phone and len(phone) >= 10:
+			last_10 = phone[-10:]
+			matches = frappe.get_all(
+				"Lead",
+				filters={"mobile_no": ["like", f"%{last_10}"], "status": ["not in", ["Junk", "Converted"]]},
+				order_by="creation desc",
+				fields=["name"],
+				limit=1,
+			)
+			if matches:
+				target_lead = matches[0].name
 
-		lead = frappe.get_doc(doc_data)
-		lead.insert(ignore_permissions=True)
-		frappe.db.commit()
+		if target_lead:
+			lead_doc = frappe.get_doc("Lead", target_lead)
+			if full_name and (
+				not lead_doc.first_name
+				or lead_doc.first_name.lower() in ("unknown", "website visitor", "prospective")
+			):
+				lead_doc.first_name = first_name
+				lead_doc.last_name = last_name
+				lead_doc.lead_name = full_name
+			if email and not lead_doc.email:
+				lead_doc.email = email
+			if phone and not lead_doc.mobile_no:
+				lead_doc.mobile_no = phone
+			if product:
+				lead_doc.product_interest = product
+			if context_msg:
+				if not lead_doc.chat_context:
+					lead_doc.chat_context = context_msg
+				elif context_msg not in lead_doc.chat_context:
+					lead_doc.chat_context = f"{lead_doc.chat_context}\n{context_msg}".strip()
+			if notes:
+				if not lead_doc.notes:
+					lead_doc.notes = notes
+				elif notes not in lead_doc.notes:
+					lead_doc.notes = f"{lead_doc.notes}\n{notes}".strip()
 
-		return {"success": True, "lead_name": lead.name}
+			lead_doc.save(ignore_permissions=True)
+			frappe.db.commit()
+			created_lead_name = lead_doc.name
+		else:
+			doc_data = {
+				"doctype": "Lead",
+				"first_name": first_name,
+				"last_name": last_name,
+				"lead_name": full_name,
+				"email": email or None,
+				"mobile_no": phone or None,
+				"source": source,
+				"status": "New",
+				"product_interest": product or None,
+				"notes": notes or None,
+				"chat_context": context_msg or None,
+			}
+			lead = frappe.get_doc(doc_data)
+			lead.insert(ignore_permissions=True)
+			frappe.db.commit()
+			created_lead_name = lead.name
+
+		return {"success": True, "lead_name": created_lead_name}
 	except Exception as e:
 		frappe.log_error(message=frappe.get_traceback(), title="Website Lead Creation Failed")
 		frappe.local.response["http_status_code"] = 400

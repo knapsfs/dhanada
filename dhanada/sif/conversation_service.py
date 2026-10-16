@@ -27,15 +27,17 @@ def get_conversation_doc(conversation_id: str):
 	return frappe.get_doc("Chatbot Conversation", conversation_id)
 
 
-# Lead ID ke basis par CRM lead ka URL banata hai.
+# Lead ID ke basis par native Lead ka URL banata hai.
 def get_lead_url(lead_id: str | None, full_url: bool = False) -> str:
-	"""Generates the canonical Frappe CRM Lead URL if lead_id is present, else empty string."""
+	"""Generates the canonical Dhanada Lead Desk URL if lead_id is present, else empty string."""
 	if not lead_id or not str(lead_id).strip():
 		return ""
 	clean_ref = str(lead_id).strip()
-	if "/crm/leads/" in clean_ref:
+	if "/app/lead/" in clean_ref:
+		clean_ref = clean_ref.split("/app/lead/")[-1].strip()
+	elif "/crm/leads/" in clean_ref:
 		clean_ref = clean_ref.split("/crm/leads/")[-1].strip()
-	route = f"/crm/leads/{clean_ref}"
+	route = f"/app/lead/{clean_ref}"
 	return get_url(route) if full_url else route
 
 
@@ -43,8 +45,11 @@ def get_lead_url(lead_id: str | None, full_url: bool = False) -> str:
 def format_conversation_dict(doc) -> dict:
 	"""Formats a Chatbot Conversation document into a clean, serialized dictionary."""
 	lead_ref = getattr(doc, "conversation_url", None) or getattr(doc, "lead_id", "") or ""
-	if lead_ref and "/crm/leads/" in str(lead_ref):
-		lead_ref = str(lead_ref).split("/crm/leads/")[-1].strip()
+	if lead_ref:
+		if "/app/lead/" in str(lead_ref):
+			lead_ref = str(lead_ref).split("/app/lead/")[-1].strip()
+		elif "/crm/leads/" in str(lead_ref):
+			lead_ref = str(lead_ref).split("/crm/leads/")[-1].strip()
 	conv_url = get_lead_url(lead_ref) if lead_ref else ""
 	return {
 		"name": doc.name,
@@ -148,19 +153,18 @@ def append_assistant_message(
 def update_chat_context(conversation_id: str, chat_context: str) -> dict:
 	"""
 	Updates the short conversational summary / context field.
-	Safely synchronizes to linked CRM Lead's custom_chat_context if available.
+	Safely synchronizes to linked native Lead's chat_context if available.
 	"""
 	doc = get_conversation_doc(conversation_id)
 	doc.set_context(str(chat_context).strip()[:500] if chat_context else "")
 	doc.save(ignore_permissions=True)
 
-	# Optional CRM Lead context sync
-	if doc.lead_id and frappe.db.exists("DocType", "CRM Lead") and frappe.db.exists("CRM Lead", doc.lead_id):
+	# Native Lead context sync
+	if doc.lead_id and frappe.db.exists("DocType", "Lead") and frappe.db.exists("Lead", doc.lead_id):
 		try:
-			if frappe.db.has_column("CRM Lead", "custom_chat_context"):
-				frappe.db.set_value("CRM Lead", doc.lead_id, "custom_chat_context", doc.chat_context)
+			frappe.db.set_value("Lead", doc.lead_id, "chat_context", doc.chat_context)
 		except Exception:
-			frappe.log_error(title="CRM Lead Context Sync Error", message=frappe.get_traceback())
+			frappe.log_error(title="Lead Context Sync Error", message=frappe.get_traceback())
 
 	return format_conversation_dict(doc)
 
@@ -178,10 +182,10 @@ def get_conversation(conversation_id: str) -> dict | None:
 	return format_conversation_dict(doc)
 
 
-# Associated CRM Lead ka URL generate karta hai.
+# Associated Lead ka URL generate karta hai.
 def get_conversation_url(conversation_id: str, full_url: bool = False) -> str:
 	"""
-	Generates the CRM Lead URL for the associated conversation if a Lead exists, else empty string.
+	Generates the native Lead Desk URL for the associated conversation if a Lead exists, else empty string.
 	Returns empty string if conversation does not exist or has no associated Lead.
 	"""
 	if not conversation_id or not frappe.db.exists("Chatbot Conversation", conversation_id):
@@ -202,9 +206,9 @@ def associate_lead(
 	chat_context: str | None = None,
 ) -> dict:
 	"""
-	Associates lead and contact information with the conversation without coupling to Frappe CRM.
+	Associates lead and contact information with the conversation.
 	Enforces visitor ownership validation when visitor_id is provided.
-	Safely populates custom_conversation, custom_chat_context, and contact fields on CRM Lead.
+	Safely populates chatbot_conversation, chat_context, and contact fields on native Lead.
 	"""
 	doc = get_conversation_doc(conversation_id)
 
@@ -215,9 +219,12 @@ def associate_lead(
 			frappe.PermissionError,
 		)
 
+	clean_lead = None
 	if lead_id:
 		clean_lead = str(lead_id).strip()[:100]
-		if "/crm/leads/" in clean_lead:
+		if "/app/lead/" in clean_lead:
+			clean_lead = clean_lead.split("/app/lead/")[-1].strip()
+		elif "/crm/leads/" in clean_lead:
 			clean_lead = clean_lead.split("/crm/leads/")[-1].strip()
 		doc.lead_id = clean_lead
 		doc.conversation_url = clean_lead
@@ -232,27 +239,21 @@ def associate_lead(
 
 	doc.save(ignore_permissions=True)
 
-	# Optional CRM Lead sync
-	if lead_id and frappe.db.exists("DocType", "CRM Lead") and frappe.db.exists("CRM Lead", lead_id):
+	# Native Lead sync
+	if clean_lead and frappe.db.exists("DocType", "Lead") and frappe.db.exists("Lead", clean_lead):
 		try:
-			lead_doc = frappe.get_doc("CRM Lead", lead_id)
+			lead_doc = frappe.get_doc("Lead", clean_lead)
 			lead_changed = False
-			if (
-				frappe.db.has_column("CRM Lead", "custom_conversation")
-				and lead_doc.get("custom_conversation") != doc.name
-			):
-				lead_doc.custom_conversation = doc.name
+			if lead_doc.get("chatbot_conversation") != doc.name:
+				lead_doc.chatbot_conversation = doc.name
 				lead_changed = True
-			if frappe.db.has_column("CRM Lead", "custom_chat_context") and doc.chat_context:
-				lead_doc.custom_chat_context = doc.chat_context
-				lead_changed = True
-			if (
-				frappe.db.has_column("CRM Lead", "chat_summary")
-				and doc.chat_context
-				and not lead_doc.get("chat_summary")
-			):
-				lead_doc.chat_summary = doc.chat_context
-				lead_changed = True
+			if doc.chat_context:
+				if not lead_doc.get("chat_context"):
+					lead_doc.chat_context = doc.chat_context
+					lead_changed = True
+				elif doc.chat_context not in lead_doc.chat_context:
+					lead_doc.chat_context = f"{lead_doc.chat_context}\n{doc.chat_context}".strip()
+					lead_changed = True
 
 			clean_u_name = str(user_name or doc.user_name or "").strip()
 			if clean_u_name and clean_u_name.lower() not in ("unknown", "website visitor"):
@@ -275,12 +276,11 @@ def associate_lead(
 			lead_phone = str(phone or doc.phone or "").strip()
 			if lead_phone and not lead_doc.mobile_no:
 				lead_doc.mobile_no = lead_phone
-				lead_doc.phone = lead_phone
 				lead_changed = True
 
 			if lead_changed:
 				lead_doc.save(ignore_permissions=True)
 		except Exception:
-			frappe.log_error(title="CRM Lead Association Sync Error", message=frappe.get_traceback())
+			frappe.log_error(title="Lead Association Sync Error", message=frappe.get_traceback())
 
 	return format_conversation_dict(doc)

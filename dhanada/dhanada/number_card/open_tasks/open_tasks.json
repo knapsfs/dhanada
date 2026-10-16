@@ -1,0 +1,16 @@
+{
+ "aggregate_function_based_on": "",
+ "color": "#6F42C1",
+ "doctype": "Number Card",
+ "document_type": "Task",
+ "dynamic_filters_json": "[]",
+ "filters_json": "[[\"Task\",\"status\",\"in\",[\"Open\",\"In Progress\"],false]]",
+ "function": "Count",
+ "is_public": 1,
+ "is_standard": 1,
+ "label": "Open Tasks",
+ "module": "Dhanada",
+ "name": "Open Tasks",
+ "show_full_number": 0,
+ "type": "Document Type"
+}

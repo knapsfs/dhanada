@@ -37,8 +37,8 @@
   {
    "fieldname": "conversation_url",
    "fieldtype": "Link",
-   "label": "CRM Lead",
-   "options": "CRM Lead",
+   "label": "Lead",
+   "options": "Lead",
    "read_only": 1
   },
   {
