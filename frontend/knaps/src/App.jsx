@@ -30,6 +30,9 @@ import RecurringDeposits from './pages/RecurringDeposits';
 import NationalPensionSystem from './pages/NationalPensionSystem';
 import SmallSavingsSchemes from './pages/SmallSavingsSchemes';
 
+// CRM Portal
+import KnapsCrmPortal from './pages/KnapsCrmPortal';
+
 // Global Infrastructure Components
 import ScrollToTop from './components/ScrollToTop';
 import ChatbotWidget from './chatbot/components/ChatbotWidget';
@@ -39,6 +42,11 @@ import './index.css';
 import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
+  const isCrmRoute = typeof window !== 'undefined' && (
+    window.location.pathname.startsWith('/knaps-crm') ||
+    window.location.pathname.startsWith('/crm')
+  );
+
   return (
     <ErrorBoundary>
       <BrowserRouter>
@@ -49,11 +57,11 @@ function App() {
             <Route path="/about" element={<AboutUs />} />
             <Route path="/services" element={<Services />} />
             
-            {/* Official Frappe Blog Post Detail Routes (2 segments: /blog/:category/:slug or /blogs/:category/:slug) */}
+            {/* Official Frappe Blog Post Detail Routes */}
             <Route path="/blog/:category/:slug" element={<BlogDetails />} />
             <Route path="/blogs/:category/:slug" element={<BlogDetails />} />
 
-            {/* Official Frappe Blog Listing & Category Filtering Routes (1 segment: /blogs/:category or /blog/:category) */}
+            {/* Official Frappe Blog Listing & Category Filtering Routes */}
             <Route path="/blogs" element={<Blogs />} />
             <Route path="/blog" element={<Blogs />} />
             <Route path="/blogs/:category" element={<Blogs />} />
@@ -89,6 +97,7 @@ function App() {
             <Route path="/calculators/retirement" element={<RetirementCalculator />} />
             <Route path="/calculators/future-value" element={<FutureValueCalculatorPage />} />
             <Route path="/calculators/sip-lumpsum" element={<SipLumpsumCalculator />} />
+
             {/* Insurance Routes */}
             <Route path="/life-insurance" element={<LifeInsurance />} />
             <Route path="/services/life-insurance" element={<LifeInsurance />} />
@@ -96,25 +105,36 @@ function App() {
             <Route path="/services/general-insurance" element={<GeneralInsurance />} />
             <Route path="/health-insurance" element={<HealthInsurance />} />
             <Route path="/services/health-insurance" element={<HealthInsurance />} />
+
             {/* Fixed Deposit Routes */}
             <Route path="/fixed-deposits" element={<FixedDeposit />} />
             <Route path="/services/fixed-deposits" element={<FixedDeposit />} />
+
             {/* Recurring Deposit Routes */}
             <Route path="/recurring-deposits" element={<RecurringDeposits />} />
             <Route path="/services/recurring-deposits" element={<RecurringDeposits />} />
+
             {/* National Pension System Routes */}
             <Route path="/services/nps" element={<NationalPensionSystem />} />
             <Route path="/nps" element={<NationalPensionSystem />} />
             <Route path="/services/national-pension-system" element={<NationalPensionSystem />} />
             <Route path="/national-pension-system" element={<NationalPensionSystem />} />
+
             {/* Small Savings Schemes Routes */}
             <Route path="/small-savings-schemes" element={<SmallSavingsSchemes />} />
             <Route path="/services/small-savings-schemes" element={<SmallSavingsSchemes />} />
             <Route path="/small-savings" element={<SmallSavingsSchemes />} />
             <Route path="/services/small-savings" element={<SmallSavingsSchemes />} />
+
+            {/* Modern KNAPS CRM Portal Routes */}
+            <Route path="/knaps-crm" element={<KnapsCrmPortal />} />
+            <Route path="/knaps-crm/*" element={<KnapsCrmPortal />} />
+            <Route path="/crm" element={<KnapsCrmPortal />} />
+            <Route path="/crm/*" element={<KnapsCrmPortal />} />
           </Routes>
-          <MysteryBoxWidget />
-          <ChatbotWidget />
+
+          {!isCrmRoute && <MysteryBoxWidget />}
+          {!isCrmRoute && <ChatbotWidget />}
         </LeadModalProvider>
       </BrowserRouter>
     </ErrorBoundary>

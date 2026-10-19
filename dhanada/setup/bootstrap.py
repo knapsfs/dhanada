@@ -183,7 +183,7 @@ def ensure_knaps_crm_desktop_icon():
 		"icon_type": "App",
 		"idx": 5,
 		"label": "KNAPS CRM",
-		"link": "/desk/knaps-crm",
+		"link": "/knaps-crm",
 		"link_type": "External",
 		"logo_url": "/assets/dhanada/images/CRM.jpg",
 		"name": "KNAPS CRM",
@@ -241,7 +241,7 @@ def boot_knaps_crm(bootinfo):
 			bootinfo.app_data.append({
 				"app_name": "knaps_crm",
 				"app_title": "KNAPS CRM",
-				"app_route": "/desk/knaps-crm",
+				"app_route": "/knaps-crm",
 				"app_logo_url": "/assets/dhanada/images/CRM.jpg",
 				"modules": ["Dhanada"],
 				"workspaces": ["KNAPS CRM"],
@@ -252,13 +252,13 @@ def boot_knaps_crm(bootinfo):
 		existing = next((d for d in bootinfo.desktop_icons if d.get("label") == "KNAPS CRM"), None)
 		if existing:
 			existing["logo_url"] = "/assets/dhanada/images/CRM.jpg"
-			existing["link"] = "/desk/knaps-crm"
+			existing["link"] = "/knaps-crm"
 			existing["hidden"] = 0
 		else:
 			bootinfo.desktop_icons.append({
 				"label": "KNAPS CRM",
 				"bg_color": "gray",
-				"link": "/desk/knaps-crm",
+				"link": "/knaps-crm",
 				"link_type": "External",
 				"app": "dhanada",
 				"icon_type": "App",
