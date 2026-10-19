@@ -268,7 +268,17 @@ export default function LuxuryContactSection() {
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
+                <>
+                  <div className="mb-6">
+                    <h3 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
+                      Send Us a Message
+                    </h3>
+                    <p className="text-xs sm:text-sm text-gray-500 font-normal mt-1 leading-relaxed">
+                      Fill out the form below and one of our dedicated wealth advisors will get back to you shortly.
+                    </p>
+                  </div>
+
+                  <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
                   {status === 'error' && errorMessage && (
                     <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-xs sm:text-sm font-medium">
                       {errorMessage}
@@ -582,6 +592,7 @@ export default function LuxuryContactSection() {
                     </button>
                   </div>
                 </form>
+                </>
               )}
             </div>
           </motion.div>
