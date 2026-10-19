@@ -28,11 +28,13 @@ class ChatbotConversation(Document):
 		self.get_transcript_list()
 
 	def _sync_conversation_url(self):
-		"""Populates conversation_url with the CRM Lead document name if lead_id exists, else None."""
+		"""Populates conversation_url with the Lead document name if lead_id exists, else None."""
 		lead_ref = getattr(self, "conversation_url", None) or getattr(self, "lead_id", None)
 		if lead_ref and str(lead_ref).strip():
 			clean_ref = str(lead_ref).strip()
-			if "/crm/leads/" in clean_ref:
+			if "/app/lead/" in clean_ref:
+				clean_ref = clean_ref.split("/app/lead/")[-1].strip()
+			elif "/crm/leads/" in clean_ref:
 				clean_ref = clean_ref.split("/crm/leads/")[-1].strip()
 			self.conversation_url = clean_ref
 			self.lead_id = clean_ref
@@ -40,13 +42,15 @@ class ChatbotConversation(Document):
 			self.conversation_url = None
 
 	def get_conversation_url(self, full_url: bool = False) -> str:
-		"""Returns the CRM Lead URL if lead is associated, else empty string."""
+		"""Returns the native Lead Desk URL if lead is associated, else empty string."""
 		lead_ref = getattr(self, "conversation_url", None) or getattr(self, "lead_id", None)
 		if lead_ref and str(lead_ref).strip():
 			clean_ref = str(lead_ref).strip()
-			if "/crm/leads/" in clean_ref:
+			if "/app/lead/" in clean_ref:
+				clean_ref = clean_ref.split("/app/lead/")[-1].strip()
+			elif "/crm/leads/" in clean_ref:
 				clean_ref = clean_ref.split("/crm/leads/")[-1].strip()
-			route = f"/crm/leads/{clean_ref}"
+			route = f"/app/lead/{clean_ref}"
 			return frappe.utils.get_url(route) if full_url else route
 		return ""
 

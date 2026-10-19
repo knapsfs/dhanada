@@ -383,7 +383,7 @@ def send_admin_alert(name, email, phone, profile, score, max_score, metrics, ans
 @rate_limit(limit=10, seconds=60, ip_based=True, methods="POST")
 def submit_risk_profile():
 	"""
-	Whitelisted endpoint to capture Risk Profiler lead, create CRM Lead,
+	Whitelisted endpoint to capture Risk Profiler lead, create native Dhanada Lead,
 	and send customized Risk Profile Report email via Brevo SMTP using Dhanada Settings.
 	"""
 	try:
@@ -450,81 +450,137 @@ def submit_risk_profile():
 
 		lead_context = "\n".join(answers_summary_lines)
 
-		# 3. Create or Update CRM Lead
+		# 3. Create or Update Native Dhanada Lead
 		created_lead_name = None
 		try:
-			# Determine source
-			source = "Website Form"
-			if frappe.db.exists("CRM Lead Source", "Investor Risk Profiler"):
-				source = "Investor Risk Profiler"
+			# Normalize profile to match Lead doctype Select options
+			valid_profiles = [
+				"Conservative",
+				"Moderately Conservative",
+				"Moderate",
+				"Moderately Aggressive",
+				"Aggressive",
+				"Very Aggressive",
+			]
+			normalized_profile = "Moderate"
+			if profile in valid_profiles:
+				normalized_profile = profile
+			elif profile == "Aggressive Growth":
+				normalized_profile = "Aggressive"
+			elif profile in ("Balanced", "Moderately Balanced"):
+				normalized_profile = "Moderate"
 			else:
+				for vp in valid_profiles:
+					if vp.lower() in profile.lower():
+						normalized_profile = vp
+						break
+
+			# Determine source
+			source = "Investor Risk Profiler"
+			if not frappe.db.exists("Lead Source", source):
 				try:
-					src_doc = frappe.get_doc(
-						{
-							"doctype": "CRM Lead Source",
-							"source_name": "Investor Risk Profiler",
-						}
-					)
+					src_doc = frappe.get_doc({
+						"doctype": "Lead Source",
+						"source_name": source,
+						"is_active": 1,
+						"details": "Investor Risk Profiler lead source",
+					})
 					src_doc.insert(ignore_permissions=True)
 					frappe.db.commit()
-					source = "Investor Risk Profiler"
 				except Exception:
 					source = "Website Form"
 
+			target_lead = None
 			existing_leads = frappe.get_all(
-				"CRM Lead",
-				filters={"email": email},
+				"Lead",
+				filters={"email": email, "status": ["not in", ["Junk", "Converted"]]},
+				order_by="creation desc",
 				fields=["name"],
 				limit=1,
 			)
-
 			if existing_leads:
-				lead_doc = frappe.get_doc("CRM Lead", existing_leads[0].name)
-				lead_doc.first_name = first_name
-				lead_doc.last_name = last_name
-				lead_doc.lead_name = full_name
-				lead_doc.mobile_no = clean_phone
-				lead_doc.phone = clean_phone
-				lead_doc.source = source
+				target_lead = existing_leads[0].name
+			elif clean_phone and len(clean_phone) >= 10:
+				last_10 = clean_phone[-10:]
+				existing_leads = frappe.get_all(
+					"Lead",
+					filters={"mobile_no": ["like", f"%{last_10}"], "status": ["not in", ["Junk", "Converted"]]},
+					order_by="creation desc",
+					fields=["name"],
+					limit=1,
+				)
+				if existing_leads:
+					target_lead = existing_leads[0].name
+
+			if target_lead:
+				lead_doc = frappe.get_doc("Lead", target_lead)
+				if full_name and (
+					not lead_doc.first_name
+					or lead_doc.first_name.lower() in ("unknown", "website visitor", "prospective")
+				):
+					lead_doc.first_name = first_name
+					lead_doc.last_name = last_name
+					lead_doc.lead_name = full_name
+				if clean_phone and not lead_doc.mobile_no:
+					lead_doc.mobile_no = clean_phone
 				if product:
-					if frappe.db.has_column("CRM Lead", "custom_product"):
-						lead_doc.custom_product = product
-					if frappe.db.has_column("CRM Lead", "product"):
-						lead_doc.product = product
-				if frappe.db.has_column("CRM Lead", "chat_summary"):
-					lead_doc.chat_summary = lead_context
-				if frappe.db.has_column("CRM Lead", "custom_chat_context"):
-					lead_doc.custom_chat_context = lead_context
+					lead_doc.product_interest = product
+				lead_doc.risk_profile = normalized_profile
+				lead_doc.risk_score = score
+				lead_doc.risk_profiler_status = "Completed"
+				lead_doc.risk_profiler_completed_on = frappe.utils.now_datetime()
+				if not lead_doc.chat_context:
+					lead_doc.chat_context = lead_context
+				elif lead_context not in lead_doc.chat_context:
+					lead_doc.chat_context = f"{lead_doc.chat_context}\n\n{lead_context}".strip()
 				lead_doc.save(ignore_permissions=True)
 				frappe.db.commit()
 				created_lead_name = lead_doc.name
 			else:
 				doc_data = {
-					"doctype": "CRM Lead",
+					"doctype": "Lead",
 					"first_name": first_name,
 					"last_name": last_name,
 					"lead_name": full_name,
 					"email": email,
 					"mobile_no": clean_phone,
-					"phone": clean_phone,
 					"source": source,
+					"status": "New",
+					"product_interest": product,
+					"risk_profile": normalized_profile,
+					"risk_score": score,
+					"risk_profiler_status": "Completed",
+					"risk_profiler_completed_on": frappe.utils.now_datetime(),
+					"chat_context": lead_context,
 				}
-				if product:
-					if frappe.db.has_column("CRM Lead", "custom_product"):
-						doc_data["custom_product"] = product
-					if frappe.db.has_column("CRM Lead", "product"):
-						doc_data["product"] = product
-				if frappe.db.has_column("CRM Lead", "chat_summary"):
-					doc_data["chat_summary"] = lead_context
-				if frappe.db.has_column("CRM Lead", "custom_chat_context"):
-					doc_data["custom_chat_context"] = lead_context
-
 				lead = frappe.get_doc(doc_data)
 				lead.insert(ignore_permissions=True)
 				frappe.db.commit()
 				created_lead_name = lead.name
+
+			# Create Risk Profiler Submission record linked to native Lead
+			try:
+				if frappe.db.exists("DocType", "Risk Profiler Submission") and created_lead_name:
+					token_val = payload.get("token") or frappe.generate_hash(length=32)
+					submission_doc = frappe.get_doc({
+						"doctype": "Risk Profiler Submission",
+						"lead": created_lead_name,
+						"token": token_val,
+						"status": "Submitted",
+						"submitted_on": frappe.utils.now_datetime(),
+						"score": score,
+						"max_score": max_score,
+						"risk_profile": normalized_profile,
+						"answers_json": json.dumps(answers) if answers else None,
+						"ip_address": getattr(frappe.local, "request_ip", None),
+					})
+					submission_doc.insert(ignore_permissions=True)
+					frappe.db.commit()
+			except Exception as sub_err:
+				frappe.log_error(title="Risk Profiler Submission Doc Creation Error", message=str(sub_err))
+
 		except Exception as lead_err:
-			frappe.log_error(title="CRM Lead Save Failed in Risk Profiler", message=str(lead_err))
+			frappe.log_error(title="Lead Save Failed in Risk Profiler", message=str(lead_err))
 
 		# 4. User email report dispatch disabled as requested (results shown directly on screen)
 		# 5. Send Admin Notification using Dhanada Settings

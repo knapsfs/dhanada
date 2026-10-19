@@ -130,13 +130,13 @@ class IntegrationTestSIFSchemePlan(IntegrationTestCase):
 		self.assertEqual(frappe.session.user, initial_user)
 
 		lead_name = res.get("lead_name")
-		if lead_name and frappe.db.exists("CRM Lead", lead_name):
-			lead = frappe.get_doc("CRM Lead", lead_name)
+		if lead_name and frappe.db.exists("Lead", lead_name):
+			lead = frappe.get_doc("Lead", lead_name)
 			self.assertEqual(lead.first_name, "Execution")
 			self.assertEqual(lead.email, "test_exec_user@example.com")
-			self.assertEqual(lead.custom_product, "Specialized Investment Fund (SIF)")
+			self.assertEqual(lead.product_interest, "Specialized Investment Fund (SIF)")
 			# Cleanup test record
-			frappe.delete_doc("CRM Lead", lead_name, ignore_permissions=True, force=True)
+			frappe.delete_doc("Lead", lead_name, ignore_permissions=True, force=True)
 
 	def test_create_chatbot_lead_preserves_session_user_and_populates_fields(self):
 		from dhanada.api import create_chatbot_lead
@@ -171,20 +171,20 @@ class IntegrationTestSIFSchemePlan(IntegrationTestCase):
 
 		lead_name = res.get("lead_name")
 		self.assertTrue(lead_name)
-		self.assertTrue(frappe.db.exists("CRM Lead", lead_name))
+		self.assertTrue(frappe.db.exists("Lead", lead_name))
 
-		lead = frappe.get_doc("CRM Lead", lead_name)
+		lead = frappe.get_doc("Lead", lead_name)
 		self.assertEqual(lead.first_name, "Priya")
 		self.assertEqual(lead.last_name, "Sharma")
 		self.assertEqual(lead.lead_name, "Priya Sharma")
 		self.assertEqual(lead.email, "priya.sharma@example.com")
 		self.assertEqual(lead.mobile_no, "9876543210")
-		self.assertEqual(lead.custom_product, "Long-Short Hybrid SIF")
-		self.assertEqual(lead.custom_conversation, conv["name"])
-		self.assertIn("Long-Short Hybrid SIF", lead.custom_chat_context or lead.chat_summary or "")
+		self.assertEqual(lead.product_interest, "Long-Short Hybrid SIF")
+		self.assertEqual(lead.chatbot_conversation, conv["name"])
+		self.assertIn("Long-Short Hybrid SIF", lead.chat_context or "")
 
 		# Cleanup
-		frappe.delete_doc("CRM Lead", lead_name, ignore_permissions=True, force=True)
+		frappe.delete_doc("Lead", lead_name, ignore_permissions=True, force=True)
 		frappe.delete_doc("Chatbot Conversation", conv["name"], ignore_permissions=True, force=True)
 
 	def test_submit_risk_profile_creates_lead_with_product(self):
@@ -206,18 +206,18 @@ class IntegrationTestSIFSchemePlan(IntegrationTestCase):
 		self.assertTrue(res.get("success"))
 
 		lead = frappe.db.get_value(
-			"CRM Lead",
+			"Lead",
 			{"email": "aarav.mehta.test@example.com"},
-			["name", "lead_name", "custom_product", "source"],
+			["name", "lead_name", "product_interest", "source"],
 			as_dict=True,
 		)
 		self.assertTrue(lead)
 		self.assertEqual(lead.lead_name, "Aarav Mehta")
-		self.assertEqual(lead.custom_product, "Alternative Investment Funds (AIF)")
+		self.assertEqual(lead.product_interest, "Alternative Investment Funds (AIF)")
 
 		# Cleanup
 		if lead:
-			frappe.delete_doc("CRM Lead", lead.name, ignore_permissions=True, force=True)
+			frappe.delete_doc("Lead", lead.name, ignore_permissions=True, force=True)
 
 	def test_create_chatbot_lead_from_conversation_fallback_when_name_omitted(self):
 		from dhanada.api import create_chatbot_lead
@@ -248,7 +248,7 @@ class IntegrationTestSIFSchemePlan(IntegrationTestCase):
 		self.assertEqual(frappe.session.user, initial_user)
 
 		lead_name = res.get("lead_name")
-		lead = frappe.get_doc("CRM Lead", lead_name)
+		lead = frappe.get_doc("Lead", lead_name)
 
 		# Proves it resolved name and contact from the conversation record instead of 'Unknown'
 		self.assertEqual(lead.first_name, "Amit")
@@ -258,7 +258,7 @@ class IntegrationTestSIFSchemePlan(IntegrationTestCase):
 		self.assertEqual(lead.mobile_no, "9123456780")
 
 		# Cleanup
-		frappe.delete_doc("CRM Lead", lead_name, ignore_permissions=True, force=True)
+		frappe.delete_doc("Lead", lead_name, ignore_permissions=True, force=True)
 		frappe.delete_doc("Chatbot Conversation", conv["name"], ignore_permissions=True, force=True)
 
 	def test_create_chatbot_lead_with_json_request_body(self):
@@ -294,7 +294,7 @@ class IntegrationTestSIFSchemePlan(IntegrationTestCase):
 			self.assertEqual(frappe.session.user, initial_user)
 
 			lead_name = res.get("lead_name")
-			lead = frappe.get_doc("CRM Lead", lead_name)
+			lead = frappe.get_doc("Lead", lead_name)
 
 			self.assertEqual(lead.first_name, "Kavita")
 			self.assertEqual(lead.last_name, "Rao")
@@ -303,8 +303,8 @@ class IntegrationTestSIFSchemePlan(IntegrationTestCase):
 			self.assertEqual(lead.mobile_no, "9811122233")
 			self.assertEqual(lead.source, "Website Chatbot")
 		finally:
-			if lead_name and frappe.db.exists("CRM Lead", lead_name):
-				frappe.delete_doc("CRM Lead", lead_name, ignore_permissions=True, force=True)
+			if lead_name and frappe.db.exists("Lead", lead_name):
+				frappe.delete_doc("Lead", lead_name, ignore_permissions=True, force=True)
 			frappe.local.request = None
 			frappe.local.request_ip = None
 

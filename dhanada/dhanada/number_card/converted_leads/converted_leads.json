@@ -1,0 +1,16 @@
+{
+ "aggregate_function_based_on": "",
+ "color": "#28A745",
+ "doctype": "Number Card",
+ "document_type": "Lead",
+ "dynamic_filters_json": "[]",
+ "filters_json": "[[\"Lead\",\"status\",\"=\",\"Converted\",false]]",
+ "function": "Count",
+ "is_public": 1,
+ "is_standard": 1,
+ "label": "Converted Leads",
+ "module": "Dhanada",
+ "name": "Converted Leads",
+ "show_full_number": 0,
+ "type": "Document Type"
+}

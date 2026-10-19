@@ -13,8 +13,17 @@ add_to_apps_screen = [
 		"logo": "/assets/dhanada/images/SIF-Assets-Favicon.png",
 		"title": "SIF",
 		"route": "/desk/sif",
-	}
+	},
+	{
+		"name": "knaps_crm",
+		"logo": "/assets/dhanada/images/CRM.jpg",
+		"title": "KNAPS CRM",
+		"route": "/desk/knaps-crm",
+	},
 ]
+
+extend_bootinfo = ["dhanada.setup.bootstrap.boot_knaps_crm"]
+
 # Apps
 # ------------------
 
@@ -172,13 +181,11 @@ get_desktop_icons = "dhanada.config.desktop.get_data"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+	"Email Queue": {
+		"on_update": "dhanada.lifecycle.api.on_email_queue_update",
+	},
+}
 
 # Scheduled Tasks
 # ---------------

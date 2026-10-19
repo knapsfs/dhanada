@@ -5,10 +5,12 @@ frappe.ui.form.on("Chatbot Conversation", {
 	refresh(frm) {
 		const lead_name = frm.doc.conversation_url || frm.doc.lead_id;
 		if (lead_name) {
-			const clean_name = lead_name.includes("/crm/leads/")
+			const clean_name = lead_name.includes("/app/lead/")
+				? lead_name.split("/app/lead/").pop().trim()
+				: lead_name.includes("/crm/leads/")
 				? lead_name.split("/crm/leads/").pop().trim()
 				: lead_name.trim();
-			frm.add_web_link(`/crm/leads/${clean_name}`, __("Open CRM Lead"));
+			frm.add_web_link(`/app/lead/${clean_name}`, __("Open Lead"));
 		}
 	},
 });
