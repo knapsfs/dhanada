@@ -185,9 +185,11 @@ export default function KnapsCrmPortal() {
         {/* Brand Header */}
         <div className="h-16 px-5 flex items-center justify-between border-b border-white/10">
           <div className="flex items-center gap-3 overflow-hidden">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#032e92] to-[#2490ef] border border-white/20 flex items-center justify-center font-bold text-white shadow-md shrink-0">
-              K
-            </div>
+            <img
+              src={`${import.meta.env.BASE_URL}favicon.svg`}
+              alt="KNAPS Logo"
+              className="w-9 h-9 object-contain rounded-xl shrink-0"
+            />
             {isSidebarOpen && (
               <div className="truncate">
                 <span className="font-bold text-sm tracking-wide text-white block leading-tight">KNAPS CRM</span>
