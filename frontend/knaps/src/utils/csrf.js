@@ -29,3 +29,10 @@ export async function getCsrfToken() {
 
   return '';
 }
+
+export function clearCsrfToken() {
+  cachedCsrfToken = null;
+  if (typeof window !== "undefined" && window.frappe) {
+    window.frappe.csrf_token = null;
+  }
+}

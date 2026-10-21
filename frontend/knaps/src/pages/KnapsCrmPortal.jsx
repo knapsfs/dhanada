@@ -22,6 +22,7 @@ import CrmLeadDrawer from '../components/crm/CrmLeadDrawer';
 import CrmNewLeadModal from '../components/crm/CrmNewLeadModal';
 import CrmNewInteractionModal from '../components/crm/CrmNewInteractionModal';
 import CrmNewTaskModal from '../components/crm/CrmNewTaskModal';
+import CrmLoginForm from '../components/crm/CrmLoginForm';
 
 export default function KnapsCrmPortal() {
   const [activeTab, setActiveTab] = useState('pipeline'); // dashboard, pipeline, leads, clients, tasks, renewals
@@ -51,6 +52,11 @@ export default function KnapsCrmPortal() {
     setLoading(true);
     try {
       const bData = await crmService.getBootstrap();
+      if (!bData || !bData.user || bData.user.name === "Guest") {
+        setBootstrapData(null);
+        setAuthRequired(true);
+        return;
+      }
       setBootstrapData(bData);
       setAuthRequired(false);
 
@@ -67,10 +73,25 @@ export default function KnapsCrmPortal() {
       setRenewals(rData);
     } catch (err) {
       console.warn("CRM Auth/Data load failed:", err);
+      setBootstrapData(null);
       setAuthRequired(true);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await crmService.logout();
+    } catch (err) {
+      console.warn("Logout error:", err);
+    }
+    setBootstrapData(null);
+    setAuthRequired(true);
+    setLeads([]);
+    setClients([]);
+    setTasks([]);
+    setRenewals([]);
   };
 
   const handleLeadCreated = (newLead) => {
@@ -149,44 +170,17 @@ export default function KnapsCrmPortal() {
   }
 
   if (authRequired || !bootstrapData) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-[#021d63] via-[#032e92] to-[#0a1a3b] flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white rounded-3xl shadow-2xl p-8 border border-white/20 text-center relative overflow-hidden">
-          <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#032e92] via-[#2490ef] to-[#ffaa00]" />
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#032e92] to-[#2490ef] text-white flex items-center justify-center text-2xl font-black mx-auto mb-5 shadow-lg shadow-blue-500/30">
-            K
-          </div>
-          <h2 className="text-2xl font-extrabold text-gray-900 tracking-tight">Advisor Login Required</h2>
-          <p className="text-gray-500 text-sm mt-2 mb-6 leading-relaxed">
-            KNAPS CRM is restricted to wealth advisors and relationship managers. Please sign in to your Frappe Desk account to access lead pipelines and client portfolios.
-          </p>
-          <div className="space-y-3">
-            <a
-              href="/login?redirect-to=/knaps-crm"
-              className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-xl font-bold text-white bg-gradient-to-r from-[#032e92] to-[#2490ef] hover:from-[#021d63] hover:to-[#1a7ad4] shadow-lg shadow-blue-900/20 transition-all cursor-pointer text-sm"
-            >
-              Sign In to Frappe Desk
-              <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
-            </a>
-            <a
-              href="/"
-              className="block w-full py-2.5 px-4 rounded-xl text-xs font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
-            >
-              Return to Website
-            </a>
-          </div>
-        </div>
-      </div>
-    );
+    return <CrmLoginForm onLoginSuccess={loadCrmData} />;
   }
+
+
 
   return (
     <div className="flex h-screen bg-[#f4f7fc] font-sans text-gray-900 overflow-hidden">
       {/* SIDEBAR */}
       <aside
-        className={`${
-          isSidebarOpen ? 'w-64' : 'w-20'
-        } bg-[#021d63] text-white flex flex-col transition-all duration-300 ease-in-out shrink-0 z-30 shadow-xl`}
+        className={`${isSidebarOpen ? 'w-64' : 'w-20'
+          } bg-[#021d63] text-white flex flex-col transition-all duration-300 ease-in-out shrink-0 z-30 shadow-xl`}
       >
         {/* Brand Header */}
         <div className="h-16 px-5 flex items-center justify-between border-b border-white/10">
@@ -197,7 +191,6 @@ export default function KnapsCrmPortal() {
             {isSidebarOpen && (
               <div className="truncate">
                 <span className="font-bold text-sm tracking-wide text-white block leading-tight">KNAPS CRM</span>
-                <span className="text-[10px] text-blue-200 uppercase tracking-widest font-semibold">Wealth Advisory</span>
               </div>
             )}
           </div>
@@ -217,11 +210,10 @@ export default function KnapsCrmPortal() {
               <button
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
-                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                  isActive
-                    ? 'bg-white/15 text-white shadow-xs font-bold'
-                    : 'text-blue-100/70 hover:bg-white/10 hover:text-white'
-                }`}
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${isActive
+                  ? 'bg-white/15 text-white shadow-xs font-bold'
+                  : 'text-blue-100/70 hover:bg-white/10 hover:text-white'
+                  }`}
               >
                 <div className="flex items-center gap-3 truncate">
                   <FontAwesomeIcon icon={item.icon} className={`text-sm ${isActive ? 'text-white' : 'text-blue-200/70'}`} />
@@ -229,9 +221,8 @@ export default function KnapsCrmPortal() {
                 </div>
                 {isSidebarOpen && item.badge > 0 && (
                   <span
-                    className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                      isActive ? 'bg-white text-[#032e92]' : 'bg-white/20 text-white'
-                    }`}
+                    className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${isActive ? 'bg-white text-[#032e92]' : 'bg-white/20 text-white'
+                      }`}
                   >
                     {item.badge}
                   </span>
@@ -268,14 +259,24 @@ export default function KnapsCrmPortal() {
               )}
             </div>
 
-            {isSidebarOpen && (
-              <a
-                href="/api/method/logout"
+            {isSidebarOpen ? (
+              <button
+                type="button"
+                onClick={handleLogout}
                 title="Logout"
-                className="text-white/50 hover:text-white p-1 transition-colors text-xs ml-1"
+                className="text-white/50 hover:text-white p-1 transition-colors text-xs ml-1 cursor-pointer"
               >
                 <FontAwesomeIcon icon={faRightFromBracket} />
-              </a>
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={handleLogout}
+                title="Logout"
+                className="text-white/50 hover:text-white p-1 transition-colors text-xs cursor-pointer"
+              >
+                <FontAwesomeIcon icon={faRightFromBracket} />
+              </button>
             )}
           </div>
         </div>
@@ -312,6 +313,14 @@ export default function KnapsCrmPortal() {
               title="Refresh CRM Data"
             >
               <FontAwesomeIcon icon={faArrowsRotate} className={loading ? 'animate-spin' : ''} />
+            </button>
+
+            <button
+              onClick={handleLogout}
+              className="p-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-600 hover:text-red-600 hover:bg-red-50 hover:border-red-200 transition-colors text-xs cursor-pointer"
+              title="Logout from CRM"
+            >
+              <FontAwesomeIcon icon={faRightFromBracket} />
             </button>
 
             <button
