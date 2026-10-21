@@ -26,6 +26,7 @@ def ensure_master_data():
 	ensure_crm_sources()
 	ensure_sif_subcategories()
 	ensure_knaps_crm_workspace()
+	ensure_sif_desktop_icon()
 	ensure_knaps_crm_desktop_icon()
 	frappe.logger().info("Finished Dhanada bootstrap process.")
 
@@ -52,12 +53,14 @@ def ensure_lead_sources():
 	for source in canonical_sources:
 		if not frappe.db.exists("Lead Source", {"source_name": source}):
 			try:
-				doc = frappe.get_doc({
-					"doctype": "Lead Source",
-					"source_name": source,
-					"is_active": 1,
-					"details": f"Canonical acquisition source: {source}",
-				})
+				doc = frappe.get_doc(
+					{
+						"doctype": "Lead Source",
+						"source_name": source,
+						"is_active": 1,
+						"details": f"Canonical acquisition source: {source}",
+					}
+				)
 				doc.insert(ignore_permissions=True)
 				frappe.logger().info(f"Created Lead Source: {source}")
 			except Exception as e:
@@ -183,7 +186,7 @@ def ensure_knaps_crm_desktop_icon():
 		"icon_type": "App",
 		"idx": 5,
 		"label": "KNAPS CRM",
-		"link": "/desk/knaps-crm",
+		"link": "/knaps-crm",
 		"link_type": "External",
 		"logo_url": "/assets/dhanada/images/CRM.jpg",
 		"name": "KNAPS CRM",
@@ -220,6 +223,59 @@ def ensure_knaps_crm_desktop_icon():
 	frappe.cache.delete_key("bootinfo")
 
 
+def ensure_sif_desktop_icon():
+	"""
+	Ensure SIF standard Desktop Icon exists and is synced.
+	"""
+	import json
+	import os
+
+	icon_path = frappe.get_app_path("dhanada", "desktop_icon", "sif.json")
+	icon_data = {
+		"app": "dhanada",
+		"bg_color": "gray",
+		"doctype": "Desktop Icon",
+		"hidden": 0,
+		"icon_type": "App",
+		"idx": 1,
+		"label": "SIF",
+		"link": "/desk/sif",
+		"link_type": "External",
+		"logo_url": "/assets/dhanada/images/SIF-Assets-Favicon.png",
+		"name": "SIF",
+		"standard": 1,
+		"roles": [],
+	}
+
+	if os.path.exists(icon_path):
+		try:
+			with open(icon_path) as f:
+				loaded_data = json.load(f)
+				icon_data.update(loaded_data)
+		except Exception as e:
+			frappe.logger().error(f"Failed to read Desktop Icon file {icon_path}: {e!s}")
+
+	icon_name = icon_data.get("name", "SIF")
+	if frappe.db.exists("Desktop Icon", icon_name):
+		try:
+			icon_doc = frappe.get_doc("Desktop Icon", icon_name)
+			icon_doc.update(icon_data)
+			icon_doc.save(ignore_permissions=True)
+			frappe.logger().info("Updated Desktop Icon: SIF")
+		except Exception as e:
+			frappe.logger().error(f"Failed to update Desktop Icon SIF: {e!s}")
+	else:
+		try:
+			icon_doc = frappe.get_doc(icon_data)
+			icon_doc.insert(ignore_permissions=True)
+			frappe.logger().info("Created Desktop Icon: SIF")
+		except Exception as e:
+			frappe.logger().error(f"Failed to create Desktop Icon SIF: {e!s}")
+
+	frappe.cache.delete_key("desktop_icons")
+	frappe.cache.delete_key("bootinfo")
+
+
 def boot_knaps_crm(bootinfo):
 	"""
 	Extend bootinfo so KNAPS CRM is visible on the Frappe Desk home screen and app switcher.
@@ -235,43 +291,71 @@ def boot_knaps_crm(bootinfo):
 
 		# Check if KNAPS CRM is already in app_data
 		if not any(
-			a.get("app_name") == "knaps_crm" or a.get("app_title") == "KNAPS CRM"
-			for a in bootinfo.app_data
+			a.get("app_name") == "knaps_crm" or a.get("app_title") == "KNAPS CRM" for a in bootinfo.app_data
 		):
-			bootinfo.app_data.append({
-				"app_name": "knaps_crm",
-				"app_title": "KNAPS CRM",
-				"app_route": "/desk/knaps-crm",
-				"app_logo_url": "/assets/dhanada/images/CRM.jpg",
-				"modules": ["Dhanada"],
-				"workspaces": ["KNAPS CRM"],
-			})
+			bootinfo.app_data.append(
+				{
+					"app_name": "knaps_crm",
+					"app_title": "KNAPS CRM",
+					"app_route": "/knaps-crm",
+					"app_logo_url": "/assets/dhanada/images/CRM.jpg",
+					"modules": ["Dhanada"],
+					"workspaces": ["KNAPS CRM"],
+				}
+			)
 
 	# 2. Update desktop_icons
 	if hasattr(bootinfo, "desktop_icons") and isinstance(bootinfo.desktop_icons, list):
 		existing = next((d for d in bootinfo.desktop_icons if d.get("label") == "KNAPS CRM"), None)
 		if existing:
 			existing["logo_url"] = "/assets/dhanada/images/CRM.jpg"
-			existing["link"] = "/desk/knaps-crm"
+			existing["link"] = "/knaps-crm"
 			existing["hidden"] = 0
 		else:
-			bootinfo.desktop_icons.append({
-				"label": "KNAPS CRM",
-				"bg_color": "gray",
-				"link": "/desk/knaps-crm",
-				"link_type": "External",
-				"app": "dhanada",
-				"icon_type": "App",
-				"parent_icon": None,
-				"icon": None,
-				"link_to": None,
-				"idx": len(bootinfo.desktop_icons),
-				"standard": 1,
-				"logo_url": "/assets/dhanada/images/CRM.jpg",
-				"hidden": 0,
-				"name": "KNAPS CRM",
-				"restrict_removal": 0,
-				"icon_image": None,
-			})
+			bootinfo.desktop_icons.append(
+				{
+					"label": "KNAPS CRM",
+					"bg_color": "gray",
+					"link": "/knaps-crm",
+					"link_type": "External",
+					"app": "dhanada",
+					"icon_type": "App",
+					"parent_icon": None,
+					"icon": None,
+					"link_to": None,
+					"idx": len(bootinfo.desktop_icons),
+					"standard": 1,
+					"logo_url": "/assets/dhanada/images/CRM.jpg",
+					"hidden": 0,
+					"name": "KNAPS CRM",
+					"restrict_removal": 0,
+					"icon_image": None,
+				}
+			)
 
-
+		existing_sif = next((d for d in bootinfo.desktop_icons if d.get("label") == "SIF"), None)
+		if existing_sif:
+			existing_sif["logo_url"] = "/assets/dhanada/images/SIF-Assets-Favicon.png"
+			existing_sif["link"] = "/desk/sif"
+			existing_sif["hidden"] = 0
+		else:
+			bootinfo.desktop_icons.append(
+				{
+					"label": "SIF",
+					"bg_color": "gray",
+					"link": "/desk/sif",
+					"link_type": "External",
+					"app": "dhanada",
+					"icon_type": "App",
+					"parent_icon": None,
+					"icon": None,
+					"link_to": None,
+					"idx": 1,
+					"standard": 1,
+					"logo_url": "/assets/dhanada/images/SIF-Assets-Favicon.png",
+					"hidden": 0,
+					"name": "SIF",
+					"restrict_removal": 0,
+					"icon_image": None,
+				}
+			)

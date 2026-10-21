@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 import re
+
 import frappe
 from frappe import _
 from frappe.model.document import Document
@@ -25,7 +26,11 @@ class Lead(Document):
 
 		if self.first_name:
 			full = f"{self.first_name} {self.last_name or ''}".strip()
-			if not self.lead_name or self.lead_name.strip() == full or self.lead_name.lower() in ("website visitor", "unknown"):
+			if (
+				not self.lead_name
+				or self.lead_name.strip() == full
+				or self.lead_name.lower() in ("website visitor", "unknown")
+			):
 				self.lead_name = full
 		elif self.lead_name:
 			self.lead_name = self.lead_name.strip()
@@ -49,7 +54,9 @@ class Lead(Document):
 			self.mobile_no = self._clean_and_validate_phone(self.mobile_no, "Mobile No")
 
 		if self.alternate_mobile_no:
-			self.alternate_mobile_no = self._clean_and_validate_phone(self.alternate_mobile_no, "Alternate Mobile No")
+			self.alternate_mobile_no = self._clean_and_validate_phone(
+				self.alternate_mobile_no, "Alternate Mobile No"
+			)
 
 	def _clean_and_validate_phone(self, phone_str: str, label: str) -> str:
 		cleaned = re.sub(r"[\s\-\(\)]", "", str(phone_str).strip())
@@ -57,7 +64,9 @@ class Lead(Document):
 			cleaned = cleaned[2:]
 		if not PHONE_REGEX.match(cleaned):
 			frappe.throw(
-				_("Invalid {0} format '{1}'. Must be a valid phone number with 10 to 15 digits.").format(label, phone_str),
+				_("Invalid {0} format '{1}'. Must be a valid phone number with 10 to 15 digits.").format(
+					label, phone_str
+				),
 				frappe.ValidationError,
 			)
 		return cleaned
@@ -70,14 +79,18 @@ class Lead(Document):
 			# Cannot change status if already converted
 			if old_status == "Converted" and old_client and self.status != "Converted":
 				frappe.throw(
-					_("Cannot modify status: Lead has already been converted to Client '{0}'.").format(old_client),
+					_("Cannot modify status: Lead has already been converted to Client '{0}'.").format(
+						old_client
+					),
 					frappe.ValidationError,
 				)
 
 			# Disallow direct manual change to 'Converted' without a linked client
 			if self.status == "Converted" and not self.converted_client:
 				frappe.throw(
-					_("Cannot mark status as Converted directly. Lead conversion requires verified client onboarding and risk profiling."),
+					_(
+						"Cannot mark status as Converted directly. Lead conversion requires verified client onboarding and risk profiling."
+					),
 					frappe.ValidationError,
 				)
 
@@ -90,7 +103,9 @@ class Lead(Document):
 						"to_status": self.status,
 						"changed_by": frappe.session.user,
 						"changed_on": now_datetime(),
-						"reason": self.lost_reason if self.status in ("Not Interested", "Junk") else self.notes,
+						"reason": self.lost_reason
+						if self.status in ("Not Interested", "Junk")
+						else self.notes,
 					},
 				)
 

@@ -2,10 +2,11 @@
 # For license information, please see license.txt
 
 import re
+
 import frappe
 from frappe import _
 from frappe.model.document import Document
-from frappe.utils import validate_email_address, today
+from frappe.utils import today, validate_email_address
 
 PAN_REGEX = re.compile(r"^[A-Z]{5}[0-9]{4}[A-Z]{1}$")
 PHONE_REGEX = re.compile(r"^\+?[0-9]{10,15}$")
@@ -23,12 +24,22 @@ class Client(Document):
 		if self.organization:
 			org_type = frappe.db.get_value("Client", self.organization, "client_type")
 			if not org_type:
-				frappe.throw(_("Linked Organization Client '{0}' does not exist.").format(self.organization), frappe.DoesNotExistError)
+				frappe.throw(
+					_("Linked Organization Client '{0}' does not exist.").format(self.organization),
+					frappe.DoesNotExistError,
+				)
 			if org_type != "Organization":
-				frappe.throw(_("Client '{0}' cannot be set as Organization because its client_type is '{1}'.").format(self.organization, org_type), frappe.ValidationError)
+				frappe.throw(
+					_("Client '{0}' cannot be set as Organization because its client_type is '{1}'.").format(
+						self.organization, org_type
+					),
+					frappe.ValidationError,
+				)
 
 		if self.family and not frappe.db.exists("Family", self.family):
-			frappe.throw(_("Linked Family '{0}' does not exist.").format(self.family), frappe.DoesNotExistError)
+			frappe.throw(
+				_("Linked Family '{0}' does not exist.").format(self.family), frappe.DoesNotExistError
+			)
 
 	def validate_client_name_and_type(self):
 		if not self.client_type:
@@ -61,9 +72,9 @@ class Client(Document):
 		normalized_pan = self.pan.strip().upper()
 		if not PAN_REGEX.match(normalized_pan):
 			frappe.throw(
-				_("Invalid PAN format '{0}'. PAN must be exactly 10 alphanumeric characters (e.g., ABCDE1234F).").format(
-					normalized_pan
-				),
+				_(
+					"Invalid PAN format '{0}'. PAN must be exactly 10 alphanumeric characters (e.g., ABCDE1234F)."
+				).format(normalized_pan),
 				frappe.ValidationError,
 			)
 

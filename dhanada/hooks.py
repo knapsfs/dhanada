@@ -18,7 +18,7 @@ add_to_apps_screen = [
 		"name": "knaps_crm",
 		"logo": "/assets/dhanada/images/CRM.jpg",
 		"title": "KNAPS CRM",
-		"route": "/desk/knaps-crm",
+		"route": "/knaps-crm",
 	},
 ]
 
@@ -27,7 +27,7 @@ extend_bootinfo = ["dhanada.setup.bootstrap.boot_knaps_crm"]
 # Apps
 # ------------------
 
-required_apps = ["crm"]
+required_apps = []
 
 # Each item in the list will be shown as an app in the apps page
 # add_to_apps_screen = [
@@ -92,6 +92,10 @@ website_route_rules = [
 	{"from_route": "/sif/<path:app_path>", "to_route": "knaps"},
 	{"from_route": "/funds", "to_route": "knaps"},
 	{"from_route": "/funds/<path:app_path>", "to_route": "knaps"},
+	{"from_route": "/knaps-crm", "to_route": "knaps"},
+	{"from_route": "/knaps-crm/<path:app_path>", "to_route": "knaps"},
+	{"from_route": "/crm", "to_route": "knaps"},
+	{"from_route": "/crm/<path:app_path>", "to_route": "knaps"},
 ]
 
 # application home page (will override Website Settings)

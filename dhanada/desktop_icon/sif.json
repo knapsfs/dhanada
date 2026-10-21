@@ -1,0 +1,20 @@
+{
+ "app": "dhanada",
+ "bg_color": "gray",
+ "creation": "2026-10-01 12:30:52.575236",
+ "docstatus": 0,
+ "doctype": "Desktop Icon",
+ "hidden": 0,
+ "icon_type": "App",
+ "idx": 1,
+ "label": "SIF",
+ "link": "/desk/sif",
+ "link_type": "External",
+ "logo_url": "/assets/dhanada/images/SIF-Assets-Favicon.png",
+ "modified": "2026-10-01 12:30:52.575236",
+ "modified_by": "Administrator",
+ "name": "SIF",
+ "owner": "Administrator",
+ "roles": [],
+ "standard": 1
+}

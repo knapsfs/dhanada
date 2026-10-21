@@ -29,12 +29,14 @@ def _resolve_lead_source(raw_source: str, default_source: str) -> str:
 		return source
 
 	try:
-		src_doc = frappe.get_doc({
-			"doctype": "Lead Source",
-			"source_name": source,
-			"is_active": 1,
-			"details": f"Acquisition source: {source}",
-		})
+		src_doc = frappe.get_doc(
+			{
+				"doctype": "Lead Source",
+				"source_name": source,
+				"is_active": 1,
+				"details": f"Acquisition source: {source}",
+			}
+		)
 		src_doc.insert(ignore_permissions=True)
 		frappe.db.commit()
 		return source

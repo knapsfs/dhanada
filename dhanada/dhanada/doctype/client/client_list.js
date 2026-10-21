@@ -10,39 +10,55 @@ frappe.listview_settings["Client"] = {
 		"kyc_status",
 		"risk_profile",
 		"client_owner",
-		"family"
+		"family",
 	],
 
 	get_indicator(doc) {
 		const colors = {
-			"Active": "green",
-			"Inactive": "darkgrey",
-			"Suspended": "red",
-			"Dormant": "orange"
+			Active: "green",
+			Inactive: "darkgrey",
+			Suspended: "red",
+			Dormant: "orange",
 		};
 		const color = colors[doc.client_status] || "grey";
 		return [__(doc.client_status), color, "client_status,=," + doc.client_status];
 	},
 
 	onload(listview) {
-		listview.page.add_inner_button(__("Active Clients"), () => {
-			listview.filter_area.clear();
-			listview.filter_area.add([["Client", "client_status", "=", "Active"]]);
-		}, __("Filter"));
+		listview.page.add_inner_button(
+			__("Active Clients"),
+			() => {
+				listview.filter_area.clear();
+				listview.filter_area.add([["Client", "client_status", "=", "Active"]]);
+			},
+			__("Filter")
+		);
 
-		listview.page.add_inner_button(__("My Clients"), () => {
-			listview.filter_area.clear();
-			listview.filter_area.add([["Client", "client_owner", "=", frappe.session.user]]);
-		}, __("Filter"));
+		listview.page.add_inner_button(
+			__("My Clients"),
+			() => {
+				listview.filter_area.clear();
+				listview.filter_area.add([["Client", "client_owner", "=", frappe.session.user]]);
+			},
+			__("Filter")
+		);
 
-		listview.page.add_inner_button(__("Individuals"), () => {
-			listview.filter_area.clear();
-			listview.filter_area.add([["Client", "client_type", "=", "Individual"]]);
-		}, __("Filter"));
+		listview.page.add_inner_button(
+			__("Individuals"),
+			() => {
+				listview.filter_area.clear();
+				listview.filter_area.add([["Client", "client_type", "=", "Individual"]]);
+			},
+			__("Filter")
+		);
 
-		listview.page.add_inner_button(__("Organizations"), () => {
-			listview.filter_area.clear();
-			listview.filter_area.add([["Client", "client_type", "=", "Organization"]]);
-		}, __("Filter"));
-	}
+		listview.page.add_inner_button(
+			__("Organizations"),
+			() => {
+				listview.filter_area.clear();
+				listview.filter_area.add([["Client", "client_type", "=", "Organization"]]);
+			},
+			__("Filter")
+		);
+	},
 };

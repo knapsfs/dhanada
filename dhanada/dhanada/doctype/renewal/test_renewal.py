@@ -9,15 +9,17 @@ from frappe.utils import add_days, today
 class TestRenewal(FrappeTestCase):
 	def setUp(self):
 		frappe.set_user("Administrator")
-		self.client = frappe.get_doc({
-			"doctype": "Client",
-			"client_type": "Individual",
-			"first_name": "Arun",
-			"last_name": "Joshi",
-			"email": "arun.joshi.unique@example.com",
-			"mobile_no": "9876543240",
-			"pan": "RNWCL1234A",
-		}).insert()
+		self.client = frappe.get_doc(
+			{
+				"doctype": "Client",
+				"client_type": "Individual",
+				"first_name": "Arun",
+				"last_name": "Joshi",
+				"email": "arun.joshi.unique@example.com",
+				"mobile_no": "9876543240",
+				"pan": "RNWCL1234A",
+			}
+		).insert()
 
 	def tearDown(self):
 		frappe.set_user("Administrator")
@@ -25,14 +27,16 @@ class TestRenewal(FrappeTestCase):
 			frappe.delete_doc("Client", self.client.name, ignore_permissions=True, force=True)
 
 	def test_create_renewal_success(self):
-		renewal = frappe.get_doc({
-			"doctype": "Renewal",
-			"client": self.client.name,
-			"product_name": "Specialized Investment Fund - Tier 1",
-			"renewal_date": add_days(today(), 30),
-			"relationship_manager": "Administrator",
-			"status": "Upcoming",
-		}).insert()
+		renewal = frappe.get_doc(
+			{
+				"doctype": "Renewal",
+				"client": self.client.name,
+				"product_name": "Specialized Investment Fund - Tier 1",
+				"renewal_date": add_days(today(), 30),
+				"relationship_manager": "Administrator",
+				"status": "Upcoming",
+			}
+		).insert()
 
 		self.assertTrue(renewal.name.startswith("RNW-"))
 		self.assertEqual(renewal.client_name, "Arun Joshi")
@@ -40,14 +44,16 @@ class TestRenewal(FrappeTestCase):
 		self.assertIsNone(renewal.completion_date)
 
 	def test_renewal_completion_sets_completion_date(self):
-		renewal = frappe.get_doc({
-			"doctype": "Renewal",
-			"client": self.client.name,
-			"product_name": "Advisory Mandate",
-			"renewal_date": today(),
-			"relationship_manager": "Administrator",
-			"status": "Upcoming",
-		}).insert()
+		renewal = frappe.get_doc(
+			{
+				"doctype": "Renewal",
+				"client": self.client.name,
+				"product_name": "Advisory Mandate",
+				"renewal_date": today(),
+				"relationship_manager": "Administrator",
+				"status": "Upcoming",
+			}
+		).insert()
 
 		renewal.status = "Renewed"
 		renewal.save()

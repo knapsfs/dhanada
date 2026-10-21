@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 import re
+
 import frappe
 from frappe import _
 from frappe.model.document import Document
@@ -20,6 +21,7 @@ class ClientOnboardingSubmission(Document):
 	def validate_token(self):
 		if not self.token:
 			import secrets
+
 			self.token = secrets.token_urlsafe(32)
 
 	def validate_pan(self):
@@ -27,7 +29,9 @@ class ClientOnboardingSubmission(Document):
 			self.pan = str(self.pan).strip().upper()
 			if not PAN_REGEX.match(self.pan):
 				frappe.throw(
-					_("Invalid PAN format '{0}'. PAN must be 10 characters (5 uppercase letters, 4 digits, 1 uppercase letter).").format(self.pan),
+					_(
+						"Invalid PAN format '{0}'. PAN must be 10 characters (5 uppercase letters, 4 digits, 1 uppercase letter)."
+					).format(self.pan),
 					frappe.ValidationError,
 				)
 
@@ -42,7 +46,9 @@ class ClientOnboardingSubmission(Document):
 				clean_mobile = clean_mobile[2:]
 			if not (10 <= len(clean_mobile) <= 15 and clean_mobile.isdigit()):
 				frappe.throw(
-					_("Invalid Mobile Number '{0}'. Mobile number must contain between 10 and 15 digits.").format(self.mobile_no),
+					_(
+						"Invalid Mobile Number '{0}'. Mobile number must contain between 10 and 15 digits."
+					).format(self.mobile_no),
 					frappe.ValidationError,
 				)
 
