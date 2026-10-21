@@ -294,19 +294,13 @@ class TestCrmEnhancements(FrappeTestCase):
 		orig_timestamp = lead_db1.last_contacted_on
 
 		# Update remark with new text
-		res2 = save_contact_remark(
-			"Lead", lead.name, "Follow-up meeting scheduled for portfolio review."
-		)
+		res2 = save_contact_remark("Lead", lead.name, "Follow-up meeting scheduled for portfolio review.")
 		self.assertTrue(res2.get("success"))
-		self.assertEqual(
-			res2.get("latest_remark"), "Follow-up meeting scheduled for portfolio review."
-		)
+		self.assertEqual(res2.get("latest_remark"), "Follow-up meeting scheduled for portfolio review.")
 
 		lead_db2 = frappe.get_doc("Lead", lead.name)
 		# Verifies that it replaced rather than appended
-		self.assertEqual(
-			lead_db2.latest_remark, "Follow-up meeting scheduled for portfolio review."
-		)
+		self.assertEqual(lead_db2.latest_remark, "Follow-up meeting scheduled for portfolio review.")
 		self.assertNotIn("Initial introductory call", lead_db2.latest_remark)
 		self.assertTrue(lead_db2.last_contacted_on >= orig_timestamp)
 
@@ -548,13 +542,15 @@ class TestCrmEnhancements(FrappeTestCase):
 		)
 
 		# Create linked task
-		task = frappe.get_doc({
-			"doctype": "Task",
-			"title": "Lead Deletion Task",
-			"related_lead": lead["name"],
-			"due_date": "2026-10-30",
-			"status": "Open",
-		}).insert(ignore_permissions=True)
+		task = frappe.get_doc(
+			{
+				"doctype": "Task",
+				"title": "Lead Deletion Task",
+				"related_lead": lead["name"],
+				"due_date": "2026-10-30",
+				"status": "Open",
+			}
+		).insert(ignore_permissions=True)
 
 		# Perform deletion
 		res = delete_crm_lead(lead["name"])
@@ -574,4 +570,3 @@ class TestCrmEnhancements(FrappeTestCase):
 		res = crm_logout()
 		self.assertEqual(res.get("status"), "ok")
 		self.assertEqual(res.get("message"), "Logged out successfully")
-

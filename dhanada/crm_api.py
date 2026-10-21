@@ -456,13 +456,17 @@ def save_contact_remark(doctype, name, remark):
 	"""
 	_check_crm_permission()
 	if doctype not in ("Lead", "Client"):
-		frappe.throw(_("Invalid document type for contact remark. Must be Lead or Client."), frappe.ValidationError)
+		frappe.throw(
+			_("Invalid document type for contact remark. Must be Lead or Client."), frappe.ValidationError
+		)
 
 	if not name or not frappe.db.exists(doctype, name):
 		frappe.throw(_("{0} '{1}' not found.").format(doctype, name), frappe.DoesNotExistError)
 
 	if not frappe.has_permission(doctype, "write", doc=name):
-		frappe.throw(_("You do not have write permission for this {0}.").format(doctype), frappe.PermissionError)
+		frappe.throw(
+			_("You do not have write permission for this {0}.").format(doctype), frappe.PermissionError
+		)
 
 	if not remark or not str(remark).strip():
 		frappe.throw(_("Remark cannot be empty."), frappe.ValidationError)
@@ -667,4 +671,3 @@ def delete_crm_lead(lead_name):
 	frappe.db.commit()
 
 	return {"status": "ok", "message": f"Lead {lead_name} deleted successfully"}
-

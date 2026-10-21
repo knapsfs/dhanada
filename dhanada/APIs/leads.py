@@ -44,9 +44,7 @@ def _resolve_lead_source(raw_source: str, default_source: str) -> str:
 		return default_source if frappe.db.exists("Lead Source", default_source) else source
 
 
-def _find_exact_duplicate_lead(
-	full_name: str, email: str, phone: str, product: str
-) -> str | None:
+def _find_exact_duplicate_lead(full_name: str, email: str, phone: str, product: str) -> str | None:
 	"""
 	Returns the name of an existing active Lead if and only if ALL relevant submitted
 	enquiry fields match:
