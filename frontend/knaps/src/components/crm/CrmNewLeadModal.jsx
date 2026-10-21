@@ -1,3 +1,4 @@
+import CrmSelect from './CrmSelect';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -140,30 +141,24 @@ export default function CrmNewLeadModal({ isOpen, onClose, onCreated, sources = 
                 <label className="block text-xs font-semibold text-gray-700 mb-1.5">
                   Product of Interest
                 </label>
-                <select
+                <CrmSelect
                   value={formData.product_interest}
-                  onChange={(e) => setFormData({ ...formData, product_interest: e.target.value })}
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 text-xs text-gray-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#032e92]/20 focus:border-[#032e92] transition-all cursor-pointer"
-                >
-                  {products.map((p) => (
-                    <option key={p} value={p}>{p}</option>
-                  ))}
-                </select>
+                  onChange={(val) => setFormData({ ...formData, product_interest: val })}
+                  options={products}
+                  placeholder="Select product..."
+                />
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-gray-700 mb-1.5">
                   Acquisition Source
                 </label>
-                <select
+                <CrmSelect
                   value={formData.source}
-                  onChange={(e) => setFormData({ ...formData, source: e.target.value })}
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 text-xs text-gray-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#032e92]/20 focus:border-[#032e92] transition-all cursor-pointer"
-                >
-                  {sources.map((s) => (
-                    <option key={s} value={s}>{s}</option>
-                  ))}
-                </select>
+                  onChange={(val) => setFormData({ ...formData, source: val })}
+                  options={sources}
+                  placeholder="Select source..."
+                />
               </div>
             </div>
 

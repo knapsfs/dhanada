@@ -5,7 +5,7 @@ import json
 
 import frappe
 from frappe import _
-from frappe.utils import getdate, now_datetime, nowdate
+from frappe.utils import get_datetime, getdate, now_datetime, nowdate
 
 import dhanada.lifecycle.api as lifecycle_api
 
@@ -113,6 +113,9 @@ def get_leads(status=None, search=None, product=None, limit=100):
 			"converted_client",
 			"creation",
 			"modified",
+			"last_contacted_on",
+			"last_contacted_by",
+			"latest_remark",
 		],
 		order_by="modified desc",
 		limit_page_length=int(limit),
@@ -135,8 +138,17 @@ def get_leads(status=None, search=None, product=None, limit=100):
 		for c in counts:
 			interaction_counts[c.related_lead] = c.cnt
 
+	now = now_datetime()
 	for l in leads:
 		l["interaction_count"] = interaction_counts.get(l.name, 0)
+		if l.get("last_contacted_on"):
+			contact_dt = get_datetime(l["last_contacted_on"])
+			days = (now - contact_dt).days
+			l["days_since_contact"] = days
+			l["is_contact_overdue"] = days >= 45
+		else:
+			l["days_since_contact"] = None
+			l["is_contact_overdue"] = False
 
 	return leads
 
@@ -149,6 +161,16 @@ def get_lead_details(lead_name):
 		frappe.throw(_("Lead {0} not found").format(lead_name))
 
 	lead = frappe.get_doc("Lead", lead_name).as_dict()
+
+	now = now_datetime()
+	if lead.get("last_contacted_on"):
+		contact_dt = get_datetime(lead["last_contacted_on"])
+		days = (now - contact_dt).days
+		lead["days_since_contact"] = days
+		lead["is_contact_overdue"] = days >= 45
+	else:
+		lead["days_since_contact"] = None
+		lead["is_contact_overdue"] = False
 
 	interactions = frappe.get_all(
 		"CRM Interaction",
@@ -277,8 +299,28 @@ def quick_log_interaction(
 	)
 	doc.insert(ignore_permissions=True)
 
+	server_time = doc.interaction_date or now_datetime()
 	if related_lead and frappe.db.exists("Lead", related_lead):
-		frappe.db.set_value("Lead", related_lead, "last_contacted_on", now_datetime())
+		frappe.db.set_value(
+			"Lead",
+			related_lead,
+			{
+				"last_contacted_on": server_time,
+				"last_contacted_by": frappe.session.user,
+				"latest_remark": summary.strip(),
+			},
+		)
+
+	if related_client and frappe.db.exists("Client", related_client):
+		frappe.db.set_value(
+			"Client",
+			related_client,
+			{
+				"last_contacted_on": server_time,
+				"last_contacted_by": frappe.session.user,
+				"latest_remark": summary.strip(),
+			},
+		)
 
 	return doc.as_dict()
 
@@ -298,7 +340,7 @@ def get_clients(search=None, limit=100):
 			["Client", "name", "like", s],
 		]
 
-	return frappe.get_all(
+	clients = frappe.get_all(
 		"Client",
 		or_filters=or_filters if or_filters else None,
 		fields=[
@@ -320,10 +362,155 @@ def get_clients(search=None, limit=100):
 			"total_invested_value",
 			"current_portfolio_value",
 			"creation",
+			"last_contacted_on",
+			"last_contacted_by",
+			"latest_remark",
 		],
 		order_by="creation desc",
 		limit_page_length=int(limit),
 	)
+
+	now = now_datetime()
+	for c in clients:
+		if c.get("last_contacted_on"):
+			contact_dt = get_datetime(c["last_contacted_on"])
+			days = (now - contact_dt).days
+			c["days_since_contact"] = days
+			c["is_contact_overdue"] = days >= 45
+		else:
+			c["days_since_contact"] = None
+			c["is_contact_overdue"] = False
+
+	return clients
+
+
+@frappe.whitelist()
+def get_client_details(client_name):
+	"""Returns full client details including interactions, tasks, and contact overdue info."""
+	_check_crm_permission()
+	if not frappe.db.exists("Client", client_name):
+		frappe.throw(_("Client {0} not found").format(client_name))
+
+	client = frappe.get_doc("Client", client_name).as_dict()
+
+	now = now_datetime()
+	if client.get("last_contacted_on"):
+		contact_dt = get_datetime(client["last_contacted_on"])
+		days = (now - contact_dt).days
+		client["days_since_contact"] = days
+		client["is_contact_overdue"] = days >= 45
+	else:
+		client["days_since_contact"] = None
+		client["is_contact_overdue"] = False
+
+	interactions = frappe.get_all(
+		"CRM Interaction",
+		filters={"related_client": client_name},
+		fields=[
+			"name",
+			"interaction_type",
+			"direction",
+			"interaction_date",
+			"logged_by",
+			"summary",
+			"details",
+			"outcome",
+			"next_step",
+		],
+		order_by="interaction_date desc",
+	)
+
+	tasks = frappe.get_all(
+		"Task",
+		filters={"related_client": client_name},
+		fields=[
+			"name",
+			"title",
+			"activity_type",
+			"priority",
+			"status",
+			"due_date",
+			"due_time",
+			"assigned_to",
+			"description",
+			"outcome",
+		],
+		order_by="due_date asc",
+	)
+
+	return {"client": client, "interactions": interactions, "tasks": tasks}
+
+
+@frappe.whitelist()
+def save_contact_remark(doctype, name, remark):
+	"""
+	Saves the latest contact remark for a Lead or Client.
+	- Validates doctype is 'Lead' or 'Client'
+	- Checks CRM and document write permission
+	- Validates remark is a non-empty string
+	- Replaces latest_remark with the new remark (does NOT append)
+	- Sets last_contacted_by = frappe.session.user
+	- Sets last_contacted_on = now_datetime() (authoritative server timestamp)
+	- Logs a CRM Interaction record
+	- Returns updated contact metadata and overdue status
+	"""
+	_check_crm_permission()
+	if doctype not in ("Lead", "Client"):
+		frappe.throw(_("Invalid document type for contact remark. Must be Lead or Client."), frappe.ValidationError)
+
+	if not name or not frappe.db.exists(doctype, name):
+		frappe.throw(_("{0} '{1}' not found.").format(doctype, name), frappe.DoesNotExistError)
+
+	if not frappe.has_permission(doctype, "write", doc=name):
+		frappe.throw(_("You do not have write permission for this {0}.").format(doctype), frappe.PermissionError)
+
+	if not remark or not str(remark).strip():
+		frappe.throw(_("Remark cannot be empty."), frappe.ValidationError)
+
+	clean_remark = str(remark).strip()
+	server_time = now_datetime()
+	current_user = frappe.session.user
+
+	frappe.db.set_value(
+		doctype,
+		name,
+		{
+			"latest_remark": clean_remark,
+			"last_contacted_by": current_user,
+			"last_contacted_on": server_time,
+		},
+	)
+
+	# Log interaction for audit trail
+	interaction_data = {
+		"doctype": "CRM Interaction",
+		"interaction_type": "Note",
+		"direction": "Outbound",
+		"interaction_date": server_time,
+		"summary": clean_remark,
+		"logged_by": current_user,
+	}
+	if doctype == "Lead":
+		interaction_data["related_lead"] = name
+	elif doctype == "Client":
+		interaction_data["related_client"] = name
+
+	try:
+		interaction_doc = frappe.get_doc(interaction_data)
+		interaction_doc.insert(ignore_permissions=True)
+	except Exception as e:
+		frappe.logger().error(f"Failed to log interaction for remark on {doctype} {name}: {e}")
+
+	return {
+		"success": True,
+		"doctype": doctype,
+		"name": name,
+		"latest_remark": clean_remark,
+		"last_contacted_by": current_user,
+		"last_contacted_on": str(server_time),
+		"days_since_contact": 0,
+		"is_contact_overdue": False,
+	}
 
 
 @frappe.whitelist()
@@ -452,3 +639,32 @@ def trigger_convert_to_client(lead_name):
 	"""Converts qualified lead to a full client."""
 	_check_crm_permission()
 	return lifecycle_api.convert_lead_to_client(lead_name)
+
+
+@frappe.whitelist(allow_guest=True)
+def crm_logout():
+	"""Logs out the user from Frappe Desk and CRM session, deleting the session from DB and cache."""
+	if frappe.session and frappe.session.user != "Guest":
+		if getattr(frappe.local, "login_manager", None):
+			frappe.local.login_manager.logout()
+		frappe.db.commit()
+	return {"status": "ok", "message": "Logged out successfully"}
+
+
+@frappe.whitelist()
+def delete_crm_lead(lead_name):
+	"""Deletes a lead and its associated interactions and tasks."""
+	_check_crm_permission()
+	if not lead_name or not frappe.db.exists("Lead", lead_name):
+		frappe.throw(_("Lead not found"))
+
+	# Delete linked interactions and tasks
+	frappe.db.delete("CRM Interaction", {"related_lead": lead_name})
+	frappe.db.delete("Task", {"related_lead": lead_name})
+
+	# Delete the Lead document
+	frappe.delete_doc("Lead", lead_name, ignore_permissions=True, force=True)
+	frappe.db.commit()
+
+	return {"status": "ok", "message": f"Lead {lead_name} deleted successfully"}
+

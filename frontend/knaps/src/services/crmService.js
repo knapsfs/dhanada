@@ -70,17 +70,53 @@ export const crmService = {
 	},
 
 	logout: async () => {
-		clearCsrfToken();
+		const csrfToken = await getCsrfToken().catch(() => "");
+		const headers = {
+			Accept: "application/json",
+		};
+		if (csrfToken) {
+			headers["X-Frappe-CSRF-Token"] = csrfToken;
+		}
+
 		try {
-			await fetch("/api/method/logout", {
+			await fetch("/api/method/dhanada.crm_api.crm_logout", {
 				method: "POST",
-				headers: { Accept: "application/json" },
+				headers,
 				credentials: "include",
 			});
 		} catch (e) {
-			console.warn("Logout request failed:", e);
+			console.warn("CRM logout POST failed, attempting GET:", e);
 		}
+
+		try {
+			await fetch("/api/method/dhanada.crm_api.crm_logout", {
+				method: "GET",
+				credentials: "include",
+			});
+		} catch (_) {}
+
+		try {
+			await fetch("/api/method/logout", {
+				method: "POST",
+				headers,
+				credentials: "include",
+			});
+		} catch (_) {}
+
 		clearCsrfToken();
+
+		if (typeof window !== "undefined" && window.frappe) {
+			if (window.frappe.session) {
+				window.frappe.session.user = "Guest";
+			}
+			window.frappe.csrf_token = null;
+		}
+
+		if (typeof document !== "undefined") {
+			document.cookie = "user_id=Guest; Path=/; Max-Age=612000;";
+			document.cookie = "system_user=no; Path=/; Max-Age=612000;";
+			document.cookie = "full_name=Guest; Path=/; Max-Age=612000;";
+		}
 	},
 
 	getBootstrap: () => fetchCrmApi("/api/method/dhanada.crm_api.get_crm_bootstrap"),
@@ -110,10 +146,24 @@ export const crmService = {
 	logInteraction: (data) =>
 		fetchCrmApi("/api/method/dhanada.crm_api.quick_log_interaction", "POST", data),
 
+	saveContactRemark: (doctype, name, remark) =>
+		fetchCrmApi("/api/method/dhanada.crm_api.save_contact_remark", "POST", {
+			doctype,
+			name,
+			remark,
+		}),
+
 	getClients: (params = {}) => {
 		const query = new URLSearchParams(params).toString();
 		return fetchCrmApi(`/api/method/dhanada.crm_api.get_clients?${query}`);
 	},
+
+	getClientDetails: (clientName) =>
+		fetchCrmApi(
+			`/api/method/dhanada.crm_api.get_client_details?client_name=${encodeURIComponent(
+				clientName
+			)}`
+		),
 
 	getTasks: (params = {}) => {
 		const query = new URLSearchParams(params).toString();
@@ -146,6 +196,11 @@ export const crmService = {
 
 	convertToClient: (leadName) =>
 		fetchCrmApi("/api/method/dhanada.crm_api.trigger_convert_to_client", "POST", {
+			lead_name: leadName,
+		}),
+
+	deleteLead: (leadName) =>
+		fetchCrmApi("/api/method/dhanada.crm_api.delete_crm_lead", "POST", {
 			lead_name: leadName,
 		}),
 };

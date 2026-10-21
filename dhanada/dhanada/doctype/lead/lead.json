@@ -32,6 +32,8 @@
   "source_detail",
   "assigned_to",
   "last_contacted_on",
+  "last_contacted_by",
+  "latest_remark",
   "next_follow_up",
   "disqualification_section",
   "lost_reason",
@@ -222,6 +224,19 @@
    "hidden": 1,
    "label": "Last Contacted On",
    "read_only": 1
+  },
+  {
+   "fieldname": "last_contacted_by",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Last Contacted By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "latest_remark",
+   "fieldtype": "Small Text",
+   "label": "Latest Remark"
   },
   {
    "fieldname": "next_follow_up",
