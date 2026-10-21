@@ -9,6 +9,7 @@ class RiskProfilerSubmission(Document):
 	def validate(self):
 		if not self.token:
 			import secrets
+
 			self.token = secrets.token_urlsafe(32)
 
 		if self.score is not None:

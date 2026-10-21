@@ -3,6 +3,7 @@
 
 import frappe
 from frappe.tests.utils import FrappeTestCase
+
 from dhanada.lifecycle.api import get_crm_dashboard_metrics
 
 
@@ -32,7 +33,7 @@ class TestCRMUI(FrappeTestCase):
 			"Families",
 			"Tasks",
 			"Renewals",
-			"Activities"
+			"Activities",
 		]
 		for sc in expected_shortcuts:
 			self.assertIn(sc, shortcut_labels, f"Expected shortcut '{sc}' in KNAPS CRM Workspace")
@@ -46,7 +47,7 @@ class TestCRMUI(FrappeTestCase):
 			"Converted Leads",
 			"Total Clients",
 			"Open Tasks",
-			"Upcoming Renewals"
+			"Upcoming Renewals",
 		]
 		for nc in expected_ncs:
 			self.assertIn(nc, nc_names, f"Expected Number Card '{nc}' in KNAPS CRM Workspace")
@@ -73,7 +74,7 @@ class TestCRMUI(FrappeTestCase):
 			"Families": ("DocType", "Family"),
 			"Tasks": ("DocType", "Task"),
 			"Renewals": ("DocType", "Renewal"),
-			"Activities": ("DocType", "CRM Interaction")
+			"Activities": ("DocType", "CRM Interaction"),
 		}
 
 		for label, (link_type, link_to) in expected_items.items():
@@ -95,7 +96,7 @@ class TestCRMUI(FrappeTestCase):
 			"converted_leads",
 			"total_clients",
 			"open_tasks",
-			"upcoming_renewals"
+			"upcoming_renewals",
 		]
 		for key in required_keys:
 			self.assertIn(key, metrics)
@@ -106,7 +107,9 @@ class TestCRMUI(FrappeTestCase):
 		self.assertEqual(metrics["interested_leads"], frappe.db.count("Lead", {"status": "Interested"}))
 		self.assertEqual(metrics["converted_leads"], frappe.db.count("Lead", {"status": "Converted"}))
 		self.assertEqual(metrics["total_clients"], frappe.db.count("Client"))
-		self.assertEqual(metrics["open_tasks"], frappe.db.count("Task", {"status": ["in", ["Open", "In Progress"]]}))
+		self.assertEqual(
+			metrics["open_tasks"], frappe.db.count("Task", {"status": ["in", ["Open", "In Progress"]]})
+		)
 		self.assertEqual(metrics["upcoming_renewals"], frappe.db.count("Renewal", {"status": "Upcoming"}))
 
 	def test_crm_dashboard_metrics_permissions_and_security(self):
@@ -139,7 +142,7 @@ class TestCRMUI(FrappeTestCase):
 			"Converted Leads": ("Lead", "Count"),
 			"Total Clients": ("Client", "Count"),
 			"Open Tasks": ("Task", "Count"),
-			"Upcoming Renewals": ("Renewal", "Count")
+			"Upcoming Renewals": ("Renewal", "Count"),
 		}
 
 		for name, (doctype, fn) in card_specs.items():
@@ -178,7 +181,9 @@ class TestCRMUI(FrappeTestCase):
 		self.assertEqual(crm_hook.get("logo"), "/assets/dhanada/images/CRM.jpg")
 
 		# 2. Verify Desktop Icon in database
-		self.assertTrue(frappe.db.exists("Desktop Icon", "KNAPS CRM"), "Desktop Icon for KNAPS CRM must exist")
+		self.assertTrue(
+			frappe.db.exists("Desktop Icon", "KNAPS CRM"), "Desktop Icon for KNAPS CRM must exist"
+		)
 		icon = frappe.get_doc("Desktop Icon", "KNAPS CRM")
 		self.assertEqual(icon.label, "KNAPS CRM")
 		self.assertEqual(icon.icon_type, "App")
@@ -190,11 +195,10 @@ class TestCRMUI(FrappeTestCase):
 
 		# 3. Verify bootinfo extension
 		from dhanada.setup.bootstrap import boot_knaps_crm
+
 		test_bootinfo = frappe._dict(
-			app_data=[
-				{"app_name": "dhanada", "app_title": "SIF", "workspaces": ["KNAPS CRM", "SIF"]}
-			],
-			desktop_icons=[]
+			app_data=[{"app_name": "dhanada", "app_title": "SIF", "workspaces": ["KNAPS CRM", "SIF"]}],
+			desktop_icons=[],
 		)
 		boot_knaps_crm(test_bootinfo)
 
@@ -210,4 +214,3 @@ class TestCRMUI(FrappeTestCase):
 		crm_desk_icon = next(d for d in test_bootinfo.desktop_icons if d["label"] == "KNAPS CRM")
 		self.assertEqual(crm_desk_icon["link"], "/desk/knaps-crm")
 		self.assertEqual(crm_desk_icon["logo_url"], "/assets/dhanada/images/CRM.jpg")
-

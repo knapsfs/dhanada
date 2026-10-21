@@ -41,7 +41,6 @@ class Family(Document):
 			return
 
 		seen_clients = set()
-		has_primary = False
 
 		for m in self.members:
 			if not m.client:
@@ -56,11 +55,9 @@ class Family(Document):
 
 			if m.client == self.primary_contact:
 				m.is_primary = 1
-				has_primary = True
 			elif m.is_primary:
 				# If user checked is_primary on someone else, update primary_contact
 				self.primary_contact = m.client
-				has_primary = True
 
 		# If primary contact was not found in the list, auto-add it
 		if self.primary_contact not in seen_clients:
@@ -92,7 +89,11 @@ class Family(Document):
 		if self.members:
 			for m in self.members:
 				if m.client:
-					frappe.db.set_value("Client", m.client, {
-						"family": self.name,
-						"family_role": m.role or "Member",
-					})
+					frappe.db.set_value(
+						"Client",
+						m.client,
+						{
+							"family": self.name,
+							"family_role": m.role or "Member",
+						},
+					)

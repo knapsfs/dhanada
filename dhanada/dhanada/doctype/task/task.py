@@ -29,10 +29,18 @@ class Task(Document):
 
 	def validate_associations(self):
 		if self.related_lead and not frappe.db.exists("Lead", self.related_lead):
-			frappe.throw(_("Related Lead '{0}' does not exist.").format(self.related_lead), frappe.DoesNotExistError)
+			frappe.throw(
+				_("Related Lead '{0}' does not exist.").format(self.related_lead), frappe.DoesNotExistError
+			)
 
 		if self.related_client and not frappe.db.exists("Client", self.related_client):
-			frappe.throw(_("Related Client '{0}' does not exist.").format(self.related_client), frappe.DoesNotExistError)
+			frappe.throw(
+				_("Related Client '{0}' does not exist.").format(self.related_client),
+				frappe.DoesNotExistError,
+			)
 
 		if self.related_family and not frappe.db.exists("Family", self.related_family):
-			frappe.throw(_("Related Family '{0}' does not exist.").format(self.related_family), frappe.DoesNotExistError)
+			frappe.throw(
+				_("Related Family '{0}' does not exist.").format(self.related_family),
+				frappe.DoesNotExistError,
+			)

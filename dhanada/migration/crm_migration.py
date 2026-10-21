@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 import re
+
 import frappe
 from frappe import _
 
@@ -17,7 +18,7 @@ def normalize_phone(raw_phone: str) -> str:
 		cleaned = cleaned[2:]
 	elif cleaned.startswith("0") and len(cleaned) == 11:
 		cleaned = cleaned[1:]
-	return cleaned if len(cleaned) >= 10 else cleaned
+	return cleaned
 
 
 def map_legacy_status(legacy_status: str) -> str:
@@ -39,7 +40,7 @@ def map_legacy_status(legacy_status: str) -> str:
 		"Disqualified": "Not Interested",
 		"Lost": "Not Interested",
 		"Junk": "Junk",
-		"Spam": "Junk"
+		"Spam": "Junk",
 	}
 	return status_map.get(legacy_status.strip(), "New")
 
@@ -58,20 +59,14 @@ def migrate_historical_crm_sources(dry_run: bool = True) -> dict:
 	Migrates unique sources from tabCRM Lead Source to tabLead Source.
 	Idempotent and safe.
 	"""
-	report = {
-		"total_legacy_sources": 0,
-		"migrated": [],
-		"skipped": [],
-		"errors": []
-	}
+	report = {"total_legacy_sources": 0, "migrated": [], "skipped": [], "errors": []}
 
 	if not frappe.db.exists("DocType", "CRM Lead Source"):
 		report["notice"] = "CRM Lead Source DocType not present in database."
 		return report
 
 	legacy_sources = frappe.db.sql(
-		"SELECT name, source_name, details FROM `tabCRM Lead Source`",
-		as_dict=True
+		"SELECT name, source_name, details FROM `tabCRM Lead Source`", as_dict=True
 	)
 	report["total_legacy_sources"] = len(legacy_sources)
 
@@ -86,12 +81,14 @@ def migrate_historical_crm_sources(dry_run: bool = True) -> dict:
 
 		try:
 			if not dry_run:
-				doc = frappe.get_doc({
-					"doctype": "Lead Source",
-					"source_name": s_name,
-					"is_active": 1,
-					"details": src.details or f"Migrated from CRM Lead Source: {s_name}"
-				})
+				doc = frappe.get_doc(
+					{
+						"doctype": "Lead Source",
+						"source_name": s_name,
+						"is_active": 1,
+						"details": src.details or f"Migrated from CRM Lead Source: {s_name}",
+					}
+				)
 				doc.insert(ignore_permissions=True)
 			report["migrated"].append(s_name)
 		except Exception as e:
@@ -113,7 +110,7 @@ def migrate_historical_crm_leads(dry_run: bool = True, include_test_records: boo
 		"reconciled": [],
 		"skipped_already_migrated": [],
 		"duplicates_skipped": [],
-		"failed": []
+		"failed": [],
 	}
 
 	if not frappe.db.exists("DocType", "CRM Lead"):
@@ -126,7 +123,7 @@ def migrate_historical_crm_leads(dry_run: bool = True, include_test_records: boo
 		SELECT * FROM `tabCRM Lead`
 		ORDER BY creation ASC
 		""",
-		as_dict=True
+		as_dict=True,
 	)
 	report["total_scanned"] = len(legacy_leads)
 
@@ -140,16 +137,12 @@ def migrate_historical_crm_leads(dry_run: bool = True, include_test_records: boo
 
 		# 2. Check if already migrated by legacy ID
 		existing_by_legacy_id = frappe.get_all(
-			"Lead",
-			filters={"legacy_crm_lead_id": lead_id},
-			fields=["name"],
-			limit=1
+			"Lead", filters={"legacy_crm_lead_id": lead_id}, fields=["name"], limit=1
 		)
 		if existing_by_legacy_id:
-			report["skipped_already_migrated"].append({
-				"legacy_id": lead_id,
-				"native_lead": existing_by_legacy_id[0].name
-			})
+			report["skipped_already_migrated"].append(
+				{"legacy_id": lead_id, "native_lead": existing_by_legacy_id[0].name}
+			)
 			continue
 
 		# 3. Extract and normalize fields
@@ -184,7 +177,7 @@ def migrate_historical_crm_leads(dry_run: bool = True, include_test_records: boo
 				filters={"email": email},
 				order_by="creation asc",
 				fields=["name", "legacy_crm_lead_id", "chatbot_conversation", "chat_context"],
-				limit=1
+				limit=1,
 			)
 			if matched:
 				target_lead = matched[0]
@@ -197,7 +190,7 @@ def migrate_historical_crm_leads(dry_run: bool = True, include_test_records: boo
 				filters={"mobile_no": ["like", f"%{last_10}"]},
 				order_by="creation asc",
 				fields=["name", "legacy_crm_lead_id", "chatbot_conversation", "chat_context"],
-				limit=1
+				limit=1,
 			)
 			if matched:
 				target_lead = matched[0]
@@ -229,11 +222,9 @@ def migrate_historical_crm_leads(dry_run: bool = True, include_test_records: boo
 						doc.flags.ignore_validate = True
 						doc.save()
 
-				report["reconciled"].append({
-					"legacy_id": lead_id,
-					"native_lead": target_lead.name,
-					"matched_on": match_type
-				})
+				report["reconciled"].append(
+					{"legacy_id": lead_id, "native_lead": target_lead.name, "matched_on": match_type}
+				)
 			else:
 				# Create new native Lead
 				doc_data = {
@@ -243,7 +234,9 @@ def migrate_historical_crm_leads(dry_run: bool = True, include_test_records: boo
 					"lead_name": full_name or first_name,
 					"email": email or None,
 					"mobile_no": phone or None,
-					"alternate_mobile_no": normalize_phone(crm_lead.phone) if crm_lead.phone != crm_lead.mobile_no else None,
+					"alternate_mobile_no": normalize_phone(crm_lead.phone)
+					if crm_lead.phone != crm_lead.mobile_no
+					else None,
 					"lead_type": lead_type,
 					"organization_name": org_name or None,
 					"status": status,
@@ -266,17 +259,11 @@ def migrate_historical_crm_leads(dry_run: bool = True, include_test_records: boo
 				else:
 					created_name = f"SIMULATED-LEAD-{lead_id}"
 
-				report["migrated"].append({
-					"legacy_id": lead_id,
-					"native_lead": created_name,
-					"email": email,
-					"status": status
-				})
+				report["migrated"].append(
+					{"legacy_id": lead_id, "native_lead": created_name, "email": email, "status": status}
+				)
 		except Exception as e:
-			report["failed"].append({
-				"legacy_id": lead_id,
-				"error": str(e)
-			})
+			report["failed"].append({"legacy_id": lead_id, "error": str(e)})
 
 	return report
 
@@ -285,13 +272,7 @@ def reconcile_chatbot_conversations(dry_run: bool = True) -> dict:
 	"""
 	Reconciles Chatbot Conversation references to point to native Lead documents.
 	"""
-	report = {
-		"dry_run": dry_run,
-		"total_conversations": 0,
-		"reconciled": [],
-		"skipped": [],
-		"unmatched": []
-	}
+	report = {"dry_run": dry_run, "total_conversations": 0, "reconciled": [], "skipped": [], "unmatched": []}
 
 	if not frappe.db.exists("DocType", "Chatbot Conversation"):
 		report["notice"] = "Chatbot Conversation DocType not found."
@@ -302,7 +283,7 @@ def reconcile_chatbot_conversations(dry_run: bool = True) -> dict:
 		SELECT name, user_name, email, lead_id, conversation_url
 		FROM `tabChatbot Conversation`
 		""",
-		as_dict=True
+		as_dict=True,
 	)
 	report["total_conversations"] = len(conversations)
 
@@ -312,11 +293,9 @@ def reconcile_chatbot_conversations(dry_run: bool = True) -> dict:
 
 		# If already pointing to native LEAD-...
 		if clean_ref.startswith("LEAD-") and frappe.db.exists("Lead", clean_ref):
-			report["skipped"].append({
-				"conversation": conv.name,
-				"lead": clean_ref,
-				"reason": "Already native Lead"
-			})
+			report["skipped"].append(
+				{"conversation": conv.name, "lead": clean_ref, "reason": "Already native Lead"}
+			)
 			continue
 
 		# Try resolving native Lead:
@@ -325,10 +304,7 @@ def reconcile_chatbot_conversations(dry_run: bool = True) -> dict:
 		# 1. By legacy_crm_lead_id
 		if clean_ref:
 			matches = frappe.get_all(
-				"Lead",
-				filters={"legacy_crm_lead_id": clean_ref},
-				fields=["name"],
-				limit=1
+				"Lead", filters={"legacy_crm_lead_id": clean_ref}, fields=["name"], limit=1
 			)
 			if matches:
 				target_native_lead = matches[0].name
@@ -336,10 +312,7 @@ def reconcile_chatbot_conversations(dry_run: bool = True) -> dict:
 		# 2. By email match
 		if not target_native_lead and conv.email:
 			matches = frappe.get_all(
-				"Lead",
-				filters={"email": conv.email.strip().lower()},
-				fields=["name"],
-				limit=1
+				"Lead", filters={"email": conv.email.strip().lower()}, fields=["name"], limit=1
 			)
 			if matches:
 				target_native_lead = matches[0].name
@@ -349,23 +322,16 @@ def reconcile_chatbot_conversations(dry_run: bool = True) -> dict:
 				frappe.db.set_value(
 					"Chatbot Conversation",
 					conv.name,
-					{
-						"lead_id": target_native_lead,
-						"conversation_url": target_native_lead
-					},
-					update_modified=False
+					{"lead_id": target_native_lead, "conversation_url": target_native_lead},
+					update_modified=False,
 				)
-			report["reconciled"].append({
-				"conversation": conv.name,
-				"original_ref": raw_lead_ref,
-				"native_lead": target_native_lead
-			})
+			report["reconciled"].append(
+				{"conversation": conv.name, "original_ref": raw_lead_ref, "native_lead": target_native_lead}
+			)
 		else:
-			report["unmatched"].append({
-				"conversation": conv.name,
-				"original_ref": raw_lead_ref,
-				"email": conv.email
-			})
+			report["unmatched"].append(
+				{"conversation": conv.name, "original_ref": raw_lead_ref, "email": conv.email}
+			)
 
 	return report
 
@@ -378,7 +344,9 @@ def run_full_crm_migration(dry_run: bool = True, include_test_records: bool = Fa
 	frappe.db.begin()
 	try:
 		sources_report = migrate_historical_crm_sources(dry_run=dry_run)
-		leads_report = migrate_historical_crm_leads(dry_run=dry_run, include_test_records=include_test_records)
+		leads_report = migrate_historical_crm_leads(
+			dry_run=dry_run, include_test_records=include_test_records
+		)
 		convs_report = reconcile_chatbot_conversations(dry_run=dry_run)
 
 		result = {
@@ -387,7 +355,7 @@ def run_full_crm_migration(dry_run: bool = True, include_test_records: bool = Fa
 			"sources": sources_report,
 			"leads": leads_report,
 			"conversations": convs_report,
-			"status": "success"
+			"status": "success",
 		}
 
 		if dry_run:
@@ -399,8 +367,4 @@ def run_full_crm_migration(dry_run: bool = True, include_test_records: bool = Fa
 	except Exception as err:
 		frappe.db.rollback()
 		frappe.logger().error(f"CRM migration aborted due to error: {err!s}")
-		return {
-			"dry_run": dry_run,
-			"status": "error",
-			"error": str(err)
-		}
+		return {"dry_run": dry_run, "status": "error", "error": str(err)}

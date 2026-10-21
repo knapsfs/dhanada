@@ -12,56 +12,91 @@ frappe.ui.form.on("Client", {
 		const risk = frm.doc.risk_profile || "Not Assessed";
 		const rm = frm.doc.client_owner || "Unassigned";
 		frm.dashboard.set_headline(
-			__("<b>KYC Status:</b> {0} | <b>Risk Profile:</b> {1} | <b>Relationship Manager:</b> {2}", [kyc, risk, rm]),
+			__(
+				"<b>KYC Status:</b> {0} | <b>Risk Profile:</b> {1} | <b>Relationship Manager:</b> {2}",
+				[kyc, risk, rm]
+			),
 			kyc === "Verified" ? "green" : "orange"
 		);
 
 		// 2. Navigation
 		if (frm.doc.lead) {
-			frm.add_custom_button(__("View Original Lead ↗"), () => {
-				frappe.set_route("Form", "Lead", frm.doc.lead);
-			}, __("Navigation"));
+			frm.add_custom_button(
+				__("View Original Lead ↗"),
+				() => {
+					frappe.set_route("Form", "Lead", frm.doc.lead);
+				},
+				__("Navigation")
+			);
 		}
 
 		if (frm.doc.family) {
-			frm.add_custom_button(__("View Family Group ↗"), () => {
-				frappe.set_route("Form", "Family", frm.doc.family);
-			}, __("Navigation"));
+			frm.add_custom_button(
+				__("View Family Group ↗"),
+				() => {
+					frappe.set_route("Form", "Family", frm.doc.family);
+				},
+				__("Navigation")
+			);
 		}
 
 		// 3. Related Operations & Activities
-		frm.add_custom_button(__("+ Add Task"), () => {
-			frappe.new_doc("Task", {
-				related_client: frm.doc.name,
-				assigned_to: frm.doc.client_owner || frappe.session.user
-			});
-		}, __("Activities"));
+		frm.add_custom_button(
+			__("+ Add Task"),
+			() => {
+				frappe.new_doc("Task", {
+					related_client: frm.doc.name,
+					assigned_to: frm.doc.client_owner || frappe.session.user,
+				});
+			},
+			__("Activities")
+		);
 
-		frm.add_custom_button(__("View Tasks"), () => {
-			frappe.set_route("List", "Task", { related_client: frm.doc.name });
-		}, __("Activities"));
+		frm.add_custom_button(
+			__("View Tasks"),
+			() => {
+				frappe.set_route("List", "Task", { related_client: frm.doc.name });
+			},
+			__("Activities")
+		);
 
-		frm.add_custom_button(__("+ Log Activity"), () => {
-			frappe.new_doc("CRM Interaction", {
-				related_client: frm.doc.name,
-				logged_by: frappe.session.user
-			});
-		}, __("Activities"));
+		frm.add_custom_button(
+			__("+ Log Activity"),
+			() => {
+				frappe.new_doc("CRM Interaction", {
+					related_client: frm.doc.name,
+					logged_by: frappe.session.user,
+				});
+			},
+			__("Activities")
+		);
 
-		frm.add_custom_button(__("View Activities"), () => {
-			frappe.set_route("List", "CRM Interaction", { related_client: frm.doc.name });
-		}, __("Activities"));
+		frm.add_custom_button(
+			__("View Activities"),
+			() => {
+				frappe.set_route("List", "CRM Interaction", { related_client: frm.doc.name });
+			},
+			__("Activities")
+		);
 
-		frm.add_custom_button(__("+ Add Renewal"), () => {
-			frappe.new_doc("Renewal", {
-				client: frm.doc.name,
-				relationship_manager: frm.doc.client_owner || frappe.session.user
-			});
-		}, __("Renewals"));
+		frm.add_custom_button(
+			__("+ Add Renewal"),
+			() => {
+				frappe.new_doc("Renewal", {
+					client: frm.doc.name,
+					relationship_manager: frm.doc.client_owner || frappe.session.user,
+				});
+			},
+			__("Renewals")
+		);
 
-		frm.add_custom_button(__("View Renewals"), () => {
-			frappe.set_route("List", "Renewal", { client: frm.doc.name });
-		}, __("Renewals"));
+		frm.add_custom_button(
+			__("View Renewals"),
+			() => {
+				frappe.set_route("List", "Renewal", { client: frm.doc.name });
+			},
+			__("Renewals")
+		);
 	},
 
 	client_type(frm) {
@@ -99,8 +134,11 @@ frappe.ui.form.on("Client", {
 		const isIndividual = frm.doc.client_type === "Individual";
 		const isOrganization = frm.doc.client_type === "Organization";
 
-		frm.toggle_display(["salutation", "first_name", "last_name", "gender", "dob"], isIndividual);
+		frm.toggle_display(
+			["salutation", "first_name", "last_name", "gender", "dob"],
+			isIndividual
+		);
 		frm.toggle_reqd("first_name", isIndividual);
 		frm.toggle_display(["incorporation_date", "organization"], isOrganization);
-	}
+	},
 });

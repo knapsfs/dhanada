@@ -27,7 +27,7 @@ extend_bootinfo = ["dhanada.setup.bootstrap.boot_knaps_crm"]
 # Apps
 # ------------------
 
-required_apps = ["crm"]
+required_apps = []
 
 # Each item in the list will be shown as an app in the apps page
 # add_to_apps_screen = [

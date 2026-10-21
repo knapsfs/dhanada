@@ -6,6 +6,7 @@ import re
 import secrets
 import smtplib
 import socket
+
 import frappe
 from frappe import _
 from frappe.utils import get_datetime, now_datetime, nowdate, validate_email_address
@@ -97,6 +98,7 @@ def validate_lead_permission(lead_doc, ptype="write"):
 
 	try:
 		from frappe.desk.form.assign_to import get
+
 		assigned = [d.get("owner") for d in get({"doctype": "Lead", "name": lead_doc.name})]
 		if user in assigned:
 			return True
@@ -115,6 +117,7 @@ def get_outgoing_email_account():
 	Returns EmailAccount doc or None without exposing credentials.
 	"""
 	from frappe.email.doctype.email_account.email_account import EmailAccount
+
 	return EmailAccount.find_outgoing(_raise_error=False)
 
 
@@ -176,7 +179,9 @@ def send_welcome_message(lead_id):
 	email = (lead.email or "").strip().lower()
 	if not email or "@" not in email:
 		frappe.throw(
-			_("Lead has no valid email address to receive the welcome email. Found: '{0}'.").format(lead.email or "None"),
+			_("Lead has no valid email address to receive the welcome email. Found: '{0}'.").format(
+				lead.email or "None"
+			),
 			frappe.ValidationError,
 		)
 
@@ -201,12 +206,16 @@ def send_welcome_message(lead_id):
 	)
 	if in_flight:
 		if isinstance(in_flight, dict):
-			diff_secs = (now_datetime() - get_datetime(in_flight.get("modified"))).total_seconds() if in_flight.get("modified") else 0
+			diff_secs = (
+				(now_datetime() - get_datetime(in_flight.get("modified"))).total_seconds()
+				if in_flight.get("modified")
+				else 0
+			)
 			if diff_secs <= 120:
 				frappe.throw(
-					_("A welcome email for this lead is currently being transmitted ({0}). Please wait a moment.").format(
-						in_flight.get("name")
-					),
+					_(
+						"A welcome email for this lead is currently being transmitted ({0}). Please wait a moment."
+					).format(in_flight.get("name")),
 					frappe.DuplicateEntryError,
 				)
 			else:
@@ -215,9 +224,9 @@ def send_welcome_message(lead_id):
 				frappe.db.commit()
 		else:
 			frappe.throw(
-				_("A welcome email for this lead is currently being transmitted ({0}). Please wait a moment.").format(
-					in_flight
-				),
+				_(
+					"A welcome email for this lead is currently being transmitted ({0}). Please wait a moment."
+				).format(in_flight),
 				frappe.DuplicateEntryError,
 			)
 
@@ -225,7 +234,9 @@ def send_welcome_message(lead_id):
 	outgoing_account = get_outgoing_email_account()
 	if not outgoing_account:
 		frappe.throw(
-			_("Cannot send welcome email: No enabled outgoing Email Account is configured in Frappe. An administrator must configure an outgoing Email Account in Settings > Email Account."),
+			_(
+				"Cannot send welcome email: No enabled outgoing Email Account is configured in Frappe. An administrator must configure an outgoing Email Account in Settings > Email Account."
+			),
 			frappe.OutgoingEmailError,
 		)
 
@@ -234,19 +245,21 @@ def send_welcome_message(lead_id):
 	if frappe.db.exists("Email Template", template_name):
 		email_template = frappe.get_doc("Email Template", template_name)
 		context = lead.as_dict()
-		context.update({
-			"first_name": lead.first_name or lead.lead_name or "Valued Investor",
-			"lead_name": lead.lead_name or lead.first_name or "Valued Investor",
-			"assigned_to": lead.assigned_to or "KNAPS Advisory Team",
-		})
+		context.update(
+			{
+				"first_name": lead.first_name or lead.lead_name or "Valued Investor",
+				"lead_name": lead.lead_name or lead.first_name or "Valued Investor",
+				"assigned_to": lead.assigned_to or "KNAPS Advisory Team",
+			}
+		)
 		formatted = email_template.get_formatted_email(context)
 		subject = formatted.get("subject")
 		content = formatted.get("message")
 	else:
 		subject = _("Welcome to KNAPS — Exclusive Investment Opportunities")
-		content = f"""<p>Dear {lead.first_name or lead.lead_name or 'Valued Investor'},</p>
+		content = f"""<p>Dear {lead.first_name or lead.lead_name or "Valued Investor"},</p>
 		<p>Thank you for connecting with <strong>KNAPS</strong>. We specialize in bespoke investment solutions designed to help you preserve and grow your wealth.</p>
-		<p>Your dedicated investment representative (<strong>{lead.assigned_to or 'KNAPS Advisory Team'}</strong>) will follow up with you shortly to understand your investment goals.</p>
+		<p>Your dedicated investment representative (<strong>{lead.assigned_to or "KNAPS Advisory Team"}</strong>) will follow up with you shortly to understand your investment goals.</p>
 		<p><em>Note: This is an introductory email. No investment has been made or committed at this stage.</em></p>"""
 
 	# Reuse existing failed or pending Email Queue record if retrying (avoids duplicate Email Queue rows)
@@ -295,7 +308,6 @@ def send_welcome_message(lead_id):
 			)
 
 	queue_id = queue_entry.name if queue_entry else None
-	delivery_status = "Queued"
 	smtp_sent = False
 	smtp_error_message = None
 
@@ -308,31 +320,30 @@ def send_welcome_message(lead_id):
 			curr_status = getattr(queue_entry, "status", None)
 			if curr_status == "Sent":
 				smtp_sent = True
-				delivery_status = "Sent"
 			elif curr_status in ("Error", "Not Sent"):
 				rec_error = getattr(queue_entry, "error", None)
 				if rec_error and isinstance(rec_error, str) and rec_error.strip():
 					smtp_error_message = rec_error
 		except smtplib.SMTPAuthenticationError as auth_err:
-			smtp_error_message = (
-				_("SMTP Authentication Failed ({0}). "
-				  "If 2-Step Verification is enabled on your Gmail account, a 16-character Google App Password "
-				  "must be configured in Frappe Settings > Email Account.").format(str(auth_err))
-			)
+			smtp_error_message = _(
+				"SMTP Authentication Failed ({0}). "
+				"If 2-Step Verification is enabled on your Gmail account, a 16-character Google App Password "
+				"must be configured in Frappe Settings > Email Account."
+			).format(str(auth_err))
 			frappe.log_error(title="Welcome Email SMTP Delivery Failure", message=frappe.get_traceback())
-		except (smtplib.SMTPConnectError, socket.error, TimeoutError) as conn_err:
-			smtp_error_message = (
-				_("SMTP Connection Failed: Unable to connect to outgoing email server ({0}). "
-				  "Please verify server host, port, TLS/SSL configuration, and network connectivity.").format(str(conn_err))
-			)
+		except (smtplib.SMTPConnectError, OSError) as conn_err:
+			smtp_error_message = _(
+				"SMTP Connection Failed: Unable to connect to outgoing email server ({0}). "
+				"Please verify server host, port, TLS/SSL configuration, and network connectivity."
+			).format(str(conn_err))
 			frappe.log_error(title="Welcome Email SMTP Delivery Failure", message=frappe.get_traceback())
 		except frappe.OutgoingEmailError as out_err:
 			err_str = str(out_err)
 			if "535" in err_str or "authentication" in err_str.lower():
-				smtp_error_message = (
-					_("SMTP Authentication Failed: The email server rejected credentials. "
-					  "If 2-Step Verification is enabled on Gmail, a 16-character Google App Password "
-					  "must be configured in Frappe Settings > Email Account.")
+				smtp_error_message = _(
+					"SMTP Authentication Failed: The email server rejected credentials. "
+					"If 2-Step Verification is enabled on Gmail, a 16-character Google App Password "
+					"must be configured in Frappe Settings > Email Account."
 				)
 			else:
 				smtp_error_message = err_str
@@ -340,16 +351,16 @@ def send_welcome_message(lead_id):
 		except Exception as smtp_err:
 			err_str = str(smtp_err)
 			if "535" in err_str or "authentication" in err_str.lower():
-				smtp_error_message = (
-					_("SMTP Authentication Failed: The email server rejected credentials. "
-					  "If 2-Step Verification is enabled on Gmail, a 16-character Google App Password "
-					  "must be configured in Frappe Settings > Email Account.")
+				smtp_error_message = _(
+					"SMTP Authentication Failed: The email server rejected credentials. "
+					"If 2-Step Verification is enabled on Gmail, a 16-character Google App Password "
+					"must be configured in Frappe Settings > Email Account."
 				)
 			elif "connection" in err_str.lower() or "timeout" in err_str.lower():
-				smtp_error_message = (
-					_("SMTP Connection Failed: Unable to connect to outgoing email server ({0}). "
-					  "Please verify server host, port, TLS/SSL configuration, and network connectivity.").format(err_str)
-				)
+				smtp_error_message = _(
+					"SMTP Connection Failed: Unable to connect to outgoing email server ({0}). "
+					"Please verify server host, port, TLS/SSL configuration, and network connectivity."
+				).format(err_str)
 			else:
 				smtp_error_message = err_str
 			frappe.log_error(title="Welcome Email SMTP Delivery Failure", message=frappe.get_traceback())
@@ -378,9 +389,13 @@ def send_welcome_message(lead_id):
 		lead.save()
 		frappe.db.commit()
 
-		clean_err = smtp_error_message.strip().splitlines()[-1] if "\n" in smtp_error_message else smtp_error_message
+		clean_err = (
+			smtp_error_message.strip().splitlines()[-1] if "\n" in smtp_error_message else smtp_error_message
+		)
 		frappe.throw(
-			_("Failed to deliver welcome email via SMTP: {0}. Please verify email settings and retry.").format(clean_err),
+			_(
+				"Failed to deliver welcome email via SMTP: {0}. Please verify email settings and retry."
+			).format(clean_err),
 			frappe.OutgoingEmailError,
 		)
 	else:
@@ -397,7 +412,9 @@ def send_welcome_message(lead_id):
 			"delivery_status": "Queued",
 			"email_queue": queue_id,
 			"recipient": email,
-			"message": _("Welcome email accepted by Frappe and queued for delivery via '{0}'. Delivery is pending background transmission.").format(outgoing_account.name),
+			"message": _(
+				"Welcome email accepted by Frappe and queued for delivery via '{0}'. Delivery is pending background transmission."
+			).format(outgoing_account.name),
 		}
 
 
@@ -430,7 +447,9 @@ def validate_lead_doc(doc, method=None):
 		)
 		if not has_ob or not has_rp:
 			frappe.throw(
-				_("Cannot mark lead as Converted: Both Onboarding and Risk Profiler submissions must be completed and verified before conversion."),
+				_(
+					"Cannot mark lead as Converted: Both Onboarding and Risk Profiler submissions must be completed and verified before conversion."
+				),
 				frappe.ValidationError,
 			)
 		convert_lead_to_client(doc.name)
@@ -458,7 +477,9 @@ def update_lead_interest(lead_id, interest_status, reason=None):
 	allowed_statuses = ("New", "Interested", "Not Interested", "Nurturing", "Converted", "Junk")
 	if interest_status not in allowed_statuses:
 		frappe.throw(
-			_("Invalid status '{0}'. Expected one of: {1}").format(interest_status, ", ".join(allowed_statuses)),
+			_("Invalid status '{0}'. Expected one of: {1}").format(
+				interest_status, ", ".join(allowed_statuses)
+			),
 			frappe.ValidationError,
 		)
 
@@ -471,14 +492,18 @@ def update_lead_interest(lead_id, interest_status, reason=None):
 	# Prevent modifying already converted leads
 	if lead.status == "Converted" and lead.converted_client:
 		frappe.throw(
-			_("Cannot modify status: Lead has already been Converted to Client '{0}'.").format(lead.converted_client),
+			_("Cannot modify status: Lead has already been Converted to Client '{0}'.").format(
+				lead.converted_client
+			),
 			frappe.ValidationError,
 		)
 
 	# Direct change to Converted requires verified submissions and client conversion flow
 	if interest_status == "Converted":
 		frappe.throw(
-			_("Cannot mark status as Converted directly. Lead conversion requires verified client onboarding and risk profiling."),
+			_(
+				"Cannot mark status as Converted directly. Lead conversion requires verified client onboarding and risk profiling."
+			),
 			frappe.ValidationError,
 		)
 
@@ -540,7 +565,9 @@ def send_onboarding_and_risk_profiler(lead_id):
 	# Check status eligibility (must be Interested or Nurturing)
 	if lead.status not in ("Interested", "Nurturing"):
 		frappe.throw(
-			_("Cannot send onboarding. Lead status must be 'Interested' or 'Nurturing'. Current: '{0}'.").format(lead.status),
+			_(
+				"Cannot send onboarding. Lead status must be 'Interested' or 'Nurturing'. Current: '{0}'."
+			).format(lead.status),
 			frappe.ValidationError,
 		)
 
@@ -555,7 +582,9 @@ def send_onboarding_and_risk_profiler(lead_id):
 	email = (lead.email or "").strip().lower()
 	if not email or "@" not in email:
 		frappe.throw(
-			_("Lead has no valid email address to receive onboarding links. Found: '{0}'.").format(lead.email or "None"),
+			_("Lead has no valid email address to receive onboarding links. Found: '{0}'.").format(
+				lead.email or "None"
+			),
 			frappe.ValidationError,
 		)
 
@@ -580,12 +609,16 @@ def send_onboarding_and_risk_profiler(lead_id):
 	)
 	if in_flight:
 		if isinstance(in_flight, dict):
-			diff_secs = (now_datetime() - get_datetime(in_flight.get("modified"))).total_seconds() if in_flight.get("modified") else 0
+			diff_secs = (
+				(now_datetime() - get_datetime(in_flight.get("modified"))).total_seconds()
+				if in_flight.get("modified")
+				else 0
+			)
 			if diff_secs <= 120:
 				frappe.throw(
-					_("An onboarding email for this lead is currently being transmitted ({0}). Please wait a moment.").format(
-						in_flight.get("name")
-					),
+					_(
+						"An onboarding email for this lead is currently being transmitted ({0}). Please wait a moment."
+					).format(in_flight.get("name")),
 					frappe.DuplicateEntryError,
 				)
 			else:
@@ -593,9 +626,9 @@ def send_onboarding_and_risk_profiler(lead_id):
 				frappe.db.commit()
 		else:
 			frappe.throw(
-				_("An onboarding email for this lead is currently being transmitted ({0}). Please wait a moment.").format(
-					in_flight
-				),
+				_(
+					"An onboarding email for this lead is currently being transmitted ({0}). Please wait a moment."
+				).format(in_flight),
 				frappe.DuplicateEntryError,
 			)
 
@@ -603,7 +636,9 @@ def send_onboarding_and_risk_profiler(lead_id):
 	outgoing_account = get_outgoing_email_account()
 	if not outgoing_account:
 		frappe.throw(
-			_("Cannot send onboarding email: No enabled outgoing Email Account is configured in Frappe. An administrator must configure an outgoing Email Account in Settings > Email Account."),
+			_(
+				"Cannot send onboarding email: No enabled outgoing Email Account is configured in Frappe. An administrator must configure an outgoing Email Account in Settings > Email Account."
+			),
 			frappe.OutgoingEmailError,
 		)
 
@@ -616,7 +651,6 @@ def send_onboarding_and_risk_profiler(lead_id):
 	)
 	if existing_ob:
 		ob_token = existing_ob[0].token
-		ob_docname = existing_ob[0].name
 	else:
 		ob_token = secrets.token_urlsafe(32)
 		clean_mobile = normalize_mobile(lead.mobile_no) or ""
@@ -636,7 +670,6 @@ def send_onboarding_and_risk_profiler(lead_id):
 		)
 		ob_doc.flags.ignore_validate = True
 		ob_doc.insert(ignore_permissions=True)
-		ob_docname = ob_doc.name
 
 	# 2. Retrieve or generate Risk Profiler Submission record
 	existing_rp = frappe.get_all(
@@ -647,7 +680,6 @@ def send_onboarding_and_risk_profiler(lead_id):
 	)
 	if existing_rp:
 		rp_token = existing_rp[0].token
-		rp_docname = existing_rp[0].name
 	else:
 		rp_token = ob_token
 		rp_doc = frappe.get_doc(
@@ -662,7 +694,6 @@ def send_onboarding_and_risk_profiler(lead_id):
 			}
 		)
 		rp_doc.insert(ignore_permissions=True)
-		rp_docname = rp_doc.name
 
 	# Secure tokenized URLs without sensitive data
 	onboarding_url = f"/onboarding?token={ob_token}"
@@ -673,19 +704,21 @@ def send_onboarding_and_risk_profiler(lead_id):
 	if frappe.db.exists("Email Template", template_name):
 		email_template = frappe.get_doc("Email Template", template_name)
 		context = lead.as_dict()
-		context.update({
-			"first_name": lead.first_name or lead.lead_name or "Valued Investor",
-			"lead_name": lead.lead_name or lead.first_name or "Valued Investor",
-			"onboarding_url": onboarding_url,
-			"risk_profiler_url": risk_profiler_url,
-		})
+		context.update(
+			{
+				"first_name": lead.first_name or lead.lead_name or "Valued Investor",
+				"lead_name": lead.lead_name or lead.first_name or "Valued Investor",
+				"onboarding_url": onboarding_url,
+				"risk_profiler_url": risk_profiler_url,
+			}
+		)
 		formatted = email_template.get_formatted_email(context)
 		subject = formatted.get("subject")
 		content = formatted.get("message")
 	else:
 		subject = _("KNAPS Investor Onboarding & Risk Assessment")
 		content = f"""<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1f2937;">
-			<p>Dear {lead.first_name or lead.lead_name or 'Valued Investor'},</p>
+			<p>Dear {lead.first_name or lead.lead_name or "Valued Investor"},</p>
 			<p>Please complete your onboarding and risk assessment using the secure links below:</p>
 			<p>1. <a href="{onboarding_url}">Client Onboarding Form</a></p>
 			<p>2. <a href="{risk_profiler_url}">Investor Risk Assessment</a></p>
@@ -752,13 +785,13 @@ def send_onboarding_and_risk_profiler(lead_id):
 				if rec_err and isinstance(rec_err, str) and rec_err.strip():
 					ob_smtp_error = rec_err
 		except smtplib.SMTPAuthenticationError as auth_err:
-			ob_smtp_error = (
-				_("SMTP Authentication Failed ({0}). "
-				  "If 2-Step Verification is enabled on Gmail, a 16-character Google App Password "
-				  "must be configured in Settings > Email Account.").format(str(auth_err))
-			)
+			ob_smtp_error = _(
+				"SMTP Authentication Failed ({0}). "
+				"If 2-Step Verification is enabled on Gmail, a 16-character Google App Password "
+				"must be configured in Settings > Email Account."
+			).format(str(auth_err))
 			frappe.log_error(title="Onboarding Email SMTP Failure", message=frappe.get_traceback())
-		except (smtplib.SMTPConnectError, socket.error, TimeoutError) as conn_err:
+		except (smtplib.SMTPConnectError, OSError) as conn_err:
 			ob_smtp_error = _("SMTP Connection Failed: {0}").format(str(conn_err))
 			frappe.log_error(title="Onboarding Email SMTP Failure", message=frappe.get_traceback())
 		except frappe.OutgoingEmailError as out_err:
@@ -771,7 +804,9 @@ def send_onboarding_and_risk_profiler(lead_id):
 	if ob_smtp_error:
 		clean_err = ob_smtp_error.strip().splitlines()[-1] if "\n" in ob_smtp_error else ob_smtp_error
 		frappe.throw(
-			_("Failed to deliver onboarding email via SMTP: {0}. Please verify email settings and retry.").format(clean_err),
+			_(
+				"Failed to deliver onboarding email via SMTP: {0}. Please verify email settings and retry."
+			).format(clean_err),
 			frappe.OutgoingEmailError,
 		)
 
@@ -790,7 +825,9 @@ def send_onboarding_and_risk_profiler(lead_id):
 	delivery_msg = (
 		_("Onboarding and Risk Profiler email accepted by SMTP server for delivery to {0}.").format(email)
 		if ob_smtp_sent
-		else _("Onboarding and Risk Profiler email queued for delivery via '{0}'.").format(outgoing_account.name)
+		else _("Onboarding and Risk Profiler email queued for delivery via '{0}'.").format(
+			outgoing_account.name
+		)
 	)
 
 	return {
@@ -841,7 +878,9 @@ def submit_client_onboarding(token, payload=None):
 		if not lead_match:
 			lead_match = frappe.db.get_value("Risk Profiler Submission", {"token": token}, "lead")
 		if lead_match:
-			submission_name = frappe.db.get_value("Client Onboarding Submission", {"lead": lead_match}, "name")
+			submission_name = frappe.db.get_value(
+				"Client Onboarding Submission", {"lead": lead_match}, "name"
+			)
 
 	if not submission_name:
 		frappe.throw(_("Invalid or expired onboarding submission token."), frappe.DoesNotExistError)
@@ -886,9 +925,13 @@ def submit_client_onboarding(token, payload=None):
 	sub_doc.country = payload.get("country") or sub_doc.country or "India"
 	sub_doc.investor_category = payload.get("investor_category") or sub_doc.investor_category or "Retail"
 	sub_doc.investment_horizon = payload.get("investment_horizon") or sub_doc.investment_horizon or ""
-	sub_doc.investment_experience = payload.get("investment_experience") or sub_doc.investment_experience or ""
+	sub_doc.investment_experience = (
+		payload.get("investment_experience") or sub_doc.investment_experience or ""
+	)
 	sub_doc.investment_capacity = payload.get("investment_capacity") or sub_doc.investment_capacity or ""
-	sub_doc.investment_objectives = payload.get("investment_objectives") or sub_doc.investment_objectives or ""
+	sub_doc.investment_objectives = (
+		payload.get("investment_objectives") or sub_doc.investment_objectives or ""
+	)
 	sub_doc.kyc_status = payload.get("kyc_status") or "In Progress"
 	sub_doc.pan_verification_status = "Verified"
 	sub_doc.status = "Submitted"
@@ -1081,11 +1124,15 @@ def convert_lead_to_client(lead_id):
 	# Also check if a Client record already points to this lead
 	existing_client = frappe.db.get_value("Client", {"lead": lead_id}, "name")
 	if existing_client:
-		frappe.db.set_value("Lead", lead_id, {
-			"converted_client": existing_client,
-			"converted_on": now_datetime(),
-			"status": "Converted",
-		})
+		frappe.db.set_value(
+			"Lead",
+			lead_id,
+			{
+				"converted_client": existing_client,
+				"converted_on": now_datetime(),
+				"status": "Converted",
+			},
+		)
 		frappe.db.commit()
 		return {
 			"success": True,
@@ -1130,7 +1177,9 @@ def convert_lead_to_client(lead_id):
 	)
 	if not ob_records:
 		frappe.throw(
-			_("Cannot convert lead: Onboarding submission is incomplete or missing. Status remains '{0}'.").format(lead.status),
+			_(
+				"Cannot convert lead: Onboarding submission is incomplete or missing. Status remains '{0}'."
+			).format(lead.status),
 			frappe.ValidationError,
 		)
 	ob_data = ob_records[0]
@@ -1151,7 +1200,9 @@ def convert_lead_to_client(lead_id):
 	)
 	if not rp_records:
 		frappe.throw(
-			_("Cannot convert lead: Risk Profiler assessment is incomplete or missing. Status remains '{0}'.").format(lead.status),
+			_(
+				"Cannot convert lead: Risk Profiler assessment is incomplete or missing. Status remains '{0}'."
+			).format(lead.status),
 			frappe.ValidationError,
 		)
 	rp_data = rp_records[0]
@@ -1311,4 +1362,3 @@ def get_crm_dashboard_metrics():
 		"open_tasks": open_tasks,
 		"upcoming_renewals": upcoming_renewals,
 	}
-

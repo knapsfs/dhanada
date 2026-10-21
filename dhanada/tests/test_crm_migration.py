@@ -3,13 +3,14 @@
 
 import frappe
 from frappe.tests.utils import FrappeTestCase
+
 from dhanada.migration.crm_migration import (
 	map_legacy_status,
-	normalize_phone,
-	migrate_historical_crm_sources,
 	migrate_historical_crm_leads,
+	migrate_historical_crm_sources,
+	normalize_phone,
 	reconcile_chatbot_conversations,
-	run_full_crm_migration
+	run_full_crm_migration,
 )
 
 
@@ -105,7 +106,7 @@ class TestCRMMigration(FrappeTestCase):
 		frappe.db.begin()
 		try:
 			# First run
-			report_1 = migrate_historical_crm_leads(dry_run=False, include_test_records=False)
+			migrate_historical_crm_leads(dry_run=False, include_test_records=False)
 
 			# Second run
 			report_2 = migrate_historical_crm_leads(dry_run=False, include_test_records=False)
@@ -123,16 +124,18 @@ class TestCRMMigration(FrappeTestCase):
 		frappe.db.begin()
 		try:
 			# Insert dummy legacy lead with missing name and unknown status
-			dummy_crm_lead = frappe.get_doc({
-				"doctype": "CRM Lead",
-				"first_name": "",
-				"last_name": "",
-				"lead_name": "",
-				"email": "orphan.test@example.com",
-				"mobile_no": "",
-				"status": "Weird Status",
-				"source": "NonExistentSource"
-			})
+			dummy_crm_lead = frappe.get_doc(
+				{
+					"doctype": "CRM Lead",
+					"first_name": "",
+					"last_name": "",
+					"lead_name": "",
+					"email": "orphan.test@example.com",
+					"mobile_no": "",
+					"status": "Weird Status",
+					"source": "NonExistentSource",
+				}
+			)
 			dummy_crm_lead.flags.ignore_permissions = True
 			dummy_crm_lead.flags.ignore_mandatory = True
 			dummy_crm_lead.flags.ignore_links = True
@@ -141,7 +144,9 @@ class TestCRMMigration(FrappeTestCase):
 			report = migrate_historical_crm_leads(dry_run=False, include_test_records=True)
 
 			# Find migrated entry
-			migrated_entry = next((m for m in report["migrated"] if m["legacy_id"] == dummy_crm_lead.name), None)
+			migrated_entry = next(
+				(m for m in report["migrated"] if m["legacy_id"] == dummy_crm_lead.name), None
+			)
 			self.assertIsNotNone(migrated_entry)
 			self.assertEqual(migrated_entry["status"], "New")
 
@@ -160,25 +165,29 @@ class TestCRMMigration(FrappeTestCase):
 		frappe.db.begin()
 		try:
 			# Create a test conversation referencing a legacy lead
-			test_conv = frappe.get_doc({
-				"doctype": "Chatbot Conversation",
-				"user_name": "Test Conv User",
-				"email": "conv.test.user@example.com",
-				"conversation_url": "CRM-LEAD-2026-99999",
-				"lead_id": "CRM-LEAD-2026-99999",
-			})
+			test_conv = frappe.get_doc(
+				{
+					"doctype": "Chatbot Conversation",
+					"user_name": "Test Conv User",
+					"email": "conv.test.user@example.com",
+					"conversation_url": "CRM-LEAD-2026-99999",
+					"lead_id": "CRM-LEAD-2026-99999",
+				}
+			)
 			test_conv.flags.ignore_permissions = True
 			test_conv.flags.ignore_links = True
 			test_conv.insert(ignore_permissions=True)
 
 			# Create native lead matching that email
-			test_lead = frappe.get_doc({
-				"doctype": "Lead",
-				"first_name": "Test Conv User",
-				"email": "conv.test.user@example.com",
-				"status": "New",
-				"legacy_crm_lead_id": "CRM-LEAD-2026-99999"
-			})
+			test_lead = frappe.get_doc(
+				{
+					"doctype": "Lead",
+					"first_name": "Test Conv User",
+					"email": "conv.test.user@example.com",
+					"status": "New",
+					"legacy_crm_lead_id": "CRM-LEAD-2026-99999",
+				}
+			)
 			test_lead.insert(ignore_permissions=True)
 
 			# Run reconciliation

@@ -10,30 +10,40 @@ frappe.listview_settings["Renewal"] = {
 		"status",
 		"relationship_manager",
 		"reminder_schedule",
-		"reminder_count"
+		"reminder_count",
 	],
 
 	get_indicator(doc) {
 		const colors = {
-			"Upcoming": "blue",
+			Upcoming: "blue",
 			"In Progress": "orange",
-			"Renewed": "green",
-			"Lapsed": "red",
-			"Cancelled": "darkgrey"
+			Renewed: "green",
+			Lapsed: "red",
+			Cancelled: "darkgrey",
 		};
 		const color = colors[doc.status] || "grey";
 		return [__(doc.status), color, "status,=," + doc.status];
 	},
 
 	onload(listview) {
-		listview.page.add_inner_button(__("Upcoming"), () => {
-			listview.filter_area.clear();
-			listview.filter_area.add([["Renewal", "status", "=", "Upcoming"]]);
-		}, __("Filter"));
+		listview.page.add_inner_button(
+			__("Upcoming"),
+			() => {
+				listview.filter_area.clear();
+				listview.filter_area.add([["Renewal", "status", "=", "Upcoming"]]);
+			},
+			__("Filter")
+		);
 
-		listview.page.add_inner_button(__("My Renewals"), () => {
-			listview.filter_area.clear();
-			listview.filter_area.add([["Renewal", "relationship_manager", "=", frappe.session.user]]);
-		}, __("Filter"));
-	}
+		listview.page.add_inner_button(
+			__("My Renewals"),
+			() => {
+				listview.filter_area.clear();
+				listview.filter_area.add([
+					["Renewal", "relationship_manager", "=", frappe.session.user],
+				]);
+			},
+			__("Filter")
+		);
+	},
 };

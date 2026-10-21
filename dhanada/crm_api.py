@@ -2,9 +2,11 @@
 # For license information, please see license.txt
 
 import json
+
 import frappe
 from frappe import _
-from frappe.utils import now_datetime, getdate, nowdate
+from frappe.utils import getdate, now_datetime, nowdate
+
 import dhanada.lifecycle.api as lifecycle_api
 
 
@@ -18,20 +20,29 @@ def get_crm_bootstrap():
 	"""Returns the user session context, metrics, and filter options."""
 	_check_crm_permission()
 	user = frappe.get_doc("User", frappe.session.user)
-	
+
 	metrics = {}
 	try:
 		metrics = lifecycle_api.get_crm_dashboard_metrics()
 	except Exception as e:
 		frappe.logger().error(f"Error fetching CRM metrics: {e}")
 		metrics = {
-			"total_leads": 0, "new_leads": 0, "interested_leads": 0,
-			"converted_leads": 0, "total_clients": 0, "open_tasks": 0, "upcoming_renewals": 0
+			"total_leads": 0,
+			"new_leads": 0,
+			"interested_leads": 0,
+			"converted_leads": 0,
+			"total_clients": 0,
+			"open_tasks": 0,
+			"upcoming_renewals": 0,
 		}
 
 	# Canonical Sources
 	sources = frappe.get_all("Lead Source", fields=["source_name"], order_by="source_name asc")
-	source_list = [s.source_name for s in sources] if sources else ["Website Form", "Website Chatbot", "WhatsApp", "Referral", "Manual"]
+	source_list = (
+		[s.source_name for s in sources]
+		if sources
+		else ["Website Form", "Website Chatbot", "WhatsApp", "Referral", "Manual"]
+	)
 
 	return {
 		"user": {
@@ -52,8 +63,8 @@ def get_crm_bootstrap():
 			"Fixed Deposits",
 			"Recurring Deposits",
 			"Small Savings Schemes",
-			"General Financial Advisory"
-		]
+			"General Financial Advisory",
+		],
 	}
 
 
@@ -83,26 +94,44 @@ def get_leads(status=None, search=None, product=None, limit=100):
 		filters=filters,
 		or_filters=or_filters if or_filters else None,
 		fields=[
-			"name", "lead_name", "status", "email", "mobile_no", "source",
-			"product_interest", "notes", "city", "investment_amount_range",
-			"investment_horizon", "risk_profile", "risk_score",
-			"welcome_email_status", "onboarding_status", "risk_profiler_status",
-			"converted_client", "creation", "modified"
+			"name",
+			"lead_name",
+			"status",
+			"email",
+			"mobile_no",
+			"source",
+			"product_interest",
+			"notes",
+			"city",
+			"investment_amount_range",
+			"investment_horizon",
+			"risk_profile",
+			"risk_score",
+			"welcome_email_status",
+			"onboarding_status",
+			"risk_profiler_status",
+			"converted_client",
+			"creation",
+			"modified",
 		],
 		order_by="modified desc",
-		limit_page_length=int(limit)
+		limit_page_length=int(limit),
 	)
 
 	# Fetch interaction count for each lead
 	lead_names = [l.name for l in leads]
 	interaction_counts = {}
 	if lead_names:
-		counts = frappe.db.sql("""
+		counts = frappe.db.sql(
+			"""
 			SELECT related_lead, count(name) as cnt
 			FROM `tabCRM Interaction`
 			WHERE related_lead IN %(leads)s
 			GROUP BY related_lead
-		""", {"leads": lead_names}, as_dict=True)
+		""",
+			{"leads": lead_names},
+			as_dict=True,
+		)
 		for c in counts:
 			interaction_counts[c.related_lead] = c.cnt
 
@@ -125,27 +154,38 @@ def get_lead_details(lead_name):
 		"CRM Interaction",
 		filters={"related_lead": lead_name},
 		fields=[
-			"name", "interaction_type", "direction", "interaction_date",
-			"logged_by", "summary", "details", "outcome", "next_step"
+			"name",
+			"interaction_type",
+			"direction",
+			"interaction_date",
+			"logged_by",
+			"summary",
+			"details",
+			"outcome",
+			"next_step",
 		],
-		order_by="interaction_date desc"
+		order_by="interaction_date desc",
 	)
 
 	tasks = frappe.get_all(
 		"Task",
 		filters={"related_lead": lead_name},
 		fields=[
-			"name", "title", "activity_type", "priority", "status",
-			"due_date", "due_time", "assigned_to", "description", "outcome"
+			"name",
+			"title",
+			"activity_type",
+			"priority",
+			"status",
+			"due_date",
+			"due_time",
+			"assigned_to",
+			"description",
+			"outcome",
 		],
-		order_by="due_date asc"
+		order_by="due_date asc",
 	)
 
-	return {
-		"lead": lead,
-		"interactions": interactions,
-		"tasks": tasks
-	}
+	return {"lead": lead, "interactions": interactions, "tasks": tasks}
 
 
 @frappe.whitelist()
@@ -155,17 +195,21 @@ def create_crm_lead(lead_name, mobile_no, email=None, product_interest=None, sou
 	if not lead_name or not mobile_no:
 		frappe.throw(_("Lead Name and Mobile Number are required."))
 
-	doc = frappe.get_doc({
-		"doctype": "Lead",
-		"lead_name": str(lead_name).strip(),
-		"mobile_no": str(mobile_no).strip(),
-		"email": str(email).strip() if email else "",
-		"product_interest": str(product_interest).strip() if product_interest else "General Financial Advisory",
-		"source": str(source).strip() if source else "Manual",
-		"notes": str(notes).strip() if notes else "",
-		"status": "New",
-		"assigned_to": frappe.session.user
-	})
+	doc = frappe.get_doc(
+		{
+			"doctype": "Lead",
+			"lead_name": str(lead_name).strip(),
+			"mobile_no": str(mobile_no).strip(),
+			"email": str(email).strip() if email else "",
+			"product_interest": str(product_interest).strip()
+			if product_interest
+			else "General Financial Advisory",
+			"source": str(source).strip() if source else "Manual",
+			"notes": str(notes).strip() if notes else "",
+			"status": "New",
+			"assigned_to": frappe.session.user,
+		}
+	)
 	doc.insert(ignore_permissions=True)
 	return doc.as_dict()
 
@@ -184,40 +228,53 @@ def update_crm_lead_status(lead_name, status, reason=None):
 	doc.save(ignore_permissions=True)
 
 	# Log interaction noting the status update
-	frappe.get_doc({
-		"doctype": "CRM Interaction",
-		"related_lead": lead_name,
-		"interaction_type": "Note",
-		"direction": "Outbound",
-		"interaction_date": now_datetime(),
-		"logged_by": frappe.session.user,
-		"summary": f"Lead status updated to {status}",
-		"details": f"Status updated via KNAPS CRM by {frappe.session.user}. Reason: {reason or 'None'}"
-	}).insert(ignore_permissions=True)
+	frappe.get_doc(
+		{
+			"doctype": "CRM Interaction",
+			"related_lead": lead_name,
+			"interaction_type": "Note",
+			"direction": "Outbound",
+			"interaction_date": now_datetime(),
+			"logged_by": frappe.session.user,
+			"summary": f"Lead status updated to {status}",
+			"details": f"Status updated via KNAPS CRM by {frappe.session.user}. Reason: {reason or 'None'}",
+		}
+	).insert(ignore_permissions=True)
 
 	return doc.as_dict()
 
 
 @frappe.whitelist()
-def quick_log_interaction(related_lead=None, related_client=None, interaction_type="Phone Call", direction="Outbound", summary="", details="", outcome="", next_step=None):
+def quick_log_interaction(
+	related_lead=None,
+	related_client=None,
+	interaction_type="Phone Call",
+	direction="Outbound",
+	summary="",
+	details="",
+	outcome="",
+	next_step=None,
+):
 	"""Logs a CRM Interaction and updates the last contacted date."""
 	_check_crm_permission()
 	if not summary:
 		frappe.throw(_("Summary is required to log an interaction."))
 
-	doc = frappe.get_doc({
-		"doctype": "CRM Interaction",
-		"related_lead": related_lead or None,
-		"related_client": related_client or None,
-		"interaction_type": interaction_type,
-		"direction": direction,
-		"interaction_date": now_datetime(),
-		"logged_by": frappe.session.user,
-		"summary": summary,
-		"details": details or "",
-		"outcome": outcome or "",
-		"next_step": next_step or ""
-	})
+	doc = frappe.get_doc(
+		{
+			"doctype": "CRM Interaction",
+			"related_lead": related_lead or None,
+			"related_client": related_client or None,
+			"interaction_type": interaction_type,
+			"direction": direction,
+			"interaction_date": now_datetime(),
+			"logged_by": frappe.session.user,
+			"summary": summary,
+			"details": details or "",
+			"outcome": outcome or "",
+			"next_step": next_step or "",
+		}
+	)
 	doc.insert(ignore_permissions=True)
 
 	if related_lead and frappe.db.exists("Lead", related_lead):
@@ -245,13 +302,27 @@ def get_clients(search=None, limit=100):
 		"Client",
 		or_filters=or_filters if or_filters else None,
 		fields=[
-			"name", "client_name", "client_type", "client_status", "email",
-			"mobile_no", "pan", "kyc_status", "city", "state", "lead",
-			"family", "family_role", "investor_category", "risk_profile",
-			"total_invested_value", "current_portfolio_value", "creation"
+			"name",
+			"client_name",
+			"client_type",
+			"client_status",
+			"email",
+			"mobile_no",
+			"pan",
+			"kyc_status",
+			"city",
+			"state",
+			"lead",
+			"family",
+			"family_role",
+			"investor_category",
+			"risk_profile",
+			"total_invested_value",
+			"current_portfolio_value",
+			"creation",
 		],
 		order_by="creation desc",
-		limit_page_length=int(limit)
+		limit_page_length=int(limit),
 	)
 
 
@@ -267,12 +338,21 @@ def get_tasks(status=None, limit=100):
 		"Task",
 		filters=filters,
 		fields=[
-			"name", "title", "activity_type", "priority", "status",
-			"due_date", "due_time", "assigned_to", "related_lead",
-			"related_client", "description", "outcome"
+			"name",
+			"title",
+			"activity_type",
+			"priority",
+			"status",
+			"due_date",
+			"due_time",
+			"assigned_to",
+			"related_lead",
+			"related_client",
+			"description",
+			"outcome",
 		],
 		order_by="due_date asc",
-		limit_page_length=int(limit)
+		limit_page_length=int(limit),
 	)
 
 
@@ -291,26 +371,37 @@ def update_task_status(task_name, status, outcome=None):
 
 
 @frappe.whitelist()
-def create_crm_task(title, activity_type="Follow-up Call", priority="Medium", due_date=None, due_time=None, related_lead=None, related_client=None, description=""):
+def create_crm_task(
+	title,
+	activity_type="Follow-up Call",
+	priority="Medium",
+	due_date=None,
+	due_time=None,
+	related_lead=None,
+	related_client=None,
+	description="",
+):
 	"""Creates a new Task."""
 	_check_crm_permission()
 	if not title:
 		frappe.throw(_("Task title is required."))
 
-	doc = frappe.get_doc({
-		"doctype": "Task",
-		"title": title,
-		"activity_type": activity_type,
-		"priority": priority,
-		"status": "Open",
-		"due_date": due_date or nowdate(),
-		"due_time": due_time or "10:00:00",
-		"assigned_to": frappe.session.user,
-		"assigned_by": frappe.session.user,
-		"related_lead": related_lead or None,
-		"related_client": related_client or None,
-		"description": description or ""
-	})
+	doc = frappe.get_doc(
+		{
+			"doctype": "Task",
+			"title": title,
+			"activity_type": activity_type,
+			"priority": priority,
+			"status": "Open",
+			"due_date": due_date or nowdate(),
+			"due_time": due_time or "10:00:00",
+			"assigned_to": frappe.session.user,
+			"assigned_by": frappe.session.user,
+			"related_lead": related_lead or None,
+			"related_client": related_client or None,
+			"description": description or "",
+		}
+	)
 	doc.insert(ignore_permissions=True)
 	return doc.as_dict()
 
@@ -327,11 +418,18 @@ def get_renewals(status=None, limit=100):
 		"Renewal",
 		filters=filters,
 		fields=[
-			"name", "client", "client_name", "family", "product_name",
-			"renewal_date", "relationship_manager", "status", "notes"
+			"name",
+			"client",
+			"client_name",
+			"family",
+			"product_name",
+			"renewal_date",
+			"relationship_manager",
+			"status",
+			"notes",
 		],
 		order_by="renewal_date asc",
-		limit_page_length=int(limit)
+		limit_page_length=int(limit),
 	)
 
 

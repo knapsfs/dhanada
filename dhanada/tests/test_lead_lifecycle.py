@@ -61,17 +61,19 @@ class TestLeadLifecycle(FrappeTestCase):
 		email="testlead@example.com",
 		status="New",
 	):
-		lead = frappe.get_doc({
-			"doctype": "Lead",
-			"first_name": first_name,
-			"last_name": last_name,
-			"lead_name": f"{first_name} {last_name}".strip(),
-			"mobile_no": mobile,
-			"email": email,
-			"status": status,
-			"source": "Website",
-			"assigned_to": "Administrator",
-		})
+		lead = frappe.get_doc(
+			{
+				"doctype": "Lead",
+				"first_name": first_name,
+				"last_name": last_name,
+				"lead_name": f"{first_name} {last_name}".strip(),
+				"mobile_no": mobile,
+				"email": email,
+				"status": status,
+				"source": "Website",
+				"assigned_to": "Administrator",
+			}
+		)
 		lead.insert(ignore_permissions=True)
 		self.test_leads.append(lead.name)
 		return lead
@@ -255,24 +257,30 @@ class TestLeadLifecycle(FrappeTestCase):
 			update_lead_interest(lead.name, "Interested")
 
 	def test_cannot_modify_status_of_already_converted_lead(self):
-		client = frappe.get_doc({
-			"doctype": "Client",
-			"first_name": "Existing",
-			"last_name": "Client",
-			"client_name": "Existing Client",
-			"email": "client@example.com",
-			"mobile_no": "9876543299",
-			"pan": "ABCDE1111A",
-			"pan_verification_status": "Verified",
-			"client_owner": "Administrator",
-		}).insert(ignore_permissions=True)
+		client = frappe.get_doc(
+			{
+				"doctype": "Client",
+				"first_name": "Existing",
+				"last_name": "Client",
+				"client_name": "Existing Client",
+				"email": "client@example.com",
+				"mobile_no": "9876543299",
+				"pan": "ABCDE1111A",
+				"pan_verification_status": "Verified",
+				"client_owner": "Administrator",
+			}
+		).insert(ignore_permissions=True)
 		self.test_clients.append(client.name)
 
 		lead = self.create_test_lead()
-		frappe.db.set_value("Lead", lead.name, {
-			"converted_client": client.name,
-			"status": "Converted",
-		})
+		frappe.db.set_value(
+			"Lead",
+			lead.name,
+			{
+				"converted_client": client.name,
+				"status": "Converted",
+			},
+		)
 		lead.reload()
 
 		with self.assertRaises(frappe.ValidationError):
@@ -372,25 +380,31 @@ class TestLeadLifecycle(FrappeTestCase):
 
 		# Invalid PAN
 		with self.assertRaises(frappe.ValidationError):
-			submit_client_onboarding(token, {
-				"full_name": "Test Lead",
-				"pan": "INVALIDPAN",
-				"email": "test@example.com",
-				"mobile_no": "9876543210",
-			})
+			submit_client_onboarding(
+				token,
+				{
+					"full_name": "Test Lead",
+					"pan": "INVALIDPAN",
+					"email": "test@example.com",
+					"mobile_no": "9876543210",
+				},
+			)
 
 		# Valid submission
-		valid_res = submit_client_onboarding(token, {
-			"full_name": "Test Lead",
-			"pan": "ABCDE1234F",
-			"email": "test@example.com",
-			"mobile_no": "9876543210",
-			"address_line1": "123 Business Bay",
-			"city": "Mumbai",
-			"state": "Maharashtra",
-			"pincode": "400001",
-			"country": "India",
-		})
+		valid_res = submit_client_onboarding(
+			token,
+			{
+				"full_name": "Test Lead",
+				"pan": "ABCDE1234F",
+				"email": "test@example.com",
+				"mobile_no": "9876543210",
+				"address_line1": "123 Business Bay",
+				"city": "Mumbai",
+				"state": "Maharashtra",
+				"pincode": "400001",
+				"country": "India",
+			},
+		)
 		self.assertTrue(valid_res.get("success"))
 
 		lead.reload()
@@ -407,16 +421,19 @@ class TestLeadLifecycle(FrappeTestCase):
 		token = res.get("token")
 
 		# Submit valid risk profile
-		res_rp = submit_risk_profile_for_lead(token, {
-			"score": 15,
-			"answers": [
-				{"question": "Investment Horizon", "score": 3},
-				{"question": "Risk Tolerance", "score": 3},
-				{"question": "Volatility Comfort", "score": 3},
-				{"question": "Financial Knowledge", "score": 3},
-				{"question": "Liquidity Need", "score": 3},
-			],
-		})
+		res_rp = submit_risk_profile_for_lead(
+			token,
+			{
+				"score": 15,
+				"answers": [
+					{"question": "Investment Horizon", "score": 3},
+					{"question": "Risk Tolerance", "score": 3},
+					{"question": "Volatility Comfort", "score": 3},
+					{"question": "Financial Knowledge", "score": 3},
+					{"question": "Liquidity Need", "score": 3},
+				],
+			},
+		)
 		self.assertTrue(res_rp.get("success"))
 		self.assertEqual(res_rp.get("risk_profile"), "Moderate")
 
@@ -456,16 +473,19 @@ class TestLeadLifecycle(FrappeTestCase):
 		token = res.get("token")
 
 		# Submit only onboarding
-		submit_client_onboarding(token, {
-			"full_name": "Incomplete Client",
-			"pan": "ABCDE5678H",
-			"email": "inc@example.com",
-			"mobile_no": "9876543211",
-			"address_line1": "456 High Street",
-			"city": "Bengaluru",
-			"state": "Karnataka",
-			"pincode": "560001",
-		})
+		submit_client_onboarding(
+			token,
+			{
+				"full_name": "Incomplete Client",
+				"pan": "ABCDE5678H",
+				"email": "inc@example.com",
+				"mobile_no": "9876543211",
+				"address_line1": "456 High Street",
+				"city": "Bengaluru",
+				"state": "Karnataka",
+				"pincode": "560001",
+			},
+		)
 
 		# Conversion must fail
 		with self.assertRaises(frappe.ValidationError):
@@ -486,21 +506,27 @@ class TestLeadLifecycle(FrappeTestCase):
 		token = res.get("token")
 
 		# Complete both
-		submit_client_onboarding(token, {
-			"full_name": "Rohan Sharma",
-			"pan": "ABCDE9999Z",
-			"email": "rohan.verified@example.com",
-			"mobile_no": "+919876543222",
-			"address_line1": "78 Marine Drive",
-			"city": "Mumbai",
-			"state": "Maharashtra",
-			"pincode": "400020",
-			"country": "India",
-		})
-		submit_risk_profile_for_lead(token, {
-			"score": 38,
-			"risk_profile": "Aggressive",
-		})
+		submit_client_onboarding(
+			token,
+			{
+				"full_name": "Rohan Sharma",
+				"pan": "ABCDE9999Z",
+				"email": "rohan.verified@example.com",
+				"mobile_no": "+919876543222",
+				"address_line1": "78 Marine Drive",
+				"city": "Mumbai",
+				"state": "Maharashtra",
+				"pincode": "400020",
+				"country": "India",
+			},
+		)
+		submit_risk_profile_for_lead(
+			token,
+			{
+				"score": 38,
+				"risk_profile": "Aggressive",
+			},
+		)
 
 		# Convert
 		conv_res = convert_lead_to_client(lead.name)
@@ -539,16 +565,19 @@ class TestLeadLifecycle(FrappeTestCase):
 				res = send_onboarding_and_risk_profiler(lead.name)
 		token = res.get("token")
 
-		submit_client_onboarding(token, {
-			"full_name": "Pooja Verma",
-			"pan": "ABCDE8888Y",
-			"email": "pooja@example.com",
-			"mobile_no": "9876543233",
-			"address_line1": "12 Residency Road",
-			"city": "Pune",
-			"state": "Maharashtra",
-			"pincode": "411001",
-		})
+		submit_client_onboarding(
+			token,
+			{
+				"full_name": "Pooja Verma",
+				"pan": "ABCDE8888Y",
+				"email": "pooja@example.com",
+				"mobile_no": "9876543233",
+				"address_line1": "12 Residency Road",
+				"city": "Pune",
+				"state": "Maharashtra",
+				"pincode": "411001",
+			},
+		)
 		submit_risk_profile_for_lead(token, {"score": 20})
 
 		conv_res1 = convert_lead_to_client(lead.name)
@@ -590,7 +619,9 @@ class TestLeadLifecycle(FrappeTestCase):
 		lead = self.create_test_lead()
 		mock_queue = MagicMock()
 		mock_queue.name = "EMQ-AUTH-0001"
-		mock_queue.send.side_effect = smtplib.SMTPAuthenticationError(535, b"5.7.8 Username and Password not accepted")
+		mock_queue.send.side_effect = smtplib.SMTPAuthenticationError(
+			535, b"5.7.8 Username and Password not accepted"
+		)
 
 		with patch("dhanada.lifecycle.api.get_outgoing_email_account", return_value=get_mock_email_account()):
 			with patch("frappe.sendmail", return_value=mock_queue):
@@ -669,6 +700,7 @@ class TestLeadLifecycle(FrappeTestCase):
 		mock_queue.status = "Sent"
 
 		orig_get_value = frappe.db.get_value
+
 		def mock_db_get_value(*args, **kwargs):
 			if args and args[0] == "Email Queue":
 				if kwargs.get("as_dict") or (len(args) > 2 and isinstance(args[2], list)):
@@ -677,6 +709,7 @@ class TestLeadLifecycle(FrappeTestCase):
 			return orig_get_value(*args, **kwargs)
 
 		orig_get_doc = frappe.get_doc
+
 		def mock_get_doc(*args, **kwargs):
 			if args and args[0] == "Email Queue":
 				return mock_queue
@@ -735,20 +768,23 @@ class TestLeadLifecycle(FrappeTestCase):
 		lead.save()
 
 		orig_get_value = frappe.db.get_value
+
 		def mock_queue_sent(*args, **kwargs):
 			if args and args[0] == "Email Queue":
 				return {"name": "EMQ-HOOK-001", "status": "Sent", "modified": frappe.utils.now_datetime()}
 			return orig_get_value(*args, **kwargs)
 
-		eq_doc = frappe._dict({
-			"doctype": "Email Queue",
-			"name": "EMQ-HOOK-001",
-			"reference_doctype": "Lead",
-			"reference_name": lead.name,
-			"status": "Sent",
-			"modified": frappe.utils.now_datetime(),
-			"message": "KNAPS Lead Welcome Email",
-		})
+		eq_doc = frappe._dict(
+			{
+				"doctype": "Email Queue",
+				"name": "EMQ-HOOK-001",
+				"reference_doctype": "Lead",
+				"reference_name": lead.name,
+				"status": "Sent",
+				"modified": frappe.utils.now_datetime(),
+				"message": "KNAPS Lead Welcome Email",
+			}
+		)
 		with patch("frappe.db.get_value", side_effect=mock_queue_sent):
 			on_email_queue_update(eq_doc)
 
@@ -819,7 +855,9 @@ class TestLeadLifecycle(FrappeTestCase):
 		]
 		for fname in visible_fields:
 			self.assertIn(fname, fields_dict, f"Field '{fname}' must exist in Lead DocType")
-			self.assertFalse(fields_dict[fname].hidden, f"Field '{fname}' must be visible on the ordinary form")
+			self.assertFalse(
+				fields_dict[fname].hidden, f"Field '{fname}' must be visible on the ordinary form"
+			)
 
 		# 2. Audit Fields Retained Internally But Hidden from Ordinary Form
 		hidden_fields = [
@@ -842,7 +880,9 @@ class TestLeadLifecycle(FrappeTestCase):
 		]
 		for fname in hidden_fields:
 			self.assertIn(fname, fields_dict, f"Audit field '{fname}' must exist in Lead DocType")
-			self.assertTrue(fields_dict[fname].hidden, f"Audit field '{fname}' must be hidden from ordinary form")
+			self.assertTrue(
+				fields_dict[fname].hidden, f"Audit field '{fname}' must be hidden from ordinary form"
+			)
 
 		# 3. Verify hidden fields are fully functional in backend operations
 		lead = self.create_test_lead()
@@ -886,7 +926,9 @@ class TestLeadLifecycle(FrappeTestCase):
 			and lead.status not in ("Not Interested", "Junk")
 			and lead.welcome_email_status != "Sent"
 		)
-		self.assertFalse(show_form_btn_after_sent, "Send Welcome Mail button must be hidden on form once Sent")
+		self.assertFalse(
+			show_form_btn_after_sent, "Send Welcome Mail button must be hidden on form once Sent"
+		)
 
 		# Case C: Failed -> Form button allows retry, list action allows retry
 		lead.welcome_email_status = "Failed"
@@ -898,7 +940,9 @@ class TestLeadLifecycle(FrappeTestCase):
 			and lead.status not in ("Not Interested", "Junk")
 			and lead.welcome_email_status != "Sent"
 		)
-		self.assertTrue(show_form_btn_failed, "Send Welcome Mail button must be available for retry on failure")
+		self.assertTrue(
+			show_form_btn_failed, "Send Welcome Mail button must be available for retry on failure"
+		)
 
 	def test_onboarding_form_link_placeholder_safety(self):
 		"""
@@ -917,4 +961,3 @@ class TestLeadLifecycle(FrappeTestCase):
 		self.assertEqual(lead.status, orig_status)
 		self.assertEqual(lead.onboarding_status, "Not Initiated")
 		self.assertEqual(lead.risk_profiler_status, "Not Initiated")
-

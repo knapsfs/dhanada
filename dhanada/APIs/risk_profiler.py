@@ -479,12 +479,14 @@ def submit_risk_profile():
 			source = "Investor Risk Profiler"
 			if not frappe.db.exists("Lead Source", source):
 				try:
-					src_doc = frappe.get_doc({
-						"doctype": "Lead Source",
-						"source_name": source,
-						"is_active": 1,
-						"details": "Investor Risk Profiler lead source",
-					})
+					src_doc = frappe.get_doc(
+						{
+							"doctype": "Lead Source",
+							"source_name": source,
+							"is_active": 1,
+							"details": "Investor Risk Profiler lead source",
+						}
+					)
 					src_doc.insert(ignore_permissions=True)
 					frappe.db.commit()
 				except Exception:
@@ -504,7 +506,10 @@ def submit_risk_profile():
 				last_10 = clean_phone[-10:]
 				existing_leads = frappe.get_all(
 					"Lead",
-					filters={"mobile_no": ["like", f"%{last_10}"], "status": ["not in", ["Junk", "Converted"]]},
+					filters={
+						"mobile_no": ["like", f"%{last_10}"],
+						"status": ["not in", ["Junk", "Converted"]],
+					},
 					order_by="creation desc",
 					fields=["name"],
 					limit=1,
@@ -562,18 +567,20 @@ def submit_risk_profile():
 			try:
 				if frappe.db.exists("DocType", "Risk Profiler Submission") and created_lead_name:
 					token_val = payload.get("token") or frappe.generate_hash(length=32)
-					submission_doc = frappe.get_doc({
-						"doctype": "Risk Profiler Submission",
-						"lead": created_lead_name,
-						"token": token_val,
-						"status": "Submitted",
-						"submitted_on": frappe.utils.now_datetime(),
-						"score": score,
-						"max_score": max_score,
-						"risk_profile": normalized_profile,
-						"answers_json": json.dumps(answers) if answers else None,
-						"ip_address": getattr(frappe.local, "request_ip", None),
-					})
+					submission_doc = frappe.get_doc(
+						{
+							"doctype": "Risk Profiler Submission",
+							"lead": created_lead_name,
+							"token": token_val,
+							"status": "Submitted",
+							"submitted_on": frappe.utils.now_datetime(),
+							"score": score,
+							"max_score": max_score,
+							"risk_profile": normalized_profile,
+							"answers_json": json.dumps(answers) if answers else None,
+							"ip_address": getattr(frappe.local, "request_ip", None),
+						}
+					)
 					submission_doc.insert(ignore_permissions=True)
 					frappe.db.commit()
 			except Exception as sub_err:
