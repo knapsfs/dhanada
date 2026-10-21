@@ -1,3 +1,4 @@
+import CrmSelect from './CrmSelect';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -113,35 +114,30 @@ export default function CrmNewTaskModal({ isOpen, onClose, onCreated, relatedLea
                 <label className="block text-xs font-semibold text-gray-700 mb-1.5">
                   Activity Type
                 </label>
-                <select
+                <CrmSelect
                   value={formData.activity_type}
-                  onChange={(e) => setFormData({ ...formData, activity_type: e.target.value })}
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 text-xs text-gray-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#032e92]/20 focus:border-[#032e92] transition-all cursor-pointer"
-                >
-                  <option value="Follow-up Call">Follow-up Call</option>
-                  <option value="In-Person Meeting">In-Person Meeting</option>
-                  <option value="Video Consultation">Video Consultation</option>
-                  <option value="KYC Verification">KYC Verification</option>
-                  <option value="Document Collection">Document Collection</option>
-                  <option value="Renewal Discussion">Renewal Discussion</option>
-                  <option value="General">General</option>
-                </select>
+                  onChange={(val) => setFormData({ ...formData, activity_type: val })}
+                  options={[
+                    "Follow-up Call",
+                    "In-Person Meeting",
+                    "Video Consultation",
+                    "KYC Verification",
+                    "Document Collection",
+                    "Renewal Discussion",
+                    "General",
+                  ]}
+                />
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-gray-700 mb-1.5">
                   Priority
                 </label>
-                <select
+                <CrmSelect
                   value={formData.priority}
-                  onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 text-xs text-gray-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#032e92]/20 focus:border-[#032e92] transition-all cursor-pointer"
-                >
-                  <option value="Low">Low</option>
-                  <option value="Medium">Medium</option>
-                  <option value="High">High</option>
-                  <option value="Urgent">Urgent</option>
-                </select>
+                  onChange={(val) => setFormData({ ...formData, priority: val })}
+                  options={["Low", "Medium", "High", "Urgent"]}
+                />
               </div>
             </div>
 

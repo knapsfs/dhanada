@@ -1,3 +1,4 @@
+import CrmSelect from './CrmSelect';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -166,19 +167,14 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
               <div className="mt-4 pt-4 border-t border-gray-200/80 flex items-center justify-between gap-2 flex-wrap">
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-semibold text-gray-500">Stage:</span>
-                  <select
-                    value={leadData?.status || 'New'}
-                    disabled={actionLoading === 'status'}
-                    onChange={(e) => handleStatusChange(e.target.value)}
-                    className="bg-white border border-gray-300 rounded-lg px-2.5 py-1 text-xs font-bold text-gray-800 shadow-2xs focus:ring-2 focus:ring-[#032e92]/20 cursor-pointer"
-                  >
-                    <option value="New">New</option>
-                    <option value="Interested">Interested</option>
-                    <option value="Nurturing">Nurturing</option>
-                    <option value="Converted">Converted</option>
-                    <option value="Not Interested">Not Interested</option>
-                    <option value="Junk">Junk</option>
-                  </select>
+                  <CrmSelect
+                    value={leadData?.status || "New"}
+                    disabled={actionLoading === "status"}
+                    onChange={(val) => handleStatusChange(val)}
+                    options={["New", "Interested", "Nurturing", "Converted", "Not Interested", "Junk"]}
+                    size="sm"
+                    className="w-36"
+                  />
                 </div>
 
                 {/* Direct Connect Buttons */}

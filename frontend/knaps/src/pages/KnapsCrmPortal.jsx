@@ -43,6 +43,8 @@ export default function KnapsCrmPortal() {
   const [isInteractionModalOpen, setIsInteractionModalOpen] = useState(false);
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [modalTargetLead, setModalTargetLead] = useState(null);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
 
   useEffect(() => {
     loadCrmData();
@@ -80,22 +82,38 @@ export default function KnapsCrmPortal() {
     }
   };
 
-  const handleLogout = async () => {
+  const triggerLogoutConfirm = () => {
+    setIsLogoutModalOpen(true);
+  };
+
+  const handleConfirmLogout = async () => {
+    setLoggingOut(true);
     try {
       await crmService.logout();
     } catch (err) {
       console.warn("Logout error:", err);
+    } finally {
+      setLoggingOut(false);
+      setIsLogoutModalOpen(false);
+      setBootstrapData(null);
+      setAuthRequired(true);
+      setLeads([]);
+      setClients([]);
+      setTasks([]);
+      setRenewals([]);
     }
-    setBootstrapData(null);
-    setAuthRequired(true);
-    setLeads([]);
-    setClients([]);
-    setTasks([]);
-    setRenewals([]);
   };
 
   const handleLeadCreated = (newLead) => {
     setLeads((prev) => [newLead, ...prev]);
+    loadCrmData();
+  };
+
+  const handleLeadDeleted = (deletedLeadName) => {
+    setLeads((prev) => prev.filter((l) => l.name !== deletedLeadName));
+    if (selectedLeadName === deletedLeadName) {
+      setSelectedLeadName(null);
+    }
     loadCrmData();
   };
 
@@ -264,7 +282,7 @@ export default function KnapsCrmPortal() {
             {isSidebarOpen ? (
               <button
                 type="button"
-                onClick={handleLogout}
+                onClick={triggerLogoutConfirm}
                 title="Logout"
                 className="text-white/50 hover:text-white p-1 transition-colors text-xs ml-1 cursor-pointer"
               >
@@ -273,7 +291,7 @@ export default function KnapsCrmPortal() {
             ) : (
               <button
                 type="button"
-                onClick={handleLogout}
+                onClick={triggerLogoutConfirm}
                 title="Logout"
                 className="text-white/50 hover:text-white p-1 transition-colors text-xs cursor-pointer"
               >
@@ -318,7 +336,7 @@ export default function KnapsCrmPortal() {
             </button>
 
             <button
-              onClick={handleLogout}
+              onClick={triggerLogoutConfirm}
               className="p-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-600 hover:text-red-600 hover:bg-red-50 hover:border-red-200 transition-colors text-xs cursor-pointer"
               title="Logout from CRM"
             >
@@ -376,6 +394,7 @@ export default function KnapsCrmPortal() {
               searchQuery={searchQuery}
               onSearchChange={setSearchQuery}
               onNewLead={() => setIsLeadModalOpen(true)}
+              onDeleteLead={handleLeadDeleted}
             />
           )}
 
@@ -444,6 +463,74 @@ export default function KnapsCrmPortal() {
         onCreated={() => loadCrmData()}
         relatedLead={modalTargetLead}
       />
+
+      {/* Logout Confirmation Modal */}
+      <AnimatePresence>
+        {isLogoutModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => !loggingOut && setIsLogoutModalOpen(false)}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-xs"
+            />
+
+            {/* Modal Card */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              transition={{ duration: 0.2 }}
+              className="relative w-full max-w-sm bg-white rounded-3xl shadow-2xl border border-gray-100 p-6 sm:p-7 text-center overflow-hidden z-10"
+            >
+              {/* Top Gradient Ribbon */}
+              <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-red-500 via-rose-500 to-[#032e92]" />
+
+              {/* Icon */}
+              <div className="w-14 h-14 rounded-2xl bg-red-50 border border-red-100 text-red-600 flex items-center justify-center text-xl mx-auto mb-4 shadow-xs">
+                <FontAwesomeIcon icon={faRightFromBracket} />
+              </div>
+
+              {/* Title & Description */}
+              <h3 className="text-lg font-bold text-gray-900 tracking-tight">
+                Are you sure you want to log out?
+              </h3>
+              <p className="text-xs text-gray-500 mt-2 mb-6 leading-relaxed">
+                You will need to enter your credentials again to access your CRM leads, client portfolios, and follow-ups.
+              </p>
+
+              {/* Action Buttons */}
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  disabled={loggingOut}
+                  onClick={() => setIsLogoutModalOpen(false)}
+                  className="flex-1 py-2.5 px-4 rounded-xl border border-gray-200 text-xs font-semibold text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  disabled={loggingOut}
+                  onClick={handleConfirmLogout}
+                  className="btn-ripple flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-700 hover:to-rose-800 text-xs font-bold text-white shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70"
+                >
+                  {loggingOut ? (
+                    <>
+                      <FontAwesomeIcon icon={faSpinner} className="animate-spin text-xs" />
+                      <span>Logging out...</span>
+                    </>
+                  ) : (
+                    <span>Yes, Log Out</span>
+                  )}
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

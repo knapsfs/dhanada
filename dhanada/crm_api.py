@@ -452,3 +452,28 @@ def trigger_convert_to_client(lead_name):
 	"""Converts qualified lead to a full client."""
 	_check_crm_permission()
 	return lifecycle_api.convert_lead_to_client(lead_name)
+
+@frappe.whitelist(allow_guest=True)
+def crm_logout():
+	"""Logs out the user from Frappe Desk and CRM session, deleting the session from DB and cache."""
+	if frappe.session and frappe.session.user != "Guest":
+		frappe.local.login_manager.logout()
+		frappe.db.commit()
+	return {"status": "ok", "message": "Logged out successfully"}
+
+@frappe.whitelist()
+def delete_crm_lead(lead_name):
+	"""Deletes a lead and its associated interactions and tasks."""
+	_check_crm_permission()
+	if not frappe.db.exists("Lead", lead_name):
+		frappe.throw(_("Lead not found"))
+
+	# Delete linked interactions and tasks
+	frappe.db.delete("CRM Interaction", {"related_lead": lead_name})
+	frappe.db.delete("Task", {"related_lead": lead_name})
+
+	# Delete the Lead document
+	frappe.delete_doc("Lead", lead_name, ignore_permissions=True, force=True)
+	frappe.db.commit()
+
+	return {"status": "ok", "message": f"Lead {lead_name} deleted successfully"}

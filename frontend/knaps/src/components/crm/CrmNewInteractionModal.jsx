@@ -1,3 +1,4 @@
+import CrmSelect from './CrmSelect';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -98,32 +99,32 @@ export default function CrmNewInteractionModal({ isOpen, onClose, onLogged, rela
                 <label className="block text-xs font-semibold text-gray-700 mb-1.5">
                   Touchpoint Type
                 </label>
-                <select
+                <CrmSelect
                   value={formData.interaction_type}
-                  onChange={(e) => setFormData({ ...formData, interaction_type: e.target.value })}
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 text-xs text-gray-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#032e92]/20 focus:border-[#032e92] transition-all cursor-pointer"
-                >
-                  <option value="Phone Call">Phone Call</option>
-                  <option value="WhatsApp">WhatsApp</option>
-                  <option value="In-Person Meeting">In-Person Meeting</option>
-                  <option value="Video Call">Video Consultation</option>
-                  <option value="Email">Email</option>
-                  <option value="Note">Internal Note</option>
-                </select>
+                  onChange={(val) => setFormData({ ...formData, interaction_type: val })}
+                  options={[
+                    "Phone Call",
+                    "WhatsApp",
+                    "In-Person Meeting",
+                    "Video Consultation",
+                    "Email",
+                    "Internal Note",
+                  ]}
+                />
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-gray-700 mb-1.5">
                   Direction
                 </label>
-                <select
+                <CrmSelect
                   value={formData.direction}
-                  onChange={(e) => setFormData({ ...formData, direction: e.target.value })}
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 text-xs text-gray-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#032e92]/20 focus:border-[#032e92] transition-all cursor-pointer"
-                >
-                  <option value="Outbound">Outbound (Advisor reached out)</option>
-                  <option value="Inbound">Inbound (Client reached out)</option>
-                </select>
+                  onChange={(val) => setFormData({ ...formData, direction: val })}
+                  options={[
+                    { value: "Outbound", label: "Outbound (Advisor reached out)" },
+                    { value: "Inbound", label: "Inbound (Client reached out)" },
+                  ]}
+                />
               </div>
             </div>
 
