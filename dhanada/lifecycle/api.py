@@ -846,6 +846,288 @@ def send_onboarding_and_risk_profiler(lead_id):
 
 
 # ============================================================================
+# SEND RISK PROFILER LINK — FRAPPE EMAIL
+# ============================================================================
+
+
+def get_risk_profiler_url(lead=None, token=None):
+	"""
+	Returns the Risk Profiler URL for email invitations.
+	Default: https://dev.knaps.app/sif
+	Priority:
+	1. frappe.conf.get("risk_profiler_url") or frappe.conf.get("risk_profiler_base_url")
+	2. Dhanada Settings Single DocType (risk_profiler_url) if configured
+	3. Default: https://dev.knaps.app/sif
+	"""
+	base_url = frappe.conf.get("risk_profiler_url") or frappe.conf.get("risk_profiler_base_url")
+
+	if not base_url and frappe.db.exists("DocType", "Dhanada Settings"):
+		try:
+			base_url = frappe.db.get_single_value("Dhanada Settings", "risk_profiler_url")
+		except Exception:
+			base_url = None
+
+	if not base_url:
+		base_url = "https://dev.knaps.app/sif"
+
+	if "{token}" in base_url or "{{token}}" in base_url:
+		rp_token = token or (lead.get("risk_profiler_token") if lead else "") or ""
+		return base_url.replace("{{token}}", str(rp_token)).replace("{token}", str(rp_token))
+
+	return base_url
+
+
+@frappe.whitelist()
+def send_risk_profiler(lead_id):
+	"""
+	Sends a concise email to the lead containing a link to the Risk Profiler form.
+	- Validates lead exists and user write permissions.
+	- Validates recipient email.
+	- Guards against duplicate in-flight sends (< 120s).
+	- Verifies outgoing Email Account configuration.
+	- Retrieves or generates Risk Profiler token and submission record.
+	- Uses configurable Risk Profiler URL (with placeholder support).
+	- Applies requested email template:
+	    Subject: Complete Your Risk Profile
+	    Body:
+	    Hi {{lead_name}},
+
+	    Please complete your Risk Profiler form using the link below:
+	    {{profiler_url}}
+
+	    Regards,
+	    Team KNAPS
+	- Reuses Frappe email infrastructure and outgoing Email Account.
+	- Updates lead.risk_profiler_status to 'Sent' (if not 'Completed').
+	"""
+	if not lead_id or not frappe.db.exists("Lead", lead_id):
+		frappe.throw(_("Lead '{0}' not found.").format(lead_id), frappe.DoesNotExistError)
+
+	lead = frappe.get_doc("Lead", lead_id)
+	validate_lead_permission(lead, "write")
+
+	# Validate lead email
+	email = (lead.email or "").strip().lower()
+	if not email or "@" not in email:
+		frappe.throw(
+			_("Lead has no valid email address to receive the Risk Profiler link. Found: '{0}'.").format(
+				lead.email or "None"
+			),
+			frappe.ValidationError,
+		)
+
+	try:
+		validate_email_address(email, throw=True)
+	except Exception:
+		frappe.throw(
+			_("Invalid email address format for lead: '{0}'.").format(email),
+			frappe.ValidationError,
+		)
+
+	# Guard against duplicate concurrent sends while actively transmitting (< 120 seconds)
+	in_flight = frappe.db.get_value(
+		"Email Queue",
+		{
+			"reference_doctype": "Lead",
+			"reference_name": lead.name,
+			"status": "Sending",
+		},
+		["name", "modified"],
+		as_dict=True,
+	)
+	if in_flight:
+		if isinstance(in_flight, dict):
+			diff_secs = (
+				(now_datetime() - get_datetime(in_flight.get("modified"))).total_seconds()
+				if in_flight.get("modified")
+				else 0
+			)
+			if diff_secs <= 120:
+				frappe.throw(
+					_(
+						"A Risk Profiler email for this lead is currently being transmitted ({0}). Please wait a moment."
+					).format(in_flight.get("name")),
+					frappe.DuplicateEntryError,
+				)
+			else:
+				frappe.db.set_value("Email Queue", in_flight.get("name"), "status", "Not Sent")
+				frappe.db.commit()
+		else:
+			frappe.throw(
+				_(
+					"A Risk Profiler email for this lead is currently being transmitted ({0}). Please wait a moment."
+				).format(in_flight),
+				frappe.DuplicateEntryError,
+			)
+
+	# Verify enabled outgoing Email Account in Frappe
+	outgoing_account = get_outgoing_email_account()
+	if not outgoing_account:
+		frappe.throw(
+			_(
+				"Cannot send Risk Profiler email: No enabled outgoing Email Account is configured in Frappe. An administrator must configure an outgoing Email Account in Settings > Email Account."
+			),
+			frappe.OutgoingEmailError,
+		)
+
+	# Retrieve or generate Risk Profiler Submission record & token
+	existing_rp = frappe.get_all(
+		"Risk Profiler Submission",
+		filters={"lead": lead.name},
+		fields=["name", "token", "status"],
+		limit=1,
+	)
+	if existing_rp and existing_rp[0].token:
+		rp_token = existing_rp[0].token
+	else:
+		rp_token = lead.get("risk_profiler_token") or secrets.token_urlsafe(32)
+		if not existing_rp:
+			rp_doc = frappe.get_doc(
+				{
+					"doctype": "Risk Profiler Submission",
+					"lead": lead.name,
+					"token": rp_token,
+					"status": "Draft",
+					"score": 0,
+					"max_score": 25,
+					"risk_profile": "Moderate",
+				}
+			)
+			rp_doc.insert(ignore_permissions=True)
+
+	profiler_url = get_risk_profiler_url(lead, token=rp_token)
+	lead_name = lead.lead_name or lead.first_name or "Valued Investor"
+
+	# Load email template if configured in Frappe, or use requested standard template
+	template_name = "Complete Your Risk Profile"
+	if not frappe.db.exists("Email Template", template_name):
+		template_name = "KNAPS Risk Profiler Email"
+
+	if frappe.db.exists("Email Template", template_name):
+		email_template = frappe.get_doc("Email Template", template_name)
+		context = lead.as_dict()
+		context.update(
+			{
+				"lead_name": lead_name,
+				"first_name": lead.first_name or lead_name,
+				"profiler_url": profiler_url,
+			}
+		)
+		formatted = email_template.get_formatted_email(context)
+		subject = formatted.get("subject") or _("Complete Your Risk Profile")
+		content = formatted.get("message")
+	else:
+		subject = _("Complete Your Risk Profile")
+		content = f"""<p>Hi {lead_name},</p>
+<p>Please complete your Risk Profiler form using the link below:<br>
+<a href="{profiler_url}">{profiler_url}</a></p>
+<p>Regards,<br>
+Team KNAPS</p>"""
+
+	# Check for existing pending queue record to avoid duplicates on repeated clicks
+	existing_rp_queue = frappe.db.get_value(
+		"Email Queue",
+		{
+			"reference_doctype": "Lead",
+			"reference_name": lead.name,
+			"status": ("in", ["Not Sent", "Error", "Partially Sent"]),
+		},
+		"name",
+		order_by="creation desc",
+	)
+
+	queue_entry = None
+	if existing_rp_queue and frappe.db.exists("Email Queue", existing_rp_queue):
+		q_cand = frappe.get_doc("Email Queue", existing_rp_queue)
+		if "Risk Profile" in (q_cand.message or "") or "profiler" in (q_cand.message or "").lower():
+			queue_entry = q_cand
+			if queue_entry.status in ("Error", "Partially Sent"):
+				queue_entry.status = "Not Sent"
+				queue_entry.error = None
+				queue_entry.retry = 0
+				queue_entry.save(ignore_permissions=True)
+				frappe.db.commit()
+
+	if not queue_entry:
+		try:
+			queue_entry = frappe.sendmail(
+				recipients=[email],
+				subject=subject,
+				content=content,
+				reference_doctype="Lead",
+				reference_name=lead.name,
+				delayed=False,
+				now=True,
+			)
+		except Exception as e:
+			frappe.log_error(title="Risk Profiler Email Dispatch Failure", message=frappe.get_traceback())
+			frappe.throw(
+				_("Failed to dispatch Risk Profiler email via Frappe mail service: {0}").format(str(e)),
+				frappe.OutgoingEmailError,
+			)
+
+	queue_id = queue_entry.name if queue_entry else None
+	rp_delivery_status = "Queued"
+	rp_smtp_error = None
+
+	if queue_entry and hasattr(queue_entry, "send"):
+		try:
+			queue_entry.send(force_send=True)
+			if hasattr(queue_entry, "reload"):
+				queue_entry.reload()
+			curr_q_status = getattr(queue_entry, "status", None)
+			if curr_q_status == "Sent":
+				rp_delivery_status = "Sent"
+			elif curr_q_status in ("Error", "Not Sent"):
+				rec_err = getattr(queue_entry, "error", None)
+				if rec_err and isinstance(rec_err, str) and rec_err.strip():
+					rp_smtp_error = rec_err
+		except smtplib.SMTPAuthenticationError as auth_err:
+			rp_smtp_error = _(
+				"SMTP Authentication Failed ({0}). "
+				"If 2-Step Verification is enabled on Gmail, a 16-character Google App Password "
+				"must be configured in Settings > Email Account."
+			).format(str(auth_err))
+			frappe.log_error(title="Risk Profiler Email SMTP Failure", message=frappe.get_traceback())
+		except (smtplib.SMTPConnectError, OSError) as conn_err:
+			rp_smtp_error = _("SMTP Connection Failed: {0}").format(str(conn_err))
+			frappe.log_error(title="Risk Profiler Email SMTP Failure", message=frappe.get_traceback())
+		except frappe.OutgoingEmailError as out_err:
+			rp_smtp_error = str(out_err)
+			frappe.log_error(title="Risk Profiler Email SMTP Failure", message=frappe.get_traceback())
+		except Exception as smtp_err:
+			rp_smtp_error = str(smtp_err)
+			frappe.log_error(title="Risk Profiler Email SMTP Failure", message=frappe.get_traceback())
+
+	if rp_smtp_error:
+		clean_err = rp_smtp_error.strip().splitlines()[-1] if "\n" in rp_smtp_error else rp_smtp_error
+		frappe.throw(
+			_(
+				"Failed to deliver Risk Profiler email via SMTP: {0}. Please verify email settings and retry."
+			).format(clean_err),
+			frappe.OutgoingEmailError,
+		)
+
+	# Update Lead state
+	lead.risk_profiler_token = rp_token
+	if lead.risk_profiler_status != "Completed":
+		lead.risk_profiler_status = "Sent"
+	lead.flags.ignore_permissions = True
+	lead.save()
+	frappe.db.commit()
+
+	return {
+		"status": "success",
+		"lead_id": lead.name,
+		"delivery_status": rp_delivery_status,
+		"email_queue": queue_id,
+		"risk_profiler_url": profiler_url,
+		"risk_profiler_token": rp_token,
+		"message": _("Risk Profiler link sent successfully to {0}.").format(email),
+	}
+
+
+# ============================================================================
 # ONBOARDING & RISK PROFILER SUBMISSION APIS
 # ============================================================================
 

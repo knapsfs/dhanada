@@ -632,6 +632,13 @@ def trigger_welcome_email(lead_name):
 
 
 @frappe.whitelist()
+def trigger_risk_profiler(lead_name):
+	"""Dispatches Risk Profiler link to the lead."""
+	_check_crm_permission()
+	return lifecycle_api.send_risk_profiler(lead_name)
+
+
+@frappe.whitelist()
 def trigger_onboarding_and_profiler(lead_name):
 	"""Dispatches onboarding form and risk profiler link to the lead."""
 	_check_crm_permission()

@@ -102,6 +102,24 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
     }
   };
 
+  const handleSendProfiler = async () => {
+    if (actionLoading) return;
+    setActionLoading('profiler');
+    try {
+      await crmService.sendRiskProfiler(leadData.name);
+      setFeedback({ type: 'success', message: 'Risk Profiler link sent successfully!' });
+      await loadDetails(true);
+      if (onLeadUpdated) {
+        onLeadUpdated({ ...leadData, risk_profiler_status: 'Sent' });
+      }
+    } catch (err) {
+      setFeedback({ type: 'error', message: err.message || 'Failed to send Risk Profiler link.' });
+      await loadDetails(true);
+    } finally {
+      setActionLoading('');
+    }
+  };
+
   const handleSendOnboarding = async () => {
     setActionLoading('onboarding');
     try {
@@ -293,12 +311,17 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
 
                 <button
                   type="button"
-                  onClick={handleSendOnboarding}
-                  disabled={actionLoading === 'onboarding'}
+                  onClick={handleSendProfiler}
+                  disabled={Boolean(actionLoading)}
+                  title={leadData?.risk_profiler_status === 'Completed' ? 'Risk profile already completed' : 'Send Risk Profiler Form'}
                   className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 flex items-center gap-1.5 shadow-2xs cursor-pointer disabled:opacity-50"
                 >
-                  {actionLoading === 'onboarding' ? <FontAwesomeIcon icon={faSpinner} className="animate-spin text-xs" /> : <FontAwesomeIcon icon={faShieldHalved} className="text-amber-600" />}
-                  <span>Send Profiler</span>
+                  {actionLoading === 'profiler' ? (
+                    <FontAwesomeIcon icon={faSpinner} className="animate-spin text-xs" />
+                  ) : (
+                    <FontAwesomeIcon icon={faShieldHalved} className="text-amber-600" />
+                  )}
+                  <span>{leadData?.risk_profiler_status === 'Sent' ? 'Resend Profiler' : 'Send Profiler'}</span>
                 </button>
 
                 {leadData?.status !== 'Converted' && (
