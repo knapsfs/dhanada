@@ -678,3 +678,29 @@ def delete_crm_lead(lead_name):
 	frappe.db.commit()
 
 	return {"status": "ok", "message": f"Lead {lead_name} deleted successfully"}
+
+
+@frappe.whitelist()
+def generate_crm_form_link(reference_doctype, reference_name, workflow_type, expires_in_days=7):
+	"""Generates a secure, expiring form link for Risk Profiler, Onboarding, or Combined workflow."""
+	_check_crm_permission()
+	import dhanada.form_workflow_api as form_workflow_api
+
+	return form_workflow_api.generate_form_workflow_link(
+		reference_doctype=reference_doctype,
+		reference_name=reference_name,
+		workflow_type=workflow_type,
+		expires_in_days=expires_in_days,
+	)
+
+
+@frappe.whitelist()
+def send_crm_form_email(token, custom_message=None):
+	"""Dispatches the generated form workflow link to customer email address."""
+	_check_crm_permission()
+	import dhanada.form_workflow_api as form_workflow_api
+
+	return form_workflow_api.send_form_workflow_email(
+		token=token,
+		custom_message=custom_message,
+	)

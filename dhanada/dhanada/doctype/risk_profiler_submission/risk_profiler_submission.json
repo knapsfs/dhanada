@@ -18,7 +18,9 @@
   "risk_profile",
   "system_section",
   "answers_json",
-  "ip_address"
+  "ip_address",
+  "client",
+  "workflow_type"
  ],
  "fields": [
   {
@@ -28,7 +30,7 @@
    "in_standard_filter": 1,
    "label": "Lead",
    "options": "Lead",
-   "reqd": 1
+   "reqd": 0
   },
   {
    "fieldname": "token",
@@ -98,6 +100,19 @@
    "fieldtype": "Data",
    "label": "IP Address",
    "read_only": 1
+  },
+  {
+   "fieldname": "client",
+   "fieldtype": "Link",
+   "label": "Client",
+   "options": "Client"
+  },
+  {
+   "fieldname": "workflow_type",
+   "fieldtype": "Select",
+   "label": "Workflow Type",
+   "options": "risk_profiler\ncombined_onboarding",
+   "default": "risk_profiler"
   }
  ],
  "links": [],

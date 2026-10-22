@@ -236,4 +236,18 @@ export const crmService = {
 		fetchCrmApi("/api/method/dhanada.crm_api.delete_crm_lead", "POST", {
 			lead_name: leadName,
 		}),
+
+	generateFormLink: (referenceDoctype, referenceName, workflowType, expiresInDays = 7) =>
+		fetchCrmApi("/api/method/dhanada.crm_api.generate_crm_form_link", "POST", {
+			reference_doctype: referenceDoctype,
+			reference_name: referenceName,
+			workflow_type: workflowType,
+			expires_in_days: expiresInDays,
+		}),
+
+	sendFormEmail: (token, customMessage = "") =>
+		fetchCrmApi("/api/method/dhanada.crm_api.send_crm_form_email", "POST", {
+			token,
+			custom_message: customMessage,
+		}),
 };

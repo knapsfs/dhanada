@@ -45,7 +45,35 @@
   "investment_objectives",
   "system_section",
   "verified_on",
-  "ip_address"
+  "ip_address",
+  "client",
+  "workflow_type",
+  "income_slab",
+  "place_of_birth",
+  "occupation",
+  "nominee_section",
+  "nominee_name",
+  "nominee_relationship",
+  "nominee_dob",
+  "is_nominee_minor",
+  "statement_name",
+  "column_break_nominee",
+  "nominee_id_type",
+  "nominee_id_number",
+  "nominee_mobile",
+  "nominee_email",
+  "nominee_address",
+  "guardian_section",
+  "guardian_name",
+  "guardian_relationship",
+  "guardian_pan",
+  "bank_section",
+  "bank_entry_method",
+  "bank_name",
+  "bank_account_no",
+  "bank_ifsc",
+  "bank_proof_file",
+  "submission_json"
  ],
  "fields": [
   {
@@ -55,7 +83,7 @@
    "in_standard_filter": 1,
    "label": "Lead",
    "options": "Lead",
-   "reqd": 1
+   "reqd": 0
   },
   {
    "fieldname": "token",
@@ -275,6 +303,151 @@
    "fieldtype": "Data",
    "label": "IP Address",
    "read_only": 1
+  },
+  {
+   "fieldname": "client",
+   "fieldtype": "Link",
+   "label": "Client",
+   "options": "Client"
+  },
+  {
+   "fieldname": "workflow_type",
+   "fieldtype": "Select",
+   "label": "Workflow Type",
+   "options": "client_onboarding\ncombined_onboarding",
+   "default": "client_onboarding"
+  },
+  {
+   "fieldname": "income_slab",
+   "fieldtype": "Data",
+   "label": "Income Slab"
+  },
+  {
+   "fieldname": "place_of_birth",
+   "fieldtype": "Data",
+   "label": "Place of Birth (City)"
+  },
+  {
+   "fieldname": "occupation",
+   "fieldtype": "Data",
+   "label": "Occupation"
+  },
+  {
+   "fieldname": "nominee_section",
+   "fieldtype": "Section Break",
+   "label": "Nominee Details"
+  },
+  {
+   "fieldname": "nominee_name",
+   "fieldtype": "Data",
+   "label": "Nominee Name"
+  },
+  {
+   "fieldname": "nominee_relationship",
+   "fieldtype": "Data",
+   "label": "Nominee Relationship"
+  },
+  {
+   "fieldname": "nominee_dob",
+   "fieldtype": "Date",
+   "label": "Nominee Date of Birth"
+  },
+  {
+   "fieldname": "is_nominee_minor",
+   "fieldtype": "Check",
+   "label": "Is Nominee Minor"
+  },
+  {
+   "fieldname": "statement_name",
+   "fieldtype": "Data",
+   "label": "Name on Statement"
+  },
+  {
+   "fieldname": "column_break_nominee",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "nominee_id_type",
+   "fieldtype": "Data",
+   "label": "Nominee ID Type"
+  },
+  {
+   "fieldname": "nominee_id_number",
+   "fieldtype": "Data",
+   "label": "Nominee ID Number"
+  },
+  {
+   "fieldname": "nominee_mobile",
+   "fieldtype": "Data",
+   "label": "Nominee Mobile"
+  },
+  {
+   "fieldname": "nominee_email",
+   "fieldtype": "Data",
+   "label": "Nominee Email"
+  },
+  {
+   "fieldname": "nominee_address",
+   "fieldtype": "Small Text",
+   "label": "Nominee Address"
+  },
+  {
+   "fieldname": "guardian_section",
+   "fieldtype": "Section Break",
+   "label": "Guardian Details (if Nominee is Minor)"
+  },
+  {
+   "fieldname": "guardian_name",
+   "fieldtype": "Data",
+   "label": "Guardian Name"
+  },
+  {
+   "fieldname": "guardian_relationship",
+   "fieldtype": "Data",
+   "label": "Guardian Relationship"
+  },
+  {
+   "fieldname": "guardian_pan",
+   "fieldtype": "Data",
+   "label": "Guardian PAN / ID"
+  },
+  {
+   "fieldname": "bank_section",
+   "fieldtype": "Section Break",
+   "label": "Bank Details"
+  },
+  {
+   "fieldname": "bank_entry_method",
+   "fieldtype": "Select",
+   "label": "Bank Entry Method",
+   "options": "Manual\nUpload",
+   "default": "Manual"
+  },
+  {
+   "fieldname": "bank_name",
+   "fieldtype": "Data",
+   "label": "Bank Name"
+  },
+  {
+   "fieldname": "bank_account_no",
+   "fieldtype": "Data",
+   "label": "Bank Account Number"
+  },
+  {
+   "fieldname": "bank_ifsc",
+   "fieldtype": "Data",
+   "label": "Bank IFSC Code"
+  },
+  {
+   "fieldname": "bank_proof_file",
+   "fieldtype": "Attach",
+   "label": "Bank Proof File"
+  },
+  {
+   "fieldname": "submission_json",
+   "fieldtype": "Code",
+   "label": "Full Submission JSON",
+   "options": "JSON"
   }
  ],
  "links": [],

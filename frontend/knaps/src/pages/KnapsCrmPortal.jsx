@@ -18,11 +18,11 @@ import CrmTasksView from '../components/crm/CrmTasksView';
 import CrmRenewalsView from '../components/crm/CrmRenewalsView';
 
 // Modals & Drawer
-import CrmLeadDrawer from '../components/crm/CrmLeadDrawer';
+import CrmLeadDetailView from '../components/crm/CrmLeadDetailView';
 import CrmNewLeadModal from '../components/crm/CrmNewLeadModal';
 import CrmNewInteractionModal from '../components/crm/CrmNewInteractionModal';
 import CrmNewTaskModal from '../components/crm/CrmNewTaskModal';
-import CrmLoginForm from '../components/crm/CrmLoginForm';
+// CrmLoginForm superseded by Frappe native /login
 
 export default function KnapsCrmPortal() {
   const [activeTab, setActiveTab] = useState('pipeline'); // dashboard, pipeline, leads, clients, tasks, renewals
@@ -39,6 +39,7 @@ export default function KnapsCrmPortal() {
 
   // Modals state
   const [selectedLeadName, setSelectedLeadName] = useState(null);
+  const [leadRefreshKey, setLeadRefreshKey] = useState(0);
   const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
   const [isInteractionModalOpen, setIsInteractionModalOpen] = useState(false);
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
@@ -57,6 +58,7 @@ export default function KnapsCrmPortal() {
       if (!bData || !bData.user || bData.user.name === "Guest") {
         setBootstrapData(null);
         setAuthRequired(true);
+        window.location.href = "/login?redirect-to=%2Fknaps-crm";
         return;
       }
       setBootstrapData(bData);
@@ -77,6 +79,7 @@ export default function KnapsCrmPortal() {
       console.warn("CRM Auth/Data load failed:", err);
       setBootstrapData(null);
       setAuthRequired(true);
+      window.location.href = "/login?redirect-to=%2Fknaps-crm";
     } finally {
       setLoading(false);
     }
@@ -101,6 +104,7 @@ export default function KnapsCrmPortal() {
       setClients([]);
       setTasks([]);
       setRenewals([]);
+      window.location.href = "/login?redirect-to=%2Fknaps-crm";
     }
   };
 
@@ -206,7 +210,14 @@ export default function KnapsCrmPortal() {
   }
 
   if (authRequired || !bootstrapData) {
-    return <CrmLoginForm onLoginSuccess={loadCrmData} />;
+    return (
+      <div className="flex h-screen items-center justify-center bg-[#021d63] text-white">
+        <div className="flex flex-col items-center gap-3">
+          <FontAwesomeIcon icon={faSpinner} className="animate-spin text-3xl text-blue-400" />
+          <p className="text-sm font-medium tracking-wide text-blue-200">Redirecting to login...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -245,7 +256,10 @@ export default function KnapsCrmPortal() {
             return (
               <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id)}
+                onClick={() => {
+                setActiveTab(item.id);
+                setSelectedLeadName(null);
+              }}
                 className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${isActive
                   ? 'bg-white/15 text-white shadow-xs font-bold'
                   : 'text-blue-100/70 hover:bg-white/10 hover:text-white'
@@ -324,7 +338,22 @@ export default function KnapsCrmPortal() {
         <header className="h-16 bg-white border-b border-gray-200/90 px-4 sm:px-6 flex items-center justify-between gap-4 z-20 shrink-0">
           <div className="flex items-center gap-4 flex-1 max-w-lg">
             <h1 className="text-base sm:text-lg font-bold text-gray-900 capitalize whitespace-nowrap">
-              {navItems.find((n) => n.id === activeTab)?.label || 'CRM'}
+              {selectedLeadName ? (
+                <span className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedLeadName(null)}
+                    className="text-gray-400 hover:text-[#032e92] transition-colors cursor-pointer text-xs"
+                    title="Back to list"
+                  >
+                    {navItems.find((n) => n.id === activeTab)?.label || 'Leads'}
+                  </button>
+                  <span className="text-gray-300">/</span>
+                  <span className="text-[#032e92]">Lead Profile</span>
+                </span>
+              ) : (
+                navItems.find((n) => n.id === activeTab)?.label || 'CRM'
+              )}
             </h1>
 
             {/* Global Search Bar */}
@@ -379,73 +408,77 @@ export default function KnapsCrmPortal() {
 
         {/* View Content Body */}
         <main className="flex-1 overflow-y-auto p-4 sm:p-6">
-          {activeTab === 'dashboard' && (
-            <CrmDashboardView
-              metrics={bootstrapData?.metrics || {}}
-              leads={leads}
-              tasks={tasks}
-              renewals={renewals}
-              onSelectLead={(name) => setSelectedLeadName(name)}
-              onNewLead={() => setIsLeadModalOpen(true)}
-              onNewTask={() => setIsTaskModalOpen(true)}
-              onNavigateTab={(tab) => setActiveTab(tab)}
-            />
-          )}
-
-          {activeTab === 'pipeline' && (
-            <CrmPipelineView
-              leads={pipelineLeads}
-              onSelectLead={(name) => setSelectedLeadName(name)}
-              onStatusChange={handleStatusChange}
-              onNewLead={() => setIsLeadModalOpen(true)}
-            />
-          )}
-
-          {activeTab === 'leads' && (
-            <CrmLeadsListView
-              leads={displayedLeads}
-              onSelectLead={(name) => setSelectedLeadName(name)}
-              selectedStatus={statusFilter}
-              onStatusFilterChange={setStatusFilter}
-              searchQuery={searchQuery}
-              onSearchChange={setSearchQuery}
-              onNewLead={() => setIsLeadModalOpen(true)}
+          {selectedLeadName ? (
+            <CrmLeadDetailView
+              leadName={selectedLeadName}
+              onBack={() => setSelectedLeadName(null)}
+              onLeadUpdated={handleLeadUpdated}
               onDeleteLead={handleLeadDeleted}
+              onLogInteraction={handleOpenInteractionModal}
+              onNewTask={handleOpenTaskModal}
+              refreshKey={leadRefreshKey}
             />
-          )}
+          ) : (
+            <>
+              {activeTab === 'dashboard' && (
+                <CrmDashboardView
+                  metrics={bootstrapData?.metrics || {}}
+                  leads={leads}
+                  tasks={tasks}
+                  renewals={renewals}
+                  onSelectLead={(name) => setSelectedLeadName(name)}
+                  onNewLead={() => setIsLeadModalOpen(true)}
+                  onNewTask={() => setIsTaskModalOpen(true)}
+                  onNavigateTab={(tab) => setActiveTab(tab)}
+                />
+              )}
 
-          {activeTab === 'clients' && (
-            <CrmClientsView
-              clients={clients}
-              loading={loading}
-              onClientUpdated={handleClientUpdated}
-            />
-          )}
+              {activeTab === 'pipeline' && (
+                <CrmPipelineView
+                  leads={pipelineLeads}
+                  onSelectLead={(name) => setSelectedLeadName(name)}
+                  onStatusChange={handleStatusChange}
+                  onNewLead={() => setIsLeadModalOpen(true)}
+                />
+              )}
 
-          {activeTab === 'tasks' && (
-            <CrmTasksView
-              tasks={tasks}
-              onToggleComplete={handleTaskToggle}
-              onNewTask={() => setIsTaskModalOpen(true)}
-              loading={loading}
-            />
-          )}
+              {activeTab === 'leads' && (
+                <CrmLeadsListView
+                  leads={displayedLeads}
+                  onSelectLead={(name) => setSelectedLeadName(name)}
+                  selectedStatus={statusFilter}
+                  onStatusFilterChange={setStatusFilter}
+                  searchQuery={searchQuery}
+                  onSearchChange={setSearchQuery}
+                  onNewLead={() => setIsLeadModalOpen(true)}
+                  onDeleteLead={handleLeadDeleted}
+                />
+              )}
 
-          {activeTab === 'renewals' && (
-            <CrmRenewalsView renewals={renewals} loading={loading} />
+              {activeTab === 'clients' && (
+                <CrmClientsView
+                  clients={clients}
+                  loading={loading}
+                  onClientUpdated={handleClientUpdated}
+                />
+              )}
+
+              {activeTab === 'tasks' && (
+                <CrmTasksView
+                  tasks={tasks}
+                  onToggleComplete={handleTaskToggle}
+                  onNewTask={() => setIsTaskModalOpen(true)}
+                  loading={loading}
+                />
+              )}
+
+              {activeTab === 'renewals' && (
+                <CrmRenewalsView renewals={renewals} loading={loading} />
+              )}
+            </>
           )}
         </main>
       </div>
-
-      {/* Slide-over Inspection Drawer for Leads */}
-      <CrmLeadDrawer
-        leadName={selectedLeadName}
-        isOpen={Boolean(selectedLeadName)}
-        onClose={() => setSelectedLeadName(null)}
-        onLeadUpdated={handleLeadUpdated}
-        onLogInteraction={handleOpenInteractionModal}
-        onNewTask={handleOpenTaskModal}
-      />
 
       {/* New Lead Modal */}
       <CrmNewLeadModal
@@ -465,10 +498,7 @@ export default function KnapsCrmPortal() {
         }}
         onLogged={() => {
           loadCrmData();
-          if (selectedLeadName) {
-            // trigger refresh on drawer
-            setSelectedLeadName((prev) => prev);
-          }
+          setLeadRefreshKey((k) => k + 1);
         }}
         relatedLead={modalTargetLead}
       />
@@ -480,7 +510,10 @@ export default function KnapsCrmPortal() {
           setIsTaskModalOpen(false);
           setModalTargetLead(null);
         }}
-        onCreated={() => loadCrmData()}
+        onCreated={() => {
+          loadCrmData();
+          setLeadRefreshKey((k) => k + 1);
+        }}
         relatedLead={modalTargetLead}
       />
 

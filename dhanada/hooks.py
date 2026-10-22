@@ -48,8 +48,10 @@ required_apps = []
 # app_include_js = "/assets/dhanada/js/dhanada.js"
 
 # include js, css files in header of web template
-# web_include_css = "/assets/dhanada/css/dhanada.css"
-# web_include_js = "/assets/dhanada/js/dhanada.js"
+web_include_css = "/assets/dhanada/css/knaps_login.css"
+web_include_js = "/assets/dhanada/js/knaps_login.js"
+
+app_logo_url = "/assets/dhanada/images/knaps-logo.webp"
 
 # include custom scss in every website theme (without file extension ".scss")
 # website_theme_scss = "dhanada/public/scss/website"
@@ -96,6 +98,8 @@ website_route_rules = [
 	{"from_route": "/knaps-crm/<path:app_path>", "to_route": "knaps"},
 	{"from_route": "/crm", "to_route": "knaps"},
 	{"from_route": "/crm/<path:app_path>", "to_route": "knaps"},
+	{"from_route": "/forms", "to_route": "knaps"},
+	{"from_route": "/forms/<path:app_path>", "to_route": "knaps"},
 ]
 
 # application home page (will override Website Settings)
