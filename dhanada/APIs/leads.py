@@ -44,6 +44,86 @@ def _resolve_lead_source(raw_source: str, default_source: str) -> str:
 		return default_source if frappe.db.exists("Lead Source", default_source) else source
 
 
+def _find_exact_duplicate_lead(full_name: str, email: str, phone: str, product: str) -> str | None:
+	"""
+	Returns the name of an existing active Lead if and only if ALL relevant submitted
+	enquiry fields match:
+	  1. lead_name (or first_name + last_name) matches full_name (case-insensitive, trimmed)
+	  2. email matches email (case-insensitive, trimmed)
+	  3. mobile_no matches phone (normalized 10-15 digits)
+	  4. product_interest matches product (case-insensitive, trimmed)
+
+	Active leads exclude 'Junk' and 'Converted'.
+	If any field differs (different product, name, phone, or email), returns None.
+	Missing/omitted values do not match populated values.
+	"""
+	clean_name = (full_name or "").strip().lower()
+	clean_email = (email or "").strip().lower()
+	clean_phone = _clean_phone_number(phone) if phone else ""
+	clean_prod = (product or "").strip().lower()
+
+	# If there's no name and no contact info, cannot determine duplicate
+	if not clean_name and not clean_email and not clean_phone:
+		return None
+
+	filters = {"status": ["not in", ["Junk", "Converted"]]}
+	candidates = []
+
+	if clean_email:
+		cand_by_email = frappe.get_all(
+			"Lead",
+			filters={**filters, "email": clean_email},
+			fields=["name", "lead_name", "first_name", "last_name", "email", "mobile_no", "product_interest"],
+			order_by="creation desc",
+		)
+		candidates.extend(cand_by_email)
+
+	if clean_phone and len(clean_phone) >= 10:
+		last_10 = clean_phone[-10:]
+		cand_by_phone = frappe.get_all(
+			"Lead",
+			filters={**filters, "mobile_no": ["like", f"%{last_10}"]},
+			fields=["name", "lead_name", "first_name", "last_name", "email", "mobile_no", "product_interest"],
+			order_by="creation desc",
+		)
+		for c in cand_by_phone:
+			if c.name not in [x.name for x in candidates]:
+				candidates.append(c)
+
+	for c in candidates:
+		c_name = (c.lead_name or f"{c.first_name or ''} {c.last_name or ''}").strip().lower()
+		c_email = (c.email or "").strip().lower()
+		c_phone = _clean_phone_number(c.mobile_no) if c.mobile_no else ""
+		c_prod = (c.product_interest or "").strip().lower()
+
+		# Check 1: Name match
+		if clean_name != c_name:
+			continue
+
+		# Check 2: Email match
+		if clean_email != c_email:
+			continue
+
+		# Check 3: Phone match
+		if clean_phone and c_phone:
+			if len(clean_phone) >= 10 and len(c_phone) >= 10:
+				if clean_phone[-10:] != c_phone[-10:]:
+					continue
+			elif clean_phone != c_phone:
+				continue
+		elif clean_phone != c_phone:
+			continue
+
+		# Check 4: Product match
+		if clean_prod != c_prod:
+			continue
+
+		# All relevant submitted fields match exactly!
+		return c.name
+
+	return None
+
+
 # Chatbot se aayi lead ko native Lead me save karta hai.
 @frappe.whitelist(allow_guest=True, methods=["POST"])  # nosemgrep: guest-whitelisted-method
 @rate_limit(limit=5, seconds=60, ip_based=True, methods="POST")
@@ -324,80 +404,43 @@ def create_website_lead():
 
 		context_msg = f"Enquiry Note: {notes}" if notes else ""
 
-		# Duplicate prevention / matching against active leads
-		target_lead = None
-		if email:
-			matches = frappe.get_all(
-				"Lead",
-				filters={"email": email, "status": ["not in", ["Junk", "Converted"]]},
-				order_by="creation desc",
-				fields=["name"],
-				limit=1,
-			)
-			if matches:
-				target_lead = matches[0].name
+		# Duplicate prevention: Reject new lead ONLY when an existing lead matches ALL relevant submitted enquiry fields
+		duplicate_lead = _find_exact_duplicate_lead(
+			full_name=full_name,
+			email=email,
+			phone=phone,
+			product=product,
+		)
 
-		if not target_lead and phone and len(phone) >= 10:
-			last_10 = phone[-10:]
-			matches = frappe.get_all(
-				"Lead",
-				filters={"mobile_no": ["like", f"%{last_10}"], "status": ["not in", ["Junk", "Converted"]]},
-				order_by="creation desc",
-				fields=["name"],
-				limit=1,
-			)
-			if matches:
-				target_lead = matches[0].name
-
-		if target_lead:
-			lead_doc = frappe.get_doc("Lead", target_lead)
-			if full_name and (
-				not lead_doc.first_name
-				or lead_doc.first_name.lower() in ("unknown", "website visitor", "prospective")
-			):
-				lead_doc.first_name = first_name
-				lead_doc.last_name = last_name
-				lead_doc.lead_name = full_name
-			if email and not lead_doc.email:
-				lead_doc.email = email
-			if phone and not lead_doc.mobile_no:
-				lead_doc.mobile_no = phone
-			if product:
-				lead_doc.product_interest = product
-			if context_msg:
-				if not lead_doc.chat_context:
-					lead_doc.chat_context = context_msg
-				elif context_msg not in lead_doc.chat_context:
-					lead_doc.chat_context = f"{lead_doc.chat_context}\n{context_msg}".strip()
-			if notes:
-				if not lead_doc.notes:
-					lead_doc.notes = notes
-				elif notes not in lead_doc.notes:
-					lead_doc.notes = f"{lead_doc.notes}\n{notes}".strip()
-
-			lead_doc.save(ignore_permissions=True)
-			frappe.db.commit()
-			created_lead_name = lead_doc.name
-		else:
-			doc_data = {
-				"doctype": "Lead",
-				"first_name": first_name,
-				"last_name": last_name,
-				"lead_name": full_name,
-				"email": email or None,
-				"mobile_no": phone or None,
-				"source": source,
-				"status": "New",
-				"product_interest": product or None,
-				"notes": notes or None,
-				"chat_context": context_msg or None,
+		if duplicate_lead:
+			# Exact duplicate detected across all relevant submitted fields.
+			# Do not create another record and do not silently overwrite the existing record.
+			return {
+				"success": True,
+				"lead_name": duplicate_lead,
+				"is_duplicate": True,
+				"message": _("An identical enquiry has already been received."),
 			}
-			lead = frappe.get_doc(doc_data)
-			lead.insert(ignore_permissions=True)
-			frappe.db.commit()
-			created_lead_name = lead.name
 
-		return {"success": True, "lead_name": created_lead_name}
+		doc_data = {
+			"doctype": "Lead",
+			"first_name": first_name,
+			"last_name": last_name,
+			"lead_name": full_name,
+			"email": email or None,
+			"mobile_no": phone or None,
+			"source": source,
+			"status": "New",
+			"product_interest": product or None,
+			"notes": notes or None,
+			"chat_context": context_msg or None,
+		}
+		lead = frappe.get_doc(doc_data)
+		lead.insert(ignore_permissions=True)
+		frappe.db.commit()
+		created_lead_name = lead.name
+
+		return {"success": True, "lead_name": created_lead_name, "is_duplicate": False}
 	except Exception as e:
 		frappe.log_error(message=frappe.get_traceback(), title="Website Lead Creation Failed")
 		frappe.local.response["http_status_code"] = 400

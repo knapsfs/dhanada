@@ -11,10 +11,11 @@
  "link": "/desk/sif",
  "link_type": "External",
  "logo_url": "/assets/dhanada/images/SIF-Assets-Favicon.png",
- "modified": "2026-10-01 12:30:52.575236",
+ "modified": "2026-10-22 10:54:24.934229",
  "modified_by": "Administrator",
  "name": "SIF",
  "owner": "Administrator",
+ "restrict_removal": 0,
  "roles": [],
  "standard": 1
 }

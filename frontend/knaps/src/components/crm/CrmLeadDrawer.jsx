@@ -5,9 +5,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faXmark, faPhone, faEnvelope, faPaperPlane, faUserCheck,
   faCommentDots, faListCheck, faSpinner,
-  faShieldHalved, faCheckCircle, faCircleExclamation
+  faShieldHalved, faCheckCircle, faCircleExclamation,
+  faTriangleExclamation, faClock, faFloppyDisk, faUser
 } from '@fortawesome/free-solid-svg-icons';
 import { crmService } from '../../services/crmService';
+import { getContactStatus, formatContactDate } from '../../utils/crmContactUtils';
 
 const STATUS_COLORS = {
   New: 'bg-blue-50 text-[#032e92] border-blue-200',
@@ -26,6 +28,8 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
   const [loading, setLoading] = useState(false);
   const [actionLoading, setActionLoading] = useState('');
   const [feedback, setFeedback] = useState({ type: '', message: '' });
+  const [remarkText, setRemarkText] = useState('');
+  const [savingRemark, setSavingRemark] = useState(false);
 
   useEffect(() => {
     if (!isOpen || !leadName) return;
@@ -104,6 +108,35 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
     }
   };
 
+  const handleSaveRemark = async (e) => {
+    e?.preventDefault();
+    if (!remarkText.trim()) {
+      setFeedback({ type: 'error', message: 'Remark text cannot be empty.' });
+      return;
+    }
+    setSavingRemark(true);
+    try {
+      const res = await crmService.saveContactRemark('Lead', leadData.name, remarkText.trim());
+      setFeedback({ type: 'success', message: 'Latest remark and contact timestamp saved successfully!' });
+      setRemarkText('');
+      const updatedLead = {
+        ...leadData,
+        latest_remark: res.latest_remark,
+        last_contacted_by: res.last_contacted_by,
+        last_contacted_on: res.last_contacted_on,
+        days_since_contact: res.days_since_contact,
+        is_contact_overdue: res.is_contact_overdue,
+      };
+      setLeadData(updatedLead);
+      onLeadUpdated && onLeadUpdated(updatedLead);
+      loadDetails();
+    } catch (err) {
+      setFeedback({ type: 'error', message: err.message || 'Failed to save remark' });
+    } finally {
+      setSavingRemark(false);
+    }
+  };
+
   if (!isOpen) return null;
 
   const cleanPhone = leadData?.mobile_no ? leadData.mobile_no.replace(/\D/g, '') : '';
@@ -168,10 +201,10 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-semibold text-gray-500">Stage:</span>
                   <CrmSelect
-                    value={leadData?.status || "New"}
-                    disabled={actionLoading === "status"}
+                    value={leadData?.status || 'New'}
+                    disabled={actionLoading === 'status'}
                     onChange={(val) => handleStatusChange(val)}
-                    options={["New", "Interested", "Nurturing", "Converted", "Not Interested", "Junk"]}
+                    options={['New', 'Interested', 'Nurturing', 'Converted', 'Not Interested', 'Junk']}
                     size="sm"
                     className="w-36"
                   />
@@ -293,6 +326,102 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
                 </div>
               ) : activeTab === 'overview' ? (
                 <div className="space-y-6">
+                  {/* Latest Contact Remark & Tracking Section */}
+                  <div className="bg-white rounded-2xl p-4 sm:p-5 border border-blue-200/90 shadow-xs space-y-4">
+                    <div className="flex items-center justify-between gap-3 flex-wrap">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#032e92]" />
+                        <h4 className="text-xs font-bold text-gray-900 uppercase tracking-wider">
+                          Latest Contact Remark
+                        </h4>
+                      </div>
+                      {/* Overdue Warning Badge */}
+                      {(() => {
+                        const contactInfo = getContactStatus(
+                          leadData?.last_contacted_on,
+                          leadData?.days_since_contact,
+                          leadData?.is_contact_overdue
+                        );
+                        if (contactInfo.isOverdue) {
+                          return (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold bg-amber-50 text-amber-800 border border-amber-300 shadow-2xs">
+                              <FontAwesomeIcon icon={faTriangleExclamation} className="text-amber-600 text-xs" />
+                              <span>{contactInfo.label}</span>
+                            </span>
+                          );
+                        }
+                        if (contactInfo.status === 'never_contacted') {
+                          return (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-600">
+                              <span>{contactInfo.label}</span>
+                            </span>
+                          );
+                        }
+                        return (
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">
+                            <span>{contactInfo.label}</span>
+                          </span>
+                        );
+                      })()}
+                    </div>
+
+                    {/* Current Remark Display */}
+                    <div className="bg-slate-50/80 rounded-xl p-3.5 border border-gray-200/80 text-xs">
+                      {leadData?.latest_remark ? (
+                        <div>
+                          <p className="text-gray-900 font-medium leading-relaxed whitespace-pre-wrap">
+                            "{leadData.latest_remark}"
+                          </p>
+                          <div className="mt-3 pt-2.5 border-t border-gray-200 flex items-center justify-between gap-3 text-[11px] text-gray-500 flex-wrap">
+                            <span className="flex items-center gap-1.5">
+                              <FontAwesomeIcon icon={faUser} className="text-gray-400 text-[10px]" />
+                              <span>Contacted by: <strong className="text-gray-700">{leadData.last_contacted_by || 'Unknown'}</strong></span>
+                            </span>
+                            <span className="flex items-center gap-1.5">
+                              <FontAwesomeIcon icon={faClock} className="text-gray-400 text-[10px]" />
+                              <span>{formatContactDate(leadData.last_contacted_on)}</span>
+                            </span>
+                          </div>
+                        </div>
+                      ) : (
+                        <p className="text-gray-400 italic">No contact remark recorded yet. Enter a remark below to record contact.</p>
+                      )}
+                    </div>
+
+                    {/* New Remark Input Form */}
+                    <form onSubmit={handleSaveRemark} className="space-y-2.5">
+                      <label className="block text-[11px] font-bold text-gray-600 uppercase tracking-wider">
+                        Record New Contact Remark
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={remarkText}
+                        onChange={(e) => setRemarkText(e.target.value)}
+                        placeholder="Enter the latest conversation notes, client discussion, or follow-up outcome..."
+                        className="w-full text-xs p-3 rounded-xl border border-gray-200 focus:outline-hidden focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92] transition-colors resize-none"
+                      />
+                      <div className="flex justify-end">
+                        <button
+                          type="submit"
+                          disabled={savingRemark || !remarkText.trim()}
+                          className="px-4 py-2 rounded-xl text-xs font-semibold bg-[#032e92] hover:bg-[#021d63] text-white flex items-center gap-2 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-2xs"
+                        >
+                          {savingRemark ? (
+                            <>
+                              <FontAwesomeIcon icon={faSpinner} className="animate-spin text-xs" />
+                              <span>Saving Remark...</span>
+                            </>
+                          ) : (
+                            <>
+                              <FontAwesomeIcon icon={faFloppyDisk} className="text-xs" />
+                              <span>Save Remark</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+
                   {/* Key Contacts */}
                   <div className="bg-gray-50 rounded-2xl p-4 sm:p-5 border border-gray-200/80 space-y-3">
                     <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Contact Profile</h4>

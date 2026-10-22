@@ -44,5 +44,11 @@ class CRMInteraction(Document):
 			)
 
 	def on_update(self):
+		# Status change notes do not count as customer contact
+		if self.interaction_type == "Note" and (self.summary or "").startswith("Lead status updated to"):
+			return
+
 		if self.related_lead:
 			frappe.db.set_value("Lead", self.related_lead, "last_contacted_on", self.interaction_date)
+		if self.related_client:
+			frappe.db.set_value("Client", self.related_client, "last_contacted_on", self.interaction_date)

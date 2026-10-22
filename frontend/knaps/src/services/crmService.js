@@ -146,10 +146,24 @@ export const crmService = {
 	logInteraction: (data) =>
 		fetchCrmApi("/api/method/dhanada.crm_api.quick_log_interaction", "POST", data),
 
+	saveContactRemark: (doctype, name, remark) =>
+		fetchCrmApi("/api/method/dhanada.crm_api.save_contact_remark", "POST", {
+			doctype,
+			name,
+			remark,
+		}),
+
 	getClients: (params = {}) => {
 		const query = new URLSearchParams(params).toString();
 		return fetchCrmApi(`/api/method/dhanada.crm_api.get_clients?${query}`);
 	},
+
+	getClientDetails: (clientName) =>
+		fetchCrmApi(
+			`/api/method/dhanada.crm_api.get_client_details?client_name=${encodeURIComponent(
+				clientName
+			)}`
+		),
 
 	getTasks: (params = {}) => {
 		const query = new URLSearchParams(params).toString();

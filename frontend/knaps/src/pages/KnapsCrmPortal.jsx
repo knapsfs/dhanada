@@ -122,6 +122,11 @@ export default function KnapsCrmPortal() {
     loadCrmData();
   };
 
+  const handleClientUpdated = (updatedClient) => {
+    setClients((prev) => prev.map((c) => (c.name === updatedClient.name ? { ...c, ...updatedClient } : c)));
+    loadCrmData();
+  };
+
   const handleStatusChange = async (leadName, newStatus) => {
     try {
       const updated = await crmService.updateLeadStatus(leadName, newStatus);
@@ -150,6 +155,19 @@ export default function KnapsCrmPortal() {
     setModalTargetLead(lead);
     setIsTaskModalOpen(true);
   };
+
+  // Pipeline leads: filtered only by search query so all Kanban status columns remain visible
+  const pipelineLeads = useMemo(() => {
+    if (!searchQuery.trim()) return leads;
+    const q = searchQuery.toLowerCase();
+    return leads.filter((l) =>
+      (l.lead_name && l.lead_name.toLowerCase().includes(q)) ||
+      (l.mobile_no && l.mobile_no.includes(q)) ||
+      (l.email && l.email.toLowerCase().includes(q)) ||
+      (l.product_interest && l.product_interest.toLowerCase().includes(q)) ||
+      (l.name && l.name.toLowerCase().includes(q))
+    );
+  }, [leads, searchQuery]);
 
   // Filtered Leads based on search and status
   const displayedLeads = useMemo(() => {
@@ -190,8 +208,6 @@ export default function KnapsCrmPortal() {
   if (authRequired || !bootstrapData) {
     return <CrmLoginForm onLoginSuccess={loadCrmData} />;
   }
-
-
 
   return (
     <div className="flex h-screen bg-[#f4f7fc] font-sans text-gray-900 overflow-hidden">
@@ -378,7 +394,7 @@ export default function KnapsCrmPortal() {
 
           {activeTab === 'pipeline' && (
             <CrmPipelineView
-              leads={displayedLeads}
+              leads={pipelineLeads}
               onSelectLead={(name) => setSelectedLeadName(name)}
               onStatusChange={handleStatusChange}
               onNewLead={() => setIsLeadModalOpen(true)}
@@ -399,7 +415,11 @@ export default function KnapsCrmPortal() {
           )}
 
           {activeTab === 'clients' && (
-            <CrmClientsView clients={clients} loading={loading} />
+            <CrmClientsView
+              clients={clients}
+              loading={loading}
+              onClientUpdated={handleClientUpdated}
+            />
           )}
 
           {activeTab === 'tasks' && (

@@ -49,6 +49,9 @@
   "organization",
   "notes_section",
   "notes",
+  "latest_remark",
+  "last_contacted_on",
+  "last_contacted_by",
   "investment_tab",
   "investor_category",
   "risk_profile",
@@ -323,6 +326,24 @@
    "fieldname": "notes",
    "fieldtype": "Small Text",
    "label": "Notes"
+  },
+  {
+   "fieldname": "latest_remark",
+   "fieldtype": "Small Text",
+   "label": "Latest Remark"
+  },
+  {
+   "fieldname": "last_contacted_on",
+   "fieldtype": "Datetime",
+   "label": "Last Contacted On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_contacted_by",
+   "fieldtype": "Link",
+   "label": "Last Contacted By",
+   "options": "User",
+   "read_only": 1
   },
   {
    "fieldname": "investment_tab",

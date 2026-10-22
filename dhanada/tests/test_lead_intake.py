@@ -24,6 +24,11 @@ class TestLeadIntake(FrappeTestCase):
 		frappe.local.request_ip = None
 		if hasattr(frappe.local, "response"):
 			frappe.local.response = frappe._dict({"message": None})
+		# Clean leftover test leads from previous failed runs
+		test_leads = frappe.get_all("Lead", filters={"email": ["like", "%@example.com"]}, pluck="name")
+		for l_name in test_leads:
+			frappe.delete_doc("Lead", l_name, ignore_permissions=True, force=True)
+		frappe.db.commit()
 
 	def tearDown(self):
 		frappe.local.request = None
@@ -68,7 +73,7 @@ class TestLeadIntake(FrappeTestCase):
 		frappe.delete_doc("Lead", lead_name, ignore_permissions=True, force=True)
 
 	def test_website_lead_duplicate_matching(self):
-		"""Verify subsequent submission with same email updates existing Lead rather than duplicating."""
+		"""Verify subsequent submission with exact same fields does not duplicate, but different product creates separate lead."""
 		frappe.local.form_dict = frappe._dict(
 			{
 				"full_name": "Ananya Sen",
@@ -81,8 +86,23 @@ class TestLeadIntake(FrappeTestCase):
 		res1 = create_website_lead()
 		self.assertTrue(res1.get("success"))
 		lead_id1 = res1.get("lead_name")
+		self.assertFalse(res1.get("is_duplicate"))
 
-		# Second submission with same email, updated product interest and notes
+		# Exact duplicate submission (same name, email, phone, product)
+		frappe.local.form_dict = frappe._dict(
+			{
+				"full_name": "Ananya Sen",
+				"email": "ananya.sen.dup@example.com",
+				"phone": "9812341234",
+				"product": "Mutual Funds",
+			}
+		)
+		res_dup = create_website_lead()
+		self.assertTrue(res_dup.get("success"))
+		self.assertTrue(res_dup.get("is_duplicate"))
+		self.assertEqual(res_dup.get("lead_name"), lead_id1)
+
+		# Second submission with different product creates separate lead
 		frappe.local.form_dict = frappe._dict(
 			{
 				"full_name": "Ananya Sen",
@@ -94,17 +114,15 @@ class TestLeadIntake(FrappeTestCase):
 		)
 		res2 = create_website_lead()
 		self.assertTrue(res2.get("success"))
+		self.assertFalse(res2.get("is_duplicate"))
 		lead_id2 = res2.get("lead_name")
 
-		# Must match existing lead, no duplicate created
-		self.assertEqual(lead_id1, lead_id2)
-		lead = frappe.get_doc("Lead", lead_id1)
-		self.assertEqual(lead.product_interest, "Long-Short SIF Fund")
-		self.assertIn("Initial contact.", lead.notes)
-		self.assertIn("Follow-up question about liquidity.", lead.notes)
+		# Separate lead created because product differed
+		self.assertNotEqual(lead_id1, lead_id2)
 
 		# Cleanup
 		frappe.delete_doc("Lead", lead_id1, ignore_permissions=True, force=True)
+		frappe.delete_doc("Lead", lead_id2, ignore_permissions=True, force=True)
 
 	def test_chatbot_lead_creation_and_conversation_link(self):
 		"""Verify chatbot creates native Lead and establishes two-way relationship with Chatbot Conversation."""

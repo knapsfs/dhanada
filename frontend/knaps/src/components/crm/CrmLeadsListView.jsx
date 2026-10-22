@@ -3,10 +3,12 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPhone, faEnvelope, faCommentDots, faEye, faFilter,
-  faSearch, faPlus, faArrowsRotate, faTrash, faSpinner
+  faSearch, faPlus, faArrowsRotate, faTrash, faSpinner,
+  faTriangleExclamation
 } from "@fortawesome/free-solid-svg-icons";
 import { motion, AnimatePresence } from "framer-motion";
 import { crmService } from "../../services/crmService";
+import { getContactStatus } from "../../utils/crmContactUtils";
 
 const STATUS_BADGES = {
   New: "bg-blue-50 text-[#032e92] border-blue-200",
@@ -134,7 +136,34 @@ export default function CrmLeadsListView({
                       <div className="font-bold text-gray-900 group-hover:text-[#032e92] transition-colors">
                         {lead.lead_name}
                       </div>
-                      <span className="text-[10px] text-gray-400 font-mono">{lead.name}</span>
+                      <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                        <span className="text-[10px] text-gray-400 font-mono">{lead.name}</span>
+                        {(() => {
+                          const contactInfo = getContactStatus(
+                            lead.last_contacted_on,
+                            lead.days_since_contact,
+                            lead.is_contact_overdue
+                          );
+                          if (contactInfo.isOverdue) {
+                            return (
+                              <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-300">
+                                <FontAwesomeIcon icon={faTriangleExclamation} className="text-amber-600 text-[9px]" />
+                                <span>{contactInfo.label}</span>
+                              </span>
+                            );
+                          }
+                          return (
+                            <span className="text-[10px] text-gray-400">
+                              · {contactInfo.label}
+                            </span>
+                          );
+                        })()}
+                      </div>
+                      {lead.latest_remark && (
+                        <p className="text-[11px] text-gray-600 italic mt-1 line-clamp-1">
+                          <span className="font-semibold not-italic text-gray-700">Remark: </span>{lead.latest_remark}
+                        </p>
+                      )}
                     </td>
 
                     <td className="py-3.5 px-4">

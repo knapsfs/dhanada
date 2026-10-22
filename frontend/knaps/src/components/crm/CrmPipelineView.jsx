@@ -3,8 +3,9 @@ import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPhone, faEllipsisVertical, faCommentDots, faCalendarAlt,
-  faPlus, faCheckCircle, faArrowsRotate
+  faPlus, faCheckCircle, faArrowsRotate, faTriangleExclamation
 } from '@fortawesome/free-solid-svg-icons';
+import { getContactStatus } from '../../utils/crmContactUtils';
 
 const STAGES = [
   { id: 'New', label: 'New Inquiries', color: 'bg-blue-500', headerBg: 'bg-blue-50/80 text-blue-900 border-blue-200' },
@@ -123,15 +124,50 @@ export default function CrmPipelineView({
                           </div>
 
                           {/* Product of Interest Pill */}
-                          <div className="mb-2.5">
+                          <div className="mb-2">
                             <span className="inline-block px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-blue-50 text-[#032e92] border border-blue-100/80 truncate max-w-full">
                               {lead.product_interest || 'General Advisory'}
                             </span>
                           </div>
 
+                          {/* Contact Overdue Warning / Status Badge */}
+                          {(() => {
+                            const contactInfo = getContactStatus(
+                              lead.last_contacted_on,
+                              lead.days_since_contact,
+                              lead.is_contact_overdue
+                            );
+                            return (
+                              <div className="mb-2">
+                                {contactInfo.isOverdue ? (
+                                  <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-300 shadow-2xs">
+                                    <FontAwesomeIcon icon={faTriangleExclamation} className="text-amber-600 text-[10px]" />
+                                    <span>{contactInfo.label}</span>
+                                  </span>
+                                ) : contactInfo.status === 'never_contacted' ? (
+                                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-gray-100 text-gray-500">
+                                    <span>{contactInfo.label}</span>
+                                  </span>
+                                ) : (
+                                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-blue-50/70 text-blue-700">
+                                    <span>{contactInfo.label}</span>
+                                  </span>
+                                )}
+                              </div>
+                            );
+                          })()}
+
+                          {/* Latest Remark Preview if any */}
+                          {lead.latest_remark && (
+                            <div className="mb-2 bg-slate-50 border border-slate-200/80 rounded-lg p-2 text-[11px] text-gray-700 leading-snug">
+                              <span className="font-bold text-gray-500 block text-[9px] uppercase tracking-wider mb-0.5">Latest Remark</span>
+                              <p className="line-clamp-2 italic text-gray-800 font-medium">"{lead.latest_remark}"</p>
+                            </div>
+                          )}
+
                           {/* Notes Preview if any */}
                           {lead.notes && (
-                            <p className="text-[11px] text-gray-500 line-clamp-2 mb-2.5 leading-relaxed bg-gray-50/80 p-2 rounded-lg">
+                            <p className="text-[11px] text-gray-500 line-clamp-2 mb-2 leading-relaxed bg-gray-50/80 p-2 rounded-lg">
                               {lead.notes}
                             </p>
                           )}

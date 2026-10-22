@@ -1,16 +1,23 @@
 {
  "aggregate_function_based_on": "",
  "color": "#6F42C1",
+ "creation": "2026-10-22 10:54:12.951633",
+ "docstatus": 0,
  "doctype": "Number Card",
  "document_type": "Task",
  "dynamic_filters_json": "[]",
  "filters_json": "[[\"Task\",\"status\",\"in\",[\"Open\",\"In Progress\"],false]]",
  "function": "Count",
+ "idx": 0,
  "is_public": 1,
  "is_standard": 1,
  "label": "Open Tasks",
+ "modified": "2026-10-22 10:54:24.832790",
+ "modified_by": "Administrator",
  "module": "Dhanada",
  "name": "Open Tasks",
+ "owner": "Administrator",
  "show_full_number": 0,
+ "show_percentage_stats": 0,
  "type": "Document Type"
 }
