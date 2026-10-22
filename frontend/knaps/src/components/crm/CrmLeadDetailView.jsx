@@ -9,6 +9,7 @@ import {
   faLocationDot, faCoins, faFileLines, faPlus, faXmark
 } from "@fortawesome/free-solid-svg-icons";
 import CrmSelect from "./CrmSelect";
+import CrmSendFormModal from "./CrmSendFormModal";
 import { crmService } from "../../services/crmService";
 import { getContactStatus, formatContactDate } from "../../utils/crmContactUtils";
 
@@ -31,6 +32,7 @@ export default function CrmLeadDetailView({
   refreshKey = 0,
 }) {
   const [leadData, setLeadData] = useState(null);
+  const [sendFormModalOpen, setSendFormModalOpen] = useState(false);
   const [interactions, setInteractions] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [activeTab, setActiveTab] = useState("overview"); // overview, timeline, tasks
@@ -349,19 +351,12 @@ export default function CrmLeadDetailView({
 
           <button
             type="button"
-            onClick={handleSendProfiler}
-            disabled={Boolean(actionLoading)}
-            title={leadData?.risk_profiler_status === "Completed" ? "Risk profile already completed" : "Send Risk Profiler Form"}
-            className="px-3 py-2 rounded-xl text-xs font-semibold bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 flex items-center gap-1.5 shadow-2xs cursor-pointer disabled:opacity-50 transition-colors"
+            onClick={() => setSendFormModalOpen(true)}
+            className="px-3 py-2 rounded-xl text-xs font-semibold bg-white border border-blue-200 text-[#032e92] hover:bg-blue-50 flex items-center gap-1.5 shadow-2xs cursor-pointer transition-colors"
+            title="Send Form Workflows (Risk Profiler, Onboarding, or Combined)"
           >
-            {actionLoading === "profiler" ? (
-              <FontAwesomeIcon icon={faSpinner} className="animate-spin text-xs" />
-            ) : (
-              <FontAwesomeIcon icon={faShieldHalved} className="text-amber-600 text-xs" />
-            )}
-            <span className="hidden sm:inline">
-              {leadData?.risk_profiler_status === "Sent" ? "Resend Profiler" : "Send Profiler"}
-            </span>
+            <FontAwesomeIcon icon={faPaperPlane} className="text-[#032e92] text-xs" />
+            <span className="hidden sm:inline">Send Form</span>
           </button>
 
           {leadData?.status !== "Converted" && (
@@ -1143,6 +1138,19 @@ export default function CrmLeadDetailView({
           </div>
         )}
       </AnimatePresence>
+
+      <CrmSendFormModal
+        isOpen={sendFormModalOpen}
+        onClose={() => setSendFormModalOpen(false)}
+        record={leadData || {}}
+        referenceDoctype="Lead"
+        onFormSent={async () => {
+          await loadDetails(true);
+          if (onLeadUpdated && leadData) {
+            onLeadUpdated({ ...leadData });
+          }
+        }}
+      />
     </div>
   );
 }

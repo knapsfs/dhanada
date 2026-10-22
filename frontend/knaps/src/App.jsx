@@ -33,6 +33,11 @@ import SmallSavingsSchemes from './pages/SmallSavingsSchemes';
 // CRM Portal
 import KnapsCrmPortal from './pages/KnapsCrmPortal';
 
+// Customer-Facing Form Workflows
+import RiskProfilerWorkflowPage from './pages/forms/RiskProfilerWorkflowPage';
+import ClientOnboardingWorkflowPage from './pages/forms/ClientOnboardingWorkflowPage';
+import CombinedOnboardingWorkflowPage from './pages/forms/CombinedOnboardingWorkflowPage';
+
 // Global Infrastructure Components
 import ScrollToTop from './components/ScrollToTop';
 import ChatbotWidget from './chatbot/components/ChatbotWidget';
@@ -42,9 +47,10 @@ import './index.css';
 import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
-  const isCrmRoute = typeof window !== 'undefined' && (
+  const isExcludedRoute = typeof window !== 'undefined' && (
     window.location.pathname.startsWith('/knaps-crm') ||
-    window.location.pathname.startsWith('/crm')
+    window.location.pathname.startsWith('/crm') ||
+    window.location.pathname.startsWith('/forms')
   );
 
   return (
@@ -131,10 +137,15 @@ function App() {
             <Route path="/knaps-crm/*" element={<KnapsCrmPortal />} />
             <Route path="/crm" element={<KnapsCrmPortal />} />
             <Route path="/crm/*" element={<KnapsCrmPortal />} />
+
+            {/* Dedicated Customer Form Workflow Routes */}
+            <Route path="/forms/risk-profiler/:token" element={<RiskProfilerWorkflowPage />} />
+            <Route path="/forms/client-onboarding/:token" element={<ClientOnboardingWorkflowPage />} />
+            <Route path="/forms/combined-onboarding/:token" element={<CombinedOnboardingWorkflowPage />} />
           </Routes>
 
-          {!isCrmRoute && <MysteryBoxWidget />}
-          {!isCrmRoute && <ChatbotWidget />}
+          {!isExcludedRoute && <MysteryBoxWidget />}
+          {!isExcludedRoute && <ChatbotWidget />}
         </LeadModalProvider>
       </BrowserRouter>
     </ErrorBoundary>

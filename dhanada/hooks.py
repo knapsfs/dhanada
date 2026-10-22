@@ -98,6 +98,8 @@ website_route_rules = [
 	{"from_route": "/knaps-crm/<path:app_path>", "to_route": "knaps"},
 	{"from_route": "/crm", "to_route": "knaps"},
 	{"from_route": "/crm/<path:app_path>", "to_route": "knaps"},
+	{"from_route": "/forms", "to_route": "knaps"},
+	{"from_route": "/forms/<path:app_path>", "to_route": "knaps"},
 ]
 
 # application home page (will override Website Settings)

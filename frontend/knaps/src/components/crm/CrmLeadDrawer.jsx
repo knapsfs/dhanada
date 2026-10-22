@@ -22,6 +22,7 @@ const STATUS_COLORS = {
 
 export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated, onLogInteraction, onNewTask }) {
   const [leadData, setLeadData] = useState(null);
+  const [sendFormModalOpen, setSendFormModalOpen] = useState(false);
   const [interactions, setInteractions] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [activeTab, setActiveTab] = useState('overview'); // overview, timeline, tasks
@@ -311,17 +312,12 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
 
                 <button
                   type="button"
-                  onClick={handleSendProfiler}
-                  disabled={Boolean(actionLoading)}
-                  title={leadData?.risk_profiler_status === 'Completed' ? 'Risk profile already completed' : 'Send Risk Profiler Form'}
-                  className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 flex items-center gap-1.5 shadow-2xs cursor-pointer disabled:opacity-50"
+                  onClick={() => setSendFormModalOpen(true)}
+                  className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-blue-200 text-[#032e92] hover:bg-blue-50 flex items-center gap-1.5 shadow-2xs cursor-pointer"
+                  title="Send Risk Profiler, Onboarding, or Combined Form"
                 >
-                  {actionLoading === 'profiler' ? (
-                    <FontAwesomeIcon icon={faSpinner} className="animate-spin text-xs" />
-                  ) : (
-                    <FontAwesomeIcon icon={faShieldHalved} className="text-amber-600" />
-                  )}
-                  <span>{leadData?.risk_profiler_status === 'Sent' ? 'Resend Profiler' : 'Send Profiler'}</span>
+                  <FontAwesomeIcon icon={faPaperPlane} className="text-[#032e92]" />
+                  <span>Send Form</span>
                 </button>
 
                 {leadData?.status !== 'Converted' && (

@@ -3,14 +3,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faSearch, faPhone, faEnvelope, faUserCheck, faShieldHalved, faUsers,
   faCommentDots, faTriangleExclamation, faClock, faUser, faFloppyDisk,
-  faSpinner, faXmark, faCheckCircle, faCircleExclamation
+  faSpinner, faXmark, faCheckCircle, faCircleExclamation, faPaperPlane
 } from '@fortawesome/free-solid-svg-icons';
 import { crmService } from '../../services/crmService';
+import CrmSendFormModal from "./CrmSendFormModal";
 import { getContactStatus, formatContactDate } from '../../utils/crmContactUtils';
 
 export default function CrmClientsView({ clients = [], loading = false, onClientUpdated }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedClientForRemark, setSelectedClientForRemark] = useState(null);
+  const [selectedClientForForm, setSelectedClientForForm] = useState(null);
   const [remarkText, setRemarkText] = useState('');
   const [savingRemark, setSavingRemark] = useState(false);
   const [feedback, setFeedback] = useState({ type: '', message: '' });
@@ -170,6 +172,14 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
 
                     <td className="py-3.5 px-4 sm:px-6 text-right">
                       <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedClientForForm(client)}
+                          className="w-7 h-7 rounded-lg bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white flex items-center justify-center transition-colors text-xs cursor-pointer"
+                          title="Send Form Workflow (Risk Profiler / Onboarding / Combined)"
+                        >
+                          <FontAwesomeIcon icon={faPaperPlane} />
+                        </button>
                         <button
                           type="button"
                           onClick={() => {
@@ -345,6 +355,16 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
           </div>
         </div>
       )}
+
+      <CrmSendFormModal
+        isOpen={Boolean(selectedClientForForm)}
+        onClose={() => setSelectedClientForForm(null)}
+        record={selectedClientForForm || {}}
+        referenceDoctype="Client"
+        onFormSent={(res) => {
+          setFeedback({ type: 'success', message: 'Form link generated for ' + (selectedClientForForm?.client_name || 'client') });
+        }}
+      />
     </div>
   );
 }
