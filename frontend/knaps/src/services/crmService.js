@@ -1,5 +1,37 @@
 import { getCsrfToken, clearCsrfToken } from "../utils/csrf";
 
+function extractFrappeErrorMessage(data, fallback = "CRM request failed") {
+	if (!data) return fallback;
+	if (data._server_messages) {
+		try {
+			const parsed = JSON.parse(data._server_messages);
+			if (Array.isArray(parsed) && parsed.length > 0) {
+				const firstMsg = parsed[0]?.message;
+				if (typeof firstMsg === "string" && firstMsg.trim()) {
+					return firstMsg.replace(/<[^>]*>?/gm, "").trim();
+				}
+			}
+		} catch {
+			// Ignore JSON parse error and continue
+		}
+	}
+	if (typeof data.message === "string" && data.message.trim()) {
+		return data.message.trim();
+	}
+	if (data.message?.message && typeof data.message.message === "string") {
+		return data.message.message.trim();
+	}
+	if (typeof data.exc_message === "string" && data.exc_message.trim()) {
+		const firstLine = data.exc_message.split("\n")[0];
+		return firstLine.replace(/<[^>]*>?/gm, "").trim();
+	}
+	if (typeof data.exception === "string" && data.exception.trim()) {
+		const clean = data.exception.split(":").pop()?.trim();
+		if (clean) return clean;
+	}
+	return fallback;
+}
+
 async function fetchCrmApi(endpoint, method = "GET", body = null) {
 	const csrfToken = await getCsrfToken();
 	const headers = {
@@ -26,12 +58,11 @@ async function fetchCrmApi(endpoint, method = "GET", body = null) {
 	const data = await response.json().catch(() => ({}));
 
 	if (!response.ok) {
-		const errorMsg =
-			data?.message?.message ||
-			data?._server_messages ||
-			data?.exc_message ||
-			"CRM request failed";
-		throw new Error(typeof errorMsg === "string" ? errorMsg : JSON.stringify(errorMsg));
+		const errorMsg = extractFrappeErrorMessage(data, "CRM request failed");
+		const err = new Error(errorMsg);
+		err.status = response.status;
+		err.data = data;
+		throw err;
 	}
 
 	return data.message !== undefined ? data.message : data;
@@ -52,18 +83,11 @@ export const crmService = {
 		});
 		const data = await response.json().catch(() => ({}));
 		if (!response.ok) {
-			let err = data?.message || "Invalid login credentials";
-			if (data?._server_messages) {
-				try {
-					const parsed = JSON.parse(data._server_messages);
-					if (Array.isArray(parsed) && parsed[0]?.message) {
-						err = parsed[0].message;
-					}
-				} catch {
-					// Ignore JSON parse error
-				}
-			}
-			throw new Error(typeof err === "string" ? err : "Invalid login credentials");
+			const errMessage = extractFrappeErrorMessage(data, "Invalid login credentials");
+			const err = new Error(errMessage);
+			err.status = response.status;
+			err.data = data;
+			throw err;
 		}
 		clearCsrfToken();
 		return data;
@@ -93,7 +117,9 @@ export const crmService = {
 				method: "GET",
 				credentials: "include",
 			});
-		} catch (_) {}
+		} catch (_) {
+			// Ignore fallback GET logout failure
+		}
 
 		try {
 			await fetch("/api/method/logout", {
@@ -101,7 +127,9 @@ export const crmService = {
 				headers,
 				credentials: "include",
 			});
-		} catch (_) {}
+		} catch (_) {
+			// Ignore standard Frappe logout error
+		}
 
 		clearCsrfToken();
 
