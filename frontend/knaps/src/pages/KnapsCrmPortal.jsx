@@ -22,7 +22,7 @@ import CrmLeadDrawer from '../components/crm/CrmLeadDrawer';
 import CrmNewLeadModal from '../components/crm/CrmNewLeadModal';
 import CrmNewInteractionModal from '../components/crm/CrmNewInteractionModal';
 import CrmNewTaskModal from '../components/crm/CrmNewTaskModal';
-import CrmLoginForm from '../components/crm/CrmLoginForm';
+// CrmLoginForm superseded by Frappe native /login
 
 export default function KnapsCrmPortal() {
   const [activeTab, setActiveTab] = useState('pipeline'); // dashboard, pipeline, leads, clients, tasks, renewals
@@ -57,6 +57,7 @@ export default function KnapsCrmPortal() {
       if (!bData || !bData.user || bData.user.name === "Guest") {
         setBootstrapData(null);
         setAuthRequired(true);
+        window.location.href = "/login?redirect-to=%2Fknaps-crm";
         return;
       }
       setBootstrapData(bData);
@@ -77,6 +78,7 @@ export default function KnapsCrmPortal() {
       console.warn("CRM Auth/Data load failed:", err);
       setBootstrapData(null);
       setAuthRequired(true);
+      window.location.href = "/login?redirect-to=%2Fknaps-crm";
     } finally {
       setLoading(false);
     }
@@ -101,6 +103,7 @@ export default function KnapsCrmPortal() {
       setClients([]);
       setTasks([]);
       setRenewals([]);
+      window.location.href = "/login?redirect-to=%2Fknaps-crm";
     }
   };
 
@@ -206,7 +209,14 @@ export default function KnapsCrmPortal() {
   }
 
   if (authRequired || !bootstrapData) {
-    return <CrmLoginForm onLoginSuccess={loadCrmData} />;
+    return (
+      <div className="flex h-screen items-center justify-center bg-[#021d63] text-white">
+        <div className="flex flex-col items-center gap-3">
+          <FontAwesomeIcon icon={faSpinner} className="animate-spin text-3xl text-blue-400" />
+          <p className="text-sm font-medium tracking-wide text-blue-200">Redirecting to login...</p>
+        </div>
+      </div>
+    );
   }
 
   return (

@@ -36,9 +36,13 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
     loadDetails();
   }, [isOpen, leadName]);
 
-  const loadDetails = async () => {
+  const isWelcomeSent = leadData?.welcome_email_status === 'Sent';
+
+  const loadDetails = async (preserveFeedback = false) => {
     setLoading(true);
-    setFeedback({ type: '', message: '' });
+    if (!preserveFeedback) {
+      setFeedback({ type: '', message: '' });
+    }
     try {
       const res = await crmService.getLeadDetails(leadName);
       setLeadData(res.lead);
@@ -59,7 +63,7 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
       setLeadData(updated);
       onLeadUpdated && onLeadUpdated(updated);
       setFeedback({ type: 'success', message: `Lead status updated to ${newStatus}` });
-      loadDetails();
+      await loadDetails(true);
     } catch (err) {
       setFeedback({ type: 'error', message: err.message });
     } finally {
@@ -68,13 +72,31 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
   };
 
   const handleSendWelcome = async () => {
+    if (isWelcomeSent) {
+      setFeedback({ type: 'info', message: 'Welcome email has already been sent to this lead.' });
+      return;
+    }
     setActionLoading('welcome');
     try {
       await crmService.sendWelcomeEmail(leadData.name);
       setFeedback({ type: 'success', message: 'Welcome email queued successfully!' });
-      loadDetails();
+      await loadDetails(true);
+      if (onLeadUpdated) {
+        onLeadUpdated({ ...leadData, welcome_email_status: 'Sent' });
+      }
     } catch (err) {
-      setFeedback({ type: 'error', message: err.message });
+      if (
+        err.status === 409 ||
+        (err.message && (
+          err.message.toLowerCase().includes('already been sent') ||
+          err.message.toLowerCase().includes('duplicate')
+        ))
+      ) {
+        setFeedback({ type: 'info', message: 'Welcome email has already been sent to this lead.' });
+      } else {
+        setFeedback({ type: 'error', message: err.message || 'Failed to send welcome email.' });
+      }
+      await loadDetails(true);
     } finally {
       setActionLoading('');
     }
@@ -85,7 +107,7 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
     try {
       await crmService.sendOnboardingAndProfiler(leadData.name);
       setFeedback({ type: 'success', message: 'Onboarding & Risk Profiler links sent!' });
-      loadDetails();
+      await loadDetails(true);
     } catch (err) {
       setFeedback({ type: 'error', message: err.message });
     } finally {
@@ -99,7 +121,7 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
     try {
       const res = await crmService.convertToClient(leadData.name);
       setFeedback({ type: 'success', message: `Lead successfully converted to Client ${res.client_id || ''}!` });
-      loadDetails();
+      await loadDetails(true);
       onLeadUpdated && onLeadUpdated({ ...leadData, status: 'Converted' });
     } catch (err) {
       setFeedback({ type: 'error', message: err.message });
@@ -129,7 +151,7 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
       };
       setLeadData(updatedLead);
       onLeadUpdated && onLeadUpdated(updatedLead);
-      loadDetails();
+      await loadDetails(true);
     } catch (err) {
       setFeedback({ type: 'error', message: err.message || 'Failed to save remark' });
     } finally {
@@ -250,11 +272,23 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
                 <button
                   type="button"
                   onClick={handleSendWelcome}
-                  disabled={actionLoading === 'welcome'}
-                  className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 flex items-center gap-1.5 shadow-2xs cursor-pointer disabled:opacity-50"
+                  disabled={actionLoading === 'welcome' || isWelcomeSent}
+                  title={isWelcomeSent ? 'Welcome email has already been sent' : 'Send Welcome Email'}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold border flex items-center gap-1.5 shadow-2xs transition-colors ${
+                    isWelcomeSent
+                      ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                      : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50 cursor-pointer disabled:opacity-50'
+                  }`}
                 >
-                  {actionLoading === 'welcome' ? <FontAwesomeIcon icon={faSpinner} className="animate-spin text-xs" /> : <FontAwesomeIcon icon={faPaperPlane} className="text-[#032e92]" />}
-                  <span>Welcome Email</span>
+                  {actionLoading === 'welcome' ? (
+                    <FontAwesomeIcon icon={faSpinner} className="animate-spin text-xs" />
+                  ) : (
+                    <FontAwesomeIcon
+                      icon={isWelcomeSent ? faCheckCircle : faPaperPlane}
+                      className={isWelcomeSent ? 'text-emerald-600' : 'text-[#032e92]'}
+                    />
+                  )}
+                  <span>{isWelcomeSent ? 'Welcome Sent' : 'Welcome Email'}</span>
                 </button>
 
                 <button
@@ -283,8 +317,26 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
 
             {/* Notifications / Feedback */}
             {feedback.message && (
-              <div className={`mx-6 mt-4 p-3 rounded-xl text-xs font-semibold flex items-center gap-2 ${feedback.type === 'success' ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-red-50 text-red-800 border border-red-200'}`}>
-                <FontAwesomeIcon icon={feedback.type === 'success' ? faCheckCircle : faCircleExclamation} />
+              <div
+                className={`mx-6 mt-4 p-3 rounded-xl text-xs font-semibold flex items-center gap-2 ${
+                  feedback.type === 'success'
+                    ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                    : feedback.type === 'info'
+                    ? 'bg-blue-50 text-blue-800 border border-blue-200'
+                    : feedback.type === 'warning'
+                    ? 'bg-amber-50 text-amber-800 border border-amber-200'
+                    : 'bg-red-50 text-red-800 border border-red-200'
+                }`}
+              >
+                <FontAwesomeIcon
+                  icon={
+                    feedback.type === 'success'
+                      ? faCheckCircle
+                      : feedback.type === 'warning'
+                      ? faTriangleExclamation
+                      : faCircleExclamation
+                  }
+                />
                 <span>{feedback.message}</span>
               </div>
             )}
