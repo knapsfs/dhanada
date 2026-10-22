@@ -217,6 +217,11 @@ export const crmService = {
 			lead_name: leadName,
 		}),
 
+	sendRiskProfiler: (leadName) =>
+		fetchCrmApi("/api/method/dhanada.crm_api.trigger_risk_profiler", "POST", {
+			lead_name: leadName,
+		}),
+
 	sendOnboardingAndProfiler: (leadName) =>
 		fetchCrmApi("/api/method/dhanada.crm_api.trigger_onboarding_and_profiler", "POST", {
 			lead_name: leadName,

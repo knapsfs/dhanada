@@ -14,6 +14,7 @@ from dhanada.lifecycle.api import (
 	mark_lead_junk,
 	on_email_queue_update,
 	send_onboarding_and_risk_profiler,
+	send_risk_profiler,
 	send_welcome_message,
 	submit_client_onboarding,
 	submit_risk_profile_for_lead,
@@ -961,3 +962,72 @@ class TestLeadLifecycle(FrappeTestCase):
 		self.assertEqual(lead.status, orig_status)
 		self.assertEqual(lead.onboarding_status, "Not Initiated")
 		self.assertEqual(lead.risk_profiler_status, "Not Initiated")
+
+	def test_send_risk_profiler_success(self):
+		"""
+		Verifies send_risk_profiler sends the email with requested template and updates lead status to Sent.
+		"""
+		lead = self.create_test_lead()
+		mock_sendmail = MagicMock()
+		mock_queue = MagicMock()
+		mock_queue.name = "EMQ-RP-101"
+		mock_queue.status = "Sent"
+		mock_sendmail.return_value = mock_queue
+
+		with patch("dhanada.lifecycle.api.get_outgoing_email_account", return_value=get_mock_email_account()):
+			with patch("frappe.sendmail", mock_sendmail):
+				res = send_risk_profiler(lead.name)
+				self.assertEqual(res.get("status"), "success")
+				self.assertTrue("risk_profiler_url" in res)
+				self.assertEqual(res.get("risk_profiler_url"), "https://dev.knaps.app/sif")
+
+				# Verify sendmail arguments
+				mock_sendmail.assert_called_once()
+				call_kwargs = mock_sendmail.call_args[1]
+				self.assertEqual(call_kwargs["subject"], "Complete Your Risk Profile")
+				self.assertIn("Complete Your Risk Profile", call_kwargs["subject"])
+				self.assertIn(
+					"Please complete your Risk Profiler form using the link below:", call_kwargs["content"]
+				)
+				self.assertIn(res["risk_profiler_url"], call_kwargs["content"])
+				self.assertIn("Team KNAPS", call_kwargs["content"])
+
+		lead.reload()
+		self.assertEqual(lead.risk_profiler_status, "Sent")
+		self.assertIsNotNone(lead.risk_profiler_token)
+
+	def test_send_risk_profiler_configurable_url(self):
+		"""
+		Verifies profiler_url is configurable via frappe.conf without hardcoding.
+		"""
+		lead = self.create_test_lead()
+		custom_url = "https://knaps.in/custom-risk-profiler"
+		with patch.dict(frappe.conf, {"risk_profiler_url": custom_url}):
+			with patch(
+				"dhanada.lifecycle.api.get_outgoing_email_account", return_value=get_mock_email_account()
+			):
+				with patch("frappe.sendmail", return_value=MagicMock()):
+					res = send_risk_profiler(lead.name)
+					self.assertIn("knaps.in/custom-risk-profiler", res.get("risk_profiler_url"))
+
+	def test_send_risk_profiler_validations(self):
+		"""
+		Verifies validations: missing lead, invalid email, no outgoing account.
+		"""
+		# 1. Non-existent lead
+		with self.assertRaises(frappe.DoesNotExistError):
+			send_risk_profiler("NON-EXISTENT-LEAD-999")
+
+		# 2. Missing email
+		lead = self.create_test_lead()
+		lead.email = ""
+		lead.save()
+		with self.assertRaises(frappe.ValidationError):
+			send_risk_profiler(lead.name)
+
+		# 3. No outgoing email account
+		lead.email = "investor@example.com"
+		lead.save()
+		with patch("dhanada.lifecycle.api.get_outgoing_email_account", return_value=None):
+			with self.assertRaises(frappe.OutgoingEmailError):
+				send_risk_profiler(lead.name)
