@@ -25,7 +25,8 @@ import CrmNewTaskModal from '../components/crm/CrmNewTaskModal';
 // CrmLoginForm superseded by Frappe native /login
 
 export default function KnapsCrmPortal() {
-  const [activeTab, setActiveTab] = useState('pipeline'); // dashboard, pipeline, leads, clients, tasks, renewals
+  const [activeTab, setActiveTab] = useState('leads'); // dashboard, leads, clients, tasks, renewals
+  const [leadsViewMode, setLeadsViewMode] = useState('list'); // 'list' or 'kanban'
   const [bootstrapData, setBootstrapData] = useState(null);
   const [leads, setLeads] = useState([]);
   const [clients, setClients] = useState([]);
@@ -160,6 +161,18 @@ export default function KnapsCrmPortal() {
     setIsTaskModalOpen(true);
   };
 
+  const handleNavigateTab = (tab, mode = 'list') => {
+    if (tab === 'pipeline') {
+      setActiveTab('leads');
+      setLeadsViewMode('kanban');
+    } else {
+      setActiveTab(tab);
+      if (tab === 'leads' && mode) {
+        setLeadsViewMode(mode);
+      }
+    }
+  };
+
   // Pipeline leads: filtered only by search query so all Kanban status columns remain visible
   const pipelineLeads = useMemo(() => {
     if (!searchQuery.trim()) return leads;
@@ -191,7 +204,6 @@ export default function KnapsCrmPortal() {
 
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: faChartPie },
-    { id: 'pipeline', label: 'Lead Pipeline', icon: faTableColumns, badge: leads.filter(l => l.status === 'New').length },
     { id: 'leads', label: 'All Leads', icon: faUsers, badge: leads.length },
     { id: 'clients', label: 'Clients', icon: faUserCheck, badge: clients.length },
     { id: 'tasks', label: 'Tasks & Follow-ups', icon: faListCheck, badge: tasks.filter(t => t.status === 'Open').length },
@@ -352,7 +364,7 @@ export default function KnapsCrmPortal() {
                   <span className="text-[#032e92]">Lead Profile</span>
                 </span>
               ) : (
-                navItems.find((n) => n.id === activeTab)?.label || 'CRM'
+                (activeTab === 'leads' && leadsViewMode === 'kanban' ? 'All Leads (Pipeline)' : (navItems.find((n) => n.id === activeTab)?.label || 'CRM'))
               )}
             </h1>
 
@@ -378,14 +390,6 @@ export default function KnapsCrmPortal() {
               title="Refresh CRM Data"
             >
               <FontAwesomeIcon icon={faArrowsRotate} className={loading ? 'animate-spin' : ''} />
-            </button>
-
-            <button
-              onClick={triggerLogoutConfirm}
-              className="p-2 rounded-xl bg-gray-50 border border-gray-200 text-gray-600 hover:text-red-600 hover:bg-red-50 hover:border-red-200 transition-colors text-xs cursor-pointer"
-              title="Logout from CRM"
-            >
-              <FontAwesomeIcon icon={faRightFromBracket} />
             </button>
 
             <button
@@ -429,8 +433,32 @@ export default function KnapsCrmPortal() {
                   onSelectLead={(name) => setSelectedLeadName(name)}
                   onNewLead={() => setIsLeadModalOpen(true)}
                   onNewTask={() => setIsTaskModalOpen(true)}
-                  onNavigateTab={(tab) => setActiveTab(tab)}
+                  onNavigateTab={handleNavigateTab}
                 />
+              )}
+
+              {activeTab === 'leads' && (
+                leadsViewMode === 'kanban' ? (
+                  <CrmPipelineView
+                    leads={pipelineLeads}
+                    onSelectLead={(name) => setSelectedLeadName(name)}
+                    onStatusChange={handleStatusChange}
+                    onNewLead={() => setIsLeadModalOpen(true)}
+                    onToggleView={(mode) => setLeadsViewMode(mode)}
+                  />
+                ) : (
+                  <CrmLeadsListView
+                    leads={displayedLeads}
+                    onSelectLead={(name) => setSelectedLeadName(name)}
+                    selectedStatus={statusFilter}
+                    onStatusFilterChange={setStatusFilter}
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                    onNewLead={() => setIsLeadModalOpen(true)}
+                    onDeleteLead={handleLeadDeleted}
+                    onOpenKanban={() => setLeadsViewMode('kanban')}
+                  />
+                )
               )}
 
               {activeTab === 'pipeline' && (
@@ -439,19 +467,10 @@ export default function KnapsCrmPortal() {
                   onSelectLead={(name) => setSelectedLeadName(name)}
                   onStatusChange={handleStatusChange}
                   onNewLead={() => setIsLeadModalOpen(true)}
-                />
-              )}
-
-              {activeTab === 'leads' && (
-                <CrmLeadsListView
-                  leads={displayedLeads}
-                  onSelectLead={(name) => setSelectedLeadName(name)}
-                  selectedStatus={statusFilter}
-                  onStatusFilterChange={setStatusFilter}
-                  searchQuery={searchQuery}
-                  onSearchChange={setSearchQuery}
-                  onNewLead={() => setIsLeadModalOpen(true)}
-                  onDeleteLead={handleLeadDeleted}
+                  onToggleView={(mode) => {
+                    setActiveTab('leads');
+                    setLeadsViewMode(mode);
+                  }}
                 />
               )}
 

@@ -12,7 +12,7 @@ import {
   faExternalLinkAlt,
   faSpinner,
   faEnvelope,
-  faCommentDots,
+  faTriangleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { crmService } from "../../services/crmService";
@@ -24,24 +24,25 @@ export default function CrmSendFormModal({
   referenceDoctype = "Lead", // "Lead" or "Client"
   onFormSent,
 }) {
-  const [selectedWorkflow, setSelectedWorkflow] = useState("combined_onboarding");
-  const [expiresInDays, setExpiresInDays] = useState(7);
-  const [generating, setGenerating] = useState(false);
-  const [sendingEmail, setSendingEmail] = useState(false);
-  const [generatedResult, setGeneratedResult] = useState(null);
-  const [copied, setCopied] = useState(false);
-  const [customEmailMessage, setCustomEmailMessage] = useState("");
-  const [feedback, setFeedback] = useState({ type: "", message: "" });
-
-  if (!isOpen) return null;
-
   const recipientName =
     record.lead_name ||
     record.client_name ||
     `${record.first_name || ""} ${record.last_name || ""}`.trim() ||
     "Customer";
-  const recipientEmail = record.email || "";
+  const recipientEmail = (record.email || "").trim().toLowerCase();
   const recipientPhone = record.mobile_no || "";
+
+  const [selectedWorkflow, setSelectedWorkflow] = useState("combined_onboarding");
+  const [expiresInDays, setExpiresInDays] = useState(7);
+  const [sendEmailDirectly, setSendEmailDirectly] = useState(Boolean(recipientEmail));
+  const [customEmailMessage, setCustomEmailMessage] = useState("");
+  const [generating, setGenerating] = useState(false);
+  const [sendingEmail, setSendingEmail] = useState(false);
+  const [generatedResult, setGeneratedResult] = useState(null);
+  const [copied, setCopied] = useState(false);
+  const [feedback, setFeedback] = useState({ type: "", message: "" });
+
+  if (!isOpen) return null;
 
   const workflows = [
     {
@@ -78,13 +79,22 @@ export default function CrmSendFormModal({
         referenceDoctype,
         record.name,
         selectedWorkflow,
-        expiresInDays
+        expiresInDays,
+        sendEmailDirectly && Boolean(recipientEmail),
+        customEmailMessage
       );
       setGeneratedResult(res);
-      setFeedback({
-        type: "success",
-        message: "Secure token and form link generated successfully!",
-      });
+      if (res.email_sent) {
+        setFeedback({
+          type: "success",
+          message: `Form link generated and sent to ${res.email_recipient || recipientEmail}!`,
+        });
+      } else {
+        setFeedback({
+          type: "success",
+          message: "Secure token and form link generated successfully!",
+        });
+      }
       if (onFormSent) {
         onFormSent(res);
       }
@@ -113,7 +123,7 @@ export default function CrmSendFormModal({
       await crmService.sendFormEmail(generatedResult.token, customEmailMessage);
       setFeedback({
         type: "success",
-        message: `Form link successfully emailed to ${recipientEmail}!`,
+        message: `Form link successfully dispatched to ${recipientEmail}!`,
       });
     } catch (err) {
       setFeedback({
@@ -253,23 +263,73 @@ export default function CrmSendFormModal({
             </select>
           </div>
 
-          {/* Generate Button or Result Display */}
+          {/* Email Delivery Options */}
+          {!generatedResult && (
+            <div className="space-y-3">
+              {recipientEmail ? (
+                <div className="bg-blue-50/60 border border-blue-200/80 rounded-2xl p-3.5 space-y-2.5">
+                  <label className="flex items-center gap-2.5 cursor-pointer text-xs font-bold text-gray-800">
+                    <input
+                      type="checkbox"
+                      checked={sendEmailDirectly}
+                      onChange={(e) => setSendEmailDirectly(e.target.checked)}
+                      className="w-4 h-4 rounded text-[#032e92] focus:ring-blue-200"
+                    />
+                    <span>
+                      Send form link directly to customer's email (
+                      <strong className="text-[#032e92]">{recipientEmail}</strong>)
+                    </span>
+                  </label>
+
+                  {sendEmailDirectly && (
+                    <input
+                      type="text"
+                      value={customEmailMessage}
+                      onChange={(e) => setCustomEmailMessage(e.target.value)}
+                      placeholder="Add an optional personal message in the email..."
+                      className="w-full text-xs px-3 py-2 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-[#032e92]"
+                    />
+                  )}
+                </div>
+              ) : (
+                <div className="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-800 flex items-center gap-2">
+                  <FontAwesomeIcon icon={faTriangleExclamation} />
+                  <span>
+                    No email on record. Link will be generated for 1-click copy and WhatsApp
+                    sharing.
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Generate & Send Button or Result Display */}
           {!generatedResult ? (
             <button
               type="button"
               onClick={handleGenerateLink}
               disabled={generating}
-              className="w-full py-3 rounded-xl text-xs font-extrabold bg-[#032e92] hover:bg-[#021d63] text-white shadow-xs hover:shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+              className="w-full py-3.5 rounded-xl text-xs font-extrabold bg-[#032e92] hover:bg-[#021d63] text-white shadow-xs hover:shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
             >
               {generating ? (
                 <>
                   <FontAwesomeIcon icon={faSpinner} className="animate-spin" />
-                  <span>Generating Secure Link...</span>
+                  <span>
+                    {sendEmailDirectly && recipientEmail
+                      ? "Generating Link & Dispatching Email..."
+                      : "Generating Customer Form Link..."}
+                  </span>
                 </>
               ) : (
                 <>
-                  <FontAwesomeIcon icon={faLink} />
-                  <span>Generate Customer Form Link</span>
+                  <FontAwesomeIcon
+                    icon={sendEmailDirectly && recipientEmail ? faPaperPlane : faLink}
+                  />
+                  <span>
+                    {sendEmailDirectly && recipientEmail
+                      ? "Generate & Send Form Link to Customer"
+                      : "Generate Customer Form Link"}
+                  </span>
                 </>
               )}
             </button>
@@ -325,21 +385,26 @@ export default function CrmSendFormModal({
                 </a>
               </div>
 
-              {/* Email Send Section */}
+              {/* Resend Email Section if needed */}
               {recipientEmail && (
                 <div className="bg-slate-50 p-3.5 rounded-2xl border border-gray-200 space-y-2">
                   <div className="flex items-center justify-between text-xs">
                     <span className="font-bold text-gray-800 flex items-center gap-1.5">
                       <FontAwesomeIcon icon={faEnvelope} className="text-[#032e92]" />
-                      <span>Email to: {recipientEmail}</span>
+                      <span>Email: {recipientEmail}</span>
                     </span>
+                    {generatedResult.email_sent && (
+                      <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 flex items-center gap-1">
+                        <FontAwesomeIcon icon={faCheck} /> Sent
+                      </span>
+                    )}
                   </div>
 
                   <input
                     type="text"
                     value={customEmailMessage}
                     onChange={(e) => setCustomEmailMessage(e.target.value)}
-                    placeholder="Optional personal message in email..."
+                    placeholder="Optional message to include in email..."
                     className="w-full text-xs px-3 py-2 rounded-lg border border-gray-300 bg-white"
                   />
 
@@ -357,7 +422,7 @@ export default function CrmSendFormModal({
                     ) : (
                       <>
                         <FontAwesomeIcon icon={faPaperPlane} />
-                        <span>Send Link via Email</span>
+                        <span>{generatedResult.email_sent ? "Resend Link via Email" : "Send Link via Email"}</span>
                       </>
                     )}
                   </button>

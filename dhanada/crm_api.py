@@ -681,8 +681,10 @@ def delete_crm_lead(lead_name):
 
 
 @frappe.whitelist()
-def generate_crm_form_link(reference_doctype, reference_name, workflow_type, expires_in_days=7):
-	"""Generates a secure, expiring form link for Risk Profiler, Onboarding, or Combined workflow."""
+def generate_crm_form_link(
+	reference_doctype, reference_name, workflow_type, expires_in_days=7, send_email=True, custom_message=None
+):
+	"""Generates a secure, expiring form link for Risk Profiler, Onboarding, or Combined workflow and sends email."""
 	_check_crm_permission()
 	import dhanada.form_workflow_api as form_workflow_api
 
@@ -691,6 +693,8 @@ def generate_crm_form_link(reference_doctype, reference_name, workflow_type, exp
 		reference_name=reference_name,
 		workflow_type=workflow_type,
 		expires_in_days=expires_in_days,
+		send_email=send_email,
+		custom_message=custom_message,
 	)
 
 

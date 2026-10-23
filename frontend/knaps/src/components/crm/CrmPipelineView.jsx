@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPhone, faEllipsisVertical, faCommentDots, faCalendarAlt,
-  faPlus, faCheckCircle, faArrowsRotate, faTriangleExclamation
+  faPlus, faCheckCircle, faArrowsRotate, faTriangleExclamation, faTableColumns, faList
 } from '@fortawesome/free-solid-svg-icons';
 import { getContactStatus } from '../../utils/crmContactUtils';
 
@@ -19,7 +19,8 @@ export default function CrmPipelineView({
   leads = [],
   onSelectLead,
   onStatusChange,
-  onNewLead
+  onNewLead,
+  onToggleView,
 }) {
   const [activeMenuLead, setActiveMenuLead] = useState(null);
 
@@ -29,6 +30,42 @@ export default function CrmPipelineView({
 
   return (
     <div className="h-full flex flex-col">
+      {/* Top Header / View Switcher Bar */}
+      <div className="bg-white rounded-2xl border border-gray-200/90 shadow-2xs p-3.5 sm:p-4 mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl bg-blue-50 text-[#032e92] flex items-center justify-center text-xs">
+            <FontAwesomeIcon icon={faTableColumns} />
+          </div>
+          <div>
+            <h3 className="text-xs font-bold text-gray-900 leading-tight">Lead Pipeline (Kanban)</h3>
+            <p className="text-[11px] text-gray-400 font-medium">Stage-by-stage visual lead management</p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 self-end sm:self-center">
+          {onToggleView && (
+            <button
+              type="button"
+              onClick={() => onToggleView("list")}
+              className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 shadow-2xs flex items-center gap-1.5 cursor-pointer whitespace-nowrap transition-colors"
+              title="Switch to Table / List View"
+            >
+              <FontAwesomeIcon icon={faList} className="text-gray-500 text-[11px]" />
+              <span>Table View</span>
+            </button>
+          )}
+
+          <button
+            type="button"
+            onClick={() => onNewLead && onNewLead("New")}
+            className="btn-ripple px-4 py-1.5 rounded-xl text-xs font-bold bg-[#032e92] hover:bg-[#021d63] text-white shadow-sm flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
+          >
+            <FontAwesomeIcon icon={faPlus} className="text-[10px]" />
+            <span>Add Lead</span>
+          </button>
+        </div>
+      </div>
+
       {/* Kanban Board Horizontal Scroll Container */}
       <div className="flex-1 overflow-x-auto pb-6">
         <div className="flex gap-4 min-w-[1280px] h-full items-start">

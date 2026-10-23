@@ -4,6 +4,7 @@
 import json
 import re
 import secrets
+import smtplib
 import urllib.request
 from datetime import timedelta
 
@@ -15,6 +16,45 @@ import dhanada.lifecycle.api as lifecycle_api
 
 PAN_REGEX = re.compile(r"^[A-Z]{5}[0-9]{4}[A-Z]$")
 IFSC_REGEX = re.compile(r"^[A-Z]{4}0[A-Z0-9]{6}$")
+
+
+def exempt_form_workflow_csrf():
+	"""
+	Auth hook to disable CSRF check for public customer form workflow endpoints.
+	These endpoints use secure, time-limited, random 256-bit cryptographic tokens.
+	"""
+	req = getattr(frappe, "request", None)
+	if req and getattr(req, "path", None) and req.path.startswith("/api/method/dhanada.form_workflow_api."):
+		frappe.conf.ignore_csrf = True
+
+
+def get_form_token_doc(token):
+	if not token:
+		frappe.throw(_("Submission token is required."), frappe.ValidationError)
+	token_name = frappe.db.get_value("CRM Form Token", {"token": token}, "name")
+	if not token_name:
+		frappe.throw(_("Invalid or expired form link."), frappe.DoesNotExistError)
+	token_doc = frappe.get_doc("CRM Form Token", token_name)
+	token_doc.flags.ignore_permissions = True
+	return token_doc
+
+
+def get_form_base_url():
+	"""
+	Returns the API Base URL configured in Dhanada Settings (api_base_url).
+	Falls back to frappe.utils.get_url() if not configured or empty.
+	"""
+	try:
+		api_base_url = frappe.db.get_single_value("Dhanada Settings", "api_base_url")
+		if api_base_url and str(api_base_url).strip():
+			url = str(api_base_url).strip().rstrip("/")
+			if not url.startswith("http://") and not url.startswith("https://"):
+				url = f"https://{url}"
+			return url
+	except Exception:
+		pass
+	return (frappe.utils.get_url() or "").rstrip("/")
+
 
 # Exact Risk Questions configuration matching riskQuestions.js
 RISK_QUESTIONS = [
@@ -43,8 +83,8 @@ RISK_QUESTIONS = [
 		"title": "Approximately what portion of your monthly income goes toward household expenses and EMI payments?",
 		"options": [
 			{"text": "Less than 30%", "score": 8},
-			{"text": "30-40%", "score": 6},
-			{"text": "40-50%", "score": 4},
+			{"text": "30–40%", "score": 6},  # noqa: RUF001
+			{"text": "40–50%", "score": 4},  # noqa: RUF001
 			{"text": "More than 50%", "score": 2},
 		],
 	},
@@ -82,22 +122,54 @@ RISK_QUESTION_MAP = {q["id"]: q for q in RISK_QUESTIONS}
 def calculate_risk_scoring(answers):
 	"""
 	Server-side authoritative scoring.
-	answers: list of dicts: [{'questionId': 1, 'selectedOptionText': '...'}] or dict {questionId: optionText}
+	answers: list of dicts, dict of dicts, dict of strings/scores, or JSON string.
 	Returns: dict with totalScore, maxScore, profile, description, validatedAnswers
 	"""
+	if isinstance(answers, str):
+		try:
+			answers = json.loads(answers)
+		except Exception:
+			answers = {}
+
 	total_score = 0
 	validated_answers = []
+
+	def parse_qid(val):
+		if val is None:
+			return None
+		if isinstance(val, int):
+			return val
+		digits = re.findall(r"\d+", str(val))
+		if digits:
+			return int(digits[0])
+		return None
+
+	def extract_val(val):
+		if isinstance(val, dict):
+			return (
+				val.get("selectedOptionText")
+				or val.get("text")
+				or val.get("option")
+				or val.get("value")
+				or val.get("score")
+				or ""
+			)
+		return val if val is not None else ""
 
 	ans_dict = {}
 	if isinstance(answers, list):
 		for item in answers:
-			qid = item.get("questionId") or item.get("id")
-			opt_text = item.get("selectedOptionText") or item.get("text") or item.get("option")
-			if qid is not None:
-				ans_dict[int(qid)] = opt_text
+			if isinstance(item, dict):
+				qid = parse_qid(item.get("questionId") or item.get("id"))
+				opt_val = extract_val(item)
+				if qid is not None:
+					ans_dict[qid] = opt_val
 	elif isinstance(answers, dict):
 		for k, v in answers.items():
-			ans_dict[int(k)] = v
+			qid = parse_qid(k)
+			opt_val = extract_val(v)
+			if qid is not None:
+				ans_dict[qid] = opt_val
 
 	for qid, question in RISK_QUESTION_MAP.items():
 		if qid not in ans_dict:
@@ -105,14 +177,20 @@ def calculate_risk_scoring(answers):
 				_("Question '{0}' has not been answered.").format(question["title"]),
 				frappe.ValidationError,
 			)
-		chosen_text = (ans_dict[qid] or "").strip()
+		chosen_val = ans_dict[qid]
+		chosen_str = str(chosen_val).strip()
+
 		matched_option = next(
-			(opt for opt in question["options"] if opt["text"].strip().lower() == chosen_text.lower()),
+			(
+				opt
+				for opt in question["options"]
+				if opt["text"].strip().lower() == chosen_str.lower() or str(opt["score"]) == chosen_str
+			),
 			None,
 		)
 		if not matched_option:
 			frappe.throw(
-				_("Invalid answer option '{0}' for question '{1}'.").format(chosen_text, question["title"]),
+				_("Invalid answer option '{0}' for question '{1}'.").format(chosen_str, question["title"]),
 				frappe.ValidationError,
 			)
 
@@ -186,19 +264,132 @@ def derive_age_band(dob_str):
 		return None
 
 
+def dispatch_form_email_immediately(token_doc, custom_message=None):
+	"""
+	Dispatches the form link via Frappe email service and forces immediate synchronous SMTP delivery.
+	"""
+	prefill = json.loads(token_doc.prefill_data or "{}")
+	recipient_email = (prefill.get("email") or "").strip().lower()
+	if not recipient_email or "@" not in recipient_email:
+		return {"success": False, "email_sent": False, "message": "No valid email address on record."}
+
+	customer_name = prefill.get("full_name") or "Valued Client"
+	base_url = get_form_base_url()
+
+	workflow_titles = {
+		"risk_profiler": "Risk Profiler Questionnaire",
+		"client_onboarding": "Client Onboarding Form",
+		"combined_onboarding": "Client Onboarding & Risk Profiler",
+	}
+	wf_title = workflow_titles.get(token_doc.workflow_type, "Form")
+
+	route_map = {
+		"risk_profiler": f"/forms/risk-profiler/{token_doc.token}",
+		"client_onboarding": f"/forms/client-onboarding/{token_doc.token}",
+		"combined_onboarding": f"/forms/combined-onboarding/{token_doc.token}",
+	}
+	form_url = f"{base_url}{route_map.get(token_doc.workflow_type)}"
+
+	subject = f"Please Complete Your {wf_title} — KNAPS"
+	content = f"""<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1e293b; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 16px; background-color: #ffffff;">
+    <div style="margin-bottom: 20px;">
+        <h2 style="color: #032e92; margin: 0 0 4px 0; font-size: 20px;">KNAPS Financial</h2>
+        <p style="font-size: 11px; color: #64748b; margin: 0;">AMFI Registered Mutual Fund Distributor</p>
+    </div>
+    <hr style="border: none; border-top: 1px solid #f1f5f9; margin-bottom: 20px;" />
+    <h3 style="color: #0f172a; margin-top: 0; font-size: 16px;">Dear {customer_name},</h3>
+    <p style="font-size: 13px; color: #334155;">We invite you to complete your <strong>{wf_title}</strong> with KNAPS.</p>
+    {f"<p style='background-color: #f8fafc; padding: 12px 16px; border-left: 4px solid #032e92; border-radius: 6px; font-style: italic; font-size: 13px; color: #1e293b;'>{custom_message}</p>" if custom_message else ""}
+    <p style="font-size: 13px; color: #334155;">Please click the secure button below to complete your details:</p>
+    <div style="margin: 28px 0;">
+        <a href="{form_url}" style="background-color: #032e92; color: #ffffff; padding: 14px 28px; text-decoration: none; border-radius: 10px; font-weight: bold; display: inline-block; font-size: 14px; box-shadow: 0 2px 4px rgba(3, 46, 146, 0.2);">
+            Open {wf_title}
+        </a>
+    </div>
+    <p style="font-size: 12px; color: #64748b;">Or copy this secure link into your browser:<br>
+    <a href="{form_url}" style="color: #032e92; word-break: break-all;">{form_url}</a></p>
+    <p style="font-size: 11px; color: #94a3b8; margin-top: 24px; border-top: 1px solid #f1f5f9; pt: 16px;">This secure link is valid for 7 days. If you did not request this communication, please disregard this email.</p>
+    <br>
+    <p style="margin: 0; font-size: 13px; color: #0f172a;">Warm regards,<br><strong>Team KNAPS</strong></p>
+</div>"""
+
+	# Check for existing pending queue item to reuse if retrying
+	existing_queue = frappe.db.get_value(
+		"Email Queue",
+		{
+			"reference_doctype": token_doc.reference_doctype,
+			"reference_name": token_doc.reference_name,
+			"status": ("in", ["Not Sent", "Error", "Partially Sent"]),
+		},
+		"name",
+		order_by="creation desc",
+	)
+
+	queue_entry = None
+	if existing_queue and frappe.db.exists("Email Queue", existing_queue):
+		queue_entry = frappe.get_doc("Email Queue", existing_queue)
+		queue_entry.message = content
+		queue_entry.status = "Not Sent"
+		queue_entry.error = None
+		queue_entry.retry = 0
+		queue_entry.save(ignore_permissions=True)
+		frappe.db.commit()
+
+	if not queue_entry:
+		queue_entry = frappe.sendmail(
+			recipients=[recipient_email],
+			subject=subject,
+			content=content,
+			reference_doctype=token_doc.reference_doctype,
+			reference_name=token_doc.reference_name,
+			delayed=False,
+			now=True,
+		)
+
+	# Force immediate synchronous SMTP transmission
+	smtp_sent = False
+	smtp_err = None
+	if queue_entry and hasattr(queue_entry, "send"):
+		try:
+			queue_entry.send(force_send=True)
+			if hasattr(queue_entry, "reload"):
+				queue_entry.reload()
+			if getattr(queue_entry, "status", None) == "Sent":
+				smtp_sent = True
+		except Exception as e:
+			smtp_err = str(e)
+			frappe.log_error(title="Form Workflow Email Send Failure", message=frappe.get_traceback())
+
+	frappe.db.commit()
+	if hasattr(frappe, "message_log") and isinstance(frappe.message_log, list):
+		frappe.message_log.clear()
+
+	return {
+		"success": True,
+		"email_sent": True,
+		"email_recipient": recipient_email,
+		"smtp_sent": smtp_sent,
+		"smtp_error": smtp_err,
+		"message": _("Form link generated and sent to {0}.").format(recipient_email),
+	}
+
+
 # ============================================================================
 # CRM ACTIONS: GENERATE LINK & SEND EMAIL
 # ============================================================================
 
 
 @frappe.whitelist()
-def generate_form_workflow_link(reference_doctype, reference_name, workflow_type, expires_in_days=7):
+def generate_form_workflow_link(
+	reference_doctype, reference_name, workflow_type, expires_in_days=7, send_email=True, custom_message=None
+):
 	"""
 	Generates a secure, customer-specific token for one of the three workflows:
 	- 'risk_profiler'
 	- 'client_onboarding'
 	- 'combined_onboarding'
 	Associates token with Lead or Client and updates workflow status to 'Sent'.
+	Dispatches email immediately to customer if send_email is True.
 	"""
 	if frappe.session.user == "Guest":
 		frappe.throw(_("Authentication required to generate form link."), frappe.PermissionError)
@@ -224,7 +415,7 @@ def generate_form_workflow_link(reference_doctype, reference_name, workflow_type
 		"full_name": full_name,
 		"first_name": rec.get("first_name") or "",
 		"last_name": rec.get("last_name") or "",
-		"email": rec.get("email") or "",
+		"email": (rec.get("email") or "").strip().lower(),
 		"mobile_no": normalize_mobile(rec.get("mobile_no")),
 		"alternate_mobile_no": normalize_mobile(rec.get("alternate_mobile_no")),
 		"pan": rec.get("pan") or "",
@@ -292,8 +483,18 @@ def generate_form_workflow_link(reference_doctype, reference_name, workflow_type
 		"combined_onboarding": f"/forms/combined-onboarding/{token}",
 	}
 	form_path = route_map.get(workflow_type)
-	base_url = frappe.utils.get_url()
+	base_url = get_form_base_url()
 	form_url = f"{base_url}{form_path}"
+
+	# Dispatch email if requested and email address exists
+	email_result = {"email_sent": False}
+	should_send = send_email in (True, 1, "1", "true", "True") if send_email is not None else True
+	if should_send and prefill.get("email"):
+		try:
+			email_result = dispatch_form_email_immediately(token_doc, custom_message)
+		except Exception as e:
+			frappe.log_error(title="Auto Send Form Email Error", message=frappe.get_traceback())
+			email_result = {"email_sent": False, "error": str(e)}
 
 	return {
 		"token": token,
@@ -302,77 +503,31 @@ def generate_form_workflow_link(reference_doctype, reference_name, workflow_type
 		"form_url": form_url,
 		"expires_at": str(expires_at),
 		"prefill": prefill,
-		"message": _("Form link generated successfully."),
+		"email_sent": email_result.get("email_sent", False),
+		"email_recipient": email_result.get("email_recipient", prefill.get("email")),
+		"message": (
+			_("Form link generated and sent to {0}.").format(prefill.get("email"))
+			if email_result.get("email_sent")
+			else _("Form link generated successfully.")
+		),
 	}
 
 
 @frappe.whitelist()
 def send_form_workflow_email(token, custom_message=None):
 	"""
-	Sends the generated form link to the customer email address.
+	Sends the generated form link to the customer email address with immediate synchronous transmission.
 	"""
 	if frappe.session.user == "Guest":
 		frappe.throw(_("Authentication required to send form email."), frappe.PermissionError)
 
-	token_doc = frappe.get_doc("CRM Form Token", {"token": token})
-	if not token_doc:
-		frappe.throw(_("Invalid token."), frappe.DoesNotExistError)
+	token_doc = get_form_token_doc(token)
 
-	prefill = json.loads(token_doc.prefill_data or "{}")
-	recipient_email = prefill.get("email")
-	if not recipient_email:
-		frappe.throw(_("Customer record does not have an email address configured."))
+	res = dispatch_form_email_immediately(token_doc, custom_message)
+	if not res.get("email_sent"):
+		frappe.throw(res.get("message") or _("Failed to send email."))
 
-	customer_name = prefill.get("full_name") or "Valued Client"
-	base_url = frappe.utils.get_url()
-
-	workflow_titles = {
-		"risk_profiler": "Risk Profiler Questionnaire",
-		"client_onboarding": "Client Onboarding Form",
-		"combined_onboarding": "Client Onboarding & Risk Profiler",
-	}
-	wf_title = workflow_titles.get(token_doc.workflow_type, "Form")
-
-	route_map = {
-		"risk_profiler": f"/forms/risk-profiler/{token}",
-		"client_onboarding": f"/forms/client-onboarding/{token}",
-		"combined_onboarding": f"/forms/combined-onboarding/{token}",
-	}
-	form_url = f"{base_url}{route_map.get(token_doc.workflow_type)}"
-
-	subject = f"Please Complete Your {wf_title} - KNAPS"
-	content = f"""<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1e293b;">
-    <h3 style="color: #032e92;">Hello {customer_name},</h3>
-    <p>We invite you to complete your <strong>{wf_title}</strong> with KNAPS.</p>
-    {f"<p>{custom_message}</p>" if custom_message else ""}
-    <p style="margin: 24px 0;">
-        <a href="{form_url}" style="background-color: #032e92; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">
-            Open {wf_title}
-        </a>
-    </p>
-    <p style="font-size: 12px; color: #64748b;">Or copy this secure link into your browser:<br><a href="{form_url}">{form_url}</a></p>
-    <p style="font-size: 12px; color: #94a3b8;">This secure link is valid for 7 days. If you did not request this form, please disregard this email.</p>
-    <br>
-    <p>Best regards,<br><strong>Team KNAPS</strong></p>
-</div>"""
-
-	try:
-		frappe.sendmail(
-			recipients=[recipient_email],
-			subject=subject,
-			content=content,
-			reference_doctype=token_doc.reference_doctype,
-			reference_name=token_doc.reference_name,
-			now=True,
-		)
-	except Exception as e:
-		frappe.log_error(title="Form Workflow Email Error", message=frappe.get_traceback())
-		frappe.throw(_("Failed to dispatch email: {0}").format(str(e)))
-
-	return {
-		"success": True,
-		"message": _("Email sent successfully to {0}.").format(recipient_email),
-	}
+	return res
 
 
 # ============================================================================
@@ -467,6 +622,17 @@ def save_form_progress(token, payload=None):
 		else:
 			payload = frappe.form_dict or {}
 
+	if isinstance(payload, str):
+		try:
+			payload = json.loads(payload)
+		except Exception:
+			payload = {}
+
+	if isinstance(payload, dict) and "payload" in payload and len(payload) <= 3:
+		nested = payload.get("payload")
+		if isinstance(nested, dict):
+			payload = nested
+
 	token_matches = frappe.get_all(
 		"CRM Form Token",
 		filters={"token": token},
@@ -495,6 +661,8 @@ def save_form_progress(token, payload=None):
 		},
 	)
 	frappe.db.commit()
+	if hasattr(frappe, "message_log") and isinstance(frappe.message_log, list):
+		frappe.message_log.clear()
 
 	return {"success": True, "message": _("Progress saved.")}
 
@@ -509,8 +677,8 @@ def upload_bank_proof(token=None):
 	if not token:
 		frappe.throw(_("Token is required for bank proof upload."), frappe.ValidationError)
 
-	token_doc = frappe.get_doc("CRM Form Token", {"token": token})
-	if not token_doc or token_doc.status in ("Expired", "Revoked"):
+	token_doc = get_form_token_doc(token)
+	if token_doc.status in ("Expired", "Revoked"):
 		frappe.throw(_("Invalid or expired token."), frappe.ValidationError)
 
 	if "file" not in frappe.request.files:
@@ -544,6 +712,8 @@ def upload_bank_proof(token=None):
 	)
 	file_doc.save(ignore_permissions=True)
 	frappe.db.commit()
+	if hasattr(frappe, "message_log") and isinstance(frappe.message_log, list):
+		frappe.message_log.clear()
 
 	return {
 		"success": True,
@@ -610,9 +780,13 @@ def submit_risk_profiler_form(token, answers=None):
 		else:
 			answers = frappe.form_dict.get("answers") or frappe.form_dict
 
-	token_doc = frappe.get_doc("CRM Form Token", {"token": token})
-	if not token_doc:
-		frappe.throw(_("Invalid token."), frappe.DoesNotExistError)
+	if isinstance(answers, str):
+		try:
+			answers = json.loads(answers)
+		except Exception:
+			pass
+
+	token_doc = get_form_token_doc(token)
 
 	if token_doc.status in ("Expired", "Revoked"):
 		frappe.throw(_("This form link has expired or been revoked."), frappe.ValidationError)
@@ -663,7 +837,7 @@ def submit_risk_profiler_form(token, answers=None):
 		lead.risk_profile = risk_profile
 		lead.risk_profiler_completed_on = now_datetime()
 		lead.flags.ignore_permissions = True
-		lead.save()
+		lead.save(ignore_permissions=True)
 		# Check auto convert if onboarding is also completed
 		try:
 			lifecycle_api.check_and_auto_convert(lead.name)
@@ -675,6 +849,8 @@ def submit_risk_profiler_form(token, answers=None):
 		frappe.db.set_value("Client", token_doc.client, "risk_profile", risk_profile)
 
 	frappe.db.commit()
+	if hasattr(frappe, "message_log") and isinstance(frappe.message_log, list):
+		frappe.message_log.clear()
 
 	return {
 		"success": True,
@@ -707,9 +883,18 @@ def submit_client_onboarding_form(token, payload=None):
 		else:
 			payload = frappe.form_dict or {}
 
-	token_doc = frappe.get_doc("CRM Form Token", {"token": token})
-	if not token_doc:
-		frappe.throw(_("Invalid token."), frappe.DoesNotExistError)
+	if isinstance(payload, str):
+		try:
+			payload = json.loads(payload)
+		except Exception:
+			payload = {}
+
+	if isinstance(payload, dict) and "payload" in payload and len(payload) <= 3:
+		nested = payload.get("payload")
+		if isinstance(nested, dict):
+			payload = nested
+
+	token_doc = get_form_token_doc(token)
 
 	if token_doc.status in ("Expired", "Revoked"):
 		frappe.throw(_("This form link has expired or been revoked."), frappe.ValidationError)
@@ -848,7 +1033,7 @@ def submit_client_onboarding_form(token, payload=None):
 		lead.onboarding_status = "Completed"
 		lead.onboarding_completed_on = now_datetime()
 		lead.flags.ignore_permissions = True
-		lead.save()
+		lead.save(ignore_permissions=True)
 		# Check auto convert
 		try:
 			lifecycle_api.check_and_auto_convert(lead.name)
@@ -856,6 +1041,8 @@ def submit_client_onboarding_form(token, payload=None):
 			pass
 
 	frappe.db.commit()
+	if hasattr(frappe, "message_log") and isinstance(frappe.message_log, list):
+		frappe.message_log.clear()
 
 	return {
 		"success": True,
@@ -884,9 +1071,18 @@ def submit_combined_form(token, payload=None):
 		else:
 			payload = frappe.form_dict or {}
 
-	token_doc = frappe.get_doc("CRM Form Token", {"token": token})
-	if not token_doc:
-		frappe.throw(_("Invalid token."), frappe.DoesNotExistError)
+	if isinstance(payload, str):
+		try:
+			payload = json.loads(payload)
+		except Exception:
+			payload = {}
+
+	if isinstance(payload, dict) and "payload" in payload and len(payload) <= 3:
+		nested = payload.get("payload")
+		if isinstance(nested, dict):
+			payload = nested
+
+	token_doc = get_form_token_doc(token)
 
 	if token_doc.status in ("Expired", "Revoked"):
 		frappe.throw(_("This form link has expired or been revoked."), frappe.ValidationError)
@@ -1064,7 +1260,7 @@ def submit_combined_form(token, payload=None):
 		lead.onboarding_status = "Completed"
 		lead.onboarding_completed_on = now_datetime()
 		lead.flags.ignore_permissions = True
-		lead.save()
+		lead.save(ignore_permissions=True)
 		# Check auto convert
 		try:
 			lifecycle_api.check_and_auto_convert(lead.name)
@@ -1076,6 +1272,8 @@ def submit_combined_form(token, payload=None):
 		frappe.db.set_value("Client", token_doc.client, "risk_profile", risk_profile)
 
 	frappe.db.commit()
+	if hasattr(frappe, "message_log") and isinstance(frappe.message_log, list):
+		frappe.message_log.clear()
 
 	return {
 		"success": True,

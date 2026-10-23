@@ -863,6 +863,14 @@ def get_risk_profiler_url(lead=None, token=None):
 
 	if not base_url and frappe.db.exists("DocType", "Dhanada Settings"):
 		try:
+			api_base_url = frappe.db.get_single_value("Dhanada Settings", "api_base_url")
+			if api_base_url and str(api_base_url).strip():
+				base_url = f"{str(api_base_url).strip().rstrip('/')}/forms/risk-profiler/{{token}}"
+		except Exception:
+			base_url = None
+
+	if not base_url and frappe.db.exists("DocType", "Dhanada Settings"):
+		try:
 			base_url = frappe.db.get_single_value("Dhanada Settings", "risk_profiler_url")
 		except Exception:
 			base_url = None

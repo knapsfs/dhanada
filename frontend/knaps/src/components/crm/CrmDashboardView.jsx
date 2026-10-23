@@ -21,9 +21,9 @@ export default function CrmDashboardView({
   const upcomingRenewals = renewals.filter((r) => r.status === 'Upcoming').slice(0, 4);
 
   const kpis = [
-    { label: 'Total Leads', value: metrics.total_leads ?? 0, icon: faUsers, color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-100', tab: 'pipeline' },
-    { label: 'New Leads', value: metrics.new_leads ?? 0, icon: faUserPlus, color: 'text-[#032e92]', bg: 'bg-[#eef5ff]', border: 'border-blue-200', tab: 'pipeline' },
-    { label: 'Interested', value: metrics.interested_leads ?? 0, icon: faChartPie, color: 'text-amber-600', bg: 'bg-amber-50', border: 'border-amber-100', tab: 'pipeline' },
+    { label: 'Total Leads', value: metrics.total_leads ?? 0, icon: faUsers, color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-100', tab: 'leads' },
+    { label: 'New Leads', value: metrics.new_leads ?? 0, icon: faUserPlus, color: 'text-[#032e92]', bg: 'bg-[#eef5ff]', border: 'border-blue-200', tab: 'leads' },
+    { label: 'Interested', value: metrics.interested_leads ?? 0, icon: faChartPie, color: 'text-amber-600', bg: 'bg-amber-50', border: 'border-amber-100', tab: 'leads' },
     { label: 'Converted Clients', value: metrics.converted_leads ?? 0, icon: faUserCheck, color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-100', tab: 'clients' },
     { label: 'Total Clients', value: metrics.total_clients ?? 0, icon: faShieldHalved, color: 'text-cyan-600', bg: 'bg-cyan-50', border: 'border-cyan-100', tab: 'clients' },
     { label: 'Open Tasks', value: metrics.open_tasks ?? 0, icon: faListCheck, color: 'text-purple-600', bg: 'bg-purple-50', border: 'border-purple-100', tab: 'tasks' },
@@ -79,7 +79,7 @@ export default function CrmDashboardView({
         </div>
 
         <button
-          onClick={() => onNavigateTab && onNavigateTab('pipeline')}
+          onClick={() => onNavigateTab && onNavigateTab('leads', 'kanban')}
           className="text-xs font-bold text-[#032e92] hover:underline flex items-center gap-1 cursor-pointer ml-auto"
         >
           <span>Open Lead Pipeline (Kanban)</span>

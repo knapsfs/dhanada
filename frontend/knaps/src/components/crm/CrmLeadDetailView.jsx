@@ -332,11 +332,10 @@ export default function CrmLeadDetailView({
             onClick={handleSendWelcome}
             disabled={actionLoading === "welcome" || isWelcomeSent}
             title={isWelcomeSent ? "Welcome email has already been sent" : "Send Welcome Email"}
-            className={`px-3 py-2 rounded-xl text-xs font-semibold border flex items-center gap-1.5 shadow-2xs transition-colors ${
-              isWelcomeSent
+            className={`px-3 py-2 rounded-xl text-xs font-semibold border flex items-center gap-1.5 shadow-2xs transition-colors ${isWelcomeSent
                 ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
                 : "bg-white border-gray-200 text-gray-700 hover:bg-gray-50 cursor-pointer disabled:opacity-50"
-            }`}
+              }`}
           >
             {actionLoading === "welcome" ? (
               <FontAwesomeIcon icon={faSpinner} className="animate-spin text-xs" />
@@ -391,15 +390,14 @@ export default function CrmLeadDetailView({
       {/* Notifications / Feedback Bar */}
       {feedback.message && (
         <div
-          className={`p-3.5 rounded-2xl text-xs font-semibold flex items-center justify-between gap-3 shadow-2xs ${
-            feedback.type === "success"
+          className={`p-3.5 rounded-2xl text-xs font-semibold flex items-center justify-between gap-3 shadow-2xs ${feedback.type === "success"
               ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
               : feedback.type === "info"
-              ? "bg-blue-50 text-blue-800 border border-blue-200"
-              : feedback.type === "warning"
-              ? "bg-amber-50 text-amber-800 border border-amber-200"
-              : "bg-red-50 text-red-800 border border-red-200"
-          }`}
+                ? "bg-blue-50 text-blue-800 border border-blue-200"
+                : feedback.type === "warning"
+                  ? "bg-amber-50 text-amber-800 border border-amber-200"
+                  : "bg-red-50 text-red-800 border border-red-200"
+            }`}
         >
           <div className="flex items-center gap-2">
             <FontAwesomeIcon
@@ -407,8 +405,8 @@ export default function CrmLeadDetailView({
                 feedback.type === "success"
                   ? faCheckCircle
                   : feedback.type === "warning"
-                  ? faTriangleExclamation
-                  : faCircleExclamation
+                    ? faTriangleExclamation
+                    : faCircleExclamation
               }
             />
             <span>{feedback.message}</span>
@@ -621,11 +619,10 @@ export default function CrmLeadDetailView({
               <button
                 type="button"
                 onClick={() => setActiveTab("overview")}
-                className={`py-3.5 px-4 text-xs font-bold border-b-2 transition-colors cursor-pointer ${
-                  activeTab === "overview"
+                className={`py-3.5 px-4 text-xs font-bold border-b-2 transition-colors cursor-pointer ${activeTab === "overview"
                     ? "border-[#032e92] text-[#032e92]"
                     : "border-transparent text-gray-500 hover:text-gray-900"
-                }`}
+                  }`}
               >
                 Overview & Activity
               </button>
@@ -633,11 +630,10 @@ export default function CrmLeadDetailView({
               <button
                 type="button"
                 onClick={() => setActiveTab("timeline")}
-                className={`py-3.5 px-4 text-xs font-bold border-b-2 transition-colors cursor-pointer flex items-center gap-2 ${
-                  activeTab === "timeline"
+                className={`py-3.5 px-4 text-xs font-bold border-b-2 transition-colors cursor-pointer flex items-center gap-2 ${activeTab === "timeline"
                     ? "border-[#032e92] text-[#032e92]"
                     : "border-transparent text-gray-500 hover:text-gray-900"
-                }`}
+                  }`}
               >
                 <span>Interactions Timeline</span>
                 <span className="w-5 h-5 rounded-full bg-blue-50 text-[#032e92] text-[10px] flex items-center justify-center font-bold">
@@ -648,11 +644,10 @@ export default function CrmLeadDetailView({
               <button
                 type="button"
                 onClick={() => setActiveTab("tasks")}
-                className={`py-3.5 px-4 text-xs font-bold border-b-2 transition-colors cursor-pointer flex items-center gap-2 ${
-                  activeTab === "tasks"
+                className={`py-3.5 px-4 text-xs font-bold border-b-2 transition-colors cursor-pointer flex items-center gap-2 ${activeTab === "tasks"
                     ? "border-[#032e92] text-[#032e92]"
                     : "border-transparent text-gray-500 hover:text-gray-900"
-                }`}
+                  }`}
               >
                 <span>Tasks & Follow-ups</span>
                 <span className="w-5 h-5 rounded-full bg-gray-100 text-gray-700 text-[10px] flex items-center justify-center font-bold">
@@ -881,22 +876,20 @@ export default function CrmLeadDetailView({
                         return (
                           <div
                             key={t.name}
-                            className={`p-4 rounded-2xl border transition-all ${
-                              isCompleted
+                            className={`p-4 rounded-2xl border transition-all ${isCompleted
                                 ? "bg-gray-50/80 border-gray-200 opacity-60"
                                 : "bg-white border-gray-200 shadow-2xs hover:border-[#032e92]/30"
-                            }`}
+                              }`}
                           >
                             <div className="flex items-start justify-between gap-3">
                               <div className="flex items-start gap-3 flex-1">
                                 <button
                                   type="button"
                                   onClick={() => handleTaskStatusToggle(t.name, t.status)}
-                                  className={`mt-0.5 w-5 h-5 rounded-lg border flex items-center justify-center transition-colors cursor-pointer ${
-                                    isCompleted
+                                  className={`mt-0.5 w-5 h-5 rounded-lg border flex items-center justify-center transition-colors cursor-pointer ${isCompleted
                                       ? "bg-emerald-600 border-emerald-600 text-white"
                                       : "border-gray-300 hover:border-[#032e92] bg-white text-transparent"
-                                  }`}
+                                    }`}
                                   title="Toggle Status"
                                 >
                                   <FontAwesomeIcon icon={faCheck} className="text-[10px]" />
@@ -1042,7 +1035,7 @@ export default function CrmLeadDetailView({
                     Risk Profiler Score
                   </span>
                   <span className="font-bold text-[#032e92]">
-                    {leadData?.risk_score ? `${leadData.risk_score} / 100` : "—"}
+                    {leadData?.risk_score ? `${leadData.risk_score} / 50` : "—"}
                   </span>
                 </div>
                 {leadData?.risk_score ? (

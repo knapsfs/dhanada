@@ -133,7 +133,7 @@ home_page = "knaps"
 
 # before_install = "dhanada.install.before_install"
 after_install = "dhanada.setup.bootstrap.after_install"
-after_migrate = ["dhanada.utils.patch_crm_layout.patch_layout", "dhanada.setup.bootstrap.after_migrate"]
+after_migrate = ["dhanada.setup.bootstrap.after_migrate"]
 
 
 get_desktop_icons = "dhanada.config.desktop.get_data"
@@ -306,9 +306,6 @@ after_request = ["dhanada.utils.login.fix_login_response"]
 fixtures = [
 	"Workflow",
 	"Workflow State",
-	{"dt": "Custom Field", "filters": [["dt", "=", "CRM Lead"]]},
-	{"dt": "CRM Form Script", "filters": [["name", "=", "CRM Lead UI Fix"]]},
-	{"dt": "CRM Fields Layout", "filters": [["dt", "=", "CRM Lead"]]},
 	{
 		"dt": "SIF Investment Strategy Subcategory",
 		"filters": [

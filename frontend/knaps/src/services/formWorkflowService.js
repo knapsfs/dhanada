@@ -6,13 +6,25 @@
  * - Combined Risk Profiler + Client Onboarding
  */
 
+import { getCsrfToken } from "../utils/csrf";
+
 function extractErrorMessage(data, fallback = "Operation failed") {
 	if (!data) return fallback;
+
+	// 1. Frappe _server_messages (doubly-stringified JSON array of JSON strings)
 	if (data._server_messages) {
 		try {
 			const parsed = JSON.parse(data._server_messages);
 			if (Array.isArray(parsed) && parsed.length > 0) {
-				const firstMsg = parsed[0]?.message;
+				let first = parsed[0];
+				if (typeof first === "string") {
+					try {
+						first = JSON.parse(first);
+					} catch {
+						// keep string as is
+					}
+				}
+				const firstMsg = typeof first === "object" ? first?.message : first;
 				if (typeof firstMsg === "string" && firstMsg.trim()) {
 					return firstMsg.replace(/<[^>]*>?/gm, "").trim();
 				}
@@ -21,16 +33,33 @@ function extractErrorMessage(data, fallback = "Operation failed") {
 			// ignore parse error
 		}
 	}
+
+	// 2. Standard message string or nested message
 	if (typeof data.message === "string" && data.message.trim()) {
 		return data.message.trim();
 	}
 	if (data.message?.message && typeof data.message.message === "string") {
 		return data.message.message.trim();
 	}
+
+	// 3. Frappe _error_message
+	if (typeof data._error_message === "string" && data._error_message.trim()) {
+		return data._error_message.replace(/<[^>]*>?/gm, "").trim();
+	}
+
+	// 4. Exception message (clean exception prefix like "ValidationError: ...")
+	if (typeof data.exception === "string" && data.exception.trim()) {
+		const firstLine = data.exception.split("\n")[0];
+		const clean = firstLine.replace(/^[\w.]*:\s*/, "").trim();
+		if (clean) return clean;
+	}
+
+	// 5. exc_message
 	if (typeof data.exc_message === "string" && data.exc_message.trim()) {
 		const firstLine = data.exc_message.split("\n")[0];
 		return firstLine.replace(/<[^>]*>?/gm, "").trim();
 	}
+
 	return fallback;
 }
 
@@ -42,12 +71,20 @@ async function requestPublicFormApi(endpoint, method = "GET", body = null) {
 		headers["Content-Type"] = "application/json";
 	}
 
+	const csrfToken = await getCsrfToken().catch(() => "");
+	if (csrfToken) {
+		headers["X-Frappe-CSRF-Token"] = csrfToken;
+	}
+
+	const payload = body ? { ...body, csrf_token: csrfToken || undefined } : null;
+
 	const options = {
 		method,
 		headers,
+		credentials: "include",
 	};
-	if (body) {
-		options.body = JSON.stringify(body);
+	if (payload) {
+		options.body = JSON.stringify(payload);
 	}
 
 	const res = await fetch(endpoint, options);
@@ -98,12 +135,23 @@ export const formWorkflowService = {
 	 * Uploads bank proof file (cancelled cheque / passbook).
 	 */
 	uploadBankProof: async (token, file) => {
+		const csrfToken = await getCsrfToken().catch(() => "");
 		const formData = new FormData();
 		formData.append("token", token);
 		formData.append("file", file);
+		if (csrfToken) {
+			formData.append("csrf_token", csrfToken);
+		}
+
+		const headers = {};
+		if (csrfToken) {
+			headers["X-Frappe-CSRF-Token"] = csrfToken;
+		}
 
 		const res = await fetch("/api/method/dhanada.form_workflow_api.upload_bank_proof", {
 			method: "POST",
+			headers,
+			credentials: "include",
 			body: formData,
 		});
 		const data = await res.json().catch(() => ({}));

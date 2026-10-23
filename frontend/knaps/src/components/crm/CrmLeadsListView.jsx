@@ -3,7 +3,7 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPhone, faEnvelope, faCommentDots, faEye, faFilter,
-  faSearch, faPlus, faArrowsRotate, faTrash, faSpinner,
+  faSearch, faPlus, faArrowsRotate, faTrash, faSpinner, faTableColumns,
   faTriangleExclamation
 } from "@fortawesome/free-solid-svg-icons";
 import { motion, AnimatePresence } from "framer-motion";
@@ -28,6 +28,7 @@ export default function CrmLeadsListView({
   onSearchChange,
   onNewLead,
   onDeleteLead,
+  onOpenKanban,
 }) {
   const [selectedProduct, setSelectedProduct] = useState("All");
   const [leadToDelete, setLeadToDelete] = useState(null);
@@ -87,6 +88,18 @@ export default function CrmLeadsListView({
               size="sm"
               className="w-44"
             />
+          )}
+
+          {onOpenKanban && (
+            <button
+              type="button"
+              onClick={onOpenKanban}
+              className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white border border-gray-200 hover:bg-gray-50 text-[#032e92] shadow-2xs flex items-center gap-1.5 cursor-pointer whitespace-nowrap transition-colors"
+              title="Open Lead Pipeline (Kanban)"
+            >
+              <FontAwesomeIcon icon={faTableColumns} className="text-[#032e92] text-[11px]" />
+              <span>Open Lead Pipeline (Kanban)</span>
+            </button>
           )}
 
           <button
