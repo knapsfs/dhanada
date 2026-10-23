@@ -237,12 +237,14 @@ export const crmService = {
 			lead_name: leadName,
 		}),
 
-	generateFormLink: (referenceDoctype, referenceName, workflowType, expiresInDays = 7) =>
+	generateFormLink: (referenceDoctype, referenceName, workflowType, expiresInDays = 7, sendEmail = true, customMessage = "") =>
 		fetchCrmApi("/api/method/dhanada.crm_api.generate_crm_form_link", "POST", {
 			reference_doctype: referenceDoctype,
 			reference_name: referenceName,
 			workflow_type: workflowType,
 			expires_in_days: expiresInDays,
+			send_email: sendEmail,
+			custom_message: customMessage,
 		}),
 
 	sendFormEmail: (token, customMessage = "") =>
