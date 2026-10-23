@@ -1,14 +1,33 @@
 app_name = "dhanada"
-app_title = "Dhanada"
+app_title = "SIF"
 app_publisher = "KNAPS Private Limited"
 app_description = "Investment Platform for KNAPS "
 app_email = "piyush.sawhney@knaps.in"
 app_license = "mit"
 
+app_home = "/desk/sif"
+
+add_to_apps_screen = [
+	{
+		"name": "dhanada",
+		"logo": "/assets/dhanada/images/SIF-Assets-Favicon.png",
+		"title": "SIF",
+		"route": "/desk/sif",
+	},
+	{
+		"name": "knaps_crm",
+		"logo": "/assets/dhanada/images/CRM.jpg",
+		"title": "KNAPS CRM",
+		"route": "/knaps-crm",
+	},
+]
+
+extend_bootinfo = ["dhanada.setup.bootstrap.boot_knaps_crm"]
+
 # Apps
 # ------------------
 
-# required_apps = []
+required_apps = []
 
 # Each item in the list will be shown as an app in the apps page
 # add_to_apps_screen = [
@@ -29,8 +48,10 @@ app_license = "mit"
 # app_include_js = "/assets/dhanada/js/dhanada.js"
 
 # include js, css files in header of web template
-# web_include_css = "/assets/dhanada/css/dhanada.css"
-# web_include_js = "/assets/dhanada/js/dhanada.js"
+web_include_css = "/assets/dhanada/css/knaps_login.css"
+web_include_js = "/assets/dhanada/js/knaps_login.js"
+
+app_logo_url = "/assets/dhanada/images/knaps-logo.webp"
 
 # include custom scss in every website theme (without file extension ".scss")
 # website_theme_scss = "dhanada/public/scss/website"
@@ -55,9 +76,34 @@ app_license = "mit"
 
 # Home Pages
 # ----------
+website_route_rules = [
+	{"from_route": "/", "to_route": "knaps"},
+	{"from_route": "/about", "to_route": "knaps"},
+	{"from_route": "/services", "to_route": "knaps"},
+	{"from_route": "/services/<path:app_path>", "to_route": "knaps"},
+	{"from_route": "/blog", "to_route": "knaps"},
+	{"from_route": "/blog/<path:app_path>", "to_route": "knaps"},
+	{"from_route": "/blogs", "to_route": "knaps"},
+	{"from_route": "/blogs/<path:app_path>", "to_route": "knaps"},
+	{"from_route": "/calculators", "to_route": "knaps"},
+	{"from_route": "/calculators/<path:app_path>", "to_route": "knaps"},
+	{"from_route": "/contact", "to_route": "knaps"},
+	{"from_route": "/author", "to_route": "knaps"},
+	{"from_route": "/author/<path:app_path>", "to_route": "knaps"},
+	{"from_route": "/sif", "to_route": "knaps"},
+	{"from_route": "/sif/<path:app_path>", "to_route": "knaps"},
+	{"from_route": "/funds", "to_route": "knaps"},
+	{"from_route": "/funds/<path:app_path>", "to_route": "knaps"},
+	{"from_route": "/knaps-crm", "to_route": "knaps"},
+	{"from_route": "/knaps-crm/<path:app_path>", "to_route": "knaps"},
+	{"from_route": "/crm", "to_route": "knaps"},
+	{"from_route": "/crm/<path:app_path>", "to_route": "knaps"},
+	{"from_route": "/forms", "to_route": "knaps"},
+	{"from_route": "/forms/<path:app_path>", "to_route": "knaps"},
+]
 
 # application home page (will override Website Settings)
-# home_page = "login"
+home_page = "knaps"
 
 # website user home page (by Role)
 # role_home_page = {
@@ -86,7 +132,12 @@ app_license = "mit"
 # ------------
 
 # before_install = "dhanada.install.before_install"
-# after_install = "dhanada.install.after_install"
+after_install = "dhanada.setup.bootstrap.after_install"
+after_migrate = ["dhanada.setup.bootstrap.after_migrate"]
+
+
+get_desktop_icons = "dhanada.config.desktop.get_data"
+
 
 # Uninstallation
 # ------------
@@ -138,39 +189,32 @@ app_license = "mit"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+	"Email Queue": {
+		"on_update": "dhanada.lifecycle.api.on_email_queue_update",
+	},
+}
 
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"dhanada.tasks.all"
-# 	],
-# 	"daily": [
-# 		"dhanada.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"dhanada.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"dhanada.tasks.weekly"
-# 	],
-# 	"monthly": [
-# 		"dhanada.tasks.monthly"
-# 	],
-# }
+scheduler_events = {
+	"cron": {
+		"0 12 * * *": [
+			"dhanada.scheduler.sync_nav_data.sync_nav_data",
+			"dhanada.scheduler.sync_nav_performance.sync_nav_performance",
+		],
+		"0 12 * * 0": [
+			"dhanada.scheduler.sync_scheme_details.sync_scheme_details",
+		],
+	},
+}
 
 # Testing
 # -------
 
-# before_tests = "dhanada.install.before_tests"
+before_tests = "dhanada.setup.bootstrap.before_tests"
+
 
 # Extend DocType Class
 # ------------------------------
@@ -244,6 +288,9 @@ app_license = "mit"
 # 	"dhanada.auth.validate"
 # ]
 
+after_request = ["dhanada.utils.login.fix_login_response"]
+
+
 # Automatically update python controller files with type annotations for this app.
 # export_python_type_annotations = True
 
@@ -256,3 +303,25 @@ app_license = "mit"
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
 
+fixtures = [
+	"Workflow",
+	"Workflow State",
+	{
+		"dt": "SIF Investment Strategy Subcategory",
+		"filters": [
+			[
+				"name",
+				"in",
+				[
+					"Equity Long-Short Fund",
+					"Equity Ex-Top 100 Long-Short Fund",
+					"Sector Rotation Long-Short Fund",
+					"Debt Long-Short Fund",
+					"Sectoral Debt Long-Short Fund",
+					"Active Asset Allocator Long-Short Fund",
+					"Hybrid Long-Short Fund",
+				],
+			]
+		],
+	},
+]

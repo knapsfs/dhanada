@@ -1,0 +1,516 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2026-10-15 12:47:00.000000",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "basic_info_tab",
+  "naming_series",
+  "client_type",
+  "client_name",
+  "column_break_basic",
+  "salutation",
+  "first_name",
+  "last_name",
+  "gender",
+  "dob",
+  "incorporation_date",
+  "contact_id_section",
+  "email",
+  "mobile_no",
+  "alternate_mobile_no",
+  "column_break_contact",
+  "pan",
+  "pan_verification_status",
+  "kyc_status",
+  "address_section",
+  "address_line1",
+  "address_line2",
+  "city",
+  "column_break_address",
+  "state",
+  "pincode",
+  "country",
+  "relationship_tab",
+  "client_status",
+  "client_owner",
+  "acquisition_source",
+  "onboarding_date",
+  "column_break_rel",
+  "lead",
+  "family",
+  "family_role",
+  "contact",
+  "organization",
+  "notes_section",
+  "notes",
+  "latest_remark",
+  "last_contacted_on",
+  "last_contacted_by",
+  "investment_tab",
+  "investor_category",
+  "risk_profile",
+  "investment_objectives",
+  "column_break_inv",
+  "investment_horizon",
+  "investment_experience",
+  "investment_capacity",
+  "financial_tab",
+  "total_invested_value",
+  "current_portfolio_value",
+  "column_break_fin",
+  "total_invested_amount",
+  "total_current_valuation",
+  "last_investment_date"
+ ],
+ "fields": [
+  {
+   "fieldname": "basic_info_tab",
+   "fieldtype": "Tab Break",
+   "label": "Basic Information"
+  },
+  {
+   "default": "CL-.YYYY.-",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "no_copy": 1,
+   "options": "CL-.YYYY.-",
+   "reqd": 1
+  },
+  {
+   "default": "Individual",
+   "fieldname": "client_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Client Type",
+   "options": "Individual\nOrganization\nFamily",
+   "reqd": 1
+  },
+  {
+   "fieldname": "client_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Client Name",
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "column_break_basic",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.client_type=='Individual'",
+   "fieldname": "salutation",
+   "fieldtype": "Link",
+   "label": "Salutation",
+   "options": "Salutation"
+  },
+  {
+   "depends_on": "eval:doc.client_type=='Individual'",
+   "fieldname": "first_name",
+   "fieldtype": "Data",
+   "label": "First Name",
+   "mandatory_depends_on": "eval:doc.client_type=='Individual'"
+  },
+  {
+   "depends_on": "eval:doc.client_type=='Individual'",
+   "fieldname": "last_name",
+   "fieldtype": "Data",
+   "label": "Last Name"
+  },
+  {
+   "depends_on": "eval:doc.client_type=='Individual'",
+   "fieldname": "gender",
+   "fieldtype": "Link",
+   "label": "Gender",
+   "options": "Gender"
+  },
+  {
+   "depends_on": "eval:doc.client_type=='Individual'",
+   "fieldname": "dob",
+   "fieldtype": "Date",
+   "label": "Date of Birth"
+  },
+  {
+   "depends_on": "eval:doc.client_type=='Organization'",
+   "fieldname": "incorporation_date",
+   "fieldtype": "Date",
+   "label": "Date of Incorporation"
+  },
+  {
+   "fieldname": "contact_id_section",
+   "fieldtype": "Section Break",
+   "label": "Contact & Identification"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Email",
+   "options": "Email",
+   "search_index": 1
+  },
+  {
+   "fieldname": "mobile_no",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Primary Mobile No",
+   "options": "Phone",
+   "search_index": 1
+  },
+  {
+   "fieldname": "alternate_mobile_no",
+   "fieldtype": "Data",
+   "label": "Alternate Mobile No",
+   "options": "Phone"
+  },
+  {
+   "fieldname": "column_break_contact",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "pan",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "PAN",
+   "search_index": 1
+  },
+  {
+   "default": "Unverified",
+   "fieldname": "pan_verification_status",
+   "fieldtype": "Select",
+   "label": "PAN Verification Status",
+   "options": "Unverified\nVerified\nFailed"
+  },
+  {
+   "default": "Pending",
+   "fieldname": "kyc_status",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "KYC Status",
+   "options": "Pending\nSubmitted\nVerified\nRejected"
+  },
+  {
+   "fieldname": "address_section",
+   "fieldtype": "Section Break",
+   "label": "Address Details"
+  },
+  {
+   "fieldname": "address_line1",
+   "fieldtype": "Data",
+   "label": "Address Line 1"
+  },
+  {
+   "fieldname": "address_line2",
+   "fieldtype": "Data",
+   "label": "Address Line 2"
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "City"
+  },
+  {
+   "fieldname": "column_break_address",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "state",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "State"
+  },
+  {
+   "fieldname": "pincode",
+   "fieldtype": "Data",
+   "label": "Postal Code"
+  },
+  {
+   "default": "India",
+   "fieldname": "country",
+   "fieldtype": "Link",
+   "label": "Country",
+   "options": "Country"
+  },
+  {
+   "fieldname": "relationship_tab",
+   "fieldtype": "Tab Break",
+   "label": "Relationship Management"
+  },
+  {
+   "default": "Active",
+   "fieldname": "client_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Client Status",
+   "options": "Prospect\nActive\nInactive\nClosed",
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "client_owner",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Relationship Manager / Client Owner",
+   "options": "User",
+   "search_index": 1
+  },
+  {
+   "fieldname": "acquisition_source",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Acquisition Source",
+   "options": "Lead Source"
+  },
+  {
+   "fieldname": "onboarding_date",
+   "fieldtype": "Date",
+   "label": "Onboarding Date"
+  },
+  {
+   "fieldname": "column_break_rel",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "lead",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Originating Lead",
+   "options": "Lead"
+  },
+  {
+   "fieldname": "family",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Family Group",
+   "options": "Family"
+  },
+  {
+   "fieldname": "family_role",
+   "fieldtype": "Select",
+   "label": "Family Role",
+   "options": "\nHead of Family\nSpouse\nChild\nParent\nSibling\nTrustee\nDependent\nBeneficiary\nOther"
+  },
+  {
+   "fieldname": "contact",
+   "fieldtype": "Link",
+   "label": "Linked Contact",
+   "options": "Contact"
+  },
+  {
+   "depends_on": "eval:doc.client_type=='Individual'",
+   "fieldname": "organization",
+   "fieldtype": "Link",
+   "label": "Parent Organization",
+   "options": "Client"
+  },
+  {
+   "fieldname": "notes_section",
+   "fieldtype": "Section Break",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "latest_remark",
+   "fieldtype": "Small Text",
+   "label": "Latest Remark"
+  },
+  {
+   "fieldname": "last_contacted_on",
+   "fieldtype": "Datetime",
+   "label": "Last Contacted On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_contacted_by",
+   "fieldtype": "Link",
+   "label": "Last Contacted By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "investment_tab",
+   "fieldtype": "Tab Break",
+   "label": "Investment Profile"
+  },
+  {
+   "fieldname": "investor_category",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Investor Category",
+   "options": "\nRetail\nHNI\nSuper HNI\nCorporate\nInstitutional\nFamily Office"
+  },
+  {
+   "fieldname": "risk_profile",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Risk Profile",
+   "options": "\nConservative\nModerate\nAggressive\nVery Aggressive"
+  },
+  {
+   "fieldname": "investment_objectives",
+   "fieldtype": "Select",
+   "label": "Investment Objectives",
+   "options": "\nCapital Preservation\nWealth Accumulation\nIncome Generation\nAggressive Growth"
+  },
+  {
+   "fieldname": "column_break_inv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "investment_horizon",
+   "fieldtype": "Select",
+   "label": "Investment Horizon",
+   "options": "\nShort Term (< 1 year)\nMedium Term (1-3 years)\nLong Term (3-5 years)\nMulti-Year (5+ years)"
+  },
+  {
+   "fieldname": "investment_experience",
+   "fieldtype": "Select",
+   "label": "Investment Experience",
+   "options": "\nBeginner\nIntermediate\nExperienced\nExpert"
+  },
+  {
+   "fieldname": "investment_capacity",
+   "fieldtype": "Currency",
+   "label": "Investment Capacity",
+   "non_negative": 1,
+   "options": "currency"
+  },
+  {
+   "fieldname": "financial_tab",
+   "fieldtype": "Tab Break",
+   "label": "Financial Summary"
+  },
+  {
+   "fieldname": "total_invested_value",
+   "fieldtype": "Currency",
+   "label": "Total Invested Value",
+   "non_negative": 1,
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "current_portfolio_value",
+   "fieldtype": "Currency",
+   "label": "Current Portfolio Value",
+   "non_negative": 1,
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_fin",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_invested_amount",
+   "fieldtype": "Currency",
+   "label": "Total Invested Amount",
+   "non_negative": 1,
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_current_valuation",
+   "fieldtype": "Currency",
+   "label": "Total Current Valuation",
+   "non_negative": 1,
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_investment_date",
+   "fieldtype": "Date",
+   "label": "Last Investment Date",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [
+  {
+   "group": "Activities",
+   "link_doctype": "Task",
+   "link_fieldname": "related_client"
+  },
+  {
+   "group": "Activities",
+   "link_doctype": "CRM Interaction",
+   "link_fieldname": "related_client"
+  },
+  {
+   "group": "Renewals",
+   "link_doctype": "Renewal",
+   "link_fieldname": "client"
+  }
+ ],
+ "search_fields": "email,mobile_no,pan,kyc_status,client_status,client_owner,family",
+ "modified": "2026-10-15 12:47:00.000000",
+ "modified_by": "Administrator",
+ "module": "Dhanada",
+ "name": "Client",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 0,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales User",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "client_name",
+ "track_changes": 1,
+ "track_seen": 1
+}

@@ -1,0 +1,504 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2026-10-16 12:00:00.000000",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "section_lead_details",
+  "lead_name",
+  "first_name",
+  "last_name",
+  "lead_type",
+  "organization_name",
+  "column_break_lead",
+  "status",
+  "email",
+  "mobile_no",
+  "source",
+  "product_interest",
+  "section_notes",
+  "notes",
+  "section_internal",
+  "naming_series",
+  "salutation",
+  "alternate_mobile_no",
+  "city",
+  "country",
+  "source_detail",
+  "assigned_to",
+  "last_contacted_on",
+  "last_contacted_by",
+  "latest_remark",
+  "next_follow_up",
+  "disqualification_section",
+  "lost_reason",
+  "lost_notes",
+  "status_history_section",
+  "status_history",
+  "investment_amount_range",
+  "investment_horizon",
+  "risk_profile",
+  "chat_context_section",
+  "chat_context",
+  "chatbot_conversation",
+  "conversation_url",
+  "welcome_email_status",
+  "welcome_email_sent_on",
+  "onboarding_status",
+  "onboarding_token",
+  "onboarding_completed_on",
+  "risk_profiler_status",
+  "risk_profiler_token",
+  "risk_profiler_completed_on",
+  "risk_score",
+  "conversion_section",
+  "converted_client",
+  "converted_on",
+  "legacy_crm_lead_id"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_lead_details",
+   "fieldtype": "Section Break",
+   "label": "Lead Details"
+  },
+  {
+   "fieldname": "lead_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Lead Name",
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "first_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "First Name"
+  },
+  {
+   "fieldname": "last_name",
+   "fieldtype": "Data",
+   "label": "Last Name"
+  },
+  {
+   "default": "Individual",
+   "fieldname": "lead_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Lead Type",
+   "options": "Individual\nOrganization\nFamily Office"
+  },
+  {
+   "depends_on": "eval:doc.lead_type=='Organization'",
+   "fieldname": "organization_name",
+   "fieldtype": "Data",
+   "label": "Organization Name"
+  },
+  {
+   "fieldname": "column_break_lead",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "New",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "New\nInterested\nNot Interested\nNurturing\nConverted\nJunk",
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Email",
+   "options": "Email",
+   "search_index": 1
+  },
+  {
+   "fieldname": "mobile_no",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Mobile No",
+   "options": "Phone",
+   "search_index": 1
+  },
+  {
+   "fieldname": "source",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Lead Source",
+   "options": "Lead Source"
+  },
+  {
+   "fieldname": "product_interest",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Product of Interest"
+  },
+  {
+   "fieldname": "section_notes",
+   "fieldtype": "Section Break",
+   "label": "General Notes"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "General Notes"
+  },
+  {
+   "fieldname": "section_internal",
+   "fieldtype": "Section Break",
+   "hidden": 1,
+   "label": "Internal & Lifecycle Data"
+  },
+  {
+   "default": "LEAD-.YYYY.-.#####",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Series",
+   "no_copy": 1,
+   "options": "LEAD-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "salutation",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Salutation",
+   "options": "Salutation"
+  },
+  {
+   "fieldname": "alternate_mobile_no",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Alternate Mobile No",
+   "options": "Phone"
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "City"
+  },
+  {
+   "default": "India",
+   "fieldname": "country",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Country",
+   "options": "Country"
+  },
+  {
+   "fieldname": "source_detail",
+   "fieldtype": "Small Text",
+   "hidden": 1,
+   "label": "Source Details / Campaign"
+  },
+  {
+   "fieldname": "assigned_to",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "in_list_view": 0,
+   "label": "Assigned User / Owner",
+   "options": "User"
+  },
+  {
+   "fieldname": "last_contacted_on",
+   "fieldtype": "Datetime",
+   "hidden": 1,
+   "label": "Last Contacted On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_contacted_by",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Last Contacted By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "latest_remark",
+   "fieldtype": "Small Text",
+   "label": "Latest Remark"
+  },
+  {
+   "fieldname": "next_follow_up",
+   "fieldtype": "Date",
+   "hidden": 1,
+   "label": "Next Follow-up Date"
+  },
+  {
+   "fieldname": "disqualification_section",
+   "fieldtype": "Section Break",
+   "hidden": 1,
+   "label": "Disqualification Details"
+  },
+  {
+   "fieldname": "lost_reason",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Lost / Junk Reason"
+  },
+  {
+   "fieldname": "lost_notes",
+   "fieldtype": "Small Text",
+   "hidden": 1,
+   "label": "Disqualification Notes"
+  },
+  {
+   "fieldname": "status_history_section",
+   "fieldtype": "Section Break",
+   "hidden": 1,
+   "label": "Status History"
+  },
+  {
+   "fieldname": "status_history",
+   "fieldtype": "Table",
+   "hidden": 1,
+   "label": "Status History Log",
+   "options": "Lead Status Log"
+  },
+  {
+   "fieldname": "investment_amount_range",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Investment Amount Range",
+   "options": "\nBelow ₹10 Lakhs\n₹10 - ₹25 Lakhs\n₹25 - ₹50 Lakhs\n₹50 Lakhs - ₹1 Crore\n₹1 - ₹5 Crores\nAbove ₹5 Crores"
+  },
+  {
+   "fieldname": "investment_horizon",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Investment Horizon",
+   "options": "\nShort Term (< 1 year)\nMedium Term (1-3 years)\nLong Term (3-5 years)\nMulti-Year (5+ years)"
+  },
+  {
+   "fieldname": "risk_profile",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Risk Profile",
+   "options": "\nConservative\nModerately Conservative\nModerate\nModerately Aggressive\nAggressive\nVery Aggressive"
+  },
+  {
+   "fieldname": "chat_context_section",
+   "fieldtype": "Section Break",
+   "hidden": 1,
+   "label": "Chatbot & Context"
+  },
+  {
+   "fieldname": "chat_context",
+   "fieldtype": "Small Text",
+   "hidden": 1,
+   "label": "Chat Context / Summary"
+  },
+  {
+   "fieldname": "chatbot_conversation",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Chatbot Conversation",
+   "options": "Chatbot Conversation"
+  },
+  {
+   "fieldname": "conversation_url",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Conversation Route",
+   "read_only": 1
+  },
+  {
+   "default": "Not Sent",
+   "fieldname": "welcome_email_status",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Welcome Email Status",
+   "options": "Not Sent\nQueued\nSent\nFailed",
+   "read_only": 1
+  },
+  {
+   "fieldname": "welcome_email_sent_on",
+   "fieldtype": "Datetime",
+   "hidden": 1,
+   "label": "Welcome Email Sent On",
+   "read_only": 1
+  },
+  {
+   "default": "Not Initiated",
+   "fieldname": "onboarding_status",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Onboarding Status",
+   "options": "Not Initiated\nSent\nCompleted",
+   "read_only": 1
+  },
+  {
+   "fieldname": "onboarding_token",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Onboarding Token",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "onboarding_completed_on",
+   "fieldtype": "Datetime",
+   "hidden": 1,
+   "label": "Onboarding Completed On",
+   "read_only": 1
+  },
+  {
+   "default": "Not Initiated",
+   "fieldname": "risk_profiler_status",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Risk Profiler Status",
+   "options": "Not Initiated\nSent\nCompleted",
+   "read_only": 1
+  },
+  {
+   "fieldname": "risk_profiler_token",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Risk Profiler Token",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "risk_profiler_completed_on",
+   "fieldtype": "Datetime",
+   "hidden": 1,
+   "label": "Risk Profiler Completed On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "risk_score",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Risk Score",
+   "read_only": 1
+  },
+  {
+   "fieldname": "conversion_section",
+   "fieldtype": "Section Break",
+   "hidden": 1,
+   "label": "Client Conversion"
+  },
+  {
+   "fieldname": "converted_client",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Converted Client",
+   "options": "Client",
+   "read_only": 1
+  },
+  {
+   "fieldname": "converted_on",
+   "fieldtype": "Datetime",
+   "hidden": 1,
+   "label": "Converted On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "legacy_crm_lead_id",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Legacy CRM Lead ID",
+   "no_copy": 1,
+   "read_only": 1,
+   "search_index": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [
+  {
+   "group": "Activities",
+   "link_doctype": "Task",
+   "link_fieldname": "related_lead"
+  },
+  {
+   "group": "Activities",
+   "link_doctype": "CRM Interaction",
+   "link_fieldname": "related_lead"
+  },
+  {
+   "group": "Submissions",
+   "link_doctype": "Client Onboarding Submission",
+   "link_fieldname": "lead"
+  },
+  {
+   "group": "Submissions",
+   "link_doctype": "Risk Profiler Submission",
+   "link_fieldname": "lead"
+  }
+ ],
+ "modified": "2026-10-16 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Dhanada",
+ "name": "Lead",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 0,
+   "email": 1,
+   "export": 0,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales User",
+   "share": 0,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "search_fields": "email,mobile_no,product_interest,status,assigned_to",
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "lead_name",
+ "track_changes": 1,
+ "track_seen": 1
+}
