@@ -495,6 +495,136 @@ def get_client_details(client_name):
 	}
 
 
+def _normalize_horizon(val, target="sub"):
+	val_str = str(val or "").lower()
+	if "< 1" in val_str or "short" in val_str:
+		return "Short Term (< 1 Year)" if target == "sub" else "Short Term (< 1 year)"
+	elif "1-3" in val_str or "medium" in val_str:
+		return "Medium Term (1-3 Years)" if target == "sub" else "Medium Term (1-3 years)"
+	elif "3-5" in val_str or "long" in val_str:
+		return "Long Term (3-5 Years)" if target == "sub" else "Long Term (3-5 years)"
+	elif "5+" in val_str or "> 5" in val_str or "multi" in val_str or "very long" in val_str:
+		return "Very Long Term (5+ Years)" if target == "sub" else "Multi-Year (5+ years)"
+	return ""
+
+
+def _normalize_experience(val, target="sub"):
+	val_str = str(val or "").lower()
+	if "begin" in val_str or "< 1" in val_str:
+		return "Beginner (< 1 Year)" if target == "sub" else "Beginner"
+	elif "inter" in val_str or "mod" in val_str or "1-5" in val_str:
+		return "Intermediate (1-5 Years)" if target == "sub" else "Intermediate"
+	elif "exper" in val_str or "5+" in val_str or "expert" in val_str:
+		return "Experienced (5+ Years)" if target == "sub" else ("Expert" if "expert" in val_str else "Experienced")
+	return ""
+
+
+def _normalize_objectives(val, target="client"):
+	if target == "sub":
+		return str(val or "")
+	val_str = str(val or "").lower()
+	if "preserv" in val_str or "safety" in val_str or "protect" in val_str:
+		return "Capital Preservation"
+	elif "income" in val_str or "dividend" in val_str or "regular" in val_str:
+		return "Income Generation"
+	elif "aggressive" in val_str or "high" in val_str:
+		return "Aggressive Growth"
+	elif "wealth" in val_str or "growth" in val_str or "capital" in val_str:
+		return "Wealth Accumulation"
+	return "Wealth Accumulation"
+
+
+def _normalize_bank_entry_method(val):
+	val_str = str(val or "").lower()
+	if "upload" in val_str or "cheque" in val_str or "statement" in val_str:
+		return "Upload"
+	return "Manual"
+
+
+def _normalize_client_type(val):
+	val_str = str(val or "").lower()
+	if "org" in val_str or "corp" in val_str:
+		return "Organization"
+	elif "fam" in val_str or "huf" in val_str:
+		return "Family"
+	return "Individual"
+
+
+def _normalize_investor_category(val, target="sub"):
+	val_str = str(val or "").lower()
+	if "super" in val_str or "ultra" in val_str:
+		return "Ultra HNI" if target == "sub" else "Super HNI"
+	elif "hni" in val_str:
+		return "HNI"
+	elif "corp" in val_str:
+		return "Corporate"
+	elif "inst" in val_str:
+		return "Institutional"
+	elif "fam" in val_str:
+		return "Retail" if target == "sub" else "Family Office"
+	return "Retail"
+
+
+def _normalize_kyc_status(val, target="sub"):
+	val_str = str(val or "").lower()
+	if target == "sub":
+		if "verif" in val_str:
+			return "Verified"
+		elif "prog" in val_str:
+			return "In Progress"
+		elif "fail" in val_str or "reject" in val_str:
+			return "Failed"
+		return "Pending"
+	else:
+		if "verif" in val_str:
+			return "Verified"
+		elif "prog" in val_str or "sub" in val_str:
+			return "Submitted"
+		elif "fail" in val_str or "reject" in val_str:
+			return "Rejected"
+		return "Pending"
+
+
+def _normalize_capacity(val, target="sub"):
+	val_str = str(val or "").strip()
+	if not val_str:
+		return "" if target == "sub" else 0.0
+
+	lower_val = val_str.lower()
+	if target == "sub":
+		if "below" in lower_val or "< 10" in lower_val or "5-10" in lower_val or "<10" in lower_val or "5 lakh" in lower_val:
+			return "Below 10 Lakhs"
+		elif "10-25" in lower_val or "10 to 25" in lower_val:
+			return "10-25 Lakhs"
+		elif "25-50" in lower_val or "25 to 50" in lower_val:
+			return "25-50 Lakhs"
+		elif "50" in lower_val and ("crore" in lower_val or "1" in lower_val):
+			return "50 Lakhs - 1 Crore"
+		elif "above" in lower_val or ">" in lower_val or "crore" in lower_val:
+			return "Above 1 Crore"
+		for opt in ["Below 10 Lakhs", "10-25 Lakhs", "25-50 Lakhs", "50 Lakhs - 1 Crore", "Above 1 Crore"]:
+			if opt.lower() == lower_val:
+				return opt
+		return "Below 10 Lakhs"
+	else:
+		try:
+			return float(val)
+		except (ValueError, TypeError):
+			pass
+		if "below" in lower_val or "5-10" in lower_val or "< 10" in lower_val:
+			return 500000.0
+		elif "10-25" in lower_val:
+			return 1500000.0
+		elif "25-50" in lower_val:
+			return 3500000.0
+		elif "50" in lower_val and "crore" in lower_val:
+			return 7500000.0
+		elif "above" in lower_val or "crore" in lower_val:
+			return 10000000.0
+		return 0.0
+
+
+
 @frappe.whitelist()
 def update_client_onboarding_details(client_name, payload):
 	"""Updates client onboarding submission and synchronizes matching client fields."""
@@ -517,6 +647,23 @@ def update_client_onboarding_details(client_name, payload):
 		sub_doc.lead = client_doc.lead or None
 		sub_doc.status = "Submitted"
 		sub_doc.workflow_type = "client_onboarding"
+
+	# Sanitize PAN and Email if provided
+	if payload.get("pan"):
+		payload["pan"] = str(payload["pan"]).strip().upper()
+	if payload.get("email"):
+		payload["email"] = str(payload["email"]).strip().lower()
+
+	# Split full name if provided
+	if payload.get("full_name"):
+		clean_name = payload["full_name"].strip()
+		parts = clean_name.split(" ", 1)
+		first_name = parts[0].strip()
+		last_name = parts[1].strip() if len(parts) > 1 else ""
+		if not payload.get("first_name"):
+			payload["first_name"] = first_name
+		if not payload.get("last_name") and last_name:
+			payload["last_name"] = last_name
 
 	sub_fields = [
 		"full_name",
@@ -576,6 +723,22 @@ def update_client_onboarding_details(client_name, payload):
 				val = 1 if (val is True or val == "1" or val == 1 or val == "true") else 0
 			sub_doc.set(f, val)
 
+	# Apply normalizations to sub_doc Select fields
+	if "client_type" in payload:
+		sub_doc.client_type = _normalize_client_type(payload.get("client_type"))
+	if "kyc_status" in payload:
+		sub_doc.kyc_status = _normalize_kyc_status(payload.get("kyc_status"), "sub")
+	if "investor_category" in payload:
+		sub_doc.investor_category = _normalize_investor_category(payload.get("investor_category"), "sub")
+	if "investment_horizon" in payload:
+		sub_doc.investment_horizon = _normalize_horizon(payload.get("investment_horizon"), "sub")
+	if "investment_experience" in payload:
+		sub_doc.investment_experience = _normalize_experience(payload.get("investment_experience"), "sub")
+	if "bank_entry_method" in payload:
+		sub_doc.bank_entry_method = _normalize_bank_entry_method(payload.get("bank_entry_method"))
+	if "investment_capacity" in payload:
+		sub_doc.investment_capacity = _normalize_capacity(payload.get("investment_capacity"), "sub")
+
 	sub_doc.client = client_name
 	if not sub_doc.lead and client_doc.lead:
 		sub_doc.lead = client_doc.lead
@@ -586,8 +749,10 @@ def update_client_onboarding_details(client_name, payload):
 			raw_json = json.loads(sub_doc.submission_json)
 		except Exception:
 			raw_json = {}
-	raw_json.update({k: v for k, v in payload.items() if v is not None})
-	sub_doc.submission_json = json.dumps(raw_json)
+	for k, v in payload.items():
+		if v is not None:
+			raw_json[k] = str(v) if hasattr(v, 'isoformat') else v
+	sub_doc.submission_json = json.dumps(raw_json, default=str)
 
 	sub_doc.save(ignore_permissions=True)
 
@@ -611,7 +776,6 @@ def update_client_onboarding_details(client_name, payload):
 		"investor_category": "investor_category",
 		"investment_horizon": "investment_horizon",
 		"investment_experience": "investment_experience",
-		"investment_capacity": "investment_capacity",
 		"investment_objectives": "investment_objectives",
 		"kyc_status": "kyc_status",
 	}
@@ -622,14 +786,34 @@ def update_client_onboarding_details(client_name, payload):
 			if client_field == "dob" and (not val or val == ""):
 				val = None
 			client_doc.set(client_field, val)
-		elif client_field in payload and payload.get(client_field) is not None:
-			val = payload.get(client_field)
-			if client_field == "dob" and (not val or val == ""):
-				val = None
-			client_doc.set(client_field, val)
+
+	# Apply normalizations to client_doc Select fields
+	if "client_type" in payload:
+		client_doc.client_type = _normalize_client_type(payload.get("client_type"))
+	if "kyc_status" in payload:
+		client_doc.kyc_status = _normalize_kyc_status(payload.get("kyc_status"), "client")
+	if "investor_category" in payload:
+		client_doc.investor_category = _normalize_investor_category(payload.get("investor_category"), "client")
+	if "investment_horizon" in payload:
+		client_doc.investment_horizon = _normalize_horizon(payload.get("investment_horizon"), "client")
+	if "investment_experience" in payload:
+		client_doc.investment_experience = _normalize_experience(payload.get("investment_experience"), "client")
+	if "investment_objectives" in payload:
+		client_doc.investment_objectives = _normalize_objectives(payload.get("investment_objectives"), "client")
+	if "investment_capacity" in payload:
+		client_doc.investment_capacity = _normalize_capacity(payload.get("investment_capacity"), "client")
 
 	if payload.get("full_name"):
-		client_doc.client_name = payload.get("full_name")
+		client_doc.client_name = payload.get("full_name").strip()
+	if payload.get("first_name"):
+		client_doc.first_name = payload.get("first_name").strip()
+	if payload.get("last_name"):
+		client_doc.last_name = payload.get("last_name").strip()
+	if not client_doc.first_name and client_doc.client_name:
+		name_parts = client_doc.client_name.strip().split(" ", 1)
+		client_doc.first_name = name_parts[0].strip()
+		if len(name_parts) > 1 and not client_doc.last_name:
+			client_doc.last_name = name_parts[1].strip()
 
 	if payload.get("risk_profile"):
 		client_doc.risk_profile = payload.get("risk_profile")
@@ -640,7 +824,7 @@ def update_client_onboarding_details(client_name, payload):
 		frappe.get_doc({
 			"doctype": "CRM Interaction",
 			"related_client": client_name,
-			"interaction_type": "Other",
+			"interaction_type": "Note",
 			"direction": "Outbound",
 			"interaction_date": now_datetime(),
 			"logged_by": frappe.session.user,

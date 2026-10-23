@@ -130,10 +130,10 @@ export default function CrmClientDetailView({
       // Investment & Risk
       investor_category: sub.investor_category || client.investor_category || "Retail",
       risk_profile: client.risk_profile || "Moderate",
-      investment_horizon: sub.investment_horizon || client.investment_horizon || "3-5 years",
-      investment_experience: sub.investment_experience || client.investment_experience || "Moderate",
-      investment_capacity: sub.investment_capacity || client.investment_capacity || "",
-      investment_objectives: sub.investment_objectives || client.investment_objectives || "Capital Growth",
+      investment_horizon: sub.investment_horizon || client.investment_horizon || "Long Term (3-5 years)",
+      investment_experience: sub.investment_experience || client.investment_experience || "Intermediate",
+      investment_capacity: sub.investment_capacity || (client.investment_capacity ? String(client.investment_capacity) : "Below 10 Lakhs"),
+      investment_objectives: client.investment_objectives || sub.investment_objectives || "Wealth Accumulation",
     });
   };
 
@@ -154,11 +154,56 @@ export default function CrmClientDetailView({
 
   const handleSaveDetails = async (e) => {
     e?.preventDefault();
-    setSaving(true);
     setFeedback({ type: "", message: "" });
 
+    // Client-side validations
+    const fullName = (editFormData.full_name || "").trim();
+    if (!fullName) {
+      setFeedback({ type: "error", message: "Full Name is required." });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    const panVal = (editFormData.pan || "").trim().toUpperCase();
+    if (panVal && !/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(panVal)) {
+      setFeedback({
+        type: "error",
+        message: "Invalid PAN format. PAN must be exactly 10 alphanumeric characters (e.g. ABCDE1234F).",
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    const emailVal = (editFormData.email || "").trim();
+    if (emailVal && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+      setFeedback({
+        type: "error",
+        message: "Please enter a valid email address.",
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    const mobileVal = (editFormData.mobile_no || "").replace(/\D/g, "");
+    if (editFormData.mobile_no && (mobileVal.length < 10 || mobileVal.length > 15)) {
+      setFeedback({
+        type: "error",
+        message: "Mobile number must be between 10 and 15 digits.",
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    setSaving(true);
+
     try {
-      const res = await crmService.updateClientOnboardingDetails(clientName, editFormData);
+      const cleanPayload = {
+        ...editFormData,
+        full_name: fullName,
+        pan: panVal,
+        email: emailVal.toLowerCase(),
+      };
+      const res = await crmService.updateClientOnboardingDetails(clientName, cleanPayload);
       setClientData(res.client);
       setSubmissionData(res.submission);
       setInteractions(res.interactions || []);
@@ -171,11 +216,13 @@ export default function CrmClientDetailView({
       if (onClientUpdated) {
         onClientUpdated(res.client);
       }
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err) {
       setFeedback({
         type: "error",
         message: err.message || "Failed to save client onboarding details.",
       });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } finally {
       setSaving(false);
     }
@@ -684,7 +731,7 @@ export default function CrmClientDetailView({
                   <CrmSelect
                     value={editFormData.client_type}
                     onChange={(val) => handleFieldChange("client_type", val)}
-                    options={["Individual", "Corporate", "NRI", "HUF", "Partnership"]}
+                    options={["Individual", "Organization", "Family"]}
                     size="sm"
                   />
                 ) : (
@@ -1238,7 +1285,7 @@ export default function CrmClientDetailView({
                   <CrmSelect
                     value={editFormData.bank_entry_method}
                     onChange={(val) => handleFieldChange("bank_entry_method", val)}
-                    options={["Manual", "Penny Drop", "Cheque Upload", "Bank Statement"]}
+                    options={["Manual", "Upload"]}
                     size="sm"
                   />
                 ) : (
@@ -1305,7 +1352,7 @@ export default function CrmClientDetailView({
                   <CrmSelect
                     value={editFormData.investor_category}
                     onChange={(val) => handleFieldChange("investor_category", val)}
-                    options={["Retail", "HNI", "Corporate", "NRI"]}
+                    options={["Retail", "HNI", "Ultra HNI", "Corporate", "Institutional"]}
                     size="sm"
                   />
                 ) : (
@@ -1320,7 +1367,7 @@ export default function CrmClientDetailView({
                   <CrmSelect
                     value={editFormData.investment_horizon}
                     onChange={(val) => handleFieldChange("investment_horizon", val)}
-                    options={["< 1 year", "1-3 years", "3-5 years", "> 5 years"]}
+                    options={["Short Term (< 1 year)", "Medium Term (1-3 years)", "Long Term (3-5 years)", "Multi-Year (5+ years)"]}
                     size="sm"
                   />
                 ) : (
@@ -1335,7 +1382,7 @@ export default function CrmClientDetailView({
                   <CrmSelect
                     value={editFormData.investment_experience}
                     onChange={(val) => handleFieldChange("investment_experience", val)}
-                    options={["Beginner", "Moderate", "Experienced"]}
+                    options={["Beginner", "Intermediate", "Experienced", "Expert"]}
                     size="sm"
                   />
                 ) : (
@@ -1347,15 +1394,14 @@ export default function CrmClientDetailView({
               <div className="space-y-1">
                 <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Investment Capacity</label>
                 {isEditing ? (
-                  <input
-                    type="text"
+                  <CrmSelect
                     value={editFormData.investment_capacity}
-                    onChange={(e) => handleFieldChange("investment_capacity", e.target.value)}
-                    className="w-full p-2.5 rounded-xl border border-gray-200 focus:border-[#032e92] text-gray-900 text-xs"
-                    placeholder="e.g. 5-10 Lakhs"
+                    onChange={(val) => handleFieldChange("investment_capacity", val)}
+                    options={["Below 10 Lakhs", "10-25 Lakhs", "25-50 Lakhs", "50 Lakhs - 1 Crore", "Above 1 Crore"]}
+                    size="sm"
                   />
                 ) : (
-                  <p className="font-medium text-gray-900 py-1">{submissionData?.investment_capacity || clientData?.investment_capacity || "—"}</p>
+                  <p className="font-medium text-gray-900 py-1">{submissionData?.investment_capacity || (clientData?.investment_capacity ? `₹ ${Number(clientData.investment_capacity).toLocaleString("en-IN")}` : "—")}</p>
                 )}
               </div>
 
@@ -1363,15 +1409,14 @@ export default function CrmClientDetailView({
               <div className="space-y-1">
                 <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Investment Objectives</label>
                 {isEditing ? (
-                  <input
-                    type="text"
+                  <CrmSelect
                     value={editFormData.investment_objectives}
-                    onChange={(e) => handleFieldChange("investment_objectives", e.target.value)}
-                    className="w-full p-2.5 rounded-xl border border-gray-200 focus:border-[#032e92] text-gray-900 text-xs"
-                    placeholder="e.g. Capital Growth"
+                    onChange={(val) => handleFieldChange("investment_objectives", val)}
+                    options={["Capital Preservation", "Wealth Accumulation", "Income Generation", "Aggressive Growth"]}
+                    size="sm"
                   />
                 ) : (
-                  <p className="font-medium text-gray-900 py-1">{submissionData?.investment_objectives || clientData?.investment_objectives || "Capital Growth"}</p>
+                  <p className="font-medium text-gray-900 py-1">{submissionData?.investment_objectives || clientData?.investment_objectives || "Wealth Accumulation"}</p>
                 )}
               </div>
             </div>
