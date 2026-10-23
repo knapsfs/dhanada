@@ -193,6 +193,12 @@ export const crmService = {
 			)}`
 		),
 
+	updateClientOnboardingDetails: (clientName, payload) =>
+		fetchCrmApi("/api/method/dhanada.crm_api.update_client_onboarding_details", "POST", {
+			client_name: clientName,
+			payload,
+		}),
+
 	getTasks: (params = {}) => {
 		const query = new URLSearchParams(params).toString();
 		return fetchCrmApi(`/api/method/dhanada.crm_api.get_tasks?${query}`);

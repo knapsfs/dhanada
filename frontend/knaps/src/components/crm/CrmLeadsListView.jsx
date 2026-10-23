@@ -19,6 +19,15 @@ const STATUS_BADGES = {
   Junk: "bg-red-50 text-red-700 border-red-200",
 };
 
+const STATUS_OPTIONS = [
+  { value: "All", label: "All" },
+  { value: "New", label: "New" },
+  { value: "Interested", label: "Interested" },
+  { value: "Nurturing", label: "Nurturing" },
+  { value: "Converted", label: "Converted" },
+  { value: "Not Interested", label: "Not Interested" },
+];
+
 export default function CrmLeadsListView({
   leads = [],
   onSelectLead,
@@ -61,21 +70,19 @@ export default function CrmLeadsListView({
     <div className="bg-white rounded-2xl border border-gray-200/90 shadow-2xs overflow-hidden flex flex-col relative">
       {/* Top Filter and Search Bar */}
       <div className="p-4 sm:p-5 border-b border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-        {/* Status Pill Filters */}
-        <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0">
-          {["All", "New", "Interested", "Nurturing", "Converted", "Not Interested"].map((st) => (
-            <button
-              key={st}
-              onClick={() => onStatusFilterChange && onStatusFilterChange(st)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
-                selectedStatus === st
-                  ? "bg-[#032e92] text-white shadow-xs"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
-            >
-              {st}
-            </button>
-          ))}
+        {/* Status Dropdown Filter */}
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          <span className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1.5 shrink-0">
+            <FontAwesomeIcon icon={faFilter} className="text-gray-400 text-[10px]" />
+            <span>Status:</span>
+          </span>
+          <CrmSelect
+            value={selectedStatus || "All"}
+            onChange={(val) => onStatusFilterChange && onStatusFilterChange(val)}
+            options={STATUS_OPTIONS}
+            size="sm"
+            className="w-44"
+          />
         </div>
 
         {/* Product Filter & New Lead Button */}

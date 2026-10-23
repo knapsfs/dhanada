@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faSearch, faPhone, faEnvelope, faUserCheck, faShieldHalved, faUsers,
+  faSearch, faPhone, faEnvelope, faUsers,
   faCommentDots, faTriangleExclamation, faClock, faUser, faFloppyDisk,
   faSpinner, faXmark, faCheckCircle, faCircleExclamation, faPaperPlane
 } from '@fortawesome/free-solid-svg-icons';
@@ -9,7 +9,7 @@ import { crmService } from '../../services/crmService';
 import CrmSendFormModal from "./CrmSendFormModal";
 import { getContactStatus, formatContactDate } from '../../utils/crmContactUtils';
 
-export default function CrmClientsView({ clients = [], loading = false, onClientUpdated }) {
+export default function CrmClientsView({ clients = [], loading = false, onClientUpdated, onSelectClient }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedClientForRemark, setSelectedClientForRemark] = useState(null);
   const [selectedClientForForm, setSelectedClientForForm] = useState(null);
@@ -102,9 +102,14 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
                 const waPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
 
                 return (
-                  <tr key={client.name} className="hover:bg-blue-50/40 transition-colors">
+                  <tr
+                    key={client.name}
+                    onClick={() => onSelectClient && onSelectClient(client.name)}
+                    className="hover:bg-blue-50/50 transition-colors cursor-pointer group"
+                    title="Click to view & edit client onboarding details"
+                  >
                     <td className="py-3.5 px-4 sm:px-6">
-                      <div className="font-bold text-gray-900">{client.client_name}</div>
+                      <div className="font-bold text-gray-900 group-hover:text-[#032e92] transition-colors">{client.client_name}</div>
                       <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
                         <span className="text-[10px] text-gray-400 font-mono">{client.name}</span>
                         {(() => {
@@ -171,10 +176,13 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
                     </td>
 
                     <td className="py-3.5 px-4 sm:px-6 text-right">
-                      <div className="flex items-center justify-end gap-1.5">
+                      <div className="flex items-center justify-end gap-1.5" onClick={(e) => e.stopPropagation()}>
                         <button
                           type="button"
-                          onClick={() => setSelectedClientForForm(client)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedClientForForm(client);
+                          }}
                           className="w-7 h-7 rounded-lg bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white flex items-center justify-center transition-colors text-xs cursor-pointer"
                           title="Send Form Workflow (Risk Profiler / Onboarding / Combined)"
                         >
@@ -182,7 +190,8 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
                         </button>
                         <button
                           type="button"
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation();
                             setSelectedClientForRemark(client);
                             setRemarkText('');
                             setFeedback({ type: '', message: '' });
@@ -197,6 +206,7 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
                           <>
                             <a
                               href={`tel:${cleanPhone}`}
+                              onClick={(e) => e.stopPropagation()}
                               className="w-7 h-7 rounded-lg bg-gray-100 hover:bg-blue-50 text-gray-600 hover:text-[#032e92] flex items-center justify-center transition-colors text-xs"
                               title="Call Client"
                             >
@@ -204,6 +214,7 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
                             </a>
                             <a
                               href={`https://wa.me/${waPhone}?text=Hello%20${encodeURIComponent(client.client_name || '')},%20greetings%20from%20KNAPS%20Wealth%20Advisory.`}
+                              onClick={(e) => e.stopPropagation()}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="w-7 h-7 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 flex items-center justify-center transition-colors text-[10px] font-bold"
@@ -216,6 +227,7 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
                         {client.email && (
                           <a
                             href={`mailto:${client.email}`}
+                            onClick={(e) => e.stopPropagation()}
                             className="w-7 h-7 rounded-lg bg-gray-100 hover:bg-blue-50 text-gray-600 hover:text-[#032e92] flex items-center justify-center transition-colors text-xs"
                             title="Email Client"
                           >

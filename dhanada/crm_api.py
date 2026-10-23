@@ -384,14 +384,60 @@ def get_clients(search=None, limit=100):
 	return clients
 
 
+def _get_client_submission_doc(client_name, client_doc=None):
+	"""Resolves Client Onboarding Submission for a given client with fallback matching."""
+	if not client_doc:
+		client_doc = frappe.get_doc("Client", client_name)
+
+	# 1. Direct link by client
+	sub_name = frappe.db.get_value("Client Onboarding Submission", {"client": client_name}, "name")
+
+	# 2. Match by lead and PAN together
+	lead_id = client_doc.get("lead")
+	pan_id = client_doc.get("pan")
+	if not sub_name and lead_id and pan_id:
+		sub_name = frappe.db.get_value(
+			"Client Onboarding Submission",
+			{"lead": lead_id, "pan": pan_id},
+			"name",
+			order_by="creation desc",
+		)
+
+	# 3. Match by Lead
+	if not sub_name and lead_id:
+		sub_name = frappe.db.get_value(
+			"Client Onboarding Submission",
+			{"lead": lead_id},
+			"name",
+			order_by="creation desc",
+		)
+
+	# 4. Match by PAN
+	if not sub_name and pan_id:
+		sub_name = frappe.db.get_value(
+			"Client Onboarding Submission",
+			{"pan": pan_id},
+			"name",
+			order_by="creation desc",
+		)
+
+	if sub_name:
+		sub_doc = frappe.get_doc("Client Onboarding Submission", sub_name)
+		if not sub_doc.client:
+			sub_doc.db_set("client", client_name, update_modified=False)
+		return sub_doc
+	return None
+
+
 @frappe.whitelist()
 def get_client_details(client_name):
-	"""Returns full client details including interactions, tasks, and contact overdue info."""
+	"""Returns full client details including submission, interactions, tasks, and contact overdue info."""
 	_check_crm_permission()
 	if not frappe.db.exists("Client", client_name):
 		frappe.throw(_("Client {0} not found").format(client_name))
 
-	client = frappe.get_doc("Client", client_name).as_dict()
+	client_doc = frappe.get_doc("Client", client_name)
+	client = client_doc.as_dict()
 
 	now = now_datetime()
 	if client.get("last_contacted_on"):
@@ -402,6 +448,9 @@ def get_client_details(client_name):
 	else:
 		client["days_since_contact"] = None
 		client["is_contact_overdue"] = False
+
+	sub_doc = _get_client_submission_doc(client_name, client_doc)
+	submission = sub_doc.as_dict() if sub_doc else None
 
 	interactions = frappe.get_all(
 		"CRM Interaction",
@@ -438,7 +487,170 @@ def get_client_details(client_name):
 		order_by="due_date asc",
 	)
 
-	return {"client": client, "interactions": interactions, "tasks": tasks}
+	return {
+		"client": client,
+		"submission": submission,
+		"interactions": interactions,
+		"tasks": tasks,
+	}
+
+
+@frappe.whitelist()
+def update_client_onboarding_details(client_name, payload):
+	"""Updates client onboarding submission and synchronizes matching client fields."""
+	_check_crm_permission()
+	if not frappe.db.exists("Client", client_name):
+		frappe.throw(_("Client {0} not found").format(client_name))
+
+	if isinstance(payload, str):
+		try:
+			payload = json.loads(payload)
+		except Exception:
+			payload = {}
+
+	client_doc = frappe.get_doc("Client", client_name)
+	sub_doc = _get_client_submission_doc(client_name, client_doc)
+
+	if not sub_doc:
+		sub_doc = frappe.new_doc("Client Onboarding Submission")
+		sub_doc.client = client_name
+		sub_doc.lead = client_doc.lead or None
+		sub_doc.status = "Submitted"
+		sub_doc.workflow_type = "client_onboarding"
+
+	sub_fields = [
+		"full_name",
+		"first_name",
+		"last_name",
+		"salutation",
+		"email",
+		"mobile_no",
+		"alternate_mobile_no",
+		"pan",
+		"dob",
+		"gender",
+		"client_type",
+		"income_slab",
+		"place_of_birth",
+		"occupation",
+		"address_line1",
+		"address_line2",
+		"city",
+		"state",
+		"pincode",
+		"country",
+		"nominee_name",
+		"nominee_relationship",
+		"nominee_dob",
+		"is_nominee_minor",
+		"statement_name",
+		"nominee_id_type",
+		"nominee_id_number",
+		"nominee_mobile",
+		"nominee_email",
+		"nominee_address",
+		"guardian_name",
+		"guardian_relationship",
+		"guardian_pan",
+		"bank_entry_method",
+		"bank_name",
+		"bank_account_no",
+		"bank_ifsc",
+		"bank_proof_file",
+		"investor_category",
+		"investment_horizon",
+		"investment_experience",
+		"investment_capacity",
+		"investment_objectives",
+		"kyc_status",
+	]
+
+	date_fields = {"dob", "nominee_dob"}
+
+	for f in sub_fields:
+		if f in payload:
+			val = payload.get(f)
+			if f in date_fields and (not val or val == ""):
+				val = None
+			elif f == "is_nominee_minor":
+				val = 1 if (val is True or val == "1" or val == 1 or val == "true") else 0
+			sub_doc.set(f, val)
+
+	sub_doc.client = client_name
+	if not sub_doc.lead and client_doc.lead:
+		sub_doc.lead = client_doc.lead
+
+	raw_json = {}
+	if sub_doc.submission_json:
+		try:
+			raw_json = json.loads(sub_doc.submission_json)
+		except Exception:
+			raw_json = {}
+	raw_json.update({k: v for k, v in payload.items() if v is not None})
+	sub_doc.submission_json = json.dumps(raw_json)
+
+	sub_doc.save(ignore_permissions=True)
+
+	client_sync_map = {
+		"full_name": "client_name",
+		"first_name": "first_name",
+		"last_name": "last_name",
+		"salutation": "salutation",
+		"email": "email",
+		"mobile_no": "mobile_no",
+		"alternate_mobile_no": "alternate_mobile_no",
+		"pan": "pan",
+		"dob": "dob",
+		"gender": "gender",
+		"address_line1": "address_line1",
+		"address_line2": "address_line2",
+		"city": "city",
+		"state": "state",
+		"pincode": "pincode",
+		"country": "country",
+		"investor_category": "investor_category",
+		"investment_horizon": "investment_horizon",
+		"investment_experience": "investment_experience",
+		"investment_capacity": "investment_capacity",
+		"investment_objectives": "investment_objectives",
+		"kyc_status": "kyc_status",
+	}
+
+	for src_key, client_field in client_sync_map.items():
+		if src_key in payload and payload.get(src_key) is not None:
+			val = payload.get(src_key)
+			if client_field == "dob" and (not val or val == ""):
+				val = None
+			client_doc.set(client_field, val)
+		elif client_field in payload and payload.get(client_field) is not None:
+			val = payload.get(client_field)
+			if client_field == "dob" and (not val or val == ""):
+				val = None
+			client_doc.set(client_field, val)
+
+	if payload.get("full_name"):
+		client_doc.client_name = payload.get("full_name")
+
+	if payload.get("risk_profile"):
+		client_doc.risk_profile = payload.get("risk_profile")
+
+	client_doc.save(ignore_permissions=True)
+
+	try:
+		frappe.get_doc({
+			"doctype": "CRM Interaction",
+			"related_client": client_name,
+			"interaction_type": "Other",
+			"direction": "Outbound",
+			"interaction_date": now_datetime(),
+			"logged_by": frappe.session.user,
+			"summary": "Client Onboarding Details Updated",
+			"details": "Client profile & onboarding submission details updated via KNAPS CRM.",
+		}).insert(ignore_permissions=True)
+	except Exception:
+		pass
+
+	return get_client_details(client_name)
 
 
 @frappe.whitelist()
