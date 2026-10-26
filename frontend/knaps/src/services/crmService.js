@@ -193,6 +193,12 @@ export const crmService = {
 			)}`
 		),
 
+	updateClientOnboardingDetails: (clientName, payload) =>
+		fetchCrmApi("/api/method/dhanada.crm_api.update_client_onboarding_details", "POST", {
+			client_name: clientName,
+			payload,
+		}),
+
 	getTasks: (params = {}) => {
 		const query = new URLSearchParams(params).toString();
 		return fetchCrmApi(`/api/method/dhanada.crm_api.get_tasks?${query}`);
@@ -259,4 +265,34 @@ export const crmService = {
 			token,
 			custom_message: customMessage,
 		}),
+
+	getConversations: (doctype, name, page = 1, pageLength = 20, sync = false) =>
+		fetchCrmApi(
+			`/api/method/dhanada.crm_api.get_crm_conversations?doctype=${encodeURIComponent(
+				doctype
+			)}&name=${encodeURIComponent(name)}&page=${page}&page_length=${pageLength}${
+				sync ? "&sync=1" : ""
+			}`
+		),
+
+	syncEmailConversations: (doctype, name) =>
+		fetchCrmApi(
+			`/api/method/dhanada.crm_api.sync_crm_emails?doctype=${encodeURIComponent(
+				doctype
+			)}&name=${encodeURIComponent(name)}`,
+			"POST"
+		),
+
+	sendEmail: (data) =>
+		fetchCrmApi("/api/method/dhanada.crm_api.send_crm_email", "POST", data),
+
+	getWhatsAppConversations: (doctype, name, page = 1, pageLength = 50) =>
+		fetchCrmApi(
+			`/api/method/dhanada.crm_api.get_crm_whatsapp_conversations?doctype=${encodeURIComponent(
+				doctype
+			)}&name=${encodeURIComponent(name)}&page=${page}&page_length=${pageLength}`
+		),
+
+	sendWhatsAppMessage: (data) =>
+		fetchCrmApi("/api/method/dhanada.crm_api.send_crm_whatsapp_message", "POST", data),
 };

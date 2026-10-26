@@ -17,7 +17,7 @@ export default function NpsHero() {
           <span className="text-[#032e92]">National Pension System (NPS)</span>
         </div>
 
-        {/* Hero Banner with text overlay matching reference */}
+        {/* Hero Banner with text overlay */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

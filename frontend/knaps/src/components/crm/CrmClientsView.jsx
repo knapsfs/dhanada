@@ -1,18 +1,23 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faSearch, faPhone, faEnvelope, faUserCheck, faShieldHalved, faUsers,
+  faSearch, faPhone, faEnvelope, faUsers,
   faCommentDots, faTriangleExclamation, faClock, faUser, faFloppyDisk,
-  faSpinner, faXmark, faCheckCircle, faCircleExclamation, faPaperPlane
+  faSpinner, faXmark, faCheckCircle, faCircleExclamation, faPaperPlane, faComments
 } from '@fortawesome/free-solid-svg-icons';
 import { crmService } from '../../services/crmService';
 import CrmSendFormModal from "./CrmSendFormModal";
+import CrmEmailConversations from "./CrmEmailConversations";
+import CrmWhatsAppConversations from "./CrmWhatsAppConversations";
 import { getContactStatus, formatContactDate } from '../../utils/crmContactUtils';
 
-export default function CrmClientsView({ clients = [], loading = false, onClientUpdated }) {
+export default function CrmClientsView({ clients = [], loading = false, onClientUpdated, onSelectClient }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedClientForRemark, setSelectedClientForRemark] = useState(null);
   const [selectedClientForForm, setSelectedClientForForm] = useState(null);
+  const [selectedClientForConversations, setSelectedClientForConversations] = useState(null);
+  const [selectedClientForWhatsApp, setSelectedClientForWhatsApp] = useState(null);
+  const [focusClientEmailComposer, setFocusClientEmailComposer] = useState(false);
   const [remarkText, setRemarkText] = useState('');
   const [savingRemark, setSavingRemark] = useState(false);
   const [feedback, setFeedback] = useState({ type: '', message: '' });
@@ -99,12 +104,16 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
             ) : (
               filtered.map((client) => {
                 const cleanPhone = client.mobile_no ? client.mobile_no.replace(/\D/g, '') : '';
-                const waPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
 
                 return (
-                  <tr key={client.name} className="hover:bg-blue-50/40 transition-colors">
+                  <tr
+                    key={client.name}
+                    onClick={() => onSelectClient && onSelectClient(client.name)}
+                    className="hover:bg-blue-50/50 transition-colors cursor-pointer group"
+                    title="Click to view & edit client onboarding details"
+                  >
                     <td className="py-3.5 px-4 sm:px-6">
-                      <div className="font-bold text-gray-900">{client.client_name}</div>
+                      <div className="font-bold text-gray-900 group-hover:text-[#032e92] transition-colors">{client.client_name}</div>
                       <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
                         <span className="text-[10px] text-gray-400 font-mono">{client.name}</span>
                         {(() => {
@@ -171,10 +180,13 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
                     </td>
 
                     <td className="py-3.5 px-4 sm:px-6 text-right">
-                      <div className="flex items-center justify-end gap-1.5">
+                      <div className="flex items-center justify-end gap-1.5" onClick={(e) => e.stopPropagation()}>
                         <button
                           type="button"
-                          onClick={() => setSelectedClientForForm(client)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedClientForForm(client);
+                          }}
                           className="w-7 h-7 rounded-lg bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white flex items-center justify-center transition-colors text-xs cursor-pointer"
                           title="Send Form Workflow (Risk Profiler / Onboarding / Combined)"
                         >
@@ -182,7 +194,8 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
                         </button>
                         <button
                           type="button"
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation();
                             setSelectedClientForRemark(client);
                             setRemarkText('');
                             setFeedback({ type: '', message: '' });
@@ -197,31 +210,37 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
                           <>
                             <a
                               href={`tel:${cleanPhone}`}
+                              onClick={(e) => e.stopPropagation()}
                               className="w-7 h-7 rounded-lg bg-gray-100 hover:bg-blue-50 text-gray-600 hover:text-[#032e92] flex items-center justify-center transition-colors text-xs"
                               title="Call Client"
                             >
                               <FontAwesomeIcon icon={faPhone} />
                             </a>
-                            <a
-                              href={`https://wa.me/${waPhone}?text=Hello%20${encodeURIComponent(client.client_name || '')},%20greetings%20from%20KNAPS%20Wealth%20Advisory.`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="w-7 h-7 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 flex items-center justify-center transition-colors text-[10px] font-bold"
-                              title="WhatsApp"
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedClientForWhatsApp(client);
+                              }}
+                              className="w-7 h-7 rounded-lg bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white flex items-center justify-center transition-colors text-xs cursor-pointer"
+                              title="Open Integrated WhatsApp Conversations"
                             >
-                              WA
-                            </a>
+                              <FontAwesomeIcon icon={faComments} />
+                            </button>
                           </>
                         )}
-                        {client.email && (
-                          <a
-                            href={`mailto:${client.email}`}
-                            className="w-7 h-7 rounded-lg bg-gray-100 hover:bg-blue-50 text-gray-600 hover:text-[#032e92] flex items-center justify-center transition-colors text-xs"
-                            title="Email Client"
-                          >
-                            <FontAwesomeIcon icon={faEnvelope} />
-                          </a>
-                        )}
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedClientForConversations(client);
+                            setFocusClientEmailComposer(true);
+                          }}
+                          className="w-7 h-7 rounded-lg bg-indigo-50 hover:bg-[#032e92] text-[#032e92] hover:text-white flex items-center justify-center transition-colors text-xs cursor-pointer"
+                          title="Open Integrated Email Conversations & Compose"
+                        >
+                          <FontAwesomeIcon icon={faEnvelope} />
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -365,6 +384,124 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
           setFeedback({ type: 'success', message: 'Form link generated for ' + (selectedClientForForm?.client_name || 'client') });
         }}
       />
+
+      {/* Client Email Conversations Modal */}
+      {selectedClientForConversations && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-3xl w-full p-6 shadow-2xl border border-gray-200 space-y-4 max-h-[90vh] flex flex-col">
+            {/* Modal Header */}
+            <div className="flex items-start justify-between gap-3 pb-3 border-b border-gray-100 shrink-0">
+              <div className="flex items-center gap-3">
+                <span className="w-10 h-10 rounded-2xl bg-blue-50 text-[#032e92] flex items-center justify-center text-sm font-bold">
+                  <FontAwesomeIcon icon={faEnvelope} />
+                </span>
+                <div>
+                  <h3 className="text-sm font-bold text-gray-900">
+                    Email Conversations · {selectedClientForConversations.client_name}
+                  </h3>
+                  <div className="flex items-center gap-2 text-xs text-gray-500 mt-0.5">
+                    <span className="font-mono text-[10px] bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">
+                      {selectedClientForConversations.name}
+                    </span>
+                    {selectedClientForConversations.email && (
+                      <span>· {selectedClientForConversations.email}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedClientForConversations(null)}
+                className="w-8 h-8 rounded-xl text-gray-400 hover:text-gray-700 hover:bg-gray-100 flex items-center justify-center transition-colors cursor-pointer"
+              >
+                <FontAwesomeIcon icon={faXmark} />
+              </button>
+            </div>
+
+            {/* Modal Body: Reused CrmEmailConversations Component */}
+            <div className="overflow-y-auto flex-1 pr-1 -mr-1">
+              <CrmEmailConversations
+                doctype="Client"
+                docName={selectedClientForConversations.name}
+                contactEmail={selectedClientForConversations.email}
+                autoFocusComposer={focusClientEmailComposer}
+              />
+            </div>
+
+            {/* Modal Footer */}
+            <div className="pt-3 border-t border-gray-100 flex items-center justify-end shrink-0">
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedClientForConversations(null);
+                  setFocusClientEmailComposer(false);
+                }}
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-gray-600 hover:bg-gray-100 transition-colors cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Client WhatsApp Conversations Modal */}
+      {selectedClientForWhatsApp && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-3xl w-full p-6 shadow-2xl border border-gray-200 space-y-4 max-h-[90vh] flex flex-col">
+            {/* Modal Header */}
+            <div className="flex items-start justify-between gap-3 pb-3 border-b border-gray-100 shrink-0">
+              <div className="flex items-center gap-3">
+                <span className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-sm font-bold">
+                  <FontAwesomeIcon icon={faComments} />
+                </span>
+                <div>
+                  <h3 className="text-sm font-bold text-gray-900">
+                    WhatsApp Conversations · {selectedClientForWhatsApp.client_name}
+                  </h3>
+                  <div className="flex items-center gap-2 text-xs text-gray-500 mt-0.5">
+                    <span className="font-mono text-[10px] bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">
+                      {selectedClientForWhatsApp.name}
+                    </span>
+                    {selectedClientForWhatsApp.mobile_no && (
+                      <span className="font-mono">· +{selectedClientForWhatsApp.mobile_no}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedClientForWhatsApp(null)}
+                className="w-8 h-8 rounded-xl text-gray-400 hover:text-gray-700 hover:bg-gray-100 flex items-center justify-center transition-colors cursor-pointer"
+              >
+                <FontAwesomeIcon icon={faXmark} />
+              </button>
+            </div>
+
+            {/* Modal Body: Reused CrmWhatsAppConversations Component */}
+            <div className="overflow-y-auto flex-1 pr-1 -mr-1">
+              <CrmWhatsAppConversations
+                doctype="Client"
+                docName={selectedClientForWhatsApp.name}
+                recipientPhone={selectedClientForWhatsApp.mobile_no}
+                contactName={selectedClientForWhatsApp.client_name}
+                autoFocusComposer={true}
+              />
+            </div>
+
+            {/* Modal Footer */}
+            <div className="pt-3 border-t border-gray-100 flex items-center justify-end shrink-0">
+              <button
+                type="button"
+                onClick={() => setSelectedClientForWhatsApp(null)}
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-gray-600 hover:bg-gray-100 transition-colors cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -23,7 +23,7 @@ export default function FormHeader({
           </div>
           <div>
             <span className="font-extrabold text-sm sm:text-base tracking-tight text-gray-950 block leading-tight">
-              KNAPS <span className="text-[#032e92] font-semibold text-xs sm:text-sm">FINANCIAL</span>
+              KNAPS <span className="text-[#032e92] font-semibold text-xs sm:text-sm">Private Limited</span>
             </span>
             <span className="text-[10px] text-gray-400 font-medium block">
               AMFI Registered Mutual Fund Distributor
@@ -83,22 +83,20 @@ export default function FormHeader({
                     type="button"
                     onClick={() => isCompleted && onStepClick && onStepClick(idx)}
                     disabled={!isCompleted}
-                    className={`flex items-center gap-1.5 text-[11px] font-bold transition-colors ${
-                      isCurrent
+                    className={`flex items-center gap-1.5 text-[11px] font-bold transition-colors ${isCurrent
                         ? "text-[#032e92]"
                         : isCompleted
-                        ? "text-emerald-700 hover:text-emerald-800 cursor-pointer"
-                        : "text-gray-400 cursor-default"
-                    }`}
+                          ? "text-emerald-700 hover:text-emerald-800 cursor-pointer"
+                          : "text-gray-400 cursor-default"
+                      }`}
                   >
                     <span
-                      className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold transition-all ${
-                        isCurrent
+                      className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold transition-all ${isCurrent
                           ? "bg-[#032e92] text-white shadow-xs"
                           : isCompleted
-                          ? "bg-emerald-600 text-white"
-                          : "bg-gray-100 text-gray-400"
-                      }`}
+                            ? "bg-emerald-600 text-white"
+                            : "bg-gray-100 text-gray-400"
+                        }`}
                     >
                       {isCompleted ? <FontAwesomeIcon icon={faCheck} /> : idx + 1}
                     </span>

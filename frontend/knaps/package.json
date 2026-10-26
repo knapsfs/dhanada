@@ -17,6 +17,7 @@
     "@fortawesome/react-fontawesome": "^3.5.0",
     "@tailwindcss/vite": "^4.3.3",
     "chart.js": "^4.5.1",
+    "dompurify": "^3.4.17",
     "framer-motion": "^12.42.2",
     "lottie-web": "^5.13.0",
     "react": "^19.2.7",

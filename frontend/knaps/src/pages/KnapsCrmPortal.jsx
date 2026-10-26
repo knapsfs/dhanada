@@ -19,6 +19,7 @@ import CrmRenewalsView from '../components/crm/CrmRenewalsView';
 
 // Modals & Drawer
 import CrmLeadDetailView from '../components/crm/CrmLeadDetailView';
+import CrmClientDetailView from '../components/crm/CrmClientDetailView';
 import CrmNewLeadModal from '../components/crm/CrmNewLeadModal';
 import CrmNewInteractionModal from '../components/crm/CrmNewInteractionModal';
 import CrmNewTaskModal from '../components/crm/CrmNewTaskModal';
@@ -41,6 +42,8 @@ export default function KnapsCrmPortal() {
   // Modals state
   const [selectedLeadName, setSelectedLeadName] = useState(null);
   const [leadRefreshKey, setLeadRefreshKey] = useState(0);
+  const [selectedClientName, setSelectedClientName] = useState(null);
+  const [clientRefreshKey, setClientRefreshKey] = useState(0);
   const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
   const [isInteractionModalOpen, setIsInteractionModalOpen] = useState(false);
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
@@ -162,6 +165,8 @@ export default function KnapsCrmPortal() {
   };
 
   const handleNavigateTab = (tab, mode = 'list') => {
+    setSelectedLeadName(null);
+    setSelectedClientName(null);
     if (tab === 'pipeline') {
       setActiveTab('leads');
       setLeadsViewMode('kanban');
@@ -186,21 +191,6 @@ export default function KnapsCrmPortal() {
     );
   }, [leads, searchQuery]);
 
-  // Filtered Leads based on search and status
-  const displayedLeads = useMemo(() => {
-    return leads.filter((l) => {
-      if (statusFilter !== 'All' && l.status !== statusFilter) return false;
-      if (!searchQuery.trim()) return true;
-      const q = searchQuery.toLowerCase();
-      return (
-        (l.lead_name && l.lead_name.toLowerCase().includes(q)) ||
-        (l.mobile_no && l.mobile_no.includes(q)) ||
-        (l.email && l.email.toLowerCase().includes(q)) ||
-        (l.product_interest && l.product_interest.toLowerCase().includes(q)) ||
-        (l.name && l.name.toLowerCase().includes(q))
-      );
-    });
-  }, [leads, statusFilter, searchQuery]);
 
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: faChartPie },
@@ -271,6 +261,7 @@ export default function KnapsCrmPortal() {
                 onClick={() => {
                 setActiveTab(item.id);
                 setSelectedLeadName(null);
+                setSelectedClientName(null);
               }}
                 className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${isActive
                   ? 'bg-white/15 text-white shadow-xs font-bold'
@@ -363,6 +354,19 @@ export default function KnapsCrmPortal() {
                   <span className="text-gray-300">/</span>
                   <span className="text-[#032e92]">Lead Profile</span>
                 </span>
+              ) : selectedClientName ? (
+                <span className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedClientName(null)}
+                    className="text-gray-400 hover:text-[#032e92] transition-colors cursor-pointer text-xs"
+                    title="Back to clients"
+                  >
+                    Clients
+                  </button>
+                  <span className="text-gray-300">/</span>
+                  <span className="text-[#032e92]">Client Details</span>
+                </span>
               ) : (
                 (activeTab === 'leads' && leadsViewMode === 'kanban' ? 'All Leads (Pipeline)' : (navItems.find((n) => n.id === activeTab)?.label || 'CRM'))
               )}
@@ -422,6 +426,15 @@ export default function KnapsCrmPortal() {
               onNewTask={handleOpenTaskModal}
               refreshKey={leadRefreshKey}
             />
+          ) : selectedClientName ? (
+            <CrmClientDetailView
+              clientName={selectedClientName}
+              onBack={() => setSelectedClientName(null)}
+              onClientUpdated={handleClientUpdated}
+              onLogInteraction={handleOpenInteractionModal}
+              onNewTask={handleOpenTaskModal}
+              refreshKey={clientRefreshKey}
+            />
           ) : (
             <>
               {activeTab === 'dashboard' && (
@@ -430,7 +443,10 @@ export default function KnapsCrmPortal() {
                   leads={leads}
                   tasks={tasks}
                   renewals={renewals}
-                  onSelectLead={(name) => setSelectedLeadName(name)}
+                  onSelectLead={(name) => {
+                    setSelectedLeadName(name);
+                    setSelectedClientName(null);
+                  }}
                   onNewLead={() => setIsLeadModalOpen(true)}
                   onNewTask={() => setIsTaskModalOpen(true)}
                   onNavigateTab={handleNavigateTab}
@@ -441,15 +457,21 @@ export default function KnapsCrmPortal() {
                 leadsViewMode === 'kanban' ? (
                   <CrmPipelineView
                     leads={pipelineLeads}
-                    onSelectLead={(name) => setSelectedLeadName(name)}
+                    onSelectLead={(name) => {
+                      setSelectedLeadName(name);
+                      setSelectedClientName(null);
+                    }}
                     onStatusChange={handleStatusChange}
                     onNewLead={() => setIsLeadModalOpen(true)}
                     onToggleView={(mode) => setLeadsViewMode(mode)}
                   />
                 ) : (
                   <CrmLeadsListView
-                    leads={displayedLeads}
-                    onSelectLead={(name) => setSelectedLeadName(name)}
+                    leads={leads}
+                    onSelectLead={(name) => {
+                      setSelectedLeadName(name);
+                      setSelectedClientName(null);
+                    }}
                     selectedStatus={statusFilter}
                     onStatusFilterChange={setStatusFilter}
                     searchQuery={searchQuery}
@@ -464,7 +486,10 @@ export default function KnapsCrmPortal() {
               {activeTab === 'pipeline' && (
                 <CrmPipelineView
                   leads={pipelineLeads}
-                  onSelectLead={(name) => setSelectedLeadName(name)}
+                  onSelectLead={(name) => {
+                    setSelectedLeadName(name);
+                    setSelectedClientName(null);
+                  }}
                   onStatusChange={handleStatusChange}
                   onNewLead={() => setIsLeadModalOpen(true)}
                   onToggleView={(mode) => {
@@ -479,6 +504,10 @@ export default function KnapsCrmPortal() {
                   clients={clients}
                   loading={loading}
                   onClientUpdated={handleClientUpdated}
+                  onSelectClient={(name) => {
+                    setSelectedClientName(name);
+                    setSelectedLeadName(null);
+                  }}
                 />
               )}
 

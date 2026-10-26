@@ -133,7 +133,7 @@ home_page = "knaps"
 
 # before_install = "dhanada.install.before_install"
 after_install = "dhanada.setup.bootstrap.after_install"
-after_migrate = ["dhanada.setup.bootstrap.after_migrate"]
+after_migrate = ["dhanada.utils.patch_crm_layout.patch_layout", "dhanada.setup.bootstrap.after_migrate"]
 
 
 get_desktop_icons = "dhanada.config.desktop.get_data"
@@ -192,6 +192,10 @@ get_desktop_icons = "dhanada.config.desktop.get_data"
 doc_events = {
 	"Email Queue": {
 		"on_update": "dhanada.lifecycle.api.on_email_queue_update",
+		"after_insert": "dhanada.email_association.capture_outgoing_email_queue",
+	},
+	"Communication": {
+		"before_insert": "dhanada.email_association.link_communication_to_crm_record",
 	},
 }
 
@@ -223,6 +227,8 @@ before_tests = "dhanada.setup.bootstrap.before_tests"
 # extend_doctype_class = {
 # 	"Task": "dhanada.custom.task.CustomTaskMixin"
 # }
+
+override_doctype_class = {"Email Account": "dhanada.overrides.custom_email_account.CustomEmailAccount"}
 
 # Overriding Methods
 # ------------------------------
