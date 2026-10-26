@@ -1,15 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowLeft, faPhone, faEnvelope, faPaperPlane, faUserCheck,
-  faCommentDots, faListCheck, faSpinner, faShieldHalved,
+  faCommentDots, faListCheck, faSpinner,
   faCheckCircle, faCircleExclamation, faTriangleExclamation,
   faClock, faFloppyDisk, faUser, faTrash, faCopy, faCheck,
-  faLocationDot, faCoins, faFileLines, faPlus, faXmark
+  faLocationDot, faCoins, faFileLines, faPlus, faXmark, faComments
 } from "@fortawesome/free-solid-svg-icons";
 import CrmSelect from "./CrmSelect";
 import CrmSendFormModal from "./CrmSendFormModal";
+import CrmEmailConversations from "./CrmEmailConversations";
+import CrmWhatsAppConversations from "./CrmWhatsAppConversations";
 import { crmService } from "../../services/crmService";
 import { getContactStatus, formatContactDate } from "../../utils/crmContactUtils";
 
@@ -35,7 +37,15 @@ export default function CrmLeadDetailView({
   const [sendFormModalOpen, setSendFormModalOpen] = useState(false);
   const [interactions, setInteractions] = useState([]);
   const [tasks, setTasks] = useState([]);
-  const [activeTab, setActiveTab] = useState("overview"); // overview, timeline, tasks
+  const [conversations, setConversations] = useState([]);
+  const [conversationsTotal, setConversationsTotal] = useState(0);
+  const [conversationsHasMore, setConversationsHasMore] = useState(false);
+  const [whatsappMessages, setWhatsappMessages] = useState([]);
+  const [whatsappTotal, setWhatsappTotal] = useState(0);
+  const [whatsappHasMore, setWhatsappHasMore] = useState(false);
+  const [focusEmailComposer, setFocusEmailComposer] = useState(false);
+  const [focusWhatsAppComposer, setFocusWhatsAppComposer] = useState(false);
+  const [activeTab, setActiveTab] = useState("overview"); // overview, emails, whatsapp, timeline, tasks
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState("");
   const [feedback, setFeedback] = useState({ type: "", message: "" });
@@ -44,6 +54,7 @@ export default function CrmLeadDetailView({
   const [copiedField, setCopiedField] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const activityHubRef = useRef(null);
 
   useEffect(() => {
     if (!leadName) return;
@@ -63,6 +74,12 @@ export default function CrmLeadDetailView({
       setLeadData(res.lead);
       setInteractions(res.interactions || []);
       setTasks(res.tasks || []);
+      setConversations(res.conversations || []);
+      setConversationsTotal(res.conversations_total || (res.conversations || []).length);
+      setConversationsHasMore(Boolean(res.conversations_has_more));
+      setWhatsappMessages(res.whatsapp_messages || []);
+      setWhatsappTotal(res.whatsapp_total || (res.whatsapp_messages || []).length);
+      setWhatsappHasMore(Boolean(res.whatsapp_has_more));
     } catch (err) {
       setFeedback({ type: "error", message: err.message || "Failed to load lead details." });
     } finally {
@@ -228,13 +245,32 @@ export default function CrmLeadDetailView({
   };
 
   const cleanPhone = leadData?.mobile_no ? leadData.mobile_no.replace(/\D/g, "") : "";
-  const waPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
 
   const contactInfo = getContactStatus(
     leadData?.last_contacted_on,
     leadData?.days_since_contact,
     leadData?.is_contact_overdue
   );
+
+  const handleOpenEmailSection = () => {
+    setActiveTab("emails");
+    setFocusEmailComposer((prev) => !prev);
+    setTimeout(() => {
+      if (activityHubRef.current) {
+        activityHubRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 60);
+  };
+
+  const handleOpenWhatsAppSection = () => {
+    setActiveTab("whatsapp");
+    setFocusWhatsAppComposer((prev) => !prev);
+    setTimeout(() => {
+      if (activityHubRef.current) {
+        activityHubRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 60);
+  };
 
   if (loading && !leadData) {
     return (
@@ -303,27 +339,28 @@ export default function CrmLeadDetailView({
                 <FontAwesomeIcon icon={faPhone} className="text-xs text-blue-600" />
                 <span className="hidden md:inline">Call</span>
               </a>
-              <a
-                href={`https://wa.me/${waPhone}?text=Hello%20${encodeURIComponent(leadData?.lead_name || "")},%20this%20is%20KNAPS%20Financial%20Advisory.`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-3 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 hover:bg-emerald-100 text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-colors"
-                title="Chat on WhatsApp"
+              <button
+                type="button"
+                onClick={handleOpenWhatsAppSection}
+                className="px-3 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 hover:bg-emerald-100 text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer"
+                title="Open Integrated WhatsApp Conversations"
               >
+                <FontAwesomeIcon icon={faComments} className="text-xs text-emerald-600" />
                 <span className="font-bold">WhatsApp</span>
-              </a>
+              </button>
             </>
           )}
 
           {leadData?.email && (
-            <a
-              href={`mailto:${leadData.email}`}
-              className="px-3 py-2 rounded-xl bg-white border border-gray-200 text-gray-700 hover:text-[#032e92] hover:border-[#032e92] text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-colors"
-              title="Send Email"
+            <button
+              type="button"
+              onClick={handleOpenEmailSection}
+              className="px-3 py-2 rounded-xl bg-white border border-gray-200 text-gray-700 hover:text-[#032e92] hover:border-[#032e92] text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer"
+              title="Open Integrated Email Conversations & Compose"
             >
               <FontAwesomeIcon icon={faEnvelope} className="text-xs text-amber-600" />
               <span className="hidden md:inline">Email</span>
-            </a>
+            </button>
           )}
 
           {/* Workflow Action Buttons */}
@@ -613,18 +650,47 @@ export default function CrmLeadDetailView({
           </div>
 
           {/* Card: Activity Hub (Overview, Interactions, Tasks) */}
-          <div className="bg-white rounded-3xl border border-gray-200/90 shadow-xs overflow-hidden">
+          <div ref={activityHubRef} className="bg-white rounded-3xl border border-gray-200/90 shadow-xs overflow-hidden scroll-mt-6">
             {/* Tabs Header */}
-            <div className="flex items-center px-6 border-b border-gray-200 bg-[#fcfdfe]">
+            <div className="flex items-center px-6 border-b border-gray-200 bg-[#fcfdfe] overflow-x-auto">
               <button
                 type="button"
                 onClick={() => setActiveTab("overview")}
-                className={`py-3.5 px-4 text-xs font-bold border-b-2 transition-colors cursor-pointer ${activeTab === "overview"
+                className={`py-3.5 px-4 text-xs font-bold border-b-2 transition-colors cursor-pointer shrink-0 ${activeTab === "overview"
                     ? "border-[#032e92] text-[#032e92]"
                     : "border-transparent text-gray-500 hover:text-gray-900"
                   }`}
               >
                 Overview & Activity
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveTab("emails")}
+                className={`py-3.5 px-4 text-xs font-bold border-b-2 transition-colors cursor-pointer flex items-center gap-2 shrink-0 ${activeTab === "emails"
+                    ? "border-[#032e92] text-[#032e92]"
+                    : "border-transparent text-gray-500 hover:text-gray-900"
+                  }`}
+              >
+                <span>Email Conversations</span>
+                <span className="w-5 h-5 rounded-full bg-blue-50 text-[#032e92] text-[10px] flex items-center justify-center font-bold">
+                  {conversationsTotal}
+                </span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveTab("whatsapp")}
+                className={`py-3.5 px-4 text-xs font-bold border-b-2 transition-colors cursor-pointer flex items-center gap-2 shrink-0 ${activeTab === "whatsapp"
+                    ? "border-emerald-600 text-emerald-700"
+                    : "border-transparent text-gray-500 hover:text-gray-900"
+                  }`}
+              >
+                <FontAwesomeIcon icon={faComments} className="text-xs text-emerald-600" />
+                <span>WhatsApp</span>
+                <span className="w-5 h-5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] flex items-center justify-center font-bold">
+                  {whatsappTotal}
+                </span>
               </button>
 
               <button
@@ -919,6 +985,35 @@ export default function CrmLeadDetailView({
                     </div>
                   )}
                 </div>
+              )}
+
+              {/* TAB 4: EMAIL CONVERSATIONS */}
+              {activeTab === "emails" && (
+                <CrmEmailConversations
+                  doctype="Lead"
+                  docName={leadData?.name || leadName}
+                  contactEmail={leadData?.email}
+                  initialConversations={conversations}
+                  initialTotal={conversationsTotal}
+                  initialHasMore={conversationsHasMore}
+                  onCountChange={(count) => setConversationsTotal(count)}
+                  autoFocusComposer={focusEmailComposer}
+                />
+              )}
+
+              {/* TAB 5: WHATSAPP CONVERSATIONS */}
+              {activeTab === "whatsapp" && (
+                <CrmWhatsAppConversations
+                  doctype="Lead"
+                  docName={leadData?.name || leadName}
+                  recipientPhone={leadData?.mobile_no}
+                  contactName={leadData?.lead_name}
+                  initialMessages={whatsappMessages}
+                  initialTotal={whatsappTotal}
+                  initialHasMore={whatsappHasMore}
+                  onCountChange={(count) => setWhatsappTotal(count)}
+                  autoFocusComposer={focusWhatsAppComposer}
+                />
               )}
             </div>
           </div>

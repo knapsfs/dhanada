@@ -192,6 +192,10 @@ get_desktop_icons = "dhanada.config.desktop.get_data"
 doc_events = {
 	"Email Queue": {
 		"on_update": "dhanada.lifecycle.api.on_email_queue_update",
+		"after_insert": "dhanada.email_association.capture_outgoing_email_queue",
+	},
+	"Communication": {
+		"before_insert": "dhanada.email_association.link_communication_to_crm_record",
 	},
 }
 
@@ -223,6 +227,8 @@ before_tests = "dhanada.setup.bootstrap.before_tests"
 # extend_doctype_class = {
 # 	"Task": "dhanada.custom.task.CustomTaskMixin"
 # }
+
+override_doctype_class = {"Email Account": "dhanada.overrides.custom_email_account.CustomEmailAccount"}
 
 # Overriding Methods
 # ------------------------------
@@ -306,9 +312,6 @@ after_request = ["dhanada.utils.login.fix_login_response"]
 fixtures = [
 	"Workflow",
 	"Workflow State",
-	{"dt": "Custom Field", "filters": [["dt", "=", "CRM Lead"]]},
-	{"dt": "CRM Form Script", "filters": [["name", "=", "CRM Lead UI Fix"]]},
-	{"dt": "CRM Fields Layout", "filters": [["dt", "=", "CRM Lead"]]},
 	{
 		"dt": "SIF Investment Strategy Subcategory",
 		"filters": [

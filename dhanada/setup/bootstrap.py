@@ -94,6 +94,9 @@ def ensure_crm_sources():
 	"""
 	required_sources = ["Website Chatbot", "Website Form", "Website", "WhatsApp", "Referral", "Manual"]
 
+	if not frappe.db.exists("DocType", "CRM Lead Source"):
+		return
+
 	for source in required_sources:
 		if not frappe.db.exists("CRM Lead Source", {"source_name": source}):
 			try:

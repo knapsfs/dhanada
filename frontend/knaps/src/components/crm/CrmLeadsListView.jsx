@@ -1,12 +1,22 @@
-import CrmSelect from "./CrmSelect";
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faPhone, faEnvelope, faCommentDots, faEye, faFilter,
-  faSearch, faPlus, faArrowsRotate, faTrash, faSpinner, faTableColumns,
-  faTriangleExclamation
+  faPhone,
+  faCommentDots,
+  faEye,
+  faFilter,
+  faPlus,
+  faTrash,
+  faSpinner,
+  faTableColumns,
+  faTriangleExclamation,
+  faRotateLeft,
+  faXmark,
+  faChevronLeft,
+  faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { motion, AnimatePresence } from "framer-motion";
+import CrmSelect from "./CrmSelect";
 import { crmService } from "../../services/crmService";
 import { getContactStatus } from "../../utils/crmContactUtils";
 
@@ -19,36 +29,267 @@ const STATUS_BADGES = {
   Junk: "bg-red-50 text-red-700 border-red-200",
 };
 
-const STATUS_OPTIONS = [
-  { value: "All", label: "All" },
-  { value: "New", label: "New" },
-  { value: "Interested", label: "Interested" },
-  { value: "Nurturing", label: "Nurturing" },
-  { value: "Converted", label: "Converted" },
-  { value: "Not Interested", label: "Not Interested" },
+const BASE_STATUS_OPTIONS = [
+  "New",
+  "Interested",
+  "Nurturing",
+  "Converted",
+  "Not Interested",
+  "Junk",
 ];
+
+function matchesDateFilter(creationStr, preset, customFrom, customTo) {
+  if (!preset || preset === "all") return true;
+  if (!creationStr) return false;
+
+  const leadDate = new Date(creationStr);
+  if (isNaN(leadDate.getTime())) return true;
+
+  const now = new Date();
+  const startOfDay = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0);
+  const endOfDay = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59, 999);
+
+  const todayStart = startOfDay(now);
+  const todayEnd = endOfDay(now);
+
+  if (preset === "today") {
+    return leadDate >= todayStart && leadDate <= todayEnd;
+  }
+  if (preset === "yesterday") {
+    const yest = new Date(now);
+    yest.setDate(yest.getDate() - 1);
+    return leadDate >= startOfDay(yest) && leadDate <= endOfDay(yest);
+  }
+  if (preset === "last_7_days") {
+    const d7 = new Date(now);
+    d7.setDate(d7.getDate() - 7);
+    return leadDate >= startOfDay(d7) && leadDate <= todayEnd;
+  }
+  if (preset === "last_30_days") {
+    const d30 = new Date(now);
+    d30.setDate(d30.getDate() - 30);
+    return leadDate >= startOfDay(d30) && leadDate <= todayEnd;
+  }
+  if (preset === "this_month") {
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0);
+    return leadDate >= monthStart && leadDate <= todayEnd;
+  }
+  if (preset === "custom") {
+    if (customFrom) {
+      const fromDate = startOfDay(new Date(customFrom));
+      if (!isNaN(fromDate.getTime()) && leadDate < fromDate) return false;
+    }
+    if (customTo) {
+      const toDate = endOfDay(new Date(customTo));
+      if (!isNaN(toDate.getTime()) && leadDate > toDate) return false;
+    }
+    return true;
+  }
+  return true;
+}
 
 export default function CrmLeadsListView({
   leads = [],
   onSelectLead,
   selectedStatus,
   onStatusFilterChange,
-  searchQuery,
+  searchQuery = "",
   onSearchChange,
   onNewLead,
   onDeleteLead,
   onOpenKanban,
 }) {
-  const [selectedProduct, setSelectedProduct] = useState("All");
+  const [filters, setFilters] = useState({
+    lead: "",
+    contact: "",
+    product: "All",
+    source: "All",
+    touchpoints: "All",
+    status: selectedStatus || "All",
+    createdPreset: "all",
+    createdFrom: "",
+    createdTo: "",
+  });
+
   const [leadToDelete, setLeadToDelete] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const filteredLeads = leads.filter((l) => {
-    if (selectedProduct !== "All" && l.product_interest !== selectedProduct) return false;
-    return true;
-  });
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(15);
 
-  const uniqueProducts = Array.from(new Set(leads.map((l) => l.product_interest).filter(Boolean)));
+  // Sync external status change
+  useEffect(() => {
+    if (selectedStatus !== undefined) {
+      setFilters((prev) => {
+        if (prev.status === selectedStatus) return prev;
+        return { ...prev, status: selectedStatus };
+      });
+      setCurrentPage(1);
+    }
+  }, [selectedStatus]);
+
+  // Unique options derived from current leads dataset
+  const availableProducts = useMemo(() => {
+    const set = new Set();
+    leads.forEach((l) => {
+      if (l.product_interest && l.product_interest.trim()) {
+        set.add(l.product_interest.trim());
+      }
+    });
+    return Array.from(set).sort();
+  }, [leads]);
+
+  const availableSources = useMemo(() => {
+    const set = new Set();
+    leads.forEach((l) => {
+      if (l.source && l.source.trim()) {
+        set.add(l.source.trim());
+      }
+    });
+    return Array.from(set).sort();
+  }, [leads]);
+
+  const availableStatuses = useMemo(() => {
+    const set = new Set(BASE_STATUS_OPTIONS);
+    leads.forEach((l) => {
+      if (l.status && l.status.trim()) {
+        set.add(l.status.trim());
+      }
+    });
+    return Array.from(set);
+  }, [leads]);
+
+  const updateFilter = (key, value) => {
+    setFilters((prev) => ({ ...prev, [key]: value }));
+    setCurrentPage(1);
+    if (key === "status" && onStatusFilterChange) {
+      onStatusFilterChange(value);
+    }
+  };
+
+  const resetAllFilters = () => {
+    setFilters({
+      lead: "",
+      contact: "",
+      product: "All",
+      source: "All",
+      touchpoints: "All",
+      status: "All",
+      createdPreset: "all",
+      createdFrom: "",
+      createdTo: "",
+    });
+    setCurrentPage(1);
+    if (onStatusFilterChange) {
+      onStatusFilterChange("All");
+    }
+    if (onSearchChange) {
+      onSearchChange("");
+    }
+  };
+
+  const activeFilterCount = useMemo(() => {
+    let count = 0;
+    if (filters.lead.trim()) count++;
+    if (filters.contact.trim()) count++;
+    if (filters.product !== "All") count++;
+    if (filters.source !== "All") count++;
+    if (filters.touchpoints !== "All") count++;
+    if (filters.status !== "All") count++;
+    if (filters.createdPreset !== "all") count++;
+    return count;
+  }, [filters]);
+
+  const filteredLeads = useMemo(() => {
+    return leads.filter((lead) => {
+      // 1. LEAD filter: name or lead ID
+      if (filters.lead.trim()) {
+        const q = filters.lead.trim().toLowerCase();
+        const nameMatch = lead.lead_name && lead.lead_name.toLowerCase().includes(q);
+        const idMatch = lead.name && lead.name.toLowerCase().includes(q);
+        if (!nameMatch && !idMatch) return false;
+      }
+
+      // 2. CONTACT filter: mobile or email
+      if (filters.contact.trim()) {
+        const q = filters.contact.trim().toLowerCase();
+        const mobileMatch = lead.mobile_no && lead.mobile_no.toLowerCase().includes(q);
+        const emailMatch = lead.email && lead.email.toLowerCase().includes(q);
+        if (!mobileMatch && !emailMatch) return false;
+      }
+
+      // 3. PRODUCT INTEREST filter
+      if (filters.product !== "All") {
+        if (!lead.product_interest) {
+          if (filters.product !== "General") return false;
+        } else if (lead.product_interest.toLowerCase() !== filters.product.toLowerCase()) {
+          return false;
+        }
+      }
+
+      // 4. SOURCE filter
+      if (filters.source !== "All") {
+        if (!lead.source || lead.source.toLowerCase() !== filters.source.toLowerCase()) {
+          return false;
+        }
+      }
+
+      // 5. TOUCHPOINTS filter
+      if (filters.touchpoints === "with") {
+        if (Number(lead.interaction_count || 0) <= 0) return false;
+      } else if (filters.touchpoints === "without") {
+        if (Number(lead.interaction_count || 0) > 0) return false;
+      }
+
+      // 6. STATUS filter
+      if (filters.status !== "All") {
+        if (lead.status !== filters.status) return false;
+      }
+
+      // 7. CREATED filter
+      if (filters.createdPreset !== "all") {
+        if (!matchesDateFilter(lead.creation, filters.createdPreset, filters.createdFrom, filters.createdTo)) {
+          return false;
+        }
+      }
+
+      // Optional: global search query passed from navbar
+      if (searchQuery && searchQuery.trim()) {
+        const q = searchQuery.trim().toLowerCase();
+        const matchesGlobal =
+          (lead.lead_name && lead.lead_name.toLowerCase().includes(q)) ||
+          (lead.mobile_no && lead.mobile_no.toLowerCase().includes(q)) ||
+          (lead.email && lead.email.toLowerCase().includes(q)) ||
+          (lead.product_interest && lead.product_interest.toLowerCase().includes(q)) ||
+          (lead.name && lead.name.toLowerCase().includes(q));
+        if (!matchesGlobal) return false;
+      }
+
+      return true;
+    });
+  }, [leads, filters, searchQuery]);
+
+  const totalItems = filteredLeads.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = Math.min(startIndex + pageSize, totalItems);
+  const paginatedLeads = filteredLeads.slice(startIndex, endIndex);
+
+  const getPageNumbers = () => {
+    if (totalPages <= 5) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+    const pages = [];
+    if (currentPage <= 3) {
+      pages.push(1, 2, 3, 4, "...", totalPages);
+    } else if (currentPage >= totalPages - 2) {
+      pages.push(1, "...", totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+    } else {
+      pages.push(1, "...", currentPage - 1, currentPage, currentPage + 1, "...", totalPages);
+    }
+    return pages;
+  };
 
   const handleDeleteConfirm = async () => {
     if (!leadToDelete) return;
@@ -70,33 +311,58 @@ export default function CrmLeadsListView({
     <div className="bg-white rounded-2xl border border-gray-200/90 shadow-2xs overflow-hidden flex flex-col relative">
       {/* Top Filter and Search Bar */}
       <div className="p-4 sm:p-5 border-b border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-        {/* Status Dropdown Filter */}
-        <div className="flex items-center gap-2 w-full sm:w-auto">
-          <span className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1.5 shrink-0">
-            <FontAwesomeIcon icon={faFilter} className="text-gray-400 text-[10px]" />
-            <span>Status:</span>
-          </span>
-          <CrmSelect
-            value={selectedStatus || "All"}
-            onChange={(val) => onStatusFilterChange && onStatusFilterChange(val)}
-            options={STATUS_OPTIONS}
-            size="sm"
-            className="w-44"
-          />
-        </div>
+        {/* Left: Summary & Active Filters */}
+        <div className="flex items-center gap-3 flex-wrap w-full sm:w-auto">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-gray-700 uppercase tracking-wider">All Leads</span>
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-50 text-[#032e92] border border-blue-200/60">
+              {totalItems} {totalItems === 1 ? "lead" : "leads"}
+            </span>
+          </div>
 
-        {/* Product Filter & New Lead Button */}
-        <div className="flex items-center gap-2.5 w-full sm:w-auto justify-end">
-          {uniqueProducts.length > 0 && (
+          {/* Status Dropdown Filter */}
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1.5 shrink-0">
+              <FontAwesomeIcon icon={faFilter} className="text-gray-400 text-[10px]" />
+              <span>Status:</span>
+            </span>
             <CrmSelect
-              value={selectedProduct}
-              onChange={(val) => setSelectedProduct(val)}
-              options={[{ value: "All", label: "All Products" }, ...uniqueProducts.map((p) => ({ value: p, label: p }))]}
+              value={filters.status || "All"}
+              onChange={(val) => updateFilter("status", val)}
+              options={[
+                { value: "All", label: "All" },
+                { value: "New", label: "New" },
+                { value: "Interested", label: "Interested" },
+                { value: "Nurturing", label: "Nurturing" },
+                { value: "Converted", label: "Converted" },
+                { value: "Not Interested", label: "Not Interested" },
+              ]}
               size="sm"
               className="w-44"
             />
-          )}
+          </div>
 
+          {activeFilterCount > 0 && (
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200/80">
+                <FontAwesomeIcon icon={faFilter} className="text-amber-600 text-[10px]" />
+                <span>{activeFilterCount} {activeFilterCount === 1 ? "filter" : "filters"} active</span>
+              </span>
+              <button
+                type="button"
+                onClick={resetAllFilters}
+                className="text-xs font-semibold text-rose-600 hover:text-rose-800 flex items-center gap-1 cursor-pointer transition-colors hover:underline"
+                title="Reset all filters"
+              >
+                <FontAwesomeIcon icon={faRotateLeft} className="text-[10px]" />
+                <span>Reset All</span>
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Right: Kanban & Add Lead Buttons */}
+        <div className="flex items-center gap-2.5 w-full sm:w-auto justify-end">
           {onOpenKanban && (
             <button
               type="button"
@@ -123,28 +389,208 @@ export default function CrmLeadsListView({
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
+            {/* Column Titles */}
             <tr className="bg-[#f8fafc] text-[11px] font-bold text-gray-500 uppercase tracking-wider border-b border-gray-200/80">
-              <th className="py-3 px-4 sm:px-6">Lead</th>
-              <th className="py-3 px-4">Contact</th>
-              <th className="py-3 px-4">Product Interest</th>
-              <th className="py-3 px-4">Source</th>
-              <th className="py-3 px-4 text-center">Touchpoints</th>
-              <th className="py-3 px-4">Status</th>
-              <th className="py-3 px-4">Created</th>
-              <th className="py-3 px-4 sm:px-6 text-right">Actions</th>
+              <th className="py-3 px-4 sm:px-6 min-w-[200px]">Lead</th>
+              <th className="py-3 px-4 min-w-[170px]">Contact</th>
+              <th className="py-3 px-4 min-w-[150px]">Product Interest</th>
+              <th className="py-3 px-4 min-w-[130px]">Source</th>
+              <th className="py-3 px-4 text-center min-w-[140px]">Touchpoints</th>
+              <th className="py-3 px-4 min-w-[140px]">Status</th>
+              <th className="py-3 px-4 min-w-[160px]">Created</th>
+              <th className="py-3 px-4 sm:px-6 text-right min-w-[110px]">Actions</th>
+            </tr>
+
+            {/* Column-wise Filter Row */}
+            <tr className="bg-slate-50/90 border-b border-gray-200 text-xs">
+              {/* 1. LEAD */}
+              <th className="py-2 px-4 sm:px-6 font-normal">
+                <div className="relative flex items-center">
+                  <input
+                    type="text"
+                    value={filters.lead}
+                    onChange={(e) => updateFilter("lead", e.target.value)}
+                    placeholder="Search name/ID..."
+                    className="w-full text-xs bg-white border border-gray-200 rounded-lg pl-2 pr-6 py-1.5 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/30 transition-all"
+                  />
+                  {filters.lead && (
+                    <button
+                      type="button"
+                      onClick={() => updateFilter("lead", "")}
+                      className="absolute right-2 text-gray-400 hover:text-gray-600 text-xs cursor-pointer"
+                      title="Clear"
+                    >
+                      <FontAwesomeIcon icon={faXmark} />
+                    </button>
+                  )}
+                </div>
+              </th>
+
+              {/* 2. CONTACT */}
+              <th className="py-2 px-4 font-normal">
+                <div className="relative flex items-center">
+                  <input
+                    type="text"
+                    value={filters.contact}
+                    onChange={(e) => updateFilter("contact", e.target.value)}
+                    placeholder="Mobile / email..."
+                    className="w-full text-xs bg-white border border-gray-200 rounded-lg pl-2 pr-6 py-1.5 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/30 transition-all"
+                  />
+                  {filters.contact && (
+                    <button
+                      type="button"
+                      onClick={() => updateFilter("contact", "")}
+                      className="absolute right-2 text-gray-400 hover:text-gray-600 text-xs cursor-pointer"
+                      title="Clear"
+                    >
+                      <FontAwesomeIcon icon={faXmark} />
+                    </button>
+                  )}
+                </div>
+              </th>
+
+              {/* 3. PRODUCT INTEREST */}
+              <th className="py-2 px-4 font-normal">
+                <select
+                  value={filters.product}
+                  onChange={(e) => updateFilter("product", e.target.value)}
+                  className="w-full text-xs bg-white border border-gray-200 rounded-lg py-1.5 px-2 text-gray-700 focus:outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/30 cursor-pointer transition-all"
+                >
+                  <option value="All">All Products</option>
+                  {availableProducts.map((p) => (
+                    <option key={p} value={p}>
+                      {p}
+                    </option>
+                  ))}
+                </select>
+              </th>
+
+              {/* 4. SOURCE */}
+              <th className="py-2 px-4 font-normal">
+                <select
+                  value={filters.source}
+                  onChange={(e) => updateFilter("source", e.target.value)}
+                  className="w-full text-xs bg-white border border-gray-200 rounded-lg py-1.5 px-2 text-gray-700 focus:outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/30 cursor-pointer transition-all"
+                >
+                  <option value="All">All Sources</option>
+                  {availableSources.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </select>
+              </th>
+
+              {/* 5. TOUCHPOINTS */}
+              <th className="py-2 px-4 font-normal">
+                <select
+                  value={filters.touchpoints}
+                  onChange={(e) => updateFilter("touchpoints", e.target.value)}
+                  className="w-full text-xs bg-white border border-gray-200 rounded-lg py-1.5 px-2 text-gray-700 focus:outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/30 cursor-pointer transition-all"
+                >
+                  <option value="All">All</option>
+                  <option value="with">With Touchpoints</option>
+                  <option value="without">Without Touchpoints</option>
+                </select>
+              </th>
+
+              {/* 6. STATUS */}
+              <th className="py-2 px-4 font-normal">
+                <select
+                  value={filters.status}
+                  onChange={(e) => updateFilter("status", e.target.value)}
+                  className="w-full text-xs bg-white border border-gray-200 rounded-lg py-1.5 px-2 text-gray-700 focus:outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/30 cursor-pointer transition-all"
+                >
+                  <option value="All">All Statuses</option>
+                  {availableStatuses.map((st) => (
+                    <option key={st} value={st}>
+                      {st}
+                    </option>
+                  ))}
+                </select>
+              </th>
+
+              {/* 7. CREATED */}
+              <th className="py-2 px-4 font-normal">
+                <div className="flex flex-col gap-1">
+                  <select
+                    value={filters.createdPreset}
+                    onChange={(e) => updateFilter("createdPreset", e.target.value)}
+                    className="w-full text-xs bg-white border border-gray-200 rounded-lg py-1.5 px-2 text-gray-700 focus:outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/30 cursor-pointer transition-all"
+                  >
+                    <option value="all">All Time</option>
+                    <option value="today">Today</option>
+                    <option value="yesterday">Yesterday</option>
+                    <option value="last_7_days">Last 7 Days</option>
+                    <option value="last_30_days">Last 30 Days</option>
+                    <option value="this_month">This Month</option>
+                    <option value="custom">Custom Range...</option>
+                  </select>
+                  {filters.createdPreset === "custom" && (
+                    <div className="flex items-center gap-1">
+                      <input
+                        type="date"
+                        value={filters.createdFrom}
+                        onChange={(e) => updateFilter("createdFrom", e.target.value)}
+                        className="w-1/2 text-[10px] bg-white border border-gray-200 rounded p-1 text-gray-700 focus:outline-none focus:border-[#032e92]"
+                        title="From Date"
+                      />
+                      <input
+                        type="date"
+                        value={filters.createdTo}
+                        onChange={(e) => updateFilter("createdTo", e.target.value)}
+                        className="w-1/2 text-[10px] bg-white border border-gray-200 rounded p-1 text-gray-700 focus:outline-none focus:border-[#032e92]"
+                        title="To Date"
+                      />
+                    </div>
+                  )}
+                </div>
+              </th>
+
+              {/* 8. ACTIONS */}
+              <th className="py-2 px-4 sm:px-6 text-right font-normal">
+                {activeFilterCount > 0 ? (
+                  <button
+                    type="button"
+                    onClick={resetAllFilters}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold text-rose-600 hover:text-white bg-rose-50 hover:bg-rose-600 rounded-lg border border-rose-200 transition-colors cursor-pointer"
+                    title="Reset all column filters"
+                  >
+                    <FontAwesomeIcon icon={faRotateLeft} className="text-[10px]" />
+                    <span>Reset</span>
+                  </button>
+                ) : (
+                  <span className="text-gray-300 text-xs select-none">—</span>
+                )}
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100 text-xs">
-            {filteredLeads.length === 0 ? (
+            {totalItems === 0 ? (
               <tr>
-                <td colSpan="8" className="py-12 text-center text-gray-400 font-medium">
-                  No leads found matching current filter or search criteria.
+                <td colSpan="8" className="py-12 text-center">
+                  <div className="flex flex-col items-center justify-center gap-2">
+                    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
+                      <FontAwesomeIcon icon={faFilter} className="text-sm" />
+                    </div>
+                    <p className="text-sm font-semibold text-gray-700">No leads match the selected filters</p>
+                    <p className="text-xs text-gray-400">Try adjusting your search criteria or resetting filters</p>
+                    {activeFilterCount > 0 && (
+                      <button
+                        type="button"
+                        onClick={resetAllFilters}
+                        className="mt-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-[#032e92] text-white hover:bg-[#021d63] transition-colors cursor-pointer flex items-center gap-1.5 shadow-sm"
+                      >
+                        <FontAwesomeIcon icon={faRotateLeft} className="text-[10px]" />
+                        <span>Reset All Filters</span>
+                      </button>
+                    )}
+                  </div>
                 </td>
               </tr>
             ) : (
-              filteredLeads.map((lead) => {
+              paginatedLeads.map((lead) => {
                 const cleanPhone = lead.mobile_no ? lead.mobile_no.replace(/\D/g, "") : "";
-                const waPhone = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
 
                 return (
                   <tr
@@ -229,15 +675,14 @@ export default function CrmLeadsListView({
                             >
                               <FontAwesomeIcon icon={faPhone} />
                             </a>
-                            <a
-                              href={`https://wa.me/${waPhone}?text=Hello%20${encodeURIComponent(lead.lead_name || "")},%20this%20is%20KNAPS%20Financial%20Advisory.`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="w-7 h-7 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 flex items-center justify-center transition-colors text-[10px] font-bold"
-                              title="WhatsApp"
+                            <button
+                              type="button"
+                              onClick={() => onSelectLead && onSelectLead(lead.name)}
+                              className="w-7 h-7 rounded-lg bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white flex items-center justify-center transition-colors text-[10px] font-bold cursor-pointer"
+                              title="Open Lead WhatsApp Conversations"
                             >
                               WA
-                            </a>
+                            </button>
                           </>
                         )}
                         <button
@@ -264,6 +709,78 @@ export default function CrmLeadsListView({
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Pagination Footer */}
+      <div className="p-3 sm:px-6 sm:py-3.5 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500 bg-[#f8fafc]/50">
+        <div className="flex items-center gap-3 flex-wrap">
+          <span>
+            Showing <strong className="text-gray-800 font-semibold">{totalItems === 0 ? 0 : startIndex + 1}</strong> to{" "}
+            <strong className="text-gray-800 font-semibold">{endIndex}</strong> of{" "}
+            <strong className="text-gray-800 font-semibold">{totalItems}</strong> leads
+          </span>
+          <div className="flex items-center gap-1.5 ml-2 border-l border-gray-200 pl-3">
+            <span className="text-gray-400 text-[11px]">Rows per page:</span>
+            <select
+              value={pageSize}
+              onChange={(e) => {
+                setPageSize(Number(e.target.value));
+                setCurrentPage(1);
+              }}
+              className="text-xs bg-white border border-gray-200 rounded-md py-0.5 px-1.5 text-gray-700 focus:outline-none focus:border-[#032e92]"
+            >
+              <option value={10}>10</option>
+              <option value={15}>15</option>
+              <option value={25}>25</option>
+              <option value={50}>50</option>
+            </select>
+          </div>
+        </div>
+
+        {totalPages > 1 && (
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              className="px-2.5 py-1 rounded-md border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer flex items-center gap-1 font-medium transition-colors"
+            >
+              <FontAwesomeIcon icon={faChevronLeft} className="text-[10px]" />
+              <span>Prev</span>
+            </button>
+
+            {getPageNumbers().map((p, idx) =>
+              p === "..." ? (
+                <span key={`dots-${idx}`} className="px-2 py-1 text-gray-400 select-none">
+                  ...
+                </span>
+              ) : (
+                <button
+                  key={p}
+                  type="button"
+                  onClick={() => setCurrentPage(p)}
+                  className={`min-w-[28px] h-7 px-2 rounded-md text-xs font-semibold flex items-center justify-center transition-colors cursor-pointer border ${
+                    currentPage === p
+                      ? "bg-[#032e92] text-white border-[#032e92] shadow-2xs"
+                      : "bg-white text-gray-700 hover:bg-gray-50 border-gray-200"
+                  }`}
+                >
+                  {p}
+                </button>
+              )
+            )}
+
+            <button
+              type="button"
+              disabled={currentPage === totalPages || totalItems === 0}
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              className="px-2.5 py-1 rounded-md border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer flex items-center gap-1 font-medium transition-colors"
+            >
+              <span>Next</span>
+              <FontAwesomeIcon icon={faChevronRight} className="text-[10px]" />
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Delete Lead Confirmation Modal */}

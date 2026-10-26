@@ -138,15 +138,14 @@ export default function CrmDashboardView({
 
                     <div className="flex items-center gap-2 shrink-0" onClick={(e) => e.stopPropagation()}>
                       {cleanPhone && (
-                        <a
-                          href={`https://wa.me/${waPhone}?text=Hello%20${encodeURIComponent(lead.lead_name || '')},%20this%20is%20KNAPS%20Financial%20Advisory.`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-colors text-[11px] font-bold"
-                          title="WhatsApp"
+                        <button
+                          type="button"
+                          onClick={() => onSelectLead && onSelectLead(lead.name)}
+                          className="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white transition-colors text-[11px] font-bold cursor-pointer"
+                          title="Open Lead WhatsApp Conversations"
                         >
                           WhatsApp
-                        </a>
+                        </button>
                       )}
                       <button
                         type="button"

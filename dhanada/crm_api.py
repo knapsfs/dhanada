@@ -5,7 +5,7 @@ import json
 
 import frappe
 from frappe import _
-from frappe.utils import get_datetime, getdate, now_datetime, nowdate
+from frappe.utils import cint, get_datetime, getdate, now_datetime, nowdate
 
 import dhanada.lifecycle.api as lifecycle_api
 
@@ -207,7 +207,24 @@ def get_lead_details(lead_name):
 		order_by="due_date asc",
 	)
 
-	return {"lead": lead, "interactions": interactions, "tasks": tasks}
+	conversations_res = get_crm_conversations("Lead", lead_name, page=1, page_length=20)
+
+	import dhanada.whatsapp_api as whatsapp_api
+
+	wa_res = whatsapp_api.get_crm_whatsapp_conversations("Lead", lead_name, page=1, page_length=30)
+
+	return {
+		"lead": lead,
+		"interactions": interactions,
+		"tasks": tasks,
+		"conversations": conversations_res["conversations"],
+		"conversations_total": conversations_res["total_count"],
+		"conversations_has_more": conversations_res["has_more"],
+		"whatsapp_messages": wa_res["messages"],
+		"whatsapp_total": wa_res["total_count"],
+		"whatsapp_is_session_active": wa_res["is_session_active"],
+		"whatsapp_templates": wa_res["templates"],
+	}
 
 
 @frappe.whitelist()
@@ -487,11 +504,24 @@ def get_client_details(client_name):
 		order_by="due_date asc",
 	)
 
+	conversations_res = get_crm_conversations("Client", client_name, page=1, page_length=20)
+
+	import dhanada.whatsapp_api as whatsapp_api
+
+	wa_res = whatsapp_api.get_crm_whatsapp_conversations("Client", client_name, page=1, page_length=30)
+
 	return {
 		"client": client,
 		"submission": submission,
 		"interactions": interactions,
 		"tasks": tasks,
+		"conversations": conversations_res["conversations"],
+		"conversations_total": conversations_res["total_count"],
+		"conversations_has_more": conversations_res["has_more"],
+		"whatsapp_messages": wa_res["messages"],
+		"whatsapp_total": wa_res["total_count"],
+		"whatsapp_is_session_active": wa_res["is_session_active"],
+		"whatsapp_templates": wa_res["templates"],
 	}
 
 
@@ -624,7 +654,6 @@ def _normalize_capacity(val, target="sub"):
 		return 0.0
 
 
-
 @frappe.whitelist()
 def update_client_onboarding_details(client_name, payload):
 	"""Updates client onboarding submission and synchronizes matching client fields."""
@@ -751,7 +780,7 @@ def update_client_onboarding_details(client_name, payload):
 			raw_json = {}
 	for k, v in payload.items():
 		if v is not None:
-			raw_json[k] = str(v) if hasattr(v, 'isoformat') else v
+			raw_json[k] = str(v) if hasattr(v, "isoformat") else v
 	sub_doc.submission_json = json.dumps(raw_json, default=str)
 
 	sub_doc.save(ignore_permissions=True)
@@ -835,6 +864,148 @@ def update_client_onboarding_details(client_name, payload):
 		pass
 
 	return get_client_details(client_name)
+
+
+def sync_crm_incoming_emails(force: bool = False):
+	"""
+	Pulls newest emails from enabled incoming email accounts to synchronize replies into CRM.
+	Rate-limited to once every 5 seconds to protect the mail server while keeping CRM responsive.
+	"""
+	cache_key = "crm_last_email_sync"
+	last_sync = frappe.cache.get_value(cache_key)
+	now = now_datetime().timestamp()
+
+	if not force and last_sync and (now - float(last_sync)) < 5.0:
+		return {"status": "cooldown", "message": "Recently synchronized."}
+
+	frappe.cache.set_value(cache_key, now, expires_in_sec=60)
+
+	accounts = frappe.get_all("Email Account", filters={"enable_incoming": 1}, fields=["name"])
+	synced = []
+	for acc in accounts:
+		try:
+			ea = frappe.get_doc("Email Account", acc.name)
+			ea.receive()
+			synced.append(acc.name)
+		except Exception as e:
+			frappe.logger("crm_email").error(f"Error during on-demand sync for {acc.name}: {e}")
+
+	frappe.cache.set_value(cache_key, now_datetime().timestamp(), expires_in_sec=60)
+	return {"status": "success", "synced_accounts": synced}
+
+
+@frappe.whitelist()
+def sync_crm_emails(doctype=None, name=None):
+	"""
+	API endpoint to trigger on-demand email sync for KNAPS CRM.
+	Optionally returns refreshed conversation history if doctype and name are provided.
+	"""
+	_check_crm_permission()
+	sync_res = sync_crm_incoming_emails(force=True)
+	if doctype and name:
+		return get_crm_conversations(doctype, name, page=1, sync=False)
+	return sync_res
+
+
+@frappe.whitelist()
+def get_crm_conversations(doctype, name, page=1, page_length=20, sync=False):
+	"""
+	Paginated API to retrieve email conversations for a specific Lead or Client.
+	- Validates doctype is 'Lead' or 'Client'
+	- Validates document exists
+	- Enforces document-level read permissions
+	- Returns message subject, sender, recipients, date, direction, content, and attachment indicator
+	- Returns only emails linked to that specific record (and linked conversion partner if converted)
+	- Supports on-demand synchronization when sync=True or sync=1
+	- Does not expose unrelated inbox emails
+	"""
+	_check_crm_permission()
+
+	if cint(sync) or str(sync).lower() == "true":
+		sync_crm_incoming_emails()
+
+	if doctype not in ("Lead", "Client"):
+		frappe.throw(_("Invalid document type. Must be Lead or Client."), frappe.ValidationError)
+
+	if not name or not frappe.db.exists(doctype, name):
+		frappe.throw(_("{0} '{1}' not found.").format(doctype, name), frappe.DoesNotExistError)
+
+	if not frappe.has_permission(doctype, "read", doc=name):
+		frappe.throw(
+			_("You do not have permission to view {0} '{1}'.").format(doctype, name),
+			frappe.PermissionError,
+		)
+
+	page = max(1, cint(page or 1))
+	page_length = min(100, max(1, cint(page_length or 20)))
+	offset = (page - 1) * page_length
+
+	linked_records = [(doctype, name)]
+	if doctype == "Lead":
+		converted_client = frappe.db.get_value("Lead", name, "converted_client")
+		if converted_client and frappe.db.exists("Client", converted_client):
+			linked_records.append(("Client", converted_client))
+	elif doctype == "Client":
+		lead_ref = frappe.db.get_value("Client", name, "lead")
+		if lead_ref and frappe.db.exists("Lead", lead_ref):
+			linked_records.append(("Lead", lead_ref))
+
+	conditions = []
+	params = []
+	for dt, dn in linked_records:
+		conditions.append("(reference_doctype = %s AND reference_name = %s)")
+		params.extend([dt, dn])
+
+	where_clause = " OR ".join(conditions)
+
+	total_count = frappe.db.sql(
+		f"""
+		SELECT COUNT(*)
+		FROM `tabCommunication`
+		WHERE ({where_clause})
+		  AND communication_medium = 'Email'
+		  AND communication_type = 'Communication'
+		""",
+		params,
+	)[0][0]
+
+	select_query = f"""
+		SELECT
+			name,
+			subject,
+			sender,
+			recipients,
+			cc,
+			bcc,
+			communication_date,
+			creation,
+			sent_or_received,
+			content,
+			text_content,
+			message_id,
+			in_reply_to,
+			has_attachment,
+			reference_doctype,
+			reference_name
+		FROM `tabCommunication`
+		WHERE ({where_clause})
+		  AND communication_medium = 'Email'
+		  AND communication_type = 'Communication'
+		ORDER BY communication_date DESC, creation DESC
+		LIMIT %s OFFSET %s
+	"""
+	query_params = [*params, page_length, offset]
+	conversations = frappe.db.sql(select_query, query_params, as_dict=True)
+
+	has_more = (offset + len(conversations)) < total_count
+
+	return {
+		"conversations": conversations,
+		"total_count": total_count,
+		"page": page,
+		"page_length": page_length,
+		"has_more": has_more,
+	}
 
 
 @frappe.whitelist()
@@ -1076,10 +1247,13 @@ def delete_crm_lead(lead_name):
 
 
 @frappe.whitelist()
-def generate_crm_form_link(reference_doctype, reference_name, workflow_type, expires_in_days=7, send_email=True, custom_message=None):
+def generate_crm_form_link(
+	reference_doctype, reference_name, workflow_type, expires_in_days=7, send_email=True, custom_message=None
+):
 	"""Generates a secure, expiring form link for Risk Profiler, Onboarding, or Combined workflow and sends email."""
 	_check_crm_permission()
 	import dhanada.form_workflow_api as form_workflow_api
+
 	return form_workflow_api.generate_form_workflow_link(
 		reference_doctype=reference_doctype,
 		reference_name=reference_name,
@@ -1095,7 +1269,118 @@ def send_crm_form_email(token, custom_message=None):
 	"""Dispatches the generated form workflow link to customer email address."""
 	_check_crm_permission()
 	import dhanada.form_workflow_api as form_workflow_api
+
 	return form_workflow_api.send_form_workflow_email(
 		token=token,
 		custom_message=custom_message,
+	)
+
+
+@frappe.whitelist()
+def send_crm_email(
+	doctype: str,
+	name: str,
+	subject: str,
+	content: str,
+	cc: str | None = None,
+	bcc: str | None = None,
+	in_reply_to: str | None = None,
+):
+	"""
+	Composes and sends an in-app email to a Lead or Client via Frappe's email infrastructure.
+	Associates the resulting Communication with the record.
+	"""
+	_check_crm_permission()
+
+	if doctype not in ("Lead", "Client"):
+		frappe.throw(_("Invalid DocType for email composition."), frappe.ValidationError)
+
+	if not frappe.db.exists(doctype, name):
+		frappe.throw(_("{0} '{1}' not found.").format(doctype, name), frappe.DoesNotExistError)
+
+	if not frappe.has_permission(doctype, "write", doc=name):
+		frappe.throw(_("Permission denied to send email to {0}.").format(name), frappe.PermissionError)
+
+	doc = frappe.get_doc(doctype, name)
+	recipient_email = (getattr(doc, "email", None) or "").strip()
+	if not recipient_email or "@" not in recipient_email:
+		frappe.throw(
+			_("The selected {0} does not have a valid email address.").format(doctype),
+			frappe.ValidationError,
+		)
+
+	if not subject or not str(subject).strip():
+		frappe.throw(_("Subject is required."), frappe.MandatoryError)
+
+	if not content or not str(content).strip():
+		frappe.throw(_("Message content is required."), frappe.MandatoryError)
+
+	cc_list = [c.strip() for c in cc.split(",") if c.strip() and "@" in c] if cc else None
+	bcc_list = [b.strip() for b in bcc.split(",") if b.strip() and "@" in b] if bcc else None
+
+	# Send via Frappe email infrastructure
+	queue_entry = frappe.sendmail(
+		recipients=[recipient_email],
+		cc=cc_list,
+		bcc=bcc_list,
+		subject=str(subject).strip(),
+		content=content,
+		reference_doctype=doctype,
+		reference_name=name,
+		in_reply_to=in_reply_to,
+		delayed=False,
+		now=True,
+	)
+
+	comm_name = getattr(queue_entry, "communication", None)
+	if not comm_name and queue_entry:
+		comm_name = frappe.db.get_value("Email Queue", queue_entry.name, "communication")
+
+	# Update contact timestamp
+	frappe.db.set_value(doctype, name, "last_contacted_on", now_datetime())
+	frappe.db.set_value(doctype, name, "last_contacted_by", frappe.session.user)
+	frappe.db.commit()
+
+	return {
+		"status": "success",
+		"message": _("Email sent successfully."),
+		"recipient": recipient_email,
+		"communication": comm_name,
+	}
+
+
+@frappe.whitelist()
+def get_crm_whatsapp_conversations(doctype: str, name: str, page: int = 1, page_length: int = 50):
+	"""Retrieves WhatsApp conversation history for a Lead or Client."""
+	_check_crm_permission()
+	import dhanada.whatsapp_api as whatsapp_api
+
+	return whatsapp_api.get_crm_whatsapp_conversations(doctype, name, page=page, page_length=page_length)
+
+
+@frappe.whitelist()
+def send_crm_whatsapp_message(
+	doctype: str,
+	name: str,
+	message: str | None = None,
+	template_name: str | None = None,
+	template_params=None,
+):
+	"""Sends an outbound WhatsApp message or approved template to a Lead or Client."""
+	_check_crm_permission()
+	import dhanada.whatsapp_api as whatsapp_api
+
+	params = template_params
+	if isinstance(template_params, str):
+		try:
+			params = json.loads(template_params)
+		except Exception:
+			params = [template_params]
+
+	return whatsapp_api.send_crm_whatsapp_message(
+		doctype=doctype,
+		name=name,
+		message=message,
+		template_name=template_name,
+		template_params=params,
 	)

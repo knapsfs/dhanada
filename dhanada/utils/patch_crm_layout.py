@@ -10,6 +10,9 @@ def patch_layout():
 	CRM Lead custom fields, layout in the Data section, and CRM Form Scripts.
 	Completely safe and idempotent if CRM is not installed.
 	"""
+	if not frappe.db.exists("DocType", "CRM Lead") or not frappe.db.exists("DocType", "CRM Fields Layout"):
+		return
+
 	setup_crm_lead_custom_fields()
 	patch_crm_lead_data_layout()
 	patch_crm_lead_side_panel_layout()
@@ -123,6 +126,9 @@ def patch_crm_lead_data_layout():
 	Ensures custom_product, custom_chat_context, and custom_conversation are included in
 	the CRM Lead 'Data Fields' layout inside the Details section.
 	"""
+	if not frappe.db.exists("DocType", "CRM Fields Layout"):
+		return
+
 	if not frappe.db.exists("CRM Fields Layout", {"dt": "CRM Lead", "type": "Data Fields"}):
 		return
 
@@ -180,6 +186,9 @@ def patch_crm_lead_side_panel_layout():
 	Ensures custom_product is present in the Side Panel details section,
 	while keeping chatbot context fields out of the sidebar.
 	"""
+	if not frappe.db.exists("DocType", "CRM Fields Layout"):
+		return
+
 	if not frappe.db.exists("CRM Fields Layout", {"dt": "CRM Lead", "type": "Side Panel"}):
 		return
 

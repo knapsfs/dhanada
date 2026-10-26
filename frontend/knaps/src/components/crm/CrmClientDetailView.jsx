@@ -7,10 +7,12 @@ import {
   faClock, faFloppyDisk, faUser, faCopy, faCheck,
   faLocationDot, faCoins, faFileLines, faPlus, faXmark,
   faPenToSquare, faBuildingColumns, faIdCard, faUserShield,
-  faArrowUpRightFromSquare
+  faArrowUpRightFromSquare, faComments
 } from "@fortawesome/free-solid-svg-icons";
 import CrmSelect from "./CrmSelect";
 import CrmSendFormModal from "./CrmSendFormModal";
+import CrmEmailConversations from "./CrmEmailConversations";
+import CrmWhatsAppConversations from "./CrmWhatsAppConversations";
 import { crmService } from "../../services/crmService";
 import { getContactStatus, formatContactDate } from "../../utils/crmContactUtils";
 
@@ -39,7 +41,13 @@ export default function CrmClientDetailView({
   const [submissionData, setSubmissionData] = useState(null);
   const [interactions, setInteractions] = useState([]);
   const [tasks, setTasks] = useState([]);
-  const [activeTab, setActiveTab] = useState("onboarding"); // onboarding, remarks, tasks
+  const [conversations, setConversations] = useState([]);
+  const [conversationsTotal, setConversationsTotal] = useState(0);
+  const [whatsappMessages, setWhatsappMessages] = useState([]);
+  const [whatsappTotal, setWhatsappTotal] = useState(0);
+  const [focusEmailComposer, setFocusEmailComposer] = useState(false);
+  const [focusWhatsAppComposer, setFocusWhatsAppComposer] = useState(false);
+  const [activeTab, setActiveTab] = useState("onboarding"); // onboarding, emails, whatsapp, remarks, tasks
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -66,6 +74,10 @@ export default function CrmClientDetailView({
       setSubmissionData(res.submission || null);
       setInteractions(res.interactions || []);
       setTasks(res.tasks || []);
+      setConversations(res.conversations || []);
+      setConversationsTotal(res.conversations_total || (res.conversations || []).length);
+      setWhatsappMessages(res.whatsapp_messages || []);
+      setWhatsappTotal(res.whatsapp_total || (res.whatsapp_messages || []).length);
       initFormData(res.client || {}, res.submission || {});
     } catch (err) {
       setFeedback({ type: "error", message: err.message || "Failed to load client details." });
@@ -312,27 +324,34 @@ export default function CrmClientDetailView({
                 <FontAwesomeIcon icon={faPhone} className="text-xs text-blue-600" />
                 <span className="hidden md:inline">Call</span>
               </a>
-              <a
-                href={`https://wa.me/${waPhone}?text=Hello%20${encodeURIComponent(displayName)},%20this%20is%20KNAPS%20Financial%20Advisory.`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-3 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 hover:bg-emerald-100 text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-colors"
-                title="WhatsApp Client"
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveTab("whatsapp");
+                  setFocusWhatsAppComposer(true);
+                }}
+                className="px-3 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 hover:bg-emerald-100 text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer"
+                title="Open Integrated WhatsApp Conversations"
               >
+                <FontAwesomeIcon icon={faComments} className="text-xs text-emerald-600" />
                 <span className="font-bold">WhatsApp</span>
-              </a>
+              </button>
             </>
           )}
 
           {primaryEmail && (
-            <a
-              href={`mailto:${primaryEmail}`}
-              className="px-3 py-2 rounded-xl bg-white border border-gray-200 text-gray-700 hover:text-[#032e92] hover:border-[#032e92] text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-colors"
-              title="Email Client"
+            <button
+              type="button"
+              onClick={() => {
+                setActiveTab("emails");
+                setFocusEmailComposer(true);
+              }}
+              className="px-3 py-2 rounded-xl bg-white border border-gray-200 text-gray-700 hover:text-[#032e92] hover:border-[#032e92] text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer"
+              title="Open Integrated Email Conversations & Compose"
             >
               <FontAwesomeIcon icon={faEnvelope} className="text-xs text-amber-600" />
               <span className="hidden md:inline">Email</span>
-            </a>
+            </button>
           )}
 
           {/* Send Form Workflows */}
@@ -534,6 +553,38 @@ export default function CrmClientDetailView({
         >
           <FontAwesomeIcon icon={faIdCard} />
           <span>Client Onboarding Submission Data</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("emails")}
+          className={`pb-3 px-4 text-xs font-bold border-b-2 transition-colors cursor-pointer flex items-center gap-2 ${
+            activeTab === "emails"
+              ? "border-[#032e92] text-[#032e92]"
+              : "border-transparent text-gray-500 hover:text-gray-900"
+          }`}
+        >
+          <FontAwesomeIcon icon={faEnvelope} />
+          <span>Email Conversations</span>
+          <span className="w-5 h-5 rounded-full bg-blue-50 text-[#032e92] text-[10px] flex items-center justify-center font-bold">
+            {conversationsTotal}
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("whatsapp")}
+          className={`pb-3 px-4 text-xs font-bold border-b-2 transition-colors cursor-pointer flex items-center gap-2 ${
+            activeTab === "whatsapp"
+              ? "border-emerald-600 text-emerald-700"
+              : "border-transparent text-gray-500 hover:text-gray-900"
+          }`}
+        >
+          <FontAwesomeIcon icon={faComments} className="text-emerald-600" />
+          <span>WhatsApp</span>
+          <span className="w-5 h-5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] flex items-center justify-center font-bold">
+            {whatsappTotal}
+          </span>
         </button>
 
         <button
@@ -1596,6 +1647,37 @@ export default function CrmClientDetailView({
               </div>
             )}
           </div>
+        </div>
+      )}
+
+            {/* TAB: EMAIL CONVERSATIONS */}
+      {activeTab === "emails" && (
+        <div className="bg-white rounded-3xl border border-gray-200/90 p-6 shadow-xs">
+          <CrmEmailConversations
+            doctype="Client"
+            docName={clientData?.name || clientName}
+            contactEmail={primaryEmail}
+            initialConversations={conversations}
+            initialTotal={conversationsTotal}
+            onCountChange={(count) => setConversationsTotal(count)}
+            autoFocusComposer={focusEmailComposer}
+          />
+        </div>
+      )}
+
+      {/* TAB: WHATSAPP CONVERSATIONS */}
+      {activeTab === "whatsapp" && (
+        <div className="bg-white rounded-3xl border border-gray-200/90 p-6 shadow-xs">
+          <CrmWhatsAppConversations
+            doctype="Client"
+            docName={clientData?.name || clientName}
+            recipientPhone={primaryPhone}
+            contactName={displayName}
+            initialMessages={whatsappMessages}
+            initialTotal={whatsappTotal}
+            onCountChange={(count) => setWhatsappTotal(count)}
+            autoFocusComposer={focusWhatsAppComposer}
+          />
         </div>
       )}
 

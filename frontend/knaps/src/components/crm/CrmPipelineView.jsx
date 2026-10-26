@@ -232,15 +232,14 @@ export default function CrmPipelineView({
                                   >
                                     <FontAwesomeIcon icon={faPhone} className="text-[10px]" />
                                   </a>
-                                  <a
-                                    href={`https://wa.me/${waPhone}?text=Hello%20${encodeURIComponent(lead.lead_name || '')},%20this%20is%20KNAPS%20Financial%20Advisory.`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="w-6 h-6 rounded-md bg-emerald-50 hover:bg-emerald-100 text-emerald-700 flex items-center justify-center transition-colors font-bold text-[10px]"
-                                    title="WhatsApp Chat"
+                                  <button
+                                    type="button"
+                                    onClick={() => onSelectLead && onSelectLead(lead.name)}
+                                    className="w-6 h-6 rounded-md bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white flex items-center justify-center transition-colors font-bold text-[10px] cursor-pointer"
+                                    title="Open Lead WhatsApp Conversations"
                                   >
                                     WA
-                                  </a>
+                                  </button>
                                 </>
                               )}
                             </div>

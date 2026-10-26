@@ -191,21 +191,6 @@ export default function KnapsCrmPortal() {
     );
   }, [leads, searchQuery]);
 
-  // Filtered Leads based on search and status
-  const displayedLeads = useMemo(() => {
-    return leads.filter((l) => {
-      if (statusFilter !== 'All' && l.status !== statusFilter) return false;
-      if (!searchQuery.trim()) return true;
-      const q = searchQuery.toLowerCase();
-      return (
-        (l.lead_name && l.lead_name.toLowerCase().includes(q)) ||
-        (l.mobile_no && l.mobile_no.includes(q)) ||
-        (l.email && l.email.toLowerCase().includes(q)) ||
-        (l.product_interest && l.product_interest.toLowerCase().includes(q)) ||
-        (l.name && l.name.toLowerCase().includes(q))
-      );
-    });
-  }, [leads, statusFilter, searchQuery]);
 
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: faChartPie },
@@ -482,7 +467,7 @@ export default function KnapsCrmPortal() {
                   />
                 ) : (
                   <CrmLeadsListView
-                    leads={displayedLeads}
+                    leads={leads}
                     onSelectLead={(name) => {
                       setSelectedLeadName(name);
                       setSelectedClientName(null);

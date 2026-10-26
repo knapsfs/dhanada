@@ -1,4 +1,5 @@
 import CrmSelect from './CrmSelect';
+import CrmSendFormModal from './CrmSendFormModal';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -263,25 +264,29 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
                         <FontAwesomeIcon icon={faPhone} />
                         <span className="hidden sm:inline font-semibold">Call</span>
                       </a>
-                      <a
-                        href={`https://wa.me/${waPhone}?text=Hello%20${encodeURIComponent(leadData?.lead_name || '')},%20this%20is%20KNAPS%20Financial%20Advisory.`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 hover:bg-emerald-100 transition-colors text-xs flex items-center gap-1.5 shadow-2xs"
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (onLeadUpdated) onLeadUpdated(leadData);
+                        }}
+                        className="p-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 hover:bg-emerald-100 transition-colors text-xs flex items-center gap-1.5 shadow-2xs cursor-pointer"
                         title="Chat on WhatsApp"
                       >
                         <span className="font-bold">WhatsApp</span>
-                      </a>
+                      </button>
                     </>
                   )}
                   {leadData?.email && (
-                    <a
-                      href={`mailto:${leadData.email}`}
-                      className="p-2 rounded-xl bg-white border border-gray-200 text-gray-700 hover:text-[#032e92] hover:border-[#032e92] transition-colors text-xs flex items-center gap-1.5 shadow-2xs"
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (onLeadUpdated) onLeadUpdated(leadData);
+                      }}
+                      className="p-2 rounded-xl bg-white border border-gray-200 text-gray-700 hover:text-[#032e92] hover:border-[#032e92] transition-colors text-xs flex items-center gap-1.5 shadow-2xs cursor-pointer"
                       title="Send Email"
                     >
                       <FontAwesomeIcon icon={faEnvelope} />
-                    </a>
+                    </button>
                   )}
                 </div>
               </div>
@@ -661,6 +666,19 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
           </motion.div>
         </div>
       </div>
+
+      <CrmSendFormModal
+        isOpen={sendFormModalOpen}
+        onClose={() => setSendFormModalOpen(false)}
+        record={leadData || {}}
+        referenceDoctype="Lead"
+        onFormSent={async () => {
+          await loadDetails(true);
+          if (onLeadUpdated && leadData) {
+            onLeadUpdated({ ...leadData });
+          }
+        }}
+      />
     </AnimatePresence>
   );
 }
