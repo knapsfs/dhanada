@@ -197,6 +197,9 @@ doc_events = {
 	"Communication": {
 		"before_insert": "dhanada.email_association.link_communication_to_crm_record",
 	},
+	"WA Message": {
+		"before_insert": "dhanada.whatsapp_adapter.link_inbound_wa_message",
+	},
 }
 
 # Scheduled Tasks

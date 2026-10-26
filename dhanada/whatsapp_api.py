@@ -145,6 +145,16 @@ def get_whatsapp_session_status(doctype: str, name: str) -> tuple[bool, str | No
 
 def get_crm_whatsapp_conversations(doctype: str, name: str, page: int = 1, page_length: int = 50) -> dict:
 	"""Retrieve paginated WhatsApp messages for a specific Lead or Client."""
+	from dhanada.whatsapp_adapter import (
+		get_crm_whatsapp_conversations as adapter_get_conversations,
+		is_official_whatsapp_available,
+	)
+
+	if is_official_whatsapp_available():
+		return adapter_get_conversations(doctype, name, page=page, page_length=page_length)
+
+	# If the official WhatsApp app is not installed, return historical CRM WhatsApp messages
+	# with provider_configured=False and a clear notice rather than silently failing.
 	if doctype not in ("Lead", "Client"):
 		frappe.throw(_("Invalid DocType for WhatsApp conversations."), frappe.ValidationError)
 
@@ -154,7 +164,6 @@ def get_crm_whatsapp_conversations(doctype: str, name: str, page: int = 1, page_
 	if not frappe.has_permission(doctype, "read", doc=name):
 		frappe.throw(_("Permission denied to view WhatsApp history for {0}.").format(name), frappe.PermissionError)
 
-	# Include paired converted Lead/Client records
 	records_to_query = [(doctype, name)]
 	if doctype == "Lead":
 		converted_client = frappe.db.get_value("Lead", name, "converted_client")
@@ -207,7 +216,6 @@ def get_crm_whatsapp_conversations(doctype: str, name: str, page: int = 1, page_
 		as_dict=True,
 	)
 
-	# Format dates
 	for m in messages:
 		if m.sent_at:
 			m.sent_at_formatted = get_datetime(m.sent_at).strftime("%d %b %Y, %I:%M %p")
@@ -220,7 +228,6 @@ def get_crm_whatsapp_conversations(doctype: str, name: str, page: int = 1, page_
 	raw_phone = getattr(doc, "mobile_no", None) or getattr(doc, "phone", None) or ""
 	clean_phone = clean_phone_number(raw_phone)
 	is_session_active, session_expires_at = get_whatsapp_session_status(doctype, name)
-	creds = get_whatsapp_credentials()
 
 	return {
 		"messages": messages,
@@ -233,7 +240,7 @@ def get_crm_whatsapp_conversations(doctype: str, name: str, page: int = 1, page_
 		"is_session_active": is_session_active,
 		"session_expires_at": session_expires_at,
 		"templates": WHATSAPP_TEMPLATES,
-		"provider_configured": creds["is_configured"],
+		"provider_configured": False,
 	}
 
 
@@ -246,138 +253,26 @@ def send_crm_whatsapp_message(
 ) -> dict:
 	"""
 	Send an outbound WhatsApp message to the Lead or Client.
-	Enforces WhatsApp Business policies (session window and approved templates).
+	Delegates to official Frappe WhatsApp adapter when available, or raises a clear safe error.
 	"""
-	if doctype not in ("Lead", "Client"):
-		frappe.throw(_("Invalid DocType for WhatsApp sending."), frappe.ValidationError)
+	from dhanada.whatsapp_adapter import (
+		is_official_whatsapp_available,
+		send_crm_whatsapp_message as adapter_send_message,
+	)
 
-	if not frappe.db.exists(doctype, name):
-		frappe.throw(_("{0} '{1}' not found.").format(doctype, name), frappe.DoesNotExistError)
-
-	if not frappe.has_permission(doctype, "write", doc=name):
-		frappe.throw(_("Permission denied to send WhatsApp message to {0}.").format(name), frappe.PermissionError)
-
-	doc = frappe.get_doc(doctype, name)
-	raw_phone = getattr(doc, "mobile_no", None) or getattr(doc, "phone", None) or ""
-	clean_phone = clean_phone_number(raw_phone)
-
-	if not clean_phone or len(clean_phone) < 10:
+	if not is_official_whatsapp_available():
 		frappe.throw(
-			_("The selected {0} does not have a valid mobile number.").format(doctype),
+			_("Official Frappe WhatsApp app ('whatsapp') is not installed or configured on this site."),
 			frappe.ValidationError,
 		)
 
-	# Session and Template validation
-	_is_session_active, _expires = get_whatsapp_session_status(doctype, name)
-	msg_content = ""
-	msg_type = "text"
-
-	if template_name:
-		matching_template = next((t for t in WHATSAPP_TEMPLATES if t["name"] == template_name), None)
-		if not matching_template:
-			frappe.throw(_("Template '{0}' is not registered or approved.").format(template_name))
-
-		params = template_params or []
-		try:
-			msg_content = matching_template["body_template"].format(*params)
-		except Exception:
-			msg_content = matching_template["body_template"]
-		msg_type = "template"
-	else:
-		if not message or not str(message).strip():
-			frappe.throw(_("Message body is required."), frappe.MandatoryError)
-		msg_content = str(message).strip()
-
-	creds = get_whatsapp_credentials()
-	status = "Sent"
-	error_message = None
-	wamid = None
-
-	if creds["is_configured"]:
-		try:
-			import requests
-
-			url = f"https://graph.facebook.com/v21.0/{creds['phone_number_id']}/messages"
-			headers = {
-				"Authorization": f"Bearer {creds['token']}",
-				"Content-Type": "application/json",
-			}
-
-			if msg_type == "template":
-				payload = {
-					"messaging_product": "whatsapp",
-					"recipient_type": "individual",
-					"to": clean_phone,
-					"type": "template",
-					"template": {
-						"name": template_name,
-						"language": {"code": "en"},
-					},
-				}
-			else:
-				payload = {
-					"messaging_product": "whatsapp",
-					"recipient_type": "individual",
-					"to": clean_phone,
-					"type": "text",
-					"text": {"preview_url": False, "body": msg_content},
-				}
-
-			resp = requests.post(url, json=payload, headers=headers, timeout=15)
-			resp_data = resp.json()
-
-			if resp.status_code in (200, 201) and resp_data.get("messages"):
-				wamid = resp_data["messages"][0].get("id")
-				status = "Sent"
-			else:
-				status = "Failed"
-				error_message = str(resp_data.get("error", {}).get("message") or resp.text)
-		except Exception as e:
-			status = "Failed"
-			error_message = str(e)
-	else:
-		# If credentials are not yet configured in Dhanada Settings
-		status = "Queued"
-		error_message = (
-			"WhatsApp Business API credentials (phone_number_id / access_token) "
-			"are pending in Dhanada Settings. Message recorded in CRM."
-		)
-
-	# Store in CRM WhatsApp Message
-	wam_doc = frappe.get_doc(
-		{
-			"doctype": "CRM WhatsApp Message",
-			"direction": "Outbound",
-			"status": status,
-			"sender": frappe.session.user,
-			"recipient": clean_phone,
-			"reference_doctype": doctype,
-			"reference_name": name,
-			"message_type": msg_type,
-			"template_name": template_name,
-			"content": msg_content,
-			"message_id": wamid,
-			"error_message": error_message,
-			"sent_at": now_datetime(),
-		}
+	return adapter_send_message(
+		doctype=doctype,
+		name=name,
+		message=message,
+		template_name=template_name,
+		template_params=template_params,
 	)
-	wam_doc.flags.ignore_permissions = True
-	wam_doc.insert()
-
-	# Update last contacted on Lead / Client
-	frappe.db.set_value(doctype, name, "last_contacted_on", now_datetime())
-	frappe.db.set_value(doctype, name, "last_contacted_by", frappe.session.user)
-	frappe.db.commit()
-
-	return {
-		"status": "success" if status == "Sent" else ("queued" if status == "Queued" else "failed"),
-		"message_name": wam_doc.name,
-		"delivery_status": status,
-		"content": msg_content,
-		"recipient": clean_phone,
-		"sent_at": wam_doc.sent_at,
-		"warning": error_message if status in ("Queued", "Failed") else None,
-	}
 
 
 @frappe.whitelist(allow_guest=True)
