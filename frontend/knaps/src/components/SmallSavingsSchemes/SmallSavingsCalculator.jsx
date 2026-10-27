@@ -3,109 +3,67 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCalculator,
   faCoins,
-  faCalendarDays,
-  faPercent,
   faArrowRight,
-  faHandHoldingDollar,
-  faVault,
-  faReceipt
+  faCheckCircle
 } from '@fortawesome/free-solid-svg-icons';
 import { SMALL_SAVINGS_SCHEMES } from '../../data/smallSavingsData';
 import { useLeadModal } from '../../context/LeadModalContext';
 
 export default function SmallSavingsCalculator() {
-  const [selectedSchemeId, setSelectedSchemeId] = useState('ppf');
-  const [depositAmount, setDepositAmount] = useState(150000); // For PPF annual
+  const [selectedSchemeId, setSelectedSchemeId] = useState('potd');
+  const [depositAmount, setDepositAmount] = useState(500000);
+  const [potdTenure, setPotdTenure] = useState(5); // 1, 2, 3, 5 years
   const { openLeadModal } = useLeadModal();
 
   const currentScheme = useMemo(() => {
     return SMALL_SAVINGS_SCHEMES.find((s) => s.id === selectedSchemeId) || SMALL_SAVINGS_SCHEMES[0];
   }, [selectedSchemeId]);
 
-  // Handle scheme change and set reasonable initial default amounts
+  // Handle scheme change
   const handleSchemeChange = (id) => {
     setSelectedSchemeId(id);
-    const s = SMALL_SAVINGS_SCHEMES.find((item) => item.id === id);
-    if (s.id === 'ppf' || s.id === 'ssy') {
-      setDepositAmount(150000); // 1.5L annual max
-    } else if (s.id === 'pord') {
+    if (id === 'pord') {
       setDepositAmount(5000); // 5k monthly
-    } else if (s.id === 'pomis') {
-      setDepositAmount(900000); // 9L single max
-    } else if (s.id === 'scss') {
-      setDepositAmount(1500000); // 15L
-    } else if (s.id === 'mssc') {
-      setDepositAmount(200000); // 2L max
     } else {
-      setDepositAmount(500000); // 5L
+      setDepositAmount(500000); // 5L lump sum
     }
   };
 
   // Scheme-specific dynamic calculation
   const results = useMemo(() => {
     const P = parseFloat(depositAmount) || 0;
-    const r = currentScheme.interestRate / 100;
     const type = currentScheme.calculatorType;
 
     let totalInvested = 0;
     let totalInterest = 0;
     let maturityValue = 0;
-    let periodicIncome = null;
-    let periodicLabel = '';
+    let tenureLabel = currentScheme.tenure;
 
-    if (type === 'annual_sip') {
-      if (currentScheme.id === 'ppf') {
-        // 15 years annual deposit compounding
-        const n = 15;
-        maturityValue = P * ((Math.pow(1 + r, n) - 1) / r) * (1 + r);
-        totalInvested = P * n;
-        totalInterest = Math.max(0, maturityValue - totalInvested);
-      } else if (currentScheme.id === 'ssy') {
-        // SSY: 15 years deposits, compounds for 21 years
-        const n = 15;
-        const corpus15 = P * ((Math.pow(1 + r, n) - 1) / r) * (1 + r);
-        maturityValue = corpus15 * Math.pow(1 + r, 6);
-        totalInvested = P * n;
-        totalInterest = Math.max(0, maturityValue - totalInvested);
-      }
-    } else if (type === 'quarterly_payout') {
-      // SCSS: 5 years, quarterly non-compounded payout
+    if (type === 'time_deposit') {
+      // POTD: 1, 2, 3, or 5 years
+      const rate = currentScheme.ratesByTenure[potdTenure] || 7.5;
+      const r = rate / 100;
       totalInvested = P;
-      const quarterlyIncome = (P * r) / 4;
-      totalInterest = quarterlyIncome * 20; // 5 years * 4 quarters
-      maturityValue = totalInvested; // principal returned
-      periodicIncome = quarterlyIncome;
-      periodicLabel = 'Quarterly Income Payout';
-    } else if (type === 'monthly_payout') {
-      // POMIS: 5 years, monthly payout
-      totalInvested = P;
-      const monthlyIncome = (P * r) / 12;
-      totalInterest = monthlyIncome * 60; // 5 years * 12 months
-      maturityValue = totalInvested;
-      periodicIncome = monthlyIncome;
-      periodicLabel = 'Monthly Income Payout';
-    } else if (type === 'lump_sum_cumulative') {
-      // NSC: 5 years annual compounding
-      totalInvested = P;
-      maturityValue = P * Math.pow(1 + r, 5);
+      // Quarterly compounded, paid annually or cumulative
+      maturityValue = P * Math.pow(1 + r / 4, 4 * potdTenure);
       totalInterest = Math.max(0, maturityValue - totalInvested);
+      tenureLabel = `${potdTenure} Year${potdTenure > 1 ? 's' : ''} (${rate}% p.a.)`;
     } else if (type === 'doubling_lump_sum') {
-      // KVP: Doubles in 115 months
+      // KVP: 115 months to double
       totalInvested = P;
       maturityValue = P * 2;
       totalInterest = P;
-    } else if (type === 'lump_sum_quarterly') {
-      // MSSC: 2 years quarterly compounding
+      tenureLabel = '115 Months (9Y 7M)';
+    } else if (type === 'lump_sum_cumulative') {
+      // NSC: 5 years, 7.7% annual compounding
+      const r = 0.077;
       totalInvested = P;
-      maturityValue = P * Math.pow(1 + r / 4, 4 * 2);
+      maturityValue = P * Math.pow(1 + r, 5);
       totalInterest = Math.max(0, maturityValue - totalInvested);
-    } else if (type === 'time_deposit') {
-      // POTD: 5 years quarterly compounding
-      totalInvested = P;
-      maturityValue = P * Math.pow(1 + r / 4, 4 * 5);
-      totalInterest = Math.max(0, maturityValue - totalInvested);
+      tenureLabel = '5 Years (7.7% p.a.)';
     } else if (type === 'monthly_rd') {
       // PORD: 5 years (60 months) quarterly compounded RD
+      const r = 0.067;
       const n = 60;
       totalInvested = P * n;
       let mat = 0;
@@ -115,6 +73,7 @@ export default function SmallSavingsCalculator() {
       }
       maturityValue = mat;
       totalInterest = Math.max(0, maturityValue - totalInvested);
+      tenureLabel = '5 Years (60 Installments)';
     }
 
     const investedPct = (totalInvested + totalInterest) > 0 ? (totalInvested / (totalInvested + totalInterest)) * 100 : 0;
@@ -124,12 +83,11 @@ export default function SmallSavingsCalculator() {
       totalInvested: Math.round(totalInvested),
       totalInterest: Math.round(totalInterest),
       maturityValue: Math.round(maturityValue),
-      periodicIncome: periodicIncome ? Math.round(periodicIncome) : null,
-      periodicLabel,
+      tenureLabel,
       investedPct: Math.round(investedPct),
       interestPct: Math.round(interestPct)
     };
-  }, [depositAmount, currentScheme]);
+  }, [depositAmount, currentScheme, potdTenure]);
 
   const formatINR = (val) => {
     return new Intl.NumberFormat('en-IN', {
@@ -147,10 +105,10 @@ export default function SmallSavingsCalculator() {
             <span>Multi-Scheme Calculator</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#032e92] tracking-tight mb-4">
-            Interactive Small Savings Calculator
+            Post Office Savings Calculator
           </h2>
           <p className="text-base sm:text-lg text-slate-600">
-            Select any government scheme below to dynamically calculate maturity corpus, periodic income payouts, or compounding growth.
+            Simulate your guaranteed returns, maturity value, and interest growth across our 4 Post Office savings instruments.
           </p>
         </div>
 
@@ -159,20 +117,21 @@ export default function SmallSavingsCalculator() {
           {/* Scheme Quick Switcher Chips */}
           <div className="mb-8 pb-6 border-b border-slate-200">
             <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-3">
-              Select Small Savings Scheme to Simulate:
+              Select Post Office Scheme to Simulate:
             </label>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2.5">
               {SMALL_SAVINGS_SCHEMES.map((scheme) => (
                 <button
+                  type="button"
                   key={scheme.id}
                   onClick={() => handleSchemeChange(scheme.id)}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                     selectedSchemeId === scheme.id
                       ? 'bg-[#032e92] text-white shadow-md'
                       : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                   }`}
                 >
-                  {scheme.shortName} ({scheme.interestRate}%)
+                  {scheme.shortName}
                 </button>
               ))}
             </div>
@@ -192,9 +151,42 @@ export default function SmallSavingsCalculator() {
                   </span>
                 </div>
                 <span className={`text-xs font-bold px-3 py-1 rounded-full ${currentScheme.badgeColor}`}>
-                  {currentScheme.taxStatus}
+                  {currentScheme.taxSection}
                 </span>
               </div>
+
+              {/* POTD Tenure Selector */}
+              {currentScheme.id === 'potd' && (
+                <div className="bg-[#f7f9fc] p-4 rounded-2xl border border-slate-200 space-y-2">
+                  <label className="text-xs font-bold text-slate-700 block">
+                    Choose Time Deposit Tenure:
+                  </label>
+                  <div className="grid grid-cols-4 gap-2">
+                    {[1, 2, 3, 5].map((yr) => (
+                      <button
+                        type="button"
+                        key={yr}
+                        onClick={() => setPotdTenure(yr)}
+                        className={`py-2 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer text-center ${
+                          potdTenure === yr
+                            ? 'bg-[#032e92] text-white shadow-xs'
+                            : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
+                        }`}
+                      >
+                        <div>{yr} Year{yr > 1 ? 's' : ''}</div>
+                        <div className={`text-[10px] ${potdTenure === yr ? 'text-blue-200' : 'text-slate-500'}`}>
+                          {currentScheme.ratesByTenure[yr]}%
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                  {potdTenure === 5 && (
+                    <p className="text-[11px] text-emerald-700 font-medium pt-1">
+                      ✓ 5-Year Time Deposit qualifies for Section 80C tax deduction up to ₹1.5 Lakh.
+                    </p>
+                  )}
+                </div>
+              )}
 
               {/* Deposit Amount Slider */}
               <div className="bg-[#f7f9fc] p-6 rounded-2xl border border-slate-200 space-y-4">
@@ -202,10 +194,8 @@ export default function SmallSavingsCalculator() {
                   <label className="text-sm font-bold text-slate-700 flex items-center gap-2">
                     <FontAwesomeIcon icon={faCoins} className="text-[#032e92]" />
                     <span>
-                      {currentScheme.id === 'ppf' || currentScheme.id === 'ssy'
-                        ? 'Annual Deposit Amount (Max ₹1.5L)'
-                        : currentScheme.id === 'pord'
-                        ? 'Monthly Deposit Installment'
+                      {currentScheme.id === 'pord'
+                        ? 'Monthly RD Installment Amount'
                         : 'Lump-Sum Investment Deposit'}
                     </span>
                   </label>
@@ -224,125 +214,116 @@ export default function SmallSavingsCalculator() {
 
                 <input
                   type="range"
-                  min={currentScheme.minDeposit}
-                  max={
-                    currentScheme.maxDeposit > 0
-                      ? currentScheme.maxDeposit
-                      : currentScheme.id === 'pord'
-                      ? 50000
-                      : 2500000
-                  }
-                  step={currentScheme.id === 'pord' ? 100 : currentScheme.id === 'ppf' ? 500 : 1000}
+                  min={currentScheme.id === 'pord' ? 100 : 1000}
+                  max={currentScheme.id === 'pord' ? 100000 : 2500000}
+                  step={currentScheme.id === 'pord' ? 100 : 5000}
                   value={depositAmount}
                   onChange={(e) => setDepositAmount(Number(e.target.value))}
                   className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#032e92]"
                 />
 
-                <div className="flex justify-between text-xs text-slate-400 font-medium">
-                  <span>Min: ₹{currentScheme.minDeposit.toLocaleString('en-IN')}</span>
-                  <span>
-                    {currentScheme.maxDeposit > 0
-                      ? `Max: ₹${currentScheme.maxDeposit.toLocaleString('en-IN')}`
-                      : 'Flexible Ceiling'}
-                  </span>
+                <div className="flex justify-between text-xs text-slate-500 font-medium">
+                  <span>₹{currentScheme.id === 'pord' ? '100' : '1,000'}</span>
+                  <span>₹{currentScheme.id === 'pord' ? '50,000' : '10 Lakh'}</span>
+                  <span>₹{currentScheme.id === 'pord' ? '1 Lakh' : '25 Lakh'}</span>
                 </div>
               </div>
 
-              {/* Tenure and Payout Specs */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="p-4 rounded-2xl bg-[#f7f9fc] border border-slate-200 space-y-1">
-                  <span className="text-xs text-slate-500 font-medium">Statutory Tenure</span>
-                  <div className="text-base font-extrabold text-slate-900">{currentScheme.tenure}</div>
+              {/* Key Scheme Rules Bullet Strip */}
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5 text-xs text-slate-600">
+                <div className="font-bold text-slate-800 mb-1">Key Operational Highlights:</div>
+                <div className="flex items-start gap-2">
+                  <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-500 mt-0.5 shrink-0" />
+                  <span><strong>Backing:</strong> Direct sovereign guarantee from Government of India.</span>
                 </div>
-                <div className="p-4 rounded-2xl bg-[#f7f9fc] border border-slate-200 space-y-1">
-                  <span className="text-xs text-slate-500 font-medium">Payout Structure</span>
-                  <div className="text-base font-extrabold text-slate-900">{currentScheme.payoutType}</div>
+                <div className="flex items-start gap-2">
+                  <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-500 mt-0.5 shrink-0" />
+                  <span><strong>Liquidity:</strong> {currentScheme.liquidity}</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-500 mt-0.5 shrink-0" />
+                  <span><strong>Tax Section:</strong> {currentScheme.taxStatus}</span>
                 </div>
               </div>
+
+              {/* Apply CTA Button */}
+              <button
+                type="button"
+                onClick={() =>
+                  openLeadModal({
+                    title: `Apply for ${currentScheme.name}`,
+                    defaultService: currentScheme.name
+                  })
+                }
+                className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#032e92] to-[#021d63] text-white font-bold text-sm shadow-md hover:shadow-lg hover:shadow-[#032e92]/30 transition-all flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <span>Apply for {currentScheme.shortName}</span>
+                <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+              </button>
             </div>
 
-            {/* Right Column: Calculated Results */}
-            <div className="lg:col-span-5 flex flex-col justify-between">
-              <div className="bg-gradient-to-br from-[#032e92] via-[#021d63] to-[#0a192f] text-white rounded-3xl p-7 sm:p-8 shadow-2xl border border-blue-900/50 space-y-6">
-                <div>
-                  <div className="text-xs text-blue-200 uppercase tracking-wider font-semibold mb-1">
-                    {results.periodicIncome ? 'Estimated Total Cash Benefit' : 'Total Estimated Maturity Sum'}
-                  </div>
-                  <div className="text-3xl sm:text-4xl font-black tracking-tight text-white">
-                    ₹{formatINR(results.maturityValue + (results.periodicIncome ? results.totalInterest : 0))}
-                  </div>
-                  <div className="text-xs text-blue-200/80 mt-1">
-                    Based on {currentScheme.interestRate}% p.a. sovereign notified rate
+            {/* Right Column: Output Summary Cards */}
+            <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
+              <div className="space-y-4">
+                {/* Principal Invested Card */}
+                <div className="p-5 rounded-2xl bg-[#f7f9fc] border border-slate-200">
+                  <span className="text-xs text-slate-500 font-semibold block mb-1">
+                    {currentScheme.id === 'pord' ? 'Total Deposits Over 5 Years (60 Mo)' : 'Total Principal Invested'}
+                  </span>
+                  <div className="text-2xl font-extrabold text-slate-800">
+                    ₹{formatINR(results.totalInvested)}
                   </div>
                 </div>
 
-                {/* Periodic Income Callout (SCSS & MIS) */}
-                {results.periodicIncome && (
-                  <div className="p-4 rounded-2xl bg-blue-950/70 border border-emerald-500/30 text-center">
-                    <span className="text-xs font-semibold text-emerald-300 uppercase tracking-wider block mb-0.5">
-                      {results.periodicLabel}
-                    </span>
-                    <div className="text-2xl sm:text-3xl font-black text-emerald-400">
-                      ₹{formatINR(results.periodicIncome)}
-                    </div>
-                    <span className="text-[11px] text-blue-200/70 block mt-1">
-                      Direct automated credit to your bank account
-                    </span>
+                {/* Total Interest Earned Card */}
+                <div className="p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200">
+                  <span className="text-xs text-emerald-800 font-semibold block mb-1">
+                    Total Guaranteed Interest Earned
+                  </span>
+                  <div className="text-2xl font-extrabold text-emerald-700">
+                    ₹{formatINR(results.totalInterest)}
                   </div>
-                )}
+                </div>
 
-                {/* Visual Proportion Bar */}
-                <div className="space-y-2">
-                  <div className="flex justify-between text-xs font-semibold">
-                    <span className="text-blue-200">Deposited: {results.investedPct}%</span>
-                    <span className="text-emerald-300">Interest: {results.interestPct}%</span>
+                {/* Final Maturity Value Card */}
+                <div className="p-6 rounded-2xl bg-gradient-to-br from-[#032e92] to-[#021d63] text-white shadow-lg space-y-2">
+                  <span className="text-xs text-blue-200 font-semibold block">
+                    Estimated Maturity Corpus
+                  </span>
+                  <div className="text-3xl font-black text-white">
+                    ₹{formatINR(results.maturityValue)}
                   </div>
-                  <div className="w-full bg-white/10 rounded-full h-3 overflow-hidden flex">
+                  <div className="text-xs text-blue-200 pt-1 border-t border-white/10 flex justify-between">
+                    <span>Tenure: {results.tenureLabel}</span>
+                    <span className="text-emerald-300 font-semibold">100% Guaranteed</span>
+                  </div>
+                </div>
+
+                {/* Visual Ratio Bar */}
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                  <div className="flex justify-between text-xs font-semibold text-slate-600">
+                    <span>Deposit: {results.investedPct}%</span>
+                    <span>Interest: {results.interestPct}%</span>
+                  </div>
+                  <div className="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden flex">
                     <div
+                      className="bg-[#032e92] h-full"
                       style={{ width: `${results.investedPct}%` }}
-                      className="bg-blue-400 h-full transition-all duration-500"
+                      title="Principal"
                     />
                     <div
+                      className="bg-emerald-500 h-full"
                       style={{ width: `${results.interestPct}%` }}
-                      className="bg-emerald-400 h-full transition-all duration-500"
+                      title="Interest"
                     />
                   </div>
                 </div>
-
-                {/* Figures Breakdown */}
-                <div className="space-y-3 pt-2 border-t border-white/15 text-xs sm:text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-blue-200">Total Investment Deposited:</span>
-                    <span className="font-bold text-white">₹{formatINR(results.totalInvested)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-blue-200">Total Interest Accrued / Paid:</span>
-                    <span className="font-bold text-emerald-300">+₹{formatINR(results.totalInterest)}</span>
-                  </div>
-                  <div className="flex justify-between py-1 border-t border-white/10">
-                    <span className="text-blue-100">Principal Return at Maturity:</span>
-                    <span className="font-bold text-white">₹{formatINR(results.maturityValue)}</span>
-                  </div>
-                </div>
-
-                {/* CTA */}
-                <button
-                  onClick={() =>
-                    openLeadModal({
-                      title: `Apply for ${currentScheme.name}`,
-                      defaultService: 'Small Savings Schemes'
-                    })
-                  }
-                  className="w-full py-3.5 rounded-xl text-sm font-semibold bg-white text-[#032e92] hover:bg-blue-50 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md"
-                >
-                  <span>Inquire About {currentScheme.shortName} Setup</span>
-                  <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
-                </button>
-
-                <p className="text-[10px] text-blue-200/70 text-center leading-relaxed">
-                  * Illustrative calculations based on currently notified interest rates. Maturity values, premature conditions, and tax rules are subject to official government notifications.
-                </p>
               </div>
+
+              {/* Statutory Note */}
+              <p className="text-[11px] text-slate-400 text-center leading-relaxed">
+                Calculations are based on currently notified Ministry of Finance interest rates. Post office rules, compounding conventions, and tax laws apply as notified by the Government of India.
+              </p>
             </div>
           </div>
         </div>

@@ -1,101 +1,112 @@
-import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronDown,
   faCircleQuestion,
   faShieldHalved,
-  faMoneyBillTransfer,
   faBuildingColumns,
+  faLandmark,
   faFileContract,
   faRotateRight,
-  faHandHoldingDollar,
-  faCoins
-} from '@fortawesome/free-solid-svg-icons';
+  faCoins,
+  faHandHoldingDollar
+} from "@fortawesome/free-solid-svg-icons";
 
 const faqs = [
   {
     id: 1,
     icon: faShieldHalved,
-    category: 'Safety & Insurance',
-    question: 'How safe is my Fixed Deposit? What is DICGC insurance coverage?',
+    category: "Safety & Backing",
+    question: "How safe are Fixed Deposits and Government of India (GoI) Bonds?",
     answer:
-      'Deposits with all commercial and cooperative banks in India are insured by the Deposit Insurance and Credit Guarantee Corporation (DICGC), a wholly-owned subsidiary of the Reserve Bank of India (RBI). Each depositor is insured up to a maximum of ₹5,00,000 (including both principal and accrued interest) across all accounts held in the same bank and same capacity/right. Corporate FDs are NOT covered by DICGC and rely on credit ratings (such as CRISIL/ICRA AAA or AA).'
+      "Government of India (GoI) Bonds carry an absolute 100% sovereign guarantee backed by the Reserve Bank of India, meaning there is zero default or credit risk on both principal and interest. Bank Fixed Deposits are insured by the DICGC (a subsidiary of RBI) up to ₹5,00,000 per depositor per bank. Corporate/NBFC FDs are uninsurable under DICGC and rely on issuer balance sheet strength, which is why KNAPS curates only AAA/AA rated corporate issuers."
   },
   {
     id: 2,
-    icon: faMoneyBillTransfer,
-    category: 'Withdrawal & Liquidity',
-    question: 'Can I break my Fixed Deposit before maturity? What is the penalty?',
+    icon: faLandmark,
+    category: "Sovereign Bonds",
+    question: "What are RBI Floating Rate Savings Bonds (FRSB 2020) and how is the yield calculated?",
     answer:
-      'Yes, most regular bank and NBFC fixed deposits offer premature withdrawal facilities, subject to a penalty (typically between 0.5% and 1.0% deducted from the applicable interest rate for the period the deposit was actually held). Note that 5-Year Tax-Saving FDs under Section 80C have a statutory lock-in and cannot be withdrawn prematurely under any circumstance.'
+      "RBI Floating Rate Savings Bonds are 7-year sovereign debt instruments issued by RBI. The coupon rate is floating and linked to the prevailing National Savings Certificate (NSC) rate with an additional spread of 35 bps. The coupon resets semi-annually (currently 8.05% p.a.). Interest is paid every 6 months directly into your bank account on January 1st and July 1st."
   },
   {
     id: 3,
     icon: faBuildingColumns,
-    category: 'Comparison',
-    question: 'What is the difference between Bank FDs and Corporate/NBFC FDs?',
+    category: "Corporate FDs",
+    question: "How do Corporate / NBFC Fixed Deposits differ from Bank Fixed Deposits?",
     answer:
-      'Bank FDs are issued by scheduled commercial or cooperative banks, regulated by RBI, and insured up to ₹5 Lakh by DICGC. Corporate or Company FDs are issued by companies and non-banking financial companies (NBFCs). Corporate FDs often offer 1% to 2% higher interest rates to compensate for higher credit risk, carry credit ratings from agencies like CRISIL/ICRA, and are not covered under DICGC deposit insurance.'
+      "Corporate FDs are term deposits placed with financial institutions and manufacturing companies (such as Bajaj Finance, Mahindra Finance, HDFC). They typically offer 0.50% to 1.50% higher interest rates than traditional banks to reward investors for taking moderate credit risk. We strictly recommend only top-rated AAA/AA options with a proven track record of timely interest payments."
   },
   {
     id: 4,
     icon: faFileContract,
-    category: 'Taxation & TDS',
-    question: 'How does TDS work on FD interest, and when should I submit Form 15G or 15H?',
+    category: "Tax Optimization",
+    question: "How do Section 54EC Bonds help save tax on real estate and property sales?",
     answer:
-      'Under Section 194A, banks deduct Tax Deducted at Source (TDS) at 10% (20% without PAN) if total interest earned across the bank branches exceeds ₹40,000 in a financial year (₹50,000 for senior citizens). If your total estimated taxable income is below the basic exemption threshold, you can submit Form 15G (below age 60) or Form 15H (senior citizens) at the start of the financial year to request zero TDS.'
+      "Under Section 54EC of the Income Tax Act, individuals who have realized Long Term Capital Gains (LTCG) from the sale of land or building can invest up to ₹50 Lakhs into eligible bonds (issued by REC, PFC, IRFC, and NHAI) within 6 months of the sale date. The invested amount is 100% exempt from capital gains tax, and the bonds pay an assured 5.25% annual interest over a 5-year lock-in period."
   },
   {
     id: 5,
-    icon: faRotateRight,
-    category: 'Tenure & Renewal',
-    question: 'What happens when my Fixed Deposit matures? What is auto-renewal?',
+    icon: faCoins,
+    category: "Sovereign Gold",
+    question: "What are Sovereign Gold Bonds (SGB) and what makes them unique?",
     answer:
-      'Upon maturity, if you selected auto-renewal at the time of opening, the principal (and accrued interest in cumulative deposits) automatically rolls over for the same tenure at the prevailing interest rate on the date of renewal. Alternatively, you can instruct the issuer to credit the proceeds directly to your linked savings bank account.'
+      "Sovereign Gold Bonds are government securities denominated in grams of 24K gold issued by the RBI. They provide dual benefits: a fixed cash interest of 2.50% per annum paid semi-annually, plus complete capital appreciation matching physical gold prices. Most importantly, redemption at the end of the 8-year maturity is 100% tax-free under Section 47."
   },
   {
     id: 6,
-    icon: faHandHoldingDollar,
-    category: 'Emergency Liquidity',
-    question: 'Can I take a loan against my Fixed Deposit instead of breaking it?',
+    icon: faRotateRight,
+    category: "Liquidity & Exit",
+    question: "Can I withdraw my Fixed Deposit or GoI Bond before maturity?",
     answer:
-      'Yes! Most banks permit depositors to borrow an overdraft or demand loan of up to 90% to 95% of the FD value. The loan interest rate is usually only 1% to 2% higher than the FD rate. Your FD continues to earn its contracted interest, making it an excellent alternative to breaking your deposit and forfeiting tenure benefits during short-term cash crunches.'
+      "For Bank FDs, premature withdrawal is permitted subject to a minor penal interest reduction of 0.5% to 1.0% (except 5-year Tax Saving FDs which have a strict statutory lock-in). For RBI Floating Rate Savings Bonds, premature exit is not allowed for general investors, but is permitted for senior citizens: 4 years lock-in for ages 80+, 5 years for ages 70–80, and 6 years for ages 60–70. 54EC bonds have a non-negotiable 5-year lock-in."
   },
   {
     id: 7,
-    icon: faCoins,
-    category: 'Interest Payout',
-    question: 'Should I choose a Cumulative or Non-Cumulative Fixed Deposit?',
+    icon: faHandHoldingDollar,
+    category: "Senior Citizens",
+    question: "What special privileges do senior citizens receive in fixed income products?",
     answer:
-      'Cumulative FDs reinvest interest quarterly, allowing you to benefit from compounding, making them ideal for long-term goal accumulation. Non-Cumulative FDs pay interest out periodically (monthly, quarterly, half-yearly, or annually), making them well-suited for retirees and individuals who require steady cash flow to meet regular living expenses.'
+      "Senior citizens (aged 60+) receive an additional interest rate spread of 0.50% to 0.75% across bank and corporate FDs. Furthermore, under Section 80TTB, senior citizens enjoy tax exemption on deposit interest up to ₹50,000 per year. They can also register Form 15H at the beginning of the financial year to prevent TDS deduction if their total taxable income is zero."
+  },
+  {
+    id: 8,
+    icon: faBuildingColumns,
+    category: "Execution & Advisory",
+    question: "How does KNAPS assist in building a Fixed Income portfolio?",
+    answer:
+      "KNAPS provides seamless, paperless execution across top scheduled banks, AAA corporate issuers, RBI sovereign bonds, and 54EC capital gain allocations. Our certified financial planners assist in tenure laddering to ensure you have predictable liquidity while maximizing yield across market cycles."
   }
 ];
 
-const FixedDepositFAQ = () => {
+export default function FixedDepositFAQ() {
   const [openId, setOpenId] = useState(1);
 
-  const toggleFAQ = (id) => {
+  const toggle = (id) => {
     setOpenId(openId === id ? null : id);
   };
 
   return (
     <section className="py-12 sm:py-16 bg-white relative overflow-hidden">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#032e92]/10 border border-[#032e92]/20 text-[#032e92] text-xs font-semibold uppercase tracking-wider mb-4">
-            <FontAwesomeIcon icon={faCircleQuestion} />
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs sm:text-sm font-semibold mb-4 shadow-xs">
+            <FontAwesomeIcon icon={faCircleQuestion} className="text-[#032e92]" />
             <span>Got Questions?</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#032e92] tracking-tight mb-4">
-            Frequently Asked Questions
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a192f] tracking-tight leading-tight">
+            Frequently Asked{" "}
+            <span className="bg-gradient-to-r from-[#032e92] to-[#0066cc] bg-clip-text text-transparent">
+              Questions
+            </span>
           </h2>
-          <p className="text-base sm:text-lg text-slate-600">
-            Clear, authoritative answers to help you navigate Fixed Deposit rules, DICGC safety, premature withdrawals, and tax declarations.
+          <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
+            Get clear, factual answers to help you navigate Fixed Deposits and Government of India Bonds with complete confidence.
           </p>
         </div>
 
-        {/* Accordion List */}
+        {/* Accordion FAQ List */}
         <div className="space-y-4">
           {faqs.map((faq) => {
             const isOpen = openId === faq.id;
@@ -104,47 +115,44 @@ const FixedDepositFAQ = () => {
                 key={faq.id}
                 className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
                   isOpen
-                    ? 'border-[#032e92]/30 bg-gradient-to-r from-blue-50/40 via-white to-indigo-50/30 shadow-md'
-                    : 'border-slate-200 bg-white hover:border-slate-300'
+                    ? "bg-blue-50/30 border-blue-200 shadow-md"
+                    : "bg-[#f7f9fc] border-gray-200/80 hover:border-gray-300"
                 }`}
               >
                 <button
-                  onClick={() => toggleFAQ(faq.id)}
-                  className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 focus:outline-none"
-                  aria-expanded={isOpen}
+                  type="button"
+                  onClick={() => toggle(faq.id)}
+                  className="w-full py-4 px-6 text-left flex items-center justify-between gap-4 cursor-pointer focus:outline-hidden"
                 >
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3">
                     <div
-                      className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
+                      className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm transition-colors ${
                         isOpen
-                          ? 'bg-[#032e92] text-white'
-                          : 'bg-slate-100 text-slate-600'
+                          ? "bg-[#032e92] text-white"
+                          : "bg-white text-gray-500 border border-gray-200"
                       }`}
                     >
-                      <FontAwesomeIcon icon={faq.icon} className="text-sm" />
+                      <FontAwesomeIcon icon={faq.icon} />
                     </div>
                     <div>
-                      <span className="text-[11px] font-bold tracking-wider uppercase text-blue-600 block mb-0.5">
+                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-0.5">
                         {faq.category}
                       </span>
-                      <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+                      <span className="text-sm sm:text-base font-bold text-[#0a192f]">
                         {faq.question}
-                      </h3>
+                      </span>
                     </div>
                   </div>
-                  <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-300 ${
-                      isOpen
-                        ? 'rotate-180 bg-[#032e92]/10 text-[#032e92]'
-                        : 'bg-slate-100 text-slate-500'
+                  <FontAwesomeIcon
+                    icon={faChevronDown}
+                    className={`text-xs text-gray-400 transition-transform duration-300 flex-shrink-0 ${
+                      isOpen ? "rotate-180 text-[#032e92]" : ""
                     }`}
-                  >
-                    <FontAwesomeIcon icon={faChevronDown} className="text-xs" />
-                  </div>
+                  />
                 </button>
 
                 {isOpen && (
-                  <div className="px-6 pb-6 pt-1 text-sm sm:text-base text-slate-600 leading-relaxed border-t border-slate-100">
+                  <div className="px-6 pb-5 pt-1 text-xs sm:text-sm text-gray-600 leading-relaxed border-t border-blue-100/60">
                     <p>{faq.answer}</p>
                   </div>
                 )}
@@ -152,19 +160,7 @@ const FixedDepositFAQ = () => {
             );
           })}
         </div>
-
-        {/* Support Note */}
-        <div className="mt-12 p-6 rounded-2xl bg-[#f7f9fc] border border-slate-200 text-center">
-          <p className="text-sm text-slate-600">
-            Have questions regarding specific bank tenures, special senior citizen rate tranches, or corporate FD ratings?{' '}
-            <span className="font-semibold text-[#032e92]">
-              Our fixed income desk is here to assist you with unbiased issuer comparisons.
-            </span>
-          </p>
-        </div>
       </div>
     </section>
   );
-};
-
-export default FixedDepositFAQ;
+}

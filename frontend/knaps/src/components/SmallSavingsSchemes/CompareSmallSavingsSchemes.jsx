@@ -2,7 +2,6 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faTableList,
-  faCheckCircle,
   faArrowRight
 } from '@fortawesome/free-solid-svg-icons';
 import { SMALL_SAVINGS_SCHEMES } from '../../data/smallSavingsData';
@@ -21,10 +20,10 @@ export default function CompareSmallSavingsSchemes() {
             <span>Side-by-Side Comparison</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#032e92] tracking-tight mb-4">
-            Compare Small Savings Schemes
+            Compare Post Office Small Savings Schemes
           </h2>
           <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
-            Review side-by-side tenures, interest rates, contribution limits, and tax exemptions across all major government savings avenues.
+            Review side-by-side tenures, interest rates, contribution minimums, and tax exemptions across POTD, KVP, NSC, and PORD.
           </p>
         </div>
 
@@ -92,8 +91,8 @@ export default function CompareSmallSavingsSchemes() {
           <button
             onClick={() =>
               openLeadModal({
-                title: 'Compare Small Savings Schemes for Your Portfolio',
-                defaultService: 'Small Savings Schemes'
+                title: 'Compare Post Office Schemes for Your Portfolio',
+                defaultService: 'Post Office Small Savings Scheme'
               })
             }
             className="btn-ripple px-6 py-2.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-md transition-all shrink-0 cursor-pointer flex items-center gap-1.5"

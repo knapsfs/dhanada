@@ -2,11 +2,8 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBell,
-  faLandmark,
-  faCalendarCheck,
-  faScaleBalanced,
   faLock,
-  faArrowsRotate
+  faCalendarCheck
 } from '@fortawesome/free-solid-svg-icons';
 
 export default function InterestRateNotifications() {
@@ -23,7 +20,7 @@ export default function InterestRateNotifications() {
             Interest Rates & Government Notifications
           </h2>
           <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
-            Understand how the Ministry of Finance determines small savings interest rates, the quarterly review cycle, and how rate revisions affect existing versus new deposits.
+            Understand how the Ministry of Finance notifies small savings interest rates, the quarterly review cycle, and how sovereign rate lock-in protects your returns.
           </p>
         </div>
 
@@ -39,7 +36,7 @@ export default function InterestRateNotifications() {
                 How Notified Rates are Calculated
               </h3>
               <p className="text-sm text-slate-600 leading-relaxed">
-                Small savings interest rates are not determined arbitrarily. By law, they are linked formulaically to the secondary market yields of benchmark Government Securities (G-Secs) of comparable maturities traded over the preceding three months, plus a sovereign policy spread ranging between 0 and 100 basis points.
+                Small savings interest rates are linked formulaically to the secondary market yields of benchmark Government Securities (G-Secs) of comparable maturities traded over the preceding three months, plus a sovereign policy spread.
               </p>
 
               <div className="p-4 rounded-2xl bg-white border border-slate-200 text-xs text-slate-700 space-y-2">
@@ -58,40 +55,39 @@ export default function InterestRateNotifications() {
             </p>
           </div>
 
-          {/* Right Column: Fixed vs Floating Nature */}
+          {/* Right Column: Fixed Rate Lock-in across POTD, KVP, NSC, PORD */}
           <div className="lg:col-span-6 p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-blue-50/70 via-indigo-50/40 to-slate-50 border border-blue-100 shadow-sm space-y-5 flex flex-col justify-between">
             <div className="space-y-4">
               <span className="text-xs font-bold text-[#032e92] uppercase tracking-wider">
-                Crucial Rule Distinction
+                Sovereign Rate Guarantee
               </span>
               <h3 className="text-2xl font-extrabold text-slate-900">
-                Rate Lock-in vs Floating Rates
+                Day 1 Rate Lock-in Protection
               </h3>
               <p className="text-sm text-slate-600 leading-relaxed">
-                Subscribers must understand that some schemes lock your rate forever on Day 1, while others adjust dynamically to every quarterly notification:
+                All 4 Post Office schemes offered (POTD, KVP, NSC, and PORD) lock in your contracted interest rate on the date of account opening:
               </p>
 
-              {/* Locked schemes */}
+              {/* Day 1 Locked */}
               <div className="p-4 rounded-2xl bg-white border border-slate-200 space-y-1.5">
                 <div className="flex items-center gap-2 text-sm font-extrabold text-[#032e92]">
                   <FontAwesomeIcon icon={faLock} />
-                  <span>Fixed for Full Tenure (Day 1 Locked)</span>
+                  <span>Fixed for Entire Tenure (Immune to Future Rate Cuts)</span>
                 </div>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  <strong>Schemes:</strong> SCSS, POMIS, NSC, KVP, MSSC & Post Office Time Deposits.<br />
-                  The rate notified on the date of your account opening is legally contracted and remains unchanged throughout your 2, 5, or 9.5-year tenure.
+                  <strong>Covered Schemes:</strong> POTD (1, 2, 3, 5 Years), KVP (115 Months), NSC (5 Years), and PORD (5 Years).<br />
+                  Once opened, subsequent downward quarterly revisions by the government do not affect your existing deposits. Your contracted yield is 100% sovereign-guaranteed until maturity.
                 </p>
               </div>
 
-              {/* Floating schemes */}
+              {/* New Deposits Timing */}
               <div className="p-4 rounded-2xl bg-white border border-slate-200 space-y-1.5">
-                <div className="flex items-center gap-2 text-sm font-extrabold text-blue-700">
-                  <FontAwesomeIcon icon={faArrowsRotate} />
-                  <span>Floating Quarterly (Applies to All Accounts)</span>
+                <div className="flex items-center gap-2 text-sm font-extrabold text-emerald-700">
+                  <FontAwesomeIcon icon={faCalendarCheck} />
+                  <span>When Do New Rates Apply?</span>
                 </div>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  <strong>Schemes:</strong> Public Provident Fund (PPF) & Sukanya Samriddhi Yojana (SSY).<br />
-                  Interest rate resets dynamically every quarter for all existing and new accounts based on the latest government notification.
+                  Newly revised rates apply strictly to fresh deposits opened on or after the effective date of the quarterly notification circular.
                 </p>
               </div>
             </div>

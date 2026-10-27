@@ -6,10 +6,7 @@ import {
   faCalendarDays,
   faPercent,
   faArrowRight,
-  faHandHoldingDollar,
-  faChartPie,
   faUserClock,
-  faBuildingColumns
 } from '@fortawesome/free-solid-svg-icons';
 import { useLeadModal } from '../../context/LeadModalContext';
 
@@ -32,7 +29,7 @@ export default function NpsCalculator() {
   const results = useMemo(() => {
     const P = parseFloat(monthlyContribution) || 0;
     const annualR = parseFloat(expectedReturn) || 0;
-    const r = annualR / 100 / 12;
+    const r = annualR > 0 ? Math.pow(1 + annualR / 100, 1 / 12) - 1 : 0;
     const n = totalMonths;
 
     let totalCorpus = 0;

@@ -43,7 +43,7 @@ export default function HealthInsuranceHero() {
         <nav className="flex items-center gap-2 text-xs font-medium text-gray-500 mb-8">
           <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
           <FontAwesomeIcon icon={faChevronRight} className="text-[9px] text-gray-400" />
-          <Link to="/services" className="hover:text-[#032e92] transition-colors">Services</Link>
+          <Link to="/products" className="hover:text-[#032e92] transition-colors">Products</Link>
           <FontAwesomeIcon icon={faChevronRight} className="text-[9px] text-gray-400" />
           <span className="text-[#032e92] font-semibold">Health Insurance</span>
         </nav>

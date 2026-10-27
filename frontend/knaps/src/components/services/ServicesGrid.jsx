@@ -4,17 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChartLine,
   faCompass,
-  faUserTie,
-  faBuildingColumns,
   faShieldHeart,
   faBuildingShield,
   faHeartPulse,
-  faFileInvoiceDollar,
   faVault,
-  faRotate,
   faPiggyBank,
-  faCoins,
-  faArrowRight
+  faCoins
 } from '@fortawesome/free-solid-svg-icons';
 import { useLeadModal } from '../../context/LeadModalContext';
 
@@ -25,7 +20,7 @@ const SERVICES_DATA = [
     desc: "Invest in a wide range of equity, debt, and hybrid funds to grow your wealth over time. Benefit from professional fund management, automated SIP compounding, and portfolio diversification suited to your risk appetite.",
     image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=800&auto=format&fit=crop",
     icon: faChartLine,
-    link: null
+    link: "/mutual-funds"
   },
   {
     id: "sif",
@@ -41,7 +36,7 @@ const SERVICES_DATA = [
     desc: "Plan for a secure, comfortable, and tax-efficient retirement. Accumulate a disciplined pension corpus with market-linked growth across equity and debt, enjoy an additional ₹50,000 tax deduction under 80CCD(1B), and secure lifelong annuity.",
     image: "https://images.unsplash.com/photo-1507206130118-b5907f817163?q=80&w=800&auto=format&fit=crop",
     icon: faPiggyBank,
-    link: "/services/nps"
+    link: "/products/nps"
   },
   {
     id: "life-insurance",
@@ -49,7 +44,7 @@ const SERVICES_DATA = [
     desc: "Comprehensive life cover to ensure your family's financial security and lifestyle continuity. Safeguard their future with high sum assured term plans, income protection, critical illness coverage, and tax benefits under Section 80C.",
     image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=800&auto=format&fit=crop",
     icon: faShieldHeart,
-    link: "/services/life-insurance"
+    link: "/products/life-insurance"
   },
   {
     id: "general-insurance",
@@ -57,7 +52,7 @@ const SERVICES_DATA = [
     desc: "Protect your most valuable physical assets including your home, vehicle, business, and travel. Shield yourself from unexpected liabilities, accidents, natural damages, and financial disruptions with complete peace of mind.",
     image: "https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?q=80&w=800&auto=format&fit=crop",
     icon: faBuildingShield,
-    link: "/services/general-insurance"
+    link: "/products/general-insurance"
   },
   {
     id: "health-insurance",
@@ -65,31 +60,23 @@ const SERVICES_DATA = [
     desc: "Stay prepared for medical uncertainties with extensive health coverage. Access cashless hospitalization across premier hospital networks, comprehensive daycare treatments, pre/post medical care, and tax savings under Section 80D.",
     image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=800&auto=format&fit=crop",
     icon: faHeartPulse,
-    link: "/services/health-insurance"
+    link: "/products/health-insurance"
   },
   {
-    id: "fixed-deposits",
-    title: "Fixed Deposits (FD)",
-    desc: "A safe and steady investment option offering predictable interest income and capital stability. Choose flexible tenures ranging from 7 days to 10 years with assured interest payouts and preferential rates for senior citizens.",
+    id: "fixed-income-products",
+    title: "Fixed Income Products",
+    desc: "A secure and steady investment portfolio combining Bank & Corporate Fixed Deposits (FDs) and 100% sovereign-backed Government of India (GoI) Bonds. Enjoy assured returns, preferential senior citizen rates, and capital safety.",
     image: "https://images.unsplash.com/photo-1565372195458-9de0b320ef04?q=80&w=800&auto=format&fit=crop",
     icon: faVault,
-    link: "/services/fixed-deposits"
-  },
-  {
-    id: "recurring-deposits",
-    title: "Recurring Deposits (RD)",
-    desc: "Build your savings consistently, one step at a time. Cultivate a disciplined monthly investment habit with fixed, guaranteed compounding interest, zero exposure to market volatility, and flexible tenure choices.",
-    image: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=800&auto=format&fit=crop",
-    icon: faRotate,
-    link: "/services/recurring-deposits"
+    link: "/products/fixed-income-products"
   },
   {
     id: "small-savings",
-    title: "Small Savings Schemes",
-    desc: "Government-backed savings instruments offering sovereign safety and assured returns. Invest in popular avenues like Public Provident Fund (PPF), Sukanya Samriddhi Yojana (SSY), and SCSS to enjoy tax-free compounding and capital security.",
+    title: "Post Office Small Savings Schemes",
+    desc: "Government-backed savings instruments offering sovereign safety and assured returns. Invest in flagship avenues like Post Office Time Deposit (POTD), Kisan Vikas Patra (KVP), National Savings Certificate (NSC), and Post Office Recurring Deposit (PORD).",
     image: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?q=80&w=800&auto=format&fit=crop",
     icon: faCoins,
-    link: "/services/small-savings-schemes"
+    link: "/products/post-office-small-savings-schemes"
   }
 ];
 

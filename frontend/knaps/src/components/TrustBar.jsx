@@ -1,19 +1,32 @@
 import { motion } from 'framer-motion';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faBuildingColumns, faShieldHeart, faLandmark,
-  faPiggyBank, faChartPie, faCoins
-} from '@fortawesome/free-solid-svg-icons';
+
+// Partner Logos
+import whiteOakLogo from '../assets/partners-logo/white-oak.png';
+import adityaBirlaLogo from '../assets/partners-logo/aditya-birla.png';
+import bajajLogo from '../assets/partners-logo/bajaj.png';
+import hdfcLogo from '../assets/partners-logo/hdfc.png';
+import iciciLogo from '../assets/partners-logo/icici.png';
+import edelweissLogo from '../assets/partners-logo/EDELWEISS.png';
+import tataLogo from '../assets/partners-logo/tata.png';
+import unionLogo from '../assets/partners-logo/union.png';
+import utiLogo from '../assets/partners-logo/uti.png';
+import dspLogo from '../assets/partners-logo/dsp.png';
+import hsbcLogo from '../assets/partners-logo/hsbc.png';
+import sbiLogo from '../assets/partners-logo/sbi.png';
 
 const partners = [
-  { name: 'HDFC Bank', icon: faBuildingColumns, type: 'Bank' },
-  { name: 'SBI Mutual Fund', icon: faChartPie, type: 'Mutual Fund' },
-  { name: 'ICICI Prudential', icon: faShieldHeart, type: 'Insurance' },
-  { name: 'Axis Bank', icon: faLandmark, type: 'Bank' },
-  { name: 'Nippon India', icon: faPiggyBank, type: 'Mutual Fund' },
-  { name: 'Kotak Life', icon: faShieldHeart, type: 'Insurance' },
-  { name: 'Tata Mutual Fund', icon: faChartPie, type: 'Mutual Fund' },
-  { name: 'Bajaj Finance', icon: faCoins, type: 'NBFC' },
+  { name: 'White Oak', logo: whiteOakLogo, type: 'Capital Management' },
+  { name: 'Aditya Birla', logo: adityaBirlaLogo, type: 'Capital' },
+  { name: 'Bajaj', logo: bajajLogo, type: 'Asset Management' },
+  { name: 'HDFC', logo: hdfcLogo, type: 'Asset Management' },
+  { name: 'ICICI Prudential', logo: iciciLogo, type: 'Mutual Fund' },
+  { name: 'Edelweiss', logo: edelweissLogo, type: 'Mutual Fund' },
+  { name: 'Tata', logo: tataLogo, type: 'Mutual Fund' },
+  { name: 'UNION', logo: unionLogo, type: 'Mutual Fund' },
+  { name: 'UTI', logo: utiLogo, type: 'Asset Management' },
+  { name: 'DSP', logo: dspLogo, type: 'Mutual Fund' },
+  { name: 'HSBC', logo: hsbcLogo, type: 'Mutual Fund' },
+  { name: 'SBI', logo: sbiLogo, type: 'Mutual Fund' },
 ];
 
 export default function TrustBar() {
@@ -27,15 +40,15 @@ export default function TrustBar() {
 
       <div className="relative flex overflow-hidden">
         {/* Gradient overlays for smooth fading edges */}
-        <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-white to-transparent z-10"></div>
-        <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-white to-transparent z-10"></div>
+        <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+        <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
 
         <motion.div
-          animate={{ x: [0, -1036] }}
+          animate={{ x: ['0%', '-50%'] }}
           transition={{
             repeat: Infinity,
             ease: "linear",
-            duration: 20,
+            duration: 25,
           }}
           className="flex gap-16 items-center whitespace-nowrap px-8"
         >
@@ -43,12 +56,14 @@ export default function TrustBar() {
           {[...partners, ...partners].map((partner, idx) => (
             <div
               key={idx}
-              className="flex items-center gap-3 group cursor-pointer transition-all duration-300 filter grayscale hover:grayscale-0 opacity-60 hover:opacity-100"
+              className="flex items-center gap-3 group cursor-pointer transition-all duration-300 filter grayscale hover:grayscale-0 opacity-70 hover:opacity-100 shrink-0"
             >
-              <div className="w-10 h-10 rounded-full bg-gray-100 group-hover:bg-[#eef5ff] flex items-center justify-center transition-colors">
-                <FontAwesomeIcon
-                  icon={partner.icon}
-                  className="text-gray-400 group-hover:text-[#032e92] text-lg transition-colors"
+              <div className="w-11 h-11 bg-white p-1 flex items-center justify-center transition-all overflow-hidden shrink-0">
+                <img
+                  src={partner.logo}
+                  alt={`${partner.name} logo`}
+                  className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+                  loading="lazy"
                 />
               </div>
               <div>

@@ -12,7 +12,8 @@ import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 
 // Step Up SIP Calculation
 function calculateStepUpSip(monthlyInvestment, stepUp, stepUpType = 'percentage', annualReturn, duration, isInflationAdjusted = false, inflationRate = 5) {
-  const i = (annualReturn / 12) / 100
+  const nomRate = (Number(annualReturn) || 0) / 100
+  const i = nomRate > 0 ? Math.pow(1 + nomRate, 1 / 12) - 1 : 0
   const infRate = Number(inflationRate) / 100
   let totalInvested = 0
   let nominalFutureValue = 0
@@ -42,7 +43,6 @@ function calculateStepUpSip(monthlyInvestment, stepUp, stepUpType = 'percentage'
 
   // Real Rate of Return for Step-Up SIP (Fisher equation):
   // Real return = (1 + r_nominal) / (1 + r_inflation) - 1
-  const nomRate = annualReturn / 100
   const rReal = (1 + nomRate) / (1 + infRate) - 1
   let inflationAdjustedValue = 0
 
@@ -78,7 +78,8 @@ function calculateStepUpSip(monthlyInvestment, stepUp, stepUpType = 'percentage'
 }
 
 function calculateYearlyData(monthlyInvestment, stepUp, stepUpType = 'percentage', annualReturn, duration) {
-  const i = (annualReturn / 12) / 100
+  const nomRate = (Number(annualReturn) || 0) / 100
+  const i = nomRate > 0 ? Math.pow(1 + nomRate, 1 / 12) - 1 : 0
   const yearlyData = []
 
   let cumulativeInvested = 0

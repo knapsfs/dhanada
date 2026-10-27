@@ -5,44 +5,28 @@ import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 
 const faqs = [
   {
-    question: 'What is SIF?',
-    answer: 'SIF (Smart Investment Fund) is our proprietary wealth management framework designed to optimize asset allocation across different market cycles, ensuring consistent returns with minimized risk.'
+    question: 'Do people lose money in mutual funds?',
+    answer: 'Mutual funds are market-linked, so returns can move up and down. However, in our 30 years of experience, we have seen people make money when they stay invested for the long term, typically for more than 5 years.'
   },
   {
-    question: 'Why invest in Mutual Funds?',
-    answer: 'Mutual funds offer professional management, diversification, and liquidity. They are an excellent way to participate in equity and debt markets without needing the expertise to pick individual securities.'
+    question: 'Which is better: Mutual Funds or SIF?',
+    answer: 'SIFs (Specialized Investment Funds) are an advanced version of mutual funds where SEBI allows the use of derivatives to some extent, enabling fund managers to potentially benefit even during falling markets. SIFs can offer better risk-adjusted returns, but they also have a minimum investment of ₹10 lakh. Mutual Funds are preferred by investors who prefer traditional investment options and want to invest smaller amounts in the market.'
   },
   {
-    question: 'What is PMS?',
-    answer: 'Portfolio Management Services (PMS) is a customized investment solution where expert fund managers create and manage a bespoke portfolio of stocks, fixed income, and other securities tailored to your specific financial goals.'
-  },
-  {
-    question: 'Difference between PMS & AIF?',
-    answer: 'While both cater to high-net-worth individuals, PMS provides a customized portfolio of direct equities or standard securities. AIF (Alternative Investment Fund) pools capital to invest in complex, alternative assets like private equity, real estate, or hedge funds.'
-  },
-  {
-    question: 'Why choose our company?',
-    answer: 'We bring decades of market experience, a client-first transparent approach, and cutting-edge technology. Our dedicated relationship managers ensure you get personalized advice, not generic products.'
-  },
-  {
-    question: 'How do I start investing?',
-    answer: 'Simply click on "Schedule Consultation" to book an initial assessment. Our advisors will understand your goals, assess your risk profile, and guide you through the seamless onboarding and investment process.'
+    question: 'Should I invest with KNAPS or Direct?',
+    answer: ' KNAPS helps investors select a suitable investment product according to their goals and needs, and stay invested in a disciplined way. If investors choose to manage everything by themselves, they can opt for Direct Plans.'
   },
   {
     question: 'Are there any hidden fees?',
-    answer: 'Transparency is our core value. We have a clear fee structure which is explained upfront before any investment is made. There are absolutely no hidden charges.'
+    answer: 'There are no hidden fees. Applicable costs such as expense ratios and exit loads are disclosed clearly before investing'
   },
   {
-    question: 'Can I track my portfolio online?',
-    answer: 'Yes, all our clients receive access to a premium digital dashboard. You can track your portfolio performance, view reports, and analyze asset allocation in real-time.'
+    question: 'Can I track my portfolio?',
+    answer: 'Yes. You can easily track your investments, current value, transactions and portfolio performance.'
   },
   {
-    question: 'What is the minimum investment amount?',
-    answer: 'The minimum investment varies by product. Regular mutual fund SIPs can start from ₹1,000, while specialized products like PMS require a minimum of ₹50 Lakhs as per regulatory guidelines.'
-  },
-  {
-    question: 'Is my data and investment secure?',
-    answer: 'Absolutely. We use bank-level 256-bit encryption to protect your data. All investments are held securely in your name through regulated depositories like NSDL/CDSL.'
+    question: 'What is the minimum investment?',
+    answer: 'Mutual Funds: ₹500 | SIF: ₹10 lakh | PMS: ₹50 lakh | AIF: ₹1 crore'
   }
 ];
 
@@ -126,11 +110,11 @@ export default function FAQ() {
           transition={{ duration: 0.5 }}
           className="grid md:grid-cols-2 gap-6 lg:gap-8 items-start"
         >
-          {/* Left Column (0 to 4) */}
-          {renderFaqColumn(faqs.slice(0, 5), 0)}
+          {/* Left Column (0 to 3) */}
+          {renderFaqColumn(faqs.slice(0, 3), 0)}
 
-          {/* Right Column (5 to 9) */}
-          {renderFaqColumn(faqs.slice(5, 10), 5)}
+          {/* Right Column (4 to 6) */}
+          {renderFaqColumn(faqs.slice(3, 6), 3)}
         </motion.div>
       </div>
     </section>

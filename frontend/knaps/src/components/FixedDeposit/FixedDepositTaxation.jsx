@@ -1,118 +1,111 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFileInvoiceDollar,
   faScaleBalanced,
   faShieldHalved,
-  faFileContract,
   faCircleInfo,
-  faCheckCircle
-} from '@fortawesome/free-solid-svg-icons';
+  faLandmark,
+  faCoins
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function FixedDepositTaxation() {
   return (
     <section className="py-12 sm:py-16 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs sm:text-sm font-semibold mb-4 shadow-xs">
             <FontAwesomeIcon icon={faScaleBalanced} className="text-[#032e92]" />
-            <span>Taxation & Statutory Rules</span>
+            <span>Taxation & Exemptions</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a192f] tracking-tight leading-tight">
-            Taxation & Important{' '}
+            Tax Rules for{" "}
             <span className="bg-gradient-to-r from-[#032e92] to-[#0066cc] bg-clip-text text-transparent">
-              TDS Considerations
+              Fixed Deposits & GoI Bonds
             </span>
           </h2>
           <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
-            Understanding how FD interest is taxed, when banks deduct TDS, and how eligible depositors can optimize tax compliance using Form 15G or 15H.
+            Understand how interest income, TDS, capital gain exemptions (Section 54EC), and tax-free maturities work across your fixed income holdings.
           </p>
         </div>
 
-        {/* 4 Core Tax Pillars */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-12">
-          {/* Pillar 1: Slab Rate Taxation */}
           <div className="bg-[#f7f9fc] rounded-3xl p-7 sm:p-8 border border-gray-200/80 shadow-xs space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200/60 flex items-center justify-center text-[#032e92]">
                 <FontAwesomeIcon icon={faFileInvoiceDollar} className="text-lg" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-[#0a192f]">Taxable at Slab Rates</h3>
-                <span className="text-xs text-blue-700 font-semibold">Income from Other Sources</span>
+                <h3 className="text-lg font-bold text-[#0a192f]">FD Interest & TDS (Sec 194A)</h3>
+                <span className="text-xs text-blue-700 font-semibold">Taxed at Marginal Slab</span>
               </div>
             </div>
             <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-              Interest earned on Fixed Deposits is added to your total gross income and taxed as per your applicable income tax slab rate (plus applicable surcharge and 4% cess). In cumulative FDs, tax liability accrues annually, even though the interest is received upon maturity.
+              Interest earned on Bank & Corporate FDs is added to your total income and taxed at your applicable slab rate. Banks deduct 10% TDS if interest exceeds <strong>₹40,000</strong>/year (or <strong>₹50,000</strong> for senior citizens). If total taxable income is below the threshold, submit <strong>Form 15G / 15H</strong> for zero TDS deduction.
             </p>
             <div className="pt-2 border-t border-gray-200/60 text-xs text-gray-500">
-              *Applies equally under both the Old and New Tax Regimes.
+              *Senior citizens can claim deduction up to ₹50,000 on bank interest under Section 80TTB.
             </div>
           </div>
 
-          {/* Pillar 2: TDS Thresholds u/s 194A */}
           <div className="bg-[#f7f9fc] rounded-3xl p-7 sm:p-8 border border-gray-200/80 shadow-xs space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-200/60 flex items-center justify-center text-indigo-700">
-                <FontAwesomeIcon icon={faScaleBalanced} className="text-lg" />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-[#0a192f]">TDS Thresholds (Section 194A)</h3>
-                <span className="text-xs text-indigo-700 font-semibold">10% Standard TDS Rate</span>
-              </div>
-            </div>
-            <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-              Banks deduct 10% TDS if aggregate annual interest across all branches of a bank exceeds <strong>₹40,000</strong> for individuals (below age 60) or <strong>₹50,000</strong> for senior citizens. If your PAN is not seeded, TDS is deducted at a penal rate of <strong>20%</strong>.
-            </p>
-            <div className="pt-2 border-t border-gray-200/60 text-xs text-gray-500">
-              *TDS is an advance tax deduction; final tax liability depends on your total annual income.
-            </div>
-          </div>
-
-          {/* Pillar 3: Form 15G & Form 15H */}
-          <div className="bg-[#f7f9fc] rounded-3xl p-7 sm:p-8 border border-gray-200/80 shadow-xs space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200/60 flex items-center justify-center text-emerald-700">
-                <FontAwesomeIcon icon={faFileContract} className="text-lg" />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-[#0a192f]">Form 15G & Form 15H</h3>
-                <span className="text-xs text-emerald-700 font-semibold">Zero TDS Self-Declaration</span>
-              </div>
-            </div>
-            <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-              If your total taxable income for the financial year is below the basic tax exemption limit, you can submit <strong>Form 15G</strong> (for individuals under 60) or <strong>Form 15H</strong> (for senior citizens aged 60+) at the beginning of each financial year to request banks not to deduct TDS.
-            </p>
-            <div className="pt-2 border-t border-gray-200/60 text-xs text-gray-500">
-              *Must be resubmitted annually at the start of every financial year (April).
-            </div>
-          </div>
-
-          {/* Pillar 4: Section 80TTB for Senior Citizens */}
-          <div className="bg-[#f7f9fc] rounded-3xl p-7 sm:p-8 border border-gray-200/80 shadow-xs space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200/60 flex items-center justify-center text-amber-700">
                 <FontAwesomeIcon icon={faShieldHalved} className="text-lg" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-[#0a192f]">Section 80TTB Exemption</h3>
-                <span className="text-xs text-amber-700 font-semibold">Up to ₹50,000 for Seniors</span>
+                <h3 className="text-lg font-bold text-[#0a192f]">Section 54EC Property Tax Exemption</h3>
+                <span className="text-xs text-indigo-700 font-semibold">Save Up to ₹50 Lakhs LTCG Tax</span>
               </div>
             </div>
             <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-              Resident senior citizens (aged 60 and above) can claim a dedicated income tax deduction of up to <strong>₹50,000</strong> per financial year on interest income earned from bank, post office, and co-operative bank deposits under Section 80TTB of the Income Tax Act.
+              When you sell land or residential/commercial property, you can invest your Long Term Capital Gains (LTCG) into 54EC Bonds (REC, PFC, IRFC, NHAI) within 6 months of sale. The invested capital (up to ₹50 Lakhs) is <strong>100% exempt from capital gains tax</strong>, while yielding 5.25% annual interest over a 5-year tenure.
             </p>
             <div className="pt-2 border-t border-gray-200/60 text-xs text-gray-500">
-              *Available under the Old Tax Regime to lower taxable interest income directly.
+              *Annual interest is taxable at slab, but entire real estate capital gain is protected.
+            </div>
+          </div>
+
+          <div className="bg-[#f7f9fc] rounded-3xl p-7 sm:p-8 border border-gray-200/80 shadow-xs space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200/60 flex items-center justify-center text-emerald-700">
+                <FontAwesomeIcon icon={faLandmark} className="text-lg" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-[#0a192f]">RBI Floating Rate Bonds (FRSB)</h3>
+                <span className="text-xs text-emerald-700 font-semibold">Semi-Annual Taxable Coupon</span>
+              </div>
+            </div>
+            <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+              Interest on RBI Floating Rate Savings Bonds (currently 8.05% p.a.) is fully taxable under other sources at your marginal income tax slab. TDS is deducted at the time of semi-annual interest payment unless eligible exemption certificates (Form 15G/15H) are registered.
+            </p>
+            <div className="pt-2 border-t border-gray-200/60 text-xs text-gray-500">
+              *Ideal for conservative investors prioritizing sovereign security over tax arbitrage.
+            </div>
+          </div>
+
+          <div className="bg-[#f7f9fc] rounded-3xl p-7 sm:p-8 border border-gray-200/80 shadow-xs space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200/60 flex items-center justify-center text-amber-700">
+                <FontAwesomeIcon icon={faCoins} className="text-lg" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-[#0a192f]">Sovereign Gold Bonds (SGB)</h3>
+                <span className="text-xs text-amber-700 font-semibold">100% Tax-Free Capital Gain</span>
+              </div>
+            </div>
+            <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+              While the 2.50% p.a. semi-annual interest is taxable at your slab rate, the capital gains arising on redemption upon the 8-year maturity are <strong>completely exempt from income tax</strong> under Section 47 of the Income Tax Act, making SGBs the most tax-efficient fixed income vehicle for gold.
+            </p>
+            <div className="pt-2 border-t border-gray-200/60 text-xs text-gray-500">
+              *Secondary market sales before maturity attract LTCG with indexation benefits.
             </div>
           </div>
         </div>
 
-        {/* Informative Tax Summary Banner */}
         <div className="p-6 rounded-3xl bg-blue-50/70 border border-blue-100 flex items-start gap-3.5 text-xs text-gray-700 max-w-4xl mx-auto shadow-xs">
           <FontAwesomeIcon icon={faCircleInfo} className="text-[#032e92] mt-0.5 text-sm flex-shrink-0" />
           <p className="leading-relaxed">
-            <strong>Tax Disclaimer:</strong> Tax provisions, exemptions, and TDS thresholds are governed by the Income Tax Act, 1961, and are subject to legislative updates announced in the Union Budget. Investors should evaluate their individual tax bracket or consult a qualified Chartered Accountant / tax professional before planning deposit distributions.
+            <strong>Tax Disclaimer:</strong> Tax provisions, exemptions, and TDS thresholds are governed by the Income Tax Act, 1961, and are subject to legislative updates. Investors should consult their Chartered Accountant or financial advisor to optimize their post-tax fixed income yields.
           </p>
         </div>
       </div>

@@ -10,7 +10,7 @@ import CTA from '../components/CTA';
 import { getBlogPostByRoute } from '../services/blogService';
 
 export default function BlogDetails() {
-  const { id, category, slug } = useParams();
+  const { id, slug } = useParams();
   const location = useLocation();
 
   const [blog, setBlog] = useState(null);

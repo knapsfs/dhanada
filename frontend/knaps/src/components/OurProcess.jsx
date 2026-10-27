@@ -34,7 +34,7 @@ const steps = [
   },
   {
     step: 4,
-    title: 'Recommend Suitable Schemes',
+    title: 'Recommendation',
     desc: 'We suggest suitable investment options based on your goals, time horizon and risk profile.',
     image: step4Img,
     badgeBg: 'bg-rose-100/90 text-rose-600 ring-4 ring-rose-50/70',
@@ -69,14 +69,14 @@ export default function OurProcess() {
           </div> */}
 
           {/* Header Tag */}
-          <motion.span
+          {/* <motion.span
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="inline-block px-4 py-2 rounded-full border border-[#032e92]/20 text-[#032e92] bg-[#eef5ff] font-semibold text-sm mb-4 uppercase tracking-wider text-center"
           >
             OUR PROCESS
-          </motion.span>
+          </motion.span> */}
 
           <motion.h2
             initial={{ opacity: 0, y: 12 }}
@@ -85,7 +85,7 @@ export default function OurProcess() {
             transition={{ duration: 0.5 }}
             className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-black tracking-tight leading-tight max-w-4xl mx-auto"
           >
-            5 Easy Steps to Start Investing
+            5 Easy Steps to <span className="text-[#032e92] block sm:inline">Start Investing</span>
           </motion.h2>
 
           <motion.p

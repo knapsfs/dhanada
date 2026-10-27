@@ -17,17 +17,18 @@ export const calculateFutureValue = ({
 	isInflationAdjusted = false,
 	inflationRate = 5,
 }) => {
+	const nomRate = (Number(annualRate) || 0) / 100;
 	const isMonthly = frequency === "monthly";
 	const n = isMonthly ? years * 12 : years;
-	const r = isMonthly ? annualRate / 100 / 12 : annualRate / 100;
+	const r = isMonthly ? (nomRate > 0 ? Math.pow(1 + nomRate, 1 / 12) - 1 : 0) : nomRate;
 
 	let fv = 0;
 
 	if (r === 0) {
 		fv = pv + pmt * n;
 	} else {
-		// FV of present value
-		const fvPv = pv * Math.pow(1 + r, n);
+		// FV of present value (annual compounding)
+		const fvPv = pv * Math.pow(1 + annualRate / 100, years);
 
 		// FV of recurring payment (ordinary annuity - end of period)
 		let fvPmt = pmt * ((Math.pow(1 + r, n) - 1) / r);
@@ -43,7 +44,6 @@ export const calculateFutureValue = ({
 	const totalInvested = pv + pmt * n;
 
 	// Real Rate of Return for Future Value (Fisher equation):
-	const nomRate = annualRate / 100;
 	const infRate = Number(inflationRate) / 100;
 	const rReal = (1 + nomRate) / (1 + infRate) - 1;
 
@@ -93,9 +93,10 @@ export const calculateRequiredInvestment = ({
 	isInflationAdjusted = false,
 	inflationRate = 5,
 }) => {
+	const nomRate = (Number(annualRate) || 0) / 100;
 	const isMonthly = frequency === "monthly";
 	const n = isMonthly ? years * 12 : years;
-	const r = isMonthly ? annualRate / 100 / 12 : annualRate / 100;
+	const r = isMonthly ? (nomRate > 0 ? Math.pow(1 + nomRate, 1 / 12) - 1 : 0) : nomRate;
 
 	// If targetFv is adjusted for inflation (target in today's money), future target needed will be targetFv * (1 + i)^years
 	let effectiveTargetFv = targetFv;
@@ -109,7 +110,7 @@ export const calculateRequiredInvestment = ({
 	if (r === 0) {
 		pmt = (effectiveTargetFv - pv) / n;
 	} else {
-		const fvPv = pv * Math.pow(1 + r, n);
+		const fvPv = pv * Math.pow(1 + annualRate / 100, years);
 		const targetPmtPortion = effectiveTargetFv - fvPv;
 
 		if (targetPmtPortion <= 0) {
@@ -195,13 +196,14 @@ export const generateChartData = ({
 		}
 
 		const n = isMonthly ? y * 12 : y;
-		const r = isMonthly ? annualRate / 100 / 12 : annualRate / 100;
+		const nomRate = (Number(annualRate) || 0) / 100;
+		const r = isMonthly ? (nomRate > 0 ? Math.pow(1 + nomRate, 1 / 12) - 1 : 0) : nomRate;
 
 		let fv = 0;
 		if (r === 0) {
 			fv = pv + effectivePmt * n;
 		} else {
-			const fvPv = pv * Math.pow(1 + r, n);
+			const fvPv = pv * Math.pow(1 + annualRate / 100, y);
 			let fvPmt = effectivePmt * ((Math.pow(1 + r, n) - 1) / r);
 			if (timing === "beginning") {
 				fvPmt = fvPmt * (1 + r);

@@ -2,7 +2,7 @@ import MysteryBoxWidget from './components/MysteryBox/MysteryBoxWidget';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import AboutUs from './pages/AboutUs';
-import Services from './pages/Services';
+import Products from './pages/Products';
 import Blogs from './pages/Blogs';
 import BlogDetails from './pages/BlogDetails';
 import AuthorPage from './pages/AuthorPage';
@@ -25,10 +25,10 @@ import SipLumpsumCalculator from './pages/SipLumpsumCalculator';
 import LifeInsurance from './pages/LifeInsurance';
 import GeneralInsurance from './pages/GeneralInsurance';
 import HealthInsurance from './pages/HealthInsurance';
-import FixedDeposit from './pages/FixedDeposit';
-import RecurringDeposits from './pages/RecurringDeposits';
+import FixedIncomeProducts from './pages/FixedIncomeProducts';
 import NationalPensionSystem from './pages/NationalPensionSystem';
 import SmallSavingsSchemes from './pages/SmallSavingsSchemes';
+import MutualFunds from './pages/MutualFunds';
 
 // CRM Portal
 import KnapsCrmPortal from './pages/KnapsCrmPortal';
@@ -61,7 +61,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<AboutUs />} />
-            <Route path="/services" element={<Services />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/services" element={<Navigate to="/products" replace />} />
             
             {/* Official Frappe Blog Post Detail Routes */}
             <Route path="/blog/:category/:slug" element={<BlogDetails />} />
@@ -106,31 +107,47 @@ function App() {
 
             {/* Insurance Routes */}
             <Route path="/life-insurance" element={<LifeInsurance />} />
-            <Route path="/services/life-insurance" element={<LifeInsurance />} />
+            <Route path="/products/life-insurance" element={<LifeInsurance />} />
+            <Route path="/services/life-insurance" element={<Navigate to="/products/life-insurance" replace />} />
             <Route path="/general-insurance" element={<GeneralInsurance />} />
-            <Route path="/services/general-insurance" element={<GeneralInsurance />} />
+            <Route path="/products/general-insurance" element={<GeneralInsurance />} />
+            <Route path="/services/general-insurance" element={<Navigate to="/products/general-insurance" replace />} />
             <Route path="/health-insurance" element={<HealthInsurance />} />
-            <Route path="/services/health-insurance" element={<HealthInsurance />} />
+            <Route path="/products/health-insurance" element={<HealthInsurance />} />
+            <Route path="/services/health-insurance" element={<Navigate to="/products/health-insurance" replace />} />
 
-            {/* Fixed Deposit Routes */}
-            <Route path="/fixed-deposits" element={<FixedDeposit />} />
-            <Route path="/services/fixed-deposits" element={<FixedDeposit />} />
-
-            {/* Recurring Deposit Routes */}
-            <Route path="/recurring-deposits" element={<RecurringDeposits />} />
-            <Route path="/services/recurring-deposits" element={<RecurringDeposits />} />
+            {/* Fixed Income Products (FDs & GoI Bonds) Routes */}
+            <Route path="/fixed-income-products" element={<FixedIncomeProducts />} />
+            <Route path="/products/fixed-income-products" element={<FixedIncomeProducts />} />
+            <Route path="/services/fixed-income-products" element={<Navigate to="/products/fixed-income-products" replace />} />
+            <Route path="/fixed-deposits" element={<Navigate to="/products/fixed-income-products" replace />} />
+            <Route path="/services/fixed-deposits" element={<Navigate to="/products/fixed-income-products" replace />} />
+            <Route path="/fixed-income" element={<Navigate to="/products/fixed-income-products" replace />} />
+            <Route path="/services/fixed-income" element={<Navigate to="/products/fixed-income-products" replace />} />
 
             {/* National Pension System Routes */}
-            <Route path="/services/nps" element={<NationalPensionSystem />} />
             <Route path="/nps" element={<NationalPensionSystem />} />
-            <Route path="/services/national-pension-system" element={<NationalPensionSystem />} />
             <Route path="/national-pension-system" element={<NationalPensionSystem />} />
+            <Route path="/products/nps" element={<NationalPensionSystem />} />
+            <Route path="/products/national-pension-system" element={<NationalPensionSystem />} />
+            <Route path="/services/nps" element={<Navigate to="/products/nps" replace />} />
+            <Route path="/services/national-pension-system" element={<Navigate to="/products/national-pension-system" replace />} />
 
-            {/* Small Savings Schemes Routes */}
-            <Route path="/small-savings-schemes" element={<SmallSavingsSchemes />} />
-            <Route path="/services/small-savings-schemes" element={<SmallSavingsSchemes />} />
-            <Route path="/small-savings" element={<SmallSavingsSchemes />} />
-            <Route path="/services/small-savings" element={<SmallSavingsSchemes />} />
+            {/* Mutual Funds Routes */}
+            <Route path="/mutual-funds" element={<MutualFunds />} />
+            <Route path="/funds" element={<MutualFunds />} />
+            <Route path="/mutual-fund" element={<MutualFunds />} />
+            <Route path="/products/mutual-funds" element={<MutualFunds />} />
+            <Route path="/services/mutual-funds" element={<Navigate to="/products/mutual-funds" replace />} />
+
+            {/* Post Office Small Savings Schemes Routes */}
+            <Route path="/post-office-small-savings-schemes" element={<SmallSavingsSchemes />} />
+            <Route path="/products/post-office-small-savings-schemes" element={<SmallSavingsSchemes />} />
+            <Route path="/services/post-office-small-savings-schemes" element={<Navigate to="/products/post-office-small-savings-schemes" replace />} />
+            <Route path="/small-savings-schemes" element={<Navigate to="/products/post-office-small-savings-schemes" replace />} />
+            <Route path="/services/small-savings-schemes" element={<Navigate to="/products/post-office-small-savings-schemes" replace />} />
+            <Route path="/small-savings" element={<Navigate to="/products/post-office-small-savings-schemes" replace />} />
+            <Route path="/services/small-savings" element={<Navigate to="/products/post-office-small-savings-schemes" replace />} />
 
             {/* Modern KNAPS CRM Portal Routes */}
             <Route path="/knaps-crm" element={<KnapsCrmPortal />} />

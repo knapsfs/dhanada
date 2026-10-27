@@ -2,47 +2,29 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faMoneyBillTransfer,
-  faLock,
-  faHandHoldingDollar,
-  faShieldHalved,
-  faTriangleExclamation
+  faShieldHalved
 } from '@fortawesome/free-solid-svg-icons';
 
 const withdrawalRules = [
   {
-    scheme: 'Public Provident Fund (PPF)',
-    tenure: '15 Years',
-    rule: 'Partial withdrawal permitted from 7th financial year (up to 50% of balance at end of 4th preceding year). Loan facility available between 3rd and 6th financial years.'
+    scheme: 'Post Office Time Deposit (POTD)',
+    tenure: '1, 2, 3, or 5 Years',
+    rule: 'Premature closure allowed after 6 months from deposit date. If closed between 6 and 12 months, post office savings account interest rate (4.0% p.a.) is paid. If closed after 1 year, interest is 2% below the applicable TD rate.'
   },
   {
-    scheme: 'Sukanya Samriddhi Account (SSY)',
-    tenure: '21 Years',
-    rule: 'Partial withdrawal up to 50% permitted once the girl child turns 18 for certified higher education expenses. Complete closure permitted on marriage after age 18.'
-  },
-  {
-    scheme: "Senior Citizens' Savings Scheme (SCSS)",
-    tenure: '5 Years',
-    rule: 'Premature exit allowed after 1 year: 1.5% deduction from deposit between 1 and 2 years; 1% deduction after 2 years. No penalty if extended after 5 years.'
-  },
-  {
-    scheme: 'Post Office Monthly Income Scheme (POMIS)',
-    tenure: '5 Years',
-    rule: 'Premature exit allowed after 1 year: 2% deduction from principal between 1 and 3 years; 1% deduction between 3 and 5 years. No exit permitted in the 1st year.'
+    scheme: 'Kisan Vikas Patra (KVP)',
+    tenure: '115 Months (9Y 7M)',
+    rule: 'Premature encashment is permitted anytime after completing 2 years and 6 months (30 months) from deposit date, with predefined progressive surrender values determined by the Ministry of Finance.'
   },
   {
     scheme: 'National Savings Certificate (NSC)',
     tenure: '5 Years',
-    rule: 'Strictly locked for the entire 5-year tenure. Premature encashment is prohibited except in the event of the holder’s demise, forfeiture by a gazetted authority, or court order.'
+    rule: 'Strictly locked for the full 5-year tenure to ensure guaranteed compounding. Premature encashment is permitted only under exceptional statutory conditions (court order, death of holder, or gazetted pledge forfeiture).'
   },
   {
-    scheme: 'Kisan Vikas Patra (KVP)',
-    tenure: '115 Months',
-    rule: 'Premature encashment is permitted anytime after completing 2 years and 6 months (30 months) from deposit date, with predefined progressive surrender values.'
-  },
-  {
-    scheme: 'Mahila Samman Savings Certificate (MSSC)',
-    tenure: '2 Years',
-    rule: 'One partial withdrawal of up to 40% of the eligible balance is permitted after 1 year from account opening date. Premature closure allowed on compassionate grounds.'
+    scheme: 'Post Office Recurring Deposit (PORD)',
+    tenure: '5 Years (60 Months)',
+    rule: 'Premature closure is permitted after 3 years from account opening date. Loan facility up to 50% of the accumulated deposit is available after completing 1 continuous year with regular payments.'
   }
 ];
 
@@ -57,37 +39,36 @@ export default function LiquidityAndWithdrawals() {
             <span>Liquidity & Exits</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#032e92] tracking-tight mb-4">
-            Liquidity, Withdrawals & Premature Closure
+            Liquidity, Withdrawals & Premature Closure Rules
           </h2>
           <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
-            Sovereign schemes balance long-term discipline with emergency liquidity. Review scheme-specific lock-in rules and premature exit penalties before deploying capital.
+            Understand the premature encashment, lock-in timelines, and loan provisions applicable to our 4 Post Office small savings schemes.
           </p>
         </div>
 
-        {/* Withdrawal Matrix Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        {/* 4 Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {withdrawalRules.map((item, idx) => (
             <div
               key={idx}
-              className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-sm hover:border-[#032e92]/30 hover:shadow-md transition-all space-y-3"
+              className="p-8 rounded-3xl bg-white border border-slate-200/80 shadow-xs hover:border-[#032e92]/30 hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
             >
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-400 uppercase">Tenure: {item.tenure}</span>
-                <span className="w-2 h-2 rounded-full bg-[#032e92]" />
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-bold text-slate-900">{item.scheme}</h3>
+                  <span className="text-xs font-bold px-3 py-1 rounded-full bg-blue-50 text-[#032e92]">
+                    Tenure: {item.tenure}
+                  </span>
+                </div>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{item.rule}</p>
               </div>
-              <h3 className="text-base font-extrabold text-slate-900">{item.scheme}</h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed pt-1">
-                {item.rule}
-              </p>
+
+              <div className="pt-4 mt-4 border-t border-slate-100 flex items-center gap-2 text-xs text-slate-500 font-medium">
+                <FontAwesomeIcon icon={faShieldHalved} className="text-emerald-500" />
+                <span>Statutory Post Office Rule</span>
+              </div>
             </div>
           ))}
-        </div>
-
-        {/* Prudent Liquidity Guidance Box */}
-        <div className="p-6 rounded-2xl bg-amber-50/70 border border-amber-200 text-center max-w-4xl mx-auto">
-          <p className="text-xs sm:text-sm text-amber-900 leading-relaxed font-medium">
-            💡 <strong>Liquidity Rule of Thumb:</strong> Small savings schemes should not be treated as emergency cash reserves. Always maintain 6 months of living expenses in an accessible savings bank account or liquid mutual fund before committing funds to multi-year small savings tenures.
-          </p>
         </div>
       </div>
     </section>

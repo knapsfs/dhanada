@@ -53,8 +53,21 @@ from dhanada.APIs.scheme_details import (
 # Website testimonials laata hai.
 from dhanada.APIs.testimonials import get_testimonials
 
+# Official Frappe Blog Post APIs
+from dhanada.APIs.blogs import (
+	get_author_profile,
+	get_blog_categories,
+	get_blog_post_details,
+	get_blog_posts,
+)
+
+
 __all__ = [
 	"get_testimonials",
+	"get_blog_posts",
+	"get_blog_post_details",
+	"get_blog_categories",
+	"get_author_profile",
 	"associate_lead_to_conversation",
 	"chatbot_response",
 	"create_chatbot_lead",
@@ -72,6 +85,10 @@ __all__ = [
 	"get_performance_for_sif",
 	"get_scheme_heatmap_performance",
 	"get_testimonials",
+	"get_blog_posts",
+	"get_blog_post_details",
+	"get_blog_categories",
+	"get_author_profile",
 	"mask_invalid_returns",
 	"save_chat_message",
 	"submit_risk_profile",

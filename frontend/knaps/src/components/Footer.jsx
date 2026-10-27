@@ -47,7 +47,7 @@ export default function Footer() {
             <h4 className="text-white font-bold mb-6">Products</h4>
             <ul className="space-y-4">
               <li><Link to="/sif" className="text-gray-400 hover:text-white text-sm transition-colors">SIF</Link></li>
-              <li><Link to="/#mf" className="text-gray-400 hover:text-white text-sm transition-colors">Mutual Fund</Link></li>
+              <li><Link to="/mutual-funds" className="text-gray-400 hover:text-white text-sm transition-colors">Mutual Funds</Link></li>
               <li><Link to="/#pms" className="text-gray-400 hover:text-white text-sm transition-colors">PMS</Link></li>
               {/* <li><Link to="/sif" className="text-gray-400 hover:text-white text-sm transition-colors">AIF</Link></li> */}
             </ul>

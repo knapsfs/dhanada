@@ -37,9 +37,9 @@ function calculateRetirement(age, retirementAge, monthlySpend, lifestyle, invest
   // Monthly expenses at retirement age adjusted for inflation
   const expensesAtRetirement = spend * Math.pow(1 + inflation, yearsToRetirement) * lifestyleMultiplier
 
-  // Real rate of return post-retirement
+  // Real rate of return post-retirement (annual compounding effective monthly rate)
   const realReturnPostRetirement = (1 + postRetirementReturn) / (1 + inflation) - 1
-  const r_monthly = realReturnPostRetirement / 12
+  const r_monthly = realReturnPostRetirement > 0 ? Math.pow(1 + realReturnPostRetirement, 1 / 12) - 1 : 0
   const monthsInRetirement = yearsInRetirement * 12
 
   let requiredCorpus = 0

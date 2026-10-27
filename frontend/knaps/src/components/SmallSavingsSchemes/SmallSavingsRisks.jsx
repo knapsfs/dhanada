@@ -5,45 +5,45 @@ import {
   faArrowTrendDown,
   faLock,
   faReceipt,
-  faArrowsRotate,
-  faBan
+  faScaleUnbalanced,
+  faBuildingColumns
 } from '@fortawesome/free-solid-svg-icons';
 
 const risks = [
   {
     icon: faArrowTrendDown,
-    title: 'Inflation & Real Rate Risk',
+    title: 'Inflation & Real Purchasing Power',
     badge: 'Purchasing Power',
     description:
-      'Because small savings rates are fixed or formula-bound, persistent retail inflation (CPI) can compress your real post-tax purchasing power, especially on multi-year tenures where interest is taxable.'
+      'Because small savings rates are fixed throughout your deposit tenure, high sustained inflation can compress your net real return, especially when maturity proceeds are taxed at higher slab brackets.'
   },
   {
     icon: faLock,
-    title: 'Strict Tenure Lock-In Restrictions',
+    title: 'Statutory Lock-In Restrictions',
     badge: 'Illiquidity',
     description:
-      'Schemes like PPF (15 years), SSY (21 years), and NSC (5 years) feature strict statutory lock-ins. Premature encashment is either prohibited or heavily penalized, making them unsuitable for emergency cash.'
+      'Schemes like NSC (5 years) carry strict lock-ins with no premature exit except upon court order or depositor demise. POTD accounts closed before 1 year earn only Post Office savings account rates.'
   },
   {
     icon: faReceipt,
-    title: 'Tax Drag on Non-Exempt Schemes',
-    badge: 'Slab Rate Taxation',
+    title: 'Slab-Rate Taxation',
+    badge: 'Tax Implications',
     description:
-      'Only PPF and SSY offer EEE tax exemption. Interest from SCSS, POMIS, KVP, and Post Office Time Deposits is fully taxable at your individual slab rate, reducing net post-tax yields for higher tax brackets.'
+      'Interest earned across POTD, KVP, and PORD is fully taxable at your individual slab rate. While India Post does not deduct TDS at source, you must declare this income when filing your ITR.'
   },
   {
-    icon: faArrowsRotate,
-    title: 'Quarterly Rate Reset Volatility',
-    badge: 'Floating Rate Impact',
+    icon: faScaleUnbalanced,
+    title: 'Opportunity & Reinvestment Risk',
+    badge: 'Fixed Yield Lock',
     description:
-      'In floating-rate schemes like PPF and SSY, interest rates reset every quarter. If macroeconomic benchmark yields soften, your deposit earnings adjust downward on all active accounts.'
+      'Locking into a 5-year POTD or 115-month KVP protects you against rate drops, but also prevents you from taking advantage if prevailing economic yields rise without incurring premature closure penalties.'
   },
   {
-    icon: faBan,
-    title: 'Strict Statutory Deposit Ceilings',
-    badge: 'Upper Cap Limits',
+    icon: faBuildingColumns,
+    title: 'Branch Verification for Closure',
+    badge: 'Physical Formalities',
     description:
-      'Most small savings schemes enforce strict statutory annual or lifetime caps (e.g., ₹1.5 Lakh/year in PPF/SSY, ₹9L single in POMIS, ₹30L in SCSS). You cannot park unlimited capital in sovereign schemes.'
+      'Unlike private bank FDs that can be created and closed instantly via net-banking apps in seconds, encashing or closing post office physical certificates often requires postal branch verification.'
   }
 ];
 
@@ -58,10 +58,10 @@ export default function SmallSavingsRisks() {
             <span>Essential Considerations</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
-            Risks & Things to Know About Small Savings
+            Risks & Things to Know About Post Office Small Savings
           </h2>
           <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
-            While small savings schemes carry sovereign safety, savers must carefully weigh inflation dynamics, tenure illiquidity, and tax drag.
+            While Post Office small savings schemes carry sovereign safety, savers must carefully evaluate lock-in durations, inflation dynamics, and slab-rate taxation.
           </p>
         </div>
 
@@ -93,7 +93,7 @@ export default function SmallSavingsRisks() {
         {/* Prudent Liquidity Notice */}
         <div className="p-6 rounded-2xl bg-amber-50/70 border border-amber-200 text-center max-w-4xl mx-auto">
           <p className="text-xs sm:text-sm text-amber-900 leading-relaxed font-medium">
-            ⚠️ <strong>Prudent Allocation Tip:</strong> Avoid committing funds required within the next 2–3 years into 15-year or 5-year lock-in schemes. Match each scheme strictly with your milestone timeline to prevent costly premature penalties.
+            ⚠️ <strong>Prudent Allocation Tip:</strong> Avoid committing emergency liquidity into 5-year lock-in certificates like NSC. Choose tenure-appropriate POTD (1, 2, 3, or 5 years) or maintain an emergency fund separately.
           </p>
         </div>
       </div>

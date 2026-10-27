@@ -48,14 +48,14 @@ export default function BlogSection() {
 
         <div className="flex flex-col items-center text-center md:flex-row md:justify-between md:items-end md:text-left mb-10 sm:mb-12 gap-6">
           <div className="max-w-2xl">
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="inline-block px-4 py-2 rounded-full bg-[#eef5ff] text-[#032e92] font-semibold text-sm mb-4 uppercase tracking-wider"
             >
               Latest Insights
-            </motion.div>
+            </motion.div> */}
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -95,13 +95,12 @@ export default function BlogSection() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}
-            className={`grid gap-8 ${
-              blogs.length === 1
+            className={`grid gap-8 ${blogs.length === 1
                 ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
                 : blogs.length === 2
-                ? "grid-cols-1 md:grid-cols-2"
-                : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-            }`}
+                  ? "grid-cols-1 md:grid-cols-2"
+                  : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+              }`}
           >
             {blogs.map((blog) => (
               <BlogCard key={blog.id} blog={blog} />

@@ -39,7 +39,7 @@ export default function LifeInsuranceHero() {
         >
           <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
           <FontAwesomeIcon icon={faChevronRight} className="text-[9px] text-gray-300" />
-          <Link to="/services" className="hover:text-[#032e92] transition-colors">Services</Link>
+          <Link to="/products" className="hover:text-[#032e92] transition-colors">Products</Link>
           <FontAwesomeIcon icon={faChevronRight} className="text-[9px] text-gray-300" />
           <span className="text-[#032e92] font-bold">Life Insurance</span>
         </motion.div>

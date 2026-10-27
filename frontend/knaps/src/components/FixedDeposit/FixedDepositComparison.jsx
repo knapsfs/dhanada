@@ -1,233 +1,204 @@
-import { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faScaleBalanced,
   faCircleInfo,
-  faCheckCircle,
-  faBuildingColumns
-} from '@fortawesome/free-solid-svg-icons';
+  faBuildingColumns,
+  faLandmark
+} from "@fortawesome/free-solid-svg-icons";
 
 const comparisonData = [
   {
-    name: 'Scheduled Bank FD',
+    name: "Scheduled Bank FD",
+    category: "Fixed Deposit",
     isPrimary: true,
-    predictability: 'High (Contracted Rate)',
-    marketExposure: 'Zero',
-    liquidity: 'Premature withdrawal allowed (minor penalty)',
-    tenureRange: '7 Days to 10 Years',
-    safetyMechanism: 'DICGC Insured up to ₹5 Lakh',
-    taxTreatment: 'Taxed at slab rate; TDS u/s 194A'
+    safetyMechanism: "DICGC Insured up to ₹5 Lakh per bank",
+    indicativeYield: "6.50% - 7.50% (+0.50% Seniors)",
+    creditRisk: "Extremely Low (RBI Regulated)",
+    tenureRange: "7 Days to 10 Years",
+    payoutFrequency: "Monthly, Quarterly, or Cumulative",
+    liquidity: "Premature withdrawal allowed (minor 0.5-1% penalty)",
+    taxTreatment: "Taxed at marginal slab rate; TDS u/s 194A"
   },
   {
-    name: 'Corporate / NBFC FD',
+    name: "Corporate / NBFC FD",
+    category: "Fixed Deposit",
     isPrimary: false,
-    predictability: 'High (Higher Contracted Rate)',
-    marketExposure: 'Zero (Credit Risk applies)',
-    liquidity: 'Premature exit per issuer rules (lock-in applies)',
-    tenureRange: '1 Year to 5 Years',
-    safetyMechanism: 'Credit Rating (CRISIL/ICRA AAA/AA)',
-    taxTreatment: 'Taxed at slab rate; TDS u/s 194A'
+    safetyMechanism: "Credit Rating (CRISIL / ICRA AAA & AA)",
+    indicativeYield: "7.75% - 8.60%+ p.a.",
+    creditRisk: "Low to Moderate (Issuer dependent)",
+    tenureRange: "1 Year to 5 Years",
+    payoutFrequency: "Monthly, Quarterly, Annual, Cumulative",
+    liquidity: "Premature exit per issuer rules (3-month lock-in)",
+    taxTreatment: "Taxed at marginal slab rate; TDS u/s 194A"
   },
   {
-    name: 'Savings Bank Account',
-    isPrimary: false,
-    predictability: 'Variable (Bank can adjust anytime)',
-    marketExposure: 'Zero',
-    liquidity: 'Instant (ATM / UPI / NetBanking)',
-    tenureRange: 'Immediate / Open-ended',
-    safetyMechanism: 'DICGC Insured up to ₹5 Lakh',
-    taxTreatment: 'Taxed at slab; ₹10k exempt u/s 80TTA'
+    name: "RBI Floating Rate Savings Bonds (FRSB)",
+    category: "GoI Bond",
+    isPrimary: true,
+    safetyMechanism: "100% Sovereign Guarantee (Govt of India)",
+    indicativeYield: "8.05% p.a. (Floating, NSC + 35 bps)",
+    creditRisk: "Zero (Direct Sovereign Backing)",
+    tenureRange: "7 Years (Early exit for seniors aged 60+)",
+    payoutFrequency: "Semi-Annual (Jan 1 & Jul 1)",
+    liquidity: "Non-transferable; no secondary trade",
+    taxTreatment: "Taxed at slab rate; TDS applicable as per rules"
   },
   {
-    name: 'Debt Mutual Funds',
+    name: "Section 54EC Capital Gain Bonds",
+    category: "GoI Bond",
     isPrimary: false,
-    predictability: 'Market-linked (Yield to Maturity)',
-    marketExposure: 'Moderate (Subject to interest rate & credit risk)',
-    liquidity: 'High (Redeemed in T+1 business day)',
-    tenureRange: 'Open-ended (Overnight to Long duration)',
-    safetyMechanism: 'Market Value (NAV fluctuates)',
-    taxTreatment: 'Taxed at investor’s income tax slab'
+    safetyMechanism: "PSU Sovereign Equivalent (REC, PFC, IRFC, NHAI)",
+    indicativeYield: "5.25% p.a. (Annual Coupon)",
+    creditRisk: "Zero / AAA Public Sector",
+    tenureRange: "5 Years (Strict Lock-in)",
+    payoutFrequency: "Annual Interest Payout",
+    liquidity: "Non-transferable; cannot be pledged",
+    taxTreatment: "100% LTCG Tax Exemption up to ₹50 Lakhs"
   },
   {
-    name: 'Public Provident Fund (PPF)',
+    name: "Sovereign Gold Bonds (SGB)",
+    category: "GoI Bond",
     isPrimary: false,
-    predictability: 'Quarterly Govt Announced Rate',
-    marketExposure: 'Zero',
-    liquidity: 'Low (Partial withdrawal after 6 yrs)',
-    tenureRange: '15 Years Mandatory',
-    safetyMechanism: 'Sovereign Guarantee (Govt of India)',
-    taxTreatment: 'Exempt (EEE: Investment, Interest & Maturity)'
+    safetyMechanism: "100% Sovereign Guarantee (Govt of India)",
+    indicativeYield: "2.50% p.a. + Gold Price Appreciation",
+    creditRisk: "Zero Credit Risk (Gold price volatility applies)",
+    tenureRange: "8 Years (Exit window after Year 5)",
+    payoutFrequency: "Semi-Annual Cash Coupon",
+    liquidity: "Tradable on stock exchanges",
+    taxTreatment: "100% Tax-Free capital gain at maturity"
   },
   {
-    name: 'Post Office Time Deposit (POTD)',
+    name: "Debt Mutual Funds",
+    category: "Market Linked",
     isPrimary: false,
-    predictability: 'High (Govt Contracted Rate)',
-    marketExposure: 'Zero',
-    liquidity: 'Premature exit after 6 months with penalty',
-    tenureRange: '1, 2, 3, or 5 Years',
-    safetyMechanism: 'Sovereign Guarantee (Govt of India)',
-    taxTreatment: 'Taxed at slab; 5-yr eligible u/s 80C'
+    safetyMechanism: "Portfolio Diversification & Credit Quality",
+    indicativeYield: "Market-linked Yield to Maturity (~7.0% - 7.5%)",
+    creditRisk: "Subject to credit & interest rate risk",
+    tenureRange: "Overnight to 10+ Years",
+    payoutFrequency: "Cumulative (Growth) or IDCW",
+    liquidity: "T+1 / T+2 redemption (Exit load may apply)",
+    taxTreatment: "Taxed at marginal slab rate (No indexation)"
   }
 ];
 
 export default function FixedDepositComparison() {
-  const [selectedMobileIndex, setSelectedMobileIndex] = useState(0);
+  const [activeTab, setActiveTab] = useState("all");
+
+  const filteredData = activeTab === "all"
+    ? comparisonData
+    : activeTab === "fd"
+    ? comparisonData.filter(d => d.category === "Fixed Deposit")
+    : comparisonData.filter(d => d.category === "GoI Bond");
 
   return (
-    <section id="fd-comparison" className="py-12 sm:py-16 bg-[#f7f9fc] relative overflow-hidden">
+    <section id="fd-comparison" className="py-12 sm:py-16 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs sm:text-sm font-semibold mb-4 shadow-xs">
             <FontAwesomeIcon icon={faScaleBalanced} className="text-[#032e92]" />
-            <span>Side-by-Side Savings Evaluation</span>
+            <span>Side-by-Side Evaluation</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a192f] tracking-tight leading-tight">
-            Fixed Deposits vs Other{' '}
+            Compare{" "}
             <span className="bg-gradient-to-r from-[#032e92] to-[#0066cc] bg-clip-text text-transparent">
-              Savings & Investment Options
+              Fixed Deposits vs GoI Bonds
             </span>
           </h2>
           <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
-            Compare return predictability, liquidity, safety mechanisms, and tax treatment across popular fixed-income avenues in India.
+            Understand how Bank FDs, Corporate FDs, and Sovereign Government Bonds compare across security, returns, liquidity, and taxation.
           </p>
+
+          {/* Tab Filter */}
+          <div className="flex items-center justify-center gap-2 mt-6">
+            <button
+              onClick={() => setActiveTab("all")}
+              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+                activeTab === "all"
+                  ? "bg-[#032e92] text-white shadow-xs"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              All Instruments
+            </button>
+            <button
+              onClick={() => setActiveTab("fd")}
+              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
+                activeTab === "fd"
+                  ? "bg-[#032e92] text-white shadow-xs"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              <FontAwesomeIcon icon={faBuildingColumns} className="text-xs" />
+              <span>Fixed Deposits</span>
+            </button>
+            <button
+              onClick={() => setActiveTab("bonds")}
+              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
+                activeTab === "bonds"
+                  ? "bg-[#032e92] text-white shadow-xs"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              <FontAwesomeIcon icon={faLandmark} className="text-xs" />
+              <span>GoI Bonds</span>
+            </button>
+          </div>
         </div>
 
-        {/* Desktop Comparison Table (Hidden on small screens) */}
-        <div className="hidden lg:block overflow-hidden rounded-3xl border border-gray-200/90 shadow-xl bg-white mb-10">
-          <table className="w-full text-left border-collapse">
+        {/* Comparison Table */}
+        <div className="overflow-x-auto rounded-3xl border border-gray-200/90 shadow-xl bg-white">
+          <table className="w-full text-left border-collapse min-w-[760px]">
             <thead>
-              <tr className="bg-[#f7f9fc] border-b border-gray-200 text-xs font-bold uppercase tracking-wider text-gray-600">
-                <th className="py-4 px-5">Instrument</th>
-                <th className="py-4 px-4">Return Predictability</th>
-                <th className="py-4 px-4">Market Exposure</th>
-                <th className="py-4 px-4">Liquidity / Exit</th>
-                <th className="py-4 px-4">Tenure Options</th>
-                <th className="py-4 px-4">Capital Protection</th>
-                <th className="py-4 px-4">Tax Consideration</th>
+              <tr className="bg-gradient-to-r from-[#0a192f] to-[#032e92] text-white">
+                <th className="py-4 px-5 text-xs font-bold uppercase tracking-wider">Product / Instrument</th>
+                <th className="py-4 px-5 text-xs font-bold uppercase tracking-wider">Safety & Guarantee</th>
+                <th className="py-4 px-5 text-xs font-bold uppercase tracking-wider">Indicative Yield</th>
+                <th className="py-4 px-5 text-xs font-bold uppercase tracking-wider">Credit Risk</th>
+                <th className="py-4 px-5 text-xs font-bold uppercase tracking-wider">Tenure & Lock-in</th>
+                <th className="py-4 px-5 text-xs font-bold uppercase tracking-wider">Income Payout</th>
+                <th className="py-4 px-5 text-xs font-bold uppercase tracking-wider">Tax Treatment</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 text-xs sm:text-sm">
-              {comparisonData.map((item, idx) => {
-                const isPrimary = item.isPrimary;
-                return (
-                  <tr
-                    key={idx}
-                    className={`transition-colors ${
-                      isPrimary
-                        ? 'bg-blue-50/70 hover:bg-blue-50 font-medium'
-                        : 'hover:bg-gray-50/70 text-gray-700'
-                    }`}
-                  >
-                    <td className="py-4 px-5">
-                      <div className="flex items-center gap-2">
-                        {isPrimary && (
-                          <span className="w-2 h-2 rounded-full bg-[#032e92] animate-pulse" />
-                        )}
-                        <span className={`font-bold ${isPrimary ? 'text-[#032e92]' : 'text-[#0a192f]'}`}>
-                          {item.name}
+              {filteredData.map((row, idx) => (
+                <tr
+                  key={row.name}
+                  className={`hover:bg-blue-50/40 transition-colors ${
+                    row.isPrimary ? "bg-blue-50/20 font-medium" : idx % 2 === 0 ? "bg-white" : "bg-gray-50/50"
+                  }`}
+                >
+                  <td className="py-4 px-5 font-bold text-[#0a192f]">
+                    <div className="flex items-center gap-2">
+                      {row.isPrimary && (
+                        <span className="w-2 h-2 rounded-full bg-[#032e92]" />
+                      )}
+                      <div>
+                        <div>{row.name}</div>
+                        <span className="text-[10px] text-gray-500 font-normal uppercase tracking-wider">
+                          {row.category}
                         </span>
-                        {isPrimary && (
-                          <span className="px-2 py-0.5 rounded-full bg-[#032e92] text-white text-[10px] font-semibold">
-                            Core Focus
-                          </span>
-                        )}
                       </div>
-                    </td>
-                    <td className="py-4 px-4 font-semibold text-gray-800">{item.predictability}</td>
-                    <td className="py-4 px-4 text-gray-700">{item.marketExposure}</td>
-                    <td className="py-4 px-4 text-xs text-gray-600">{item.liquidity}</td>
-                    <td className="py-4 px-4 font-medium text-gray-900">{item.tenureRange}</td>
-                    <td className="py-4 px-4">
-                      <span className="inline-block px-2.5 py-1 rounded-lg text-xs font-semibold bg-gray-100 text-gray-800">
-                        {item.safetyMechanism}
-                      </span>
-                    </td>
-                    <td className="py-4 px-4 text-xs text-gray-600">{item.taxTreatment}</td>
-                  </tr>
-                );
-              })}
+                    </div>
+                  </td>
+                  <td className="py-4 px-5 text-gray-700">{row.safetyMechanism}</td>
+                  <td className="py-4 px-5 font-bold text-[#032e92]">{row.indicativeYield}</td>
+                  <td className="py-4 px-5 text-gray-700">{row.creditRisk}</td>
+                  <td className="py-4 px-5 text-gray-700">{row.tenureRange}</td>
+                  <td className="py-4 px-5 text-gray-700">{row.payoutFrequency}</td>
+                  <td className="py-4 px-5 text-gray-600 text-xs">{row.taxTreatment}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
 
-        {/* Mobile/Tablet Card-based View */}
-        <div className="lg:hidden space-y-4 mb-10">
-          <div className="flex items-center justify-between pb-2">
-            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Select Instrument:</span>
-            <span className="text-xs text-[#032e92] font-semibold">Tap to inspect</span>
-          </div>
-
-          <div className="flex overflow-x-auto gap-2 pb-2 scrollbar-none">
-            {comparisonData.map((item, idx) => (
-              <button
-                key={idx}
-                onClick={() => setSelectedMobileIndex(idx)}
-                className={`flex-shrink-0 px-4 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
-                  selectedMobileIndex === idx
-                    ? 'bg-[#032e92] text-white border-[#032e92] shadow-sm'
-                    : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
-                }`}
-              >
-                {item.name.split(' ')[0]}
-              </button>
-            ))}
-          </div>
-
-          {/* Selected Mobile Instrument Card */}
-          {(() => {
-            const active = comparisonData[selectedMobileIndex];
-            return (
-              <div
-                className={`rounded-2xl p-5 border shadow-sm ${
-                  active.isPrimary ? 'bg-blue-50/70 border-blue-200' : 'bg-white border-gray-200'
-                }`}
-              >
-                <div className="flex items-center justify-between pb-3 border-b border-gray-200/60 mb-3">
-                  <h4 className="text-base font-bold text-[#0a192f]">{active.name}</h4>
-                  {active.isPrimary && (
-                    <span className="px-2 py-0.5 rounded-full bg-[#032e92] text-white text-[10px] font-bold">
-                      Core Option
-                    </span>
-                  )}
-                </div>
-
-                <div className="space-y-2.5 text-xs">
-                  <div className="flex justify-between">
-                    <span className="text-gray-500">Return Predictability:</span>
-                    <strong className="text-gray-900">{active.predictability}</strong>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-500">Market Exposure:</span>
-                    <strong className="text-gray-900">{active.marketExposure}</strong>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-500">Tenure Range:</span>
-                    <strong className="text-[#032e92]">{active.tenureRange}</strong>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-500">Capital Protection:</span>
-                    <span className="text-gray-800 text-right max-w-[60%]">{active.safetyMechanism}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-500">Liquidity / Exit:</span>
-                    <span className="text-gray-800 text-right max-w-[60%]">{active.liquidity}</span>
-                  </div>
-                  <div className="flex justify-between pt-1 border-t border-gray-100">
-                    <span className="text-gray-500">Tax Treatment:</span>
-                    <span className="text-gray-800 text-right max-w-[60%]">{active.taxTreatment}</span>
-                  </div>
-                </div>
-              </div>
-            );
-          })()}
-        </div>
-
-        {/* Regulatory Note */}
-        <div className="p-4 sm:p-5 rounded-2xl bg-white border border-gray-200/80 flex items-start gap-3 text-xs text-gray-600 shadow-xs">
-          <FontAwesomeIcon icon={faCircleInfo} className="text-[#032e92] mt-0.5 flex-shrink-0" />
-          <p>
-            <strong>Regulatory & Safety Note:</strong> Deposits placed with scheduled commercial banks in India are protected by the Deposit Insurance and Credit Guarantee Corporation (DICGC) up to ₹5 Lakh per depositor per bank (inclusive of both principal and interest). Corporate FDs do not carry DICGC insurance and are evaluated by independent credit rating agencies.
+        {/* Informational Guidance Footer */}
+        <div className="mt-6 p-4 rounded-2xl bg-blue-50/60 border border-blue-100 flex items-start gap-3 text-xs text-gray-600">
+          <FontAwesomeIcon icon={faCircleInfo} className="text-[#032e92] text-sm mt-0.5 flex-shrink-0" />
+          <p className="leading-relaxed">
+            <strong>KNAPS Asset Allocation Insight:</strong> Conservative investors seeking maximum safety can anchor their debt portfolio with 100% sovereign <strong>Government of India (GoI) Bonds</strong> for high yield and zero default risk, while utilizing <strong>Scheduled Bank FDs</strong> for emergency liquidity and laddered maturity dates.
           </p>
         </div>
       </div>

@@ -15,7 +15,8 @@ import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 // i = annual_rate / 12 / 100
 // FV = P * [ (1 + i)^n - 1 ] / i
 function calculateSIP(sipAmount, annualReturn, duration, isInflationAdjusted = false, inflationRate = 5) {
-  const i = (annualReturn / 12) / 100
+  const nomRate = (Number(annualReturn) || 0) / 100
+  const i = nomRate > 0 ? Math.pow(1 + nomRate, 1 / 12) - 1 : 0
   const n = duration * 12
   const totalInvested = sipAmount * n
 
@@ -28,7 +29,6 @@ function calculateSIP(sipAmount, annualReturn, duration, isInflationAdjusted = f
 
   // Real Rate of Return for SIP (Fisher equation):
   // Real return = (1 + r_nominal) / (1 + r_inflation) - 1
-  const nomRate = annualReturn / 100
   const infRate = Number(inflationRate) / 100
   const rReal = (1 + nomRate) / (1 + infRate) - 1
 
@@ -61,7 +61,8 @@ function calculateSIP(sipAmount, annualReturn, duration, isInflationAdjusted = f
 
 // Gains and graph do not change as per inflation
 function calculateYearlyData(sipAmount, annualReturn, duration) {
-  const i = (annualReturn / 12) / 100
+  const nomRate = (Number(annualReturn) || 0) / 100
+  const i = nomRate > 0 ? Math.pow(1 + nomRate, 1 / 12) - 1 : 0
   return Array.from({ length: duration }, (_, idx) => {
     const year = idx + 1
     const n = year * 12

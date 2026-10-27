@@ -4,55 +4,44 @@ import {
   faStar,
   faShieldHalved,
   faCalendarCheck,
-  faHandHoldingDollar,
   faReceipt,
-  faBullseye,
-  faBuildingColumns,
-  faArrowRight
+  faArrowTrendUp,
+  faRotate
 } from '@fortawesome/free-solid-svg-icons';
-import { useLeadModal } from '../../context/LeadModalContext';
-
 const advantages = [
   {
     icon: faShieldHalved,
     title: 'Absolute Sovereign Security',
     description:
-      'Unlike bank fixed deposits that rely on DICGC insurance up to ₹5 Lakh, small savings schemes are direct liabilities of the Government of India, offering unmatched capital protection.'
+      'Unlike private deposits that rely on insurance limits, Post Office Small Savings Schemes are direct liabilities of the Government of India, offering 100% capital protection.'
   },
   {
     icon: faCalendarCheck,
-    title: 'Competitive Notified Yields',
+    title: 'Locked-In Notified Yields',
     description:
-      'The Ministry of Finance reviews and notifies rates quarterly. Yields on schemes like SCSS and SSY (8.2%) frequently outpace comparable scheduled commercial bank deposit rates.'
+      'In schemes like NSC (7.7%), KVP (7.5%), and POTD (up to 7.5%), your interest rate locks in on your deposit date and remains guaranteed for your entire tenure regardless of future rate cuts.'
   },
   {
     icon: faReceipt,
-    title: 'Exemplary Tax Advantages (EEE)',
+    title: 'Section 80C Tax Savings',
     description:
-      'Schemes like PPF and Sukanya Samriddhi Yojana (SSY) enjoy the rare Exempt-Exempt-Exempt (EEE) status—providing tax deductions at deposit, zero tax on interest, and tax-free maturity.'
+      'National Savings Certificate (NSC) and 5-Year Post Office Time Deposit (POTD) qualify for up to ₹1.5 Lakh deductions under Section 80C. In NSC, annually accrued interest also qualifies for 80C re-investment.'
   },
   {
-    icon: faHandHoldingDollar,
-    title: 'Tailored Income Payout Modes',
+    icon: faArrowTrendUp,
+    title: 'Guaranteed Capital Doubling',
     description:
-      'Whether you need monthly cash flow (POMIS), quarterly post-retirement pension (SCSS), annual compounding (NSC), or capital doubling (KVP), there is a pre-designed structure for your cash flow needs.'
+      'Kisan Vikas Patra (KVP) guarantees your initial lump-sum deposit will double over the notified tenure (115 months at 7.5% p.a.), with safe exit liquidity available after 30 months.'
   },
   {
-    icon: faBullseye,
-    title: 'Lifecycle Goal Alignment',
+    icon: faRotate,
+    title: 'Low Entry Monthly Savings',
     description:
-      'Each product is customized to a distinct social or financial milestone: girl child education (SSY), retirement accumulation (PPF), women capital building (MSSC), or rural capital protection (KVP).'
-  },
-  {
-    icon: faBuildingColumns,
-    title: 'Immunity to Market Fluctuations',
-    description:
-      'Completely detached from equity or secondary debt market fluctuations. You are never exposed to negative NAV returns, mark-to-market bond drawdowns, or stock market volatility.'
+      'Post Office Recurring Deposit (PORD) lets you cultivate disciplined savings starting with just ₹100 per month, with quarterly compounding and loan facilities up to 50% after 1 year.'
   }
 ];
 
 export default function WhyConsiderSmallSavings() {
-  const { openLeadModal } = useLeadModal();
 
   return (
     <section className="py-12 sm:py-16 bg-[#f7f9fc] relative overflow-hidden">
@@ -61,25 +50,25 @@ export default function WhyConsiderSmallSavings() {
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#032e92]/10 border border-[#032e92]/20 text-[#032e92] text-xs font-semibold uppercase tracking-wider mb-4">
             <FontAwesomeIcon icon={faStar} />
-            <span>Strategic Value</span>
+            <span>Strategic Value Proposition</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#032e92] tracking-tight mb-4">
-            Why Consider Small Savings Schemes?
+            Why Consider Post Office Small Savings Schemes?
           </h2>
           <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
-            Discover why millions of Indian households anchor their foundational wealth in government-notified small savings schemes.
+            Discover why millions of Indian savers trust Post Office savings certificates and term deposits for safe compounding, capital doubling, and tax efficiency.
           </p>
         </div>
 
-        {/* 6 Advantages Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10 sm:mb-12">
+        {/* 5 Advantages Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
           {advantages.map((item, idx) => (
             <div
               key={idx}
-              className="p-8 rounded-2xl bg-white border border-slate-200/80 hover:border-[#032e92]/30 hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
+              className="p-8 rounded-3xl bg-white border border-slate-200/80 hover:border-[#032e92]/30 hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
             >
               <div>
-                <div className="w-12 h-12 rounded-xl bg-blue-50 text-[#032e92] group-hover:bg-[#032e92] group-hover:text-white flex items-center justify-center text-lg mb-6 transition-colors shadow-sm">
+                <div className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-200 text-[#032e92] group-hover:bg-[#032e92] group-hover:text-white flex items-center justify-center text-lg transition-all duration-300 shadow-sm mb-6">
                   <FontAwesomeIcon icon={item.icon} />
                 </div>
                 <h3 className="text-lg font-bold text-slate-900 mb-3 group-hover:text-[#032e92] transition-colors">
@@ -89,30 +78,6 @@ export default function WhyConsiderSmallSavings() {
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Bottom CTA Banner */}
-        <div className="p-8 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div>
-            <h4 className="text-lg font-bold text-slate-900">
-              Need assistance mapping the right small savings scheme to your tax bracket?
-            </h4>
-            <p className="text-sm text-slate-600 mt-1">
-              Our fixed-income advisors analyze your income stream and help you optimize between EEE options and regular payout avenues.
-            </p>
-          </div>
-          <button
-            onClick={() =>
-              openLeadModal({
-                title: 'Small Savings Schemes Guidance',
-                defaultService: 'Small Savings Schemes'
-              })
-            }
-            className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center gap-2 shrink-0 cursor-pointer"
-          >
-            <span>Talk to a Small Savings Advisor</span>
-            <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
-          </button>
         </div>
       </div>
     </section>

@@ -11,7 +11,7 @@ const faqs = [
   },
   {
     q: 'How is SIP return calculated?',
-    a: 'SIP returns use the compound interest formula: FV = P × [((1 + r)ⁿ - 1) / r] × (1 + r), where P = monthly investment, r = monthly interest rate (annual rate ÷ 12), and n = total months. This calculator applies this formula to give you instant projections.',
+    a: 'SIP returns use the compound interest formula: FV = P × [((1 + r)ⁿ - 1) / r] × (1 + r), where P = monthly investment, r = effective monthly interest rate based on annual compounding ((1 + annualReturn)¹/¹² - 1), and n = total months. This calculator applies this formula to give you instant projections.',
   },
   {
     q: "What is the 'Expected Return' in this calculator?",

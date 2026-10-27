@@ -18,12 +18,12 @@ function calculateSipLumpsum(initialInvestment, sipAmount, duration, annualRetur
   const years = Number(duration) || 0
   const r = (Number(annualReturn) || 0) / 100
   const n = years * 12
-  const i = r / 12
+  const i = r > 0 ? Math.pow(1 + r, 1 / 12) - 1 : 0
 
   const totalInvested = pv + (pmt * n)
 
   // Nominal Future Value
-  const fvLump = pv * Math.pow(1 + i, n)
+  const fvLump = pv * Math.pow(1 + r, years)
   let fvSip = 0
   if (i === 0) {
     fvSip = pmt * n
@@ -39,7 +39,7 @@ function calculateSipLumpsum(initialInvestment, sipAmount, duration, annualRetur
 
   let inflationAdjustedValue = nominalFutureValue
   if (years > 0) {
-    const fvLumpReal = pv * Math.pow(1 + iReal, n)
+    const fvLumpReal = pv * Math.pow(1 + rReal, years)
     let fvSipReal = 0
     if (iReal === 0) {
       fvSipReal = pmt * n
@@ -69,14 +69,14 @@ function calculateYearlyData(initialInvestment, sipAmount, duration, annualRetur
   const pmt = Number(sipAmount) || 0
   const years = Number(duration) || 0
   const r = (Number(annualReturn) || 0) / 100
-  const i = r / 12
+  const i = r > 0 ? Math.pow(1 + r, 1 / 12) - 1 : 0
 
   return Array.from({ length: years }, (_, idx) => {
     const year = idx + 1
     const n = year * 12
     const invested = pv + (pmt * n)
 
-    const fvLump = pv * Math.pow(1 + i, n)
+    const fvLump = pv * Math.pow(1 + r, year)
     let fvSip = 0
     if (i === 0) {
       fvSip = pmt * n

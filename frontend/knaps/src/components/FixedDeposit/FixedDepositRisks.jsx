@@ -1,44 +1,43 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTriangleExclamation,
   faArrowTrendDown,
   faBan,
   faRotateRight,
   faBuildingCircleExclamation,
-  faFileInvoiceDollar,
-  faPercent
-} from '@fortawesome/free-solid-svg-icons';
+  faFileInvoiceDollar
+} from "@fortawesome/free-solid-svg-icons";
 
 const risks = [
   {
     icon: faArrowTrendDown,
-    title: 'Inflation Risk (Post-Tax Returns)',
-    desc: 'While nominal returns are guaranteed, real purchasing power may decline if inflation exceeds your post-tax interest yield. For high-tax bracket investors, post-tax FD yields often lag consumer inflation.'
+    title: "Inflation Risk (Purchasing Power)",
+    desc: "While returns are fixed and guaranteed, real purchasing power can lag behind inflation after paying taxes. High-net-worth investors often blend fixed income with equities for inflation hedging."
   },
   {
     icon: faBan,
-    title: 'Premature Withdrawal Penalties',
-    desc: 'Liquidating a bank FD before its contracted maturity date typically incurs a 0.5% to 1.0% interest rate reduction penalty. Tax-saving 5-year FDs strictly prohibit premature withdrawal under any circumstance.'
+    title: "Lock-in & Liquidity Nuances",
+    desc: "Bank FDs allow early withdrawal with a 0.5%–1% penalty. GoI Floating Rate Savings Bonds have a mandatory 7-year lock-in (early exit allowed only for seniors aged 60+), and 54EC bonds have a strict 5-year lock-in."
   },
   {
     icon: faRotateRight,
-    title: 'Reinvestment & Rate Cycle Risk',
-    desc: 'When a high-interest deposit matures during an economic rate-cut cycle, renewing the funds will occur at prevailing lower rates, leading to reduced periodic interest cash flow.'
+    title: "Reinvestment & Rate Cycle Shifts",
+    desc: "Fixed FDs lock in current yields. When they mature during low interest rate environments, renewing funds yields lower income. Conversely, floating bonds (RBI FRSB) adjust every 6 months."
   },
   {
     icon: faBuildingCircleExclamation,
-    title: 'Issuer Credit Risk (Corporate FDs)',
-    desc: 'Bank deposits are insured under DICGC up to ₹5,00,000 per bank. Corporate/NBFC FDs are uninsurable under DICGC and carry default risk linked to the corporate balance sheet and credit rating.'
+    title: "Credit Risk Distinction",
+    desc: "GoI Bonds carry ZERO default risk (100% sovereign). Bank FDs are insured up to ₹5 Lakh under DICGC. Corporate NBFC deposits carry credit risk dependent on the issuer rating (AAA/AA recommended)."
   },
   {
     icon: faFileInvoiceDollar,
-    title: 'Taxation at Full Slab Rates',
-    desc: 'Unlike equity capital gains which benefit from concessional tax rates, FD interest is added to your total income and taxed at your marginal slab rate (up to 30% + cess), alongside mandatory TDS deductions.'
+    title: "Marginal Slab Rate Taxation",
+    desc: "Interest income from FDs and RBI FRSB bonds is added to your income and taxed at your marginal income tax slab. However, SGBs are 100% tax-free at maturity and 54EC exempts property capital gains."
   },
   {
-    icon: faPercent,
-    title: 'Dynamic Rate Adjustments on Renewal',
-    desc: 'Interest rates displayed today apply only to newly booked deposits. At the time of maturity and auto-renewal, the prevailing card rates on that specific renewal date will apply.'
+    icon: faBan,
+    title: "Non-Transferability in Specific Bonds",
+    desc: "RBI Floating Rate Savings Bonds and Section 54EC bonds cannot be traded on secondary markets or pledged for loans, requiring you to hold them until the scheduled maturity date."
   }
 ];
 
@@ -50,16 +49,16 @@ export default function FixedDepositRisks() {
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-50 border border-amber-200/80 text-amber-800 text-xs sm:text-sm font-semibold mb-4 shadow-xs">
             <FontAwesomeIcon icon={faTriangleExclamation} className="text-amber-600" />
-            <span>Transparency & Risk Realities</span>
+            <span>Transparency & Due Diligence</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a192f] tracking-tight leading-tight">
-            Key Risks & Things to Know{' '}
+            Key Risks & Factors to Evaluate{" "}
             <span className="bg-gradient-to-r from-[#032e92] to-[#0066cc] bg-clip-text text-transparent">
-              Before Booking an FD
+              in Fixed Income
             </span>
           </h2>
           <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
-            While Fixed Deposits offer capital stability, investors must understand inflation dynamics, liquidity constraints, and issuer distinctions.
+            While Fixed Income provides stability, understanding liquidity, tenure lock-ins, and credit security ensures you pick the right instrument for your needs.
           </p>
         </div>
 
@@ -88,7 +87,7 @@ export default function FixedDepositRisks() {
         {/* Regulatory Disclaimer Banner */}
         <div className="mt-12 bg-white rounded-2xl p-6 border border-gray-200 text-center max-w-4xl mx-auto shadow-xs">
           <p className="text-xs text-gray-500 leading-relaxed">
-            <strong>Regulatory Guidance:</strong> Fixed deposit interest rates, maturity proceeds, premature withdrawal conditions, and TDS applicability are governed by the respective financial institution's policies and guidelines prescribed by the Reserve Bank of India (RBI) and the Ministry of Corporate Affairs (MCA).
+            <strong>Regulatory & Investor Protection:</strong> Fixed deposits in scheduled commercial banks are insured under DICGC guidelines up to ₹5 Lakh. Government of India Bonds are sovereign obligations managed by the Reserve Bank of India. Corporate deposits are subject to respective issuer credit ratings.
           </p>
         </div>
       </div>
