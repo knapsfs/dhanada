@@ -1,6 +1,6 @@
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChartLine,
   faCompass,
@@ -9,75 +9,85 @@ import {
   faHeartPulse,
   faVault,
   faPiggyBank,
-  faCoins
-} from '@fortawesome/free-solid-svg-icons';
-import { useLeadModal } from '../../context/LeadModalContext';
+  faCoins,
+} from "@fortawesome/free-solid-svg-icons";
+import { useLeadModal } from "../../context/LeadModalContext";
+
+// Product Images from src/assets/products
+import mutualFundsImg from "../../assets/products/mutual-funds.webp";
+import sifImg from "../../assets/products/specialised-investment-funds.webp";
+import npsImg from "../../assets/products/nps.webp";
+import lifeInsuranceImg from "../../assets/products/life-insurance.webp";
+import generalInsuranceImg from "../../assets/products/general-insurance.webp";
+import healthInsuranceImg from "../../assets/products/health-insurance.webp";
+import fixedIncomeImg from "../../assets/products/fixed-income-products.webp";
+import smallSavingsImg from "../../assets/products/post-office-small-savings.webp";
 
 const SERVICES_DATA = [
   {
     id: "mutual-funds",
     title: "Mutual Funds",
     desc: "Invest in a wide range of equity, debt, and hybrid funds to grow your wealth over time. Benefit from professional fund management, automated SIP compounding, and portfolio diversification suited to your risk appetite.",
-    image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=800&auto=format&fit=crop",
+    image: mutualFundsImg,
     icon: faChartLine,
-    link: "/mutual-funds"
+    link: "/mutual-funds",
   },
   {
     id: "sif",
     title: "SIF (Specialised Investment Funds)",
     desc: "Goal-based, flexible investing engineered for your unique financial milestones. Leverage curated asset allocation, dynamic market hedging, and disciplined strategies designed to navigate volatility while capturing upside.",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop",
+    image: sifImg,
     icon: faCompass,
-    link: "/sif"
+    link: "/sif",
   },
   {
     id: "nps",
     title: "National Pension System (NPS)",
     desc: "Plan for a secure, comfortable, and tax-efficient retirement. Accumulate a disciplined pension corpus with market-linked growth across equity and debt, enjoy an additional ₹50,000 tax deduction under 80CCD(1B), and secure lifelong annuity.",
-    image: "https://images.unsplash.com/photo-1507206130118-b5907f817163?q=80&w=800&auto=format&fit=crop",
+    image: npsImg,
     icon: faPiggyBank,
-    link: "/products/nps"
+    link: "/products/nps",
   },
   {
     id: "life-insurance",
     title: "Life Insurance",
     desc: "Comprehensive life cover to ensure your family's financial security and lifestyle continuity. Safeguard their future with high sum assured term plans, income protection, critical illness coverage, and tax benefits under Section 80C.",
-    image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=800&auto=format&fit=crop",
+    image: lifeInsuranceImg,
     icon: faShieldHeart,
-    link: "/products/life-insurance"
+    link: "/products/life-insurance",
   },
   {
     id: "general-insurance",
     title: "General Insurance",
     desc: "Protect your most valuable physical assets including your home, vehicle, business, and travel. Shield yourself from unexpected liabilities, accidents, natural damages, and financial disruptions with complete peace of mind.",
-    image: "https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?q=80&w=800&auto=format&fit=crop",
+    image: generalInsuranceImg,
     icon: faBuildingShield,
-    link: "/products/general-insurance"
+    link: "/products/general-insurance",
   },
   {
     id: "health-insurance",
     title: "Health Insurance",
     desc: "Stay prepared for medical uncertainties with extensive health coverage. Access cashless hospitalization across premier hospital networks, comprehensive daycare treatments, pre/post medical care, and tax savings under Section 80D.",
-    image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=800&auto=format&fit=crop",
+    image: healthInsuranceImg,
     icon: faHeartPulse,
-    link: "/products/health-insurance"
+    link: "/products/health-insurance",
   },
   {
     id: "fixed-income-products",
     title: "Fixed Income Products",
     desc: "A secure and steady investment portfolio combining Bank & Corporate Fixed Deposits (FDs) and 100% sovereign-backed Government of India (GoI) Bonds. Enjoy assured returns, preferential senior citizen rates, and capital safety.",
-    image: "https://images.unsplash.com/photo-1565372195458-9de0b320ef04?q=80&w=800&auto=format&fit=crop",
+    image: fixedIncomeImg,
     icon: faVault,
-    link: "/products/fixed-income-products"
+    link: "/products/fixed-income-products",
   },
   {
     id: "small-savings",
     title: "Post Office Small Savings Schemes",
     desc: "Government-backed savings instruments offering sovereign safety and assured returns. Invest in flagship avenues like Post Office Time Deposit (POTD), Kisan Vikas Patra (KVP), National Savings Certificate (NSC), and Post Office Recurring Deposit (PORD).",
-    image: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?q=80&w=800&auto=format&fit=crop",
+    image: smallSavingsImg,
     icon: faCoins,
-    link: "/products/post-office-small-savings-schemes"
-  }
+    link: "/products/post-office-small-savings-schemes",
+  },
 ];
 
 export default function ServicesGrid() {
@@ -107,9 +117,9 @@ export default function ServicesGrid() {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a192f]/60 via-[#0a192f]/10 to-transparent" />
 
                 {/* Floating Frosted Icon Box */}
-                <div className="absolute top-4 right-4 w-11 h-11 rounded-2xl bg-white/90 backdrop-blur-md flex items-center justify-center text-[#032e92] shadow-md border border-white/80 group-hover:scale-110 transition-transform duration-300 z-10">
+                {/* <div className="absolute top-4 right-4 w-11 h-11 rounded-2xl bg-white/90 backdrop-blur-md flex items-center justify-center text-[#032e92] shadow-md border border-white/80 group-hover:scale-110 transition-transform duration-300 z-10">
                   <FontAwesomeIcon icon={service.icon} className="text-lg" />
-                </div>
+                </div> */}
               </div>
 
               {/* Content Section */}

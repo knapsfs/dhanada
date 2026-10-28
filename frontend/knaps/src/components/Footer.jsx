@@ -45,11 +45,15 @@ export default function Footer() {
           {/* Products */}
           <div>
             <h4 className="text-white font-bold mb-6">Products</h4>
-            <ul className="space-y-4">
-              <li><Link to="/sif" className="text-gray-400 hover:text-white text-sm transition-colors">SIF</Link></li>
+            <ul className="space-y-3">
               <li><Link to="/mutual-funds" className="text-gray-400 hover:text-white text-sm transition-colors">Mutual Funds</Link></li>
-              <li><Link to="/#pms" className="text-gray-400 hover:text-white text-sm transition-colors">PMS</Link></li>
-              {/* <li><Link to="/sif" className="text-gray-400 hover:text-white text-sm transition-colors">AIF</Link></li> */}
+              <li><Link to="/sif" className="text-gray-400 hover:text-white text-sm transition-colors">SIF</Link></li>
+              <li><Link to="/products/nps" className="text-gray-400 hover:text-white text-sm transition-colors">NPS</Link></li>
+              <li><Link to="/products/post-office-small-savings-schemes" className="text-gray-400 hover:text-white text-sm transition-colors">Post Office Small Savings</Link></li>
+              <li><Link to="/products/fixed-income-products" className="text-gray-400 hover:text-white text-sm transition-colors">Fixed Income Products</Link></li>
+              <li><Link to="/products/life-insurance" className="text-gray-400 hover:text-white text-sm transition-colors">Life Insurance</Link></li>
+              <li><Link to="/products/health-insurance" className="text-gray-400 hover:text-white text-sm transition-colors">Health Insurance</Link></li>
+              <li><Link to="/products/general-insurance" className="text-gray-400 hover:text-white text-sm transition-colors">General Insurance</Link></li>
             </ul>
           </div>
 
