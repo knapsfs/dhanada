@@ -63,7 +63,7 @@ function App() {
             <Route path="/about" element={<AboutUs />} />
             <Route path="/products" element={<Products />} />
             <Route path="/services" element={<Navigate to="/products" replace />} />
-            
+
             {/* Official Frappe Blog Post Detail Routes */}
             <Route path="/blog/:category/:slug" element={<BlogDetails />} />
             <Route path="/blogs/:category/:slug" element={<BlogDetails />} />
@@ -74,7 +74,7 @@ function App() {
             <Route path="/blogs/:category" element={<Blogs />} />
             <Route path="/blog/:category" element={<Blogs />} />
             <Route path="/blogs/category/:category" element={<Blogs />} />
-            
+
             {/* Fallback redirects for legacy URLs to official Frappe route */}
             <Route path="/sif-vs-mutual-funds" element={<Navigate to="/blog/mutual-funds/what’s-the-difference-between-sif-and-mutual-funds" replace />} />
 
