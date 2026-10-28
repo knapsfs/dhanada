@@ -32,7 +32,6 @@ export default function Home() {
         {/* <Services /> */}
         {/* <WhyChooseUs /> */}
         {/* <HowItWorks /> */}
-
         {/* <InvestmentSolutions /> */}
         <Testimonials />
         <BlogSection />
