@@ -6,8 +6,8 @@ import {
   faCalendarDays,
   faCoins,
   faReceipt,
-  faUserGroup,
-  faHandHoldingDollar,
+  faArrowTrendUp,
+  faLock,
   faArrowRight
 } from '@fortawesome/free-solid-svg-icons';
 import { useLeadModal } from '../../context/LeadModalContext';
@@ -18,42 +18,42 @@ const features = [
     title: 'Sovereign-Guaranteed Safety',
     badge: 'Direct Govt. Backing',
     description:
-      'Unlike private or commercial deposits that rely on insurance thresholds, Small Savings Schemes are directly backed by the Consolidated Fund of India.'
+      'Unlike private or commercial deposits that rely on insurance thresholds, Post Office Small Savings Schemes are directly backed by the Consolidated Fund of India.'
   },
   {
     icon: faCalendarDays,
-    title: 'Diverse Tenure Spectrum',
-    badge: '1 Year to 21 Years',
+    title: 'Flexible Tenure Spectrum',
+    badge: '1 Year to 9.5 Years',
     description:
-      'Choose short horizons like 1-to-3-year Time Deposits, medium 5-year options (NSC, SCSS, MIS), or multi-decade compounding milestones (PPF 15y, SSY 21y).'
+      'Choose short-to-medium horizons with 1, 2, 3, or 5-Year Time Deposits (POTD), 5-Year NSC, 5-Year PORD, or 115 months for capital doubling in KVP.'
   },
   {
     icon: faCoins,
-    title: 'Lump-Sum & Periodic Flexibility',
+    title: 'Lump-Sum & Monthly Flexibility',
     badge: 'Contribution Choice',
     description:
-      'Invest either as a one-time lump-sum deposit (SCSS, MIS, TD, KVP) or as disciplined monthly/annual installments (PPF, SSY, Post Office RD).'
+      'Invest either as a one-time lump-sum deposit (POTD, KVP, NSC) or through disciplined monthly installments starting at just ₹100 in Post Office RD.'
   },
   {
     icon: faReceipt,
-    title: 'Comprehensive Tax Advantages',
-    badge: 'Section 80C & EEE',
+    title: 'Section 80C Tax Deductions',
+    badge: 'Section 80C Relief',
     description:
-      'Multiple schemes qualify for up to ₹1.5 Lakh tax deductions under Section 80C, while flagship schemes like PPF and SSY provide 100% tax-free maturity under EEE.'
+      'NSC and 5-Year Post Office Time Deposit qualify for up to ₹1.5 Lakh deductions under Section 80C. NSC accrued interest is also deemed reinvested.'
   },
   {
-    icon: faUserGroup,
-    title: 'Targeted Demographics',
-    badge: 'Social Protection',
+    icon: faArrowTrendUp,
+    title: 'Guaranteed Capital Doubling',
+    badge: 'KVP Advantage',
     description:
-      'Specialized features and premium rates designed for dedicated societal segments: girl children (SSY), senior citizens (SCSS), and women investors (MSSC).'
+      'Kisan Vikas Patra (KVP) doubles your investment over 115 months with 7.5% p.a. guaranteed rate and exit liquidity permitted after 30 months.'
   },
   {
-    icon: faHandHoldingDollar,
-    title: 'Sovereign Cash Flow Reliability',
-    badge: 'Direct Credit',
+    icon: faLock,
+    title: 'Locked-In Notified Yields',
+    badge: 'Rate Protection',
     description:
-      'Monthly and quarterly interest distributions are directly credited electronically to your linked savings bank or post office account on predefined dates.'
+      'The notified rate prevailing on the date of opening is locked in for your entire tenure, protecting you against future interest rate drops.'
   }
 ];
 
@@ -70,10 +70,10 @@ export default function SmallSavingsKeyFeatures() {
             <span>Structural Features</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#032e92] tracking-tight mb-4">
-            Key Features of Small Savings Schemes
+            Key Features of Post Office Small Savings Schemes
           </h2>
           <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
-            Examine the institutional building blocks that govern sovereign small savings schemes across tenures, tax avenues, and payout structures.
+            Examine the institutional building blocks that govern our 4 core Post Office schemes: POTD, KVP, NSC, and PORD.
           </p>
         </div>
 
@@ -86,7 +86,7 @@ export default function SmallSavingsKeyFeatures() {
             >
               <div>
                 <div className="flex items-center justify-between mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-blue-50 text-[#032e92] group-hover:bg-[#032e92] group-hover:text-white flex items-center justify-center text-lg transition-all duration-300 shadow-sm">
+                  <div className="w-12 h-12 rounded-xl bg-blue-50 text-[#032e92] group-hover:bg-[#032e92] group-hover:text-white flex items-center justify-center text-lg transition-all duration-300 shadow-xs">
                     <FontAwesomeIcon icon={item.icon} />
                   </div>
                   <span className="text-[11px] font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full uppercase tracking-wider">
@@ -105,15 +105,16 @@ export default function SmallSavingsKeyFeatures() {
         {/* Bottom CTA */}
         <div className="text-center pt-4">
           <button
+            type="button"
             onClick={() =>
               openLeadModal({
-                title: 'Inquire on Small Savings Features',
-                defaultService: 'Small Savings Schemes'
+                title: 'Inquire on Post Office Scheme Features',
+                defaultService: 'Post Office Small Savings Schemes'
               })
             }
             className="btn-ripple px-8 py-3.5 rounded-xl text-[14px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center gap-2 cursor-pointer"
           >
-            <span>Speak with a Fixed Income Specialist</span>
+            <span>Speak with a Post Office Specialist</span>
             <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
           </button>
         </div>

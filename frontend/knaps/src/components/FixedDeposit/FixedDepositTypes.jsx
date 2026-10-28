@@ -1,225 +1,304 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBuildingColumns,
+  faLandmark,
+  faCoins,
+  faShieldHalved,
   faPersonWalkingWithCane,
   faFileInvoiceDollar,
-  faCoins,
-  faHandHoldingDollar,
   faBuilding,
-  faRotate,
   faCheckCircle,
-  faArrowRight
-} from '@fortawesome/free-solid-svg-icons';
-import { useLeadModal } from '../../context/LeadModalContext';
+  faArrowRight,
+  faScaleBalanced
+} from "@fortawesome/free-solid-svg-icons";
+import { useLeadModal } from "../../context/LeadModalContext";
 
-const fdTypes = [
+const products = [
+  // ─── Fixed Deposits ──────────────────────────────────────────────────────────
   {
-    id: 'regular-bank-fd',
-    title: 'Regular Bank Fixed Deposit',
-    tagline: 'Standard term deposit offered by scheduled public and private commercial banks.',
+    id: "regular-bank-fd",
+    category: "fd",
+    categoryLabel: "Fixed Deposit",
+    title: "Regular Bank Fixed Deposit",
+    tagline: "Standard term deposit offered by scheduled public and private commercial banks.",
     icon: faBuildingColumns,
-    badge: 'Most Popular',
-    badgeColor: 'bg-blue-50 text-[#032e92] border-blue-200',
-    idealFor: 'Any individual looking for capital stability and predictable returns',
-    tenures: '7 Days to 10 Years',
+    badge: "Most Popular",
+    badgeColor: "bg-blue-50 text-[#032e92] border-blue-200",
+    idealFor: "Capital safety, liquidity, and goal-dated planning",
+    tenures: "7 Days to 10 Years",
+    indicativeYield: "6.50% - 7.50% p.a.",
     highlights: [
-      'Covered by DICGC insurance up to ₹5 Lakh per depositor per bank',
-      'Flexible tenures tailored to exact goal dates',
-      'Option to choose cumulative compounding or periodic interest payout',
-      'Instant loan or overdraft facility available up to 90% of deposit'
+      "DICGC insured up to ₹5 Lakh per depositor per bank",
+      "Flexible tenures aligned with precise financial goals",
+      "Option to choose quarterly compounding or periodic monthly/quarterly payouts",
+      "Overdraft & loan against FD available up to 90% of deposit value"
     ]
   },
   {
-    id: 'senior-citizen-fd',
-    title: 'Senior Citizen Fixed Deposit',
-    tagline: 'Special preferential rates designed for individuals aged 60 and above.',
+    id: "senior-citizen-fd",
+    category: "fd",
+    categoryLabel: "Fixed Deposit",
+    title: "Senior Citizen Fixed Deposit",
+    tagline: "Special preferential term deposit rates designed for investors aged 60 and above.",
     icon: faPersonWalkingWithCane,
-    badge: 'Preferential Rates',
-    badgeColor: 'bg-amber-50 text-amber-800 border-amber-200',
-    idealFor: 'Retirees and seniors seeking dependable cash flow and higher yield',
-    tenures: '7 Days to 10 Years',
+    badge: "Senior Special",
+    badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    idealFor: "Retirees seeking dependable monthly or quarterly pension-like cashflow",
+    tenures: "7 Days to 10 Years",
+    indicativeYield: "7.00% - 8.25% p.a.",
     highlights: [
-      'Additional 0.25% to 0.50% p.a. interest over standard retail rates',
-      'Non-cumulative monthly or quarterly payout options for living expenses',
-      'Tax exemption on interest income up to ₹50,000 u/s 80TTB',
-      'Eligible to submit Form 15H for zero TDS if total income is below taxable limits'
+      "Additional interest spread of 0.50% to 0.75% above standard rack rates",
+      "Regular monthly or quarterly interest credit directly to bank savings account",
+      "Higher TDS exemption limit of ₹50,000 per financial year under Section 80TTB",
+      "Exemption from TDS available by submitting Form 15H"
     ]
   },
   {
-    id: 'tax-saving-fd',
-    title: 'Tax-Saving Fixed Deposit',
-    tagline: 'Designated 5-year fixed deposit offering tax deduction under Section 80C.',
-    icon: faFileInvoiceDollar,
-    badge: 'Section 80C Eligible',
-    badgeColor: 'bg-purple-50 text-purple-800 border-purple-200',
-    idealFor: 'Taxpayers opting for the Old Tax Regime needing a safe 80C avenue',
-    tenures: 'Fixed 5-Year Lock-In',
-    highlights: [
-      'Deduction of up to ₹1,50,000 per financial year under Section 80C',
-      'Mandatory 5-year statutory lock-in with zero premature withdrawal',
-      'No loan or overdraft facility allowed against tax-saver FDs',
-      'Interest earned is taxable as per investor’s applicable income tax slab'
-    ]
-  },
-  {
-    id: 'cumulative-fd',
-    title: 'Cumulative Fixed Deposit',
-    tagline: 'Interest is reinvested quarterly and paid out together with principal at maturity.',
-    icon: faCoins,
-    badge: 'Compounded Growth',
-    badgeColor: 'bg-emerald-50 text-emerald-800 border-emerald-200',
-    idealFor: 'Investors planning for future lump-sum milestones without interim cash needs',
-    tenures: '6 Months to 10 Years',
-    highlights: [
-      'Quarterly compounding accelerates effective annual yield',
-      'Lump-sum maturity value paid at the end of the contracted tenure',
-      'Ideal for milestone planning like children’s education or property down payment',
-      'TDS is deducted annually on accrued interest even though payout is at maturity'
-    ]
-  },
-  {
-    id: 'non-cumulative-fd',
-    title: 'Non-Cumulative Fixed Deposit',
-    tagline: 'Earn regular interest income credited directly to your bank account periodically.',
-    icon: faHandHoldingDollar,
-    badge: 'Regular Cash Flow',
-    badgeColor: 'bg-pink-50 text-pink-800 border-pink-200',
-    idealFor: 'Retirees, homemakers, or freelancers requiring predictable monthly cash flow',
-    tenures: '1 Year to 10 Years',
-    highlights: [
-      'Choice of Monthly, Quarterly, Half-Yearly, or Annual interest payouts',
-      'Predictable regular income without eroding the underlying principal deposit',
-      'Automated direct electronic transfer into your savings bank account',
-      'Effective annual yield is slightly lower than cumulative FDs due to lack of reinvestment'
-    ]
-  },
-  {
-    id: 'corporate-fd',
-    title: 'Corporate / Company Fixed Deposit',
-    tagline: 'Term deposits issued by leading non-banking financial companies (NBFCs) and corporations.',
+    id: "corporate-fd",
+    category: "fd",
+    categoryLabel: "Fixed Deposit",
+    title: "Corporate & NBFC Fixed Deposit",
+    tagline: "Higher-yielding term deposits offered by top credit-rated manufacturing & financial NBFCs.",
     icon: faBuilding,
-    badge: 'Higher Potential Yield',
-    badgeColor: 'bg-indigo-50 text-indigo-800 border-indigo-200',
-    idealFor: 'Investors seeking higher yields who are comfortable evaluating credit ratings',
-    tenures: '1 Year to 5 Years',
+    badge: "High Yield",
+    badgeColor: "bg-amber-50 text-amber-700 border-amber-200",
+    idealFor: "Investors seeking superior fixed returns above traditional bank deposits",
+    tenures: "1 Year to 5 Years",
+    indicativeYield: "7.75% - 8.60%+ p.a.",
     highlights: [
-      'Offers 0.50% to 1.50% higher interest rates compared to standard bank FDs',
-      'Credit ratings from CRISIL, ICRA, or CARE (AAA/AA rated highly recommended)',
-      'Not covered by DICGC insurance; safety relies on the issuer’s creditworthiness',
-      'Subject to guidelines established by the Reserve Bank of India (RBI) and MCA'
+      "Premium interest rates generally 0.50% to 1.50% higher than bank FDs",
+      "Vigorously monitored by rating agencies (CRISIL / ICRA AAA & AA ratings)",
+      "Curated issuers with robust balance sheets and low default track records",
+      "Choice of monthly, quarterly, annual, or cumulative compounding growth"
     ]
   },
   {
-    id: 'flexi-sweep-fd',
-    title: 'Flexi / Auto-Sweep Fixed Deposit',
-    tagline: 'Smart hybrid deposit linked directly to your savings bank account.',
-    icon: faRotate,
-    badge: 'Liquid Hybrid',
-    badgeColor: 'bg-cyan-50 text-cyan-800 border-cyan-200',
-    idealFor: 'Active earners wanting FD interest on idle cash without sacrificing liquidity',
-    tenures: 'Auto-determined by bank rules',
+    id: "tax-saving-fd",
+    category: "fd",
+    categoryLabel: "Fixed Deposit",
+    title: "Tax-Saving 5-Year Bank FD",
+    tagline: "Statutory term deposit eligible for income tax deduction under Section 80C.",
+    icon: faFileInvoiceDollar,
+    badge: "Tax Benefit",
+    badgeColor: "bg-purple-50 text-purple-700 border-purple-200",
+    idealFor: "Taxpayers looking for guaranteed returns combined with Section 80C deductions",
+    tenures: "Mandatory 5-Year Lock-in",
+    indicativeYield: "6.80% - 7.50% p.a.",
     highlights: [
-      'Surplus balances above a threshold automatically sweep into an FD to earn higher interest',
-      'Reverse sweep automatically breaks required portion of FD if savings balance falls short',
-      'Zero manual management required; handled entirely through core banking automation',
-      'Maintains ready liquidity for cheques and ATM withdrawals at all times'
+      "Tax deduction up to ₹1,50,000 per financial year under Section 80C",
+      "5-year lock-in with zero premature withdrawal or loan facility",
+      "Compounded quarterly for steady maturity value growth",
+      "Ideal tax-saving instrument with zero equity or capital loss exposure"
+    ]
+  },
+
+  // ─── Government of India (GoI) Bonds ──────────────────────────────────────────
+  {
+    id: "rbi-frsb",
+    category: "bonds",
+    categoryLabel: "GoI Bond",
+    title: "RBI Floating Rate Savings Bonds (FRSB 2020)",
+    tagline: "100% sovereign-guaranteed bonds issued by RBI with floating rates pegged above NSC.",
+    icon: faLandmark,
+    badge: "100% Sovereign",
+    badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    idealFor: "Investors desiring zero-default sovereign security with inflation-beating yields",
+    tenures: "7 Years (Senior relief available)",
+    indicativeYield: "8.05% p.a. (Current Coupon)",
+    highlights: [
+      "Zero credit risk: Issued directly on behalf of the Government of India",
+      "Floating rate pegged at 35 bps above NSC rate, reset semi-annually",
+      "Guaranteed semi-annual interest payouts on January 1st and July 1st",
+      "No upper limit on investment amount starting from just ₹1,000"
+    ]
+  },
+  {
+    id: "54ec-bonds",
+    category: "bonds",
+    categoryLabel: "GoI Bond",
+    title: "Section 54EC Capital Gain Bonds",
+    tagline: "Government-backed bonds specifically structured to exempt long-term capital gains tax on property sales.",
+    icon: faShieldHalved,
+    badge: "LTCG Exemption",
+    badgeColor: "bg-indigo-50 text-indigo-700 border-indigo-200",
+    idealFor: "Individuals who have sold real estate/land and wish to legally save 20% LTCG tax",
+    tenures: "5 Years (Non-transferable)",
+    indicativeYield: "5.25% p.a. (Annual Coupon)",
+    highlights: [
+      "100% exemption from Long Term Capital Gains tax up to ₹50 Lakhs under Section 54EC",
+      "Issued by top public-sector undertakings: REC, PFC, IRFC, and NHAI",
+      "AAA-rated sovereign-equivalent balance sheets with assured annual interest",
+      "Investment must be completed within 6 months of the real estate sale date"
+    ]
+  },
+  {
+    id: "sovereign-gold-bonds",
+    category: "bonds",
+    categoryLabel: "GoI Bond",
+    title: "Sovereign Gold Bonds (SGB)",
+    tagline: "Government of India securities denominated in grams of 24K gold with periodic cash interest.",
+    icon: faCoins,
+    badge: "Tax-Free Capital Gain",
+    badgeColor: "bg-amber-50 text-amber-700 border-amber-200",
+    idealFor: "Investors seeking physical gold appreciation plus annual cash income without storage costs",
+    tenures: "8 Years (Exit window after Year 5)",
+    indicativeYield: "2.50% p.a. + Gold Price Growth",
+    highlights: [
+      "Issued by RBI on behalf of GoI, linked directly to the price of 999 purity gold",
+      "Fixed 2.50% per annum cash interest credited semi-annually to your bank account",
+      "100% tax exemption on capital gains when held until the 8-year maturity",
+      "Zero making charges, purity risk, or locker fees compared to physical gold"
+    ]
+  },
+  {
+    id: "g-secs-tbills",
+    category: "bonds",
+    categoryLabel: "GoI Bond",
+    title: "GoI Dated Securities & Treasury Bills (T-Bills)",
+    tagline: "Direct central government sovereign securities and short-term treasury bills issued by RBI.",
+    icon: faScaleBalanced,
+    badge: "Direct Sovereign",
+    badgeColor: "bg-blue-50 text-[#032e92] border-blue-200",
+    idealFor: "Institutions and individuals wanting direct exposure to the sovereign yield curve",
+    tenures: "91 Days to 40 Years",
+    indicativeYield: "Market Yield Curve (~6.8% - 7.3%)",
+    highlights: [
+      "Direct sovereign debt with zero risk of default on principal and interest",
+      "Tradable in secondary markets through RBI Retail Direct and stock exchanges",
+      "Treasury bills (91D, 182D, 364D) issued at a discount and redeemed at par",
+      "Dated G-Secs pay semi-annual coupons with precise maturities up to 40 years"
     ]
   }
 ];
 
 export default function FixedDepositTypes() {
+  const [selectedCategory, setSelectedCategory] = useState("all"); // "all", "fd", "bonds"
   const { openLeadModal } = useLeadModal();
 
+  const filteredProducts = selectedCategory === "all"
+    ? products
+    : products.filter(p => p.category === selectedCategory);
+
   return (
-    <section id="fd-types" className="py-12 sm:py-16 bg-white relative overflow-hidden">
+    <section id="fixed-income-products" className="py-12 sm:py-16 bg-[#f7f9fc] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs sm:text-sm font-semibold mb-4 shadow-xs">
-            <span>Comprehensive Product Range</span>
+            <FontAwesomeIcon icon={faLandmark} className="text-[#032e92]" />
+            <span>Comprehensive Product Catalogue</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a192f] tracking-tight leading-tight">
-            Types of{' '}
+            Explore{" "}
             <span className="bg-gradient-to-r from-[#032e92] to-[#0066cc] bg-clip-text text-transparent">
-              Fixed Deposits Available
+              Fixed Deposits & GoI Bonds
             </span>
           </h2>
           <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
-            From conventional bank term deposits and senior citizen schemes to tax-saving FDs and high-yield corporate deposits, find the exact structure matching your financial goal.
+            Select between high-yield Fixed Deposits and default-free Government of India (GoI) Bonds to match your liquidity needs, tax bracket, and investment horizon.
           </p>
+
+          {/* Interactive Category Filter Tabs */}
+          <div className="flex flex-wrap items-center justify-center gap-3 mt-8">
+            <button
+              onClick={() => setSelectedCategory("all")}
+              className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+                selectedCategory === "all"
+                  ? "bg-[#032e92] text-white shadow-md shadow-[#032e92]/20"
+                  : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+              }`}
+            >
+              All Products ({products.length})
+            </button>
+            <button
+              onClick={() => setSelectedCategory("fd")}
+              className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-2 ${
+                selectedCategory === "fd"
+                  ? "bg-[#032e92] text-white shadow-md shadow-[#032e92]/20"
+                  : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+              }`}
+            >
+              <FontAwesomeIcon icon={faBuildingColumns} className="text-xs" />
+              <span>Fixed Deposits (FD)</span>
+            </button>
+            <button
+              onClick={() => setSelectedCategory("bonds")}
+              className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-2 ${
+                selectedCategory === "bonds"
+                  ? "bg-[#032e92] text-white shadow-md shadow-[#032e92]/20"
+                  : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+              }`}
+            >
+              <FontAwesomeIcon icon={faLandmark} className="text-xs" />
+              <span>Government of India (GoI) Bonds</span>
+            </button>
+          </div>
         </div>
 
-        {/* Types Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {fdTypes.map((type) => (
+        {/* Product Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {filteredProducts.map((prod) => (
             <div
-              key={type.id}
-              className="bg-[#f7f9fc] rounded-3xl p-6 sm:p-8 border border-gray-200/80 shadow-xs hover:shadow-xl hover:bg-white hover:border-blue-200 transition-all duration-300 flex flex-col justify-between group"
+              key={prod.id}
+              className="bg-white rounded-3xl p-6 border border-gray-200/80 shadow-xs hover:shadow-xl hover:border-blue-200 transition-all duration-300 flex flex-col justify-between group"
             >
               <div>
-                {/* Top Badge & Icon */}
-                <div className="flex items-center justify-between mb-5">
-                  <div className="w-12 h-12 rounded-2xl bg-white border border-gray-200/80 flex items-center justify-center text-[#032e92] group-hover:bg-[#032e92] group-hover:text-white transition-all duration-300 shadow-xs">
-                    <FontAwesomeIcon icon={type.icon} className="text-lg" />
-                  </div>
-                  <span className={`text-xs font-semibold px-3 py-1 rounded-full border ${type.badgeColor}`}>
-                    {type.badge}
+                {/* Header Badge & Category */}
+                <div className="flex items-center justify-between mb-4">
+                  <span className={`text-[11px] font-semibold px-2.5 py-1 rounded-full border ${prod.badgeColor}`}>
+                    {prod.badge}
+                  </span>
+                  <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+                    {prod.categoryLabel}
                   </span>
                 </div>
 
-                {/* Title & Tagline */}
-                <h3 className="text-xl font-bold text-[#0a192f] mb-2 group-hover:text-[#032e92] transition-colors">
-                  {type.title}
+                {/* Icon & Title */}
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-[#032e92] mb-4 group-hover:bg-[#032e92] group-hover:text-white transition-all shadow-xs">
+                  <FontAwesomeIcon icon={prod.icon} className="text-xl" />
+                </div>
+
+                <h3 className="text-lg font-bold text-[#0a192f] mb-2 group-hover:text-[#032e92] transition-colors leading-snug">
+                  {prod.title}
                 </h3>
-                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed mb-4">
-                  {type.tagline}
+                <p className="text-xs text-gray-600 leading-relaxed mb-4">
+                  {prod.tagline}
                 </p>
 
-                {/* Ideal For & Tenures */}
-                <div className="space-y-2 py-3 border-y border-gray-200/60 mb-5 text-xs">
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-500 font-medium">Ideal For:</span>
-                    <span className="font-semibold text-gray-800 text-right max-w-[65%]">{type.idealFor}</span>
+                {/* Yield & Tenure Badges */}
+                <div className="p-3 rounded-2xl bg-gray-50 border border-gray-100 mb-4 space-y-1.5">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-gray-500 font-medium">Indicative Yield:</span>
+                    <span className="font-extrabold text-[#032e92]">{prod.indicativeYield}</span>
                   </div>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between text-xs">
                     <span className="text-gray-500 font-medium">Tenure:</span>
-                    <span className="font-bold text-[#032e92]">{type.tenures}</span>
+                    <span className="font-bold text-gray-800">{prod.tenures}</span>
                   </div>
                 </div>
 
-                {/* Highlights */}
-                <ul className="space-y-2 mb-6">
-                  {type.highlights.map((item, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-xs text-gray-700">
-                      <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 text-xs flex-shrink-0 mt-0.5" />
-                      <span className="leading-snug">{item}</span>
-                    </li>
+                {/* Feature Highlights */}
+                <div className="space-y-2 mb-6">
+                  {prod.highlights.map((h, i) => (
+                    <div key={i} className="flex items-start gap-2 text-xs text-gray-600">
+                      <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 text-[11px] mt-0.5 flex-shrink-0" />
+                      <span>{h}</span>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
 
               {/* Action Button */}
-              <div className="pt-2">
-                <button
-                  onClick={() => openLeadModal({ title: `Explore ${type.title}`, defaultService: 'Fixed Deposits' })}
-                  className="w-full btn-ripple py-3 px-4 rounded-xl text-xs sm:text-sm font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 group-hover:scale-[1.01] cursor-pointer"
-                >
-                  <span>Explore {type.title.split(' ')[0]} Options</span>
-                  <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
-                </button>
-              </div>
+              <button
+                onClick={() => openLeadModal({ title: `Invest in ${prod.title}`, defaultService: prod.title })}
+                className="w-full btn-ripple py-2.5 px-4 rounded-xl text-xs font-semibold bg-[#f7f9fc] text-[#032e92] hover:bg-[#032e92] hover:text-white border border-blue-200/60 transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-auto"
+              >
+                <span>Invest in {prod.category === "bonds" ? "Bond" : "FD"}</span>
+                <FontAwesomeIcon icon={faArrowRight} className="text-[10px]" />
+              </button>
             </div>
           ))}
-        </div>
-
-        {/* Bank vs Corporate FD Note */}
-        <div className="mt-14 p-6 sm:p-8 rounded-3xl bg-blue-50/60 border border-blue-100 text-center max-w-4xl mx-auto space-y-2">
-          <h4 className="text-base font-bold text-[#0a192f]">
-            Important Distinction: Bank Deposits vs Corporate Deposits
-          </h4>
-          <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
-            Bank FDs are covered by the Deposit Insurance and Credit Guarantee Corporation (DICGC), an RBI subsidiary, up to ₹5,00,000 per depositor per bank. Corporate FDs, while offering higher yields, are unsecured or partially secured borrowings governed by the Companies Act/RBI and carry credit risk corresponding to the issuer’s credit rating (e.g. CRISIL AAA, AA+). They are not covered by DICGC insurance.
-          </p>
         </div>
       </div>
     </section>

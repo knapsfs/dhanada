@@ -177,6 +177,11 @@ def normalize_wa_message(m: dict) -> dict:
 		"recipient": m.get("recipient") or m.get("to") or "",
 		"reference_doctype": m.get("reference_doctype"),
 		"reference_name": m.get("reference_name") or m.get("reference_docname"),
+		"origin_doctype": m.get("origin_doctype") or m.get("reference_doctype"),
+		"origin_name": m.get("origin_name") or m.get("reference_name") or m.get("reference_docname"),
+		"origin_product": m.get("origin_product") or "",
+		"origin_lead_name": m.get("origin_lead_name") or "",
+		"origin_label": m.get("origin_label") or "",
 		"message_type": message_type,
 		"template_name": m.get("template_name") or m.get("whatsapp_template"),
 		"content": m.get("content") or m.get("message") or "",
@@ -197,17 +202,37 @@ def get_whatsapp_session_status(doctype: str, name: str) -> tuple[bool, str | No
 	"""
 	last_inbound_dt = None
 
+	records_to_check = [(doctype, name)]
+	if doctype == "Client":
+		origin_lead = frappe.db.get_value("Client", name, "lead")
+		leads = frappe.db.sql(
+			"""
+			SELECT name FROM `tabLead`
+			WHERE client = %s OR converted_client = %s OR name = %s
+			""",
+			(name, name, origin_lead or ""),
+			as_dict=True,
+		)
+		for l in leads:
+			records_to_check.append(("Lead", l.name))
+
 	# Check official WA Message table if available
 	if is_official_whatsapp_available() and frappe.db.table_exists("WA Message"):
+		clauses = []
+		params = []
+		for dt, dn in records_to_check:
+			clauses.append("(reference_doctype = %s AND reference_docname = %s)")
+			params.extend([dt, dn])
+		where_clause = " OR ".join(clauses)
 		wa_inbound = frappe.db.sql(
-			"""
+			f"""
 			SELECT creation, timestamp
 			FROM `tabWA Message`
-			WHERE reference_doctype = %s AND reference_docname = %s AND direction = 'Incoming'
+			WHERE ({where_clause}) AND direction = 'Incoming'
 			ORDER BY creation DESC
 			LIMIT 1
 			""",
-			(doctype, name),
+			params,
 			as_dict=True,
 		)
 		if wa_inbound:
@@ -215,18 +240,25 @@ def get_whatsapp_session_status(doctype: str, name: str) -> tuple[bool, str | No
 
 	# Also check pre-existing CRM WhatsApp Message table
 	if frappe.db.table_exists("CRM WhatsApp Message"):
-		crm_inbound = frappe.db.get_value(
-			"CRM WhatsApp Message",
-			{
-				"reference_doctype": doctype,
-				"reference_name": name,
-				"direction": "Inbound",
-			},
-			"sent_at",
-			order_by="sent_at desc",
+		clauses = []
+		params = []
+		for dt, dn in records_to_check:
+			clauses.append("(reference_doctype = %s AND reference_name = %s)")
+			params.extend([dt, dn])
+		where_clause = " OR ".join(clauses)
+		crm_inbound = frappe.db.sql(
+			f"""
+			SELECT sent_at
+			FROM `tabCRM WhatsApp Message`
+			WHERE ({where_clause}) AND direction = 'Inbound'
+			ORDER BY sent_at DESC
+			LIMIT 1
+			""",
+			params,
+			as_dict=True,
 		)
-		if crm_inbound:
-			crm_dt = get_datetime(crm_inbound)
+		if crm_inbound and crm_inbound[0].get("sent_at"):
+			crm_dt = get_datetime(crm_inbound[0]["sent_at"])
 			if not last_inbound_dt or crm_dt > last_inbound_dt:
 				last_inbound_dt = crm_dt
 
@@ -311,9 +343,7 @@ def get_approved_templates(doctype: str = "Lead") -> list[dict]:
 	return template_list
 
 
-def get_crm_whatsapp_conversations(
-	doctype: str, name: str, page: int = 1, page_length: int = 50
-) -> dict:
+def get_crm_whatsapp_conversations(doctype: str, name: str, page: int = 1, page_length: int = 50) -> dict:
 	"""
 	Retrieve paginated WhatsApp conversation messages for a specific Lead or Client.
 	Combines official WA Message documents and pre-existing CRM WhatsApp Message records
@@ -331,16 +361,36 @@ def get_crm_whatsapp_conversations(
 			frappe.PermissionError,
 		)
 
-	# Include paired converted Lead / Client records
+	lead_product_map = {}
+	lead_name_map = {}
+
+	# Separate queries: Lead strictly isolated; Client aggregates all mapped leads
 	records_to_query = [(doctype, name)]
 	if doctype == "Lead":
-		converted_client = frappe.db.get_value("Lead", name, "converted_client")
-		if converted_client:
-			records_to_query.append(("Client", converted_client))
+		lead_doc = frappe.db.get_value("Lead", name, ["lead_name", "product_interest"], as_dict=True)
+		if lead_doc:
+			lead_product_map[name] = lead_doc.product_interest or "General"
+			lead_name_map[name] = lead_doc.lead_name or name
 	elif doctype == "Client":
-		converted_lead = frappe.db.get_value("Lead", {"converted_client": name}, "name")
-		if converted_lead:
-			records_to_query.append(("Lead", converted_lead))
+		origin_lead = frappe.db.get_value("Client", name, "lead")
+		leads = frappe.db.sql(
+			"""
+			SELECT name, lead_name, product_interest
+			FROM `tabLead`
+			WHERE client = %s
+			   OR converted_client = %s
+			   OR name = %s
+			""",
+			(name, name, origin_lead or ""),
+			as_dict=True,
+		)
+		seen_leads = set()
+		for l in leads:
+			if l.name not in seen_leads:
+				seen_leads.add(l.name)
+				records_to_query.append(("Lead", l.name))
+				lead_product_map[l.name] = l.product_interest or "General"
+				lead_name_map[l.name] = l.lead_name or l.name
 
 	raw_messages = []
 	seen_message_ids = set()
@@ -438,6 +488,30 @@ def get_crm_whatsapp_conversations(
 				continue
 			raw_messages.append(r)
 
+	# Annotate each message with originating metadata
+	for r in raw_messages:
+		ref_dt = r.get("reference_doctype")
+		ref_dn = r.get("reference_docname") or r.get("reference_name")
+		if ref_dt == "Lead":
+			prod = lead_product_map.get(ref_dn) or "Lead"
+			r["origin_doctype"] = "Lead"
+			r["origin_name"] = ref_dn
+			r["origin_product"] = prod
+			r["origin_lead_name"] = lead_name_map.get(ref_dn) or ref_dn
+			r["origin_label"] = f"{prod} Lead ({ref_dn})"
+		elif ref_dt == "Client":
+			r["origin_doctype"] = "Client"
+			r["origin_name"] = ref_dn
+			r["origin_product"] = "Direct Client"
+			r["origin_lead_name"] = ""
+			r["origin_label"] = f"Client Direct ({ref_dn})"
+		else:
+			r["origin_doctype"] = ref_dt
+			r["origin_name"] = ref_dn
+			r["origin_product"] = ""
+			r["origin_lead_name"] = ""
+			r["origin_label"] = f"{ref_dt} ({ref_dn})"
+
 	# Sort combined history chronologically
 	raw_messages.sort(key=lambda m: str(m.get("creation") or ""))
 
@@ -517,7 +591,11 @@ def send_crm_whatsapp_message(
 	msg_content = ""
 	if template_name:
 		matching_template = next(
-			(t for t in get_approved_templates(doctype) if t["name"] == template_name or t["id"] == template_name),
+			(
+				t
+				for t in get_approved_templates(doctype)
+				if t["name"] == template_name or t["id"] == template_name
+			),
 			None,
 		)
 
@@ -762,4 +840,3 @@ def match_and_link_inbound_message(doc, method=None) -> tuple[str | None, str | 
 
 # Alias for explicit hook naming
 link_inbound_wa_message = match_and_link_inbound_message
-

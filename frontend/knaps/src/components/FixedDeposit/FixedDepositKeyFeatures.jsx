@@ -1,51 +1,51 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faLock,
   faClock,
   faSliders,
   faCoins,
   faPersonWalkingWithCane,
-  faHandshakeSimple,
+  faLandmark,
   faArrowRight
-} from '@fortawesome/free-solid-svg-icons';
-import { useLeadModal } from '../../context/LeadModalContext';
+} from "@fortawesome/free-solid-svg-icons";
+import { useLeadModal } from "../../context/LeadModalContext";
 
 const features = [
   {
-    icon: faLock,
-    title: 'Predetermined Interest Rate',
-    description: 'Your rate of return is legally contracted at the time of booking. It remains fixed for the entire duration, protecting your earnings against broader economic rate reductions.',
-    badge: 'Fixed & Guaranteed'
+    icon: faLandmark,
+    title: "100% Sovereign & DICGC Security",
+    description: "Government of India (GoI) Bonds carry an absolute sovereign guarantee with zero credit risk. Scheduled Bank FDs are protected by DICGC insurance up to ₹5 Lakh per depositor per bank.",
+    badge: "Maximum Safety"
   },
   {
-    icon: faClock,
-    title: 'Tenures from 7 Days to 10 Years',
-    description: 'Pick an exact maturity timeframe tailored to your liquidity horizon. Whether parking funds for a few months or planning a 5-year capital pool, tenures adapt to you.',
-    badge: 'High Flexibility'
+    icon: faLock,
+    title: "Assured & Floating Yield Models",
+    description: "Fixed Deposits lock in contracted interest rates across tenures, while RBI Floating Rate Savings Bonds (FRSB) provide attractive sovereign yields reset at 35 bps above NSC.",
+    badge: "Guaranteed Returns"
   },
   {
     icon: faSliders,
-    title: 'Cumulative & Non-Cumulative Options',
-    description: 'Reinvest your quarterly interest for compounding wealth growth upon maturity, or receive periodic payouts (monthly, quarterly, or annually) for regular income.',
-    badge: 'Cash Flow Choice'
+    title: "Cashflow Choice & Compounding",
+    description: "Tailor income to your lifestyle: receive regular monthly, quarterly, or semi-annual payouts directly in your bank account, or choose cumulative compounding for maximum maturity wealth.",
+    badge: "Flexible Payouts"
   },
   {
-    icon: faCoins,
-    title: 'Accessible Lump-Sum Investing',
-    description: 'Start investing with as little as ₹1,000 in scheduled banks. There is no statutory ceiling on how much you can deposit across institutional issuers.',
-    badge: 'From ₹1,000'
+    icon: faClock,
+    title: "Tenures from 7 Days to 10 Years",
+    description: "Pick an exact maturity timeframe tailored to your liquidity horizon. Whether parking funds for a few months in bank FDs or committing 5 to 7 years in GoI bonds, tenures adapt to you.",
+    badge: "High Flexibility"
   },
   {
     icon: faPersonWalkingWithCane,
-    title: 'Senior Citizen Rate Advantage',
-    description: 'Individuals aged 60 and above typically receive an additional interest rate benefit of 0.25% to 0.50% p.a. over standard retail rates across most deposit tenures.',
-    badge: '+0.50% for Seniors'
+    title: "Senior Citizen Rate Advantage",
+    description: "Investors aged 60 and above enjoy an extra 0.50% to 0.75% interest spread on bank and corporate FDs, along with premature exit options under RBI Floating Rate Savings Bonds.",
+    badge: "+0.50% for Seniors"
   },
   {
-    icon: faHandshakeSimple,
-    title: 'Loan / Overdraft Facility',
-    description: 'Access liquidity during sudden emergencies by availing an instant loan or overdraft against your FD (up to 85%–90% of deposit value) without breaking the deposit or losing interest.',
-    badge: 'Up to 90% Loan'
+    icon: faCoins,
+    title: "Specialized Tax Benefits",
+    description: "Save up to ₹50 Lakhs in Long Term Capital Gains tax on property sales with Section 54EC Bonds, and enjoy 100% tax-free capital appreciation at maturity with Sovereign Gold Bonds.",
+    badge: "54EC & SGB Exemptions"
   }
 ];
 
@@ -58,16 +58,16 @@ export default function FixedDepositKeyFeatures() {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs sm:text-sm font-semibold mb-4 shadow-xs">
-            <span>Essential Deposit Characteristics</span>
+            <span>Essential Characteristics</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a192f] tracking-tight leading-tight">
-            Key Features of{' '}
+            Key Features of{" "}
             <span className="bg-gradient-to-r from-[#032e92] to-[#0066cc] bg-clip-text text-transparent">
-              Fixed Deposits (FD)
+              Fixed Income Products
             </span>
           </h2>
           <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
-            Examine the core structural features that make Fixed Deposits one of the most reliable and transparent savings instruments in India.
+            Examine the core structural features that make Fixed Deposits and Government of India Bonds the most dependable wealth preservation avenues.
           </p>
         </div>
 
@@ -98,7 +98,7 @@ export default function FixedDepositKeyFeatures() {
               </div>
 
               <div className="mt-6 pt-4 border-t border-gray-100 flex items-center text-xs font-semibold text-[#032e92] group-hover:translate-x-1 transition-transform">
-                <span>Explore terms & conditions</span>
+                <span>Explore options</span>
                 <FontAwesomeIcon icon={faArrowRight} className="text-[10px] ml-1.5" />
               </div>
             </div>
@@ -106,12 +106,12 @@ export default function FixedDepositKeyFeatures() {
         </div>
 
         {/* Bottom Callout */}
-        <div className="mt-14 text-center">
+        <div className="mt-12 text-center">
           <button
-            onClick={() => openLeadModal({ title: 'Explore FD Placement Strategies', defaultService: 'Fixed Deposits' })}
+            onClick={() => openLeadModal({ title: "Explore Fixed Income Strategies", defaultService: "Fixed Income Products" })}
             className="btn-ripple px-8 py-3.5 rounded-xl text-sm sm:text-base font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-lg shadow-[#032e92]/25 hover:shadow-xl hover:shadow-[#032e92]/35 transition-all duration-300 inline-flex items-center gap-2 cursor-pointer"
           >
-            <span>Speak with an FD Advisor</span>
+            <span>Speak with a Fixed Income Advisor</span>
             <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
           </button>
         </div>

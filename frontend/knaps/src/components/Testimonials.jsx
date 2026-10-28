@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQuoteLeft, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { fetchTestimonials } from '../api/testimonials';
 
-const defaultTestimonialsRow1 = [
+const defaultTestimonials = [
   {
     id: 1,
     name: 'Priyanshu',
@@ -29,9 +29,6 @@ const defaultTestimonialsRow1 = [
     location: 'Bihar',
     text: 'A refreshing and imaginative team that consistently delivers exceptional results - highly recommended for any complex financial planning.'
   },
-];
-
-const defaultTestimonialsRow2 = [
   {
     id: 5,
     name: 'Rajesh',
@@ -94,23 +91,14 @@ const TestimonialCard = ({ testimonial }) => (
 );
 
 export default function Testimonials() {
-  const [row1, setRow1] = useState(defaultTestimonialsRow1);
-  const [row2, setRow2] = useState(defaultTestimonialsRow2);
+  const [testimonials, setTestimonials] = useState(defaultTestimonials);
 
   useEffect(() => {
     let isMounted = true;
     async function loadTestimonials() {
       const data = await fetchTestimonials();
       if (isMounted && data && Array.isArray(data) && data.length > 0) {
-        const mapped = data.map(mapDocToTestimonial);
-        if (mapped.length === 1) {
-          setRow1(mapped);
-          setRow2(mapped);
-        } else {
-          const mid = Math.ceil(mapped.length / 2);
-          setRow1(mapped.slice(0, mid));
-          setRow2(mapped.slice(mid));
-        }
+        setTestimonials(data.map(mapDocToTestimonial));
       }
     }
 
@@ -120,22 +108,24 @@ export default function Testimonials() {
     };
   }, []);
 
-  const displayRow1 = row1.length < 4 ? [...row1, ...row1, ...row1, ...row1] : [...row1, ...row1];
-  const displayRow2 = row2.length < 4 ? [...row2, ...row2, ...row2, ...row2] : [...row2, ...row2];
+  const displayTestimonials =
+    testimonials.length < 4
+      ? [...testimonials, ...testimonials, ...testimonials, ...testimonials]
+      : [...testimonials, ...testimonials];
 
   return (
     <section className="py-12 sm:py-16 bg-white relative overflow-hidden">
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-20 mb-10 sm:mb-12">
         <div className="text-center max-w-3xl mx-auto">
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="inline-block px-4 py-2 rounded-full border border-[#032e92]/20 text-[#032e92] bg-[#eef5ff] font-semibold text-sm mb-4 uppercase tracking-wider"
           >
             Client Testimonials
-          </motion.div>
+          </motion.div> */}
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -155,30 +145,17 @@ export default function Testimonials() {
         <div className="hidden sm:block absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
         <div className="hidden sm:block absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
 
-        <div className="flex flex-col gap-6 overflow-hidden max-w-[100vw]">
-
-          {/* Top Row: Left to Right (Starts at -50%, moves to 0%) */}
+        <div className="overflow-hidden max-w-[100vw]">
+          {/* Single Row: Right to Left (Starts at 0%, moves to -50%) */}
           <motion.div
             className="flex w-max"
-            animate={{ x: ["-50%", "0%"] }}
-            transition={{ repeat: Infinity, ease: "linear", duration: 45 }}
-          >
-            {displayRow1.map((t, idx) => (
-              <TestimonialCard key={`row1-${t.id || idx}-${idx}`} testimonial={t} />
-            ))}
-          </motion.div>
-
-          {/* Bottom Row: Right to Left (Starts at 0%, moves to -50%) - Hidden on mobile screens */}
-          <motion.div
-            className="hidden md:flex w-max"
             animate={{ x: ["0%", "-50%"] }}
             transition={{ repeat: Infinity, ease: "linear", duration: 55 }}
           >
-            {displayRow2.map((t, idx) => (
-              <TestimonialCard key={`row2-${t.id || idx}-${idx}`} testimonial={t} />
+            {displayTestimonials.map((t, idx) => (
+              <TestimonialCard key={`testimonial-${t.id || idx}-${idx}`} testimonial={t} />
             ))}
           </motion.div>
-
         </div>
       </div>
     </section>

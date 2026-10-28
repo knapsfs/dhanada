@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
-// Small Savings Schemes Modular Components
+// Post Office Small Savings Schemes Modular Components
 import SmallSavingsHero from '../components/SmallSavingsSchemes/SmallSavingsHero';
 import WhatAreSmallSavingsSchemes from '../components/SmallSavingsSchemes/WhatAreSmallSavingsSchemes';
 import WhyConsiderSmallSavings from '../components/SmallSavingsSchemes/WhyConsiderSmallSavings';
@@ -26,7 +26,7 @@ import SmallSavingsCTA from '../components/SmallSavingsSchemes/SmallSavingsCTA';
 export default function SmallSavingsSchemes() {
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = 'Small Savings Schemes | Government Backed Savings, PPF, SSY & SCSS | KNAPS';
+    document.title = 'Post Office Small Savings Schemes | POTD, KVP, NSC & PORD | KNAPS';
   }, []);
 
   return (
@@ -37,19 +37,19 @@ export default function SmallSavingsSchemes() {
         {/* 1. Hero Section */}
         <SmallSavingsHero />
 
-        {/* 2. What are Small Savings Schemes? */}
+        {/* 2. What are Post Office Small Savings Schemes? */}
         <WhatAreSmallSavingsSchemes />
 
-        {/* 3. Why Consider Small Savings Schemes? */}
+        {/* 3. Why Consider Post Office Small Savings Schemes? */}
         <WhyConsiderSmallSavings />
 
-        {/* 4. How Small Savings Schemes Work */}
+        {/* 4. How Post Office Small Savings Schemes Work */}
         <HowSmallSavingsWork />
 
-        {/* 5. Popular Small Savings Schemes (PPF, SSY, SCSS, POMIS, NSC) */}
+        {/* 5. Popular Post Office Schemes (POTD, KVP, NSC, PORD) */}
         <PopularSmallSavingsSchemes />
 
-        {/* 6. Comprehensive Scheme Explorer (Filters across all 9 instruments) */}
+        {/* 6. Comprehensive Scheme Explorer */}
         <SchemeExplorer />
 
         {/* 7. Key Features */}
@@ -58,16 +58,16 @@ export default function SmallSavingsSchemes() {
         {/* 8. Comprehensive Comparison Table */}
         <CompareSmallSavingsSchemes />
 
-        {/* 9. Interactive Multi-Scheme Savings Calculator */}
+        {/* 9. Interactive Post Office Savings Calculator */}
         <SmallSavingsCalculator />
 
-        {/* 10. Goal-Based Savings Framework */}
+        {/* 10. Goal-Based Savings Alignment */}
         <GoalBasedSavings />
 
-        {/* 11. Tax Benefits & Taxation (EEE vs EET vs Taxable) */}
+        {/* 11. Tax Benefits & Rules (Section 80C & Deemed Reinvestment) */}
         <SmallSavingsTaxBenefits />
 
-        {/* 12. Interest Rates & Government Notifications (G-Sec benchmark formula) */}
+        {/* 12. Interest Rates & Government Notifications */}
         <InterestRateNotifications />
 
         {/* 13. Liquidity, Withdrawals & Premature Exit Rules */}
@@ -76,7 +76,7 @@ export default function SmallSavingsSchemes() {
         {/* 14. Small Savings vs Other Investments (FD, RD, Debt Mutual Funds) */}
         <SmallSavingsVsOthers />
 
-        {/* 15. Who May Consider Small Savings Schemes? */}
+        {/* 15. Who May Consider Post Office Schemes? */}
         <WhoShouldConsiderSmallSavings />
 
         {/* 16. Risks & Things to Know */}

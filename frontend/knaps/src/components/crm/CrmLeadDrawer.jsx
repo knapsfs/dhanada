@@ -1,5 +1,6 @@
 import CrmSelect from './CrmSelect';
 import CrmSendFormModal from './CrmSendFormModal';
+import CrmMapToClientModal from './CrmMapToClientModal';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,7 +8,8 @@ import {
   faXmark, faPhone, faEnvelope, faPaperPlane, faUserCheck,
   faCommentDots, faListCheck, faSpinner,
   faShieldHalved, faCheckCircle, faCircleExclamation,
-  faTriangleExclamation, faClock, faFloppyDisk, faUser
+  faTriangleExclamation, faClock, faFloppyDisk, faUser,
+  faLink, faArrowUpRightFromSquare
 } from '@fortawesome/free-solid-svg-icons';
 import { crmService } from '../../services/crmService';
 import { getContactStatus, formatContactDate } from '../../utils/crmContactUtils';
@@ -24,6 +26,7 @@ const STATUS_COLORS = {
 export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated, onLogInteraction, onNewTask }) {
   const [leadData, setLeadData] = useState(null);
   const [sendFormModalOpen, setSendFormModalOpen] = useState(false);
+  const [mapModalOpen, setMapModalOpen] = useState(false);
   const [interactions, setInteractions] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [activeTab, setActiveTab] = useState('overview'); // overview, timeline, tasks
@@ -39,6 +42,7 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
   }, [isOpen, leadName]);
 
   const isWelcomeSent = leadData?.welcome_email_status === 'Sent';
+  const associatedClient = leadData?.client || leadData?.converted_client || null;
 
   const loadDetails = async (preserveFeedback = false) => {
     setLoading(true);
@@ -324,6 +328,32 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
                   <FontAwesomeIcon icon={faPaperPlane} className="text-[#032e92]" />
                   <span>Send Form</span>
                 </button>
+
+                {/* Linked Client Badge or Map to Existing Client */}
+                {associatedClient ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      window.location.href = `/crm?view=clients&client=${encodeURIComponent(associatedClient)}`;
+                    }}
+                    className="px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1.5 shadow-2xs cursor-pointer transition-colors"
+                    title={`View Linked Client: ${leadData?.client_name || associatedClient}`}
+                  >
+                    <FontAwesomeIcon icon={faLink} className="text-emerald-600 text-xs" />
+                    <span className="truncate max-w-[130px]">Client: {leadData?.client_name || associatedClient}</span>
+                    <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[10px] text-emerald-600 ml-0.5" />
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setMapModalOpen(true)}
+                    className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-[#032e92] text-[#032e92] hover:bg-blue-50 flex items-center gap-1.5 shadow-2xs cursor-pointer transition-colors"
+                    title="Map this Lead to an Existing Client Profile"
+                  >
+                    <FontAwesomeIcon icon={faLink} className="text-xs text-[#032e92]" />
+                    <span>Map to Existing Client</span>
+                  </button>
+                )}
 
                 {leadData?.status !== 'Converted' && (
                   <button
@@ -677,6 +707,24 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
           if (onLeadUpdated && leadData) {
             onLeadUpdated({ ...leadData });
           }
+        }}
+      />
+
+      <CrmMapToClientModal
+        isOpen={mapModalOpen}
+        onClose={() => setMapModalOpen(false)}
+        leadData={leadData}
+        onMapped={async (updated) => {
+          setLeadData(updated);
+          if (onLeadUpdated) onLeadUpdated(updated);
+          setFeedback({
+            type: "success",
+            message: `Lead successfully mapped to Client ${updated.client_name || updated.client}!`,
+          });
+          await loadDetails(true);
+        }}
+        onOpenClientProfile={(clientId) => {
+          window.location.href = `/crm?view=clients&client=${encodeURIComponent(clientId)}`;
         }}
       />
     </AnimatePresence>

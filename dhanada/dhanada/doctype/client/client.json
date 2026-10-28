@@ -458,6 +458,11 @@
    "group": "Renewals",
    "link_doctype": "Renewal",
    "link_fieldname": "client"
+  },
+  {
+   "group": "CRM",
+   "link_doctype": "Lead",
+   "link_fieldname": "client"
   }
  ],
  "search_fields": "email,mobile_no,pan,kyc_status,client_status,client_owner,family",

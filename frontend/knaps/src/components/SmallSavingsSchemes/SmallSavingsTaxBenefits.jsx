@@ -2,11 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faReceipt,
-  faShieldHalved,
-  faCheckCircle,
-  faCoins,
-  faBuildingColumns,
-  faFileContract
+  faCheckCircle
 } from '@fortawesome/free-solid-svg-icons';
 
 export default function SmallSavingsTaxBenefits() {
@@ -17,122 +13,122 @@ export default function SmallSavingsTaxBenefits() {
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#032e92]/10 border border-[#032e92]/20 text-[#032e92] text-xs font-semibold uppercase tracking-wider mb-4">
             <FontAwesomeIcon icon={faReceipt} />
-            <span>Tax Framework</span>
+            <span>Taxation Framework</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#032e92] tracking-tight mb-4">
-            Tax Benefits & Taxation Across Schemes
+            Tax Benefits & Rules for Post Office Schemes
           </h2>
           <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
-            Understand how different small savings schemes are treated under the Indian Income Tax Act—from complete EEE exemptions to taxable interest rules.
+            Understand how our 4 core Post Office small savings schemes are treated under the Indian Income Tax Act.
           </p>
         </div>
 
         {/* 3 Distinct Tax Categorization Cards */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-          {/* Card 1: EEE */}
+          {/* Card 1: Section 80C Deduction */}
           <div className="p-8 rounded-3xl bg-white border-2 border-emerald-300 shadow-md space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-emerald-700 uppercase tracking-wider">
-                Triple Exemption
+                Tax Deduction
               </span>
               <span className="text-xs font-black px-3 py-1 rounded-full bg-emerald-100 text-emerald-800">
-                EEE Status
-              </span>
-            </div>
-            <h3 className="text-xl font-extrabold text-slate-900">Exempt-Exempt-Exempt (EEE)</h3>
-            <div className="text-xs font-bold text-blue-600">
-              Schemes: Public Provident Fund (PPF) & Sukanya Samriddhi (SSY)
-            </div>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              The gold standard of tax efficiency under Indian tax laws:
-            </p>
-            <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
-              <li className="flex items-start gap-2">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-500 mt-0.5" />
-                <span><strong>Deposit Phase:</strong> Tax deduction up to ₹1.5 Lakh under Section 80C.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-500 mt-0.5" />
-                <span><strong>Accumulation Phase:</strong> Annual interest accrued is 100% tax-free.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-500 mt-0.5" />
-                <span><strong>Maturity Phase:</strong> Entire final corpus paid out is 100% tax-free.</span>
-              </li>
-            </ul>
-          </div>
-
-          {/* Card 2: 80C Deduction with Taxable Interest */}
-          <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">
-                Deposit Deduction Only
-              </span>
-              <span className="text-xs font-black px-3 py-1 rounded-full bg-blue-100 text-[#032e92]">
                 Section 80C
               </span>
             </div>
-            <h3 className="text-xl font-extrabold text-slate-900">80C Deduction (Interest Taxable)</h3>
+            <h3 className="text-xl font-extrabold text-slate-900">Section 80C Tax Deduction</h3>
             <div className="text-xs font-bold text-blue-600">
-              Schemes: SCSS, NSC & 5-Year Time Deposit
+              Schemes: NSC (VIII Issue) & 5-Year Time Deposit (POTD)
             </div>
             <p className="text-sm text-slate-600 leading-relaxed">
-              Deduction on the principal deposit, while the interest earned is treated as taxable income:
+              Deduction on the principal deposit under Section 80C of the Income Tax Act (Old Tax Regime):
             </p>
-            <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
+            <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700">
               <li className="flex items-start gap-2">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-blue-500 mt-0.5" />
-                <span><strong>Principal Deposit:</strong> Deductible up to ₹1.5L under Section 80C.</span>
+                <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-500 mt-0.5" />
+                <span><strong>Principal Deposit:</strong> Deductible up to ₹1.5 Lakh per financial year.</span>
               </li>
               <li className="flex items-start gap-2">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-blue-500 mt-0.5" />
-                <span><strong>Interest Taxation:</strong> Added to gross total income and taxed at slab rates.</span>
+                <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-500 mt-0.5" />
+                <span><strong>Sovereign Backing:</strong> 100% capital safety backed by Government of India.</span>
               </li>
               <li className="flex items-start gap-2">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-blue-500 mt-0.5" />
-                <span><strong>Senior Relief:</strong> SCSS interest eligible for up to ₹50,000 deduction u/s 80TTB.</span>
+                <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-500 mt-0.5" />
+                <span><strong>Lock-in Tenure:</strong> 5 Years statutory holding period.</span>
               </li>
             </ul>
           </div>
 
-          {/* Card 3: Fully Taxable */}
+          {/* Card 2: Deemed Reinvestment Benefit */}
+          <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">
+                Compounding Benefit
+              </span>
+              <span className="text-xs font-black px-3 py-1 rounded-full bg-blue-100 text-[#032e92]">
+                Deemed 80C
+              </span>
+            </div>
+            <h3 className="text-xl font-extrabold text-slate-900">NSC Deemed Reinvestment</h3>
+            <div className="text-xs font-bold text-blue-600">
+              Scheme: National Savings Certificate (NSC)
+            </div>
+            <p className="text-sm text-slate-600 leading-relaxed">
+              Unique tax advantage where interest accrued annually is deemed reinvested:
+            </p>
+            <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700">
+              <li className="flex items-start gap-2">
+                <FontAwesomeIcon icon={faCheckCircle} className="text-blue-500 mt-0.5" />
+                <span><strong>Years 1 to 4:</strong> Accrued interest is deemed reinvested and qualifies for fresh 80C deductions.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <FontAwesomeIcon icon={faCheckCircle} className="text-blue-500 mt-0.5" />
+                <span><strong>Year 5 (Maturity):</strong> Interest earned in the 5th year is added to income and taxed at slab rate.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <FontAwesomeIcon icon={faCheckCircle} className="text-blue-500 mt-0.5" />
+                <span><strong>No Tax at Source:</strong> Post Office does not deduct TDS on maturity payouts.</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Card 3: Taxable at Slab Rate (Zero TDS) */}
           <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                Regular Tax Treatment
+                Income Slab Tax
               </span>
               <span className="text-xs font-black px-3 py-1 rounded-full bg-slate-100 text-slate-700">
                 Slab Rate Tax
               </span>
             </div>
-            <h3 className="text-xl font-extrabold text-slate-900">Fully Taxable Schemes</h3>
+            <h3 className="text-xl font-extrabold text-slate-900">Taxed at Income Slab (Zero TDS)</h3>
             <div className="text-xs font-bold text-blue-600">
-              Schemes: POMIS, KVP, MSSC, 1/2/3-Yr TD & Post Office RD
+              Schemes: KVP, 1/2/3-Yr POTD, and PORD
             </div>
             <p className="text-sm text-slate-600 leading-relaxed">
-              No Section 80C tax deduction available on deposits. Entire interest earned is taxable:
+              No Section 80C deduction on deposit. Interest is taxable at your applicable slab rate:
             </p>
-            <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
+            <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700">
               <li className="flex items-start gap-2">
                 <FontAwesomeIcon icon={faCheckCircle} className="text-slate-400 mt-0.5" />
-                <span><strong>Principal Deposit:</strong> Zero tax deduction on entry.</span>
+                <span><strong>Interest Taxation:</strong> Declared under 'Income from Other Sources' at slab rates.</span>
               </li>
               <li className="flex items-start gap-2">
                 <FontAwesomeIcon icon={faCheckCircle} className="text-slate-400 mt-0.5" />
-                <span><strong>Interest Income:</strong> Taxed under 'Income from Other Sources' at slab rates.</span>
+                <span><strong>Zero TDS:</strong> Department of Posts does NOT deduct TDS at source.</span>
               </li>
               <li className="flex items-start gap-2">
                 <FontAwesomeIcon icon={faCheckCircle} className="text-slate-400 mt-0.5" />
-                <span><strong>TDS Policy:</strong> Post Office generally does not deduct TDS; depositor self-reports.</span>
+                <span><strong>Senior Citizen Relief:</strong> Interest income eligible for up to ₹50,000 deduction u/s 80TTB.</span>
               </li>
             </ul>
           </div>
         </div>
 
         {/* Regulatory Caveat */}
-        <div className="p-6 rounded-2xl bg-white border border-slate-200 text-center max-w-4xl mx-auto">
+        <div className="p-5 rounded-2xl bg-white border border-slate-200 text-center max-w-3xl mx-auto">
           <p className="text-xs text-slate-500 leading-relaxed">
-            * <strong>Important:</strong> Section 80C deductions apply under the Old Tax Regime. Tax laws, rebate thresholds, and surcharge rates are subject to amendments under the Finance Act. Consult a tax professional for personal advice.
+            * <strong>Important Note:</strong> Section 80C deductions apply under the Old Tax Regime. Tax laws and slab rates are governed by prevailing Finance Act regulations.
           </p>
         </div>
       </div>

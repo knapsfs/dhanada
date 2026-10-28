@@ -167,7 +167,9 @@ def get_lead_details(lead_name):
 	effective_client = lead.get("client") or lead.get("converted_client") or ""
 	lead["client"] = effective_client
 	if effective_client:
-		lead["client_name"] = frappe.db.get_value("Client", effective_client, "client_name") or effective_client
+		lead["client_name"] = (
+			frappe.db.get_value("Client", effective_client, "client_name") or effective_client
+		)
 	else:
 		lead["client_name"] = ""
 
@@ -581,10 +583,14 @@ def map_lead_to_client(lead_id, client_id):
 		frappe.throw(_("Client '{0}' not found.").format(client_id), frappe.DoesNotExistError)
 
 	if not frappe.has_permission("Lead", "write", doc=lead_id):
-		frappe.throw(_("You do not have write permission for Lead '{0}'.").format(lead_id), frappe.PermissionError)
+		frappe.throw(
+			_("You do not have write permission for Lead '{0}'.").format(lead_id), frappe.PermissionError
+		)
 
 	if not frappe.has_permission("Client", "read", doc=client_id):
-		frappe.throw(_("You do not have permission to view Client '{0}'.").format(client_id), frappe.PermissionError)
+		frappe.throw(
+			_("You do not have permission to view Client '{0}'.").format(client_id), frappe.PermissionError
+		)
 
 	lead = frappe.get_doc("Lead", lead_id)
 	client = frappe.get_doc("Client", client_id)
@@ -852,7 +858,11 @@ def _normalize_experience(val, target="sub"):
 	elif "inter" in val_str or "mod" in val_str or "1-5" in val_str:
 		return "Intermediate (1-5 Years)" if target == "sub" else "Intermediate"
 	elif "exper" in val_str or "5+" in val_str or "expert" in val_str:
-		return "Experienced (5+ Years)" if target == "sub" else ("Expert" if "expert" in val_str else "Experienced")
+		return (
+			"Experienced (5+ Years)"
+			if target == "sub"
+			else ("Expert" if "expert" in val_str else "Experienced")
+		)
 	return ""
 
 
@@ -929,7 +939,13 @@ def _normalize_capacity(val, target="sub"):
 
 	lower_val = val_str.lower()
 	if target == "sub":
-		if "below" in lower_val or "< 10" in lower_val or "5-10" in lower_val or "<10" in lower_val or "5 lakh" in lower_val:
+		if (
+			"below" in lower_val
+			or "< 10" in lower_val
+			or "5-10" in lower_val
+			or "<10" in lower_val
+			or "5 lakh" in lower_val
+		):
 			return "Below 10 Lakhs"
 		elif "10-25" in lower_val or "10 to 25" in lower_val:
 			return "10-25 Lakhs"
@@ -1129,13 +1145,19 @@ def update_client_onboarding_details(client_name, payload):
 	if "kyc_status" in payload:
 		client_doc.kyc_status = _normalize_kyc_status(payload.get("kyc_status"), "client")
 	if "investor_category" in payload:
-		client_doc.investor_category = _normalize_investor_category(payload.get("investor_category"), "client")
+		client_doc.investor_category = _normalize_investor_category(
+			payload.get("investor_category"), "client"
+		)
 	if "investment_horizon" in payload:
 		client_doc.investment_horizon = _normalize_horizon(payload.get("investment_horizon"), "client")
 	if "investment_experience" in payload:
-		client_doc.investment_experience = _normalize_experience(payload.get("investment_experience"), "client")
+		client_doc.investment_experience = _normalize_experience(
+			payload.get("investment_experience"), "client"
+		)
 	if "investment_objectives" in payload:
-		client_doc.investment_objectives = _normalize_objectives(payload.get("investment_objectives"), "client")
+		client_doc.investment_objectives = _normalize_objectives(
+			payload.get("investment_objectives"), "client"
+		)
 	if "investment_capacity" in payload:
 		client_doc.investment_capacity = _normalize_capacity(payload.get("investment_capacity"), "client")
 
@@ -1157,16 +1179,18 @@ def update_client_onboarding_details(client_name, payload):
 	client_doc.save(ignore_permissions=True)
 
 	try:
-		frappe.get_doc({
-			"doctype": "CRM Interaction",
-			"related_client": client_name,
-			"interaction_type": "Note",
-			"direction": "Outbound",
-			"interaction_date": now_datetime(),
-			"logged_by": frappe.session.user,
-			"summary": "Client Onboarding Details Updated",
-			"details": "Client profile & onboarding submission details updated via KNAPS CRM.",
-		}).insert(ignore_permissions=True)
+		frappe.get_doc(
+			{
+				"doctype": "CRM Interaction",
+				"related_client": client_name,
+				"interaction_type": "Note",
+				"direction": "Outbound",
+				"interaction_date": now_datetime(),
+				"logged_by": frappe.session.user,
+				"summary": "Client Onboarding Details Updated",
+				"details": "Client profile & onboarding submission details updated via KNAPS CRM.",
+			}
+		).insert(ignore_permissions=True)
 	except Exception:
 		pass
 

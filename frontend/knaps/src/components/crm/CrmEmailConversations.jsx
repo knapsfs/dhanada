@@ -86,6 +86,12 @@ function EmailCard({ email, onReply }) {
                 {isSent ? "Outgoing" : "Incoming"}
               </span>
 
+              {email.origin_label && (
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-200/80 px-2 py-0.5 rounded-full">
+                  <span>{email.origin_label}</span>
+                </span>
+              )}
+
               {hasAttachment && (
                 <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full border border-gray-200">
                   <FontAwesomeIcon icon={faPaperclip} className="text-gray-400 text-[9px]" />
@@ -239,6 +245,7 @@ export default function CrmEmailConversations({
   const [inReplyTo, setInReplyTo] = useState(null);
   const [sendingEmail, setSendingEmail] = useState(false);
   const [sendFeedback, setSendFeedback] = useState({ type: "", message: "" });
+  const [sourceFilter, setSourceFilter] = useState("all");
 
   const composerRef = useRef(null);
   const subjectInputRef = useRef(null);
@@ -395,6 +402,12 @@ export default function CrmEmailConversations({
   const handleRefresh = () => {
     fetchConversations(1, false, true);
   };
+
+  const availableSources = Array.from(new Set(conversations.map((c) => c.origin_label).filter(Boolean)));
+  const displayedConversations =
+    sourceFilter === "all"
+      ? conversations
+      : conversations.filter((c) => c.origin_label === sourceFilter);
 
   return (
     <div className="space-y-4">
@@ -650,10 +663,45 @@ export default function CrmEmailConversations({
         </div>
       )}
 
+      {/* Source Filter if multiple sources present */}
+      {!loading && conversations.length > 0 && availableSources.length > 1 && (
+        <div className="flex items-center gap-1.5 flex-wrap pt-1 pb-1">
+          <span className="text-[11px] font-semibold text-gray-400 mr-1">Filter Source:</span>
+          <button
+            type="button"
+            onClick={() => setSourceFilter("all")}
+            className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+              sourceFilter === "all"
+                ? "bg-[#032e92] text-white"
+                : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+            }`}
+          >
+            All Sources ({conversations.length})
+          </button>
+          {availableSources.map((src) => {
+            const count = conversations.filter((c) => c.origin_label === src).length;
+            return (
+              <button
+                key={src}
+                type="button"
+                onClick={() => setSourceFilter(src)}
+                className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                  sourceFilter === src
+                    ? "bg-[#032e92] text-white"
+                    : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                }`}
+              >
+                {src} ({count})
+              </button>
+            );
+          })}
+        </div>
+      )}
+
       {/* Conversation List */}
-      {!loading && conversations.length > 0 && (
+      {!loading && displayedConversations.length > 0 && (
         <div className="space-y-3.5">
-          {conversations.map((email) => (
+          {displayedConversations.map((email) => (
             <EmailCard
               key={email.name || email.communication_date + email.subject}
               email={email}

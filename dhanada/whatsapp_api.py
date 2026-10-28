@@ -65,11 +65,7 @@ def get_whatsapp_credentials():
 	except Exception:
 		settings = None
 
-	token = (
-		getattr(settings, "whatsapp_access_token", None)
-		or frappe.conf.get("whatsapp_access_token")
-		or ""
-	)
+	token = getattr(settings, "whatsapp_access_token", None) or frappe.conf.get("whatsapp_access_token") or ""
 	phone_number_id = (
 		getattr(settings, "whatsapp_phone_number_id", None)
 		or frappe.conf.get("whatsapp_phone_number_id")
@@ -147,6 +143,8 @@ def get_crm_whatsapp_conversations(doctype: str, name: str, page: int = 1, page_
 	"""Retrieve paginated WhatsApp messages for a specific Lead or Client."""
 	from dhanada.whatsapp_adapter import (
 		get_crm_whatsapp_conversations as adapter_get_conversations,
+	)
+	from dhanada.whatsapp_adapter import (
 		is_official_whatsapp_available,
 	)
 
@@ -162,7 +160,9 @@ def get_crm_whatsapp_conversations(doctype: str, name: str, page: int = 1, page_
 		frappe.throw(_("{0} '{1}' not found.").format(doctype, name), frappe.DoesNotExistError)
 
 	if not frappe.has_permission(doctype, "read", doc=name):
-		frappe.throw(_("Permission denied to view WhatsApp history for {0}.").format(name), frappe.PermissionError)
+		frappe.throw(
+			_("Permission denied to view WhatsApp history for {0}.").format(name), frappe.PermissionError
+		)
 
 	records_to_query = [(doctype, name)]
 	if doctype == "Lead":
@@ -257,6 +257,8 @@ def send_crm_whatsapp_message(
 	"""
 	from dhanada.whatsapp_adapter import (
 		is_official_whatsapp_available,
+	)
+	from dhanada.whatsapp_adapter import (
 		send_crm_whatsapp_message as adapter_send_message,
 	)
 

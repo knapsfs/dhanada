@@ -27,14 +27,14 @@ export default function WhyInvestWithUs() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
 
         {/* Header Tag */}
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="inline-block px-4 py-2 rounded-full border border-[#032e92]/20 text-[#032e92] bg-[#eef5ff] font-semibold text-sm mb-4 uppercase tracking-wider"
         >
           Why Invest With Us
-        </motion.div>
+        </motion.div> */}
 
         {/* Main Title */}
         <motion.h2
@@ -48,7 +48,7 @@ export default function WhyInvestWithUs() {
         </motion.h2>
 
         {/* Subtitle */}
-        <motion.p
+        {/* <motion.p
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -56,7 +56,7 @@ export default function WhyInvestWithUs() {
           className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5"
         >
           We guide you to stay invested with patience and discipline, allowing the power of compounding to grow your wealth exponentially.
-        </motion.p>
+        </motion.p> */}
 
         <Stats className="pt-8 sm:pt-10" />
       </div>

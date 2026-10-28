@@ -17,7 +17,7 @@ const steps = [
     title: 'Choose Scheme Based on Goal',
     subtitle: 'Milestone Alignment',
     description:
-      'Identify your primary financial target: retirement planning (PPF), your daughter’s future (SSY), post-retirement income (SCSS), monthly household cash flow (POMIS), or capital doubling (KVP).'
+      'Identify your primary financial target: capital doubling (KVP), 5-year tax-saving with compounded growth (NSC), fixed-term guaranteed return (POTD), or disciplined monthly habit (PORD).'
   },
   {
     number: '02',
@@ -25,7 +25,7 @@ const steps = [
     title: 'Deposit per Applicable Rules',
     subtitle: 'Contribution Mode',
     description:
-      'Invest through India Post or designated commercial banks. Deposit lump-sum amounts or automated monthly/annual installments adhering to scheme-specific deposit ceilings (e.g. ₹1.5L for PPF/SSY).'
+      'Invest through India Post. Deposit lump-sum amounts for POTD, KVP, and NSC, or set up affordable monthly deposits from ₹100/mo for Post Office Recurring Deposit.'
   },
   {
     number: '03',
@@ -33,7 +33,7 @@ const steps = [
     title: 'Earn Government-Notified Interest',
     subtitle: 'Sovereign Compounding',
     description:
-      'Your funds accumulate interest at the rates officially notified quarterly by the Ministry of Finance, compounding annually or quarterly depending on the scheme rules.'
+      'Your deposit locks in sovereign interest notified by the Ministry of Finance, compounding annually (NSC) or quarterly (POTD, KVP, PORD) over your chosen tenure.'
   },
   {
     number: '04',
@@ -41,7 +41,7 @@ const steps = [
     title: 'Receive Maturity or Periodic Income',
     subtitle: 'Payout Realization',
     description:
-      'Enjoy seamless maturity payouts credited directly to your bank account, or receive automated monthly/quarterly income distributions, enjoying applicable tax exemptions (such as EEE).'
+      'Receive guaranteed maturity proceeds credited directly to your post office savings account or linked bank account, along with tax benefits under Section 80C where applicable (NSC & 5Y POTD).'
   }
 ];
 
@@ -58,10 +58,10 @@ export default function HowSmallSavingsWork() {
             <span>Operational Journey</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#032e92] tracking-tight mb-4">
-            How Small Savings Schemes Work — A 4-Step Journey
+            How Post Office Small Savings Schemes Work — A 4-Step Journey
           </h2>
           <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
-            A simple, transparent pathway from scheme selection and deposit to compounding interest and final maturity realization.
+            A simple, transparent pathway from scheme selection and deposit to compounding interest and final maturity realization across POTD, KVP, NSC, and PORD.
           </p>
         </div>
 
@@ -101,17 +101,17 @@ export default function HowSmallSavingsWork() {
         <div className="p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-blue-50/70 via-indigo-50/40 to-slate-50 border border-blue-100 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="space-y-1">
             <h4 className="text-base sm:text-lg font-bold text-slate-900">
-              Need assistance opening a small savings scheme online or through your bank?
+              Need assistance opening a Post Office savings scheme or completing formalities?
             </h4>
             <p className="text-xs sm:text-sm text-slate-600">
-              Our specialists assist you with documentation, net banking activation, standing instructions, and nomination registration.
+              Our specialists assist you with documentation, scheme selection, nomination registration, and maturity planning.
             </p>
           </div>
           <button
             onClick={() =>
               openLeadModal({
-                title: 'Small Savings Account Assistance',
-                defaultService: 'Small Savings Schemes'
+                title: 'Post Office Scheme Assistance',
+                defaultService: 'Post Office Small Savings Scheme'
               })
             }
             className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center gap-2 shrink-0 cursor-pointer"

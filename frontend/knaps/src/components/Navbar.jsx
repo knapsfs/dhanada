@@ -15,20 +15,17 @@ const navLinks = [
     label: 'SIF',
     href: '/sif',
   },
-  { label: 'Mutual Fund', href: '/funds' },
+  { label: 'Mutual Funds', href: '/mutual-funds' },
   {
-    label: 'Services',
-    href: '/services',
+    label: 'Products',
+    href: '/products',
     dropdown: [
-      { label: 'National Pension System (NPS)', href: '/services/nps' },
-      { label: 'Small Savings Scheme', href: '/services/small-savings-schemes' },
-      { label: 'Life Insurance', href: '/services/life-insurance' },
-      { label: 'Health Insurance', href: '/services/health-insurance' },
-      { label: 'General Insurance', href: '/services/general-insurance' },
-      { label: 'Fixed Deposits', href: '/services/fixed-deposits' },
-      { label: 'Recurring Deposits', href: '/services/recurring-deposits' },
-      { label: 'Child Marriage Planning', href: '/services#child-planning' },
-      { label: 'Retirement Planning', href: '/services#retirement' },
+      { label: 'National Pension System (NPS)', href: '/products/nps' },
+      { label: 'Post Office Small Savings Scheme', href: '/products/post-office-small-savings-schemes' },
+      { label: 'Life Insurance', href: '/products/life-insurance' },
+      { label: 'Health Insurance', href: '/products/health-insurance' },
+      { label: 'General Insurance', href: '/products/general-insurance' },
+      { label: 'Fixed Income Products', href: '/products/fixed-income-products' },
     ],
   },
   {
@@ -126,9 +123,8 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-white shadow-lg shadow-blue-900/5' : 'bg-white shadow-lg shadow-blue-900/5'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-lg shadow-blue-900/5' : 'bg-white shadow-lg shadow-blue-900/5'
+        }`}
     >
       <nav className="max-w-7xl mx-auto px-6 lg:px-8 py-3.5 sm:py-4">
         <div className="flex items-center justify-between">
@@ -138,13 +134,13 @@ export default function Navbar() {
               <img
                 src={logo}
                 alt="KNAPS Logo"
-                className="h-9 sm:h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                className="h-9 sm:h-11 w-auto object-contain transition-transform duration-300 scale-110 group-hover:scale-105"
               />
             </div>
           </Link>
 
           {/* Desktop Nav Links */}
-          <ul className="hidden xl:flex items-center gap-1 2xl:gap-2">
+          <ul className="hidden xl:flex items-center">
             {navLinks.map((link) => (
               <li
                 key={link.label}
@@ -161,37 +157,33 @@ export default function Navbar() {
                     {link.dropdown && (
                       <FontAwesomeIcon
                         icon={faChevronDown}
-                        className={`text-[10px] transition-transform duration-300 ${
-                          activeDropdown === link.label ? 'rotate-180 text-[#032e92]' : ''
-                        }`}
+                        className={`text-[10px] transition-transform duration-300 ${activeDropdown === link.label ? 'rotate-180 text-[#032e92]' : ''
+                          }`}
                       />
                     )}
                   </a>
                 ) : (
                   <Link
                     to={link.href}
-                    className={`relative flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-[14px] 2xl:text-[15px] font-medium transition-all duration-300 group ${
-                      activeDropdown === link.label || location.pathname === link.href
-                        ? 'text-[#032e92] bg-[#eef5ff]'
-                        : 'text-gray-700 hover:text-[#032e92] hover:bg-[#eef5ff]/60'
-                    }`}
+                    className={`relative flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-[14px] 2xl:text-[15px] font-medium transition-all duration-300 group ${activeDropdown === link.label || location.pathname === link.href
+                      ? 'text-[#032e92] bg-[#eef5ff]'
+                      : 'text-gray-700 hover:text-[#032e92] hover:bg-[#eef5ff]/60'
+                      }`}
                   >
                     {link.label}
                     {link.dropdown && (
                       <FontAwesomeIcon
                         icon={faChevronDown}
-                        className={`text-[10px] transition-transform duration-300 ${
-                          activeDropdown === link.label ? 'rotate-180 text-[#032e92]' : ''
-                        }`}
+                        className={`text-[10px] transition-transform duration-300 ${activeDropdown === link.label ? 'rotate-180 text-[#032e92]' : ''
+                          }`}
                       />
                     )}
                     {/* Animated underline */}
                     <span
-                      className={`absolute bottom-1 left-3.5 right-3.5 h-0.5 bg-[#c10000] transform origin-left scale-x-0 transition-transform duration-300 ease-out ${
-                        activeDropdown === link.label || location.pathname === link.href
-                          ? 'scale-x-100'
-                          : 'group-hover:scale-x-100'
-                      }`}
+                      className={`absolute bottom-1 left-3.5 right-3.5 h-0.5 bg-[#c10000] transform origin-left scale-x-0 transition-transform duration-300 ease-out ${activeDropdown === link.label || location.pathname === link.href
+                        ? 'scale-x-100'
+                        : 'group-hover:scale-x-100'
+                        }`}
                     ></span>
                   </Link>
                 )}
@@ -322,18 +314,16 @@ export default function Navbar() {
                         <button
                           type="button"
                           onClick={() => toggleMobileDropdown(link.label)}
-                          className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-[15px] font-semibold transition-all cursor-pointer ${
-                            openMobileDropdown === link.label
-                              ? 'bg-[#eef5ff] text-[#032e92]'
-                              : 'text-gray-800 hover:bg-gray-50'
-                          }`}
+                          className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-[15px] font-semibold transition-all cursor-pointer ${openMobileDropdown === link.label
+                            ? 'bg-[#eef5ff] text-[#032e92]'
+                            : 'text-gray-800 hover:bg-gray-50'
+                            }`}
                         >
                           <span>{link.label}</span>
                           <FontAwesomeIcon
                             icon={faChevronDown}
-                            className={`text-xs transition-transform duration-300 ${
-                              openMobileDropdown === link.label ? 'rotate-180 text-[#032e92]' : 'text-gray-400'
-                            }`}
+                            className={`text-xs transition-transform duration-300 ${openMobileDropdown === link.label ? 'rotate-180 text-[#032e92]' : 'text-gray-400'
+                              }`}
                           />
                         </button>
 
@@ -362,11 +352,10 @@ export default function Navbar() {
                                     key={item.label}
                                     to={item.href}
                                     onClick={() => setMobileOpen(false)}
-                                    className={`block px-3.5 py-2 text-[14px] font-medium rounded-xl transition-all ${
-                                      location.pathname === item.href
-                                        ? 'bg-white text-[#032e92] font-semibold shadow-xs'
-                                        : 'text-gray-600 hover:bg-white hover:text-[#032e92]'
-                                    }`}
+                                    className={`block px-3.5 py-2 text-[14px] font-medium rounded-xl transition-all ${location.pathname === item.href
+                                      ? 'bg-white text-[#032e92] font-semibold shadow-xs'
+                                      : 'text-gray-600 hover:bg-white hover:text-[#032e92]'
+                                      }`}
                                   >
                                     {item.label}
                                   </Link>
@@ -389,11 +378,10 @@ export default function Navbar() {
                         <Link
                           to={link.href}
                           onClick={() => setMobileOpen(false)}
-                          className={`block px-4 py-3 rounded-2xl text-[15px] font-semibold transition-colors ${
-                            location.pathname === link.href
-                              ? 'text-[#032e92] bg-[#eef5ff]'
-                              : 'text-gray-800 hover:bg-[#eef5ff] hover:text-[#032e92]'
-                          }`}
+                          className={`block px-4 py-3 rounded-2xl text-[15px] font-semibold transition-colors ${location.pathname === link.href
+                            ? 'text-[#032e92] bg-[#eef5ff]'
+                            : 'text-gray-800 hover:bg-[#eef5ff] hover:text-[#032e92]'
+                            }`}
                         >
                           {link.label}
                         </Link>
@@ -423,9 +411,8 @@ export default function Navbar() {
                     <span>Login</span>
                     <FontAwesomeIcon
                       icon={faChevronDown}
-                      className={`text-xs transition-transform duration-300 ${
-                        mobileLoginOpen ? 'rotate-180' : ''
-                      }`}
+                      className={`text-xs transition-transform duration-300 ${mobileLoginOpen ? 'rotate-180' : ''
+                        }`}
                     />
                   </button>
 

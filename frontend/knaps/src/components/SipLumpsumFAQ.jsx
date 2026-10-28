@@ -14,7 +14,7 @@ const FAQS = [
   },
   {
     q: 'How is the Future Value calculated for a combined investment?',
-    a: 'The future value is the sum of two compounding equations: (1) The initial lump sum compounded annually/monthly over your investment duration, plus (2) the ordinary monthly annuity compounding formula applied to your recurring monthly SIP contributions at your expected rate of return.',
+    a: 'The future value is the sum of two compounding equations: (1) The initial lump sum compounded annually over your investment duration, plus (2) the ordinary monthly annuity compounding formula applied to your recurring monthly SIP contributions at your expected rate of return.',
   },
   {
     q: 'Can I start with any lump sum amount?',

@@ -9,7 +9,6 @@ import {
   faShield,
   faHeartPulse,
   faCoins,
-  faPiggyBank,
   faUser,
   faFileLines,
   faArrowRight,
@@ -20,66 +19,59 @@ import {
 const products = [
   {
     title: 'Mutual Funds',
-    description: 'Invest in a wide range of funds to grow your wealth over time.',
+    description: 'Invest money across stocks, bonds and other securities through a mutual fund scheme.',
     icon: faChartSimple,
     iconBg: 'bg-purple-50 text-purple-600',
-    route: '/funds',
+    route: '/mutual-funds',
   },
   {
     title: 'SIF (Specialised Investment Funds)',
-    description: 'Goal-based, flexible investing for your unique needs.',
+    description: ' Invest in specialised strategies with higher flexibility and a minimum investment of ₹10 lakh.',
     icon: faSeedling,
     iconBg: 'bg-emerald-50 text-emerald-600',
     route: '/sif',
   },
   {
+    title: 'National Pension System (NPS)',
+    description: 'Build a retirement corpus through contributions invested across equity, debt, and G-sec.',
+    icon: faUser,
+    iconBg: 'bg-blue-50 text-blue-600',
+    route: '/products/nps',
+  },
+  {
     title: 'Life Insurance',
-    description: "Comprehensive life cover to ensure your family's financial security.",
+    description: " Protect your family’s financial future with life cover and benefits.",
     icon: faShieldHalved,
     iconBg: 'bg-rose-50 text-rose-600',
-    route: '/services/life-insurance',
+    route: '/products/life-insurance',
   },
   {
     title: 'General Insurance',
-    description: 'Protect your valuable assets including home, vehicle and more.',
+    description: ' Cover risks related to vehicles, property, travel and other non-life assets.',
     icon: faShield,
     iconBg: 'bg-blue-50 text-blue-600',
-    route: '/services/general-insurance',
+    route: '/products/general-insurance',
   },
   {
     title: 'Health Insurance',
-    description: "Stay prepared for life's uncertainties with adequate health cover.",
+    description: "Cover medical expenses and protect your savings from healthcare costs.",
     icon: faHeartPulse,
     iconBg: 'bg-emerald-50 text-emerald-600',
-    route: '/services/health-insurance',
+    route: '/products/health-insurance',
   },
   {
-    title: 'Fixed Deposits (FD)',
-    description: 'A safe and steady investment option with assured returns.',
+    title: 'Fixed Income Products',
+    description: 'Invest in high-grade Fixed Deposits (Bank & Corporate) and 100% sovereign-backed Government of India (GoI) Bonds.',
     icon: faCoins,
     iconBg: 'bg-amber-50 text-amber-600',
-    route: '/services/fixed-deposits',
+    route: '/products/fixed-income-products',
   },
   {
-    title: 'Recurring Deposits (RD)',
-    description: 'Build your savings consistently, one step at a time.',
-    icon: faPiggyBank,
-    iconBg: 'bg-rose-50 text-rose-500',
-    route: '/services/recurring-deposits',
-  },
-  {
-    title: 'National Pension System (NPS)',
-    description: 'Plan for a secure, tax-efficient retirement.',
-    icon: faUser,
-    iconBg: 'bg-blue-50 text-blue-600',
-    route: '/services/nps',
-  },
-  {
-    title: 'Small Savings Schemes',
-    description: 'Government-backed schemes with guaranteed returns.',
+    title: 'Post Office Small Savings',
+    description: ' Save through schemes such as PPF, NSC, SCSS and Post Office Time Deposits.',
     icon: faFileLines,
     iconBg: 'bg-green-50 text-green-600',
-    route: '/services/small-savings-schemes',
+    route: '/products/post-office-small-savings-schemes',
   },
 ];
 
@@ -98,14 +90,14 @@ export default function OurProducts() {
       <div className="max-w-7xl mx-auto text-center px-4 sm:px-6 lg:px-8 relative z-10">
 
         {/* Header Tag */}
-        <motion.p
+        {/* <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="inline-block px-4 py-2 rounded-full border border-[#032e92]/20 text-[#032e92] bg-[#eef5ff] font-semibold text-sm mb-4 uppercase tracking-wider text-center"
         >
           OUR PRODUCTS
-        </motion.p>
+        </motion.p> */}
 
         {/* Heading */}
         <motion.h2
@@ -115,8 +107,8 @@ export default function OurProducts() {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-black tracking-tight leading-tight max-w-4xl mx-auto"
         >
-          A Complete Range of{' '}
-          <span className="text-[#032e92] block sm:inline">Financial Solutions</span>
+          A Wide Range of{' '}
+          <span className="text-[#032e92] block sm:inline">Financial Products</span>
         </motion.h2>
 
         {/* Subtitle */}
@@ -127,7 +119,7 @@ export default function OurProducts() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl mx-auto leading-relaxed mt-3.5 text-center"
         >
-          From growing your wealth to protecting what matters, we offer a wide range of trusted financial products to support every stage of your life.
+          From protecting your wealth to growing it, we offer a wide range of regulated financial products to support every stage of life.
         </motion.p>
 
         {/* 3-Column Grid of Products */}
@@ -143,9 +135,8 @@ export default function OurProducts() {
                 transition={{ duration: 0.4, delay: 0.05 * (idx % 3) }}
                 whileHover={{ y: -4, scale: 1.015 }}
                 onClick={() => handleCardClick(item)}
-                className={`${
-                  isHiddenOnMobile ? 'hidden sm:flex' : 'flex'
-                } bg-white rounded-2xl border border-gray-100 shadow-md shadow-blue-900/4 p-5 sm:p-6 items-center justify-between gap-4 hover:shadow-xl hover:border-blue-100 transition-all duration-300 group cursor-pointer`}
+                className={`${isHiddenOnMobile ? 'hidden sm:flex' : 'flex'
+                  } bg-white rounded-2xl border border-gray-100 shadow-md shadow-blue-900/4 p-5 sm:p-6 items-center justify-between gap-4 hover:shadow-xl hover:border-blue-100 transition-all duration-300 group cursor-pointer`}
               >
                 {/* Left Content */}
                 <div className="flex items-center gap-4 min-w-0">
@@ -201,7 +192,7 @@ export default function OurProducts() {
         <div className="mt-12 text-center hidden sm:block">
           <button
             type="button"
-            onClick={() => navigate('/services')}
+            onClick={() => navigate('/products')}
             className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
           >
             Explore All Products

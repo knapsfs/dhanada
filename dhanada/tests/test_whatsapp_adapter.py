@@ -23,6 +23,8 @@ from dhanada.whatsapp_adapter import (
 )
 from dhanada.whatsapp_api import (
 	get_crm_whatsapp_conversations as api_get_conversations,
+)
+from dhanada.whatsapp_api import (
 	send_crm_whatsapp_message as api_send_message,
 )
 
@@ -193,7 +195,10 @@ class TestWhatsAppAdapter(FrappeTestCase):
 				mock_doc.timestamp = now_datetime()
 				mock_doc.creation = now_datetime()
 
-				with patch("frappe.get_doc", side_effect=lambda dt, dn=None: self.test_lead if dt == "Lead" else mock_doc):
+				with patch(
+					"frappe.get_doc",
+					side_effect=lambda dt, dn=None: self.test_lead if dt == "Lead" else mock_doc,
+				):
 					res = send_crm_whatsapp_message(
 						doctype="Lead",
 						name=self.test_lead.name,
@@ -215,7 +220,9 @@ class TestWhatsAppAdapter(FrappeTestCase):
 	@patch("dhanada.whatsapp_adapter.get_whatsapp_session_status", return_value=(True, "2026-10-27 12:00:00"))
 	def test_08_send_template_delegation(self, mock_sess, mock_acc, mock_avail):
 		"""Verify outbound template delegates to official messages.send_template if approved in WA Template."""
-		with patch("whatsapp.whatsapp.api.messages.send_template", return_value="hash_tpl_123") as mock_send_tpl:
+		with patch(
+			"whatsapp.whatsapp.api.messages.send_template", return_value="hash_tpl_123"
+		) as mock_send_tpl:
 			with patch("frappe.db.exists", side_effect=lambda dt, fn=None: True):
 				mock_doc = MagicMock()
 				mock_doc.name = "hash_tpl_123"
@@ -225,7 +232,10 @@ class TestWhatsAppAdapter(FrappeTestCase):
 				mock_doc.timestamp = now_datetime()
 				mock_doc.creation = now_datetime()
 
-				with patch("frappe.get_doc", side_effect=lambda dt, dn=None: self.test_lead if dt == "Lead" else mock_doc):
+				with patch(
+					"frappe.get_doc",
+					side_effect=lambda dt, dn=None: self.test_lead if dt == "Lead" else mock_doc,
+				):
 					res = send_crm_whatsapp_message(
 						doctype="Lead",
 						name=self.test_lead.name,
@@ -266,7 +276,6 @@ class TestWhatsAppAdapter(FrappeTestCase):
 				self.assertEqual(res["status"], "queued")
 				self.assertEqual(res["delivery_status"], "Queued")
 				self.assertIsNotNone(res["warning"])
-
 
 	def test_11_match_and_link_inbound_message(self):
 		"""Verify match_and_link_inbound_message links unreferenced incoming WA Message by phone."""
@@ -385,12 +394,12 @@ class TestWhatsAppAdapter(FrappeTestCase):
 			with patch("frappe.get_doc", return_value=mock_wa_msg):
 				with patch("frappe.db.get_value", side_effect=mock_get_value_fn):
 					# First call
-					ref_dt1, ref_dn1 = match_and_link_inbound_message(mock_wa_msg)
+					ref_dt1, _ref_dn1 = match_and_link_inbound_message(mock_wa_msg)
 					self.assertEqual(ref_dt1, "Lead")
 					self.assertEqual(mock_wa_msg.db_set.call_count, 1)
 
 					# Second call (repeated hook trigger)
-					ref_dt2, ref_dn2 = match_and_link_inbound_message(mock_wa_msg)
+					ref_dt2, _ref_dn2 = match_and_link_inbound_message(mock_wa_msg)
 					self.assertEqual(ref_dt2, "Lead")
 					# db_set must not be called a second time
 					self.assertEqual(mock_wa_msg.db_set.call_count, 1)
@@ -449,8 +458,13 @@ class TestWhatsAppAdapter(FrappeTestCase):
 
 		try:
 			mock_meta_resp = {"messages": [{"id": "wamid.e2e.out.1"}]}
-			with patch("whatsapp.whatsapp.api.whatsapp.WhatsApp.send_message", return_value=mock_meta_resp) as mock_meta:
-				with patch("dhanada.whatsapp_adapter.get_whatsapp_session_status", return_value=(True, "2026-10-27 12:00:00")):
+			with patch(
+				"whatsapp.whatsapp.api.whatsapp.WhatsApp.send_message", return_value=mock_meta_resp
+			) as mock_meta:
+				with patch(
+					"dhanada.whatsapp_adapter.get_whatsapp_session_status",
+					return_value=(True, "2026-10-27 12:00:00"),
+				):
 					res = send_crm_whatsapp_message(
 						doctype="Lead",
 						name=self.test_lead.name,
@@ -575,5 +589,3 @@ class TestWhatsAppAdapter(FrappeTestCase):
 			frappe.db.set_single_value("WA Settings", "default_account", orig_default)
 			frappe.db.delete("WA Message", {"message_id": "wamid.e2e.client.1"})
 			frappe.db.delete("WA Account", {"name": wa_acc.name})
-
-
