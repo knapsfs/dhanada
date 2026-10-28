@@ -57,9 +57,7 @@ class CustomEmailAccount(EmailAccount):
 				folder_name = folder.folder_name or "INBOX"
 				if email_server.select_imap_folder(folder_name):
 					email_server.settings["uid_validity"] = folder.uidvalidity
-					messages = (
-						self.get_newest_imap_messages(email_server, folder=folder_name) or {}
-					)
+					messages = self.get_newest_imap_messages(email_server, folder=folder_name) or {}
 					process_mail(messages, folder.append_to)
 
 			email_server.logout()
@@ -140,9 +138,7 @@ class CustomEmailAccount(EmailAccount):
 			pass
 
 		# Sort missing UIDs in descending order (newest UID first)
-		missing_uids = sorted(
-			[u for u in set(candidate_uids) if u not in existing_uids], reverse=True
-		)
+		missing_uids = sorted([u for u in set(candidate_uids) if u not in existing_uids], reverse=True)
 		uids_to_process = missing_uids[:limit]
 
 		retrieved_uids = []

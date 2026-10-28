@@ -21,6 +21,7 @@
   "mobile_no",
   "source",
   "product_interest",
+  "client",
   "section_notes",
   "notes",
   "section_internal",
@@ -149,6 +150,15 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Product of Interest"
+  },
+  {
+   "fieldname": "client",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Linked Client",
+   "options": "Client",
+   "search_index": 1
   },
   {
    "fieldname": "section_notes",
@@ -280,7 +290,7 @@
    "fieldtype": "Select",
    "hidden": 1,
    "label": "Investment Amount Range",
-   "options": "\nBelow ₹10 Lakhs\n₹10 - ₹25 Lakhs\n₹25 - ₹50 Lakhs\n₹50 Lakhs - ₹1 Crore\n₹1 - ₹5 Crores\nAbove ₹5 Crores"
+   "options": "\nBelow \u20b910 Lakhs\n\u20b910 - \u20b925 Lakhs\n\u20b925 - \u20b950 Lakhs\n\u20b950 Lakhs - \u20b91 Crore\n\u20b91 - \u20b95 Crores\nAbove \u20b95 Crores"
   },
   {
    "fieldname": "investment_horizon",

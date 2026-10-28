@@ -283,8 +283,7 @@ export const crmService = {
 			"POST"
 		),
 
-	sendEmail: (data) =>
-		fetchCrmApi("/api/method/dhanada.crm_api.send_crm_email", "POST", data),
+	sendEmail: (data) => fetchCrmApi("/api/method/dhanada.crm_api.send_crm_email", "POST", data),
 
 	getWhatsAppConversations: (doctype, name, page = 1, pageLength = 50) =>
 		fetchCrmApi(

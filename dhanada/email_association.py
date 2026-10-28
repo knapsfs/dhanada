@@ -80,7 +80,7 @@ def find_matching_crm_record(email_address: str | None) -> tuple[str | None, str
 	# 2. Match against Lead
 	leads = frappe.db.sql(
 		"""
-		SELECT name, status, converted_client
+		SELECT name, status, client, converted_client
 		FROM `tabLead`
 		WHERE LOWER(TRIM(email)) = %s
 		""",
@@ -92,8 +92,10 @@ def find_matching_crm_record(email_address: str | None) -> tuple[str | None, str
 		return None, None, "not_found"
 
 	# Separate unconverted leads and converted leads with linked clients
-	unconverted_leads = [l for l in leads if l.status != "Converted" or not l.converted_client]
-	converted_leads = [l for l in leads if l.status == "Converted" and l.converted_client]
+	unconverted_leads = [
+		l for l in leads if l.status != "Converted" or (not l.client and not l.converted_client)
+	]
+	converted_leads = [l for l in leads if l.status == "Converted" and (l.client or l.converted_client)]
 
 	if len(unconverted_leads) == 1:
 		return "Lead", unconverted_leads[0].name, None
@@ -104,7 +106,7 @@ def find_matching_crm_record(email_address: str | None) -> tuple[str | None, str
 		return None, None, "ambiguous_lead"
 	elif len(unconverted_leads) == 0 and len(converted_leads) == 1:
 		# Lead was converted to client
-		client_name = converted_leads[0].converted_client
+		client_name = converted_leads[0].client or converted_leads[0].converted_client
 		if frappe.db.exists("Client", client_name):
 			return "Client", client_name, None
 		return "Lead", converted_leads[0].name, None
@@ -133,7 +135,10 @@ def link_communication_to_crm_record(doc, method=None):
 		parent = None
 		if frappe.db.exists("Communication", doc.in_reply_to):
 			parent = frappe.db.get_value(
-				"Communication", doc.in_reply_to, ["name", "reference_doctype", "reference_name"], as_dict=True
+				"Communication",
+				doc.in_reply_to,
+				["name", "reference_doctype", "reference_name"],
+				as_dict=True,
 			)
 		else:
 			# doc.in_reply_to may be a raw message_id instead of a communication name

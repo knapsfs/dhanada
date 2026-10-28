@@ -85,6 +85,21 @@ function MessageBubble({ msg }) {
           </div>
         )}
 
+        {/* Origin Label Badge (e.g., MPS Lead, SIF Lead, Client Direct) */}
+        {msg.origin_label && (
+          <div
+            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold tracking-wider mb-1.5 ${
+              isTemplate ? "ml-1.5" : ""
+            } ${
+              isOutbound
+                ? "bg-blue-950/60 text-blue-200 border border-blue-400/30"
+                : "bg-indigo-50 text-indigo-700 border border-indigo-200"
+            }`}
+          >
+            <span>{msg.origin_label}</span>
+          </div>
+        )}
+
         {/* Message Body */}
         <p className="text-xs sm:text-[13px] leading-relaxed whitespace-pre-wrap break-words">
           {msg.content || ""}
@@ -129,6 +144,7 @@ export default function CrmWhatsAppConversations({
   const [loading, setLoading] = useState(initialMessages === null);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState("");
+  const [sourceFilter, setSourceFilter] = useState("all");
 
   // WhatsApp Session & Provider Metadata
   const [isSessionActive, setIsSessionActive] = useState(false);
@@ -342,6 +358,10 @@ export default function CrmWhatsAppConversations({
 
   const currentTemplateObj = templates.find((t) => t.name === selectedTemplate);
 
+  const availableSources = Array.from(new Set(messages.map((m) => m.origin_label).filter(Boolean)));
+  const displayedMessages =
+    sourceFilter === "all" ? messages : messages.filter((m) => m.origin_label === sourceFilter);
+
   return (
     <div className="space-y-4">
       {/* Top Header Bar */}
@@ -404,6 +424,41 @@ export default function CrmWhatsAppConversations({
           </button>
         </div>
       </div>
+
+      {/* Source Filter if multiple sources present */}
+      {!loading && messages.length > 0 && availableSources.length > 1 && (
+        <div className="flex items-center gap-1.5 flex-wrap pt-1 pb-1">
+          <span className="text-[11px] font-semibold text-gray-400 mr-1">Filter Source:</span>
+          <button
+            type="button"
+            onClick={() => setSourceFilter("all")}
+            className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+              sourceFilter === "all"
+                ? "bg-emerald-700 text-white"
+                : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+            }`}
+          >
+            All Sources ({messages.length})
+          </button>
+          {availableSources.map((src) => {
+            const count = messages.filter((m) => m.origin_label === src).length;
+            return (
+              <button
+                key={src}
+                type="button"
+                onClick={() => setSourceFilter(src)}
+                className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                  sourceFilter === src
+                    ? "bg-emerald-700 text-white"
+                    : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                }`}
+              >
+                {src} ({count})
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       {/* Provider Advisory if not yet configured with Meta Graph API */}
       {!providerConfigured && (
@@ -525,7 +580,7 @@ export default function CrmWhatsAppConversations({
                   </button>
                 </div>
               )}
-              {messages.map((m) => (
+              {displayedMessages.map((m) => (
                 <MessageBubble key={m.name || m.message_id || m.creation} msg={m} />
               ))}
               <div ref={messagesEndRef} />

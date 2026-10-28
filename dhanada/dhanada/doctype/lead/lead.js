@@ -261,6 +261,57 @@ frappe.ui.form.on("Lead", {
 			);
 		}
 
+		// 5b. Action: Map to Existing Client / View Client
+		const effectiveClient = frm.doc.client || frm.doc.converted_client;
+		if (!effectiveClient) {
+			const mapBtn = frm.add_custom_button(__("Map to Existing Client"), () => {
+				const d = new frappe.ui.Dialog({
+					title: __("Map Lead to Existing Client"),
+					fields: [
+						{
+							label: __("Select Client"),
+							fieldname: "client",
+							fieldtype: "Link",
+							options: "Client",
+							reqd: 1,
+						},
+					],
+					primary_action_label: __("Map to Client"),
+					primary_action(values) {
+						frappe.call({
+							method: "dhanada.crm_api.map_lead_to_client",
+							args: {
+								lead_id: frm.doc.name,
+								client_id: values.client,
+							},
+							freeze: true,
+							freeze_message: __("Mapping Lead to Client..."),
+							callback(r) {
+								d.hide();
+								if (r.message && r.message.success) {
+									frappe.show_alert({
+										message: r.message.message,
+										indicator: "green",
+									});
+									frm.reload_doc();
+								}
+							},
+						});
+					},
+				});
+				d.show();
+			});
+			mapBtn.addClass("btn-default");
+		} else {
+			const viewClientBtn = frm.add_custom_button(
+				__("View Client: {0}", [effectiveClient]),
+				() => {
+					frappe.set_route("Form", "Client", effectiveClient);
+				}
+			);
+			viewClientBtn.addClass("btn-success");
+		}
+
 		// 6. Navigation: View Submissions
 		if (frm.doc.onboarding_status === "Completed" || frm.doc.onboarding_status === "Sent") {
 			frm.add_custom_button(
@@ -314,11 +365,12 @@ frappe.ui.form.on("Lead", {
 		}
 
 		// 7. Navigation: Linked Client & Chatbot
-		if (frm.doc.converted_client) {
+		const navClient = frm.doc.client || frm.doc.converted_client;
+		if (navClient) {
 			frm.add_custom_button(
 				__("View Client ↗"),
 				() => {
-					frappe.set_route("Form", "Client", frm.doc.converted_client);
+					frappe.set_route("Form", "Client", navClient);
 				},
 				__("Navigation")
 			);

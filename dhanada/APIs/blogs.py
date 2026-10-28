@@ -1,5 +1,6 @@
 import re
 from math import ceil
+
 import frappe
 from frappe import _
 from frappe.utils import cint, global_date_format, markdown, strip_html_tags
@@ -56,10 +57,7 @@ def _format_post_dict(doc, category_map=None, blogger_map=None):
 
 	blogger_doc = blogger_map.get(doc.blogger)
 	author_name = (
-		blogger_doc.get("full_name")
-		or blogger_doc.get("short_name")
-		or doc.blogger
-		or "KNAPS Research"
+		blogger_doc.get("full_name") or blogger_doc.get("short_name") or doc.blogger or "KNAPS Research"
 	)
 	author_role = blogger_doc.get("bio") or "Financial Research"
 	author_avatar = _get_image_url(blogger_doc.get("avatar")) if blogger_doc else ""
@@ -79,9 +77,7 @@ def _format_post_dict(doc, category_map=None, blogger_map=None):
 		except Exception:
 			date_str = str(raw_date)
 
-	canonical_route = (
-		f"/{doc.route.lstrip('/')}" if getattr(doc, "route", None) else f"/blogs/{doc.name}"
-	)
+	canonical_route = f"/{doc.route.lstrip('/')}" if getattr(doc, "route", None) else f"/blogs/{doc.name}"
 
 	return {
 		"id": doc.name,
@@ -234,14 +230,20 @@ def get_blog_post_details(route_or_slug):
 		return {"blog": None, "message": "Blog post is unpublished"}
 
 	# Fetch category & blogger info
-	cat_doc = frappe.db.get_value(
-		"Blog Category", doc.blog_category, ["name", "title"], as_dict=True
-	) if doc.blog_category else None
+	cat_doc = (
+		frappe.db.get_value("Blog Category", doc.blog_category, ["name", "title"], as_dict=True)
+		if doc.blog_category
+		else None
+	)
 	category_map = {doc.blog_category: cat_doc} if cat_doc else {}
 
-	blogger_doc = frappe.db.get_value(
-		"Blogger", doc.blogger, ["name", "short_name", "full_name", "bio", "avatar"], as_dict=True
-	) if doc.blogger else None
+	blogger_doc = (
+		frappe.db.get_value(
+			"Blogger", doc.blogger, ["name", "short_name", "full_name", "bio", "avatar"], as_dict=True
+		)
+		if doc.blogger
+		else None
+	)
 	blogger_map = {doc.blogger: blogger_doc} if blogger_doc else {}
 
 	formatted = _format_post_dict(doc, category_map, blogger_map)

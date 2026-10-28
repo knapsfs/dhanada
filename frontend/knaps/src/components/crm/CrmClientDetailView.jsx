@@ -35,10 +35,12 @@ export default function CrmClientDetailView({
   onClientUpdated,
   onLogInteraction,
   onNewTask,
+  onNavigateToLead,
   refreshKey = 0,
 }) {
   const [clientData, setClientData] = useState(null);
   const [submissionData, setSubmissionData] = useState(null);
+  const [linkedLeads, setLinkedLeads] = useState([]);
   const [interactions, setInteractions] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [conversations, setConversations] = useState([]);
@@ -72,6 +74,7 @@ export default function CrmClientDetailView({
       const res = await crmService.getClientDetails(clientName);
       setClientData(res.client || {});
       setSubmissionData(res.submission || null);
+      setLinkedLeads(res.linked_leads || []);
       setInteractions(res.interactions || []);
       setTasks(res.tasks || []);
       setConversations(res.conversations || []);
@@ -495,10 +498,55 @@ export default function CrmClientDetailView({
             <p className="text-xs text-gray-500 font-medium flex items-center gap-4 flex-wrap">
               <span>Client since {clientData?.onboarding_date ? formatContactDate(clientData.onboarding_date) : (clientData?.creation ? new Date(clientData.creation).toLocaleDateString("en-IN") : "—")}</span>
               <span>•</span>
-              <span>Linked Lead: <strong className="text-gray-700">{clientData?.lead || submissionData?.lead || "None"}</strong></span>
-              <span>•</span>
               <span>Location: <strong className="text-gray-700">{submissionData?.city || clientData?.city || "Not Specified"}, {submissionData?.state || clientData?.state || "India"}</strong></span>
             </p>
+
+            {/* Linked Opportunities / Multi-Lead Badges */}
+            <div className="flex items-center gap-2 flex-wrap pt-1">
+              <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                Linked Opportunities ({linkedLeads.length || (clientData?.lead ? 1 : 0)}):
+              </span>
+              {linkedLeads.length > 0 ? (
+                linkedLeads.map((ld) => (
+                  <button
+                    key={ld.name}
+                    type="button"
+                    onClick={() => {
+                      if (onNavigateToLead) {
+                        onNavigateToLead(ld.name);
+                      } else {
+                        window.location.href = `/crm?view=leads&lead=${encodeURIComponent(ld.name)}`;
+                      }
+                    }}
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-semibold bg-white hover:bg-blue-50 border border-blue-200 text-[#032e92] transition-colors cursor-pointer shadow-2xs group"
+                    title={`Open Lead: ${ld.lead_name} (${ld.name})`}
+                  >
+                    <span className="font-bold">{ld.product_interest || "General"}</span>
+                    <span className="text-[10px] px-1.5 py-0.2 rounded-md bg-blue-100/70 text-blue-800 font-mono">
+                      {ld.status}
+                    </span>
+                    <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[9px] opacity-60 group-hover:opacity-100" />
+                  </button>
+                ))
+              ) : clientData?.lead ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (onNavigateToLead) {
+                      onNavigateToLead(clientData.lead);
+                    } else {
+                      window.location.href = `/crm?view=leads&lead=${encodeURIComponent(clientData.lead)}`;
+                    }
+                  }}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-semibold bg-white hover:bg-blue-50 border border-blue-200 text-[#032e92] transition-colors cursor-pointer shadow-2xs"
+                >
+                  <span>{clientData.lead}</span>
+                  <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[9px]" />
+                </button>
+              ) : (
+                <span className="text-xs text-gray-400 italic">No linked leads</span>
+              )}
+            </div>
           </div>
 
           {/* Vital Stats Bar */}

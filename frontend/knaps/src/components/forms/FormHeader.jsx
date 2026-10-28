@@ -23,7 +23,7 @@ export default function FormHeader({
           </div>
           <div>
             <span className="font-extrabold text-sm sm:text-base tracking-tight text-gray-950 block leading-tight">
-              KNAPS <span className="text-[#032e92] font-semibold text-xs sm:text-sm">Private Limited</span>
+              KNAPS <span className="text-[#032e92] font-semibold text-xs sm:text-sm">FINANCIAL</span>
             </span>
             <span className="text-[10px] text-gray-400 font-medium block">
               AMFI Registered Mutual Fund Distributor

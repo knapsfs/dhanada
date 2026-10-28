@@ -83,8 +83,8 @@ RISK_QUESTIONS = [
 		"title": "Approximately what portion of your monthly income goes toward household expenses and EMI payments?",
 		"options": [
 			{"text": "Less than 30%", "score": 8},
-			{"text": "30–40%", "score": 6},  # noqa: RUF001
-			{"text": "40–50%", "score": 4},  # noqa: RUF001
+			{"text": "30-40%", "score": 6},
+			{"text": "40-50%", "score": 4},
 			{"text": "More than 50%", "score": 2},
 		],
 	},

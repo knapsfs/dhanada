@@ -1418,6 +1418,7 @@ def convert_lead_to_client(lead_id):
 			"Lead",
 			lead_id,
 			{
+				"client": existing_client,
 				"converted_client": existing_client,
 				"converted_on": now_datetime(),
 				"status": "Converted",
@@ -1570,6 +1571,7 @@ def convert_lead_to_client(lead_id):
 	client_doc.insert()
 
 	# Update native Lead
+	lead.client = client_doc.name
 	lead.converted_client = client_doc.name
 	lead.converted_on = now_datetime()
 	lead.status = "Converted"

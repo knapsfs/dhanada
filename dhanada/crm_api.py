@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 import json
+import re
 
 import frappe
 from frappe import _
@@ -111,6 +112,7 @@ def get_leads(status=None, search=None, product=None, limit=100):
 			"onboarding_status",
 			"risk_profiler_status",
 			"converted_client",
+			"client",
 			"creation",
 			"modified",
 			"last_contacted_on",
@@ -140,6 +142,7 @@ def get_leads(status=None, search=None, product=None, limit=100):
 
 	now = now_datetime()
 	for l in leads:
+		l["client"] = l.get("client") or l.get("converted_client") or ""
 		l["interaction_count"] = interaction_counts.get(l.name, 0)
 		if l.get("last_contacted_on"):
 			contact_dt = get_datetime(l["last_contacted_on"])
@@ -161,6 +164,14 @@ def get_lead_details(lead_name):
 		frappe.throw(_("Lead {0} not found").format(lead_name))
 
 	lead = frappe.get_doc("Lead", lead_name).as_dict()
+	effective_client = lead.get("client") or lead.get("converted_client") or ""
+	lead["client"] = effective_client
+	if effective_client:
+		lead["client_name"] = (
+			frappe.db.get_value("Client", effective_client, "client_name") or effective_client
+		)
+	else:
+		lead["client_name"] = ""
 
 	now = now_datetime()
 	if lead.get("last_contacted_on"):
@@ -342,6 +353,305 @@ def quick_log_interaction(
 	return doc.as_dict()
 
 
+def _mask_pan(pan: str | None) -> str:
+	if not pan:
+		return ""
+	pan_clean = str(pan).strip().upper()
+	if len(pan_clean) == 10:
+		return f"{pan_clean[:5]}****{pan_clean[-1]}"
+	return pan_clean
+
+
+@frappe.whitelist()
+def get_client_linked_leads(client_name):
+	"""
+	Returns all Leads associated with a given Client.
+	Aggregates Leads mapped via Lead.client, Lead.converted_client, or Client.lead.
+	"""
+	_check_crm_permission()
+	if not client_name or not frappe.db.exists("Client", client_name):
+		frappe.throw(_("Client '{0}' not found.").format(client_name), frappe.DoesNotExistError)
+
+	if not frappe.has_permission("Client", "read", doc=client_name):
+		frappe.throw(_("Permission denied to read Client '{0}'.").format(client_name), frappe.PermissionError)
+
+	origin_lead = frappe.db.get_value("Client", client_name, "lead")
+
+	leads = frappe.db.sql(
+		"""
+		SELECT
+			name,
+			lead_name,
+			status,
+			product_interest,
+			source,
+			mobile_no,
+			email,
+			creation,
+			modified,
+			last_contacted_on,
+			last_contacted_by,
+			client,
+			converted_client
+		FROM `tabLead`
+		WHERE client = %s
+		   OR converted_client = %s
+		   OR name = %s
+		ORDER BY creation DESC
+		""",
+		(client_name, client_name, origin_lead or ""),
+		as_dict=True,
+	)
+
+	seen = set()
+	unique_leads = []
+	for l in leads:
+		if l.name not in seen:
+			seen.add(l.name)
+			l["client"] = l.get("client") or l.get("converted_client") or client_name
+			unique_leads.append(l)
+
+	return unique_leads
+
+
+@frappe.whitelist()
+def search_clients_for_mapping(lead_id, query=None):
+	"""
+	Search existing Clients to map a Lead to.
+	Returns:
+	- 'suggested': Clients matching the Lead's phone, email, or name with match reasons.
+	- 'results': Search results matching 'query' across name, mobile, email, PAN, and ID.
+	Never maps automatically; returns candidate details with masked PAN.
+	"""
+	_check_crm_permission()
+	if not lead_id or not frappe.db.exists("Lead", lead_id):
+		frappe.throw(_("Lead '{0}' not found.").format(lead_id), frappe.DoesNotExistError)
+
+	if not frappe.has_permission("Lead", "write", doc=lead_id):
+		frappe.throw(_("Permission denied to map Lead '{0}'.").format(lead_id), frappe.PermissionError)
+
+	if not frappe.has_permission("Client", "read"):
+		frappe.throw(_("Permission denied to search Clients."), frappe.PermissionError)
+
+	lead = frappe.get_doc("Lead", lead_id)
+	lead_mobile = (lead.mobile_no or "").strip()
+	lead_alt_mobile = (lead.alternate_mobile_no or "").strip()
+	lead_email = (lead.email or "").strip().lower()
+	lead_name = (lead.lead_name or "").strip()
+
+	current_linked_client = lead.client or lead.converted_client or ""
+
+	def format_client(row, match_reason=None):
+		linked_leads_count = frappe.db.sql(
+			"""
+			SELECT COUNT(DISTINCT name)
+			FROM `tabLead`
+			WHERE (client = %s OR converted_client = %s OR name = %s)
+			  AND name != %s
+			""",
+			(row.name, row.name, row.get("lead") or "", lead_id),
+		)[0][0]
+
+		return {
+			"name": row.name,
+			"client_name": row.client_name,
+			"client_type": row.client_type or "Individual",
+			"client_status": row.client_status or "Active",
+			"kyc_status": row.kyc_status or "Pending",
+			"email": row.email or "",
+			"mobile_no": row.mobile_no or "",
+			"pan": _mask_pan(row.pan),
+			"risk_profile": row.risk_profile or "Not Assessed",
+			"match_reason": match_reason or "",
+			"linked_leads_count": linked_leads_count,
+			"is_current": (current_linked_client == row.name),
+		}
+
+	suggested = []
+	suggested_ids = set()
+
+	# 1. Match by phone digits (last 10 digits)
+	for phone in (lead_mobile, lead_alt_mobile):
+		if not phone:
+			continue
+		digits = re.sub(r"\D", "", phone)
+		last10 = digits[-10:] if len(digits) >= 10 else digits
+		if last10 and len(last10) >= 7:
+			matches = frappe.db.sql(
+				"""
+				SELECT name, client_name, client_type, client_status, kyc_status, email, mobile_no, pan, risk_profile, lead
+				FROM `tabClient`
+				WHERE mobile_no LIKE %s OR alternate_mobile_no LIKE %s
+				ORDER BY client_name ASC
+				LIMIT 10
+				""",
+				(f"%{last10}%", f"%{last10}%"),
+				as_dict=True,
+			)
+			for m in matches:
+				if m.name not in suggested_ids:
+					suggested_ids.add(m.name)
+					suggested.append(format_client(m, match_reason="Matched by Phone Number"))
+
+	# 2. Match by email
+	if lead_email and "@" in lead_email:
+		matches = frappe.db.sql(
+			"""
+			SELECT name, client_name, client_type, client_status, kyc_status, email, mobile_no, pan, risk_profile, lead
+			FROM `tabClient`
+			WHERE LOWER(TRIM(email)) = %s
+			ORDER BY client_name ASC
+			LIMIT 10
+			""",
+			(lead_email,),
+			as_dict=True,
+		)
+		for m in matches:
+			if m.name not in suggested_ids:
+				suggested_ids.add(m.name)
+				suggested.append(format_client(m, match_reason="Matched by Email Address"))
+
+	# 3. Match by exact or very close name
+	if lead_name and len(lead_name) >= 3:
+		matches = frappe.db.sql(
+			"""
+			SELECT name, client_name, client_type, client_status, kyc_status, email, mobile_no, pan, risk_profile, lead
+			FROM `tabClient`
+			WHERE LOWER(TRIM(client_name)) = %s
+			ORDER BY client_name ASC
+			LIMIT 10
+			""",
+			(lead_name.lower(),),
+			as_dict=True,
+		)
+		for m in matches:
+			if m.name not in suggested_ids:
+				suggested_ids.add(m.name)
+				suggested.append(format_client(m, match_reason="Matched by Full Name"))
+
+	# Search Query Results
+	results = []
+	if query and str(query).strip():
+		q = str(query).strip()
+		q_wild = f"%{q}%"
+		search_rows = frappe.db.sql(
+			"""
+			SELECT name, client_name, client_type, client_status, kyc_status, email, mobile_no, pan, risk_profile, lead
+			FROM `tabClient`
+			WHERE name LIKE %s
+			   OR client_name LIKE %s
+			   OR email LIKE %s
+			   OR mobile_no LIKE %s
+			   OR alternate_mobile_no LIKE %s
+			   OR pan LIKE %s
+			ORDER BY client_name ASC
+			LIMIT 25
+			""",
+			(q_wild, q_wild, q_wild, q_wild, q_wild, q_wild),
+			as_dict=True,
+		)
+		for r in search_rows:
+			results.append(format_client(r))
+
+	return {
+		"lead_id": lead_id,
+		"lead_name": lead.lead_name,
+		"current_client": current_linked_client or None,
+		"suggested": suggested,
+		"results": results,
+	}
+
+
+@frappe.whitelist()
+def map_lead_to_client(lead_id, client_id):
+	"""
+	Associates an existing Lead with an existing Client record.
+	- Validates server-side permissions: Lead write & Client read.
+	- Ensures Lead and Client exist.
+	- Sets Lead.client = client_id.
+	- Preserves Lead's product interest, source, status, follow-ups, and conversations.
+	- Preserves Client's KYC, PAN, risk profile, and existing details (no overwriting).
+	- Sets Client.lead = lead_id if Client.lead is currently unassigned.
+	- Logs a CRM Interaction documenting the mapping event on both documents.
+	- Idempotent: repeated mapping to the same client is safely handled.
+	"""
+	_check_crm_permission()
+	if not lead_id or not frappe.db.exists("Lead", lead_id):
+		frappe.throw(_("Lead '{0}' not found.").format(lead_id), frappe.DoesNotExistError)
+
+	if not client_id or not frappe.db.exists("Client", client_id):
+		frappe.throw(_("Client '{0}' not found.").format(client_id), frappe.DoesNotExistError)
+
+	if not frappe.has_permission("Lead", "write", doc=lead_id):
+		frappe.throw(
+			_("You do not have write permission for Lead '{0}'.").format(lead_id), frappe.PermissionError
+		)
+
+	if not frappe.has_permission("Client", "read", doc=client_id):
+		frappe.throw(
+			_("You do not have permission to view Client '{0}'.").format(client_id), frappe.PermissionError
+		)
+
+	lead = frappe.get_doc("Lead", lead_id)
+	client = frappe.get_doc("Client", client_id)
+
+	# If already mapped to the same client, return success idempotently
+	current_client = lead.client or lead.converted_client
+	if current_client == client_id:
+		return {
+			"success": True,
+			"already_mapped": True,
+			"lead_id": lead_id,
+			"client_id": client_id,
+			"client_name": client.client_name,
+			"product_interest": lead.product_interest,
+			"message": _("Lead '{0}' is already mapped to Client '{1}' ({2}).").format(
+				lead_id, client.client_name, client_id
+			),
+		}
+
+	# Map Lead to Client
+	lead.client = client_id
+	lead.flags.ignore_permissions = True
+	lead.save()
+
+	# If Client has no originating lead set, set it backward-compatibly
+	if not client.lead:
+		client.db_set("lead", lead_id, update_modified=False)
+
+	# Log CRM Interaction record linking both Lead and Client
+	interaction = frappe.get_doc(
+		{
+			"doctype": "CRM Interaction",
+			"related_lead": lead_id,
+			"related_client": client_id,
+			"interaction_type": "Note",
+			"direction": "Outbound",
+			"interaction_date": now_datetime(),
+			"logged_by": frappe.session.user,
+			"summary": f"Mapped to Client: {client.client_name} ({client_id})",
+			"details": (
+				f"Lead {lead_id} (Product Interest: {lead.product_interest or 'General Advisory'}, "
+				f"Status: {lead.status}) was explicitly mapped to Client {client_id} "
+				f"by {frappe.session.user}."
+			),
+		}
+	)
+	interaction.flags.ignore_permissions = True
+	interaction.insert()
+
+	return {
+		"success": True,
+		"lead_id": lead_id,
+		"client_id": client_id,
+		"client_name": client.client_name,
+		"product_interest": lead.product_interest,
+		"message": _("Lead '{0}' successfully mapped to Client '{1}' ({2}).").format(
+			lead_id, client.client_name, client_id
+		),
+	}
+
+
 @frappe.whitelist()
 def get_clients(search=None, limit=100):
 	"""Returns clients list."""
@@ -510,11 +820,14 @@ def get_client_details(client_name):
 
 	wa_res = whatsapp_api.get_crm_whatsapp_conversations("Client", client_name, page=1, page_length=30)
 
+	linked_leads = get_client_linked_leads(client_name)
+
 	return {
 		"client": client,
 		"submission": submission,
 		"interactions": interactions,
 		"tasks": tasks,
+		"linked_leads": linked_leads,
 		"conversations": conversations_res["conversations"],
 		"conversations_total": conversations_res["total_count"],
 		"conversations_has_more": conversations_res["has_more"],
@@ -545,7 +858,11 @@ def _normalize_experience(val, target="sub"):
 	elif "inter" in val_str or "mod" in val_str or "1-5" in val_str:
 		return "Intermediate (1-5 Years)" if target == "sub" else "Intermediate"
 	elif "exper" in val_str or "5+" in val_str or "expert" in val_str:
-		return "Experienced (5+ Years)" if target == "sub" else ("Expert" if "expert" in val_str else "Experienced")
+		return (
+			"Experienced (5+ Years)"
+			if target == "sub"
+			else ("Expert" if "expert" in val_str else "Experienced")
+		)
 	return ""
 
 
@@ -622,7 +939,13 @@ def _normalize_capacity(val, target="sub"):
 
 	lower_val = val_str.lower()
 	if target == "sub":
-		if "below" in lower_val or "< 10" in lower_val or "5-10" in lower_val or "<10" in lower_val or "5 lakh" in lower_val:
+		if (
+			"below" in lower_val
+			or "< 10" in lower_val
+			or "5-10" in lower_val
+			or "<10" in lower_val
+			or "5 lakh" in lower_val
+		):
 			return "Below 10 Lakhs"
 		elif "10-25" in lower_val or "10 to 25" in lower_val:
 			return "10-25 Lakhs"
@@ -822,13 +1145,19 @@ def update_client_onboarding_details(client_name, payload):
 	if "kyc_status" in payload:
 		client_doc.kyc_status = _normalize_kyc_status(payload.get("kyc_status"), "client")
 	if "investor_category" in payload:
-		client_doc.investor_category = _normalize_investor_category(payload.get("investor_category"), "client")
+		client_doc.investor_category = _normalize_investor_category(
+			payload.get("investor_category"), "client"
+		)
 	if "investment_horizon" in payload:
 		client_doc.investment_horizon = _normalize_horizon(payload.get("investment_horizon"), "client")
 	if "investment_experience" in payload:
-		client_doc.investment_experience = _normalize_experience(payload.get("investment_experience"), "client")
+		client_doc.investment_experience = _normalize_experience(
+			payload.get("investment_experience"), "client"
+		)
 	if "investment_objectives" in payload:
-		client_doc.investment_objectives = _normalize_objectives(payload.get("investment_objectives"), "client")
+		client_doc.investment_objectives = _normalize_objectives(
+			payload.get("investment_objectives"), "client"
+		)
 	if "investment_capacity" in payload:
 		client_doc.investment_capacity = _normalize_capacity(payload.get("investment_capacity"), "client")
 
@@ -850,16 +1179,18 @@ def update_client_onboarding_details(client_name, payload):
 	client_doc.save(ignore_permissions=True)
 
 	try:
-		frappe.get_doc({
-			"doctype": "CRM Interaction",
-			"related_client": client_name,
-			"interaction_type": "Note",
-			"direction": "Outbound",
-			"interaction_date": now_datetime(),
-			"logged_by": frappe.session.user,
-			"summary": "Client Onboarding Details Updated",
-			"details": "Client profile & onboarding submission details updated via KNAPS CRM.",
-		}).insert(ignore_permissions=True)
+		frappe.get_doc(
+			{
+				"doctype": "CRM Interaction",
+				"related_client": client_name,
+				"interaction_type": "Note",
+				"direction": "Outbound",
+				"interaction_date": now_datetime(),
+				"logged_by": frappe.session.user,
+				"summary": "Client Onboarding Details Updated",
+				"details": "Client profile & onboarding submission details updated via KNAPS CRM.",
+			}
+		).insert(ignore_permissions=True)
 	except Exception:
 		pass
 
@@ -940,15 +1271,41 @@ def get_crm_conversations(doctype, name, page=1, page_length=20, sync=False):
 	page_length = min(100, max(1, cint(page_length or 20)))
 	offset = (page - 1) * page_length
 
-	linked_records = [(doctype, name)]
+	linked_records = []
+	lead_product_map = {}
+	lead_name_map = {}
+
 	if doctype == "Lead":
-		converted_client = frappe.db.get_value("Lead", name, "converted_client")
-		if converted_client and frappe.db.exists("Client", converted_client):
-			linked_records.append(("Client", converted_client))
+		# STRICT ISOLATION: Lead sees ONLY its own communications (never sibling leads or client direct)
+		linked_records = [("Lead", name)]
+		lead_info = frappe.db.get_value("Lead", name, ["lead_name", "product_interest"], as_dict=True)
+		if lead_info:
+			lead_product_map[name] = lead_info.product_interest or "General"
+			lead_name_map[name] = lead_info.lead_name or name
 	elif doctype == "Client":
-		lead_ref = frappe.db.get_value("Client", name, "lead")
-		if lead_ref and frappe.db.exists("Lead", lead_ref):
-			linked_records.append(("Lead", lead_ref))
+		# AGGREGATION: Client sees Direct Client communications + communications from all mapped Leads
+		linked_records = [("Client", name)]
+		origin_lead = frappe.db.get_value("Client", name, "lead")
+		leads = frappe.db.sql(
+			"""
+			SELECT name, lead_name, product_interest
+			FROM `tabLead`
+			WHERE client = %s
+			   OR converted_client = %s
+			   OR name = %s
+			""",
+			(name, name, origin_lead or ""),
+			as_dict=True,
+		)
+		seen_leads = set()
+		for l in leads:
+			if l.name not in seen_leads:
+				seen_leads.add(l.name)
+				linked_records.append(("Lead", l.name))
+				lead_product_map[l.name] = l.product_interest or "General"
+				lead_name_map[l.name] = l.lead_name or l.name
+	else:
+		linked_records = [(doctype, name)]
 
 	conditions = []
 	params = []
@@ -996,6 +1353,30 @@ def get_crm_conversations(doctype, name, page=1, page_length=20, sync=False):
 	"""
 	query_params = [*params, page_length, offset]
 	conversations = frappe.db.sql(select_query, query_params, as_dict=True)
+
+	# Annotate each email with origin metadata
+	for c in conversations:
+		ref_dt = c.get("reference_doctype")
+		ref_dn = c.get("reference_name")
+		if ref_dt == "Lead":
+			prod = lead_product_map.get(ref_dn) or "Lead"
+			c["origin_doctype"] = "Lead"
+			c["origin_name"] = ref_dn
+			c["origin_product"] = prod
+			c["origin_lead_name"] = lead_name_map.get(ref_dn) or ref_dn
+			c["origin_label"] = f"{prod} Lead ({ref_dn})"
+		elif ref_dt == "Client":
+			c["origin_doctype"] = "Client"
+			c["origin_name"] = ref_dn
+			c["origin_product"] = "Direct Client"
+			c["origin_lead_name"] = ""
+			c["origin_label"] = f"Client Direct ({ref_dn})"
+		else:
+			c["origin_doctype"] = ref_dt
+			c["origin_name"] = ref_dn
+			c["origin_product"] = ""
+			c["origin_lead_name"] = ""
+			c["origin_label"] = f"{ref_dt} ({ref_dn})"
 
 	has_more = (offset + len(conversations)) < total_count
 
@@ -1227,6 +1608,7 @@ def crm_logout():
 			frappe.local.login_manager.logout()
 		frappe.db.commit()
 	return {"status": "ok", "message": "Logged out successfully"}
+
 
 @frappe.whitelist()
 def delete_crm_lead(lead_name):
