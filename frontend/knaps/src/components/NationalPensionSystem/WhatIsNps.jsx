@@ -146,9 +146,8 @@ export default function WhatIsNps() {
             className="btn-ripple w-full sm:w-auto px-8 py-3.5 rounded-xl text-[15px] font-semibold bg-[#032e92] hover:bg-[#022169] text-white shadow-md hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center gap-2.5 cursor-pointer"
           >
             <span>Start Your NPS Investment</span>
-            <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
           </button>
-
+          {/* 
           <button
             type="button"
             onClick={scrollToCalculator}
@@ -156,7 +155,7 @@ export default function WhatIsNps() {
           >
             <FontAwesomeIcon icon={faCalculator} className="text-xs" />
             <span>Calculate Retirement Corpus</span>
-          </button>
+          </button> */}
         </div>
 
       </div>

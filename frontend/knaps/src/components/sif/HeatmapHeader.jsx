@@ -36,7 +36,7 @@ export default function HeatmapHeader({ timeFilter, setTimeFilter }) {
           initial={{ opacity: 0, y: 5 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.2 }}
-          className="text-blue-100 text-sm max-w-2xl">
+          className="text-blue-100 text-sm sm:text-base font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed">
           {getSubTitle()}
         </motion.p>
       </div>
@@ -50,8 +50,8 @@ export default function HeatmapHeader({ timeFilter, setTimeFilter }) {
             key={tab.value}
             onClick={() => setTimeFilter(tab.value)}
             className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-300 ${timeFilter === tab.value
-                ? 'bg-white text-[#032e92] shadow-md'
-                : 'text-blue-100 hover:text-white hover:bg-white/10'
+              ? 'bg-white text-[#032e92] shadow-md'
+              : 'text-blue-100 hover:text-white hover:bg-white/10'
               }`}>
             {tab.label}
           </button>

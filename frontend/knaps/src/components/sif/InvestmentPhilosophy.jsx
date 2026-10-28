@@ -29,12 +29,12 @@ export default function InvestmentPhilosophy() {
             </h2>
 
             {/* Paragraph 1 */}
-            <p className="text-gray-500 font-normal leading-relaxed text-sm sm:text-base mb-5">
+            <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mb-5">
               Every investment decision should start with a clear goal. What am I investing for? How much do I need? And how long can I stay invested? The answers should guide one’s investment choices, not market rumours, a friend’s advice or the fear of missing out.
             </p>
 
             {/* Paragraph 2 */}
-            <p className="text-gray-500 font-normal leading-relaxed text-sm sm:text-base mb-8">
+            <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mb-8">
               Markets will rise and fall. A disciplined investor should stay focused on the plan, avoid panic during downturns and give investments the time they need to work.
             </p>
 

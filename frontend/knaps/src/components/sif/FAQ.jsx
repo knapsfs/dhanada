@@ -30,7 +30,7 @@ export default function FAQ() {
               <br />
               <span className="gradient-text">Questions</span>
             </h2>
-            <p className="text-gray-500 font-medium leading-relaxed mb-8">
+            <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mb-8">
               Everything you need to know about investing with SIF. Can't find an answer? Our team is available 24/7.
             </p>
 

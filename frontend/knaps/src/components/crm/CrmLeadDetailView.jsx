@@ -6,12 +6,14 @@ import {
   faCommentDots, faListCheck, faSpinner,
   faCheckCircle, faCircleExclamation, faTriangleExclamation,
   faClock, faFloppyDisk, faUser, faTrash, faCopy, faCheck,
-  faLocationDot, faCoins, faFileLines, faPlus, faXmark, faComments
+  faLocationDot, faCoins, faFileLines, faPlus, faXmark, faComments,
+  faLink, faArrowUpRightFromSquare
 } from "@fortawesome/free-solid-svg-icons";
 import CrmSelect from "./CrmSelect";
 import CrmSendFormModal from "./CrmSendFormModal";
 import CrmEmailConversations from "./CrmEmailConversations";
 import CrmWhatsAppConversations from "./CrmWhatsAppConversations";
+import CrmMapToClientModal from "./CrmMapToClientModal";
 import { crmService } from "../../services/crmService";
 import { getContactStatus, formatContactDate } from "../../utils/crmContactUtils";
 
@@ -31,10 +33,12 @@ export default function CrmLeadDetailView({
   onDeleteLead,
   onLogInteraction,
   onNewTask,
+  onNavigateToClient,
   refreshKey = 0,
 }) {
   const [leadData, setLeadData] = useState(null);
   const [sendFormModalOpen, setSendFormModalOpen] = useState(false);
+  const [mapModalOpen, setMapModalOpen] = useState(false);
   const [interactions, setInteractions] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [conversations, setConversations] = useState([]);
@@ -245,6 +249,7 @@ export default function CrmLeadDetailView({
   };
 
   const cleanPhone = leadData?.mobile_no ? leadData.mobile_no.replace(/\D/g, "") : "";
+  const associatedClient = leadData?.client || leadData?.converted_client || null;
 
   const contactInfo = getContactStatus(
     leadData?.last_contacted_on,
@@ -394,6 +399,36 @@ export default function CrmLeadDetailView({
             <FontAwesomeIcon icon={faPaperPlane} className="text-[#032e92] text-xs" />
             <span className="hidden sm:inline">Send Form</span>
           </button>
+
+          {/* Linked Client Badge or Map to Existing Client */}
+          {associatedClient ? (
+            <button
+              type="button"
+              onClick={() => {
+                if (onNavigateToClient) {
+                  onNavigateToClient(associatedClient);
+                } else {
+                  window.location.href = `/crm?view=clients&client=${encodeURIComponent(associatedClient)}`;
+                }
+              }}
+              className="px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1.5 shadow-2xs cursor-pointer transition-colors"
+              title={`View Linked Client: ${leadData?.client_name || associatedClient}`}
+            >
+              <FontAwesomeIcon icon={faLink} className="text-emerald-600 text-xs" />
+              <span className="truncate max-w-[150px]">Client: {leadData?.client_name || associatedClient}</span>
+              <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[10px] text-emerald-600 ml-0.5" />
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setMapModalOpen(true)}
+              className="px-3.5 py-2 rounded-xl text-xs font-bold bg-white border border-[#032e92] text-[#032e92] hover:bg-blue-50 flex items-center gap-1.5 shadow-2xs cursor-pointer transition-colors"
+              title="Map this Lead to an Existing Client Profile"
+            >
+              <FontAwesomeIcon icon={faLink} className="text-xs text-[#032e92]" />
+              <span>Map to Existing Client</span>
+            </button>
+          )}
 
           {leadData?.status !== "Converted" && (
             <button
@@ -1236,6 +1271,28 @@ export default function CrmLeadDetailView({
           await loadDetails(true);
           if (onLeadUpdated && leadData) {
             onLeadUpdated({ ...leadData });
+          }
+        }}
+      />
+
+      <CrmMapToClientModal
+        isOpen={mapModalOpen}
+        onClose={() => setMapModalOpen(false)}
+        leadData={leadData}
+        onMapped={async (updated) => {
+          setLeadData(updated);
+          if (onLeadUpdated) onLeadUpdated(updated);
+          setFeedback({
+            type: "success",
+            message: `Lead successfully mapped to Client ${updated.client_name || updated.client}!`,
+          });
+          await loadDetails(true);
+        }}
+        onOpenClientProfile={(clientId) => {
+          if (onNavigateToClient) {
+            onNavigateToClient(clientId);
+          } else {
+            window.location.href = `/crm?view=clients&client=${encodeURIComponent(clientId)}`;
           }
         }}
       />

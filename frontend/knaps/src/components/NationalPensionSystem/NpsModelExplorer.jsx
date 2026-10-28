@@ -11,6 +11,8 @@ import {
   faLayerGroup,
   faUsers,
   faCheckCircle,
+  faArrowRight,
+  faArrowUpRightFromSquare,
   faCircleCheck,
   faChartLine,
   faGraduationCap,

@@ -1,5 +1,4 @@
 import os
-
 import frappe
 
 
@@ -15,7 +14,7 @@ def get_context(context):
 			csrf_token = frappe.sessions.get_csrf_token() or ""
 			csrf_script = (
 				f'<script>window.csrf_token = "{csrf_token}";'
-				f" window.frappe = window.frappe || {{}};"
+				f' window.frappe = window.frappe || {{}};'
 				f' window.frappe.csrf_token = "{csrf_token}";</script>'
 			)
 			if "</head>" in html:

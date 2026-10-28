@@ -1,16 +1,23 @@
 {
  "aggregate_function_based_on": "",
  "color": "#28A745",
+ "creation": "2026-10-22 10:54:13.019086",
+ "docstatus": 0,
  "doctype": "Number Card",
  "document_type": "Lead",
  "dynamic_filters_json": "[]",
  "filters_json": "[[\"Lead\",\"status\",\"=\",\"Converted\",false]]",
  "function": "Count",
+ "idx": 0,
  "is_public": 1,
  "is_standard": 1,
  "label": "Converted Leads",
+ "modified": "2026-10-22 15:03:38.457578",
+ "modified_by": "Administrator",
  "module": "Dhanada",
  "name": "Converted Leads",
+ "owner": "Administrator",
  "show_full_number": 0,
+ "show_percentage_stats": 0,
  "type": "Document Type"
 }

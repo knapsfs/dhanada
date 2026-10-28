@@ -49,7 +49,7 @@ export default function Footer() {
               <li><Link to="/sif" className="text-gray-400 hover:text-white text-sm transition-colors">SIF</Link></li>
               <li><Link to="/#mf" className="text-gray-400 hover:text-white text-sm transition-colors">Mutual Fund</Link></li>
               <li><Link to="/#pms" className="text-gray-400 hover:text-white text-sm transition-colors">PMS</Link></li>
-              <li><Link to="/sif" className="text-gray-400 hover:text-white text-sm transition-colors">AIF</Link></li>
+              {/* <li><Link to="/sif" className="text-gray-400 hover:text-white text-sm transition-colors">AIF</Link></li> */}
             </ul>
           </div>
 

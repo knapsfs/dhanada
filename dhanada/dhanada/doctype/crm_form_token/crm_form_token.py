@@ -2,11 +2,9 @@
 # For license information, please see license.txt
 
 import secrets
-
 import frappe
 from frappe.model.document import Document
-from frappe.utils import add_to_date, now_datetime
-
+from frappe.utils import now_datetime, add_to_date
 
 class CRMFormToken(Document):
 	def validate(self):

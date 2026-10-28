@@ -424,6 +424,11 @@ export default function KnapsCrmPortal() {
               onDeleteLead={handleLeadDeleted}
               onLogInteraction={handleOpenInteractionModal}
               onNewTask={handleOpenTaskModal}
+              onNavigateToClient={(clientName) => {
+                setSelectedLeadName(null);
+                setSelectedClientName(clientName);
+                setActiveTab('clients');
+              }}
               refreshKey={leadRefreshKey}
             />
           ) : selectedClientName ? (
@@ -433,6 +438,11 @@ export default function KnapsCrmPortal() {
               onClientUpdated={handleClientUpdated}
               onLogInteraction={handleOpenInteractionModal}
               onNewTask={handleOpenTaskModal}
+              onNavigateToLead={(leadName) => {
+                setSelectedClientName(null);
+                setSelectedLeadName(leadName);
+                setActiveTab('leads');
+              }}
               refreshKey={clientRefreshKey}
             />
           ) : (
