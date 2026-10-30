@@ -66,7 +66,7 @@ export default function AboutTimeline() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed"
           >
-            Three decades of disciplined wealth advisory &amp; family trust
+            Three decades of financial experience & family trust.
           </motion.p>
         </div>
 

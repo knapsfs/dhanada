@@ -184,21 +184,7 @@ export const faqs = [
 		question: "What documents do I need to invest in an SIF?",
 		answer: "You generally need PAN, Aadhaar/valid KYC documents, bank details, and a completed application form. Additional documents may be required depending on the investor type and SIF requirements.",
 	},
-	{
-		id: 7,
-		question: "What is the minimum investment required for an SIF?",
-		answer: "The minimum investment for SIF is ₹10 lakh. This amount can be invested across different SIF strategies.",
-	},
-	{
-		id: 8,
-		question: "Can I withdraw my investments anytime?",
-		answer: "Yes, you can withdraw your SIF investment, subject to the terms of the specific strategy. Withdrawals before the applicable 3–5 year period may attract an exit load or other charges. Please refer to the respective PPM for details.",
-	},
-	{
-		id: 9,
-		question: "What are the tax implications of mutual fund investments?",
-		answer: "Most cases, SIFs follow mutual-fund taxation. For equity-oriented SIFs, short-term capital gains are taxed at 20%, while long-term capital gains are taxed at 12.5% on gains above ₹1.25 lakh. Other SIF strategies may have different tax treatment depending on their underlying investments. ",
-	},
+
 ];
 
 // Stats Data

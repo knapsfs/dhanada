@@ -112,11 +112,28 @@ export default function NpsModelExplorer() {
     { key: 'why-vatsalya', label: 'Why NPS Vatsalya', icon: faHeart },
   ];
 
-  const activeTabs = activeModelId === 'vatsalya' ? vatsalyaTabs : defaultTabs;
+  const corporateTabs = [
+    { key: 'audience', label: 'Who is it for?', icon: faUsers },
+    { key: 'eligibility', label: 'Eligibility', icon: faCircleCheck },
+    { key: 'benefits', label: 'Benefits', icon: faShieldHeart },
+    { key: 'tax', label: 'Tax Benefits', icon: faReceipt },
+  ];
+
+  const activeTabs =
+    activeModelId === 'vatsalya'
+      ? vatsalyaTabs
+      : activeModelId === 'corporate'
+        ? corporateTabs
+        : defaultTabs;
 
   const handleModelSelect = (modelId) => {
     setActiveModelId(modelId);
-    const targetTabs = modelId === 'vatsalya' ? vatsalyaTabs : defaultTabs;
+    const targetTabs =
+      modelId === 'vatsalya'
+        ? vatsalyaTabs
+        : modelId === 'corporate'
+          ? corporateTabs
+          : defaultTabs;
     if (!targetTabs.some((t) => t.key === activeTabKey)) {
       setActiveTabKey(targetTabs[0].key);
     }
@@ -132,7 +149,7 @@ export default function NpsModelExplorer() {
       pfrdaUrl: 'https://pfrda.org.in/en/schemes/national-pension-system/nps-for-all-citizen-models',
       sections: {
         audience: {
-          title: 'Who is it for?',
+          // title: 'Who is it for?',
           description: 'NPS is a voluntary retirement savings scheme for resident Indians, NRIs and OCIs above 18 years of age, who want to build a retirement corpus. An NPS account can be opened with a minimum contribution of ₹500 and ₹1,000 annually thereafter.',
           targetSubtitle: 'Best suited for:',
           targetList: [
@@ -143,33 +160,33 @@ export default function NpsModelExplorer() {
           ]
         },
         tax: {
-          title: 'Tax-Free Exit',
+          // title: 'Tax-Free Exit',
           description:
             'At exit, the lump-sum amount withdrawn and the amount used to purchase an annuity are completely tax-free. Only the income received from the annuity is taxable.',
           eeeBenefit: {
             title: 'E-E-E Benefit',
-            subtitle: 'Triple Tax Exemption Framework',
+            // subtitle: 'Triple Tax Exemption Framework',
             items: [
               {
                 stage: 'Investment',
                 label: 'Exemption on Investment',
-                desc: 'Eligible contributions qualify for deduction under Sec 80CCD(1) and additional Sec 80CCD(1B).'
+                // desc: 'Eligible contributions qualify for deduction under Sec 80CCD(1) and additional Sec 80CCD(1B).'
               },
               {
                 stage: 'Growth',
                 label: 'Exemption during growth',
-                desc: 'Compounding capital gains and returns during the accumulation phase are exempt from annual tax.'
+                // desc: 'Compounding capital gains and returns during the accumulation phase are exempt from annual tax.'
               },
               {
                 stage: 'Withdrawals',
                 label: 'Exemption at the time of withdrawals',
-                desc: 'Lump-sum corpus withdrawal (up to 60%) and annuity investment are 100% tax-free.'
+                // desc: 'Lump-sum corpus withdrawal (up to 60%) and annuity investment are 100% tax-free.'
               }
             ]
           }
         },
         withdrawals: {
-          title: 'Withdrawals & Exit',
+          // title: 'Withdrawals & Exit',
           exitCards: [
             {
               type: 'normal',
@@ -220,7 +237,7 @@ export default function NpsModelExplorer() {
           }
         },
         choices: {
-          title: 'Scheme Type',
+          // title: 'Scheme Type',
           msf: {
             title: 'Multiple Scheme Framework (MSF)',
             badge: 'Multi Choice',
@@ -234,14 +251,14 @@ export default function NpsModelExplorer() {
             activeChoice: {
               title: 'Active Choice — Custom Allocation',
               name: 'Active Choice',
-              badge: 'Custom Allocation',
+              // badge: 'Custom Allocation',
               summary:
                 'Choose your own asset allocation across Equity (E), Corporate Bonds (C), and Government Securities (G), subject to applicable limits. Equity allocation can be up to 75%.'
             },
             autoChoice: {
               title: 'Auto Choice — Age-Based Glide Path',
               name: 'Auto Choice',
-              badge: 'Age-Based Glide Path',
+              // badge: 'Age-Based Glide Path',
               summary:
                 'Asset allocation is automatically adjusted according to age through a predefined Life Cycle Fund, generally reducing equity exposure over time.',
               lifecycleTitle: 'Auto Choice Life Cycle Options',
@@ -271,12 +288,12 @@ export default function NpsModelExplorer() {
                   fullText: 'Aggressive — Life Cycle (35E/55Y)'
                 }
               ],
-              footerNote: 'Select any Life Cycle Fund to view its age-wise asset allocation chart.'
+              // footerNote: 'Select any Life Cycle Fund to view its age-wise asset allocation chart.'
             }
           }
         },
         tiers: {
-          title: 'Tier I / Tier II',
+          // title: 'Tier I / Tier II',
           table: {
             col1Header: 'Criteria',
             col2Header: 'Tier I (Retirement Account)',
@@ -441,101 +458,124 @@ export default function NpsModelExplorer() {
       sections: {
         audience: {
           title: 'Who is it for?',
-          targetSubtitle: 'Recommended for:',
-          targetList: [
-            'Private-sector employees looking to reduce taxable salary income',
-            'Employees whose employers offer corporate NPS benefit structuring',
-            'Companies looking to provide an additional structured retirement benefit',
-            'Employees seeking employer-supported retirement savings',
-            'Organisations building structured employee benefits and retirement programs'
-          ]
+          dualAudience: {
+            employee: {
+              title: 'For Employees',
+              // badge: 'Age 18 - 85 Years',
+              desc: 'Employees aged 18-85 years working in an organisation that has NPS can join the Corporate NPS scheme. It is available to Indian citizens, NRIs and OCIs, subject to KYC.'
+            },
+            employer: {
+              title: 'For Employers',
+              // badge: 'Companies & Corporates',
+              desc: 'Companies can offer Corporate NPS to their employees as a retirement savings benefit.'
+            }
+          }
+        },
+        eligibility: {
+          title: 'Eligibility Criteria',
+          corporateEligibility: {
+            employee: {
+              title: 'For Employees',
+              // badge: 'Individual Conditions',
+              intro: 'A person can join the NPS Corporate Sector Model if they meet all of these conditions:',
+              criteria: [
+                { label: 'Age', value: '18 to 85 years' },
+                { label: 'Citizenship', value: 'Indian citizens, NRIs and OCIs (Overseas Citizens of India)' },
+                { label: 'Employment', value: 'Must be working with an organisation that has adopted NPS' },
+                { label: 'KYC', value: 'KYC (Know Your Customer) must be completed' },
+                { label: 'Registration', value: 'Registration must be done through the employer' }
+              ]
+            },
+            company: {
+              title: 'For Companies',
+              // badge: 'Eligible Entities',
+              intro: 'An organisation can adopt NPS Corporate Sector Model if it falls under any of these categories:',
+              entities: [
+                'Trusts and Societies',
+                'Co-operative societies',
+                'Partnership firms',
+                'Proprietorships',
+                'Government bodies or entities',
+                'Limited Liability Partnerships',
+                'International organisations operating in India',
+                'Foreign diplomatic missions in India',
+                'Companies registered under the Companies Act, 2013',
+                'Eligible foreign companies with employees in India',
+                'Public Sector Enterprises (PSEs) or Government companies'
+
+              ]
+            }
+          }
+        },
+        benefits: {
+          title: 'Benefits of Corporate NPS',
+          corporateBenefits: {
+            companies: {
+              title: 'Benefits for Companies',
+              // badge: 'Employer Advantage',
+              items: [
+                { title: 'Flexible contributions', desc: 'Employers can decide how much to contribute towards NPS.' },
+                { title: 'Lower administrative work', desc: 'No need to manage a separate pension trust or record-keeping.' },
+                { title: 'Tax benefits', desc: 'Eligible employer contributions can be claimed as a business expense.' },
+                { title: 'Flexible investment management', desc: 'Employers can choose the investment option or let employees choose.' },
+                { title: 'Works with existing benefits', desc: 'NPS can be offered along with PF and other retirement benefits.' },
+                { title: 'Employee retirement benefit', desc: 'Provides an additional structured retirement benefit to employees.' }
+              ]
+            },
+            employees: {
+              title: 'Benefits for Employees',
+              // badge: 'Employee Advantage',
+              items: [
+                { title: 'Low-cost retirement savings', desc: 'Build retirement savings at low fund management costs.' },
+                { title: 'Investment choices', desc: 'Choose from different Pension Fund Managers and investment options.' },
+                { title: 'Tax benefits', desc: 'Get eligible tax deductions on employee and employer contributions.' },
+                { title: 'Easy online access', desc: 'Track NPS account, investments and fund performance online.' },
+                { title: 'Flexible retirement options', desc: 'Continue investing and choose withdrawal or annuity options as per NPS rules.' },
+                { title: 'Tier II option', desc: 'Invest additional money through an optional Tier II account with flexible withdrawals.' }
+              ]
+            }
+          }
         },
         tax: {
           title: 'Tax Benefits',
-          points: [
-            {
-              label: 'Employee Contributions',
-              desc: 'Employee contributions can qualify for applicable NPS tax deductions (Sec 80CCD(1) and 80CCD(1B)).'
+          corporateTax: {
+            employers: {
+              title: 'For Employers',
+              // badge: 'Section 36(1)(iv)(a)',
+              description: 'Employer contributions to NPS (up to 14% of salary, i.e., Basic + DA) are treated as a business expense and can be claimed as a deduction under Section 36(1)(iv)(a) of the Income Tax Act, 1961.'
             },
-            {
-              label: 'Employer Contribution (Sec 80CCD(2))',
-              desc: 'Employer contributions qualify for deduction under Section 80CCD(2) up to 10% of salary (Basic + DA), over and above Section 80C!'
-            },
-            {
-              label: 'Employer Business Expense',
-              desc: 'Corporate NPS can provide an additional retirement benefit through employer contributions deductible as business expense.'
-            },
-            {
-              label: 'Both Tax Regimes',
-              desc: 'Tax treatment depends on prevailing Income-tax provisions and is beneficial under both old and new regimes.'
-            }
-          ]
-        },
-        withdrawals: {
-          title: 'Withdrawals and Exit',
-          points: [
-            {
-              label: 'Tier I Core Account',
-              desc: 'Core retirement account with restricted withdrawals governed by applicable PFRDA regulations.'
-            },
-            {
-              label: 'Partial Withdrawals',
-              desc: 'Partial withdrawals may be permitted for specified purposes, subject to conditions.'
-            },
-            {
-              label: 'Tier II Voluntary Account',
-              desc: 'Optional account with unrestricted anytime withdrawals.'
-            },
-            {
-              label: 'Employment / Retirement Exit',
-              desc: 'Exit treatment depends on the subscriber’s employment/retirement status and applicable NPS rules.'
-            }
-          ]
-        },
-        choices: {
-          title: 'Scheme Choices',
-          subCards: [
-            {
-              name: 'For Employees',
-              tag: 'Subscriber Choice',
-              items: [
-                'Choose from available Pension Fund Managers.',
-                'Select an investment approach and permitted asset allocation.',
-                'Choose between Active Choice and applicable Auto/Lifecycle Choice options.'
-              ]
-            },
-            {
-              name: 'For Employers',
-              tag: 'Corporate Structure',
-              items: [
-                'Employer can structure its NPS contribution policy.',
-                'Employer and employee contribution structures can be customized according to the organisation’s policy.'
+            employees: {
+              title: 'For Employees',
+              // badge: 'Income Tax Act, 1961',
+              subtitle: 'Attractive Tax Benefits under Income Tax Act, 1961:',
+              sections: [
+                {
+                  section: 'Section 80CCD(1)',
+                  title: 'Employee Contributions Deduction',
+                  points: [
+                    '10% of salary (Basic + DA) for salaried employees',
+                    '20% of Gross Income for self-employed',
+                    '(Subject to ₹1.5 lakh limit under Section 80CCE)'
+                  ]
+                },
+                {
+                  section: 'Section 80CCD(1B)',
+                  title: 'Additional Tax Deduction',
+                  points: [
+                    'Additional tax deduction of ₹50,000 (over and above Section 80C)'
+                  ]
+                },
+                {
+                  section: 'Section 80CCD(2)',
+                  title: 'Employer Contributions Deductible',
+                  points: [
+                    '10% of salary for employees under Old Tax Regime',
+                    '14% of salary for employees under New Tax Regime'
+                  ]
+                }
               ]
             }
-          ]
-        },
-        tiers: {
-          title: 'Tier I and Tier II Accounts',
-          subCards: [
-            {
-              name: 'Tier I — Corporate Retirement Account',
-              tag: 'Employer + Employee',
-              items: [
-                'Core retirement account receiving contributions from both employer and employee.',
-                'Restricted withdrawals safeguarding long-term retirement security.',
-                'Eligible for maximum combined tax deductions (80CCD(1), 80CCD(1B), 80CCD(2)).'
-              ]
-            },
-            {
-              name: 'Tier II — Voluntary Investment Account',
-              tag: 'No Lock-in',
-              items: [
-                'Optional account for existing Tier I subscribers.',
-                'No lock-in period with anytime liquidity.',
-                'Generally no tax benefit on contributions or returns.'
-              ]
-            }
-          ]
+          }
         }
       }
     }
@@ -659,14 +699,14 @@ export default function NpsModelExplorer() {
               </div>
 
               {/* CURRENT MODEL BADGE / HEADER */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+              {/* <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
                 <div>
                   <h3 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
                     {currentSection.title}
                   </h3>
                 </div>
 
-                {/* <a
+                <a
                   href={currentModel.pfrdaUrl}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -675,8 +715,8 @@ export default function NpsModelExplorer() {
                 >
                   <span>PFRDA Reference</span>
                   <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[10px]" />
-                </a> */}
-              </div>
+                </a>
+              </div> */}
 
               {/* ACTIVE TAB CONTENT DISPLAY */}
               <AnimatePresence mode="wait">
@@ -709,6 +749,320 @@ export default function NpsModelExplorer() {
                     </div>
                   )}
 
+                  {/* Mode: Dual Audience Display (Corporate NPS Who is it for?) */}
+                  {currentSection.dualAudience && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                      {/* For Employees Card */}
+                      <div className="p-5 sm:p-6 rounded-2xl bg-white border border-gray-200/90 shadow-xs hover:border-blue-200 hover:shadow-sm transition-all flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center justify-between mb-3.5">
+                            <div className="flex items-center gap-2.5">
+                              <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#032e92] flex items-center justify-center text-base">
+                                <FontAwesomeIcon icon={faUserTie} />
+                              </div>
+                              <h4 className="font-bold text-base sm:text-lg text-gray-900">
+                                {currentSection.dualAudience.employee.title}
+                              </h4>
+                            </div>
+                            {/* <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-[#032e92] border border-blue-100 uppercase tracking-wider">
+                              {currentSection.dualAudience.employee.badge}
+                            </span> */}
+                          </div>
+                          <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-normal mb-4">
+                            {currentSection.dualAudience.employee.desc}
+                          </p>
+                        </div>
+
+                        {/* <div className="pt-3.5 border-t border-gray-100 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-gray-700 font-medium">
+                          <div className="flex items-center gap-1.5 p-2 rounded-lg bg-gray-50/80">
+                            <FontAwesomeIcon icon={faCircleCheck} className="text-emerald-500 text-xs shrink-0" />
+                            <span>Age 18 to 85 Years</span>
+                          </div>
+                          <div className="flex items-center gap-1.5 p-2 rounded-lg bg-gray-50/80">
+                            <FontAwesomeIcon icon={faCircleCheck} className="text-emerald-500 text-xs shrink-0" />
+                            <span>Indian Citizens, NRIs & OCIs</span>
+                          </div>
+                        </div> */}
+                      </div>
+
+                      {/* For Employers Card */}
+                      <div className="p-5 sm:p-6 rounded-2xl bg-white border border-gray-200/90 shadow-xs hover:border-emerald-200 hover:shadow-sm transition-all flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center justify-between mb-3.5">
+                            <div className="flex items-center gap-2.5">
+                              <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-base">
+                                <FontAwesomeIcon icon={faBuilding} />
+                              </div>
+                              <h4 className="font-bold text-base sm:text-lg text-gray-900">
+                                {currentSection.dualAudience.employer.title}
+                              </h4>
+                            </div>
+                            {/* <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase tracking-wider">
+                              {currentSection.dualAudience.employer.badge}
+                            </span> */}
+                          </div>
+                          <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-normal mb-4">
+                            {currentSection.dualAudience.employer.desc}
+                          </p>
+                        </div>
+
+                        {/* <div className="pt-3.5 border-t border-gray-100 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-gray-700 font-medium">
+                          <div className="flex items-center gap-1.5 p-2 rounded-lg bg-gray-50/80">
+                            <FontAwesomeIcon icon={faCircleCheck} className="text-emerald-500 text-xs shrink-0" />
+                            <span>Structured Retirement Benefit</span>
+                          </div>
+                          <div className="flex items-center gap-1.5 p-2 rounded-lg bg-gray-50/80">
+                            <FontAwesomeIcon icon={faCircleCheck} className="text-emerald-500 text-xs shrink-0" />
+                            <span>Business Expense Deduction</span>
+                          </div>
+                        </div> */}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Mode: Corporate NPS Eligibility Display */}
+                  {currentSection.corporateEligibility && (
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+                      {/* For Employees (5 cols) */}
+                      <div className="lg:col-span-5 p-5 sm:p-6 rounded-2xl bg-white border border-gray-200/90 shadow-xs flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-2">
+                              <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#032e92] flex items-center justify-center text-sm">
+                                <FontAwesomeIcon icon={faUserTie} />
+                              </div>
+                              <h4 className="font-bold text-base sm:text-lg text-gray-900">
+                                {currentSection.corporateEligibility.employee.title}
+                              </h4>
+                            </div>
+                            {/* <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-[#032e92] border border-blue-100 uppercase tracking-wider">
+                              {currentSection.corporateEligibility.employee.badge}
+                            </span> */}
+                          </div>
+
+                          <p className="text-xs sm:text-sm text-gray-600 mb-4 leading-relaxed font-medium">
+                            {currentSection.corporateEligibility.employee.intro}
+                          </p>
+
+                          <div className="space-y-2.5">
+                            {currentSection.corporateEligibility.employee.criteria.map((crit, cIdx) => (
+                              <div
+                                key={cIdx}
+                                className="p-1"
+                              >
+                                {/* <FontAwesomeIcon icon={faCircleCheck} className="text-emerald-500 text-xs mt-1 shrink-0" /> */}
+                                <div>
+                                  <span className="font-bold text-xs sm:text-[13px] text-gray-900 mr-1.5">
+                                    {crit.label}:
+                                  </span>
+                                  <span className="text-xs sm:text-[13px] text-gray-600 leading-relaxed font-normal">
+                                    {crit.value}
+                                  </span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* For Companies (7 cols) */}
+                      <div className="lg:col-span-7 p-5 sm:p-6 rounded-2xl bg-white border border-gray-200/90 shadow-xs flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-2">
+                              <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center text-sm">
+                                <FontAwesomeIcon icon={faBuilding} />
+                              </div>
+                              <h4 className="font-bold text-base sm:text-lg text-gray-900">
+                                {currentSection.corporateEligibility.company.title}
+                              </h4>
+                            </div>
+                            {/* <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase tracking-wider">
+                              {currentSection.corporateEligibility.company.badge}
+                            </span> */}
+                          </div>
+
+                          <p className="text-xs sm:text-sm text-gray-600 mb-4 leading-relaxed font-medium">
+                            {currentSection.corporateEligibility.company.intro}
+                          </p>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            {currentSection.corporateEligibility.company.entities.map((ent, eIdx) => (
+                              <div
+                                key={eIdx}
+                                className="p-1"
+                              >
+                                {/* <FontAwesomeIcon icon={faCircleCheck} className="text-emerald-500 text-xs mt-0.5 shrink-0" /> */}
+                                <span className="text-xs text-gray-700 font-medium leading-snug">
+                                  {ent}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Mode: Corporate NPS Benefits Display */}
+                  {currentSection.corporateBenefits && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                      {/* Benefits for Companies */}
+                      <div className="p-5 sm:p-6 rounded-2xl bg-white border border-gray-200/90 shadow-xs flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+                            <div className="flex items-center gap-2.5">
+                              <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-sm">
+                                <FontAwesomeIcon icon={faBuilding} />
+                              </div>
+                              <h4 className="font-bold text-base sm:text-lg text-gray-900">
+                                {currentSection.corporateBenefits.companies.title}
+                              </h4>
+                            </div>
+                            {/* <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase tracking-wider">
+                              {currentSection.corporateBenefits.companies.badge}
+                            </span> */}
+                          </div>
+
+                          <div className="space-y-3">
+                            {currentSection.corporateBenefits.companies.items.map((b, bIdx) => (
+                              <div
+                                key={bIdx}
+                                className="p-1"
+                              >
+                                {/* <FontAwesomeIcon icon={faCircleCheck} className="text-emerald-500 text-xs mt-1 shrink-0" /> */}
+                                <div>
+                                  <span className="font-bold text-xs sm:text-sm text-gray-900 block mb-0.5">
+                                    {b.title}
+                                  </span>
+                                  <span className="text-xs sm:text-[13px] text-gray-600 leading-relaxed font-normal">
+                                    {b.desc}
+                                  </span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Benefits for Employees */}
+                      <div className="p-5 sm:p-6 rounded-2xl bg-white border border-gray-200/90 shadow-xs flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+                            <div className="flex items-center gap-2.5">
+                              <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#032e92] flex items-center justify-center text-sm">
+                                <FontAwesomeIcon icon={faUserTie} />
+                              </div>
+                              <h4 className="font-bold text-base sm:text-lg text-gray-900">
+                                {currentSection.corporateBenefits.employees.title}
+                              </h4>
+                            </div>
+                            {/* <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-[#032e92] border border-blue-100 uppercase tracking-wider">
+                              {currentSection.corporateBenefits.employees.badge}
+                            </span> */}
+                          </div>
+
+                          <div className="space-y-3">
+                            {currentSection.corporateBenefits.employees.items.map((b, bIdx) => (
+                              <div
+                                key={bIdx}
+                                className="p-1"
+                              >
+                                {/* <FontAwesomeIcon icon={faCircleCheck} className="text-blue-500 text-xs mt-1 shrink-0" /> */}
+                                <div>
+                                  <span className="font-bold text-xs sm:text-sm text-gray-900 block mb-0.5">
+                                    {b.title}
+                                  </span>
+                                  <span className="text-xs sm:text-[13px] text-gray-600 leading-relaxed font-normal">
+                                    {b.desc}
+                                  </span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Mode: Corporate NPS Tax Benefits Display */}
+                  {currentSection.corporateTax && (
+                    <div className="space-y-5">
+                      {/* For Employers Callout Card */}
+                      <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-emerald-50/80 via-white to-blue-50/40 border border-emerald-200/90 shadow-xs">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3 pb-2.5 border-b border-emerald-100">
+                          <div className="flex items-center gap-2.5">
+                            <div className="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-sm">
+                              <FontAwesomeIcon icon={faBuilding} />
+                            </div>
+                            <h4 className="font-bold text-base sm:text-lg text-gray-900">
+                              {currentSection.corporateTax.employers.title}
+                            </h4>
+                          </div>
+                          {/* <span className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-600 text-white shadow-2xs w-fit">
+                            {currentSection.corporateTax.employers.badge}
+                          </span> */}
+                        </div>
+                        <p className="text-xs sm:text-sm text-gray-700 leading-relaxed font-medium">
+                          {currentSection.corporateTax.employers.description}
+                        </p>
+                      </div>
+
+                      {/* For Employees Section */}
+                      <div className="p-5 sm:p-6 rounded-2xl bg-white border border-gray-200/90 shadow-xs">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 pb-3 border-b border-gray-100">
+                          <div className="flex items-center gap-2.5">
+                            <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#032e92] flex items-center justify-center text-sm">
+                              <FontAwesomeIcon icon={faUserTie} />
+                            </div>
+                            <h4 className="font-bold text-base sm:text-lg text-gray-900">
+                              {currentSection.corporateTax.employees.title}
+                            </h4>
+                          </div>
+                          {/* <span className="text-xs font-semibold text-[#032e92] bg-blue-50 px-3 py-1 rounded-lg border border-blue-100 w-fit">
+                            {currentSection.corporateTax.employees.badge}
+                          </span> */}
+                        </div>
+
+                        <p className="text-xs sm:text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
+                          <span className="w-1.5 h-3.5 bg-[#032e92] rounded-full inline-block"></span>
+                          <span>{currentSection.corporateTax.employees.subtitle}</span>
+                        </p>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          {currentSection.corporateTax.employees.sections.map((sec, sIdx) => (
+                            <div
+                              key={sIdx}
+                              className="p-4 sm:p-5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-blue-200 transition-all flex flex-col justify-between"
+                            >
+                              <div>
+                                <div className="mb-2.5">
+                                  <span className="text-xs font-bold px-2.5 py-1 rounded-md bg-[#032e92] text-white">
+                                    {sec.section}
+                                  </span>
+                                </div>
+                                <h5 className="font-bold text-xs sm:text-sm text-gray-900 mb-2.5">
+                                  {sec.title}
+                                </h5>
+                                <ul className="space-y-2 text-xs sm:text-[13px] text-gray-600">
+                                  {sec.points.map((pt, pIdx) => (
+                                    <li key={pIdx} className="flex items-start gap-2">
+                                      {/* <FontAwesomeIcon
+                                        icon={faCircleCheck}
+                                        className="text-emerald-500 text-xs mt-0.5 shrink-0"
+                                      /> */}
+                                      <span className="leading-relaxed">{pt}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Mode: E-E-E Benefit Display (All Citizen Tax-Free Exit) */}
                   {currentSection.eeeBenefit && (
                     <div className="mb-6 p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-emerald-50/70 via-white to-blue-50/40 border border-emerald-100/90 shadow-xs">
@@ -721,9 +1075,9 @@ export default function NpsModelExplorer() {
                             {currentSection.eeeBenefit.title}
                           </h4>
                         </div>
-                        <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200/60 w-fit">
+                        {/* <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200/60 w-fit">
                           {currentSection.eeeBenefit.subtitle}
-                        </span>
+                        </span> */}
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
@@ -737,9 +1091,9 @@ export default function NpsModelExplorer() {
                                 <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
                                   Stage 0{idx + 1}
                                 </span>
-                                <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
+                                {/* <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
                                   Exempt
-                                </span>
+                                </span> */}
                               </div>
                               <div className="font-bold text-xs sm:text-sm text-gray-900 mb-1.5">
                                 {item.label}
@@ -834,26 +1188,26 @@ export default function NpsModelExplorer() {
                             </span>
                           </div>
 
-                          {/* 3 Step Options */}
-                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-2 items-center mb-5">
+                          {/* 3 Step Options in Single Row with 'or' */}
+                          <div className="flex flex-col sm:flex-row items-stretch gap-2 sm:gap-1.5 mb-5">
                             {currentSection.vatsalyaWithdrawals.whenTurns18.steps.map((st, sIdx) => (
                               <React.Fragment key={st.id}>
-                                <div className="p-3.5 rounded-xl bg-gray-50/80 border border-gray-100 flex flex-col justify-between h-full">
+                                <div className="p-3 sm:p-3.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-blue-200 transition-colors flex flex-col justify-between flex-1 min-w-0 w-full sm:w-auto h-auto">
                                   <div className="mb-2">
                                     <span
-                                      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold border ${st.badgeStyle}`}
+                                      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] sm:text-xs font-bold border ${st.badgeStyle}`}
                                     >
                                       <span>{st.id}</span>
                                       <span>{st.name}</span>
                                     </span>
                                   </div>
-                                  <p className="text-xs text-gray-700 leading-snug font-medium">
+                                  <p className="text-[11px] sm:text-xs text-gray-700 leading-snug font-medium">
                                     {st.desc}
                                   </p>
                                 </div>
                                 {sIdx < currentSection.vatsalyaWithdrawals.whenTurns18.steps.length - 1 && (
-                                  <div className="hidden sm:flex justify-center -mx-3 z-10">
-                                    <span className="text-[11px] font-bold text-gray-400 bg-white px-1.5 py-0.5 rounded-full border border-gray-200">
+                                  <div className="flex items-center justify-center shrink-0 self-center -my-1 sm:my-0 -mx-0 sm:-mx-2 z-10">
+                                    <span className="text-[10px] sm:text-[11px] font-bold text-gray-600 bg-white p-1 m-2 rounded-full border border-gray-200 shadow-2xs select-none">
                                       or
                                     </span>
                                   </div>
@@ -975,9 +1329,9 @@ export default function NpsModelExplorer() {
                               <h4 className="font-bold text-base sm:text-lg text-gray-900">
                                 {currentSection.msf.title}
                               </h4>
-                              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase tracking-wider">
+                              {/* <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase tracking-wider">
                                 {currentSection.msf.badge || 'Multi Choice'}
-                              </span>
+                              </span> */}
                             </div>
 
                             <button
@@ -1022,9 +1376,9 @@ export default function NpsModelExplorer() {
                                   <span className="font-bold text-sm sm:text-base text-gray-900">
                                     {currentSection.commonSchemes.activeChoice.name}
                                   </span>
-                                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-[#032e92] border border-blue-100">
+                                  {/* <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-[#032e92] border border-blue-100">
                                     {currentSection.commonSchemes.activeChoice.badge}
-                                  </span>
+                                  </span> */}
                                 </div>
                                 <p className="text-xs sm:text-[13px] text-gray-600 leading-relaxed font-normal">
                                   {currentSection.commonSchemes.activeChoice.summary}
@@ -1039,9 +1393,9 @@ export default function NpsModelExplorer() {
                                   <span className="font-bold text-sm sm:text-base text-gray-900">
                                     {currentSection.commonSchemes.autoChoice.name}
                                   </span>
-                                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-[#032e92] border border-blue-100">
+                                  {/* <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-[#032e92] border border-blue-100">
                                     {currentSection.commonSchemes.autoChoice.badge}
-                                  </span>
+                                  </span> */}
                                 </div>
                                 <p className="text-xs sm:text-[13px] text-gray-600 leading-relaxed font-normal mb-3.5">
                                   {currentSection.commonSchemes.autoChoice.summary}
@@ -1064,15 +1418,15 @@ export default function NpsModelExplorer() {
                                           setModalDisplayMode('chart');
                                           setShowAutoChoiceModal(true);
                                         }}
-                                        className="p-2.5 rounded-lg bg-gray-50 hover:bg-blue-50/60 border border-gray-200 hover:border-[#032e92] text-left transition-all cursor-pointer group/opt shadow-2xs flex items-center justify-between"
+                                        className="p-2.5 rounded-lg bg-gray-50 hover:bg-blue-50/60 border border-gray-200 hover:border-[#032e92] text-left transition-all cursor-pointer group/opt shadow-2xs flex items-center"
                                       >
                                         <div>
                                           <span className="text-xs font-bold text-gray-900 group-hover/opt:text-[#032e92] transition-colors block">
                                             {opt.name}
                                           </span>
-                                          <span className="text-[11px] text-gray-500 font-medium block">
+                                          {/* <span className="text-[11px] text-gray-500 font-medium block">
                                             {opt.desc}
-                                          </span>
+                                          </span> */}
                                         </div>
                                         <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[9px] text-gray-400 group-hover/opt:text-[#032e92] transition-colors shrink-0 ml-1.5" />
                                       </button>
@@ -1080,7 +1434,7 @@ export default function NpsModelExplorer() {
                                   </div>
 
                                   {/* Footer Note */}
-                                  <button
+                                  {/* <button
                                     type="button"
                                     onClick={() => {
                                       setModalActiveStrategy('all');
@@ -1091,7 +1445,7 @@ export default function NpsModelExplorer() {
                                   >
                                     <span>{currentSection.commonSchemes.autoChoice.footerNote}</span>
                                     <FontAwesomeIcon icon={faArrowRight} className="text-[10px]" />
-                                  </button>
+                                  </button> */}
                                 </div>
                               </div>
                             </div>
@@ -1169,10 +1523,10 @@ export default function NpsModelExplorer() {
                             key={tIdx}
                             className="flex items-start gap-2.5 p-3.5 rounded-xl bg-white border border-gray-100 shadow-xs hover:border-blue-200 transition-all"
                           >
-                            <FontAwesomeIcon
+                            {/* <FontAwesomeIcon
                               icon={faCheckCircle}
                               className="text-emerald-500 text-xs mt-1 shrink-0"
-                            />
+                            /> */}
                             <span className="text-xs sm:text-sm text-gray-700 font-medium leading-relaxed">
                               {target}
                             </span>

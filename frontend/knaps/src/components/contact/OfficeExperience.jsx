@@ -9,14 +9,14 @@ export default function OfficeExperience() {
 
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="inline-block px-4 py-1.5 rounded-full border border-[#032e92]/20 text-[#032e92] bg-[#eef5ff] font-semibold text-xs sm:text-sm mb-4 uppercase tracking-wider"
           >
             Visit Our Office
-          </motion.div>
+          </motion.div> */}
 
           <motion.h2
             initial={{ opacity: 0, y: 15 }}

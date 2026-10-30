@@ -20,9 +20,9 @@ export default function InvestmentPhilosophy() {
             className="lg:col-span-6 flex flex-col items-start"
           >
             {/* Tag */}
-            <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#eef4ff] text-[#032e92] text-xs sm:text-sm font-semibold mb-6">
+            {/* <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#eef4ff] text-[#032e92] text-xs sm:text-sm font-semibold mb-6">
               <span>💡</span> Our Philosophy
-            </span>
+            </span> */}
 
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-gray-900 mb-4">
               Invest with a plan, <span className="gradient-text"> not with emotions </span>

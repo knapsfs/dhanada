@@ -110,9 +110,9 @@ export default function NpsFAQ() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          <div className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-[#032e92] text-xs font-semibold tracking-wider uppercase mb-3">
+          {/* <div className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-[#032e92] text-xs font-semibold tracking-wider uppercase mb-3">
             FAQ
-          </div>
+          </div> */}
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight">
             Frequently Asked <span className="text-[#032e92]">Questions</span>
           </h2>
