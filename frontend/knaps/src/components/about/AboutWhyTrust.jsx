@@ -12,26 +12,26 @@ export default function AboutWhyTrust() {
     {
       icon: faShieldHalved,
       title: "Confidentiality",
-      description: "Your financial information stays completely private and secure.",
-      tag: "Data Privacy"
+      description: "Your personal and financial information stays private.",
+      // tag: "Data Privacy"
     },
     {
       icon: faBullseye,
       title: "Right Recommendation",
-      description: "We recommend schemes based strictly on your life goals and risk appetite.",
-      tag: "Goal Aligned"
+      description: "We don’t have sales targets! We suggest what’s best for you.",
+      // tag: "Goal Aligned"
     },
     {
       icon: faChartLine,
-      title: "Guidance Through Market Cycles",
-      description: "We stay with you through financial ups & downs across every cycle.",
-      tag: "Continuous Support"
+      title: "100% Support",
+      description: "When markets fall, we help you stay rational and avoid sentiment-driven decisions.",
+      // tag: "Continuous Support"
     },
     {
       icon: faAward,
       title: "30+ Years of Experience",
-      description: "Decades of deep advisory experience across market cycles and investments.",
-      tag: "Since 1996"
+      description: "Decades of experience across market cycles and investments..",
+      // tag: "Since 1996"
     }
   ];
 
@@ -41,16 +41,7 @@ export default function AboutWhyTrust() {
 
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="inline-block px-4 py-1.5 rounded-full bg-white border border-blue-100 shadow-sm mb-4"
-          >
-            <span className="text-[#032e92] text-xs font-bold tracking-widest uppercase">
-              Why Investors Trust Us
-            </span>
-          </motion.div>
+
 
           <motion.h2
             initial={{ opacity: 0, y: 15 }}
@@ -59,7 +50,7 @@ export default function AboutWhyTrust() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-black tracking-tight leading-tight max-w-4xl mx-auto mb-3"
           >
-            Principles That Guide <span className="text-[#032e92]">Every Recommendation</span>
+            Why Thousands of Investors <span className="text-[#032e92]">Trust Us </span>
           </motion.h2>
 
           <motion.p
@@ -107,7 +98,7 @@ export default function AboutWhyTrust() {
               </div>
 
               {/* Subtle interactive accent bar */}
-              <div className="h-0.5 w-8 bg-gray-200 group-hover:w-16 group-hover:bg-[#032e92] transition-all duration-300 mt-6 rounded-full" />
+              {/* <div className="h-0.5 w-8 bg-gray-200 group-hover:w-16 group-hover:bg-[#032e92] transition-all duration-300 mt-6 rounded-full" /> */}
             </motion.div>
           ))}
         </div>

@@ -5,6 +5,7 @@ import { faLocationDot, faPhone, faEnvelope, faClock, faCircleCheck, faChevronDo
 import { getCsrfToken } from '../../utils/csrf';
 import { productOptions } from '../../data/productOptions';
 import { COUNTRIES, DEFAULT_COUNTRY } from '../../data/countries';
+import contactOfficeImg from '../../assets/contact.webp';
 
 export default function LuxuryContactSection() {
   const [selectedProduct, setSelectedProduct] = useState('');
@@ -171,14 +172,13 @@ export default function LuxuryContactSection() {
               {/* Premium Office Image */}
               <div className="w-full h-44 sm:h-52 relative overflow-hidden">
                 <img
-                  src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop"
+                  src={contactOfficeImg}
                   alt="Our Headquarters"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#032e92]/95 via-[#032e92]/40 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-[#424242]/95 via-[#a1a1a1]/40 to-transparent"></div>
                 <div className="absolute bottom-5 left-6 sm:bottom-6 sm:left-8 text-left">
                   <h3 className="text-white text-xl sm:text-2xl font-bold tracking-tight">KNAPS Private Limited</h3>
-                  <p className="text-blue-100 text-xs sm:text-sm mt-1 font-semibold tracking-wider uppercase">New Delhi, India</p>
                 </div>
               </div>
 
@@ -279,319 +279,310 @@ export default function LuxuryContactSection() {
                   </div>
 
                   <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
-                  {status === 'error' && errorMessage && (
-                    <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-xs sm:text-sm font-medium">
-                      {errorMessage}
-                    </div>
-                  )}
+                    {status === 'error' && errorMessage && (
+                      <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-xs sm:text-sm font-medium">
+                        {errorMessage}
+                      </div>
+                    )}
 
-                  {/* Product Field */}
-                  <div className="relative" ref={dropdownRef}>
-                    <label className="block text-xs font-bold text-gray-700 mb-2">
-                      Product <span className="text-red-500">*</span>
-                    </label>
-                    <div
-                      onClick={() => !status.startsWith('submit') && setProductOpen(!productOpen)}
-                      role="button"
-                      tabIndex={0}
-                      aria-haspopup="listbox"
-                      aria-expanded={productOpen}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault();
-                          setProductOpen(!productOpen);
-                        } else if (e.key === 'Escape') {
-                          setProductOpen(false);
-                        }
-                      }}
-                      className={`w-full bg-gray-50 border rounded-xl px-4 py-3.5 flex items-center justify-between cursor-pointer transition-all select-none ${
-                        errors.product
+                    {/* Product Field */}
+                    <div className="relative" ref={dropdownRef}>
+                      <label className="block text-xs font-bold text-gray-700 mb-2">
+                        Product <span className="text-red-500">*</span>
+                      </label>
+                      <div
+                        onClick={() => !status.startsWith('submit') && setProductOpen(!productOpen)}
+                        role="button"
+                        tabIndex={0}
+                        aria-haspopup="listbox"
+                        aria-expanded={productOpen}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            setProductOpen(!productOpen);
+                          } else if (e.key === 'Escape') {
+                            setProductOpen(false);
+                          }
+                        }}
+                        className={`w-full bg-gray-50 border rounded-xl px-4 py-3.5 flex items-center justify-between cursor-pointer transition-all select-none ${errors.product
                           ? 'border-red-400 bg-red-50/20'
                           : productOpen
                             ? 'border-[#032e92] ring-2 ring-[#032e92]/20 bg-white'
                             : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                    >
-                      <span className={selectedProduct ? 'text-gray-900 font-medium text-sm' : 'text-gray-400 font-normal text-sm'}>
-                        {selectedProductObj ? selectedProductObj.label : 'Select a product'}
-                      </span>
-                      <FontAwesomeIcon
-                        icon={faChevronDown}
-                        className={`text-gray-400 text-xs transition-transform duration-200 ${
-                          productOpen ? 'rotate-180 text-[#032e92]' : ''
-                        }`}
-                      />
-                    </div>
-                    {errors.product && <p className="text-red-500 text-xs mt-1 font-medium">{errors.product}</p>}
-
-                    <AnimatePresence>
-                      {productOpen && (
-                        <motion.div
-                          initial={{ opacity: 0, y: -4 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -4 }}
-                          transition={{ duration: 0.15 }}
-                          className="absolute left-0 right-0 top-full mt-1.5 bg-white rounded-xl shadow-xl shadow-blue-950/10 border border-gray-100 p-1.5 z-50 overflow-hidden"
-                        >
-                          {productOptions.map((option) => {
-                            const isSelected = selectedProduct === option.value;
-                            return (
-                              <div
-                                key={option.value}
-                                onClick={() => {
-                                  setSelectedProduct(option.value);
-                                  setProductOpen(false);
-                                  if (errors.product) {
-                                    setErrors((prev) => ({ ...prev, product: '' }));
-                                  }
-                                }}
-                                className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg cursor-pointer text-sm transition-colors ${
-                                  isSelected
-                                    ? 'bg-[#eef4ff] text-[#032e92] font-semibold'
-                                    : 'text-gray-700 hover:bg-gray-50 hover:text-[#032e92]'
-                                }`}
-                              >
-                                <span>{option.label}</span>
-                                {isSelected && (
-                                  <svg className="w-4 h-4 text-[#032e92]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
-                                  </svg>
-                                )}
-                              </div>
-                            );
-                          })}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
-                    {/* Full Name */}
-                    <div>
-                      <label className="block text-xs font-bold text-gray-700 mb-2">
-                        Full Name <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="e.g. Ratan Tata"
-                        value={formData.fullName}
-                        onChange={(e) => {
-                          setFormData({ ...formData, fullName: e.target.value });
-                          if (errors.fullName) setErrors((prev) => ({ ...prev, fullName: '' }));
-                        }}
-                        className={`w-full bg-gray-50 border rounded-xl px-4 py-3.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#032e92]/20 focus:border-[#032e92] transition-all shadow-xs ${
-                          errors.fullName ? 'border-red-400 bg-red-50/20' : 'border-gray-200'
-                        }`}
-                      />
-                      {errors.fullName && <p className="text-red-500 text-xs mt-1 font-medium">{errors.fullName}</p>}
-                    </div>
-
-                    {/* Phone Number with Country Code */}
-                    <div className="relative" ref={countryDropdownRef}>
-                      <div className="flex items-center justify-between mb-2">
-                        <label className="block text-xs font-bold text-gray-700">
-                          Phone Number <span className="text-red-500">*</span>
-                        </label>
-                        <span className="text-[11px] text-gray-400 font-medium">
-                          {selectedCountry.name}
-                        </span>
-                      </div>
-                      <div
-                        className={`flex items-center bg-gray-50 border rounded-xl transition-all focus-within:bg-white focus-within:border-[#032e92] focus-within:ring-2 focus-within:ring-[#032e92]/20 ${
-                          errors.phone ? 'border-red-400 bg-red-50/20' : 'border-gray-200'
-                        }`}
+                          }`}
                       >
-                        {/* Country Code Dropdown Trigger */}
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (status !== 'submitting') {
-                              setIsCountryOpen((prev) => !prev);
-                              setCountrySearch('');
-                            }
-                          }}
-                          disabled={status === 'submitting'}
-                          aria-label="Select Country Code"
-                          className="flex items-center gap-1.5 px-3.5 py-3.5 border-r border-gray-200 bg-gray-100/70 hover:bg-blue-50/60 rounded-l-xl transition-all cursor-pointer select-none group/btn shrink-0 disabled:cursor-not-allowed focus:outline-none"
-                        >
-                          <span className="text-xs font-bold text-gray-800 font-mono tracking-tight">
-                            {selectedCountry.code}
-                          </span>
-                          <FontAwesomeIcon
-                            icon={faChevronDown}
-                            className={`text-[9px] text-gray-400 group-hover/btn:text-[#032e92] transition-transform duration-200 ${
-                              isCountryOpen ? 'rotate-180 text-[#032e92]' : ''
+                        <span className={selectedProduct ? 'text-gray-900 font-medium text-sm' : 'text-gray-400 font-normal text-sm'}>
+                          {selectedProductObj ? selectedProductObj.label : 'Select a product'}
+                        </span>
+                        <FontAwesomeIcon
+                          icon={faChevronDown}
+                          className={`text-gray-400 text-xs transition-transform duration-200 ${productOpen ? 'rotate-180 text-[#032e92]' : ''
                             }`}
-                          />
-                        </button>
-
-                        {/* Phone Input */}
-                        <input
-                          type="tel"
-                          inputMode="numeric"
-                          maxLength={selectedCountry.maxDigits}
-                          placeholder={selectedCountry.placeholder || '98765 43210'}
-                          value={formData.phone}
-                          onChange={(e) => {
-                            const maxLen = selectedCountry.maxDigits || 15;
-                            const val = e.target.value.replace(/\D/g, '').slice(0, maxLen);
-                            setFormData({ ...formData, phone: val });
-                            if (errors.phone) setErrors((prev) => ({ ...prev, phone: '' }));
-                          }}
-                          disabled={status === 'submitting'}
-                          className="w-full bg-transparent px-4 py-3.5 outline-none text-sm text-gray-900 placeholder:text-gray-400 disabled:bg-gray-50 rounded-r-xl"
                         />
                       </div>
-                      {errors.phone && <p className="text-red-500 text-xs mt-1 font-medium">{errors.phone}</p>}
+                      {errors.product && <p className="text-red-500 text-xs mt-1 font-medium">{errors.product}</p>}
 
-                      {/* Country Code Dropdown Menu */}
                       <AnimatePresence>
-                        {isCountryOpen && (
+                        {productOpen && (
                           <motion.div
-                            initial={{ opacity: 0, y: -6, scale: 0.98 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, y: -6, scale: 0.98 }}
+                            initial={{ opacity: 0, y: -4 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -4 }}
                             transition={{ duration: 0.15 }}
-                            className="absolute left-0 top-full mt-2 w-full sm:w-80 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 overflow-hidden flex flex-col"
+                            className="absolute left-0 right-0 top-full mt-1.5 bg-white rounded-xl shadow-xl shadow-blue-950/10 border border-gray-100 p-1.5 z-50 overflow-hidden"
                           >
-                            {/* Search Header */}
-                            <div className="p-2.5 border-b border-gray-100 bg-gray-50/80">
-                              <input
-                                type="text"
-                                placeholder="Search country or code..."
-                                value={countrySearch}
-                                onChange={(e) => setCountrySearch(e.target.value)}
-                                className="w-full px-3 py-1.5 text-xs bg-white border border-gray-200 rounded-lg outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/20 text-gray-800 placeholder:text-gray-400"
-                                autoFocus
-                              />
-                            </div>
-
-                            {/* Country List */}
-                            <div className="max-h-52 overflow-y-auto divide-y divide-gray-50 py-1">
-                              {filteredCountries.length === 0 ? (
-                                <div className="p-4 text-center text-xs text-gray-400 font-medium">
-                                  No countries found
+                            {productOptions.map((option) => {
+                              const isSelected = selectedProduct === option.value;
+                              return (
+                                <div
+                                  key={option.value}
+                                  onClick={() => {
+                                    setSelectedProduct(option.value);
+                                    setProductOpen(false);
+                                    if (errors.product) {
+                                      setErrors((prev) => ({ ...prev, product: '' }));
+                                    }
+                                  }}
+                                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg cursor-pointer text-sm transition-colors ${isSelected
+                                    ? 'bg-[#eef4ff] text-[#032e92] font-semibold'
+                                    : 'text-gray-700 hover:bg-gray-50 hover:text-[#032e92]'
+                                    }`}
+                                >
+                                  <span>{option.label}</span>
+                                  {isSelected && (
+                                    <svg className="w-4 h-4 text-[#032e92]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                  )}
                                 </div>
-                              ) : (
-                                filteredCountries.map((c) => {
-                                  const isSelected = selectedCountry.iso === c.iso;
-                                  return (
-                                    <button
-                                      key={c.iso}
-                                      type="button"
-                                      onClick={() => {
-                                        handleCountryChange(c.iso);
-                                        setIsCountryOpen(false);
-                                        setCountrySearch('');
-                                      }}
-                                      className={`w-full flex items-center justify-between px-3.5 py-2.5 text-left text-xs transition-colors hover:bg-blue-50/80 cursor-pointer ${
-                                        isSelected
-                                          ? 'bg-blue-50/70 font-semibold text-[#032e92]'
-                                          : 'text-gray-700'
-                                      }`}
-                                    >
-                                      <div className="flex items-center gap-2.5 truncate pr-2">
-                                        <span className="text-base shrink-0 leading-none">{c.flag}</span>
-                                        <span className="truncate">{c.name}</span>
-                                      </div>
-                                      <div className="flex items-center gap-2 shrink-0">
-                                        <span
-                                          className={`font-mono text-xs ${
-                                            isSelected ? 'text-[#032e92] font-bold' : 'text-gray-400'
-                                          }`}
-                                        >
-                                          {c.code}
-                                        </span>
-                                        {isSelected && (
-                                          <span className="w-1.5 h-1.5 rounded-full bg-[#032e92]" />
-                                        )}
-                                      </div>
-                                    </button>
-                                  );
-                                })
-                              )}
-                            </div>
+                              );
+                            })}
                           </motion.div>
                         )}
                       </AnimatePresence>
                     </div>
-                  </div>
 
-                  {/* Email */}
-                  <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-2">
-                      Email Address <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="email"
-                      placeholder="name@company.com"
-                      value={formData.email}
-                      onChange={(e) => {
-                        setFormData({ ...formData, email: e.target.value });
-                        if (errors.email) setErrors((prev) => ({ ...prev, email: '' }));
-                      }}
-                      className={`w-full bg-gray-50 border rounded-xl px-4 py-3.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#032e92]/20 focus:border-[#032e92] transition-all shadow-xs ${
-                        errors.email ? 'border-red-400 bg-red-50/20' : 'border-gray-200'
-                      }`}
-                    />
-                    {errors.email && <p className="text-red-500 text-xs mt-1 font-medium">{errors.email}</p>}
-                  </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+                      {/* Full Name */}
+                      <div>
+                        <label className="block text-xs font-bold text-gray-700 mb-2">
+                          Full Name <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Full Name"
+                          value={formData.fullName}
+                          onChange={(e) => {
+                            setFormData({ ...formData, fullName: e.target.value });
+                            if (errors.fullName) setErrors((prev) => ({ ...prev, fullName: '' }));
+                          }}
+                          className={`w-full bg-gray-50 border rounded-xl px-4 py-3.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#032e92]/20 focus:border-[#032e92] transition-all shadow-xs ${errors.fullName ? 'border-red-400 bg-red-50/20' : 'border-gray-200'
+                            }`}
+                        />
+                        {errors.fullName && <p className="text-red-500 text-xs mt-1 font-medium">{errors.fullName}</p>}
+                      </div>
 
-                  {/* Message */}
-                  <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-2">
-                      Message (Optional)
-                    </label>
-                    <textarea
-                      rows="3"
-                      placeholder="Briefly describe your financial objectives..."
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl px-4 py-3.5 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#032e92]/20 focus:border-[#032e92] transition-all placeholder:text-gray-400 resize-none shadow-xs"
-                    ></textarea>
-                  </div>
+                      {/* Phone Number with Country Code */}
+                      <div className="relative" ref={countryDropdownRef}>
+                        <div className="flex items-center justify-between mb-2">
+                          <label className="block text-xs font-bold text-gray-700">
+                            Phone Number <span className="text-red-500">*</span>
+                          </label>
+                          <span className="text-[11px] text-gray-400 font-medium">
+                            {selectedCountry.name}
+                          </span>
+                        </div>
+                        <div
+                          className={`flex items-center bg-gray-50 border rounded-xl transition-all focus-within:bg-white focus-within:border-[#032e92] focus-within:ring-2 focus-within:ring-[#032e92]/20 ${errors.phone ? 'border-red-400 bg-red-50/20' : 'border-gray-200'
+                            }`}
+                        >
+                          {/* Country Code Dropdown Trigger */}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (status !== 'submitting') {
+                                setIsCountryOpen((prev) => !prev);
+                                setCountrySearch('');
+                              }
+                            }}
+                            disabled={status === 'submitting'}
+                            aria-label="Select Country Code"
+                            className="flex items-center gap-1.5 px-3.5 py-3.5 border-r border-gray-200 bg-gray-100/70 hover:bg-blue-50/60 rounded-l-xl transition-all cursor-pointer select-none group/btn shrink-0 disabled:cursor-not-allowed focus:outline-none"
+                          >
+                            <span className="text-xs font-bold text-gray-800 font-mono tracking-tight">
+                              {selectedCountry.code}
+                            </span>
+                            <FontAwesomeIcon
+                              icon={faChevronDown}
+                              className={`text-[9px] text-gray-400 group-hover/btn:text-[#032e92] transition-transform duration-200 ${isCountryOpen ? 'rotate-180 text-[#032e92]' : ''
+                                }`}
+                            />
+                          </button>
 
-                  {/* Terms & Conditions Checkbox */}
-                  <div>
-                    <div className="flex items-start gap-2.5 pt-1">
-                      <input
-                        type="checkbox"
-                        id="contact-terms"
-                        checked={formData.consent}
-                        onChange={(e) => {
-                          setFormData({ ...formData, consent: e.target.checked });
-                          if (e.target.checked && errors.consent) setErrors((prev) => ({ ...prev, consent: '' }));
-                        }}
-                        className="mt-0.5 w-4 h-4 text-[#032e92] rounded border-gray-300 focus:ring-[#032e92] cursor-pointer"
-                      />
-                      <label htmlFor="contact-terms" className="text-xs sm:text-[13px] text-gray-600 leading-relaxed cursor-pointer select-none">
-                        I agree to be contacted by a KNAPS representative and accept the{' '}
-                        <a href="/terms-and-conditions" className="text-[#032e92] font-semibold hover:underline" target="_blank" rel="noopener noreferrer">
-                          Terms & Conditions.
-                        </a>
-                      </label>
+                          {/* Phone Input */}
+                          <input
+                            type="tel"
+                            inputMode="numeric"
+                            maxLength={selectedCountry.maxDigits}
+                            placeholder={selectedCountry.placeholder || '99999 99999'}
+                            value={formData.phone}
+                            onChange={(e) => {
+                              const maxLen = selectedCountry.maxDigits || 15;
+                              const val = e.target.value.replace(/\D/g, '').slice(0, maxLen);
+                              setFormData({ ...formData, phone: val });
+                              if (errors.phone) setErrors((prev) => ({ ...prev, phone: '' }));
+                            }}
+                            disabled={status === 'submitting'}
+                            className="w-full bg-transparent px-4 py-3.5 outline-none text-sm text-gray-900 placeholder:text-gray-400 disabled:bg-gray-50 rounded-r-xl"
+                          />
+                        </div>
+                        {errors.phone && <p className="text-red-500 text-xs mt-1 font-medium">{errors.phone}</p>}
+
+                        {/* Country Code Dropdown Menu */}
+                        <AnimatePresence>
+                          {isCountryOpen && (
+                            <motion.div
+                              initial={{ opacity: 0, y: -6, scale: 0.98 }}
+                              animate={{ opacity: 1, y: 0, scale: 1 }}
+                              exit={{ opacity: 0, y: -6, scale: 0.98 }}
+                              transition={{ duration: 0.15 }}
+                              className="absolute left-0 top-full mt-2 w-full sm:w-80 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 overflow-hidden flex flex-col"
+                            >
+                              {/* Search Header */}
+                              <div className="p-2.5 border-b border-gray-100 bg-gray-50/80">
+                                <input
+                                  type="text"
+                                  placeholder="Search country or code..."
+                                  value={countrySearch}
+                                  onChange={(e) => setCountrySearch(e.target.value)}
+                                  className="w-full px-3 py-1.5 text-xs bg-white border border-gray-200 rounded-lg outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/20 text-gray-800 placeholder:text-gray-400"
+                                  autoFocus
+                                />
+                              </div>
+
+                              {/* Country List */}
+                              <div className="max-h-52 overflow-y-auto divide-y divide-gray-50 py-1">
+                                {filteredCountries.length === 0 ? (
+                                  <div className="p-4 text-center text-xs text-gray-400 font-medium">
+                                    No countries found
+                                  </div>
+                                ) : (
+                                  filteredCountries.map((c) => {
+                                    const isSelected = selectedCountry.iso === c.iso;
+                                    return (
+                                      <button
+                                        key={c.iso}
+                                        type="button"
+                                        onClick={() => {
+                                          handleCountryChange(c.iso);
+                                          setIsCountryOpen(false);
+                                          setCountrySearch('');
+                                        }}
+                                        className={`w-full flex items-center justify-between px-3.5 py-2.5 text-left text-xs transition-colors hover:bg-blue-50/80 cursor-pointer ${isSelected
+                                          ? 'bg-blue-50/70 font-semibold text-[#032e92]'
+                                          : 'text-gray-700'
+                                          }`}
+                                      >
+                                        <div className="flex items-center gap-2.5 truncate pr-2">
+                                          <span className="text-base shrink-0 leading-none">{c.flag}</span>
+                                          <span className="truncate">{c.name}</span>
+                                        </div>
+                                        <div className="flex items-center gap-2 shrink-0">
+                                          <span
+                                            className={`font-mono text-xs ${isSelected ? 'text-[#032e92] font-bold' : 'text-gray-400'
+                                              }`}
+                                          >
+                                            {c.code}
+                                          </span>
+                                          {isSelected && (
+                                            <span className="w-1.5 h-1.5 rounded-full bg-[#032e92]" />
+                                          )}
+                                        </div>
+                                      </button>
+                                    );
+                                  })
+                                )}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
                     </div>
-                    {errors.consent && <p className="text-red-500 text-xs mt-1 font-medium pl-6">{errors.consent}</p>}
-                  </div>
 
-                  {/* Submit Button */}
-                  <div>
-                    <button
-                      type="submit"
-                      disabled={status === 'submitting'}
-                      className="btn-ripple w-full py-3.5 sm:py-4 px-8 rounded-xl text-sm sm:text-[15px] font-semibold bg-[#032e92] hover:bg-[#022169] text-white shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer disabled:opacity-75 flex items-center justify-center gap-2.5"
-                    >
-                      {status === 'submitting' ? (
-                        <>
-                          <FontAwesomeIcon icon={faSpinner} className="animate-spin text-sm" />
-                          <span>Scheduling Consultation...</span>
-                        </>
-                      ) : (
-                        <span>Talk to Us</span>
-                      )}
-                    </button>
-                  </div>
-                </form>
+                    {/* Email */}
+                    <div>
+                      <label className="block text-xs font-bold text-gray-700 mb-2">
+                        Email Address <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="email"
+                        placeholder="Enter your email"
+                        value={formData.email}
+                        onChange={(e) => {
+                          setFormData({ ...formData, email: e.target.value });
+                          if (errors.email) setErrors((prev) => ({ ...prev, email: '' }));
+                        }}
+                        className={`w-full bg-gray-50 border rounded-xl px-4 py-3.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#032e92]/20 focus:border-[#032e92] transition-all shadow-xs ${errors.email ? 'border-red-400 bg-red-50/20' : 'border-gray-200'
+                          }`}
+                      />
+                      {errors.email && <p className="text-red-500 text-xs mt-1 font-medium">{errors.email}</p>}
+                    </div>
+
+                    {/* Message */}
+                    <div>
+                      <label className="block text-xs font-bold text-gray-700 mb-2">
+                        Message (Optional)
+                      </label>
+                      <textarea
+                        rows="3"
+                        placeholder="Briefly describe your financial objectives..."
+                        value={formData.message}
+                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                        className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl px-4 py-3.5 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#032e92]/20 focus:border-[#032e92] transition-all placeholder:text-gray-400 resize-none shadow-xs"
+                      ></textarea>
+                    </div>
+
+                    {/* Terms & Conditions Checkbox */}
+                    <div>
+                      <div className="flex items-start gap-2.5 pt-1">
+                        <input
+                          type="checkbox"
+                          id="contact-terms"
+                          checked={formData.consent}
+                          onChange={(e) => {
+                            setFormData({ ...formData, consent: e.target.checked });
+                            if (e.target.checked && errors.consent) setErrors((prev) => ({ ...prev, consent: '' }));
+                          }}
+                          className="mt-0.5 w-4 h-4 text-[#032e92] rounded border-gray-300 focus:ring-[#032e92] cursor-pointer"
+                        />
+                        <label htmlFor="contact-terms" className="text-xs sm:text-[13px] text-gray-600 leading-relaxed cursor-pointer select-none">
+                          I agree to be contacted by a KNAPS representative and accept the{' '}
+                          <a href="/terms-and-conditions" className="text-[#032e92] font-semibold hover:underline" target="_blank" rel="noopener noreferrer">
+                            Terms & Conditions.
+                          </a>
+                        </label>
+                      </div>
+                      {errors.consent && <p className="text-red-500 text-xs mt-1 font-medium pl-6">{errors.consent}</p>}
+                    </div>
+
+                    {/* Submit Button */}
+                    <div>
+                      <button
+                        type="submit"
+                        disabled={status === 'submitting'}
+                        className="btn-ripple w-full py-3.5 sm:py-4 px-8 rounded-xl text-sm sm:text-[15px] font-semibold bg-[#032e92] hover:bg-[#022169] text-white shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer disabled:opacity-75 flex items-center justify-center gap-2.5"
+                      >
+                        {status === 'submitting' ? (
+                          <>
+                            <FontAwesomeIcon icon={faSpinner} className="animate-spin text-sm" />
+                            <span>Scheduling Consultation...</span>
+                          </>
+                        ) : (
+                          <span>Talk to Us</span>
+                        )}
+                      </button>
+                    </div>
+                  </form>
                 </>
               )}
             </div>

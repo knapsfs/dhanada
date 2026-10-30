@@ -44,13 +44,10 @@ export default function AboutHero() {
             {/* Story & Philosophy Paragraphs */}
             <div className="space-y-4 text-sm sm:text-base text-gray-600 font-normal leading-relaxed">
               <p>
-                At KNAPS, we help people invest to achieve the goals they work hard for - seeing their child graduate, giving them the wedding they dreamed of, buying their first home, or enjoying a worry-free retirement.
+                At KNAPS, we help investors select suitable investment products based on their needs and goals, and support them in achieving those goals by helping them stay invested with discipline. We take pride in seeing our investors achieve their life goals - whether it is seeing their child graduate, giving them the wedding they dreamed of, buying their first home, or enjoying a worry-free retirement.
               </p>
               <p>
                 We know that feeling of <span className="font-semibold text-[#032e92]">‘sukoon’</span> that comes after seeing your dream come true after years of hard work, savings and sacrifices.
-              </p>
-              <p>
-                Our role is to understand what life-stage you are in, when you need the money, how much risk you can take, and help you choose investments that are suited to you.
               </p>
               <p>
                 So when that day finally comes, you can look back and say, <span className="font-semibold text-[#032e92]">“I planned for this. And today, I can live it.”</span>

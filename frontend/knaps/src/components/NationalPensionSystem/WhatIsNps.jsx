@@ -24,12 +24,12 @@ export default function WhatIsNps() {
   const npsVariants = [
     {
       icon: faUserTie,
-      title: 'Regular NPS',
+      title: 'All Citizen NPS',
       subtitle: 'For Your Retirement',
       // badge: 'Individual Tier I & II',
       description:
-        'Designed for all Indian citizens (18-70 years) to systematically build a retirement corpus with flexible asset allocation (up to 75% equity) and exclusive tax benefits.',
-      highlights: ['Extra ₹50,000 u/s 80CCD(1B)', 'Lowest expense ratios globally', '60% tax-free lump sum exit']
+        'For Indian citizens aged 18-70 to build a retirement corpus through market-linked and non-market-linked investments.',
+      highlights: ['Tax-free exit', 'Regular income after retirement', 'Compounding benefit in long term']
     },
     {
       icon: faChild,
@@ -37,8 +37,8 @@ export default function WhatIsNps() {
       subtitle: "For Your Child's Future",
       // badge: 'Minors (< 18 Years)',
       description:
-        'A dedicated long-term wealth initiative started by parents or guardians for minor children, compounding wealth from childhood and seamlessly transitioning into adulthood.',
-      highlights: ['Early compounding advantage', 'Seamless conversion at age 18', 'PFRDA regulated architecture']
+        'A long-term investment scheme for children below 18, started and managed by a parent or legal guardian.',
+      highlights: ['Tax-free exit', 'Build financial discipline in the child', 'Empower your child from an early age']
     },
     {
       icon: faBuilding,
@@ -46,8 +46,8 @@ export default function WhatIsNps() {
       subtitle: 'For Companies & Employees',
       // badge: 'Employer - Employee Benefit',
       description:
-        'A structured retirement benefit program adopted by corporations, allowing employees to claim additional tax deductions on employer contributions under Section 80CCD(2).',
-      highlights: ['Tax deduction u/s 80CCD(2)', 'Zero cost setup for employers', 'Enhanced employee retention']
+        'Corporate NPS is an NPS facility offered by employers to help employees build retirement savings, with contributions from the employee and/or employer.',
+      highlights: ['Tax benefits for employer', 'Retirement benefit for employees', 'Improve employee retention']
     }
   ];
 
@@ -65,8 +65,8 @@ export default function WhatIsNps() {
         >
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3 sm:gap-6">
             <div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#032e92] tracking-tight">
-                National Pension System (NPS)
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-black tracking-tight leading-tight max-w-4xl mx-auto">
+                National Pension System <span className='text-[#032e92]'> (NPS)</span>
               </h2>
               <p className="text-xl sm:text-2xl md:text-3xl font-medium text-[#032e92] mt-1">
                 Pension for All

@@ -11,10 +11,12 @@ export default function NpsHero() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
         {/* Breadcrumb Navigation */}
-        <div className="flex items-center pb-4 sm:pb-6 gap-3 text-[15px] font-medium text-gray-500">
+        <div className="flex items-center pb-4 sm:pb-6 gap-2 text-xs sm:text-sm text-gray-500">
           <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
           <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
-          <span className="text-[#032e92]">National Pension System (NPS)</span>
+          <Link to="/products" className="hover:text-[#032e92] transition-colors">Products</Link>
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+          <span className="text-[#032e92] font-semibold">National Pension System (NPS)</span>
         </div>
 
         {/* Hero Banner with text overlay */}
@@ -22,19 +24,19 @@ export default function NpsHero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
-          className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border border-gray-100 aspect-[16/9] sm:aspect-[2.1/1] md:aspect-[2.235/1] min-h-[250px] sm:min-h-[340px]"
+          className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border border-gray-100"
         >
-          {/* Background Image */}
+          {/* Background Image - full visible without cuts */}
           <img
             src={npsHeroImg}
             alt="Retirement in real is closer than it appears"
-            className="w-full h-full object-cover object-center"
+            className="w-full h-auto block"
           />
 
           {/* Text Overlay on Top Left */}
-          <div className="absolute top-6 sm:top-10 md:top-12 lg:top-16 left-6 sm:left-10 md:left-12 lg:left-16 max-w-xs sm:max-w-md md:max-w-lg z-10">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-semibold text-gray-900 tracking-tight leading-tight sm:leading-snug drop-shadow-sm">
-              Retirement in real<br />is closer than it appears
+          <div className="absolute top-4 sm:top-8 md:top-10 lg:top-12 left-4 sm:left-8 md:left-10 lg:left-14 max-w-[200px] sm:max-w-xs md:max-w-md lg:max-w-lg z-10 pointer-events-none">
+            <h1 className="text-base sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-gray-900 tracking-tight leading-tight sm:leading-snug drop-shadow-sm">
+              How do you see your <br />Retirement ?
             </h1>
           </div>
         </motion.div>
