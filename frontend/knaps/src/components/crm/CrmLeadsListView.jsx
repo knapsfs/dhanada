@@ -16,7 +16,6 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { motion, AnimatePresence } from "framer-motion";
-import CrmSelect from "./CrmSelect";
 import { crmService } from "../../services/crmService";
 import { getContactStatus } from "../../utils/crmContactUtils";
 
@@ -318,28 +317,6 @@ export default function CrmLeadsListView({
             <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-50 text-[#032e92] border border-blue-200/60">
               {totalItems} {totalItems === 1 ? "lead" : "leads"}
             </span>
-          </div>
-
-          {/* Status Dropdown Filter */}
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1.5 shrink-0">
-              <FontAwesomeIcon icon={faFilter} className="text-gray-400 text-[10px]" />
-              <span>Status:</span>
-            </span>
-            <CrmSelect
-              value={filters.status || "All"}
-              onChange={(val) => updateFilter("status", val)}
-              options={[
-                { value: "All", label: "All" },
-                { value: "New", label: "New" },
-                { value: "Interested", label: "Interested" },
-                { value: "Nurturing", label: "Nurturing" },
-                { value: "Converted", label: "Converted" },
-                { value: "Not Interested", label: "Not Interested" },
-              ]}
-              size="sm"
-              className="w-44"
-            />
           </div>
 
           {activeFilterCount > 0 && (

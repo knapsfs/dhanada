@@ -1698,37 +1698,6 @@ export default function CrmClientDetailView({
         </div>
       )}
 
-            {/* TAB: EMAIL CONVERSATIONS */}
-      {activeTab === "emails" && (
-        <div className="bg-white rounded-3xl border border-gray-200/90 p-6 shadow-xs">
-          <CrmEmailConversations
-            doctype="Client"
-            docName={clientData?.name || clientName}
-            contactEmail={primaryEmail}
-            initialConversations={conversations}
-            initialTotal={conversationsTotal}
-            onCountChange={(count) => setConversationsTotal(count)}
-            autoFocusComposer={focusEmailComposer}
-          />
-        </div>
-      )}
-
-      {/* TAB: WHATSAPP CONVERSATIONS */}
-      {activeTab === "whatsapp" && (
-        <div className="bg-white rounded-3xl border border-gray-200/90 p-6 shadow-xs">
-          <CrmWhatsAppConversations
-            doctype="Client"
-            docName={clientData?.name || clientName}
-            recipientPhone={primaryPhone}
-            contactName={displayName}
-            initialMessages={whatsappMessages}
-            initialTotal={whatsappTotal}
-            onCountChange={(count) => setWhatsappTotal(count)}
-            autoFocusComposer={focusWhatsAppComposer}
-          />
-        </div>
-      )}
-
       {/* TAB 3: CLIENT TASKS */}
       {activeTab === "tasks" && (
         <div className="bg-white rounded-3xl border border-gray-200/90 p-6 shadow-xs space-y-4">
@@ -1770,6 +1739,37 @@ export default function CrmClientDetailView({
               ))}
             </div>
           )}
+        </div>
+      )}
+
+      {/* TAB 4: EMAIL CONVERSATIONS */}
+      {activeTab === "emails" && (
+        <div className="bg-white rounded-3xl border border-gray-200/90 p-6 shadow-xs">
+          <CrmEmailConversations
+            doctype="Client"
+            docName={clientData?.name || clientName}
+            contactEmail={primaryEmail}
+            initialConversations={conversations}
+            initialTotal={conversationsTotal}
+            onCountChange={(count) => setConversationsTotal(count)}
+            autoFocusComposer={focusEmailComposer}
+          />
+        </div>
+      )}
+
+      {/* TAB 5: WHATSAPP CONVERSATIONS */}
+      {activeTab === "whatsapp" && (
+        <div className="bg-white rounded-3xl border border-gray-200/90 p-6 shadow-xs">
+          <CrmWhatsAppConversations
+            doctype="Client"
+            docName={clientData?.name || clientName}
+            recipientPhone={cleanPhone}
+            contactName={displayName}
+            initialMessages={whatsappMessages}
+            initialTotal={whatsappTotal}
+            onCountChange={(count) => setWhatsappTotal(count)}
+            autoFocusComposer={focusWhatsAppComposer}
+          />
         </div>
       )}
 
