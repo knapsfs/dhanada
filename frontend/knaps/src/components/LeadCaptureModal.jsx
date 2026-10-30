@@ -73,7 +73,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
   const validateField = (name, value, country = selectedCountry) => {
     switch (name) {
       case 'product':
-        if (!value) return 'Please select a product';
+        if (!value) return 'Please select your goal';
         return '';
       case 'full_name': {
         const trimmed = value.trim();
@@ -288,10 +288,10 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                     </div>
                   )}
 
-                  {/* Standardized Product Field */}
+                  {/* Standardized Goal Field */}
                   <div className="relative" ref={productDropdownRef}>
                     <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
-                      Product <span className="text-red-500">*</span>
+                      What’s your goal? <span className="text-red-500">*</span>
                     </label>
 
                     <div
@@ -317,7 +317,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                       }`}
                     >
                       <span className={selectedProduct ? 'text-gray-800 font-medium' : 'text-gray-400 font-normal'}>
-                        {selectedProductObj ? selectedProductObj.label : 'Select a product'}
+                        {selectedProductObj ? selectedProductObj.label : 'Select your goal'}
                       </span>
 
                       <FontAwesomeIcon

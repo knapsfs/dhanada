@@ -245,7 +245,11 @@ def create_chatbot_lead():
 		source = _resolve_lead_source(payload.get("source"), "Website Chatbot")
 
 		product = (
-			payload.get("product") or payload.get("interest") or payload.get("requirement") or ""
+			payload.get("product")
+			or payload.get("goal")
+			or payload.get("interest")
+			or payload.get("requirement")
+			or ""
 		).strip()
 
 		# 10. Existing Lead Matching / Duplicate Prevention
@@ -380,6 +384,7 @@ def create_website_lead():
 
 		product = (
 			payload.get("product")
+			or payload.get("goal")
 			or payload.get("product_name")
 			or payload.get("service")
 			or payload.get("service_interested")

@@ -62,7 +62,7 @@ export default function LuxuryContactSection() {
   const validate = () => {
     const newErrors = {};
     if (!selectedProduct) {
-      newErrors.product = 'Please select a product';
+      newErrors.product = 'Please select your goal';
     }
     if (!formData.fullName.trim()) {
       newErrors.fullName = 'Please enter your full name';
@@ -288,7 +288,7 @@ export default function LuxuryContactSection() {
                     {/* Product Field */}
                     <div className="relative" ref={dropdownRef}>
                       <label className="block text-xs font-bold text-gray-700 mb-2">
-                        Product <span className="text-red-500">*</span>
+                        What’s your goal? <span className="text-red-500">*</span>
                       </label>
                       <div
                         onClick={() => !status.startsWith('submit') && setProductOpen(!productOpen)}
@@ -312,7 +312,7 @@ export default function LuxuryContactSection() {
                           }`}
                       >
                         <span className={selectedProduct ? 'text-gray-900 font-medium text-sm' : 'text-gray-400 font-normal text-sm'}>
-                          {selectedProductObj ? selectedProductObj.label : 'Select a product'}
+                          {selectedProductObj ? selectedProductObj.label : 'Select your goal'}
                         </span>
                         <FontAwesomeIcon
                           icon={faChevronDown}

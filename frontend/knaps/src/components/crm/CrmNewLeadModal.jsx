@@ -10,7 +10,7 @@ export default function CrmNewLeadModal({ isOpen, onClose, onCreated, sources = 
     lead_name: '',
     mobile_no: '',
     email: '',
-    product_interest: 'NPS (National Pension System)',
+    product_interest: 'Long-term wealth creation',
     source: 'Manual',
     notes: '',
   });
@@ -139,7 +139,7 @@ export default function CrmNewLeadModal({ isOpen, onClose, onCreated, sources = 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-semibold text-gray-700 mb-1.5">
-                  Product of Interest
+                  Goal / Product of Interest
                 </label>
                 <CrmSelect
                   value={formData.product_interest}
