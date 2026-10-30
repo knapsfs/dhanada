@@ -195,9 +195,7 @@ export default function KnapsCrmPortal() {
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: faChartPie },
     { id: 'leads', label: 'All Leads', icon: faUsers, badge: leads.length },
-    { id: 'clients', label: 'Clients', icon: faUserCheck, badge: clients.length },
     { id: 'tasks', label: 'Tasks & Follow-ups', icon: faListCheck, badge: tasks.filter(t => t.status === 'Open').length },
-    { id: 'renewals', label: 'Renewals', icon: faRotateRight, badge: renewals.filter(r => r.status === 'Upcoming').length },
   ];
 
   if (loading) {
@@ -424,6 +422,11 @@ export default function KnapsCrmPortal() {
               onDeleteLead={handleLeadDeleted}
               onLogInteraction={handleOpenInteractionModal}
               onNewTask={handleOpenTaskModal}
+              onNavigateToClient={(clientName) => {
+                setSelectedLeadName(null);
+                setSelectedClientName(clientName);
+                setActiveTab('clients');
+              }}
               refreshKey={leadRefreshKey}
             />
           ) : selectedClientName ? (
@@ -433,6 +436,11 @@ export default function KnapsCrmPortal() {
               onClientUpdated={handleClientUpdated}
               onLogInteraction={handleOpenInteractionModal}
               onNewTask={handleOpenTaskModal}
+              onNavigateToLead={(leadName) => {
+                setSelectedClientName(null);
+                setSelectedLeadName(leadName);
+                setActiveTab('leads');
+              }}
               refreshKey={clientRefreshKey}
             />
           ) : (

@@ -12,214 +12,67 @@ frappe.ui.form.on("Lead", {
 			frm.doc.onboarding_status === "Completed" &&
 			frm.doc.risk_profiler_status === "Completed";
 
-		// 1. Status Dashboard Headline
-		if (isConverted) {
+		// Basic Lead Status Headline
+		if (status) {
 			frm.dashboard.set_headline(
-				__(
-					"Lead Converted to Client: <a href='/app/client/{0}'><b>{0}</b></a> (Converted On: {1})",
-					[
-						frm.doc.converted_client || "",
-						frappe.datetime.str_to_user(frm.doc.converted_on) || "",
-					]
-				),
-				"green"
-			);
-		} else if (canConvert) {
-			frm.dashboard.set_headline(
-				__(
-					"<b>Ready for Conversion:</b> Both Onboarding (PAN verified) and Risk Profiler submissions are completed."
-				),
-				"green"
-			);
-		} else if (status === "Nurturing") {
-			frm.dashboard.set_headline(
-				__(
-					"<b>Nurturing Pipeline:</b> Onboarding Status: <b>{0}</b> | Risk Profiler Status: <b>{1}</b>",
-					[frm.doc.onboarding_status, frm.doc.risk_profiler_status]
-				),
-				"purple"
-			);
-		} else if (frm.doc.welcome_email_status === "Failed") {
-			frm.dashboard.set_headline(
-				__(
-					"<b>Welcome Email Delivery Failed:</b> Outgoing email could not be delivered via SMTP. Please verify email settings and click 'Retry Welcome Mail'."
-				),
-				"red"
-			);
-		} else if (frm.doc.welcome_email_status === "Queued") {
-			frm.dashboard.set_headline(
-				__(
-					"<b>Welcome Email Queued:</b> Outgoing email is queued in Frappe for background delivery."
-				),
-				"blue"
-			);
-		} else if (status === "Interested") {
-			frm.dashboard.set_headline(
-				__(
-					"<b>Qualified Lead:</b> Lead is interested. Awaiting Onboarding & Risk Profiler submission."
-				),
-				"orange"
+				__("<b>Lead Status:</b> {0}", [status]),
+				status === "Converted" ? "green" : status === "Interested" ? "orange" : "blue"
 			);
 		}
 
-		// 2. TOP-LEVEL BUTTON 1: "Send Welcome Mail"
-		// Prominent top-level action: shown only when NOT sent, hidden once Sent, allows retry if Failed.
-		if (
-			!isConverted &&
-			status !== "Not Interested" &&
-			status !== "Junk" &&
-			frm.doc.welcome_email_status !== "Sent"
-		) {
-			const isFailed = frm.doc.welcome_email_status === "Failed";
-			const label = isFailed ? __("Retry Welcome Mail") : __("Send Welcome Mail");
-			const welcomeBtn = frm.add_custom_button(label, () => {
-				frappe.call({
-					method: "dhanada.lifecycle.api.send_welcome_message",
-					args: { lead_id: frm.doc.name },
-					freeze: true,
-					freeze_message: isFailed
-						? __("Retrying Welcome Email...")
-						: __("Sending Welcome Email..."),
-					callback(r) {
-						if (r.message && r.message.success) {
-							frappe.show_alert({ message: r.message.message, indicator: "green" });
-						} else if (r.message) {
-							frappe.msgprint({
-								title: __("Notice"),
-								message: r.message.message,
-								indicator: "orange",
-							});
-						}
-						frm.reload_doc();
+		// 1. Action: Update Lead Status (under Actions dropdown)
+		frm.add_custom_button(
+			__("Update Status"),
+			() => {
+				const d = new frappe.ui.Dialog({
+					title: __("Update Lead Status"),
+					fields: [
+						{
+							label: __("New Status"),
+							fieldname: "new_status",
+							fieldtype: "Select",
+							options: ["New", "Interested", "Nurturing", "Not Interested", "Junk"],
+							default: status,
+							reqd: 1,
+						},
+						{
+							label: __("Notes / Reason"),
+							fieldname: "notes",
+							fieldtype: "Small Text",
+						},
+					],
+					primary_action_label: __("Update"),
+					primary_action(values) {
+						d.hide();
+						frappe.call({
+							method: "dhanada.crm_api.update_crm_lead_status",
+							args: {
+								lead_name: frm.doc.name,
+								status: values.new_status,
+								reason: values.notes,
+							},
+							freeze: true,
+							freeze_message: __("Updating status..."),
+							callback(r) {
+								if (r.message) {
+									frappe.show_alert({
+										message: __("Lead status updated to {0}", [
+											values.new_status,
+										]),
+										indicator: "green",
+									});
+								}
+								frm.reload_doc();
+							},
+						});
 					},
 				});
-			});
-			if (isFailed) {
-				welcomeBtn.addClass("btn-danger");
-			} else {
-				welcomeBtn.addClass("btn-primary");
-			}
-		}
+				d.show();
+			},
+			__("Actions")
+		);
 
-		// 3. TOP-LEVEL BUTTON 2: "Onboarding Form Link"
-		// Prominent top-level placeholder action for future combined customer-facing form
-		if (!isConverted) {
-			const obBtn = frm.add_custom_button(__("Onboarding Form Link"), () => {
-				frappe.msgprint({
-					title: __("Combined Onboarding Form"),
-					message: __(
-						"The combined customer-facing Onboarding & Risk Profiler form is currently in preparation.<br><br>" +
-							"<b>Planned Unified Flow:</b><br>" +
-							"• <b>Section A:</b> Investor KYC & Identity (PAN, contact, KYC details)<br>" +
-							"• <b>Section B:</b> Risk Profiler Assessment Questionnaire<br><br>" +
-							"Once available, this action will generate a single secure, expiring submission link for the prospective investor."
-					),
-					indicator: "blue",
-				});
-			});
-			obBtn.addClass("btn-default");
-		}
-
-		// 4. Action: Update Lead Status (under Actions dropdown)
-		if (!isConverted) {
-			frm.add_custom_button(
-				__("Update Status"),
-				() => {
-					const d = new frappe.ui.Dialog({
-						title: __("Update Lead Status"),
-						fields: [
-							{
-								label: __("New Status"),
-								fieldname: "new_status",
-								fieldtype: "Select",
-								options: ["Interested", "Nurturing", "Not Interested", "Junk"],
-								default: status !== "New" ? status : "Interested",
-								reqd: 1,
-								change() {
-									const val = d.get_value("new_status");
-									const isDisqualified =
-										val === "Not Interested" || val === "Junk";
-									d.set_df_property(
-										"lost_reason",
-										"reqd",
-										isDisqualified ? 1 : 0
-									);
-									d.toggle_display(
-										["lost_reason", "lost_notes"],
-										isDisqualified
-									);
-								},
-							},
-							{
-								label: __("Reason"),
-								fieldname: "lost_reason",
-								fieldtype: "Data",
-								depends_on:
-									"eval:['Not Interested','Junk'].includes(doc.new_status)",
-								description: __("Required if marking as Not Interested or Junk"),
-							},
-							{
-								label: __("Disqualification Notes"),
-								fieldname: "lost_notes",
-								fieldtype: "Small Text",
-								depends_on:
-									"eval:['Not Interested','Junk'].includes(doc.new_status)",
-							},
-						],
-						primary_action_label: __("Update"),
-						primary_action(values) {
-							d.hide();
-							if (values.new_status === "Junk") {
-								frappe.call({
-									method: "dhanada.lifecycle.api.mark_lead_junk",
-									args: {
-										lead_id: frm.doc.name,
-										reason: values.lost_reason,
-										notes: values.lost_notes,
-									},
-									freeze: true,
-									freeze_message: __("Updating status..."),
-									callback(r) {
-										if (r.message && r.message.success) {
-											frappe.show_alert({
-												message: r.message.message,
-												indicator: "green",
-											});
-										}
-										frm.reload_doc();
-									},
-								});
-							} else {
-								frappe.call({
-									method: "dhanada.lifecycle.api.update_lead_interest",
-									args: {
-										lead_id: frm.doc.name,
-										status: values.new_status,
-										lost_reason: values.lost_reason,
-										lost_notes: values.lost_notes,
-									},
-									freeze: true,
-									freeze_message: __("Updating status..."),
-									callback(r) {
-										if (r.message && r.message.success) {
-											frappe.show_alert({
-												message: r.message.message,
-												indicator: "green",
-											});
-										}
-										frm.reload_doc();
-									},
-								});
-							}
-						},
-					});
-					d.show();
-				},
-				__("Actions")
-			);
-		}
-
-		// 5. Action: Convert to Client (STRICT: only when both submissions completed)
+		// 2. Action: Convert to Client (STRICT: only when both submissions completed)
 		if (canConvert) {
 			frm.add_custom_button(
 				__("Convert to Client"),
@@ -261,7 +114,7 @@ frappe.ui.form.on("Lead", {
 			);
 		}
 
-		// 5b. Action: Map to Existing Client / View Client
+		// 3. Action: Map to Existing Client / View Client
 		const effectiveClient = frm.doc.client || frm.doc.converted_client;
 		if (!effectiveClient) {
 			const mapBtn = frm.add_custom_button(__("Map to Existing Client"), () => {
@@ -312,7 +165,7 @@ frappe.ui.form.on("Lead", {
 			viewClientBtn.addClass("btn-success");
 		}
 
-		// 6. Navigation: View Submissions
+		// 4. Navigation: View Submissions
 		if (frm.doc.onboarding_status === "Completed" || frm.doc.onboarding_status === "Sent") {
 			frm.add_custom_button(
 				__("View Onboarding ↗"),
@@ -364,7 +217,7 @@ frappe.ui.form.on("Lead", {
 			);
 		}
 
-		// 7. Navigation: Linked Client & Chatbot
+		// 5. Navigation: Linked Client & Chatbot
 		const navClient = frm.doc.client || frm.doc.converted_client;
 		if (navClient) {
 			frm.add_custom_button(

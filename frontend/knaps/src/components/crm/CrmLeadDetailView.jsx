@@ -6,7 +6,8 @@ import {
   faCommentDots, faListCheck, faSpinner,
   faCheckCircle, faCircleExclamation, faTriangleExclamation,
   faClock, faFloppyDisk, faUser, faTrash, faCopy, faCheck,
-  faLocationDot, faCoins, faFileLines, faPlus, faXmark, faComments
+  faLocationDot, faCoins, faFileLines, faPlus, faXmark, faComments,
+  faLink, faArrowUpRightFromSquare
 } from "@fortawesome/free-solid-svg-icons";
 import CrmSelect from "./CrmSelect";
 import CrmSendFormModal from "./CrmSendFormModal";
@@ -31,10 +32,12 @@ export default function CrmLeadDetailView({
   onDeleteLead,
   onLogInteraction,
   onNewTask,
+  onNavigateToClient,
   refreshKey = 0,
 }) {
   const [leadData, setLeadData] = useState(null);
   const [sendFormModalOpen, setSendFormModalOpen] = useState(false);
+  const [mapModalOpen, setMapModalOpen] = useState(false);
   const [interactions, setInteractions] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [conversations, setConversations] = useState([]);
@@ -245,6 +248,7 @@ export default function CrmLeadDetailView({
   };
 
   const cleanPhone = leadData?.mobile_no ? leadData.mobile_no.replace(/\D/g, "") : "";
+  const associatedClient = leadData?.client || leadData?.converted_client || null;
 
   const contactInfo = getContactStatus(
     leadData?.last_contacted_on,
@@ -328,7 +332,7 @@ export default function CrmLeadDetailView({
 
         {/* Action Buttons Toolbar */}
         <div className="flex items-center gap-2 flex-wrap">
-          {/* Direct Communication Buttons */}
+          {/* Direct Phone Link */}
           {cleanPhone && (
             <>
               <a
@@ -692,9 +696,6 @@ export default function CrmLeadDetailView({
                   {whatsappTotal}
                 </span>
               </button>
-
-              <button
-                type="button"
                 onClick={() => setActiveTab("timeline")}
                 className={`py-3.5 px-4 text-xs font-bold border-b-2 transition-colors cursor-pointer flex items-center gap-2 ${activeTab === "timeline"
                     ? "border-[#032e92] text-[#032e92]"
@@ -987,6 +988,7 @@ export default function CrmLeadDetailView({
                 </div>
               )}
 
+
               {/* TAB 4: EMAIL CONVERSATIONS */}
               {activeTab === "emails" && (
                 <CrmEmailConversations
@@ -995,7 +997,6 @@ export default function CrmLeadDetailView({
                   contactEmail={leadData?.email}
                   initialConversations={conversations}
                   initialTotal={conversationsTotal}
-                  initialHasMore={conversationsHasMore}
                   onCountChange={(count) => setConversationsTotal(count)}
                   autoFocusComposer={focusEmailComposer}
                 />
@@ -1227,16 +1228,18 @@ export default function CrmLeadDetailView({
         )}
       </AnimatePresence>
 
+      {/* Send Form Modal */}
       <CrmSendFormModal
         isOpen={sendFormModalOpen}
         onClose={() => setSendFormModalOpen(false)}
-        record={leadData || {}}
+        record={leadData}
         referenceDoctype="Lead"
-        onFormSent={async () => {
-          await loadDetails(true);
-          if (onLeadUpdated && leadData) {
-            onLeadUpdated({ ...leadData });
-          }
+        onFormSent={() => {
+          setFeedback({
+            type: "success",
+            message: `Form workflow link sent to ${leadData?.lead_name || "lead"}`,
+          });
+          loadDetails(true);
         }}
       />
     </div>

@@ -184,7 +184,6 @@ export const faqs = [
 		question: "What documents do I need to invest in an SIF?",
 		answer: "You generally need PAN, Aadhaar/valid KYC documents, bank details, and a completed application form. Additional documents may be required depending on the investor type and SIF requirements.",
 	},
-
 ];
 
 // Stats Data

@@ -238,6 +238,26 @@ export const crmService = {
 			lead_name: leadName,
 		}),
 
+	searchClientsForMapping: (leadId, query = "") =>
+		fetchCrmApi(
+			`/api/method/dhanada.crm_api.search_clients_for_mapping?lead_id=${encodeURIComponent(
+				leadId
+			)}&query=${encodeURIComponent(query)}`
+		),
+
+	mapLeadToClient: (leadId, clientId) =>
+		fetchCrmApi("/api/method/dhanada.crm_api.map_lead_to_client", "POST", {
+			lead_id: leadId,
+			client_id: clientId,
+		}),
+
+	getClientLinkedLeads: (clientName) =>
+		fetchCrmApi(
+			`/api/method/dhanada.crm_api.get_client_linked_leads?client_name=${encodeURIComponent(
+				clientName
+			)}`
+		),
+
 	deleteLead: (leadName) =>
 		fetchCrmApi("/api/method/dhanada.crm_api.delete_crm_lead", "POST", {
 			lead_name: leadName,

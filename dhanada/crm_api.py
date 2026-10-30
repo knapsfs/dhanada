@@ -218,23 +218,17 @@ def get_lead_details(lead_name):
 		order_by="due_date asc",
 	)
 
-	conversations_res = get_crm_conversations("Lead", lead_name, page=1, page_length=20)
-
-	import dhanada.whatsapp_api as whatsapp_api
-
-	wa_res = whatsapp_api.get_crm_whatsapp_conversations("Lead", lead_name, page=1, page_length=30)
-
 	return {
 		"lead": lead,
 		"interactions": interactions,
 		"tasks": tasks,
-		"conversations": conversations_res["conversations"],
-		"conversations_total": conversations_res["total_count"],
-		"conversations_has_more": conversations_res["has_more"],
-		"whatsapp_messages": wa_res["messages"],
-		"whatsapp_total": wa_res["total_count"],
-		"whatsapp_is_session_active": wa_res["is_session_active"],
-		"whatsapp_templates": wa_res["templates"],
+		"conversations": [],
+		"conversations_total": 0,
+		"conversations_has_more": False,
+		"whatsapp_messages": [],
+		"whatsapp_total": 0,
+		"whatsapp_is_session_active": False,
+		"whatsapp_templates": [],
 	}
 
 
@@ -1227,29 +1221,14 @@ def sync_crm_incoming_emails(force: bool = False):
 
 @frappe.whitelist()
 def sync_crm_emails(doctype=None, name=None):
-	"""
-	API endpoint to trigger on-demand email sync for KNAPS CRM.
-	Optionally returns refreshed conversation history if doctype and name are provided.
-	"""
+	"""API endpoint to trigger on-demand email sync (disabled in basic CRM)."""
 	_check_crm_permission()
-	sync_res = sync_crm_incoming_emails(force=True)
-	if doctype and name:
-		return get_crm_conversations(doctype, name, page=1, sync=False)
-	return sync_res
+	return {"synced": 0}
 
 
 @frappe.whitelist()
 def get_crm_conversations(doctype, name, page=1, page_length=20, sync=False):
-	"""
-	Paginated API to retrieve email conversations for a specific Lead or Client.
-	- Validates doctype is 'Lead' or 'Client'
-	- Validates document exists
-	- Enforces document-level read permissions
-	- Returns message subject, sender, recipients, date, direction, content, and attachment indicator
-	- Returns only emails linked to that specific record (and linked conversion partner if converted)
-	- Supports on-demand synchronization when sync=True or sync=1
-	- Does not expose unrelated inbox emails
-	"""
+	"""Paginated API to retrieve email conversations."""
 	_check_crm_permission()
 
 	if cint(sync) or str(sync).lower() == "true":
@@ -1574,30 +1553,32 @@ def get_renewals(status=None, limit=100):
 
 @frappe.whitelist()
 def trigger_welcome_email(lead_name):
-	"""Dispatches welcome email to the lead."""
+	"""Welcome email functionality is disabled in the basic CRM branch."""
 	_check_crm_permission()
-	return lifecycle_api.send_welcome_message(lead_name)
+	frappe.throw(
+		_("Welcome email functionality is disabled in the basic CRM branch."), frappe.ValidationError
+	)
 
 
 @frappe.whitelist()
 def trigger_risk_profiler(lead_name):
-	"""Dispatches Risk Profiler link to the lead."""
+	"""Risk Profiler dispatch is disabled in the basic CRM branch."""
 	_check_crm_permission()
-	return lifecycle_api.send_risk_profiler(lead_name)
+	frappe.throw(_("Risk Profiler dispatch is disabled in the basic CRM branch."), frappe.ValidationError)
 
 
 @frappe.whitelist()
 def trigger_onboarding_and_profiler(lead_name):
-	"""Dispatches onboarding form and risk profiler link to the lead."""
+	"""Onboarding and Risk Profiler dispatch is disabled in the basic CRM branch."""
 	_check_crm_permission()
-	return lifecycle_api.send_onboarding_and_risk_profiler(lead_name)
+	frappe.throw(_("Onboarding dispatch is disabled in the basic CRM branch."), frappe.ValidationError)
 
 
 @frappe.whitelist()
 def trigger_convert_to_client(lead_name):
-	"""Converts qualified lead to a full client."""
+	"""Lead-to-client conversion is disabled in the basic CRM branch."""
 	_check_crm_permission()
-	return lifecycle_api.convert_lead_to_client(lead_name)
+	frappe.throw(_("Lead-to-client conversion is disabled in the basic CRM branch."), frappe.ValidationError)
 
 
 @frappe.whitelist(allow_guest=True)
@@ -1632,7 +1613,7 @@ def delete_crm_lead(lead_name):
 def generate_crm_form_link(
 	reference_doctype, reference_name, workflow_type, expires_in_days=7, send_email=True, custom_message=None
 ):
-	"""Generates a secure, expiring form link for Risk Profiler, Onboarding, or Combined workflow and sends email."""
+	"""Generates a secure form link for onboarding or risk profiler workflows."""
 	_check_crm_permission()
 	import dhanada.form_workflow_api as form_workflow_api
 
@@ -1648,7 +1629,7 @@ def generate_crm_form_link(
 
 @frappe.whitelist()
 def send_crm_form_email(token, custom_message=None):
-	"""Dispatches the generated form workflow link to customer email address."""
+	"""Sends an email invitation containing a workflow form link."""
 	_check_crm_permission()
 	import dhanada.form_workflow_api as form_workflow_api
 
@@ -1668,76 +1649,22 @@ def send_crm_email(
 	bcc: str | None = None,
 	in_reply_to: str | None = None,
 ):
-	"""
-	Composes and sends an in-app email to a Lead or Client via Frappe's email infrastructure.
-	Associates the resulting Communication with the record.
-	"""
+	"""In-app email sending is disabled in the basic CRM branch."""
 	_check_crm_permission()
-
-	if doctype not in ("Lead", "Client"):
-		frappe.throw(_("Invalid DocType for email composition."), frappe.ValidationError)
-
-	if not frappe.db.exists(doctype, name):
-		frappe.throw(_("{0} '{1}' not found.").format(doctype, name), frappe.DoesNotExistError)
-
-	if not frappe.has_permission(doctype, "write", doc=name):
-		frappe.throw(_("Permission denied to send email to {0}.").format(name), frappe.PermissionError)
-
-	doc = frappe.get_doc(doctype, name)
-	recipient_email = (getattr(doc, "email", None) or "").strip()
-	if not recipient_email or "@" not in recipient_email:
-		frappe.throw(
-			_("The selected {0} does not have a valid email address.").format(doctype),
-			frappe.ValidationError,
-		)
-
-	if not subject or not str(subject).strip():
-		frappe.throw(_("Subject is required."), frappe.MandatoryError)
-
-	if not content or not str(content).strip():
-		frappe.throw(_("Message content is required."), frappe.MandatoryError)
-
-	cc_list = [c.strip() for c in cc.split(",") if c.strip() and "@" in c] if cc else None
-	bcc_list = [b.strip() for b in bcc.split(",") if b.strip() and "@" in b] if bcc else None
-
-	# Send via Frappe email infrastructure
-	queue_entry = frappe.sendmail(
-		recipients=[recipient_email],
-		cc=cc_list,
-		bcc=bcc_list,
-		subject=str(subject).strip(),
-		content=content,
-		reference_doctype=doctype,
-		reference_name=name,
-		in_reply_to=in_reply_to,
-		delayed=False,
-		now=True,
-	)
-
-	comm_name = getattr(queue_entry, "communication", None)
-	if not comm_name and queue_entry:
-		comm_name = frappe.db.get_value("Email Queue", queue_entry.name, "communication")
-
-	# Update contact timestamp
-	frappe.db.set_value(doctype, name, "last_contacted_on", now_datetime())
-	frappe.db.set_value(doctype, name, "last_contacted_by", frappe.session.user)
-	frappe.db.commit()
-
-	return {
-		"status": "success",
-		"message": _("Email sent successfully."),
-		"recipient": recipient_email,
-		"communication": comm_name,
-	}
+	frappe.throw(_("In-app email communication is disabled in the basic CRM branch."), frappe.ValidationError)
 
 
 @frappe.whitelist()
 def get_crm_whatsapp_conversations(doctype: str, name: str, page: int = 1, page_length: int = 50):
-	"""Retrieves WhatsApp conversation history for a Lead or Client."""
+	"""WhatsApp conversations are disabled in the basic CRM branch."""
 	_check_crm_permission()
-	import dhanada.whatsapp_api as whatsapp_api
-
-	return whatsapp_api.get_crm_whatsapp_conversations(doctype, name, page=page, page_length=page_length)
+	return {
+		"messages": [],
+		"total_count": 0,
+		"has_more": False,
+		"is_session_active": False,
+		"templates": [],
+	}
 
 
 @frappe.whitelist()
@@ -1748,7 +1675,7 @@ def send_crm_whatsapp_message(
 	template_name: str | None = None,
 	template_params=None,
 ):
-	"""Sends an outbound WhatsApp message or approved template to a Lead or Client."""
+	"""Sends a WhatsApp message via official API integration."""
 	_check_crm_permission()
 	import dhanada.whatsapp_api as whatsapp_api
 

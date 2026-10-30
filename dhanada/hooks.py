@@ -99,8 +99,8 @@ website_route_rules = [
 	{"from_route": "/terms-and-conditions", "to_route": "knaps"},
 	{"from_route": "/knaps-crm", "to_route": "knaps"},
 	{"from_route": "/knaps-crm/<path:app_path>", "to_route": "knaps"},
-	{"from_route": "/crm", "to_route": "knaps"},
-	{"from_route": "/crm/<path:app_path>", "to_route": "knaps"},
+	# {"from_route": "/crm", "to_route": "knaps"},
+	# {"from_route": "/crm/<path:app_path>", "to_route": "knaps"},
 	{"from_route": "/forms", "to_route": "knaps"},
 	{"from_route": "/forms/<path:app_path>", "to_route": "knaps"},
 ]
@@ -191,16 +191,9 @@ get_desktop_icons = "dhanada.config.desktop.get_data"
 # Document Events
 # ---------------
 # Hook on document methods and events
-
-doc_events = {
-	"Email Queue": {
-		"on_update": "dhanada.lifecycle.api.on_email_queue_update",
-		"after_insert": "dhanada.email_association.capture_outgoing_email_queue",
-	},
-	"Communication": {
-		"before_insert": "dhanada.email_association.link_communication_to_crm_record",
-	},
-}
+# Advanced CRM communication hooks (Email Queue, Communication, WhatsApp)
+# are reserved for the feat/crm branch.
+doc_events = {}
 
 # Scheduled Tasks
 # ---------------
@@ -231,7 +224,8 @@ before_tests = "dhanada.setup.bootstrap.before_tests"
 # 	"Task": "dhanada.custom.task.CustomTaskMixin"
 # }
 
-override_doctype_class = {"Email Account": "dhanada.overrides.custom_email_account.CustomEmailAccount"}
+# Advanced Email Account override is reserved for feat/crm
+# override_doctype_class = {"Email Account": "dhanada.overrides.custom_email_account.CustomEmailAccount"}
 
 # Overriding Methods
 # ------------------------------

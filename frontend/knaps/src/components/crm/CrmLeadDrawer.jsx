@@ -259,38 +259,14 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
                 {/* Direct Connect Buttons */}
                 <div className="flex items-center gap-1.5">
                   {cleanPhone && (
-                    <>
-                      <a
-                        href={`tel:${cleanPhone}`}
-                        className="p-2 rounded-xl bg-white border border-gray-200 text-gray-700 hover:text-[#032e92] hover:border-[#032e92] transition-colors text-xs flex items-center gap-1.5 shadow-2xs"
-                        title="Call Lead"
-                      >
-                        <FontAwesomeIcon icon={faPhone} />
-                        <span className="hidden sm:inline font-semibold">Call</span>
-                      </a>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (onLeadUpdated) onLeadUpdated(leadData);
-                        }}
-                        className="p-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 hover:bg-emerald-100 transition-colors text-xs flex items-center gap-1.5 shadow-2xs cursor-pointer"
-                        title="Chat on WhatsApp"
-                      >
-                        <span className="font-bold">WhatsApp</span>
-                      </button>
-                    </>
-                  )}
-                  {leadData?.email && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (onLeadUpdated) onLeadUpdated(leadData);
-                      }}
-                      className="p-2 rounded-xl bg-white border border-gray-200 text-gray-700 hover:text-[#032e92] hover:border-[#032e92] transition-colors text-xs flex items-center gap-1.5 shadow-2xs cursor-pointer"
-                      title="Send Email"
+                    <a
+                      href={`tel:${cleanPhone}`}
+                      className="p-2 rounded-xl bg-white border border-gray-200 text-gray-700 hover:text-[#032e92] hover:border-[#032e92] transition-colors text-xs flex items-center gap-1.5 shadow-2xs"
+                      title="Call Lead"
                     >
-                      <FontAwesomeIcon icon={faEnvelope} />
-                    </button>
+                      <FontAwesomeIcon icon={faPhone} />
+                      <span className="hidden sm:inline font-semibold">Call</span>
+                    </a>
                   )}
                 </div>
               </div>
@@ -368,7 +344,6 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
                 )}
               </div>
             </div>
-
             {/* Notifications / Feedback */}
             {feedback.message && (
               <div
