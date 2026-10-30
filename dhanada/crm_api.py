@@ -218,23 +218,17 @@ def get_lead_details(lead_name):
 		order_by="due_date asc",
 	)
 
-	conversations_res = get_crm_conversations("Lead", lead_name, page=1, page_length=20)
-
-	import dhanada.whatsapp_api as whatsapp_api
-
-	wa_res = whatsapp_api.get_crm_whatsapp_conversations("Lead", lead_name, page=1, page_length=30)
-
 	return {
 		"lead": lead,
 		"interactions": interactions,
 		"tasks": tasks,
-		"conversations": conversations_res["conversations"],
-		"conversations_total": conversations_res["total_count"],
-		"conversations_has_more": conversations_res["has_more"],
-		"whatsapp_messages": wa_res["messages"],
-		"whatsapp_total": wa_res["total_count"],
-		"whatsapp_is_session_active": wa_res["is_session_active"],
-		"whatsapp_templates": wa_res["templates"],
+		"conversations": [],
+		"conversations_total": 0,
+		"conversations_has_more": False,
+		"whatsapp_messages": [],
+		"whatsapp_total": 0,
+		"whatsapp_is_session_active": False,
+		"whatsapp_templates": [],
 	}
 
 
@@ -564,92 +558,9 @@ def search_clients_for_mapping(lead_id, query=None):
 
 @frappe.whitelist()
 def map_lead_to_client(lead_id, client_id):
-	"""
-	Associates an existing Lead with an existing Client record.
-	- Validates server-side permissions: Lead write & Client read.
-	- Ensures Lead and Client exist.
-	- Sets Lead.client = client_id.
-	- Preserves Lead's product interest, source, status, follow-ups, and conversations.
-	- Preserves Client's KYC, PAN, risk profile, and existing details (no overwriting).
-	- Sets Client.lead = lead_id if Client.lead is currently unassigned.
-	- Logs a CRM Interaction documenting the mapping event on both documents.
-	- Idempotent: repeated mapping to the same client is safely handled.
-	"""
+	"""Client mapping is disabled in the basic CRM branch."""
 	_check_crm_permission()
-	if not lead_id or not frappe.db.exists("Lead", lead_id):
-		frappe.throw(_("Lead '{0}' not found.").format(lead_id), frappe.DoesNotExistError)
-
-	if not client_id or not frappe.db.exists("Client", client_id):
-		frappe.throw(_("Client '{0}' not found.").format(client_id), frappe.DoesNotExistError)
-
-	if not frappe.has_permission("Lead", "write", doc=lead_id):
-		frappe.throw(
-			_("You do not have write permission for Lead '{0}'.").format(lead_id), frappe.PermissionError
-		)
-
-	if not frappe.has_permission("Client", "read", doc=client_id):
-		frappe.throw(
-			_("You do not have permission to view Client '{0}'.").format(client_id), frappe.PermissionError
-		)
-
-	lead = frappe.get_doc("Lead", lead_id)
-	client = frappe.get_doc("Client", client_id)
-
-	# If already mapped to the same client, return success idempotently
-	current_client = lead.client or lead.converted_client
-	if current_client == client_id:
-		return {
-			"success": True,
-			"already_mapped": True,
-			"lead_id": lead_id,
-			"client_id": client_id,
-			"client_name": client.client_name,
-			"product_interest": lead.product_interest,
-			"message": _("Lead '{0}' is already mapped to Client '{1}' ({2}).").format(
-				lead_id, client.client_name, client_id
-			),
-		}
-
-	# Map Lead to Client
-	lead.client = client_id
-	lead.flags.ignore_permissions = True
-	lead.save()
-
-	# If Client has no originating lead set, set it backward-compatibly
-	if not client.lead:
-		client.db_set("lead", lead_id, update_modified=False)
-
-	# Log CRM Interaction record linking both Lead and Client
-	interaction = frappe.get_doc(
-		{
-			"doctype": "CRM Interaction",
-			"related_lead": lead_id,
-			"related_client": client_id,
-			"interaction_type": "Note",
-			"direction": "Outbound",
-			"interaction_date": now_datetime(),
-			"logged_by": frappe.session.user,
-			"summary": f"Mapped to Client: {client.client_name} ({client_id})",
-			"details": (
-				f"Lead {lead_id} (Product Interest: {lead.product_interest or 'General Advisory'}, "
-				f"Status: {lead.status}) was explicitly mapped to Client {client_id} "
-				f"by {frappe.session.user}."
-			),
-		}
-	)
-	interaction.flags.ignore_permissions = True
-	interaction.insert()
-
-	return {
-		"success": True,
-		"lead_id": lead_id,
-		"client_id": client_id,
-		"client_name": client.client_name,
-		"product_interest": lead.product_interest,
-		"message": _("Lead '{0}' successfully mapped to Client '{1}' ({2}).").format(
-			lead_id, client.client_name, client_id
-		),
-	}
+	frappe.throw(_("Client mapping is disabled in the basic CRM branch."), frappe.ValidationError)
 
 
 @frappe.whitelist()
@@ -1227,165 +1138,21 @@ def sync_crm_incoming_emails(force: bool = False):
 
 @frappe.whitelist()
 def sync_crm_emails(doctype=None, name=None):
-	"""
-	API endpoint to trigger on-demand email sync for KNAPS CRM.
-	Optionally returns refreshed conversation history if doctype and name are provided.
-	"""
+	"""API endpoint to trigger on-demand email sync (disabled in basic CRM)."""
 	_check_crm_permission()
-	sync_res = sync_crm_incoming_emails(force=True)
-	if doctype and name:
-		return get_crm_conversations(doctype, name, page=1, sync=False)
-	return sync_res
+	return {"synced": 0}
 
 
 @frappe.whitelist()
 def get_crm_conversations(doctype, name, page=1, page_length=20, sync=False):
-	"""
-	Paginated API to retrieve email conversations for a specific Lead or Client.
-	- Validates doctype is 'Lead' or 'Client'
-	- Validates document exists
-	- Enforces document-level read permissions
-	- Returns message subject, sender, recipients, date, direction, content, and attachment indicator
-	- Returns only emails linked to that specific record (and linked conversion partner if converted)
-	- Supports on-demand synchronization when sync=True or sync=1
-	- Does not expose unrelated inbox emails
-	"""
+	"""Paginated API to retrieve email conversations (disabled in basic CRM)."""
 	_check_crm_permission()
-
-	if cint(sync) or str(sync).lower() == "true":
-		sync_crm_incoming_emails()
-
-	if doctype not in ("Lead", "Client"):
-		frappe.throw(_("Invalid document type. Must be Lead or Client."), frappe.ValidationError)
-
-	if not name or not frappe.db.exists(doctype, name):
-		frappe.throw(_("{0} '{1}' not found.").format(doctype, name), frappe.DoesNotExistError)
-
-	if not frappe.has_permission(doctype, "read", doc=name):
-		frappe.throw(
-			_("You do not have permission to view {0} '{1}'.").format(doctype, name),
-			frappe.PermissionError,
-		)
-
-	page = max(1, cint(page or 1))
-	page_length = min(100, max(1, cint(page_length or 20)))
-	offset = (page - 1) * page_length
-
-	linked_records = []
-	lead_product_map = {}
-	lead_name_map = {}
-
-	if doctype == "Lead":
-		# STRICT ISOLATION: Lead sees ONLY its own communications (never sibling leads or client direct)
-		linked_records = [("Lead", name)]
-		lead_info = frappe.db.get_value("Lead", name, ["lead_name", "product_interest"], as_dict=True)
-		if lead_info:
-			lead_product_map[name] = lead_info.product_interest or "General"
-			lead_name_map[name] = lead_info.lead_name or name
-	elif doctype == "Client":
-		# AGGREGATION: Client sees Direct Client communications + communications from all mapped Leads
-		linked_records = [("Client", name)]
-		origin_lead = frappe.db.get_value("Client", name, "lead")
-		leads = frappe.db.sql(
-			"""
-			SELECT name, lead_name, product_interest
-			FROM `tabLead`
-			WHERE client = %s
-			   OR converted_client = %s
-			   OR name = %s
-			""",
-			(name, name, origin_lead or ""),
-			as_dict=True,
-		)
-		seen_leads = set()
-		for l in leads:
-			if l.name not in seen_leads:
-				seen_leads.add(l.name)
-				linked_records.append(("Lead", l.name))
-				lead_product_map[l.name] = l.product_interest or "General"
-				lead_name_map[l.name] = l.lead_name or l.name
-	else:
-		linked_records = [(doctype, name)]
-
-	conditions = []
-	params = []
-	for dt, dn in linked_records:
-		conditions.append("(reference_doctype = %s AND reference_name = %s)")
-		params.extend([dt, dn])
-
-	where_clause = " OR ".join(conditions)
-
-	total_count = frappe.db.sql(
-		f"""
-		SELECT COUNT(*)
-		FROM `tabCommunication`
-		WHERE ({where_clause})
-		  AND communication_medium = 'Email'
-		  AND communication_type = 'Communication'
-		""",
-		params,
-	)[0][0]
-
-	select_query = f"""
-		SELECT
-			name,
-			subject,
-			sender,
-			recipients,
-			cc,
-			bcc,
-			communication_date,
-			creation,
-			sent_or_received,
-			content,
-			text_content,
-			message_id,
-			in_reply_to,
-			has_attachment,
-			reference_doctype,
-			reference_name
-		FROM `tabCommunication`
-		WHERE ({where_clause})
-		  AND communication_medium = 'Email'
-		  AND communication_type = 'Communication'
-		ORDER BY communication_date DESC, creation DESC
-		LIMIT %s OFFSET %s
-	"""
-	query_params = [*params, page_length, offset]
-	conversations = frappe.db.sql(select_query, query_params, as_dict=True)
-
-	# Annotate each email with origin metadata
-	for c in conversations:
-		ref_dt = c.get("reference_doctype")
-		ref_dn = c.get("reference_name")
-		if ref_dt == "Lead":
-			prod = lead_product_map.get(ref_dn) or "Lead"
-			c["origin_doctype"] = "Lead"
-			c["origin_name"] = ref_dn
-			c["origin_product"] = prod
-			c["origin_lead_name"] = lead_name_map.get(ref_dn) or ref_dn
-			c["origin_label"] = f"{prod} Lead ({ref_dn})"
-		elif ref_dt == "Client":
-			c["origin_doctype"] = "Client"
-			c["origin_name"] = ref_dn
-			c["origin_product"] = "Direct Client"
-			c["origin_lead_name"] = ""
-			c["origin_label"] = f"Client Direct ({ref_dn})"
-		else:
-			c["origin_doctype"] = ref_dt
-			c["origin_name"] = ref_dn
-			c["origin_product"] = ""
-			c["origin_lead_name"] = ""
-			c["origin_label"] = f"{ref_dt} ({ref_dn})"
-
-	has_more = (offset + len(conversations)) < total_count
-
 	return {
-		"conversations": conversations,
-		"total_count": total_count,
-		"page": page,
-		"page_length": page_length,
-		"has_more": has_more,
+		"conversations": [],
+		"total_count": 0,
+		"page": max(1, cint(page or 1)),
+		"page_length": min(100, max(1, cint(page_length or 20))),
+		"has_more": False,
 	}
 
 
@@ -1574,30 +1341,32 @@ def get_renewals(status=None, limit=100):
 
 @frappe.whitelist()
 def trigger_welcome_email(lead_name):
-	"""Dispatches welcome email to the lead."""
+	"""Welcome email functionality is disabled in the basic CRM branch."""
 	_check_crm_permission()
-	return lifecycle_api.send_welcome_message(lead_name)
+	frappe.throw(
+		_("Welcome email functionality is disabled in the basic CRM branch."), frappe.ValidationError
+	)
 
 
 @frappe.whitelist()
 def trigger_risk_profiler(lead_name):
-	"""Dispatches Risk Profiler link to the lead."""
+	"""Risk Profiler dispatch is disabled in the basic CRM branch."""
 	_check_crm_permission()
-	return lifecycle_api.send_risk_profiler(lead_name)
+	frappe.throw(_("Risk Profiler dispatch is disabled in the basic CRM branch."), frappe.ValidationError)
 
 
 @frappe.whitelist()
 def trigger_onboarding_and_profiler(lead_name):
-	"""Dispatches onboarding form and risk profiler link to the lead."""
+	"""Onboarding and Risk Profiler dispatch is disabled in the basic CRM branch."""
 	_check_crm_permission()
-	return lifecycle_api.send_onboarding_and_risk_profiler(lead_name)
+	frappe.throw(_("Onboarding dispatch is disabled in the basic CRM branch."), frappe.ValidationError)
 
 
 @frappe.whitelist()
 def trigger_convert_to_client(lead_name):
-	"""Converts qualified lead to a full client."""
+	"""Lead-to-client conversion is disabled in the basic CRM branch."""
 	_check_crm_permission()
-	return lifecycle_api.convert_lead_to_client(lead_name)
+	frappe.throw(_("Lead-to-client conversion is disabled in the basic CRM branch."), frappe.ValidationError)
 
 
 @frappe.whitelist(allow_guest=True)
@@ -1632,30 +1401,16 @@ def delete_crm_lead(lead_name):
 def generate_crm_form_link(
 	reference_doctype, reference_name, workflow_type, expires_in_days=7, send_email=True, custom_message=None
 ):
-	"""Generates a secure, expiring form link for Risk Profiler, Onboarding, or Combined workflow and sends email."""
+	"""Form link generation is disabled in the basic CRM branch."""
 	_check_crm_permission()
-	import dhanada.form_workflow_api as form_workflow_api
-
-	return form_workflow_api.generate_form_workflow_link(
-		reference_doctype=reference_doctype,
-		reference_name=reference_name,
-		workflow_type=workflow_type,
-		expires_in_days=expires_in_days,
-		send_email=send_email,
-		custom_message=custom_message,
-	)
+	frappe.throw(_("Form workflow generation is disabled in the basic CRM branch."), frappe.ValidationError)
 
 
 @frappe.whitelist()
 def send_crm_form_email(token, custom_message=None):
-	"""Dispatches the generated form workflow link to customer email address."""
+	"""Form email dispatch is disabled in the basic CRM branch."""
 	_check_crm_permission()
-	import dhanada.form_workflow_api as form_workflow_api
-
-	return form_workflow_api.send_form_workflow_email(
-		token=token,
-		custom_message=custom_message,
-	)
+	frappe.throw(_("Form email dispatch is disabled in the basic CRM branch."), frappe.ValidationError)
 
 
 @frappe.whitelist()
@@ -1668,76 +1423,22 @@ def send_crm_email(
 	bcc: str | None = None,
 	in_reply_to: str | None = None,
 ):
-	"""
-	Composes and sends an in-app email to a Lead or Client via Frappe's email infrastructure.
-	Associates the resulting Communication with the record.
-	"""
+	"""In-app email sending is disabled in the basic CRM branch."""
 	_check_crm_permission()
-
-	if doctype not in ("Lead", "Client"):
-		frappe.throw(_("Invalid DocType for email composition."), frappe.ValidationError)
-
-	if not frappe.db.exists(doctype, name):
-		frappe.throw(_("{0} '{1}' not found.").format(doctype, name), frappe.DoesNotExistError)
-
-	if not frappe.has_permission(doctype, "write", doc=name):
-		frappe.throw(_("Permission denied to send email to {0}.").format(name), frappe.PermissionError)
-
-	doc = frappe.get_doc(doctype, name)
-	recipient_email = (getattr(doc, "email", None) or "").strip()
-	if not recipient_email or "@" not in recipient_email:
-		frappe.throw(
-			_("The selected {0} does not have a valid email address.").format(doctype),
-			frappe.ValidationError,
-		)
-
-	if not subject or not str(subject).strip():
-		frappe.throw(_("Subject is required."), frappe.MandatoryError)
-
-	if not content or not str(content).strip():
-		frappe.throw(_("Message content is required."), frappe.MandatoryError)
-
-	cc_list = [c.strip() for c in cc.split(",") if c.strip() and "@" in c] if cc else None
-	bcc_list = [b.strip() for b in bcc.split(",") if b.strip() and "@" in b] if bcc else None
-
-	# Send via Frappe email infrastructure
-	queue_entry = frappe.sendmail(
-		recipients=[recipient_email],
-		cc=cc_list,
-		bcc=bcc_list,
-		subject=str(subject).strip(),
-		content=content,
-		reference_doctype=doctype,
-		reference_name=name,
-		in_reply_to=in_reply_to,
-		delayed=False,
-		now=True,
-	)
-
-	comm_name = getattr(queue_entry, "communication", None)
-	if not comm_name and queue_entry:
-		comm_name = frappe.db.get_value("Email Queue", queue_entry.name, "communication")
-
-	# Update contact timestamp
-	frappe.db.set_value(doctype, name, "last_contacted_on", now_datetime())
-	frappe.db.set_value(doctype, name, "last_contacted_by", frappe.session.user)
-	frappe.db.commit()
-
-	return {
-		"status": "success",
-		"message": _("Email sent successfully."),
-		"recipient": recipient_email,
-		"communication": comm_name,
-	}
+	frappe.throw(_("In-app email communication is disabled in the basic CRM branch."), frappe.ValidationError)
 
 
 @frappe.whitelist()
 def get_crm_whatsapp_conversations(doctype: str, name: str, page: int = 1, page_length: int = 50):
-	"""Retrieves WhatsApp conversation history for a Lead or Client."""
+	"""WhatsApp conversations are disabled in the basic CRM branch."""
 	_check_crm_permission()
-	import dhanada.whatsapp_api as whatsapp_api
-
-	return whatsapp_api.get_crm_whatsapp_conversations(doctype, name, page=page, page_length=page_length)
+	return {
+		"messages": [],
+		"total_count": 0,
+		"has_more": False,
+		"is_session_active": False,
+		"templates": [],
+	}
 
 
 @frappe.whitelist()
@@ -1748,21 +1449,6 @@ def send_crm_whatsapp_message(
 	template_name: str | None = None,
 	template_params=None,
 ):
-	"""Sends an outbound WhatsApp message or approved template to a Lead or Client."""
+	"""WhatsApp messaging is disabled in the basic CRM branch."""
 	_check_crm_permission()
-	import dhanada.whatsapp_api as whatsapp_api
-
-	params = template_params
-	if isinstance(template_params, str):
-		try:
-			params = json.loads(template_params)
-		except Exception:
-			params = [template_params]
-
-	return whatsapp_api.send_crm_whatsapp_message(
-		doctype=doctype,
-		name=name,
-		message=message,
-		template_name=template_name,
-		template_params=params,
-	)
+	frappe.throw(_("WhatsApp messaging is disabled in the basic CRM branch."), frappe.ValidationError)

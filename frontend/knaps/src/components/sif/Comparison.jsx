@@ -18,9 +18,9 @@ export default function Comparison() {
           transition={{ duration: 0.7 }}
           className="text-center mb-8 sm:mb-12"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-[#eef4ff] text-[#032e92] text-sm font-semibold mb-4">
+          {/* <span className="inline-block px-4 py-1.5 rounded-full bg-[#eef4ff] text-[#032e92] text-sm font-semibold mb-4">
             ⚖️ Smart Comparison
-          </span>
+          </span> */}
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-gray-900 mb-4">
             Why SIF <span className="gradient-text">Stands Out</span>
           </h2>

@@ -1,6 +1,4 @@
 import CrmSelect from './CrmSelect';
-import CrmSendFormModal from './CrmSendFormModal';
-import CrmMapToClientModal from './CrmMapToClientModal';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -268,106 +266,10 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
                         <FontAwesomeIcon icon={faPhone} />
                         <span className="hidden sm:inline font-semibold">Call</span>
                       </a>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (onLeadUpdated) onLeadUpdated(leadData);
-                        }}
-                        className="p-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 hover:bg-emerald-100 transition-colors text-xs flex items-center gap-1.5 shadow-2xs cursor-pointer"
-                        title="Chat on WhatsApp"
-                      >
-                        <span className="font-bold">WhatsApp</span>
-                      </button>
-                    </>
-                  )}
-                  {leadData?.email && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (onLeadUpdated) onLeadUpdated(leadData);
-                      }}
-                      className="p-2 rounded-xl bg-white border border-gray-200 text-gray-700 hover:text-[#032e92] hover:border-[#032e92] transition-colors text-xs flex items-center gap-1.5 shadow-2xs cursor-pointer"
-                      title="Send Email"
-                    >
-                      <FontAwesomeIcon icon={faEnvelope} />
-                    </button>
-                  )}
+                    )}
+                  </div>
                 </div>
               </div>
-
-              {/* Action Ribbon */}
-              <div className="mt-3 flex items-center gap-2 flex-wrap">
-                <button
-                  type="button"
-                  onClick={handleSendWelcome}
-                  disabled={actionLoading === 'welcome' || isWelcomeSent}
-                  title={isWelcomeSent ? 'Welcome email has already been sent' : 'Send Welcome Email'}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold border flex items-center gap-1.5 shadow-2xs transition-colors ${
-                    isWelcomeSent
-                      ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
-                      : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50 cursor-pointer disabled:opacity-50'
-                  }`}
-                >
-                  {actionLoading === 'welcome' ? (
-                    <FontAwesomeIcon icon={faSpinner} className="animate-spin text-xs" />
-                  ) : (
-                    <FontAwesomeIcon
-                      icon={isWelcomeSent ? faCheckCircle : faPaperPlane}
-                      className={isWelcomeSent ? 'text-emerald-600' : 'text-[#032e92]'}
-                    />
-                  )}
-                  <span>{isWelcomeSent ? 'Welcome Sent' : 'Welcome Email'}</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setSendFormModalOpen(true)}
-                  className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-blue-200 text-[#032e92] hover:bg-blue-50 flex items-center gap-1.5 shadow-2xs cursor-pointer"
-                  title="Send Risk Profiler, Onboarding, or Combined Form"
-                >
-                  <FontAwesomeIcon icon={faPaperPlane} className="text-[#032e92]" />
-                  <span>Send Form</span>
-                </button>
-
-                {/* Linked Client Badge or Map to Existing Client */}
-                {associatedClient ? (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      window.location.href = `/crm?view=clients&client=${encodeURIComponent(associatedClient)}`;
-                    }}
-                    className="px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1.5 shadow-2xs cursor-pointer transition-colors"
-                    title={`View Linked Client: ${leadData?.client_name || associatedClient}`}
-                  >
-                    <FontAwesomeIcon icon={faLink} className="text-emerald-600 text-xs" />
-                    <span className="truncate max-w-[130px]">Client: {leadData?.client_name || associatedClient}</span>
-                    <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[10px] text-emerald-600 ml-0.5" />
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => setMapModalOpen(true)}
-                    className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-[#032e92] text-[#032e92] hover:bg-blue-50 flex items-center gap-1.5 shadow-2xs cursor-pointer transition-colors"
-                    title="Map this Lead to an Existing Client Profile"
-                  >
-                    <FontAwesomeIcon icon={faLink} className="text-xs text-[#032e92]" />
-                    <span>Map to Existing Client</span>
-                  </button>
-                )}
-
-                {leadData?.status !== 'Converted' && (
-                  <button
-                    type="button"
-                    onClick={handleConvertClient}
-                    disabled={actionLoading === 'convert'}
-                    className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#032e92] hover:bg-[#021d63] text-white flex items-center gap-1.5 shadow-2xs cursor-pointer ml-auto disabled:opacity-50"
-                  >
-                    {actionLoading === 'convert' ? <FontAwesomeIcon icon={faSpinner} className="animate-spin text-xs" /> : <FontAwesomeIcon icon={faUserCheck} />}
-                    <span>Convert to Client</span>
-                  </button>
-                )}
-              </div>
-            </div>
 
             {/* Notifications / Feedback */}
             {feedback.message && (
@@ -697,36 +599,6 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
         </div>
       </div>
 
-      <CrmSendFormModal
-        isOpen={sendFormModalOpen}
-        onClose={() => setSendFormModalOpen(false)}
-        record={leadData || {}}
-        referenceDoctype="Lead"
-        onFormSent={async () => {
-          await loadDetails(true);
-          if (onLeadUpdated && leadData) {
-            onLeadUpdated({ ...leadData });
-          }
-        }}
-      />
-
-      <CrmMapToClientModal
-        isOpen={mapModalOpen}
-        onClose={() => setMapModalOpen(false)}
-        leadData={leadData}
-        onMapped={async (updated) => {
-          setLeadData(updated);
-          if (onLeadUpdated) onLeadUpdated(updated);
-          setFeedback({
-            type: "success",
-            message: `Lead successfully mapped to Client ${updated.client_name || updated.client}!`,
-          });
-          await loadDetails(true);
-        }}
-        onOpenClientProfile={(clientId) => {
-          window.location.href = `/crm?view=clients&client=${encodeURIComponent(clientId)}`;
-        }}
-      />
     </AnimatePresence>
   );
 }

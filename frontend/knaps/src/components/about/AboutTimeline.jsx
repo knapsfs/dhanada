@@ -6,70 +6,40 @@ import {
   faAward,
   faUsers,
   faBriefcase,
-  faBoxesStacked
+  faArrowTrendUp
 } from '@fortawesome/free-solid-svg-icons';
 
 export default function AboutTimeline() {
   const milestones = [
     {
       year: "1996",
-      dateTop: "Est.",
-      dateMiddle: "1996",
-      dateBottom: "Foundation",
       title: "Established KNAPS Financial Services",
-      desc: "Founded by Ms. Neelam Sawhney with a mission to bring structured financial planning and clarity to family life goals.",
       icon: faBuilding,
-      badge: "Foundation"
-    },
-    {
-      year: "2012",
-      dateTop: "Scale",
-      dateMiddle: "2012",
-      dateBottom: "₹100 Cr+ AUM",
-      title: "100 cr+ AUM",
-      desc: "Crossed ₹100 Crore in Assets Under Management, established through consistent compounding and long-term investor trust.",
-      icon: faChartLine,
-      badge: "Scale & Growth"
     },
     {
       year: "2016",
-      dateTop: "Award",
-      dateMiddle: "2016",
-      dateBottom: "HDFC Winner",
       title: "Winner Noble White Upper Crust Awards HDFC",
-      desc: "Conferred with the prestigious Noble White Upper Crust Award by HDFC, recognizing excellence in client wealth advisory.",
       icon: faAward,
-      badge: "Industry Award"
     },
     {
       year: "2020",
-      dateTop: "Trust",
-      dateMiddle: "2020",
-      dateBottom: "1,000+ Clients",
-      title: "1,000+ Investors",
-      desc: "Expanded our trusted family of investors to more than 1,000 satisfied clients navigating life-stage financial independence.",
+      title: "1000+ investors",
       icon: faUsers,
-      badge: "Community Trust"
+    },
+    {
+      year: "2022",
+      title: "100 cr+ AUM",
+      icon: faChartLine,
+    },
+    {
+      year: "2025",
+      title: "200 cr+ AUM",
+      icon: faArrowTrendUp,
     },
     {
       year: "2026",
-      dateTop: "Corp.",
-      dateMiddle: "2026",
-      dateBottom: "Pvt. Ltd.",
       title: "KNAPS Private Limited",
-      desc: "Incorporated into KNAPS Private Limited, stepping into the next era with enhanced institutional capabilities and governance.",
       icon: faBriefcase,
-      badge: "Corporate Milestone"
-    },
-    {
-      year: "Going Forward",
-      dateTop: "Future",
-      dateMiddle: "2026+",
-      dateBottom: "New Bouquet",
-      title: "Added New Products for Investors",
-      desc: "Enriched our investment bouquet with advanced and structured strategies - NPS, SIF, PMS, & AIF for high-conviction wealth creation.",
-      icon: faBoxesStacked,
-      badge: "NPS • SIF • PMS • AIF"
     }
   ];
 
@@ -79,17 +49,6 @@ export default function AboutTimeline() {
 
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="inline-block px-4 py-1.5 rounded-full bg-white border border-blue-100 shadow-sm mb-4"
-          >
-            <span className="text-[#032e92] text-xs font-bold tracking-widest uppercase">
-              Our Journey &amp; Milestones
-            </span>
-          </motion.div>
-
           <motion.h2
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -105,9 +64,9 @@ export default function AboutTimeline() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-xs sm:text-sm font-semibold uppercase tracking-widest text-gray-400"
+            className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed"
           >
-            Three decades of disciplined wealth advisory &amp; family trust
+            Three decades of financial experience & family trust.
           </motion.p>
         </div>
 
@@ -129,25 +88,22 @@ export default function AboutTimeline() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.5, delay: idx * 0.08 }}
-                  className={`relative flex items-center ${
-                    isEven ? 'md:flex-row' : 'md:flex-row-reverse'
-                  }`}
+                  className={`relative flex items-center ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'}`}
                 >
                   {/* Card Container (Takes half width on md+, full width on mobile) */}
                   <div
-                    className={`w-full md:w-1/2 ${
-                      isEven
-                        ? 'pl-14 md:pl-0 md:pr-10 lg:pr-12'
-                        : 'pl-14 md:pl-10 lg:pl-12 md:pr-0'
-                    }`}
+                    className={`w-full md:w-1/2 ${isEven
+                      ? 'pl-14 md:pl-0 md:pr-10 lg:pr-12'
+                      : 'pl-14 md:pl-10 lg:pl-12 md:pr-0'
+                      }`}
                   >
                     {/* The Milestone Card */}
-                    <div className="relative bg-white rounded-xl sm:rounded-2xl border border-gray-200/80 shadow-sm hover:shadow-md transition-all duration-300 flex items-stretch overflow-hidden group">
+                    <div className="relative bg-white rounded-xl sm:rounded-2xl border border-gray-200/80 shadow-sm hover:shadow-md hover:border-[#032e92]/30 transition-all duration-300 p-5 sm:p-6 overflow-hidden group">
 
                       {/* Desktop pointer for Left card (points right toward center line) */}
                       {isEven ? (
                         <div
-                          className="hidden md:block absolute -right-2 top-1/2 -translate-y-1/2 w-0 h-0 border-y-[8px] border-y-transparent border-l-[8px] border-l-gray-50 drop-shadow-[1px_0_1px_rgba(0,0,0,0.06)] z-20"
+                          className="hidden md:block absolute -right-2 top-1/2 -translate-y-1/2 w-0 h-0 border-y-[8px] border-y-transparent border-l-[8px] border-l-white drop-shadow-[1px_0_1px_rgba(0,0,0,0.06)] z-20"
                         />
                       ) : (
                         /* Desktop pointer for Right card (points left toward center line) */
@@ -161,38 +117,20 @@ export default function AboutTimeline() {
                         className="md:hidden absolute -left-2 top-1/2 -translate-y-1/2 w-0 h-0 border-y-[8px] border-y-transparent border-r-[8px] border-r-white drop-shadow-[-1px_0_1px_rgba(0,0,0,0.06)] z-20"
                       />
 
-                      {/* Main Narrative Content Area */}
-                      <div className="flex-1 p-4 sm:p-5 flex flex-col justify-center">
-                        <div className="flex items-center gap-2 mb-1.5">
-                          <span className="w-6 h-6 rounded-md bg-[#eef5ff] text-[#032e92] flex items-center justify-center text-xs shrink-0">
-                            <FontAwesomeIcon icon={item.icon} />
-                          </span>
-                          <span className="text-[11px] font-bold text-[#032e92] uppercase tracking-wider">
-                            {item.badge}
-                          </span>
+                      {/* Year & Icon Row above Title */}
+                      <div className="flex items-center justify-between gap-3 mb-2.5">
+                        <span className="text-xl sm:text-2xl font-bold text-[#032e92] tracking-tight">
+                          {item.year}
+                        </span>
+                        <div className="w-8 h-8 rounded-lg bg-[#eef4ff] text-[#032e92] flex items-center justify-center text-xs shrink-0 group-hover:bg-[#032e92] group-hover:text-white transition-colors duration-200">
+                          <FontAwesomeIcon icon={item.icon} />
                         </div>
-
-                        <h3 className="text-base sm:text-lg font-bold text-gray-900 tracking-tight leading-snug">
-                          {item.title}
-                        </h3>
-
-                        <p className="text-xs sm:text-sm text-gray-500 font-normal leading-relaxed mt-1">
-                          {item.desc}
-                        </p>
                       </div>
 
-                      {/* Date Compartment on Right */}
-                      <div className="w-20 sm:w-24 shrink-0 flex flex-col items-center justify-center text-center p-3 sm:p-4 bg-gray-50 border-l border-gray-100 select-none">
-                        <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-gray-400">
-                          {item.dateTop}
-                        </span>
-                        <span className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight my-0.5 group-hover:text-[#032e92] transition-colors">
-                          {item.dateMiddle}
-                        </span>
-                        <span className="text-[10px] sm:text-[11px] font-medium text-gray-400 uppercase tracking-wider">
-                          {item.dateBottom}
-                        </span>
-                      </div>
+                      {/* Title */}
+                      <h3 className="text-base sm:text-lg font-semibold text-gray-900 tracking-tight leading-snug group-hover:text-[#032e92] transition-colors">
+                        {item.title}
+                      </h3>
 
                     </div>
                   </div>

@@ -644,23 +644,13 @@ export default function CrmLeadsListView({
                     <td className="py-3.5 px-4 sm:px-6 text-right" onClick={(e) => e.stopPropagation()}>
                       <div className="flex items-center justify-end gap-1.5">
                         {cleanPhone && (
-                          <>
-                            <a
-                              href={`tel:${cleanPhone}`}
-                              className="w-7 h-7 rounded-lg bg-gray-100 hover:bg-blue-50 text-gray-600 hover:text-[#032e92] flex items-center justify-center transition-colors text-xs"
-                              title="Call Lead"
-                            >
-                              <FontAwesomeIcon icon={faPhone} />
-                            </a>
-                            <button
-                              type="button"
-                              onClick={() => onSelectLead && onSelectLead(lead.name)}
-                              className="w-7 h-7 rounded-lg bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white flex items-center justify-center transition-colors text-[10px] font-bold cursor-pointer"
-                              title="Open Lead WhatsApp Conversations"
-                            >
-                              WA
-                            </button>
-                          </>
+                          <a
+                            href={`tel:${cleanPhone}`}
+                            className="w-7 h-7 rounded-lg bg-gray-100 hover:bg-blue-50 text-gray-600 hover:text-[#032e92] flex items-center justify-center transition-colors text-xs"
+                            title="Call Lead"
+                          >
+                            <FontAwesomeIcon icon={faPhone} />
+                          </a>
                         )}
                         <button
                           type="button"

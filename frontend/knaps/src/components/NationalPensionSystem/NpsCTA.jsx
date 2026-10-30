@@ -27,9 +27,9 @@ export default function NpsCTA() {
           className="space-y-6"
         >
           {/* Pill Badge */}
-          <div className="inline-block px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-blue-200 text-xs font-semibold uppercase tracking-wider">
+          {/* <div className="inline-block px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-blue-200 text-xs font-semibold uppercase tracking-wider">
             Secure Your Retirement
-          </div>
+          </div> */}
 
           {/* Headline */}
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-white tracking-tight leading-tight">

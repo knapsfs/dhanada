@@ -10,10 +10,6 @@ import {
   faLink, faArrowUpRightFromSquare
 } from "@fortawesome/free-solid-svg-icons";
 import CrmSelect from "./CrmSelect";
-import CrmSendFormModal from "./CrmSendFormModal";
-import CrmEmailConversations from "./CrmEmailConversations";
-import CrmWhatsAppConversations from "./CrmWhatsAppConversations";
-import CrmMapToClientModal from "./CrmMapToClientModal";
 import { crmService } from "../../services/crmService";
 import { getContactStatus, formatContactDate } from "../../utils/crmContactUtils";
 
@@ -333,118 +329,16 @@ export default function CrmLeadDetailView({
 
         {/* Action Buttons Toolbar */}
         <div className="flex items-center gap-2 flex-wrap">
-          {/* Direct Communication Buttons */}
+          {/* Direct Phone Link */}
           {cleanPhone && (
-            <>
-              <a
-                href={`tel:${cleanPhone}`}
-                className="px-3 py-2 rounded-xl bg-white border border-gray-200 text-gray-700 hover:text-[#032e92] hover:border-[#032e92] text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-colors"
-                title="Call Lead"
-              >
-                <FontAwesomeIcon icon={faPhone} className="text-xs text-blue-600" />
-                <span className="hidden md:inline">Call</span>
-              </a>
-              <button
-                type="button"
-                onClick={handleOpenWhatsAppSection}
-                className="px-3 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 hover:bg-emerald-100 text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer"
-                title="Open Integrated WhatsApp Conversations"
-              >
-                <FontAwesomeIcon icon={faComments} className="text-xs text-emerald-600" />
-                <span className="font-bold">WhatsApp</span>
-              </button>
-            </>
-          )}
-
-          {leadData?.email && (
-            <button
-              type="button"
-              onClick={handleOpenEmailSection}
-              className="px-3 py-2 rounded-xl bg-white border border-gray-200 text-gray-700 hover:text-[#032e92] hover:border-[#032e92] text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer"
-              title="Open Integrated Email Conversations & Compose"
+            <a
+              href={`tel:${cleanPhone}`}
+              className="px-3 py-2 rounded-xl bg-white border border-gray-200 text-gray-700 hover:text-[#032e92] hover:border-[#032e92] text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-colors"
+              title="Call Lead"
             >
-              <FontAwesomeIcon icon={faEnvelope} className="text-xs text-amber-600" />
-              <span className="hidden md:inline">Email</span>
-            </button>
-          )}
-
-          {/* Workflow Action Buttons */}
-          <button
-            type="button"
-            onClick={handleSendWelcome}
-            disabled={actionLoading === "welcome" || isWelcomeSent}
-            title={isWelcomeSent ? "Welcome email has already been sent" : "Send Welcome Email"}
-            className={`px-3 py-2 rounded-xl text-xs font-semibold border flex items-center gap-1.5 shadow-2xs transition-colors ${isWelcomeSent
-                ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
-                : "bg-white border-gray-200 text-gray-700 hover:bg-gray-50 cursor-pointer disabled:opacity-50"
-              }`}
-          >
-            {actionLoading === "welcome" ? (
-              <FontAwesomeIcon icon={faSpinner} className="animate-spin text-xs" />
-            ) : (
-              <FontAwesomeIcon
-                icon={isWelcomeSent ? faCheckCircle : faPaperPlane}
-                className={isWelcomeSent ? "text-emerald-600" : "text-[#032e92]"}
-              />
-            )}
-            <span className="hidden sm:inline">{isWelcomeSent ? "Welcome Sent" : "Welcome Email"}</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setSendFormModalOpen(true)}
-            className="px-3 py-2 rounded-xl text-xs font-semibold bg-white border border-blue-200 text-[#032e92] hover:bg-blue-50 flex items-center gap-1.5 shadow-2xs cursor-pointer transition-colors"
-            title="Send Form Workflows (Risk Profiler, Onboarding, or Combined)"
-          >
-            <FontAwesomeIcon icon={faPaperPlane} className="text-[#032e92] text-xs" />
-            <span className="hidden sm:inline">Send Form</span>
-          </button>
-
-          {/* Linked Client Badge or Map to Existing Client */}
-          {associatedClient ? (
-            <button
-              type="button"
-              onClick={() => {
-                if (onNavigateToClient) {
-                  onNavigateToClient(associatedClient);
-                } else {
-                  window.location.href = `/crm?view=clients&client=${encodeURIComponent(associatedClient)}`;
-                }
-              }}
-              className="px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1.5 shadow-2xs cursor-pointer transition-colors"
-              title={`View Linked Client: ${leadData?.client_name || associatedClient}`}
-            >
-              <FontAwesomeIcon icon={faLink} className="text-emerald-600 text-xs" />
-              <span className="truncate max-w-[150px]">Client: {leadData?.client_name || associatedClient}</span>
-              <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[10px] text-emerald-600 ml-0.5" />
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setMapModalOpen(true)}
-              className="px-3.5 py-2 rounded-xl text-xs font-bold bg-white border border-[#032e92] text-[#032e92] hover:bg-blue-50 flex items-center gap-1.5 shadow-2xs cursor-pointer transition-colors"
-              title="Map this Lead to an Existing Client Profile"
-            >
-              <FontAwesomeIcon icon={faLink} className="text-xs text-[#032e92]" />
-              <span>Map to Existing Client</span>
-            </button>
-          )}
-
-          {leadData?.status !== "Converted" && (
-            <button
-              type="button"
-              onClick={handleConvertClient}
-              disabled={actionLoading === "convert"}
-              className="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#032e92] hover:bg-[#021d63] text-white flex items-center gap-1.5 shadow-sm cursor-pointer disabled:opacity-50 transition-colors"
-              title="Convert Lead to Client"
-            >
-              {actionLoading === "convert" ? (
-                <FontAwesomeIcon icon={faSpinner} className="animate-spin text-xs" />
-              ) : (
-                <FontAwesomeIcon icon={faUserCheck} className="text-xs" />
-              )}
-              <span>Convert to Client</span>
-            </button>
+              <FontAwesomeIcon icon={faPhone} className="text-xs text-blue-600" />
+              <span className="hidden md:inline">Call</span>
+            </a>
           )}
 
           {/* Delete Lead Button */}
@@ -699,34 +593,6 @@ export default function CrmLeadDetailView({
                 Overview & Activity
               </button>
 
-              <button
-                type="button"
-                onClick={() => setActiveTab("emails")}
-                className={`py-3.5 px-4 text-xs font-bold border-b-2 transition-colors cursor-pointer flex items-center gap-2 shrink-0 ${activeTab === "emails"
-                    ? "border-[#032e92] text-[#032e92]"
-                    : "border-transparent text-gray-500 hover:text-gray-900"
-                  }`}
-              >
-                <span>Email Conversations</span>
-                <span className="w-5 h-5 rounded-full bg-blue-50 text-[#032e92] text-[10px] flex items-center justify-center font-bold">
-                  {conversationsTotal}
-                </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setActiveTab("whatsapp")}
-                className={`py-3.5 px-4 text-xs font-bold border-b-2 transition-colors cursor-pointer flex items-center gap-2 shrink-0 ${activeTab === "whatsapp"
-                    ? "border-emerald-600 text-emerald-700"
-                    : "border-transparent text-gray-500 hover:text-gray-900"
-                  }`}
-              >
-                <FontAwesomeIcon icon={faComments} className="text-xs text-emerald-600" />
-                <span>WhatsApp</span>
-                <span className="w-5 h-5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] flex items-center justify-center font-bold">
-                  {whatsappTotal}
-                </span>
-              </button>
 
               <button
                 type="button"
@@ -1022,34 +888,7 @@ export default function CrmLeadDetailView({
                 </div>
               )}
 
-              {/* TAB 4: EMAIL CONVERSATIONS */}
-              {activeTab === "emails" && (
-                <CrmEmailConversations
-                  doctype="Lead"
-                  docName={leadData?.name || leadName}
-                  contactEmail={leadData?.email}
-                  initialConversations={conversations}
-                  initialTotal={conversationsTotal}
-                  initialHasMore={conversationsHasMore}
-                  onCountChange={(count) => setConversationsTotal(count)}
-                  autoFocusComposer={focusEmailComposer}
-                />
-              )}
 
-              {/* TAB 5: WHATSAPP CONVERSATIONS */}
-              {activeTab === "whatsapp" && (
-                <CrmWhatsAppConversations
-                  doctype="Lead"
-                  docName={leadData?.name || leadName}
-                  recipientPhone={leadData?.mobile_no}
-                  contactName={leadData?.lead_name}
-                  initialMessages={whatsappMessages}
-                  initialTotal={whatsappTotal}
-                  initialHasMore={whatsappHasMore}
-                  onCountChange={(count) => setWhatsappTotal(count)}
-                  autoFocusComposer={focusWhatsAppComposer}
-                />
-              )}
             </div>
           </div>
         </div>
@@ -1262,40 +1101,6 @@ export default function CrmLeadDetailView({
         )}
       </AnimatePresence>
 
-      <CrmSendFormModal
-        isOpen={sendFormModalOpen}
-        onClose={() => setSendFormModalOpen(false)}
-        record={leadData || {}}
-        referenceDoctype="Lead"
-        onFormSent={async () => {
-          await loadDetails(true);
-          if (onLeadUpdated && leadData) {
-            onLeadUpdated({ ...leadData });
-          }
-        }}
-      />
-
-      <CrmMapToClientModal
-        isOpen={mapModalOpen}
-        onClose={() => setMapModalOpen(false)}
-        leadData={leadData}
-        onMapped={async (updated) => {
-          setLeadData(updated);
-          if (onLeadUpdated) onLeadUpdated(updated);
-          setFeedback({
-            type: "success",
-            message: `Lead successfully mapped to Client ${updated.client_name || updated.client}!`,
-          });
-          await loadDetails(true);
-        }}
-        onOpenClientProfile={(clientId) => {
-          if (onNavigateToClient) {
-            onNavigateToClient(clientId);
-          } else {
-            window.location.href = `/crm?view=clients&client=${encodeURIComponent(clientId)}`;
-          }
-        }}
-      />
     </div>
   );
 }
