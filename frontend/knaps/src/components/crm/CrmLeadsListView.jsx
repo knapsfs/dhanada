@@ -370,7 +370,7 @@ export default function CrmLeadsListView({
             <tr className="bg-[#f8fafc] text-[11px] font-bold text-gray-500 uppercase tracking-wider border-b border-gray-200/80">
               <th className="py-3 px-4 sm:px-6 min-w-[200px]">Lead</th>
               <th className="py-3 px-4 min-w-[170px]">Contact</th>
-              <th className="py-3 px-4 min-w-[150px]">Product Interest</th>
+              <th className="py-3 px-4 min-w-[150px]">Goal / Product</th>
               <th className="py-3 px-4 min-w-[130px]">Source</th>
               <th className="py-3 px-4 text-center min-w-[140px]">Touchpoints</th>
               <th className="py-3 px-4 min-w-[140px]">Status</th>
@@ -433,7 +433,7 @@ export default function CrmLeadsListView({
                   onChange={(e) => updateFilter("product", e.target.value)}
                   className="w-full text-xs bg-white border border-gray-200 rounded-lg py-1.5 px-2 text-gray-700 focus:outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/30 cursor-pointer transition-all"
                 >
-                  <option value="All">All Products</option>
+                  <option value="All">All Goals / Products</option>
                   {availableProducts.map((p) => (
                     <option key={p} value={p}>
                       {p}

@@ -63,7 +63,7 @@ export default function Hero() {
   const validateField = (name, value, country = selectedCountry) => {
     switch (name) {
       case 'product':
-        if (!value) return 'Please select a product';
+        if (!value) return 'Please select your goal';
         return '';
       case 'name': {
         const trimmed = value.trim();
@@ -316,7 +316,7 @@ export default function Hero() {
                   {/* Product Dropdown - Consistent Underline Style */}
                   <div className="relative" ref={dropdownRef}>
                     <label className="block text-[11px] font-bold text-gray-600 uppercase tracking-wider mb-1">
-                      Product <span className="text-red-500">*</span>
+                      What’s your goal? <span className="text-red-500">*</span>
                     </label>
 
                     <div
@@ -341,7 +341,7 @@ export default function Hero() {
                         }`}
                     >
                       <span className={selectedProduct ? 'text-gray-800 font-medium' : 'text-gray-400 font-normal'}>
-                        {selectedProductObj ? selectedProductObj.label : 'Select a product'}
+                        {selectedProductObj ? selectedProductObj.label : 'Select your goal'}
                       </span>
 
                       <div className={`text-gray-400 transition-transform duration-200 ${productOpen ? 'rotate-180 text-[#032e92]' : ''}`}>
