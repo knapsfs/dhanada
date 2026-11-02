@@ -24,7 +24,7 @@ export default function HowToInvestMf() {
     {
       step: '02',
       title: 'Select a Suitable Scheme',
-      desc: 'Based on your risk tolerance and holding duration, filter the best-fit mutual fund categories. Our AMFI-certified advisors review rolling returns, expense ratios, and fund manager track records.',
+      desc: 'Based on your risk tolerance and holding duration, filter the best-fit mutual fund categories. Our AMFI-registered mutual fund specialists review rolling returns, expense ratios, and fund manager track records.',
       icon: faSliders,
       duration: 'Expert Assisted'
     },

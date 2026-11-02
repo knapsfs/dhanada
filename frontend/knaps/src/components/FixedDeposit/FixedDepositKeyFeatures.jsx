@@ -111,7 +111,7 @@ export default function FixedDepositKeyFeatures() {
             onClick={() => openLeadModal({ title: "Explore Fixed Income Strategies", defaultService: "Fixed Income Products" })}
             className="btn-ripple px-8 py-3.5 rounded-xl text-sm sm:text-base font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-lg shadow-[#032e92]/25 hover:shadow-xl hover:shadow-[#032e92]/35 transition-all duration-300 inline-flex items-center gap-2 cursor-pointer"
           >
-            <span>Speak with a Fixed Income Advisor</span>
+            <span>Speak with a Fixed Income Specialist</span>
             <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
           </button>
         </div>

@@ -9,6 +9,7 @@ import AuthorPage from './pages/AuthorPage';
 import ContactUs from './pages/ContactUs';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsAndConditions from './pages/TermsAndConditions';
+import RegulatoryDisclosures from './pages/RegulatoryDisclosures';
 
 // SIF Pages
 import SifHome from './pages/sif/SifHome';
@@ -91,6 +92,10 @@ function App() {
             <Route path="/privacy" element={<Navigate to="/privacy-policy" replace />} />
             <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
             <Route path="/terms" element={<Navigate to="/terms-and-conditions" replace />} />
+            <Route path="/regulatory-disclosures" element={<RegulatoryDisclosures />} />
+            <Route path="/regulatory-disclosure" element={<Navigate to="/regulatory-disclosures" replace />} />
+            <Route path="/registrations" element={<Navigate to="/regulatory-disclosures" replace />} />
+            <Route path="/regulatory" element={<Navigate to="/regulatory-disclosures" replace />} />
 
             {/* SIF Routes */}
             <Route path="/sif" element={<SifHome />} />

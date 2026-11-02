@@ -32,18 +32,13 @@ export default function GeneralInsuranceHero() {
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         {/* Breadcrumb Navigation */}
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="flex items-center gap-2.5 text-xs font-semibold text-gray-400 mb-6 uppercase tracking-wider"
-        >
+        <div className="flex items-center pb-4 sm:pb-5 gap-3 text-[15px] font-medium text-gray-500">
           <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
-          <FontAwesomeIcon icon={faChevronRight} className="text-[9px] text-gray-300" />
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
           <Link to="/products" className="hover:text-[#032e92] transition-colors">Products</Link>
-          <FontAwesomeIcon icon={faChevronRight} className="text-[9px] text-gray-300" />
-          <span className="text-[#032e92] font-bold">General Insurance</span>
-        </motion.div>
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+          <span className="text-[#032e92]">General Insurance</span>
+        </div>
 
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           {/* Left Hero Content */}

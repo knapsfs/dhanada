@@ -88,18 +88,6 @@ export default function CompareSmallSavingsSchemes() {
           <p className="text-xs text-slate-500 leading-relaxed">
             * Rates and operational conditions reflect prevailing notifications from the Ministry of Finance, Government of India. Updated quarterly based on G-Sec market movements.
           </p>
-          <button
-            onClick={() =>
-              openLeadModal({
-                title: 'Compare Post Office Schemes for Your Portfolio',
-                defaultService: 'Post Office Small Savings Scheme'
-              })
-            }
-            className="btn-ripple px-6 py-2.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-md transition-all shrink-0 cursor-pointer flex items-center gap-1.5"
-          >
-            <span>Request Comparative Advisory</span>
-            <FontAwesomeIcon icon={faArrowRight} className="text-[10px]" />
-          </button>
         </div>
       </div>
     </section>

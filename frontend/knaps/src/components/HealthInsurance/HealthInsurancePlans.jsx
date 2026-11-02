@@ -204,14 +204,14 @@ export default function HealthInsurancePlans() {
           })}
         </div>
 
-        {/* Advisory Banner */}
+        {/* Guidance Banner */}
         <div className="mt-14 p-6 sm:p-8 rounded-3xl bg-white border border-blue-100 shadow-md flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-1 text-center md:text-left">
             <h4 className="text-lg font-bold text-[#0a192f]">
               Confused between Family Floater vs Super Top-Up combinations?
             </h4>
             <p className="text-xs sm:text-sm text-gray-600">
-              Our IRDAI certified health insurance advisors help you design the most cost-effective 1-Crore cover structure with zero broker bias.
+              Our IRDAI certified health insurance specialists help you design the most cost-effective 1-Crore cover structure with zero broker bias.
             </p>
           </div>
           <button

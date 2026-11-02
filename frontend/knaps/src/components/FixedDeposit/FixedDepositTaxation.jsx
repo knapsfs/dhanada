@@ -105,7 +105,7 @@ export default function FixedDepositTaxation() {
         <div className="p-6 rounded-3xl bg-blue-50/70 border border-blue-100 flex items-start gap-3.5 text-xs text-gray-700 max-w-4xl mx-auto shadow-xs">
           <FontAwesomeIcon icon={faCircleInfo} className="text-[#032e92] mt-0.5 text-sm flex-shrink-0" />
           <p className="leading-relaxed">
-            <strong>Tax Disclaimer:</strong> Tax provisions, exemptions, and TDS thresholds are governed by the Income Tax Act, 1961, and are subject to legislative updates. Investors should consult their Chartered Accountant or financial advisor to optimize their post-tax fixed income yields.
+            <strong>Tax Disclaimer:</strong> Tax provisions, exemptions, and TDS thresholds are governed by the Income Tax Act, 1961, and are subject to legislative updates. Investors should consult their Chartered Accountant or tax professional to optimize their post-tax fixed income yields.
           </p>
         </div>
       </div>

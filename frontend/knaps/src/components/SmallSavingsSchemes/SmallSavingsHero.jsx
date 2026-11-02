@@ -1,11 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCalculator,
   faArrowRight,
   faShieldHalved,
   faLandmark,
-  faCheckCircle
+  faCheckCircle,
+  faChevronRight
 } from '@fortawesome/free-solid-svg-icons';
 import { useLeadModal } from '../../context/LeadModalContext';
 
@@ -26,16 +28,12 @@ export default function SmallSavingsHero() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb Navigation */}
-        <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-500 mb-8">
-          <a href="/" className="hover:text-[#032e92] transition-colors">
-            Home
-          </a>
-          <span>/</span>
-          <a href="/products" className="hover:text-[#032e92] transition-colors">
-            Products
-          </a>
-          <span>/</span>
-          <span className="text-[#032e92] font-semibold">Post Office Small Savings Schemes</span>
+        <div className="flex items-center pb-4 sm:pb-5 gap-3 text-[15px] font-medium text-gray-500">
+          <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+          <Link to="/products" className="hover:text-[#032e92] transition-colors">Products</Link>
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+          <span className="text-[#032e92]">Post Office Small Savings Schemes</span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">

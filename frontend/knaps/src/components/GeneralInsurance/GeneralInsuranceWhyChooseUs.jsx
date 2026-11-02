@@ -14,7 +14,7 @@ import { useLeadModal } from '../../context/LeadModalContext';
 const differentiators = [
   {
     icon: faHandshake,
-    title: '100% Unbiased Multi-Insurer Advisory',
+    title: '100% Unbiased Multi-Insurer Guidance',
     description: 'We represent you, not any single insurance company. We evaluate policies from 15+ top IRDAI-registered insurers solely based on merit, premium value, and settlement performance.'
   },
   {
@@ -38,7 +38,7 @@ const stats = [
   { value: '15+', label: 'Partner Insurers' },
   { value: '98.4%', label: 'Claim Assistance Success' },
   { value: '24,000+', label: 'Cashless Network Facilities' },
-  { value: '100%', label: 'Zero-Bias Advisory' }
+  { value: '100%', label: 'Zero-Bias Guidance' }
 ];
 
 const GeneralInsuranceWhyChooseUs = () => {

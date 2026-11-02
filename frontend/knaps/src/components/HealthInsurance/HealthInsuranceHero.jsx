@@ -39,14 +39,14 @@ export default function HealthInsuranceHero() {
       <div className="absolute bottom-10 left-0 w-[450px] h-[450px] bg-indigo-500/10 rounded-full blur-3xl pointer-events-none -ml-32" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Breadcrumbs */}
-        <nav className="flex items-center gap-2 text-xs font-medium text-gray-500 mb-8">
+        {/* Breadcrumb Navigation */}
+        <div className="flex items-center pb-4 sm:pb-5 gap-3 text-[15px] font-medium text-gray-500">
           <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
-          <FontAwesomeIcon icon={faChevronRight} className="text-[9px] text-gray-400" />
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
           <Link to="/products" className="hover:text-[#032e92] transition-colors">Products</Link>
-          <FontAwesomeIcon icon={faChevronRight} className="text-[9px] text-gray-400" />
-          <span className="text-[#032e92] font-semibold">Health Insurance</span>
-        </nav>
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+          <span className="text-[#032e92]">Health Insurance</span>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           {/* Left Column: Headline, Description & CTAs (7 cols) */}
@@ -223,7 +223,7 @@ export default function HealthInsuranceHero() {
               {/* Instant Call Prompt */}
               <div className="mt-5 text-center">
                 <p className="text-xs text-gray-500">
-                  Need personalized advice? Call our certified health advisors at{' '}
+                  Need personalized guidance? Call our certified health insurance specialists at{' '}
                   <a href="tel:+918080808080" className="font-semibold text-[#032e92] hover:underline">
                     +91 8080808080
                   </a>

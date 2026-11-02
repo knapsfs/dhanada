@@ -31,18 +31,13 @@ export default function LifeInsuranceHero() {
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         {/* Breadcrumb Navigation */}
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="flex items-center gap-2.5 text-xs font-semibold text-gray-400 mb-6 uppercase tracking-wider"
-        >
+        <div className="flex items-center pb-4 sm:pb-5 gap-3 text-[15px] font-medium text-gray-500">
           <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
-          <FontAwesomeIcon icon={faChevronRight} className="text-[9px] text-gray-300" />
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
           <Link to="/products" className="hover:text-[#032e92] transition-colors">Products</Link>
-          <FontAwesomeIcon icon={faChevronRight} className="text-[9px] text-gray-300" />
-          <span className="text-[#032e92] font-bold">Life Insurance</span>
-        </motion.div>
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+          <span className="text-[#032e92]">Life Insurance</span>
+        </div>
 
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           {/* Left Hero Content */}
@@ -90,7 +85,7 @@ export default function LifeInsuranceHero() {
                 onClick={openLeadModal}
                 className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-white hover:bg-blue-50 text-[#032e92] border border-[#032e92]/20 shadow-md hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer"
               >
-                <span>Speak with an Advisor</span>
+                <span>Talk to Us</span>
               </button>
             </div>
 

@@ -11,12 +11,12 @@ export default function NpsHero() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
         {/* Breadcrumb Navigation */}
-        <div className="flex items-center pb-4 sm:pb-6 gap-2 text-xs sm:text-sm text-gray-500">
+        <div className="flex items-center pb-4 sm:pb-5 gap-3 text-[15px] font-medium text-gray-500">
           <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
           <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
           <Link to="/products" className="hover:text-[#032e92] transition-colors">Products</Link>
           <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
-          <span className="text-[#032e92] font-semibold">National Pension System (NPS)</span>
+          <span className="text-[#032e92]">National Pension System (NPS)</span>
         </div>
 
         {/* Hero Banner with text overlay */}

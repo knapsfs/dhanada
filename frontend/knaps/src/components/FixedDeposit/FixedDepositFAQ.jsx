@@ -72,10 +72,10 @@ const faqs = [
   {
     id: 8,
     icon: faBuildingColumns,
-    category: "Execution & Advisory",
+    category: "Execution & Portfolio Support",
     question: "How does KNAPS assist in building a Fixed Income portfolio?",
     answer:
-      "KNAPS provides seamless, paperless execution across top scheduled banks, AAA corporate issuers, RBI sovereign bonds, and 54EC capital gain allocations. Our certified financial planners assist in tenure laddering to ensure you have predictable liquidity while maximizing yield across market cycles."
+      "KNAPS provides seamless, paperless execution across top scheduled banks, AAA corporate issuers, RBI sovereign bonds, and 54EC capital gain allocations. Our specialists assist in tenure laddering to ensure you have predictable liquidity while maximizing yield across market cycles."
   }
 ];
 

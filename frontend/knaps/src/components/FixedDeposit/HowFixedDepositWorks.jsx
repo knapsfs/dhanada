@@ -117,7 +117,7 @@ export default function HowFixedDepositWorks() {
           ))}
         </div>
 
-        {/* Advisory Action */}
+        {/* Action Button */}
         <div className="mt-12 text-center">
           <button
             onClick={() => openLeadModal({ title: "Start Fixed Income Allocation", defaultService: "Fixed Income Products" })}

@@ -62,7 +62,7 @@ export default function MfRisksAndTaxation() {
               </div>
               <div>
                 <h3 className="text-lg font-bold text-slate-900">Total Expense Ratio (TER)</h3>
-                <span className="text-xs font-semibold text-slate-500">Fund Management & Advisory Fees</span>
+                <span className="text-xs font-semibold text-slate-500">Fund Management & Operating Expenses</span>
               </div>
             </div>
             <p className="text-sm text-slate-600 leading-relaxed">

@@ -99,7 +99,7 @@ const GeneralInsuranceFAQ = () => {
         <div className="mt-12 bg-white rounded-2xl p-6 sm:p-8 border border-blue-100 shadow-md text-center flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="text-center sm:text-left">
             <h4 className="text-lg font-bold text-[#0a192f]">Have a question about a specific policy or claim clause?</h4>
-            <p className="text-xs sm:text-sm text-gray-600 mt-1">Our certified insurance advisors are available for free policy audits.</p>
+            <p className="text-xs sm:text-sm text-gray-600 mt-1">Our certified insurance specialists are available for free policy audits.</p>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <button

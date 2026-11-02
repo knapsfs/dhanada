@@ -91,10 +91,10 @@ export default function WhoShouldConsiderFD() {
           ))}
         </div>
 
-        {/* Advisory Guidance */}
+        {/* Portfolio Guidance */}
         <div className="mt-12 p-6 rounded-3xl bg-white border border-gray-200 text-center max-w-4xl mx-auto shadow-xs">
           <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-            <strong>KNAPS Advisory Guidance:</strong> Fixed Income products provide non-negotiable stability. Our wealth managers assist you in laddering tenures across scheduled banks and sovereign bonds to optimize tax efficiency and liquidity.
+            <strong>KNAPS Portfolio Guidance:</strong> Fixed Income products provide non-negotiable stability. Our team assists you in laddering tenures across scheduled banks and sovereign bonds to optimize tax efficiency and liquidity.
           </p>
         </div>
       </div>

@@ -42,7 +42,7 @@ export default function MfCTA() {
 
             {/* Subtitle */}
             <p className="text-base sm:text-lg text-blue-100/90 leading-relaxed font-normal max-w-2xl mx-auto">
-              Whether you are taking your very first step with a ₹500 SIP or structuring an established high-net-worth portfolio, KNAPS provides the research, technology, and unbiased advisory to grow your wealth.
+              Whether you are taking your very first step with a ₹500 SIP or structuring an established high-net-worth portfolio, KNAPS provides the research, technology, and dedicated guidance to grow your wealth.
             </p>
 
             {/* Trust Checklist */}

@@ -13,7 +13,7 @@ import { useLeadModal } from '../../context/LeadModalContext';
 const differentiators = [
   {
     icon: faHandshake,
-    title: '100% Zero-Bias Multi-Insurer Advisory',
+    title: '100% Zero-Bias Multi-Insurer Guidance',
     description: 'We don’t represent a single insurance company. We scan plans across 15+ IRDAI authorized insurers to find the highest claim settlement ratios and best network hospital density in your city.'
   },
   {
@@ -37,7 +37,7 @@ const stats = [
   { value: '15+', label: 'IRDAI Insurer Partners' },
   { value: '99.2%', label: 'Claim Assistance Success' },
   { value: '14,000+', label: 'Cashless Network Hospitals' },
-  { value: '10+ Yrs', label: 'Financial Advisory Trust' }
+  { value: '10+ Yrs', label: 'Financial Services Trust' }
 ];
 
 export default function HealthInsuranceWhyChooseUs() {
@@ -76,7 +76,7 @@ export default function HealthInsuranceWhyChooseUs() {
               </div>
               <div className="flex items-center gap-3">
                 <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 flex-shrink-0 text-base" />
-                <span className="text-sm font-medium text-gray-800">Certified health advisors available on call & WhatsApp</span>
+                <span className="text-sm font-medium text-gray-800">Certified health insurance specialists available on call & WhatsApp</span>
               </div>
             </div>
 

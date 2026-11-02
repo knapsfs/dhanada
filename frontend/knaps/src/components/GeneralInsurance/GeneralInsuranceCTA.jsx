@@ -81,7 +81,7 @@ const GeneralInsuranceCTA = () => {
 
             {/* Subtle Footer Note */}
             <p className="text-xs text-blue-200/70 pt-2">
-              KNAPS Wealth & Insurance Solutions is an IRDAI compliant advisory platform. All policies underwritten directly by registered insurers.
+              KNAPS Wealth & Insurance Solutions is an IRDAI compliant distribution platform. All policies underwritten directly by registered insurers.
             </p>
           </div>
         </div>

@@ -120,15 +120,15 @@ export default function WhatIsFixedDeposit() {
             </div>
 
             <div className="lg:col-span-5 bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/15 space-y-4 text-center sm:text-left">
-              <h4 className="text-base font-bold text-white">Need Guidance on Fixed Income Allocation?</h4>
+              <h4 className="text-base font-bold text-white">Need Assistance with Fixed Income Allocation?</h4>
               <p className="text-xs text-blue-200">
-                Our certified advisors evaluate credit ratings, tax slabs, liquidity needs, and yield curves to build your optimal FD and GoI Bond portfolio.
+                Our specialists evaluate credit ratings, tax slabs, liquidity needs, and yield curves to build your optimal FD and GoI Bond portfolio.
               </p>
               <button
-                onClick={() => openLeadModal({ title: "Request Fixed Income Consultation", defaultService: "Fixed Income Products" })}
+                onClick={() => openLeadModal({ title: "Explore Fixed Income Options", defaultService: "Fixed Income Products" })}
                 className="w-full btn-ripple py-3 px-4 rounded-xl text-xs sm:text-sm font-semibold bg-white text-[#032e92] hover:bg-blue-50 transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
-                <span>Consult a Fixed Income Specialist</span>
+                <span>Speak with a Fixed Income Specialist</span>
                 <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
               </button>
             </div>

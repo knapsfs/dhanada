@@ -227,7 +227,7 @@ const requirementCategories = [
           'Workmen’s Compensation cover complying with the Employees Compensation Act'
         ],
         popularAddons: ['Cyber Risk Liability', 'Commercial General Liability (CGL)'],
-        indicativeBadge: 'Institutional Advisory'
+        indicativeBadge: 'Enterprise Risk Solutions'
       }
     ]
   }
@@ -412,7 +412,7 @@ const GeneralInsuranceFinder = () => {
                 <div className="flex items-center justify-center gap-4 text-xs text-gray-500 pt-1">
                   <a href="tel:+918080808080" className="inline-flex items-center gap-1.5 hover:text-[#032e92] font-medium transition-colors">
                     <FontAwesomeIcon icon={faPhone} className="text-[#032e92] text-xs" />
-                    <span>Or Speak with Insurance Advisor</span>
+                    <span>Or Speak with Insurance Specialist</span>
                   </a>
                 </div>
               </div>

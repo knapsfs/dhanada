@@ -46,27 +46,13 @@ export default function FixedDepositHero() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Breadcrumb Navigation */}
-        <nav aria-label="Breadcrumb" className="mb-6 sm:mb-8">
-          <ol className="flex items-center space-x-2 text-xs sm:text-sm text-gray-500">
-            <li>
-              <Link to="/" className="hover:text-[#032e92] transition-colors">
-                Home
-              </Link>
-            </li>
-            <li>
-              <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
-            </li>
-            <li>
-              <Link to="/products" className="hover:text-[#032e92] transition-colors">
-                Products
-              </Link>
-            </li>
-            <li>
-              <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
-            </li>
-            <li className="font-semibold text-[#032e92]">Fixed Income Products</li>
-          </ol>
-        </nav>
+        <div className="flex items-center pb-4 sm:pb-5 gap-3 text-[15px] font-medium text-gray-500">
+          <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+          <Link to="/products" className="hover:text-[#032e92] transition-colors">Products</Link>
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+          <span className="text-[#032e92]">Fixed Income Products</span>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Left Column: Heading, Value Props, CTAs (7 cols) */}
@@ -232,10 +218,10 @@ export default function FixedDepositHero() {
                 </div>
               </div>
 
-              {/* Advisory note */}
+              {/* Assistance note */}
               <div className="mt-5 text-center">
                 <p className="text-xs text-gray-500">
-                  Need personalized advice on FD laddering or GoI bonds? Contact our advisors at KNAPS.
+                  Need assistance with FD laddering or GoI bonds? Contact our team at KNAPS.
                 </p>
               </div>
             </div>

@@ -334,7 +334,7 @@ export default function HealthInsuranceCoverageExplorer() {
         <div className="mt-8 text-center">
           <p className="inline-flex items-center gap-2 text-xs sm:text-sm text-gray-500">
             <FontAwesomeIcon icon={faCircleQuestion} className="text-gray-400" />
-            <span>Have existing pre-existing conditions like diabetes or high blood pressure? Our advisors guide you to policies with Day-1 or 1-year waiting periods.</span>
+            <span>Have existing pre-existing conditions like diabetes or high blood pressure? Our insurance specialists guide you to policies with Day-1 or 1-year waiting periods.</span>
           </p>
         </div>
       </div>

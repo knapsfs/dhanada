@@ -30,10 +30,7 @@ export default function SmallSavingsCTA() {
 
           <div className="relative z-10 max-w-4xl mx-auto text-center space-y-8">
             {/* Pill */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-blue-200 text-xs sm:text-sm font-semibold shadow-inner">
-              <FontAwesomeIcon icon={faShieldHalved} className="text-amber-300 text-xs" />
-              <span>Sovereign Security • India Post</span>
-            </div>
+
 
             {/* Headline */}
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
@@ -100,7 +97,7 @@ export default function SmallSavingsCTA() {
                 className="w-full sm:w-auto btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all duration-300 flex items-center justify-center gap-3 backdrop-blur-sm cursor-pointer"
               >
                 <FontAwesomeIcon icon={faPhone} className="text-sm text-blue-200" />
-                <span>Speak with an Advisor</span>
+                <span>Talk to Us</span>
               </a>
             </div>
 

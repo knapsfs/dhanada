@@ -257,11 +257,21 @@ export default function Navbar() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
                     transition={{ duration: 0.2, ease: "easeOut" }}
-                    className="absolute top-full right-0 mt-2 w-48 bg-white rounded-2xl shadow-xl shadow-blue-900/10 border border-gray-100 py-3 overflow-hidden origin-top-right z-50"
+                    className="absolute top-full right-0 mt-2 w-48 bg-white rounded-2xl shadow-xl shadow-blue-900/10 border border-gray-100 py-2.5 overflow-hidden origin-top-right z-50"
                   >
-                    <Link to="/#login-investor" className="block px-5 py-2.5 text-[14px] text-gray-600 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors font-medium">Investor Login</Link>
-                    <Link to="/#login-admin" className="block px-5 py-2.5 text-[14px] text-gray-600 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors font-medium">Admin Login</Link>
-                    <Link to="/#login-employee" className="block px-5 py-2.5 text-[14px] text-gray-600 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors font-medium">Employee Login</Link>
+                    <Link
+                      to="/"
+                      onClick={() => setActiveDropdown(null)}
+                      className="block px-5 py-2.5 text-[14px] text-gray-600 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors font-medium"
+                    >
+                      Investor Login
+                    </Link>
+                    <a
+                      href="/login?redirect-to=%2Fdesk"
+                      className="block px-5 py-2.5 text-[14px] text-gray-600 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors font-medium"
+                    >
+                      Employee Login
+                    </a>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -426,26 +436,25 @@ export default function Navbar() {
                         className="overflow-hidden bg-[#f8fbff] rounded-2xl mt-2 p-2 border border-blue-100/80 space-y-1"
                       >
                         <Link
-                          to="/#login-investor"
-                          onClick={() => setMobileOpen(false)}
+                          to="/"
+                          onClick={() => {
+                            setMobileOpen(false);
+                            setMobileLoginOpen(false);
+                          }}
                           className="block px-4 py-2.5 rounded-xl text-[14px] font-semibold text-gray-700 hover:bg-white hover:text-[#032e92] hover:shadow-xs transition-all"
                         >
                           Investor Login
                         </Link>
-                        <Link
-                          to="/#login-admin"
-                          onClick={() => setMobileOpen(false)}
-                          className="block px-4 py-2.5 rounded-xl text-[14px] font-semibold text-gray-700 hover:bg-white hover:text-[#032e92] hover:shadow-xs transition-all"
-                        >
-                          Admin Login
-                        </Link>
-                        <Link
-                          to="/#login-employee"
-                          onClick={() => setMobileOpen(false)}
+                        <a
+                          href="/login?redirect-to=%2Fdesk"
+                          onClick={() => {
+                            setMobileOpen(false);
+                            setMobileLoginOpen(false);
+                          }}
                           className="block px-4 py-2.5 rounded-xl text-[14px] font-semibold text-gray-700 hover:bg-white hover:text-[#032e92] hover:shadow-xs transition-all"
                         >
                           Employee Login
-                        </Link>
+                        </a>
                       </motion.div>
                     )}
                   </AnimatePresence>

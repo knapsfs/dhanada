@@ -41,7 +41,7 @@ export default function GeneralInsurance() {
         {/* 6. Key Benefits (Risk Transfer, Cashless Network, Zero Dep, 80D, RSA) */}
         <GeneralInsuranceBenefits />
 
-        {/* 7. Why Choose Us (Unbiased Advisory, Claims Concierge, Trust Metrics) */}
+        {/* 7. Why Choose Us (Unbiased Guidance, Claims Concierge, Trust Metrics) */}
         <GeneralInsuranceWhyChooseUs />
 
         {/* 8. FAQ Section */}

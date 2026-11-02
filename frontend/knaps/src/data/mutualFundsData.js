@@ -401,7 +401,7 @@ export const MF_FAQS = [
 	},
 	{
 		q: "What is the difference between Direct and Regular Mutual Fund plans?",
-		a: "In a Direct Plan, you invest directly with the Asset Management Company (AMC) without intermediary commissions, leading to a slightly lower Expense Ratio. In a Regular Plan, you invest through an AMFI-registered distributor (like KNAPS) who provides personalized advisory, portfolio rebalancing, tax guidance, and dedicated relationship management. Both plans hold the exact same portfolio of stocks and bonds.",
+		a: "In a Direct Plan, you invest directly with the Asset Management Company (AMC) without intermediary commissions, leading to a slightly lower Expense Ratio. In a Regular Plan, you invest through an AMFI-registered distributor (like KNAPS) who provides personalized guidance, portfolio review assistance, tax information, and dedicated relationship management. Both plans hold the exact same portfolio of stocks and bonds.",
 	},
 	{
 		q: "What is the minimum amount required to start investing in Mutual Funds?",
