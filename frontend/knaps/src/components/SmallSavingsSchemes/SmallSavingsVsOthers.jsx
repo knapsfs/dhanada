@@ -64,15 +64,11 @@ export default function SmallSavingsVsOthers() {
     <section className="py-12 sm:py-16 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#032e92]/10 border border-[#032e92]/20 text-[#032e92] text-xs font-semibold uppercase tracking-wider mb-4">
-            <FontAwesomeIcon icon={faScaleBalanced} />
-            <span>Multi-Asset Context</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#032e92] tracking-tight mb-4">
-            Post Office Small Savings vs Other Investment Avenues
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
+            Post Office Small Savings vs <span className="text-[#032e92]">Other Investment Avenues</span>
           </h2>
-          <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             A balanced comparison of Post Office Small Savings Schemes (POTD, KVP, NSC, PORD) alongside Bank FDs, Recurring Deposits, Mutual Funds, and Corporate/Govt Bonds.
           </p>
         </div>
@@ -121,24 +117,7 @@ export default function SmallSavingsVsOthers() {
           </div>
         </div>
 
-        {/* Objective Balance Note */}
-        <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-slate-600 leading-relaxed">
-            <strong className="text-slate-900">Portfolio Coexistence:</strong> No single asset class fits every need. Prudent financial plans allocate across Post Office Small Savings (for sovereign safety, guaranteed compounding, and 80C tax relief), Mutual Funds (for wealth creation), and Bank FDs (for immediate liquidity).
-          </p>
-          <button
-            onClick={() =>
-              openLeadModal({
-                title: 'Multi-Asset Allocation Advisory',
-                defaultService: 'Post Office Small Savings Scheme'
-              })
-            }
-            className="btn-ripple px-6 py-2.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-md transition-all shrink-0 cursor-pointer flex items-center gap-1.5"
-          >
-            <span>Consult Asset Allocation</span>
-            <FontAwesomeIcon icon={faArrowRight} className="text-[10px]" />
-          </button>
-        </div>
+
       </div>
     </section>
   );

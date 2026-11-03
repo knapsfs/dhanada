@@ -115,11 +115,11 @@ export default function WhyConsiderNps() {
           >
             <FontAwesomeIcon icon={item.icon} />
           </div>
-          <span
+          {/* <span
             className={`text-[11px] font-bold px-3 py-1 rounded-full border uppercase tracking-wider ${item.theme.badgeBg}`}
           >
             {item.badge}
-          </span>
+          </span> */}
         </div>
 
         {/* Title */}
@@ -128,13 +128,13 @@ export default function WhyConsiderNps() {
         </h3>
 
         {/* Highlight Pill */}
-        <div className="inline-block mb-3">
+        {/* <div className="inline-block mb-3">
           <span
             className={`text-xs font-semibold px-2.5 py-1 rounded-md border ${item.theme.highlightColor}`}
           >
             {item.highlight}
           </span>
-        </div>
+        </div> */}
 
         {/* Description */}
         <p className="text-xs sm:text-[13.5px] text-slate-600 leading-relaxed font-normal mb-5">
@@ -143,12 +143,12 @@ export default function WhyConsiderNps() {
       </div>
 
       {/* Bottom Takeaway Pill */}
-      <div className="pt-3.5 border-t border-slate-100 flex items-center gap-2">
+      {/* <div className="pt-3.5 border-t border-slate-100 flex items-center gap-2">
         <FontAwesomeIcon icon={faCircleCheck} className={`text-xs shrink-0 ${item.theme.checkColor}`} />
         <span className="text-[11.5px] sm:text-xs font-medium text-slate-700 leading-snug">
           {item.takeaway}
         </span>
-      </div>
+      </div> */}
     </motion.div>
   );
 

@@ -88,25 +88,21 @@ export default function FixedDepositComparison() {
   const filteredData = activeTab === "all"
     ? comparisonData
     : activeTab === "fd"
-    ? comparisonData.filter(d => d.category === "Fixed Deposit")
-    : comparisonData.filter(d => d.category === "GoI Bond");
+      ? comparisonData.filter(d => d.category === "Fixed Deposit")
+      : comparisonData.filter(d => d.category === "GoI Bond");
 
   return (
     <section id="fd-comparison" className="py-12 sm:py-16 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs sm:text-sm font-semibold mb-4 shadow-xs">
-            <FontAwesomeIcon icon={faScaleBalanced} className="text-[#032e92]" />
-            <span>Side-by-Side Evaluation</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a192f] tracking-tight leading-tight">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
             Compare{" "}
-            <span className="bg-gradient-to-r from-[#032e92] to-[#0066cc] bg-clip-text text-transparent">
+            <span className="text-[#032e92]">
               Fixed Deposits vs GoI Bonds
             </span>
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             Understand how Bank FDs, Corporate FDs, and Sovereign Government Bonds compare across security, returns, liquidity, and taxation.
           </p>
 
@@ -114,32 +110,29 @@ export default function FixedDepositComparison() {
           <div className="flex items-center justify-center gap-2 mt-6">
             <button
               onClick={() => setActiveTab("all")}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-                activeTab === "all"
-                  ? "bg-[#032e92] text-white shadow-xs"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
+              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${activeTab === "all"
+                ? "bg-[#032e92] text-white shadow-xs"
+                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }`}
             >
               All Instruments
             </button>
             <button
               onClick={() => setActiveTab("fd")}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
-                activeTab === "fd"
-                  ? "bg-[#032e92] text-white shadow-xs"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
+              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${activeTab === "fd"
+                ? "bg-[#032e92] text-white shadow-xs"
+                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }`}
             >
               <FontAwesomeIcon icon={faBuildingColumns} className="text-xs" />
               <span>Fixed Deposits</span>
             </button>
             <button
               onClick={() => setActiveTab("bonds")}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
-                activeTab === "bonds"
-                  ? "bg-[#032e92] text-white shadow-xs"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
+              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${activeTab === "bonds"
+                ? "bg-[#032e92] text-white shadow-xs"
+                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }`}
             >
               <FontAwesomeIcon icon={faLandmark} className="text-xs" />
               <span>GoI Bonds</span>
@@ -165,9 +158,8 @@ export default function FixedDepositComparison() {
               {filteredData.map((row, idx) => (
                 <tr
                   key={row.name}
-                  className={`hover:bg-blue-50/40 transition-colors ${
-                    row.isPrimary ? "bg-blue-50/20 font-medium" : idx % 2 === 0 ? "bg-white" : "bg-gray-50/50"
-                  }`}
+                  className={`hover:bg-blue-50/40 transition-colors ${row.isPrimary ? "bg-blue-50/20 font-medium" : idx % 2 === 0 ? "bg-white" : "bg-gray-50/50"
+                    }`}
                 >
                   <td className="py-4 px-5 font-bold text-[#0a192f]">
                     <div className="flex items-center gap-2">
@@ -194,13 +186,7 @@ export default function FixedDepositComparison() {
           </table>
         </div>
 
-        {/* Informational Guidance Footer */}
-        <div className="mt-6 p-4 rounded-2xl bg-blue-50/60 border border-blue-100 flex items-start gap-3 text-xs text-gray-600">
-          <FontAwesomeIcon icon={faCircleInfo} className="text-[#032e92] text-sm mt-0.5 flex-shrink-0" />
-          <p className="leading-relaxed">
-            <strong>KNAPS Asset Allocation Insight:</strong> Conservative investors seeking maximum safety can anchor their debt portfolio with 100% sovereign <strong>Government of India (GoI) Bonds</strong> for high yield and zero default risk, while utilizing <strong>Scheduled Bank FDs</strong> for emergency liquidity and laddered maturity dates.
-          </p>
-        </div>
+
       </div>
     </section>
   );

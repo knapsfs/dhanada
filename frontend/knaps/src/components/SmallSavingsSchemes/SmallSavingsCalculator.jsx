@@ -99,15 +99,11 @@ export default function SmallSavingsCalculator() {
     <section id="small-savings-calculator" className="py-12 sm:py-16 bg-[#f7f9fc] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#032e92]/10 border border-[#032e92]/20 text-[#032e92] text-xs font-semibold uppercase tracking-wider mb-4">
-            <FontAwesomeIcon icon={faCalculator} />
-            <span>Multi-Scheme Calculator</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#032e92] tracking-tight mb-4">
-            Post Office Savings Calculator
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
+            Post Office <span className="text-[#032e92]">Savings Calculator</span>
           </h2>
-          <p className="text-base sm:text-lg text-slate-600">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             Simulate your guaranteed returns, maturity value, and interest growth across our 4 Post Office savings instruments.
           </p>
         </div>
@@ -125,11 +121,10 @@ export default function SmallSavingsCalculator() {
                   type="button"
                   key={scheme.id}
                   onClick={() => handleSchemeChange(scheme.id)}
-                  className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                    selectedSchemeId === scheme.id
+                  className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${selectedSchemeId === scheme.id
                       ? 'bg-[#032e92] text-white shadow-md'
                       : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                  }`}
+                    }`}
                 >
                   {scheme.shortName}
                 </button>
@@ -167,11 +162,10 @@ export default function SmallSavingsCalculator() {
                         type="button"
                         key={yr}
                         onClick={() => setPotdTenure(yr)}
-                        className={`py-2 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer text-center ${
-                          potdTenure === yr
+                        className={`py-2 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer text-center ${potdTenure === yr
                             ? 'bg-[#032e92] text-white shadow-xs'
                             : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
-                        }`}
+                          }`}
                       >
                         <div>{yr} Year{yr > 1 ? 's' : ''}</div>
                         <div className={`text-[10px] ${potdTenure === yr ? 'text-blue-200' : 'text-slate-500'}`}>

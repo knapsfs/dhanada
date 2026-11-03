@@ -41,15 +41,11 @@ export default function SchemeExplorer() {
     <section className="py-12 sm:py-16 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#032e92]/10 border border-[#032e92]/20 text-[#032e92] text-xs font-semibold uppercase tracking-wider mb-4">
-            <FontAwesomeIcon icon={faFilter} />
-            <span>Interactive Scheme Discovery</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#032e92] tracking-tight mb-4">
-            Explore Post Office Small Savings Schemes
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
+            Explore <span className="text-[#032e92]">Post Office Small Savings Schemes</span>
           </h2>
-          <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             Filter our core government-backed post office schemes by financial goal, tenure, and tax preference.
           </p>
         </div>
@@ -77,55 +73,50 @@ export default function SchemeExplorer() {
               <button
                 type="button"
                 onClick={() => setSelectedGoal('all')}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                  selectedGoal === 'all'
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${selectedGoal === 'all'
                     ? 'bg-[#032e92] text-white shadow-xs'
                     : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-                }`}
+                  }`}
               >
                 All Schemes
               </button>
               <button
                 type="button"
                 onClick={() => setSelectedGoal('tax-saving')}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                  selectedGoal === 'tax-saving'
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${selectedGoal === 'tax-saving'
                     ? 'bg-[#032e92] text-white shadow-xs'
                     : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-                }`}
+                  }`}
               >
                 Section 80C Tax-Saving
               </button>
               <button
                 type="button"
                 onClick={() => setSelectedGoal('capital-doubling')}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                  selectedGoal === 'capital-doubling'
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${selectedGoal === 'capital-doubling'
                     ? 'bg-[#032e92] text-white shadow-xs'
                     : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-                }`}
+                  }`}
               >
                 Capital Doubling (KVP)
               </button>
               <button
                 type="button"
                 onClick={() => setSelectedGoal('term-deposit')}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                  selectedGoal === 'term-deposit'
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${selectedGoal === 'term-deposit'
                     ? 'bg-[#032e92] text-white shadow-xs'
                     : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-                }`}
+                  }`}
               >
                 Time Deposits (POTD)
               </button>
               <button
                 type="button"
                 onClick={() => setSelectedGoal('monthly-recurring')}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                  selectedGoal === 'monthly-recurring'
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${selectedGoal === 'monthly-recurring'
                     ? 'bg-[#032e92] text-white shadow-xs'
                     : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-                }`}
+                  }`}
               >
                 Monthly Savings (PORD)
               </button>

@@ -9,7 +9,7 @@ export default function LifeInsuranceCTA() {
   return (
     <section className="py-12 sm:py-16 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        
+
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -22,20 +22,16 @@ export default function LifeInsuranceCTA() {
           <div className="absolute bottom-0 left-0 w-[300px] h-[300px] rounded-full bg-emerald-400/10 blur-3xl pointer-events-none -ml-10 -mb-10" />
 
           <div className="relative z-10 max-w-3xl mx-auto text-center">
-            {/* Pill */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-bold uppercase tracking-widest text-blue-100 mb-6">
-              <FontAwesomeIcon icon={faShieldHeart} className="text-emerald-300" />
-              <span>Zero-Hassle Protection</span>
-            </div>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight mb-6">
+
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-white leading-tight mb-4">
               Secure Your Family’s Tomorrow,{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-emerald-300">
                 Starting Today
               </span>
             </h2>
 
-            <p className="text-blue-100 text-base sm:text-lg leading-relaxed font-normal mb-10 max-w-2xl mx-auto">
+            <p className="text-sm sm:text-base text-blue-100 font-normal leading-relaxed max-w-2xl mx-auto mb-8 mt-3.5">
               Schedule a 15-minute consultation with our certified insurance planners. We compare all top Indian insurers to find your family maximum coverage at the lowest premium.
             </p>
 
@@ -59,17 +55,7 @@ export default function LifeInsuranceCTA() {
               </a>
             </div>
 
-            {/* Reassurance Indicators */}
-            <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-blue-200 font-medium">
-              <div className="flex items-center gap-2">
-                <FontAwesomeIcon icon={faLock} className="text-emerald-300 text-[10px]" />
-                <span>100% Confidential & Secure</span>
-              </div>
-              <span className="hidden sm:inline text-blue-400">•</span>
-              <div>Zero Spam Calls Guarantee</div>
-              <span className="hidden sm:inline text-blue-400">•</span>
-              <div>Unbiased Fiduciary Guidance</div>
-            </div>
+
           </div>
         </motion.div>
 

@@ -1,10 +1,10 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faClipboardCheck, 
-  faScaleBalanced, 
-  faFileShield, 
-  faShieldHalved, 
+import {
+  faClipboardCheck,
+  faScaleBalanced,
+  faFileShield,
+  faShieldHalved,
   faArrowRight,
   faCheckCircle,
   faPhone
@@ -68,14 +68,11 @@ const GeneralInsuranceHowItWorks = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs sm:text-sm font-semibold mb-4 shadow-sm">
-            <span>Simple 4-Step Process</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a192f] tracking-tight leading-tight">
-            How It Works — <span className="bg-gradient-to-r from-[#032e92] to-[#0066cc] bg-clip-text text-transparent">From Cover to Claim</span>
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
+            How It Works — <span className="text-[#032e92]">From Cover to Claim</span>
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             Securing protection for your car, home, health, or business shouldn’t be complicated. We make policy selection effortless and claims hassle-free.
           </p>
         </div>

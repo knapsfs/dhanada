@@ -39,19 +39,14 @@ export default function SmallSavingsHero() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           {/* Left Column: Positioning & Headlines */}
           <div className="lg:col-span-7 space-y-6">
-            {/* Pill Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-100/80 border border-blue-200 text-[#032e92] text-xs sm:text-sm font-semibold shadow-xs">
-              <FontAwesomeIcon icon={faLandmark} className="text-blue-600" />
-              <span>Government-Backed Sovereign Savings • India Post</span>
-            </div>
 
             {/* Main Headline */}
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#032e92] tracking-tight leading-tight">
-              Post Office Small Savings Schemes
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900 leading-tight">
+              Post Office <span className="text-[#032e92]">Small Savings Schemes</span>
             </h1>
 
             {/* Hero Copy */}
-            <p className="text-base sm:text-lg lg:text-xl text-slate-700 font-medium leading-relaxed">
+            <p className="text-sm sm:text-base text-gray-600 font-normal leading-relaxed mt-3.5">
               Explore sovereign-backed Post Office savings schemes designed to encourage disciplined saving, capital safety, and assured long-term wealth growth.
             </p>
 

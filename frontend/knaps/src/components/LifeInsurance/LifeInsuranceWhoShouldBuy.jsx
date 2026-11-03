@@ -78,16 +78,13 @@ export default function LifeInsuranceWhoShouldBuy() {
   return (
     <section className="py-12 sm:py-16 bg-[#f7f9fc] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        
+
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#e8edf7] text-[#032e92] text-[11px] font-extrabold tracking-widest uppercase mb-4 shadow-sm">
-            Life Stages
-          </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-[#0a192f] tracking-tight leading-tight mb-4">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
             Who Needs Life Insurance <span className="text-[#032e92]">The Most?</span>
           </h2>
-          <p className="text-gray-600 text-base sm:text-lg font-normal leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             Financial responsibilities shift across different stages of life. See how life cover adapts to protect your specific situation.
           </p>
         </div>
@@ -101,11 +98,10 @@ export default function LifeInsuranceWhoShouldBuy() {
                 key={p.id}
                 type="button"
                 onClick={() => setActiveTab(idx)}
-                className={`px-5 py-3 rounded-2xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer flex items-center gap-2.5 whitespace-nowrap ${
-                  isSelected
+                className={`px-5 py-3 rounded-2xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer flex items-center gap-2.5 whitespace-nowrap ${isSelected
                     ? 'bg-[#032e92] text-white shadow-lg shadow-blue-900/20 scale-[1.02]'
                     : 'bg-white text-gray-600 hover:text-gray-900 border border-[#e8edf7] hover:border-gray-300'
-                }`}
+                  }`}
               >
                 <FontAwesomeIcon icon={p.icon} className={isSelected ? 'text-blue-200' : 'text-gray-400'} />
                 <span>{p.tab}</span>

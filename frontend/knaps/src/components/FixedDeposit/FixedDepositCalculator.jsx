@@ -101,18 +101,14 @@ export default function FixedDepositCalculator() {
     <section id="fd-calculator" className="py-12 sm:py-16 bg-[#f7f9fc] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs sm:text-sm font-semibold mb-4 shadow-xs">
-            <FontAwesomeIcon icon={faCalculator} className="text-[#032e92]" />
-            <span>Interactive Yield Calculator</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a192f] tracking-tight leading-tight">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
             Fixed Income{" "}
-            <span className="bg-gradient-to-r from-[#032e92] to-[#0066cc] bg-clip-text text-transparent">
+            <span className="text-[#032e92]">
               Maturity & Cashflow Calculator
             </span>
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             Calculate your guaranteed returns across Fixed Deposits (Bank & Corporate) and 100% Sovereign-backed Government of India (GoI) Bonds.
           </p>
 
@@ -120,22 +116,20 @@ export default function FixedDepositCalculator() {
           <div className="flex items-center justify-center gap-3 mt-8">
             <button
               onClick={() => setCalcMode("fd")}
-              className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-2 ${
-                calcMode === "fd"
+              className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-2 ${calcMode === "fd"
                   ? "bg-[#032e92] text-white shadow-md shadow-[#032e92]/20"
                   : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
-              }`}
+                }`}
             >
               <FontAwesomeIcon icon={faBuildingColumns} className="text-xs" />
               <span>Fixed Deposit (FD) Calculator</span>
             </button>
             <button
               onClick={() => setCalcMode("bond")}
-              className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-2 ${
-                calcMode === "bond"
+              className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-2 ${calcMode === "bond"
                   ? "bg-[#032e92] text-white shadow-md shadow-[#032e92]/20"
                   : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
-              }`}
+                }`}
             >
               <FontAwesomeIcon icon={faLandmark} className="text-xs" />
               <span>GoI Bond (RBI FRSB) Calculator</span>
@@ -214,14 +208,12 @@ export default function FixedDepositCalculator() {
                 <button
                   type="button"
                   onClick={() => setIsSenior(!isSenior)}
-                  className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-300 ${
-                    isSenior ? "bg-[#032e92]" : "bg-gray-300"
-                  }`}
+                  className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-300 ${isSenior ? "bg-[#032e92]" : "bg-gray-300"
+                    }`}
                 >
                   <div
-                    className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${
-                      isSenior ? "translate-x-6" : "translate-x-0"
-                    }`}
+                    className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${isSenior ? "translate-x-6" : "translate-x-0"
+                      }`}
                   />
                 </button>
               </div>
@@ -268,11 +260,10 @@ export default function FixedDepositCalculator() {
                       key={freq.val}
                       type="button"
                       onClick={() => setCompoundingFreq(freq.val)}
-                      className={`py-2 px-3 rounded-xl text-xs font-semibold border transition-all cursor-pointer text-center ${
-                        compoundingFreq === freq.val
+                      className={`py-2 px-3 rounded-xl text-xs font-semibold border transition-all cursor-pointer text-center ${compoundingFreq === freq.val
                           ? "bg-[#032e92] text-white border-[#032e92] shadow-xs"
                           : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
-                      }`}
+                        }`}
                     >
                       {freq.label}
                     </button>

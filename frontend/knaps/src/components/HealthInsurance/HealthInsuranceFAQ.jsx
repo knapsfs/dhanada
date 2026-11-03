@@ -50,18 +50,14 @@ export default function HealthInsuranceFAQ() {
     <section className="py-12 sm:py-16 bg-[#f7f9fc] relative overflow-hidden">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs sm:text-sm font-semibold mb-4 shadow-xs">
-            <FontAwesomeIcon icon={faCircleQuestion} className="text-[#032e92]" />
-            <span>Got Questions? We Have Answers</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a192f] tracking-tight leading-tight">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
             Frequently Asked Questions on{' '}
-            <span className="bg-gradient-to-r from-[#032e92] to-[#0066cc] bg-clip-text text-transparent">
+            <span className="text-[#032e92]">
               Health Insurance
             </span>
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             Everything you need to know about waiting periods, cashless admissions, room-rent clauses, and Section 80D tax deductions.
           </p>
         </div>
@@ -84,9 +80,8 @@ export default function HealthInsuranceFAQ() {
                     {faq.question}
                   </span>
                   <div
-                    className={`w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-[#032e92] flex-shrink-0 transition-transform duration-300 ${
-                      isOpen ? 'rotate-180 bg-[#032e92] text-white' : ''
-                    }`}
+                    className={`w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-[#032e92] flex-shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180 bg-[#032e92] text-white' : ''
+                      }`}
                   >
                     <FontAwesomeIcon icon={faChevronDown} className="text-xs" />
                   </div>

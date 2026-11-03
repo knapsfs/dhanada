@@ -47,24 +47,18 @@ export default function LifeInsuranceHero() {
             transition={{ duration: 0.7 }}
             className="lg:col-span-7"
           >
-            {/* Pill Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-blue-100 shadow-sm mb-5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-[#032e92] text-[11px] font-extrabold tracking-widest uppercase">
-                KNAPS Life & Family Protection
-              </span>
-            </div>
+
 
             {/* Headline */}
-            <h1 className="text-3xl sm:text-4xl lg:text-[48px] font-extrabold text-[#0a192f] leading-[1.16] tracking-tight mb-5">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900 leading-[1.2] mb-4">
               Protect What Truly Matters:{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#032e92] via-[#0b5cff] to-[#021d63]">
+              <span className="text-[#032e92]">
                 Your Family’s Financial Tomorrow
               </span>
             </h1>
 
             {/* Subtitle */}
-            <p className="text-gray-600 text-base sm:text-lg leading-relaxed max-w-2xl font-normal mb-8">
+            <p className="text-sm sm:text-base text-gray-600 font-normal leading-relaxed max-w-2xl mb-8 mt-3.5">
               A robust life insurance shield guarantees that your loved ones maintain their lifestyle, clear liabilities, and fulfill cherished dreams, even in your absence. Pure protection with zero compromise.
             </p>
 
@@ -89,25 +83,7 @@ export default function LifeInsuranceHero() {
               </button>
             </div>
 
-            {/* Trust Highlights Strip */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 border-t border-[#e8edf7]">
-              <div className="flex items-center gap-2.5 text-xs text-gray-700 font-medium">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 text-sm flex-shrink-0" />
-                <span>₹1 Cr Cover from ₹490/mo*</span>
-              </div>
-              <div className="flex items-center gap-2.5 text-xs text-gray-700 font-medium">
-                <FontAwesomeIcon icon={faFileContract} className="text-[#032e92] text-sm flex-shrink-0" />
-                <span>100% Digital & Paperless</span>
-              </div>
-              <div className="flex items-center gap-2.5 text-xs text-gray-700 font-medium">
-                <FontAwesomeIcon icon={faShieldHeart} className="text-rose-600 text-sm flex-shrink-0" />
-                <span>98.5%+ Claim Ratio</span>
-              </div>
-              <div className="flex items-center gap-2.5 text-xs text-gray-700 font-medium">
-                <FontAwesomeIcon icon={faPercent} className="text-amber-600 text-sm flex-shrink-0" />
-                <span>Tax Free u/s 10(10D)</span>
-              </div>
-            </div>
+
           </motion.div>
 
           {/* Right Floating Term Illustration Card */}

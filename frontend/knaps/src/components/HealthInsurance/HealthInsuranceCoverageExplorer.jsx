@@ -133,18 +133,14 @@ export default function HealthInsuranceCoverageExplorer() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs sm:text-sm font-semibold mb-4 shadow-xs">
-            <FontAwesomeIcon icon={faCompass} className="text-[#032e92]" />
-            <span>Smart Coverage Matcher</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a192f] tracking-tight leading-tight">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
             Explore the{' '}
-            <span className="bg-gradient-to-r from-[#032e92] to-[#0066cc] bg-clip-text text-transparent">
+            <span className="text-[#032e92]">
               Right Cover for Your Family
             </span>
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             Select your life stage, family size, and top health priority to reveal the optimal policy architecture, sum insured, and essential riders.
           </p>
         </div>
@@ -161,11 +157,10 @@ export default function HealthInsuranceCoverageExplorer() {
                 <button
                   key={stage.id}
                   onClick={() => setSelectedStage(stage.id)}
-                  className={`p-3.5 sm:p-4 rounded-2xl text-left transition-all duration-300 border cursor-pointer ${
-                    isActive
-                      ? 'bg-[#032e92] text-white border-[#032e92] shadow-md scale-[1.02]'
-                      : 'bg-[#f7f9fc] hover:bg-white text-gray-800 border-gray-200/80 hover:border-blue-200'
-                  }`}
+                  className={`p-3.5 sm:p-4 rounded-2xl text-left transition-all duration-300 border cursor-pointer ${isActive
+                    ? 'bg-[#032e92] text-white border-[#032e92] shadow-md scale-[1.02]'
+                    : 'bg-[#f7f9fc] hover:bg-white text-gray-800 border-gray-200/80 hover:border-blue-200'
+                    }`}
                 >
                   <div className={`text-xs sm:text-sm font-bold ${isActive ? 'text-white' : 'text-[#0a192f]'}`}>
                     {stage.label}
@@ -191,11 +186,10 @@ export default function HealthInsuranceCoverageExplorer() {
                 <button
                   key={fam.id}
                   onClick={() => setSelectedFamily(fam.id)}
-                  className={`px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all border cursor-pointer ${
-                    isActive
-                      ? 'bg-gradient-to-r from-[#032e92] to-[#021d63] text-white border-transparent shadow-md'
-                      : 'bg-white text-gray-700 border-gray-200 hover:border-blue-200 hover:bg-gray-50'
-                  }`}
+                  className={`px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all border cursor-pointer ${isActive
+                    ? 'bg-gradient-to-r from-[#032e92] to-[#021d63] text-white border-transparent shadow-md'
+                    : 'bg-white text-gray-700 border-gray-200 hover:border-blue-200 hover:bg-gray-50'
+                    }`}
                 >
                   <span>{fam.label}</span>
                   <span className={`text-[10px] ml-1.5 opacity-80 ${isActive ? 'text-blue-200' : 'text-gray-400'}`}>
@@ -219,11 +213,10 @@ export default function HealthInsuranceCoverageExplorer() {
                 <button
                   key={pri.id}
                   onClick={() => setSelectedPriority(pri.id)}
-                  className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all border cursor-pointer flex items-center gap-1.5 ${
-                    isActive
-                      ? 'bg-emerald-700 text-white border-emerald-700 shadow-sm'
-                      : 'bg-white text-gray-700 border-gray-200 hover:border-emerald-300 hover:bg-emerald-50/40'
-                  }`}
+                  className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all border cursor-pointer flex items-center gap-1.5 ${isActive
+                    ? 'bg-emerald-700 text-white border-emerald-700 shadow-sm'
+                    : 'bg-white text-gray-700 border-gray-200 hover:border-emerald-300 hover:bg-emerald-50/40'
+                    }`}
                 >
                   <span>{pri.label}</span>
                 </button>

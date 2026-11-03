@@ -48,15 +48,11 @@ export default function GoalBasedSavings() {
     <section className="py-12 sm:py-16 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#032e92]/10 border border-[#032e92]/20 text-[#032e92] text-xs font-semibold uppercase tracking-wider mb-4">
-            <FontAwesomeIcon icon={faBullseye} />
-            <span>Milestone Mapping</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#032e92] tracking-tight mb-4">
-            Goal-Based Post Office Savings Alignment
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
+            Goal-Based <span className="text-[#032e92]">Post Office Savings Alignment</span>
           </h2>
-          <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             Align your capital with the right Post Office small savings instrument based on your investment horizon, tax objective, and return requirements.
           </p>
         </div>
@@ -100,12 +96,7 @@ export default function GoalBasedSavings() {
           ))}
         </div>
 
-        {/* Objective Guidance Note */}
-        <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-center max-w-3xl mx-auto">
-          <p className="text-xs text-slate-500 leading-relaxed">
-            * <strong>Disclaimer:</strong> Goal mappings above illustrate typical financial applications. Post Office schemes are backed by the Government of India with sovereign capital safety.
-          </p>
-        </div>
+
       </div>
     </section>
   );

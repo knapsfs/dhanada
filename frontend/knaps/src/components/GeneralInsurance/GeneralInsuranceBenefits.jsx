@@ -1,11 +1,11 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faShieldHalved, 
-  faWrench, 
-  faScaleBalanced, 
-  faPiggyBank, 
-  faLifeRing, 
+import {
+  faShieldHalved,
+  faWrench,
+  faScaleBalanced,
+  faPiggyBank,
+  faLifeRing,
   faAward,
   faArrowRight
 } from '@fortawesome/free-solid-svg-icons';
@@ -57,14 +57,11 @@ const GeneralInsuranceBenefits = () => {
     <section className="py-12 sm:py-16 bg-[#f7f9fc] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs sm:text-sm font-semibold mb-4 shadow-sm">
-            <span>High-Impact Advantages</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a192f] tracking-tight leading-tight">
-            Key Benefits of <span className="bg-gradient-to-r from-[#032e92] to-[#0066cc] bg-clip-text text-transparent">General Insurance</span>
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
+            Key Benefits of <span className="text-[#032e92]">General Insurance</span>
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             General insurance isn’t merely an expense — it’s your primary financial shock absorber protecting the investments and lifestyle you have worked hard to build.
           </p>
         </div>

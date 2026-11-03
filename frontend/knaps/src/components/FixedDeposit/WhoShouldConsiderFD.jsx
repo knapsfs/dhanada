@@ -41,18 +41,14 @@ export default function WhoShouldConsiderFD() {
     <section className="py-12 sm:py-16 bg-[#f7f9fc] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs sm:text-sm font-semibold mb-4 shadow-xs">
-            <FontAwesomeIcon icon={faUsers} className="text-[#032e92]" />
-            <span>Suitability & Profiles</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a192f] tracking-tight leading-tight">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
             Who Should Invest in{" "}
-            <span className="bg-gradient-to-r from-[#032e92] to-[#0066cc] bg-clip-text text-transparent">
+            <span className="text-[#032e92]">
               Fixed Income Products?
             </span>
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             From senior citizens wanting regular pension credits to real estate sellers saving tax, Fixed Deposits and GoI Bonds fulfill critical financial objectives.
           </p>
         </div>
@@ -91,12 +87,7 @@ export default function WhoShouldConsiderFD() {
           ))}
         </div>
 
-        {/* Portfolio Guidance */}
-        <div className="mt-12 p-6 rounded-3xl bg-white border border-gray-200 text-center max-w-4xl mx-auto shadow-xs">
-          <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-            <strong>KNAPS Portfolio Guidance:</strong> Fixed Income products provide non-negotiable stability. Our team assists you in laddering tenures across scheduled banks and sovereign bonds to optimize tax efficiency and liquidity.
-          </p>
-        </div>
+
       </div>
     </section>
   );

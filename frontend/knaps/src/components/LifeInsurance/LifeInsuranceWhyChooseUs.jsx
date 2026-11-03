@@ -40,7 +40,7 @@ export default function LifeInsuranceWhyChooseUs() {
     <section className="py-12 sm:py-16 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-          
+
           {/* Left Column: Heading & Feature Grid (7 Cols) */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -49,15 +49,12 @@ export default function LifeInsuranceWhyChooseUs() {
             transition={{ duration: 0.7 }}
             className="lg:col-span-7"
           >
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#eef4ff] text-[#032e92] text-[11px] font-extrabold tracking-widest uppercase mb-4">
-              The KNAPS Distinction
-            </div>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-[#0a192f] tracking-tight leading-tight mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900 mb-4">
               Why Partner with <span className="text-[#032e92]">KNAPS</span> for Life Insurance?
             </h2>
 
-            <p className="text-gray-600 text-base sm:text-lg font-normal leading-relaxed mb-10">
+            <p className="text-sm sm:text-base text-gray-600 font-normal leading-relaxed mb-8 mt-3.5">
               Insurance isn't just a document; it’s an emotional promise made to your family. We ensure that promise is fulfilled without friction, hidden clauses, or hassle.
             </p>
 

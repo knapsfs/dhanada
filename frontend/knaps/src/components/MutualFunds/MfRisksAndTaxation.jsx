@@ -23,15 +23,11 @@ export default function MfRisksAndTaxation() {
     <section className="py-20 lg:py-24 bg-[#f7f9fc] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-50 border border-amber-200 text-amber-900 text-xs font-semibold uppercase tracking-wider mb-4">
-            <FontAwesomeIcon icon={faTriangleExclamation} className="text-amber-600" />
-            <span>Essential Due Diligence</span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#032e92] tracking-tight">
-            Risks & Things to Know Before Investing
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
+            Risks & Things to Know <span className="text-[#032e92]">Before Investing</span>
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed font-medium">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             Smart investing requires complete transparency. Familiarize yourself with market volatility, risk gauges, operational costs, and the latest taxation rules.
           </p>
         </div>

@@ -75,15 +75,11 @@ export default function ExploreFunds() {
     <section id="explore-funds" className="py-20 lg:py-24 bg-[#f7f9fc] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs font-semibold uppercase tracking-wider mb-4">
-            <FontAwesomeIcon icon={faCompass} className="text-[#2490ef]" />
-            <span>Interactive Scheme Discovery</span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#032e92] tracking-tight">
-            Explore Mutual Fund Categories
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
+            Explore <span className="text-[#032e92]">Mutual Fund Categories</span>
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed font-medium">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             Filter mutual fund strategies across risk appetite, investment time horizon, and asset type to construct your tailored portfolio.
           </p>
         </div>
@@ -134,11 +130,10 @@ export default function ExploreFunds() {
                   key={type}
                   type="button"
                   onClick={() => setSelectedType(type)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-                    selectedType === type
+                  className={`px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${selectedType === type
                       ? 'bg-[#032e92] text-white shadow-xs'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
+                    }`}
                 >
                   {type}
                 </button>
@@ -157,11 +152,10 @@ export default function ExploreFunds() {
                   key={risk}
                   type="button"
                   onClick={() => setSelectedRisk(risk)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-                    selectedRisk === risk
+                  className={`px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${selectedRisk === risk
                       ? 'bg-[#032e92] text-white shadow-xs'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
+                    }`}
                 >
                   {risk}
                 </button>
@@ -180,11 +174,10 @@ export default function ExploreFunds() {
                   key={h}
                   type="button"
                   onClick={() => setSelectedHorizon(h)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-                    selectedHorizon === h
+                  className={`px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${selectedHorizon === h
                       ? 'bg-[#032e92] text-white shadow-xs'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
+                    }`}
                 >
                   {h}
                 </button>

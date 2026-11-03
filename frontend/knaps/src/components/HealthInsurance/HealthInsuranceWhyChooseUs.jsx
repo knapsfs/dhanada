@@ -49,19 +49,16 @@ export default function HealthInsuranceWhyChooseUs() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           {/* Left Column: Heading & Value Prop (5 cols) */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs sm:text-sm font-semibold shadow-xs">
-              <FontAwesomeIcon icon={faStar} className="w-3.5 h-3.5 text-[#032e92]" />
-              <span>The KNAPS Healthcare Advantage</span>
-            </div>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a192f] tracking-tight leading-tight">
+
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900 leading-[1.2] mb-4">
               Why Trust KNAPS with Your{' '}
-              <span className="bg-gradient-to-r from-[#032e92] to-[#0066cc] bg-clip-text text-transparent">
+              <span className="text-[#032e92]">
                 Family’s Health Insurance?
               </span>
             </h2>
 
-            <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
+            <p className="text-sm sm:text-base text-gray-600 font-normal leading-relaxed mb-6 mt-3.5">
               Buying health insurance online is easy, but getting a complex ₹8,00,000 hospital claim approved without deductions requires expert advocacy. That’s where KNAPS stands with your family.
             </p>
 

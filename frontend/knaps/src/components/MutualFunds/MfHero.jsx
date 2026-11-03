@@ -41,12 +41,12 @@ export default function MfHero() {
           <div className="lg:col-span-7 space-y-6">
 
             {/* Main Headline */}
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#032e92] tracking-tight leading-tight">
-              Invest Smarter with Mutual Funds
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900 leading-tight">
+              Invest Smarter with <span className="text-[#032e92]">Mutual Funds</span>
             </h1>
 
             {/* Hero Copy */}
-            <p className="text-base sm:text-lg lg:text-xl text-slate-700 font-medium leading-relaxed">
+            <p className="text-sm sm:text-base text-gray-600 font-normal leading-relaxed mt-3.5">
               Harness the power of professional fund management, instant asset diversification, and compounding wealth creation. Whether you are building an emergency cushion or planning for generational wealth, mutual funds help you achieve your goals with discipline.
             </p>
 

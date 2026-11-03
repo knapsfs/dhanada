@@ -46,18 +46,14 @@ export default function FixedDepositRisks() {
     <section className="py-12 sm:py-16 bg-[#f7f9fc] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-50 border border-amber-200/80 text-amber-800 text-xs sm:text-sm font-semibold mb-4 shadow-xs">
-            <FontAwesomeIcon icon={faTriangleExclamation} className="text-amber-600" />
-            <span>Transparency & Due Diligence</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a192f] tracking-tight leading-tight">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
             Key Risks & Factors to Evaluate{" "}
-            <span className="bg-gradient-to-r from-[#032e92] to-[#0066cc] bg-clip-text text-transparent">
+            <span className="text-[#032e92]">
               in Fixed Income
             </span>
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             While Fixed Income provides stability, understanding liquidity, tenure lock-ins, and credit security ensures you pick the right instrument for your needs.
           </p>
         </div>
@@ -84,12 +80,7 @@ export default function FixedDepositRisks() {
           ))}
         </div>
 
-        {/* Regulatory Disclaimer Banner */}
-        <div className="mt-12 bg-white rounded-2xl p-6 border border-gray-200 text-center max-w-4xl mx-auto shadow-xs">
-          <p className="text-xs text-gray-500 leading-relaxed">
-            <strong>Regulatory & Investor Protection:</strong> Fixed deposits in scheduled commercial banks are insured under DICGC guidelines up to ₹5 Lakh. Government of India Bonds are sovereign obligations managed by the Reserve Bank of India. Corporate deposits are subject to respective issuer credit ratings.
-          </p>
-        </div>
+
       </div>
     </section>
   );

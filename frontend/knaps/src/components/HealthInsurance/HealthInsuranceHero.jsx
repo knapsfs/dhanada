@@ -56,23 +56,18 @@ export default function HealthInsuranceHero() {
             transition={{ duration: 0.6 }}
             className="lg:col-span-7 space-y-6"
           >
-            {/* Top Pill */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-[#032e92] text-xs sm:text-sm font-semibold shadow-xs">
-              <span className="flex h-2 w-2 rounded-full bg-[#032e92] animate-pulse" />
-              <FontAwesomeIcon icon={faHeartPulse} className="text-[#032e92] text-xs" />
-              <span>Comprehensive Health Protection</span>
-            </div>
+
 
             {/* Main Headline */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-black text-[#0a192f] tracking-tight leading-[1.15]">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900 leading-[1.2] mb-4">
               Shield Your Family’s Health & Wealth Against{' '}
-              <span className="bg-gradient-to-r from-[#032e92] via-[#0066cc] to-[#021d63] bg-clip-text text-transparent">
+              <span className="text-[#032e92]">
                 Soaring Medical Inflation
               </span>
             </h1>
 
             {/* Subheading */}
-            <p className="text-base sm:text-lg text-gray-600 leading-relaxed max-w-2xl">
+            <p className="text-sm sm:text-base text-gray-600 font-normal leading-relaxed max-w-2xl mb-6 mt-3.5">
               Medical expenses in India are rising at 14% every year. Safeguard your lifetime savings with 100% cashless hospitalization across 14,000+ top network hospitals, zero room-rent sub-limits, unlimited restoration, and tax savings up to ₹1,00,000 under Section 80D.
             </p>
 
@@ -115,21 +110,7 @@ export default function HealthInsuranceHero() {
               </button>
             </div>
 
-            {/* Trust Badges Bar */}
-            <div className="pt-6 border-t border-gray-200/70 flex flex-wrap items-center gap-6 sm:gap-8 text-xs text-gray-600">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                <span>15+ IRDAI Authorized Insurers</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                <span>Dedicated Cashless Concierge</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                <span>Zero Spam & Honest Guidance</span>
-              </div>
-            </div>
+
           </motion.div>
 
           {/* Right Column: Reassuring Healthcare/Financial Card (5 cols) */}
@@ -210,7 +191,7 @@ export default function HealthInsuranceHero() {
                 </p>
                 <div className="pt-2 flex items-center justify-between text-xs font-semibold text-blue-200">
                   <span>Explore recommended cover</span>
-                  <button 
+                  <button
                     onClick={scrollToExplorer}
                     className="text-white hover:text-blue-200 underline flex items-center gap-1 cursor-pointer"
                   >
