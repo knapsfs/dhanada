@@ -102,18 +102,14 @@ export default function HealthInsuranceCalculator() {
     <section id="health-calculator" className="py-12 sm:py-16 bg-[#f7f9fc] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs sm:text-sm font-semibold mb-4 shadow-xs">
-            <FontAwesomeIcon icon={faCalculator} className="text-[#032e92]" />
-            <span>Interactive Health Coverage Estimator</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a192f] tracking-tight leading-tight">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
             How Much Health Cover{' '}
-            <span className="bg-gradient-to-r from-[#032e92] to-[#0066cc] bg-clip-text text-transparent">
+            <span className="text-[#032e92]">
               Does Your Family Really Need?
             </span>
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             Enter your family composition, age, and location to calculate the ideal baseline cover, super top-up shield, and potential tax savings under Section 80D.
           </p>
         </div>
@@ -138,11 +134,10 @@ export default function HealthInsuranceCalculator() {
                   <button
                     key={item.id}
                     onClick={() => setFamilyType(item.id)}
-                    className={`py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer ${
-                      familyType === item.id
+                    className={`py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer ${familyType === item.id
                         ? 'bg-[#032e92] text-white border-[#032e92] shadow-sm'
                         : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-white'
-                    }`}
+                      }`}
                   >
                     {item.label}
                   </button>
@@ -184,11 +179,10 @@ export default function HealthInsuranceCalculator() {
               <div className="grid grid-cols-2 gap-3">
                 <button
                   onClick={() => setCityTier('metro')}
-                  className={`p-3 rounded-xl text-left border transition-all cursor-pointer ${
-                    cityTier === 'metro'
+                  className={`p-3 rounded-xl text-left border transition-all cursor-pointer ${cityTier === 'metro'
                       ? 'bg-blue-50 text-[#032e92] border-blue-300 shadow-xs'
                       : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-white'
-                  }`}
+                    }`}
                 >
                   <div className="font-bold text-xs sm:text-sm">Tier 1 / Metro City</div>
                   <div className="text-[11px] text-gray-500">Mumbai, Delhi NCR, Bengaluru, Hyderabad, etc.</div>
@@ -196,11 +190,10 @@ export default function HealthInsuranceCalculator() {
 
                 <button
                   onClick={() => setCityTier('tier2')}
-                  className={`p-3 rounded-xl text-left border transition-all cursor-pointer ${
-                    cityTier === 'tier2'
+                  className={`p-3 rounded-xl text-left border transition-all cursor-pointer ${cityTier === 'tier2'
                       ? 'bg-blue-50 text-[#032e92] border-blue-300 shadow-xs'
                       : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-white'
-                  }`}
+                    }`}
                 >
                   <div className="font-bold text-xs sm:text-sm">Tier 2 / Tier 3 City</div>
                   <div className="text-[11px] text-gray-500">Jaipur, Lucknow, Indore, Coimbatore, etc.</div>
@@ -223,11 +216,10 @@ export default function HealthInsuranceCalculator() {
                   <button
                     key={item.val}
                     onClick={() => setCorporateCover(item.val)}
-                    className={`py-2 px-2 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
-                      corporateCover === item.val
+                    className={`py-2 px-2 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${corporateCover === item.val
                         ? 'bg-[#032e92] text-white border-[#032e92]'
                         : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-white'
-                    }`}
+                      }`}
                   >
                     {item.label}
                   </button>
@@ -249,14 +241,12 @@ export default function HealthInsuranceCalculator() {
               <button
                 type="button"
                 onClick={() => setHasSeniorParents(!hasSeniorParents)}
-                className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-300 ${
-                  hasSeniorParents || familyType === 'with_parents' ? 'bg-[#032e92]' : 'bg-gray-300'
-                }`}
+                className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition-colors duration-300 ${hasSeniorParents || familyType === 'with_parents' ? 'bg-[#032e92]' : 'bg-gray-300'
+                  }`}
               >
                 <div
-                  className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${
-                    hasSeniorParents || familyType === 'with_parents' ? 'translate-x-6' : 'translate-x-0'
-                  }`}
+                  className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${hasSeniorParents || familyType === 'with_parents' ? 'translate-x-6' : 'translate-x-0'
+                    }`}
                 />
               </button>
             </div>

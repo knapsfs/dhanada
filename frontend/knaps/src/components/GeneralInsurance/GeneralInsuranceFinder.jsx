@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faCar, 
-  faHeartPulse, 
-  faHouseChimney, 
-  faPlaneDeparture, 
-  faBuilding, 
-  faCheckCircle, 
-  faArrowRight, 
-  faStar, 
-  faCircleQuestion, 
-  faPhone 
+import {
+  faCar,
+  faHeartPulse,
+  faHouseChimney,
+  faPlaneDeparture,
+  faBuilding,
+  faCheckCircle,
+  faArrowRight,
+  faStar,
+  faCircleQuestion,
+  faPhone
 } from '@fortawesome/free-solid-svg-icons';
 import { useLeadModal } from '../../context/LeadModalContext';
 
@@ -227,7 +227,7 @@ const requirementCategories = [
           'Workmen’s Compensation cover complying with the Employees Compensation Act'
         ],
         popularAddons: ['Cyber Risk Liability', 'Commercial General Liability (CGL)'],
-        indicativeBadge: 'Institutional Advisory'
+        indicativeBadge: 'Enterprise Risk Solutions'
       }
     ]
   }
@@ -261,15 +261,11 @@ const GeneralInsuranceFinder = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs sm:text-sm font-semibold mb-4 shadow-sm">
-            <FontAwesomeIcon icon={faStar} className="w-3.5 h-3.5 text-[#032e92]" />
-            <span>Interactive Cover Matcher</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a192f] tracking-tight leading-tight">
-            Find the <span className="bg-gradient-to-r from-[#032e92] to-[#0066cc] bg-clip-text text-transparent">Right Cover</span> for Your Need
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
+            Find the <span className="text-[#032e92]">Right Cover</span> for Your Need
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             Select what you wish to protect and explore tailored policy configurations, essential add-ons, and instant quotation guidance.
           </p>
         </div>
@@ -282,11 +278,10 @@ const GeneralInsuranceFinder = () => {
               <button
                 key={cat.id}
                 onClick={() => handleCategoryChange(cat.id)}
-                className={`flex items-center gap-2.5 px-4 sm:px-6 py-3 rounded-xl sm:rounded-2xl text-sm sm:text-base font-semibold transition-all duration-300 shadow-sm cursor-pointer ${
-                  isActive
-                    ? 'bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-lg shadow-[#032e92]/25 scale-[1.02]'
-                    : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200/80 hover:border-blue-200'
-                }`}
+                className={`flex items-center gap-2.5 px-4 sm:px-6 py-3 rounded-xl sm:rounded-2xl text-sm sm:text-base font-semibold transition-all duration-300 shadow-sm cursor-pointer ${isActive
+                  ? 'bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-lg shadow-[#032e92]/25 scale-[1.02]'
+                  : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200/80 hover:border-blue-200'
+                  }`}
               >
                 <FontAwesomeIcon icon={cat.icon} className={`text-base ${isActive ? 'text-white' : 'text-[#032e92]'}`} />
                 <span>{cat.label}</span>
@@ -310,11 +305,10 @@ const GeneralInsuranceFinder = () => {
               <button
                 key={sub.id}
                 onClick={() => setSelectedSubIndex(idx)}
-                className={`px-4 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all cursor-pointer ${
-                  isSubActive
-                    ? 'bg-[#032e92] text-white shadow-md'
-                    : 'bg-white/80 text-gray-600 hover:text-gray-900 border border-gray-200 hover:bg-white'
-                }`}
+                className={`px-4 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all cursor-pointer ${isSubActive
+                  ? 'bg-[#032e92] text-white shadow-md'
+                  : 'bg-white/80 text-gray-600 hover:text-gray-900 border border-gray-200 hover:bg-white'
+                  }`}
               >
                 {sub.title}
               </button>
@@ -375,7 +369,7 @@ const GeneralInsuranceFinder = () => {
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {activeOption.popularAddons.map((addon, idx) => (
-                    <span 
+                    <span
                       key={idx}
                       className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-[#032e92] border border-blue-200/70 shadow-xs"
                     >
@@ -412,7 +406,7 @@ const GeneralInsuranceFinder = () => {
                 <div className="flex items-center justify-center gap-4 text-xs text-gray-500 pt-1">
                   <a href="tel:+918080808080" className="inline-flex items-center gap-1.5 hover:text-[#032e92] font-medium transition-colors">
                     <FontAwesomeIcon icon={faPhone} className="text-[#032e92] text-xs" />
-                    <span>Or Speak with Insurance Advisor</span>
+                    <span>Or Speak with Insurance Specialist</span>
                   </a>
                 </div>
               </div>
@@ -420,13 +414,7 @@ const GeneralInsuranceFinder = () => {
           </div>
         </div>
 
-        {/* Unsure Note */}
-        <div className="mt-8 text-center">
-          <p className="inline-flex items-center gap-2 text-xs sm:text-sm text-gray-500">
-            <FontAwesomeIcon icon={faCircleQuestion} className="text-gray-400" />
-            <span>Unsure which policy fits your exact requirements? Our IRDAI certified experts provide free, zero-bias comparative analysis.</span>
-          </p>
-        </div>
+
       </div>
     </section>
   );

@@ -2,11 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowRight,
-  faPhone,
-  faCheckCircle,
-  faShieldHalved,
-  faLandmark,
-  faCoins
+  faPhone
 } from '@fortawesome/free-solid-svg-icons';
 import { useLeadModal } from '../../context/LeadModalContext';
 
@@ -30,43 +26,22 @@ export default function SmallSavingsCTA() {
 
           <div className="relative z-10 max-w-4xl mx-auto text-center space-y-8">
             {/* Pill */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-blue-200 text-xs sm:text-sm font-semibold shadow-inner">
-              <FontAwesomeIcon icon={faShieldHalved} className="text-amber-300 text-xs" />
-              <span>Sovereign Security • India Post</span>
-            </div>
+
 
             {/* Headline */}
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-white leading-tight mb-4">
               Invest in Post Office Schemes <br className="hidden sm:inline" />
-              <span className="bg-gradient-to-r from-white via-blue-100 to-blue-200 bg-clip-text text-transparent">
+              <span className="text-blue-100">
                 Backed by the Government of India
               </span>
             </h2>
 
             {/* Subheading */}
-            <p className="text-base sm:text-lg text-blue-100/90 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-sm sm:text-base text-blue-100/90 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5 mb-8">
               Whether you are locking in 7.7% compounding with NSC, doubling your capital in 115 months with KVP, securing structured yields via Time Deposits, or starting an RD with ₹100/mo — KNAPS assists your entire Post Office investment journey.
             </p>
 
-            {/* Trust Checklist */}
-            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 pt-2 text-xs sm:text-sm text-blue-200">
-              <div className="flex items-center gap-2">
-                <FontAwesomeIcon icon={faLandmark} className="text-emerald-400 shrink-0 text-sm" />
-                <span>100% Sovereign Guarantee</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-400 shrink-0 text-sm" />
-                <span>Up to 7.70% p.a. Notified Yield</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-400 shrink-0 text-sm" />
-                <span>Section 80C Tax Deductions</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <FontAwesomeIcon icon={faCoins} className="text-amber-300 shrink-0 text-xs" />
-                <span>Quarterly or Cumulative Growth</span>
-              </div>
-            </div>
+
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
@@ -78,36 +53,33 @@ export default function SmallSavingsCTA() {
                     defaultService: 'Post Office Small Savings Schemes'
                   })
                 }
-                className="w-full sm:w-auto btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-white text-[#032e92] hover:bg-blue-50 shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 group cursor-pointer"
+                className="w-full sm:w-auto btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-white text-[#032e92] hover:bg-blue-50 shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-2.5 group cursor-pointer"
               >
                 <span>Apply for Post Office Schemes</span>
                 <FontAwesomeIcon
                   icon={faArrowRight}
-                  className="text-sm transition-transform duration-300 group-hover:translate-x-1"
+                  className="text-xs transition-transform duration-300 group-hover:translate-x-1"
                 />
               </button>
 
               <button
                 type="button"
                 onClick={scrollToComparison}
-                className="w-full sm:w-auto btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all duration-300 flex items-center justify-center gap-3 backdrop-blur-sm cursor-pointer"
+                className="w-full sm:w-auto btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all duration-300 flex items-center justify-center gap-2.5 backdrop-blur-sm cursor-pointer"
               >
                 <span>Calculate Returns</span>
               </button>
 
               <a
                 href="tel:+919990243143"
-                className="w-full sm:w-auto btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all duration-300 flex items-center justify-center gap-3 backdrop-blur-sm cursor-pointer"
+                className="w-full sm:w-auto btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all duration-300 flex items-center justify-center gap-2.5 backdrop-blur-sm cursor-pointer"
               >
-                <FontAwesomeIcon icon={faPhone} className="text-sm text-blue-200" />
-                <span>Speak with an Advisor</span>
+                <FontAwesomeIcon icon={faPhone} className="text-xs text-blue-200" />
+                <span>Talk to Us</span>
               </a>
             </div>
 
-            {/* Disclaimer */}
-            <p className="text-xs text-blue-200/70 pt-4 max-w-2xl mx-auto leading-relaxed">
-              * Post Office Small Savings Scheme interest rates, statutory deposit limits, premature exit conditions, loan facilities, and tax exemptions are notified by the Ministry of Finance, Government of India.
-            </p>
+
           </div>
         </div>
       </div>

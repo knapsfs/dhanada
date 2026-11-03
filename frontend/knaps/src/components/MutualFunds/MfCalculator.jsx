@@ -187,15 +187,11 @@ export default function MfCalculator() {
     <section id="mf-calculator" className="py-20 lg:py-24 bg-white relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs font-semibold uppercase tracking-wider mb-4">
-            <FontAwesomeIcon icon={faCalculator} className="text-[#2490ef]" />
-            <span>Interactive Financial Planning</span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#032e92] tracking-tight">
-            Mutual Fund SIP & Lumpsum Calculator
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
+            Mutual Fund <span className="text-[#032e92]">SIP & Lumpsum Calculator</span>
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed font-medium">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             Simulate the long-term compounding growth of your systematic investments or one-time lump sum corpus with realistic returns.
           </p>
         </div>
@@ -206,22 +202,20 @@ export default function MfCalculator() {
             <button
               type="button"
               onClick={() => handleModeSwitch('sip')}
-              className={`px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                calcMode === 'sip'
+              className={`px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${calcMode === 'sip'
                   ? 'bg-[#032e92] text-white shadow-md'
                   : 'text-slate-600 hover:text-slate-900'
-              }`}
+                }`}
             >
               Systematic Investment Plan (SIP)
             </button>
             <button
               type="button"
               onClick={() => handleModeSwitch('lumpsum')}
-              className={`px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                calcMode === 'lumpsum'
+              className={`px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${calcMode === 'lumpsum'
                   ? 'bg-[#032e92] text-white shadow-md'
                   : 'text-slate-600 hover:text-slate-900'
-              }`}
+                }`}
             >
               One-Time Lumpsum
             </button>
@@ -341,27 +335,24 @@ export default function MfCalculator() {
                   <button
                     type="button"
                     onClick={() => setReturnRate(8)}
-                    className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-colors cursor-pointer ${
-                      returnRate === 8 ? 'bg-[#032e92] text-white' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
-                    }`}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-colors cursor-pointer ${returnRate === 8 ? 'bg-[#032e92] text-white' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                      }`}
                   >
                     Debt / Conservative (8%)
                   </button>
                   <button
                     type="button"
                     onClick={() => setReturnRate(12)}
-                    className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-colors cursor-pointer ${
-                      returnRate === 12 ? 'bg-[#032e92] text-white' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
-                    }`}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-colors cursor-pointer ${returnRate === 12 ? 'bg-[#032e92] text-white' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                      }`}
                   >
                     Hybrid / Moderate (12%)
                   </button>
                   <button
                     type="button"
                     onClick={() => setReturnRate(15)}
-                    className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-colors cursor-pointer ${
-                      returnRate === 15 ? 'bg-[#032e92] text-white' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
-                    }`}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-colors cursor-pointer ${returnRate === 15 ? 'bg-[#032e92] text-white' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                      }`}
                   >
                     Equity Alpha (15%)
                   </button>

@@ -115,7 +115,7 @@ export default function WhatIsNps() {
                     {item.subtitle}
                   </p>
 
-                  <p className="text-xs sm:text-[13px] text-gray-600 leading-relaxed font-normal mb-5">
+                  <p className="text-xs sm:text-[14px] text-gray-600 leading-relaxed font-normal mb-5">
                     {item.description}
                   </p>
                 </div>

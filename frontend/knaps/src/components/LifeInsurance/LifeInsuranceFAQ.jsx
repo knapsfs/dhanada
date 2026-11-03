@@ -36,30 +36,26 @@ const FAQS = [
 
 function FAQItem({ item, index, isOpen, onToggle }) {
   return (
-    <div className={`border rounded-2xl overflow-hidden transition-all duration-200 ${
-      isOpen ? 'border-[#032e92]/30 shadow-md shadow-blue-900/5 bg-white' : 'border-[#e8edf7] bg-white hover:border-gray-300'
-    }`}>
+    <div className={`border rounded-2xl overflow-hidden transition-all duration-200 ${isOpen ? 'border-[#032e92]/30 shadow-md shadow-blue-900/5 bg-white' : 'border-[#e8edf7] bg-white hover:border-gray-300'
+      }`}>
       <button
         type="button"
         onClick={onToggle}
         className="w-full flex items-center justify-between px-6 py-5 text-left transition-colors cursor-pointer"
       >
         <div className="flex items-start gap-4 flex-1">
-          <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 text-xs font-bold transition-colors ${
-            isOpen ? 'bg-[#032e92] text-white' : 'bg-[#eef4ff] text-[#032e92]'
-          }`}>
+          <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 text-xs font-bold transition-colors ${isOpen ? 'bg-[#032e92] text-white' : 'bg-[#eef4ff] text-[#032e92]'
+            }`}>
             {index + 1}
           </div>
-          <span className={`text-sm sm:text-base font-bold transition-colors ${
-            isOpen ? 'text-[#032e92]' : 'text-gray-900'
-          }`}>
+          <span className={`text-sm sm:text-base font-bold transition-colors ${isOpen ? 'text-[#032e92]' : 'text-gray-900'
+            }`}>
             {item.q}
           </span>
         </div>
         <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
-          <FontAwesomeIcon icon={faChevronDown} className={`text-xs flex-shrink-0 ml-3 ${
-            isOpen ? 'text-[#032e92]' : 'text-gray-400'
-          }`} />
+          <FontAwesomeIcon icon={faChevronDown} className={`text-xs flex-shrink-0 ml-3 ${isOpen ? 'text-[#032e92]' : 'text-gray-400'
+            }`} />
         </motion.div>
       </button>
 
@@ -91,16 +87,13 @@ export default function LifeInsuranceFAQ() {
   return (
     <section className="py-12 sm:py-16 bg-[#f7f9fc] relative overflow-hidden">
       <div className="max-w-4xl mx-auto px-6 lg:px-8">
-        
+
         {/* Header */}
-        <div className="text-center mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#e8edf7] text-[#032e92] text-[11px] font-extrabold tracking-widest uppercase mb-4 shadow-sm">
-            Got Questions?
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0a192f] tracking-tight leading-tight mb-4">
-            Frequently Asked Questions
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
+            Frequently Asked <span className="text-[#032e92]">Questions</span>
           </h2>
-          <p className="text-gray-600 text-sm sm:text-base font-normal">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             Everything you need to know about life cover, policy structures, claims, and tax rules.
           </p>
         </div>

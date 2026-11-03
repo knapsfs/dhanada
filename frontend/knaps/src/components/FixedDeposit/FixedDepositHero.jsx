@@ -46,27 +46,13 @@ export default function FixedDepositHero() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Breadcrumb Navigation */}
-        <nav aria-label="Breadcrumb" className="mb-6 sm:mb-8">
-          <ol className="flex items-center space-x-2 text-xs sm:text-sm text-gray-500">
-            <li>
-              <Link to="/" className="hover:text-[#032e92] transition-colors">
-                Home
-              </Link>
-            </li>
-            <li>
-              <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
-            </li>
-            <li>
-              <Link to="/products" className="hover:text-[#032e92] transition-colors">
-                Products
-              </Link>
-            </li>
-            <li>
-              <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
-            </li>
-            <li className="font-semibold text-[#032e92]">Fixed Income Products</li>
-          </ol>
-        </nav>
+        <div className="flex items-center pb-4 sm:pb-5 gap-3 text-[15px] font-medium text-gray-500">
+          <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+          <Link to="/products" className="hover:text-[#032e92] transition-colors">Products</Link>
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+          <span className="text-[#032e92]">Fixed Income Products</span>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Left Column: Heading, Value Props, CTAs (7 cols) */}
@@ -76,22 +62,18 @@ export default function FixedDepositHero() {
             transition={{ duration: 0.6 }}
             className="lg:col-span-7 space-y-6"
           >
-            {/* Pill Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-100/70 border border-blue-200/80 text-[#032e92] text-xs sm:text-sm font-semibold shadow-xs">
-              <FontAwesomeIcon icon={faLandmark} className="text-xs text-[#032e92]" />
-              <span>Fixed Deposits (FD) & GoI Sovereign Bonds</span>
-            </div>
+
 
             {/* Main Headline */}
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0a192f] tracking-tight leading-[1.15]">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900 leading-[1.2] mb-4">
               Fixed Income Products:{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#032e92] via-[#0052cc] to-[#0a192f]">
+              <span className="text-[#032e92]">
                 Capital Safety & Assured Cashflow
               </span>
             </h1>
 
             {/* Sub-headline */}
-            <p className="text-base sm:text-lg text-gray-600 font-normal leading-relaxed max-w-2xl">
+            <p className="text-sm sm:text-base text-gray-600 font-normal leading-relaxed max-w-2xl mb-6 mt-3.5">
               Preserve your wealth and generate predictable income with structured debt instruments. Choose from scheduled Bank Fixed Deposits, AAA-rated Corporate FDs, and 100% sovereign-guaranteed Government of India (GoI) Bonds.
             </p>
 
@@ -232,10 +214,10 @@ export default function FixedDepositHero() {
                 </div>
               </div>
 
-              {/* Advisory note */}
+              {/* Assistance note */}
               <div className="mt-5 text-center">
                 <p className="text-xs text-gray-500">
-                  Need personalized advice on FD laddering or GoI bonds? Contact our advisors at KNAPS.
+                  Need assistance with FD laddering or GoI bonds? Contact our team at KNAPS.
                 </p>
               </div>
             </div>

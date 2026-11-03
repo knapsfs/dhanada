@@ -123,18 +123,14 @@ export default function HealthInsurancePlans() {
     <section id="health-plans" className="py-12 sm:py-16 bg-[#f7f9fc] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs sm:text-sm font-semibold mb-4 shadow-xs">
-            <FontAwesomeIcon icon={faShieldHalved} className="text-[#032e92]" />
-            <span>Comprehensive Plan Portfolio</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a192f] tracking-tight leading-tight">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
             Tailored Health Insurance Plans for{' '}
-            <span className="bg-gradient-to-r from-[#032e92] to-[#0066cc] bg-clip-text text-transparent">
+            <span className="text-[#032e92]">
               Every Life Stage
             </span>
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             From single young professionals to growing families and senior parents, explore curated insurance plans structured to protect against every medical contingency.
           </p>
         </div>
@@ -204,14 +200,14 @@ export default function HealthInsurancePlans() {
           })}
         </div>
 
-        {/* Advisory Banner */}
+        {/* Guidance Banner */}
         <div className="mt-14 p-6 sm:p-8 rounded-3xl bg-white border border-blue-100 shadow-md flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-1 text-center md:text-left">
             <h4 className="text-lg font-bold text-[#0a192f]">
               Confused between Family Floater vs Super Top-Up combinations?
             </h4>
             <p className="text-xs sm:text-sm text-gray-600">
-              Our IRDAI certified health insurance advisors help you design the most cost-effective 1-Crore cover structure with zero broker bias.
+              Our IRDAI certified health insurance specialists help you design the most cost-effective 1-Crore cover structure with zero broker bias.
             </p>
           </div>
           <button

@@ -22,40 +22,20 @@ export default function FixedDepositCTA() {
           <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none -ml-20 -mb-10 sm:mb-12" />
 
           <div className="relative z-10 max-w-4xl mx-auto text-center space-y-8">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-blue-200 text-xs sm:text-sm font-semibold shadow-inner">
-              <FontAwesomeIcon icon={faShieldHalved} className="text-blue-300 text-xs" />
-              <span>Sovereign Security & Predictable Income</span>
-            </div>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
+
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-white leading-tight mb-4">
               Build a Resilient Fixed Income Portfolio <br className="hidden sm:inline" />
-              <span className="bg-gradient-to-r from-white via-blue-100 to-blue-200 bg-clip-text text-transparent">
+              <span className="text-blue-100">
                 with Top FDs & Sovereign GoI Bonds
               </span>
             </h2>
 
-            <p className="text-base sm:text-lg text-blue-100/90 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-sm sm:text-base text-blue-100/90 font-normal max-w-2xl mx-auto leading-relaxed mt-3.5 mb-8">
               Combine the flexibility of Bank and Corporate FDs with the unmatched 100% sovereign guarantee of Government of India (GoI) Bonds. Plan your cashflows with precision and zero market risk.
             </p>
 
-            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 pt-2 text-xs sm:text-sm text-blue-200">
-              <div className="flex items-center gap-2">
-                <FontAwesomeIcon icon={faLandmark} className="text-emerald-400 flex-shrink-0 text-sm" />
-                <span>100% Sovereign Backed GoI Bonds</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <FontAwesomeIcon icon={faBuildingColumns} className="text-emerald-400 flex-shrink-0 text-sm" />
-                <span>DICGC Insured Banks up to ₹5L</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-400 flex-shrink-0 text-sm" />
-                <span>CRISIL/ICRA AAA Rated Corporate FDs</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <FontAwesomeIcon icon={faCoins} className="text-amber-300 flex-shrink-0 text-xs" />
-                <span>54EC Real Estate Tax Exemption</span>
-              </div>
-            </div>
+
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
               <button
@@ -88,9 +68,7 @@ export default function FixedDepositCTA() {
               </button>
             </div>
 
-            <p className="text-xs text-blue-200/70 pt-4 max-w-2xl mx-auto leading-relaxed">
-              * Government of India Bonds are sovereign obligations managed through RBI. Bank fixed deposit insurance is governed by DICGC rules. Corporate deposits carry issuer credit ratings. Section 54EC bond investment must be completed within 6 months of capital asset transfer.
-            </p>
+
           </div>
         </div>
       </div>

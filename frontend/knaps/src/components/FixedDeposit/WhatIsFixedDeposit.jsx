@@ -15,18 +15,14 @@ export default function WhatIsFixedDeposit() {
     <section className="py-12 sm:py-16 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs sm:text-sm font-semibold mb-4 shadow-xs">
-            <FontAwesomeIcon icon={faBookOpen} className="text-[#032e92]" />
-            <span>Understanding Fixed Income</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a192f] tracking-tight leading-tight">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
             What are{" "}
-            <span className="bg-gradient-to-r from-[#032e92] to-[#0066cc] bg-clip-text text-transparent">
+            <span className="text-[#032e92]">
               Fixed Income Products?
             </span>
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             Fixed Income products are structured financial instruments that offer pre-agreed, regular interest payments (coupons) and guarantee the full return of your invested principal upon maturity. They form the non-volatile foundation of a balanced investment portfolio.
           </p>
         </div>
@@ -120,15 +116,15 @@ export default function WhatIsFixedDeposit() {
             </div>
 
             <div className="lg:col-span-5 bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/15 space-y-4 text-center sm:text-left">
-              <h4 className="text-base font-bold text-white">Need Guidance on Fixed Income Allocation?</h4>
+              <h4 className="text-base font-bold text-white">Need Assistance with Fixed Income Allocation?</h4>
               <p className="text-xs text-blue-200">
-                Our certified advisors evaluate credit ratings, tax slabs, liquidity needs, and yield curves to build your optimal FD and GoI Bond portfolio.
+                Our specialists evaluate credit ratings, tax slabs, liquidity needs, and yield curves to build your optimal FD and GoI Bond portfolio.
               </p>
               <button
-                onClick={() => openLeadModal({ title: "Request Fixed Income Consultation", defaultService: "Fixed Income Products" })}
+                onClick={() => openLeadModal({ title: "Explore Fixed Income Options", defaultService: "Fixed Income Products" })}
                 className="w-full btn-ripple py-3 px-4 rounded-xl text-xs sm:text-sm font-semibold bg-white text-[#032e92] hover:bg-blue-50 transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
-                <span>Consult a Fixed Income Specialist</span>
+                <span>Speak with a Fixed Income Specialist</span>
                 <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
               </button>
             </div>

@@ -39,15 +39,11 @@ export default function MfTypes() {
     <section id="mf-types" className="py-20 lg:py-24 bg-[#f7f9fc] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs font-semibold uppercase tracking-wider mb-4">
-            <FontAwesomeIcon icon={faLayerGroup} className="text-[#2490ef]" />
-            <span>Asset Classes & Categories</span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#032e92] tracking-tight">
-            Types of Mutual Funds in India
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
+            Types of <span className="text-[#032e92]">Mutual Funds</span> in India
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed font-medium">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             SEBI categorizes mutual funds into distinct classes based on asset allocation, market cap, and risk profile. Explore each category to find the ideal match for your financial roadmap.
           </p>
         </div>
@@ -61,11 +57,10 @@ export default function MfTypes() {
                 key={cat.id}
                 type="button"
                 onClick={() => setActiveCategoryId(cat.id)}
-                className={`flex-shrink-0 flex items-center gap-2 px-4 sm:px-5 py-3 rounded-2xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
-                  isSelected
+                className={`flex-shrink-0 flex items-center gap-2 px-4 sm:px-5 py-3 rounded-2xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${isSelected
                     ? 'bg-[#032e92] text-white shadow-md shadow-[#032e92]/20 scale-[1.02]'
                     : 'bg-white text-slate-700 border border-slate-200 hover:border-blue-300 hover:bg-blue-50/50'
-                }`}
+                  }`}
               >
                 <FontAwesomeIcon icon={getCategoryIcon(cat.id)} className={isSelected ? 'text-blue-300' : 'text-[#032e92]'} />
                 <span>{cat.name}</span>

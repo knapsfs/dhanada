@@ -29,20 +29,15 @@ export default function MfCTA() {
           <div className="absolute bottom-0 left-0 w-80 h-80 bg-cyan-400/15 rounded-full blur-3xl pointer-events-none -ml-20 -mb-20" />
 
           <div className="relative z-10 max-w-3xl mx-auto text-center space-y-6">
-            {/* Pill Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs sm:text-sm font-semibold text-blue-200">
-              <FontAwesomeIcon icon={faShieldHalved} className="text-cyan-400" />
-              <span>AMFI Registered Mutual Fund Distributor • ARN-367144</span>
-            </div>
 
             {/* Main Headline */}
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-white leading-tight">
               Start Your Mutual Fund Journey Today
             </h2>
 
             {/* Subtitle */}
-            <p className="text-base sm:text-lg text-blue-100/90 leading-relaxed font-normal max-w-2xl mx-auto">
-              Whether you are taking your very first step with a ₹500 SIP or structuring an established high-net-worth portfolio, KNAPS provides the research, technology, and unbiased advisory to grow your wealth.
+            <p className="text-sm sm:text-base text-blue-100/90 leading-relaxed font-normal max-w-2xl sm:max-w-3xl mx-auto mt-3.5">
+              Whether you are taking your very first step with a ₹500 SIP or structuring an established high-net-worth portfolio, KNAPS provides the research, technology, and dedicated guidance to grow your wealth.
             </p>
 
             {/* Trust Checklist */}
@@ -86,18 +81,6 @@ export default function MfCTA() {
               </button>
             </div>
 
-            {/* Contact Micro-Strip */}
-            <div className="pt-8 border-t border-white/10 flex flex-wrap items-center justify-center gap-6 text-xs text-blue-200">
-              <a href="tel:+919990243143" className="flex items-center gap-2 hover:text-white transition-colors">
-                <FontAwesomeIcon icon={faPhone} />
-                <span>(+91) 9990243143</span>
-              </a>
-              <span className="text-white/20">•</span>
-              <a href="mailto:connect@knaps.in" className="flex items-center gap-2 hover:text-white transition-colors">
-                <FontAwesomeIcon icon={faEnvelope} />
-                <span>connect@knaps.in</span>
-              </a>
-            </div>
           </div>
         </div>
       </div>

@@ -1,11 +1,11 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faCheckCircle, 
-  faShieldHalved, 
-  faHandshake, 
-  faClock, 
-  faHeadphones, 
+import {
+  faCheckCircle,
+  faShieldHalved,
+  faHandshake,
+  faClock,
+  faHeadphones,
   faStar,
   faArrowRight
 } from '@fortawesome/free-solid-svg-icons';
@@ -14,7 +14,7 @@ import { useLeadModal } from '../../context/LeadModalContext';
 const differentiators = [
   {
     icon: faHandshake,
-    title: '100% Unbiased Multi-Insurer Advisory',
+    title: '100% Unbiased Multi-Insurer Guidance',
     description: 'We represent you, not any single insurance company. We evaluate policies from 15+ top IRDAI-registered insurers solely based on merit, premium value, and settlement performance.'
   },
   {
@@ -38,7 +38,7 @@ const stats = [
   { value: '15+', label: 'Partner Insurers' },
   { value: '98.4%', label: 'Claim Assistance Success' },
   { value: '24,000+', label: 'Cashless Network Facilities' },
-  { value: '100%', label: 'Zero-Bias Advisory' }
+  { value: '100%', label: 'Zero-Bias Guidance' }
 ];
 
 const GeneralInsuranceWhyChooseUs = () => {
@@ -50,16 +50,13 @@ const GeneralInsuranceWhyChooseUs = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           {/* Left Column: Heading & Description */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs sm:text-sm font-semibold shadow-sm">
-              <FontAwesomeIcon icon={faStar} className="w-3.5 h-3.5 text-[#032e92]" />
-              <span>The KNAPS Advantage</span>
-            </div>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a192f] tracking-tight leading-tight">
-              Why Choose KNAPS for Your <span className="bg-gradient-to-r from-[#032e92] to-[#0066cc] bg-clip-text text-transparent">General Insurance</span>?
+
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900 leading-[1.2] mb-4">
+              Why Choose KNAPS for Your <span className="text-[#032e92]">General Insurance</span>?
             </h2>
 
-            <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
+            <p className="text-sm sm:text-base text-gray-600 font-normal leading-relaxed mb-6 mt-3.5">
               Buying insurance online is quick, but what happens when you actually need to file a ₹5,00,000 claim? That’s where KNAPS makes the critical difference.
             </p>
 

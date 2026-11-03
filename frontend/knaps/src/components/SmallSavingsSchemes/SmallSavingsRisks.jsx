@@ -52,15 +52,11 @@ export default function SmallSavingsRisks() {
     <section className="py-12 sm:py-16 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-700 text-xs font-semibold uppercase tracking-wider mb-4">
-            <FontAwesomeIcon icon={faTriangleExclamation} />
-            <span>Essential Considerations</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
-            Risks & Things to Know About Post Office Small Savings
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
+            Risks & Things to Know About <span className="text-[#032e92]">Post Office Small Savings</span>
           </h2>
-          <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             While Post Office small savings schemes carry sovereign safety, savers must carefully evaluate lock-in durations, inflation dynamics, and slab-rate taxation.
           </p>
         </div>
@@ -90,12 +86,7 @@ export default function SmallSavingsRisks() {
           ))}
         </div>
 
-        {/* Prudent Liquidity Notice */}
-        <div className="p-6 rounded-2xl bg-amber-50/70 border border-amber-200 text-center max-w-4xl mx-auto">
-          <p className="text-xs sm:text-sm text-amber-900 leading-relaxed font-medium">
-            ⚠️ <strong>Prudent Allocation Tip:</strong> Avoid committing emergency liquidity into 5-year lock-in certificates like NSC. Choose tenure-appropriate POTD (1, 2, 3, or 5 years) or maintain an emergency fund separately.
-          </p>
-        </div>
+
       </div>
     </section>
   );

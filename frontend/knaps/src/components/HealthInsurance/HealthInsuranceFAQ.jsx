@@ -18,7 +18,7 @@ const faqs = [
   },
   {
     question: 'What is the Room Rent Capping clause and how does it reduce claim payouts?',
-    answer: 'Many standard policies cap room rent at 1% of the sum insured (e.g., ₹5,000/day on a ₹5 Lakh policy). If you choose a room costing ₹10,000/day, the insurer applies a "proportionate deduction" across the entire hospital bill — cutting surgeon fees, OT charges, and nursing costs by 50%! KNAPS strictly advises choosing plans with "No Room Rent Capping" so you can select private AC rooms without proportionate financial penalties.'
+    answer: 'Many standard policies cap room rent at 1% of the sum insured (e.g., ₹5,000/day on a ₹5 Lakh policy). If you choose a room costing ₹10,000/day, the insurer applies a "proportionate deduction" across the entire hospital bill — cutting surgeon fees, OT charges, and nursing costs by 50%! KNAPS strictly recommends choosing plans with "No Room Rent Capping" so you can select private AC rooms without proportionate financial penalties.'
   },
   {
     question: 'What is the difference between Cashless Hospitalization and Reimbursement claims?',
@@ -50,18 +50,14 @@ export default function HealthInsuranceFAQ() {
     <section className="py-12 sm:py-16 bg-[#f7f9fc] relative overflow-hidden">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs sm:text-sm font-semibold mb-4 shadow-xs">
-            <FontAwesomeIcon icon={faCircleQuestion} className="text-[#032e92]" />
-            <span>Got Questions? We Have Answers</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a192f] tracking-tight leading-tight">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
             Frequently Asked Questions on{' '}
-            <span className="bg-gradient-to-r from-[#032e92] to-[#0066cc] bg-clip-text text-transparent">
+            <span className="text-[#032e92]">
               Health Insurance
             </span>
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             Everything you need to know about waiting periods, cashless admissions, room-rent clauses, and Section 80D tax deductions.
           </p>
         </div>
@@ -84,9 +80,8 @@ export default function HealthInsuranceFAQ() {
                     {faq.question}
                   </span>
                   <div
-                    className={`w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-[#032e92] flex-shrink-0 transition-transform duration-300 ${
-                      isOpen ? 'rotate-180 bg-[#032e92] text-white' : ''
-                    }`}
+                    className={`w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-[#032e92] flex-shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180 bg-[#032e92] text-white' : ''
+                      }`}
                   >
                     <FontAwesomeIcon icon={faChevronDown} className="text-xs" />
                   </div>
@@ -106,14 +101,14 @@ export default function HealthInsuranceFAQ() {
         <div className="mt-12 bg-white rounded-2xl p-6 sm:p-8 border border-blue-100 shadow-md text-center flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="text-center sm:text-left">
             <h4 className="text-lg font-bold text-[#0a192f]">Have a question about an existing medical condition or specific policy clause?</h4>
-            <p className="text-xs sm:text-sm text-gray-600 mt-1">Our certified health insurance advisors provide free, confidential policy audits.</p>
+            <p className="text-xs sm:text-sm text-gray-600 mt-1">Our certified health insurance specialists provide free, confidential policy audits.</p>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <button
               onClick={() => openLeadModal({ title: 'Ask Health Insurance Question', defaultService: 'Health Insurance' })}
               className="btn-ripple px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-md hover:shadow-lg transition-all cursor-pointer"
             >
-              Ask an Advisor
+              Ask a Specialist
             </button>
             <a
               href="tel:+918080808080"

@@ -63,11 +63,11 @@ const parseAllocation = (str) => {
 };
 
 const STRATEGY_TABS = [
-  { id: 'all', label: 'All Strategies', key: null, title: 'All 4 Life Cycle Strategies', desc: 'Comparative view of all PFRDA Life Cycle glide paths across age bands.' },
-  { id: 'low', label: 'Low — LC 25 (5E/55Y)', key: 'lc25', title: 'Low — Life Cycle 25 (5E/55Y)', startEq: '25%', endEq: '5%', desc: 'Conservative glide path reducing equity from 25% down to 5%.' },
-  { id: 'moderate', label: 'Moderate — LC 50 (10E/55Y)', key: 'lc50', title: 'Moderate — Life Cycle 50 (10E/55Y)', startEq: '50%', endEq: '10%', desc: 'Balanced glide path reducing equity from 50% down to 10%.' },
-  { id: 'high', label: 'High — LC 75 (15E/55Y)', key: 'lc75', title: 'High — Life Cycle 75 (15E/55Y)', startEq: '75%', endEq: '15%', desc: 'Growth glide path reducing equity from 75% down to 15%.' },
-  { id: 'aggressive', label: 'Aggressive — Life Cycle (35E/55Y)', key: 'aggressive', title: 'Aggressive — Life Cycle (35E/55Y)', startEq: '50%', endEq: '35%', desc: 'Aggressive equity glide path retaining 35% equity at age 55.' }
+  // { id: 'all', label: 'All Strategies', key: null, title: 'All 4 Life Cycle Strategies', desc: 'Comparative view of all PFRDA Life Cycle glide paths across age bands.' },
+  { id: 'low', label: 'Low', key: 'lc25', title: 'Low — Life Cycle 25 (5E/55Y)', startEq: '25%', endEq: '5%', desc: 'Conservative glide path reducing equity from 25% down to 5%.' },
+  { id: 'moderate', label: 'Moderate', key: 'lc50', title: 'Moderate — Life Cycle 50 (10E/55Y)', startEq: '50%', endEq: '10%', desc: 'Balanced glide path reducing equity from 50% down to 10%.' },
+  { id: 'high', label: 'High', key: 'lc75', title: 'High — Life Cycle 75 (15E/55Y)', startEq: '75%', endEq: '15%', desc: 'Growth glide path reducing equity from 75% down to 15%.' },
+  { id: 'aggressive', label: 'Aggressive', key: 'aggressive', title: 'Aggressive — Life Cycle (35E/55Y)', startEq: '50%', endEq: '35%', desc: 'Aggressive equity glide path retaining 35% equity at age 55.' }
 ];
 
 export default function NpsModelExplorer() {
@@ -76,7 +76,7 @@ export default function NpsModelExplorer() {
   const [activeModelId, setActiveModelId] = useState('all-citizen');
   const [activeTabKey, setActiveTabKey] = useState('audience');
   const [showAutoChoiceModal, setShowAutoChoiceModal] = useState(false);
-  const [modalActiveStrategy, setModalActiveStrategy] = useState('all');
+  const [modalActiveStrategy, setModalActiveStrategy] = useState('low');
   const [modalDisplayMode, setModalDisplayMode] = useState('table');
 
   useEffect(() => {
@@ -1591,10 +1591,10 @@ export default function NpsModelExplorer() {
               <div className="p-5 sm:p-6 border-b border-gray-200 bg-gradient-to-r from-[#0a192f] via-[#032e92] to-[#0a192f] text-white flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider bg-white/15 text-white border border-white/20">
+                    {/* <span className="px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider bg-white/15 text-white border border-white/20">
                       PFRDA Glide Path
-                    </span>
-                    <span className="text-xs text-blue-200 font-medium hidden sm:inline">• NPS Auto Choice</span>
+                    </span> */}
+                    <span className="text-xs text-blue-200 font-medium hidden sm:inline">NPS Auto Choice</span>
                   </div>
                   <h3 className="text-lg sm:text-2xl font-bold tracking-tight text-white">
                     Asset Allocation in Auto Choice

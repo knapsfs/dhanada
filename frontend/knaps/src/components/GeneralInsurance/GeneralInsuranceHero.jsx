@@ -32,18 +32,13 @@ export default function GeneralInsuranceHero() {
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         {/* Breadcrumb Navigation */}
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="flex items-center gap-2.5 text-xs font-semibold text-gray-400 mb-6 uppercase tracking-wider"
-        >
+        <div className="flex items-center pb-4 sm:pb-5 gap-3 text-[15px] font-medium text-gray-500">
           <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
-          <FontAwesomeIcon icon={faChevronRight} className="text-[9px] text-gray-300" />
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
           <Link to="/products" className="hover:text-[#032e92] transition-colors">Products</Link>
-          <FontAwesomeIcon icon={faChevronRight} className="text-[9px] text-gray-300" />
-          <span className="text-[#032e92] font-bold">General Insurance</span>
-        </motion.div>
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+          <span className="text-[#032e92]">General Insurance</span>
+        </div>
 
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           {/* Left Hero Content */}
@@ -53,24 +48,18 @@ export default function GeneralInsuranceHero() {
             transition={{ duration: 0.7 }}
             className="lg:col-span-7"
           >
-            {/* Pill Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-blue-100 shadow-sm mb-5">
-              <span className="w-2 h-2 rounded-full bg-[#032e92] animate-pulse" />
-              <span className="text-[#032e92] text-[11px] font-extrabold tracking-widest uppercase">
-                KNAPS Asset & Non-Life Protection
-              </span>
-            </div>
+
 
             {/* Headline */}
-            <h1 className="text-3xl sm:text-4xl lg:text-[48px] font-extrabold text-[#0a192f] leading-[1.16] tracking-tight mb-5">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900 leading-[1.2] mb-4">
               Protect Every Valuable Asset:{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#032e92] via-[#0b5cff] to-[#021d63]">
+              <span className="text-[#032e92]">
                 Comprehensive General Insurance
               </span>
             </h1>
 
             {/* Subtitle */}
-            <p className="text-gray-600 text-base sm:text-lg leading-relaxed max-w-2xl font-normal mb-8">
+            <p className="text-sm sm:text-base text-gray-600 font-normal leading-relaxed max-w-2xl mb-8 mt-3.5">
               From your car and home to international travel and commercial business, safeguard your lifetime investments against unexpected damages, liabilities, and natural calamities with zero paperwork hassle.
             </p>
 

@@ -14,15 +14,11 @@ export default function CompareSmallSavingsSchemes() {
     <section className="py-12 sm:py-16 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#032e92]/10 border border-[#032e92]/20 text-[#032e92] text-xs font-semibold uppercase tracking-wider mb-4">
-            <FontAwesomeIcon icon={faTableList} />
-            <span>Side-by-Side Comparison</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#032e92] tracking-tight mb-4">
-            Compare Post Office Small Savings Schemes
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
+            Compare <span className="text-[#032e92]">Post Office Small Savings Schemes</span>
           </h2>
-          <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             Review side-by-side tenures, interest rates, contribution minimums, and tax exemptions across POTD, KVP, NSC, and PORD.
           </p>
         </div>
@@ -88,18 +84,6 @@ export default function CompareSmallSavingsSchemes() {
           <p className="text-xs text-slate-500 leading-relaxed">
             * Rates and operational conditions reflect prevailing notifications from the Ministry of Finance, Government of India. Updated quarterly based on G-Sec market movements.
           </p>
-          <button
-            onClick={() =>
-              openLeadModal({
-                title: 'Compare Post Office Schemes for Your Portfolio',
-                defaultService: 'Post Office Small Savings Scheme'
-              })
-            }
-            className="btn-ripple px-6 py-2.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-md transition-all shrink-0 cursor-pointer flex items-center gap-1.5"
-          >
-            <span>Request Comparative Advisory</span>
-            <FontAwesomeIcon icon={faArrowRight} className="text-[10px]" />
-          </button>
         </div>
       </div>
     </section>

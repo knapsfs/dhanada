@@ -91,16 +91,13 @@ export default function LifeInsuranceCalculator() {
   return (
     <section id="insurance-calculator" className="py-12 sm:py-16 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        
+
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#eef4ff] text-[#032e92] text-[11px] font-extrabold tracking-widest uppercase mb-4">
-            Interactive Tool
-          </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-[#0a192f] tracking-tight leading-tight mb-4">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
             How Much Life Cover <span className="text-[#032e92]">Do You Need?</span>
           </h2>
-          <p className="text-gray-600 text-base sm:text-lg font-normal leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             Use our Human Life Value (HLV) estimator to calculate your ideal life cover and see an estimated monthly premium instantly.
           </p>
         </div>
@@ -108,7 +105,7 @@ export default function LifeInsuranceCalculator() {
         {/* Calculator Main Box */}
         <div className="bg-[#f8fafc] rounded-3xl p-6 sm:p-8 lg:p-10 border border-[#e8edf7] shadow-xl shadow-blue-900/5">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
-            
+
             {/* Left Inputs Column (7 Cols) */}
             <div className="lg:col-span-7 space-y-7">
               {/* Input 1: Age */}
@@ -199,11 +196,10 @@ export default function LifeInsuranceCalculator() {
                         key={d}
                         type="button"
                         onClick={() => setDependents(d)}
-                        className={`py-2.5 rounded-xl font-bold text-xs sm:text-sm border-2 transition-all cursor-pointer ${
-                          isSelected
+                        className={`py-2.5 rounded-xl font-bold text-xs sm:text-sm border-2 transition-all cursor-pointer ${isSelected
                             ? 'border-[#032e92] bg-[#eef4ff] text-[#032e92] shadow-sm'
                             : 'border-[#e8edf7] bg-white text-gray-700 hover:border-gray-300'
-                        }`}
+                          }`}
                       >
                         {d === 5 ? '5+' : d}
                       </button>
@@ -260,7 +256,7 @@ export default function LifeInsuranceCalculator() {
                 {/* Big Recommended Sum Assured Box */}
                 <div className="bg-gradient-to-br from-[#032e92] via-[#0948cd] to-[#021d63] text-white rounded-2xl p-5 mb-5 shadow-lg relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none" />
-                  
+
                   <p className="text-xs font-bold text-blue-200 uppercase tracking-wider mb-1">
                     Recommended Life Cover
                   </p>

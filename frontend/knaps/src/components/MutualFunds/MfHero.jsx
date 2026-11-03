@@ -1,11 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChartLine,
   faShieldHalved,
   faArrowRight,
   faCalculator,
-  faCheckCircle
+  faCheckCircle,
+  faChevronRight
 } from '@fortawesome/free-solid-svg-icons';
 import { useLeadModal } from '../../context/LeadModalContext';
 
@@ -26,34 +28,25 @@ export default function MfHero() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb Navigation */}
-        <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-500 mb-8">
-          <a href="/" className="hover:text-[#032e92] transition-colors">
-            Home
-          </a>
-          <span>/</span>
-          <a href="/products" className="hover:text-[#032e92] transition-colors">
-            Services
-          </a>
-          <span>/</span>
-          <span className="text-[#032e92] font-semibold">Mutual Funds</span>
+        <div className="flex items-center pb-4 sm:pb-5 gap-3 text-[15px] font-medium text-gray-500">
+          <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+          <Link to="/products" className="hover:text-[#032e92] transition-colors">Products</Link>
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+          <span className="text-[#032e92]">Mutual Funds</span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           {/* Left Column: Positioning & Headlines */}
           <div className="lg:col-span-7 space-y-6">
-            {/* Pill Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-100/80 border border-blue-200 text-[#032e92] text-xs sm:text-sm font-semibold shadow-xs">
-              <FontAwesomeIcon icon={faShieldHalved} className="text-[#2490ef]" />
-              <span>SEBI-Regulated Wealth Creation</span>
-            </div>
 
             {/* Main Headline */}
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#032e92] tracking-tight leading-tight">
-              Invest Smarter with Mutual Funds
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900 leading-tight">
+              Invest Smarter with <span className="text-[#032e92]">Mutual Funds</span>
             </h1>
 
             {/* Hero Copy */}
-            <p className="text-base sm:text-lg lg:text-xl text-slate-700 font-medium leading-relaxed">
+            <p className="text-sm sm:text-base text-gray-600 font-normal leading-relaxed mt-3.5">
               Harness the power of professional fund management, instant asset diversification, and compounding wealth creation. Whether you are building an emergency cushion or planning for generational wealth, mutual funds help you achieve your goals with discipline.
             </p>
 

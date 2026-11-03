@@ -12,18 +12,14 @@ export default function FixedDepositTaxation() {
   return (
     <section className="py-12 sm:py-16 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs sm:text-sm font-semibold mb-4 shadow-xs">
-            <FontAwesomeIcon icon={faScaleBalanced} className="text-[#032e92]" />
-            <span>Taxation & Exemptions</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a192f] tracking-tight leading-tight">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
             Tax Rules for{" "}
-            <span className="bg-gradient-to-r from-[#032e92] to-[#0066cc] bg-clip-text text-transparent">
+            <span className="text-[#032e92]">
               Fixed Deposits & GoI Bonds
             </span>
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             Understand how interest income, TDS, capital gain exemptions (Section 54EC), and tax-free maturities work across your fixed income holdings.
           </p>
         </div>
@@ -102,12 +98,7 @@ export default function FixedDepositTaxation() {
           </div>
         </div>
 
-        <div className="p-6 rounded-3xl bg-blue-50/70 border border-blue-100 flex items-start gap-3.5 text-xs text-gray-700 max-w-4xl mx-auto shadow-xs">
-          <FontAwesomeIcon icon={faCircleInfo} className="text-[#032e92] mt-0.5 text-sm flex-shrink-0" />
-          <p className="leading-relaxed">
-            <strong>Tax Disclaimer:</strong> Tax provisions, exemptions, and TDS thresholds are governed by the Income Tax Act, 1961, and are subject to legislative updates. Investors should consult their Chartered Accountant or financial advisor to optimize their post-tax fixed income yields.
-          </p>
-        </div>
+
       </div>
     </section>
   );

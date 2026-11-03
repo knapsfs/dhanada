@@ -61,6 +61,7 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-bold mb-6">Resources</h4>
             <ul className="space-y-4">
+              <li><Link to="/regulatory-disclosures" className="text-gray-400 hover:text-white text-sm transition-colors">Regulatory Disclosures</Link></li>
               <li><Link to="https://www.sebi.gov.in/filings/mutual-funds.html" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white text-sm transition-colors">SID/SAI/KIM</Link></li>
               <li><Link to="https://www.amfiindia.com/uploads/Revised_Codeof_Conductfor_Mutual_Fund_Distributors_April2022_57d91fe1c4.pdf" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white text-sm transition-colors">Code of Conduct</Link></li>
               <li><Link to="https://www.sebi.gov.in/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white text-sm transition-colors">SEBI Circulars</Link></li>
@@ -111,7 +112,8 @@ export default function Footer() {
           <p className="text-gray-400 text-xs text-center md:text-left">
             &copy; {currentYear} Knaps Private Limited. All rights reserved. AMFI Registered : ARN-367144.
           </p>
-          <div className="flex gap-6 text-xs text-gray-500">
+          <div className="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-2 text-xs text-gray-500">
+            <Link to="/regulatory-disclosures" className="hover:text-white transition-colors">Regulatory Disclosures</Link>
             <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
             <Link to="/terms-and-conditions" className="hover:text-white transition-colors">Terms &amp; Conditions</Link>
           </div>

@@ -46,15 +46,11 @@ export default function WhatAreMutualFunds() {
     <section className="py-20 lg:py-24 bg-white relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs font-semibold uppercase tracking-wider mb-4">
-            <FontAwesomeIcon icon={faLightbulb} className="text-[#2490ef]" />
-            <span>Core Investment Concept</span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#032e92] tracking-tight">
-            What Are Mutual Funds?
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
+            What Are <span className="text-[#032e92]">Mutual Funds</span>?
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed font-medium">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             A mutual fund is an investment vehicle that pools money from many investors to purchase a diversified portfolio of securities like stocks, bonds, or money market instruments. Instead of buying individual shares yourself, professional fund managers do the heavy lifting for you.
           </p>
         </div>

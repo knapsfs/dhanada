@@ -24,7 +24,7 @@ export default function HowToInvestMf() {
     {
       step: '02',
       title: 'Select a Suitable Scheme',
-      desc: 'Based on your risk tolerance and holding duration, filter the best-fit mutual fund categories. Our AMFI-certified advisors review rolling returns, expense ratios, and fund manager track records.',
+      desc: 'Based on your risk tolerance and holding duration, filter the best-fit mutual fund categories. Our AMFI-registered mutual fund specialists review rolling returns, expense ratios, and fund manager track records.',
       icon: faSliders,
       duration: 'Expert Assisted'
     },
@@ -48,15 +48,11 @@ export default function HowToInvestMf() {
     <section className="py-20 lg:py-24 bg-white relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs font-semibold uppercase tracking-wider mb-4">
-            <FontAwesomeIcon icon={faCompass} className="text-[#2490ef]" />
-            <span>Simple 4-Step Process</span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#032e92] tracking-tight">
-            How to Invest in Mutual Funds with KNAPS
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
+            How to Invest in Mutual Funds with <span className="text-[#032e92]">KNAPS</span>
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed font-medium">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             Investing does not have to be intimidating. Start your disciplined mutual fund journey with a paperless, assisted, and completely transparent onboarding flow.
           </p>
         </div>

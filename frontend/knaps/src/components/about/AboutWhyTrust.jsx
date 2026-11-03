@@ -60,7 +60,7 @@ export default function AboutWhyTrust() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed"
           >
-            Our advisory practice is anchored on integrity, fiduciary duty, and a long-term partnership with you.
+            Our approach is built on integrity, transparency, and a long-term commitment to your financial well-being.
           </motion.p>
         </div>
 

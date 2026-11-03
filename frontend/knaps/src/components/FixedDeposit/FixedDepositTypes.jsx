@@ -184,18 +184,14 @@ export default function FixedDepositTypes() {
     <section id="fixed-income-products" className="py-12 sm:py-16 bg-[#f7f9fc] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-[#032e92] text-xs sm:text-sm font-semibold mb-4 shadow-xs">
-            <FontAwesomeIcon icon={faLandmark} className="text-[#032e92]" />
-            <span>Comprehensive Product Catalogue</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a192f] tracking-tight leading-tight">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
             Explore{" "}
-            <span className="bg-gradient-to-r from-[#032e92] to-[#0066cc] bg-clip-text text-transparent">
+            <span className="text-[#032e92]">
               Fixed Deposits & GoI Bonds
             </span>
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             Select between high-yield Fixed Deposits and default-free Government of India (GoI) Bonds to match your liquidity needs, tax bracket, and investment horizon.
           </p>
 
@@ -203,32 +199,29 @@ export default function FixedDepositTypes() {
           <div className="flex flex-wrap items-center justify-center gap-3 mt-8">
             <button
               onClick={() => setSelectedCategory("all")}
-              className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-                selectedCategory === "all"
+              className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${selectedCategory === "all"
                   ? "bg-[#032e92] text-white shadow-md shadow-[#032e92]/20"
                   : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
-              }`}
+                }`}
             >
               All Products ({products.length})
             </button>
             <button
               onClick={() => setSelectedCategory("fd")}
-              className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-2 ${
-                selectedCategory === "fd"
+              className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-2 ${selectedCategory === "fd"
                   ? "bg-[#032e92] text-white shadow-md shadow-[#032e92]/20"
                   : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
-              }`}
+                }`}
             >
               <FontAwesomeIcon icon={faBuildingColumns} className="text-xs" />
               <span>Fixed Deposits (FD)</span>
             </button>
             <button
               onClick={() => setSelectedCategory("bonds")}
-              className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-2 ${
-                selectedCategory === "bonds"
+              className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-2 ${selectedCategory === "bonds"
                   ? "bg-[#032e92] text-white shadow-md shadow-[#032e92]/20"
                   : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
-              }`}
+                }`}
             >
               <FontAwesomeIcon icon={faLandmark} className="text-xs" />
               <span>Government of India (GoI) Bonds</span>
