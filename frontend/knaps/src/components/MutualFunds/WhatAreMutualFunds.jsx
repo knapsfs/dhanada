@@ -48,7 +48,7 @@ export default function WhatAreMutualFunds() {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
-            What Are <span className="text-[#032e92]">Mutual Funds</span>?
+            What Are <span className="text-[#032e92]">Mutual Funds?</span>
           </h2>
           <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             A mutual fund is an investment vehicle that pools money from many investors to purchase a diversified portfolio of securities like stocks, bonds, or money market instruments. Instead of buying individual shares yourself, professional fund managers do the heavy lifting for you.
@@ -63,22 +63,22 @@ export default function WhatAreMutualFunds() {
               className="relative p-6 sm:p-7 rounded-3xl bg-[#f8fbff] border border-blue-100/90 shadow-xs hover:shadow-md hover:border-blue-300 transition-all duration-300 flex flex-col justify-between"
             >
               <div>
-                <div className="flex items-center justify-between mb-5">
+                {/* <div className="flex items-center justify-between mb-5">
                   <span className="text-xs font-extrabold px-3 py-1 rounded-full bg-blue-100/70 text-[#032e92]">
-                    STEP {item.step}
+                    {item.step}
                   </span>
                   <div className="w-11 h-11 rounded-2xl bg-white border border-blue-100 flex items-center justify-center text-[#032e92] shadow-xs">
                     <FontAwesomeIcon icon={item.icon} className="text-lg" />
                   </div>
-                </div>
+                </div> */}
                 <h3 className="text-lg font-bold text-slate-900 mb-2.5">{item.title}</h3>
                 <p className="text-sm text-slate-600 leading-relaxed font-normal">{item.desc}</p>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-blue-100/60 flex items-center justify-between text-xs font-semibold text-[#032e92]">
+              {/* <div className="mt-6 pt-4 border-t border-blue-100/60 flex items-center justify-between text-xs font-semibold text-[#032e92]">
                 <span>{item.highlight}</span>
                 <span className="text-blue-400">→</span>
-              </div>
+              </div> */}
             </div>
           ))}
         </div>
@@ -99,9 +99,9 @@ export default function WhatAreMutualFunds() {
             <div className="bg-white rounded-2xl p-6 border border-slate-200">
               <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
                 <h4 className="text-base font-bold text-slate-800">Direct Stock Picking</h4>
-                <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">
+                {/* <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">
                   DIY Investing
-                </span>
+                </span> */}
               </div>
               <ul className="space-y-3 text-sm text-slate-600">
                 <li className="flex items-start gap-2.5">
@@ -130,9 +130,9 @@ export default function WhatAreMutualFunds() {
               </div>
               <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
                 <h4 className="text-base font-bold text-[#032e92]">Mutual Funds via KNAPS</h4>
-                <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-50 text-[#032e92]">
+                {/* <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-50 text-[#032e92]">
                   Managed Wealth
-                </span>
+                </span> */}
               </div>
               <ul className="space-y-3 text-sm text-slate-700">
                 <li className="flex items-start gap-2.5">
@@ -156,6 +156,6 @@ export default function WhatAreMutualFunds() {
           </div>
         </div>
       </div>
-    </section>
+    </section >
   );
 }

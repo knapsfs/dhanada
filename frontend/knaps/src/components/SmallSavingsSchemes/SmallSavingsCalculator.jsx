@@ -122,8 +122,8 @@ export default function SmallSavingsCalculator() {
                   key={scheme.id}
                   onClick={() => handleSchemeChange(scheme.id)}
                   className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${selectedSchemeId === scheme.id
-                      ? 'bg-[#032e92] text-white shadow-md'
-                      : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                    ? 'bg-[#032e92] text-white shadow-md'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                     }`}
                 >
                   {scheme.shortName}
@@ -163,8 +163,8 @@ export default function SmallSavingsCalculator() {
                         key={yr}
                         onClick={() => setPotdTenure(yr)}
                         className={`py-2 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer text-center ${potdTenure === yr
-                            ? 'bg-[#032e92] text-white shadow-xs'
-                            : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
+                          ? 'bg-[#032e92] text-white shadow-xs'
+                          : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
                           }`}
                       >
                         <div>{yr} Year{yr > 1 ? 's' : ''}</div>
@@ -252,7 +252,7 @@ export default function SmallSavingsCalculator() {
                 className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#032e92] to-[#021d63] text-white font-bold text-sm shadow-md hover:shadow-lg hover:shadow-[#032e92]/30 transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span>Apply for {currentScheme.shortName}</span>
-                <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+                {/* <FontAwesomeIcon icon={faArrowRight} className="text-xs" /> */}
               </button>
             </div>
 
@@ -289,7 +289,7 @@ export default function SmallSavingsCalculator() {
                   </div>
                   <div className="text-xs text-blue-200 pt-1 border-t border-white/10 flex justify-between">
                     <span>Tenure: {results.tenureLabel}</span>
-                    <span className="text-emerald-300 font-semibold">100% Guaranteed</span>
+                    {/* <span className="text-emerald-300 font-semibold">100% Guaranteed</span> */}
                   </div>
                 </div>
 

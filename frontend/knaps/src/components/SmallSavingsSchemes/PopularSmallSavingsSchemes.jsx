@@ -34,7 +34,7 @@ export default function PopularSmallSavingsSchemes() {
               className="p-7 rounded-3xl bg-white border border-slate-200/80 hover:border-[#032e92]/30 hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
             >
               <div className="space-y-4">
-                <div className="flex items-center justify-between">
+                {/* <div className="flex items-center justify-between">
                   <span
                     className={`text-[11px] font-bold px-3 py-1 rounded-full ${scheme.badgeColor}`}
                   >
@@ -43,7 +43,7 @@ export default function PopularSmallSavingsSchemes() {
                   <span className="text-xs font-bold text-slate-500 uppercase">
                     {scheme.id.toUpperCase()}
                   </span>
-                </div>
+                </div> */}
 
                 <div>
                   <h3 className="text-lg font-bold text-slate-900 group-hover:text-[#032e92] transition-colors leading-snug">

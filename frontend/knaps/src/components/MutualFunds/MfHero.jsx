@@ -78,17 +78,9 @@ export default function MfHero() {
                 className="px-7 py-3.5 rounded-2xl bg-gradient-to-r from-[#032e92] to-[#021d63] text-white font-bold text-sm sm:text-base shadow-lg shadow-[#032e92]/25 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center gap-2 cursor-pointer"
               >
                 <span>Start Your Investment Journey</span>
-                <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+                {/* <FontAwesomeIcon icon={faArrowRight} className="text-xs" /> */}
               </button>
 
-              <button
-                type="button"
-                onClick={() => scrollToSection('mf-calculator')}
-                className="px-6 py-3.5 rounded-2xl bg-white border border-slate-300 text-[#032e92] font-bold text-sm sm:text-base hover:bg-blue-50/60 hover:border-blue-300 transition-all duration-300 flex items-center gap-2 shadow-xs cursor-pointer"
-              >
-                <FontAwesomeIcon icon={faCalculator} className="text-blue-600" />
-                <span>Calculate SIP Returns</span>
-              </button>
             </div>
           </div>
 

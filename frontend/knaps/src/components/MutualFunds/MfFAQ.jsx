@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faChevronDown,
-  faCircleQuestion,
+  faPlus,
+  faMinus,
   faHeadset,
   faArrowRight
 } from '@fortawesome/free-solid-svg-icons';
@@ -18,44 +18,56 @@ export default function MfFAQ() {
     setOpenIndex(openIndex === idx ? null : idx);
   };
 
-  const faqs = MF_FAQS.slice(0, 6);
-  const leftFaqs = faqs.slice(0, 3);
-  const rightFaqs = faqs.slice(3, 6);
+  const mid = Math.ceil(MF_FAQS.length / 2);
+  const leftFaqs = MF_FAQS.slice(0, mid);
+  const rightFaqs = MF_FAQS.slice(mid);
 
-  const renderFaqCard = (faq, index) => {
+  const renderFaqItem = (faq, index) => {
     const isOpen = openIndex === index;
+
     return (
       <div
         key={index}
-        className={`rounded-2xl border transition-all duration-200 bg-white ${isOpen ? 'border-[#032e92]/30 shadow-md shadow-blue-900/5' : 'border-slate-200 hover:border-slate-300'
-          }`}
+        className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
+          isOpen
+            ? 'border-[#032e92] bg-white shadow-lg shadow-blue-900/5'
+            : 'border-slate-100 bg-[#f8fafc] hover:bg-white hover:border-slate-200'
+        }`}
       >
         <button
           type="button"
           onClick={() => toggleIndex(index)}
-          className="w-full py-5 px-6 text-left flex items-start justify-between gap-4 cursor-pointer hover:bg-slate-50 transition-colors"
+          className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 focus:outline-none cursor-pointer"
+          aria-expanded={isOpen}
         >
-          <span className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+          <span
+            className={`text-[15px] md:text-[16px] font-bold transition-colors duration-300 ${
+              isOpen ? 'text-[#032e92]' : 'text-slate-900'
+            }`}
+          >
             {faq.q}
           </span>
           <div
-            className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-transform duration-300 mt-0.5 ${isOpen ? 'bg-[#032e92] text-white rotate-180' : 'bg-slate-100 text-slate-600'
-              }`}
+            className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-300 ${
+              isOpen
+                ? 'bg-[#032e92] text-white'
+                : 'border border-slate-200 bg-white text-slate-400'
+            }`}
           >
-            <FontAwesomeIcon icon={faChevronDown} className="text-xs" />
+            <FontAwesomeIcon icon={isOpen ? faMinus : faPlus} className="text-xs" />
           </div>
         </button>
 
-        <AnimatePresence>
+        <AnimatePresence initial={false}>
           {isOpen && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.25, ease: 'easeInOut' }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
               className="overflow-hidden"
             >
-              <div className="px-6 pb-6 pt-1 text-sm sm:text-base text-slate-600 leading-relaxed border-t border-slate-100 whitespace-pre-line font-normal">
+              <div className="px-6 pb-6 pt-2 text-[14px] md:text-[15px] text-slate-600 leading-relaxed border-t border-slate-100/70 mt-1 whitespace-pre-line">
                 {faq.a}
               </div>
             </motion.div>
@@ -66,9 +78,9 @@ export default function MfFAQ() {
   };
 
   return (
-    <section id="mf-faq" className="py-20 lg:py-24 bg-white relative">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
+    <section id="mf-faq" className="py-12 sm:py-16 bg-white relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
             Frequently Asked <span className="text-[#032e92]">Questions</span>
@@ -78,34 +90,34 @@ export default function MfFAQ() {
           </p>
         </div>
 
-        {/* 2-Column Accordion Grid: 3 on left, 3 on right */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-          {/* Left Column (3 FAQs) */}
+        {/* 2-Column Split FAQ Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-5 items-start">
+          {/* Left Column */}
           <div className="space-y-4">
-            {leftFaqs.map((faq, idx) => renderFaqCard(faq, idx))}
+            {leftFaqs.map((faq, idx) => renderFaqItem(faq, idx))}
           </div>
 
-          {/* Right Column (3 FAQs) */}
+          {/* Right Column */}
           <div className="space-y-4">
-            {rightFaqs.map((faq, idx) => renderFaqCard(faq, idx + 3))}
+            {rightFaqs.map((faq, idx) => renderFaqItem(faq, idx + mid))}
           </div>
         </div>
 
         {/* Bottom Help Card */}
         <div className="mt-12 text-center p-6 rounded-2xl bg-[#f8fbff] border border-blue-100 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3 text-left">
-            <div className="w-10 h-10 rounded-xl bg-blue-100 text-[#032e92] flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-blue-100 text-[#032e92] flex items-center justify-center shrink-0">
               <FontAwesomeIcon icon={faHeadset} />
             </div>
             <div>
               <div className="text-sm font-bold text-slate-800">Still have questions about mutual funds?</div>
-              <div className="text-xs text-slate-500">Our financial experts are ready to assist you anytime.</div>
+              <p className="text-xs text-slate-600 mt-0.5">Connect with our AMFI-registered mutual fund distributors for personalized portfolio guidance.</p>
             </div>
           </div>
           <button
             type="button"
             onClick={() => openLeadModal('Mutual Funds: FAQ Consultation')}
-            className="px-5 py-2.5 rounded-xl bg-[#032e92] text-white text-xs sm:text-sm font-bold hover:bg-[#021d63] transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs flex-shrink-0"
+            className="px-5 py-2.5 rounded-xl bg-[#032e92] text-white text-xs sm:text-sm font-bold hover:bg-[#021d63] transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs shrink-0"
           >
             <span>Ask a Specialist</span>
             <FontAwesomeIcon icon={faArrowRight} className="text-xs" />

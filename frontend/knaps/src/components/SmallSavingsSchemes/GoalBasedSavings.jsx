@@ -65,9 +65,9 @@ export default function GoalBasedSavings() {
               className="p-7 rounded-3xl bg-[#f7f9fc] border border-slate-200/80 hover:border-[#032e92]/30 hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
             >
               <div>
-                <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 text-[#032e92] group-hover:bg-[#032e92] group-hover:text-white flex items-center justify-center text-lg transition-all duration-300 shadow-xs mb-5">
+                {/* <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 text-[#032e92] group-hover:bg-[#032e92] group-hover:text-white flex items-center justify-center text-lg transition-all duration-300 shadow-xs mb-5">
                   <FontAwesomeIcon icon={item.icon} />
-                </div>
+                </div> */}
                 <span className="text-[11px] font-bold text-blue-600 uppercase tracking-wider block mb-1">
                   {item.schemes}
                 </span>

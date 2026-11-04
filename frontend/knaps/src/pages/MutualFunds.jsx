@@ -35,19 +35,19 @@ export default function MutualFunds() {
         <MfTypes />
 
         {/* 4. Why Invest in Mutual Funds? */}
-        <WhyInvestMf />
+        {/* <WhyInvestMf /> */}
 
         {/* 5. Explore Funds (Interactive Cards with Filters) */}
-        <ExploreFunds />
+        {/* <ExploreFunds /> */}
 
         {/* 6. SIP & Lumpsum Calculator */}
-        <MfCalculator />
+        {/* <MfCalculator /> */}
 
         {/* 7. How to Invest (4-Step Roadmap) */}
-        <HowToInvestMf />
+        {/* <HowToInvestMf /> */}
 
         {/* 8. Risks & Things to Know (Market fluctuations, TER, exit load, Budget 2024 tax) */}
-        <MfRisksAndTaxation />
+        {/* <MfRisksAndTaxation /> */}
 
         {/* 9. FAQ Section */}
         <MfFAQ />

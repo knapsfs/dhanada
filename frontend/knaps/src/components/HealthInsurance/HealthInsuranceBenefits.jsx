@@ -92,14 +92,14 @@ export default function HealthInsuranceBenefits() {
                 className="bg-[#f7f9fc] rounded-2xl sm:rounded-3xl p-6 sm:p-7 border border-gray-200/80 shadow-xs hover:shadow-xl hover:bg-white hover:border-blue-200 transition-all duration-300 flex flex-col justify-between group"
               >
                 <div>
-                  <div className="flex items-center justify-between mb-5">
+                  {/* <div className="flex items-center justify-between mb-5">
                     <div className="w-12 h-12 rounded-xl sm:rounded-2xl bg-white border border-gray-200/80 flex items-center justify-center text-[#032e92] group-hover:bg-[#032e92] group-hover:text-white group-hover:scale-105 transition-all duration-300 shadow-xs">
                       <FontAwesomeIcon icon={benefit.icon} className="text-lg" />
                     </div>
                     <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-[#032e92] border border-blue-100">
                       {benefit.badge}
                     </span>
-                  </div>
+                  </div> */}
 
                   <h3 className="text-base sm:text-lg font-bold text-[#0a192f] mb-2 group-hover:text-[#032e92] transition-colors leading-snug">
                     {benefit.title}
@@ -110,17 +110,17 @@ export default function HealthInsuranceBenefits() {
                   </p>
                 </div>
 
-                <div className="mt-5 pt-3 border-t border-gray-200/60 flex items-center text-xs font-semibold text-[#032e92] group-hover:translate-x-1 transition-transform">
+                {/* <div className="mt-5 pt-3 border-t border-gray-200/60 flex items-center text-xs font-semibold text-[#032e92] group-hover:translate-x-1 transition-transform">
                   <span>Coverage details</span>
                   <FontAwesomeIcon icon={faArrowRight} className="text-[10px] ml-1.5" />
-                </div>
+                </div> */}
               </div>
             );
           })}
         </div>
 
         {/* Bottom Call to Action */}
-        <div className="mt-14 text-center">
+        {/* <div className="mt-14 text-center">
           <button
             onClick={() => openLeadModal({ title: 'Explore Policy Benefits', defaultService: 'Health Insurance' })}
             className="btn-ripple px-8 py-3.5 rounded-xl text-sm sm:text-base font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-lg shadow-[#032e92]/25 hover:shadow-xl hover:shadow-[#032e92]/35 transition-all duration-300 inline-flex items-center gap-2 cursor-pointer"
@@ -128,7 +128,7 @@ export default function HealthInsuranceBenefits() {
             <span>Protect Your Family Today</span>
             <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
           </button>
-        </div>
+        </div> */}
       </div>
     </section>
   );

@@ -1,22 +1,35 @@
 import { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faCircleCheck, faCircleExclamation, faSpinner, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { getCsrfToken } from '../utils/csrf';
-import { productOptions, findProductOption } from '../data/productOptions';
-
+import {
+  goalOptions,
+  financialProductOptions,
+  getPageProduct,
+  findGoalOption,
+} from '../data/productOptions';
 import { COUNTRIES, DEFAULT_COUNTRY } from '../data/countries';
 
 export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }) {
-  const [selectedProduct, setSelectedProduct] = useState('');
-  const [productOpen, setProductOpen] = useState(false);
+  const location = useLocation();
+  const currentPath = location?.pathname || (typeof window !== 'undefined' ? window.location.pathname : '');
+
+  // Detect whether the current page or source is for a specific product vs a general goal page
+  const matchedProduct = getPageProduct(defaultSource, currentPath);
+  const isProductPage = Boolean(matchedProduct);
+  const activeOptions = isProductPage ? financialProductOptions : goalOptions;
+
+  const [selectedOption, setSelectedOption] = useState('');
+  const [optionOpen, setOptionOpen] = useState(false);
   const [formData, setFormData] = useState({ full_name: '', email: '', phone: '' });
   const [selectedCountry, setSelectedCountry] = useState(DEFAULT_COUNTRY);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const dropdownRef = useRef(null);
-  const productDropdownRef = useRef(null);
+  const optionDropdownRef = useRef(null);
 
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState('idle'); // idle, submitting, success, error
@@ -28,8 +41,8 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setIsDropdownOpen(false);
       }
-      if (productDropdownRef.current && !productDropdownRef.current.contains(e.target)) {
-        setProductOpen(false);
+      if (optionDropdownRef.current && !optionDropdownRef.current.contains(e.target)) {
+        setOptionOpen(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -45,24 +58,20 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
       setFormData({ full_name: '', email: '', phone: '' });
       setSelectedCountry(DEFAULT_COUNTRY);
       setIsDropdownOpen(false);
-      setProductOpen(false);
+      setOptionOpen(false);
       setSearchQuery('');
       setAgreedToTerms(false);
 
-      if (defaultSource) {
-        const matched = findProductOption(
-          typeof defaultSource === 'string'
-            ? defaultSource
-            : defaultSource?.defaultProduct || defaultSource?.defaultService || defaultSource?.title || ''
-        );
-        setSelectedProduct(matched ? matched.value : '');
+      if (isProductPage && matchedProduct) {
+        setSelectedOption(matchedProduct.value);
       } else {
-        setSelectedProduct('');
+        const matchedGoal = findGoalOption(defaultSource);
+        setSelectedOption(matchedGoal ? matchedGoal.value : '');
       }
     }
-  }, [isOpen, defaultSource]);
+  }, [isOpen, defaultSource, currentPath, isProductPage, matchedProduct?.value]);
 
-  const selectedProductObj = productOptions.find((p) => p.value === selectedProduct);
+  const selectedOptionObj = activeOptions.find((p) => p.value === selectedOption);
 
   const filteredCountries = COUNTRIES.filter(
     (c) =>
@@ -72,8 +81,8 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
 
   const validateField = (name, value, country = selectedCountry) => {
     switch (name) {
-      case 'product':
-        if (!value) return 'Please select your goal';
+      case 'option':
+        if (!value) return isProductPage ? 'Please select a product' : 'Please select your goal';
         return '';
       case 'full_name': {
         const trimmed = value.trim();
@@ -112,7 +121,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
 
   const validateForm = () => {
     const newErrors = {
-      product: validateField('product', selectedProduct),
+      option: validateField('option', selectedOption),
       full_name: validateField('full_name', formData.full_name),
       email: validateField('email', formData.email),
       phone: validateField('phone', formData.phone),
@@ -186,6 +195,15 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
 
       const formattedPhone = `${selectedCountry.code} ${formData.phone.trim()}`;
 
+      let sourceName = isProductPage ? 'Website Product Modal' : 'Website Goal Modal';
+      if (typeof defaultSource === 'string' && defaultSource.trim()) {
+        sourceName = defaultSource.trim();
+      } else if (defaultSource && typeof defaultSource === 'object') {
+        sourceName = defaultSource.title || defaultSource.source || defaultSource.defaultService || sourceName;
+      }
+
+      const submittedProduct = selectedOptionObj?.label || selectedOption || (isProductPage ? 'Product Inquiry' : 'General Goal');
+
       const response = await fetch('/api/method/dhanada.api.create_website_lead', {
         method: 'POST',
         headers,
@@ -193,7 +211,8 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
           full_name: formData.full_name.trim(),
           email: formData.email.trim(),
           phone: formattedPhone,
-          product: selectedProductObj?.label || selectedProduct || 'Website Modal',
+          product: submittedProduct,
+          source: sourceName,
           csrf_token: csrfToken || undefined,
         })
       });
@@ -246,20 +265,22 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl"
+            className="relative w-full max-w-[460px] bg-white rounded-3xl shadow-2xl overflow-hidden"
           >
             {/* Header */}
-            <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between bg-gradient-to-br from-[#f8fbff] to-white rounded-t-3xl">
+            <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between bg-white rounded-t-3xl">
               <div>
-                <h3 className="text-xl font-bold text-[#032e92]">Start Investing</h3>
-                <p className="text-xs text-gray-500 font-medium mt-1">Leave your details and we'll help you get started.</p>
+                <h3 className="text-xl sm:text-2xl font-bold text-[#032e92] tracking-tight">Start Investing</h3>
+                <p className="text-xs sm:text-sm text-gray-500 font-normal mt-1">Leave your details and we'll help you get started.</p>
               </div>
               <button
+                type="button"
                 onClick={onClose}
                 disabled={status === 'submitting'}
-                className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors disabled:opacity-50"
+                className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors disabled:opacity-50 cursor-pointer"
+                aria-label="Close"
               >
-                <FontAwesomeIcon icon={faXmark} />
+                <FontAwesomeIcon icon={faXmark} className="text-sm" />
               </button>
             </div>
 
@@ -273,8 +294,9 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                   <h4 className="text-xl font-bold text-gray-900 mb-2">Thank you!</h4>
                   <p className="text-gray-500 text-sm font-medium">We've received your details. Our team will contact you shortly to complete your setup.</p>
                   <button
+                    type="button"
                     onClick={onClose}
-                    className="mt-6 w-full btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
+                    className="mt-6 w-full btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-[#032e92] hover:bg-[#022475] text-white shadow-lg shadow-[#032e92]/25 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
                   >
                     Done
                   </button>
@@ -288,70 +310,63 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                     </div>
                   )}
 
-                  {/* Standardized Goal Field */}
-                  <div className="relative" ref={productDropdownRef}>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
-                      What’s your goal? <span className="text-red-500">*</span>
+                  {/* Goal or Product Dropdown Field */}
+                  <div className="relative" ref={optionDropdownRef}>
+                    <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wide">
+                      {isProductPage ? 'Product' : 'What’s your goal?'} <span className="text-red-500">*</span>
                     </label>
 
-                    <div
-                      onClick={() => setProductOpen(!productOpen)}
-                      role="button"
-                      tabIndex={0}
+                    <button
+                      type="button"
+                      onClick={() => setOptionOpen((prev) => !prev)}
                       aria-haspopup="listbox"
-                      aria-expanded={productOpen}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault();
-                          setProductOpen(!productOpen);
-                        } else if (e.key === 'Escape') {
-                          setProductOpen(false);
-                        }
-                      }}
-                      className={`w-full px-4 py-3 rounded-xl border text-sm flex items-center justify-between cursor-pointer transition-all select-none ${
-                        errors.product
+                      aria-expanded={optionOpen}
+                      className={`w-full px-4 py-3 rounded-xl border text-sm flex items-center justify-between cursor-pointer transition-all select-none text-left ${
+                        errors.option
                           ? 'border-red-400 bg-red-50/20'
-                          : productOpen
+                          : optionOpen
                             ? 'border-[#032e92] ring-2 ring-blue-900/10 bg-white'
                             : 'border-gray-200 bg-white hover:border-gray-300'
                       }`}
                     >
-                      <span className={selectedProduct ? 'text-gray-800 font-medium' : 'text-gray-400 font-normal'}>
-                        {selectedProductObj ? selectedProductObj.label : 'Select your goal'}
+                      <span className={selectedOption ? 'text-gray-800 font-medium' : 'text-gray-400 font-normal'}>
+                        {selectedOptionObj
+                          ? selectedOptionObj.label
+                          : (isProductPage ? 'Select a product' : 'Select your goal')}
                       </span>
 
                       <FontAwesomeIcon
                         icon={faChevronDown}
                         className={`text-gray-400 text-xs transition-transform duration-200 ${
-                          productOpen ? 'rotate-180 text-[#032e92]' : ''
+                          optionOpen ? 'rotate-180 text-[#032e92]' : ''
                         }`}
                       />
-                    </div>
+                    </button>
 
-                    {errors.product && (
-                      <p className="text-red-500 text-xs mt-1 font-medium">{errors.product}</p>
+                    {errors.option && (
+                      <p className="text-red-500 text-xs mt-1 font-medium">{errors.option}</p>
                     )}
 
                     {/* Styled Floating Dropdown Menu */}
                     <AnimatePresence>
-                      {productOpen && (
+                      {optionOpen && (
                         <motion.div
                           initial={{ opacity: 0, y: -4 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -4 }}
                           transition={{ duration: 0.15 }}
-                          className="absolute left-0 right-0 top-full mt-1.5 bg-white rounded-xl shadow-xl shadow-blue-950/10 border border-gray-100 p-1.5 z-50 overflow-hidden"
+                          className="absolute left-0 right-0 top-full mt-1.5 bg-white rounded-xl shadow-xl shadow-blue-950/10 border border-gray-100 p-1.5 z-50 max-h-56 overflow-y-auto"
                         >
-                          {productOptions.map((option) => {
-                            const isSelected = selectedProduct === option.value;
+                          {activeOptions.map((option) => {
+                            const isSelected = selectedOption === option.value;
                             return (
                               <div
                                 key={option.value}
                                 onClick={() => {
-                                  setSelectedProduct(option.value);
-                                  setProductOpen(false);
-                                  if (errors.product) {
-                                    setErrors((prev) => ({ ...prev, product: '' }));
+                                  setSelectedOption(option.value);
+                                  setOptionOpen(false);
+                                  if (errors.option) {
+                                    setErrors((prev) => ({ ...prev, option: '' }));
                                   }
                                 }}
                                 className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg cursor-pointer text-sm transition-colors ${
@@ -374,8 +389,9 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                     </AnimatePresence>
                   </div>
 
+                  {/* Full Name */}
                   <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                    <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wide">
                       Full Name <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -385,9 +401,9 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                       onChange={handleChange}
                       disabled={status === 'submitting'}
                       placeholder="e.g. Rahul Sharma"
-                      className={`w-full px-4 py-3 rounded-xl border transition-all outline-none text-sm disabled:bg-gray-50 ${errors.full_name
+                      className={`w-full px-4 py-3 rounded-xl border transition-all outline-none text-sm disabled:bg-gray-50 text-gray-800 placeholder:text-gray-400 ${errors.full_name
                         ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-500/10'
-                        : 'border-gray-200 focus:border-[#032e92] focus:ring-2 focus:ring-blue-900/10'
+                        : 'border-gray-200 focus:border-[#032e92] focus:ring-2 focus:ring-blue-900/10 hover:border-gray-300'
                         }`}
                     />
                     {errors.full_name && (
@@ -395,8 +411,9 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                     )}
                   </div>
 
+                  {/* Email Address */}
                   <div>
-                    <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                    <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wide">
                       Email Address <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -406,9 +423,9 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                       onChange={handleChange}
                       disabled={status === 'submitting'}
                       placeholder="e.g. rahul@example.com"
-                      className={`w-full px-4 py-3 rounded-xl border transition-all outline-none text-sm disabled:bg-gray-50 ${errors.email
+                      className={`w-full px-4 py-3 rounded-xl border transition-all outline-none text-sm disabled:bg-gray-50 text-gray-800 placeholder:text-gray-400 ${errors.email
                         ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-500/10'
-                        : 'border-gray-200 focus:border-[#032e92] focus:ring-2 focus:ring-blue-900/10'
+                        : 'border-gray-200 focus:border-[#032e92] focus:ring-2 focus:ring-blue-900/10 hover:border-gray-300'
                         }`}
                     />
                     {errors.email && (
@@ -416,25 +433,26 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                     )}
                   </div>
 
+                  {/* Phone Number */}
                   <div className="relative" ref={dropdownRef}>
                     <div className="flex items-center justify-between mb-1.5">
-                      <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                      <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide">
                         Phone Number <span className="text-red-500">*</span>
                       </label>
-                      <span className="text-[11px] text-gray-400 font-medium">
+                      <span className="text-xs text-gray-400 font-medium">
                         {selectedCountry.name}
                       </span>
                     </div>
 
                     <div
-                      className={`relative flex items-stretch rounded-xl border transition-all bg-white shadow-sm ${errors.phone
+                      className={`relative flex items-stretch rounded-xl border transition-all bg-white shadow-xs ${errors.phone
                         ? 'border-red-400 ring-2 ring-red-500/10'
                         : isDropdownOpen
                           ? 'border-[#032e92] ring-2 ring-blue-900/10'
-                          : 'border-gray-200 focus-within:border-[#032e92] focus-within:ring-2 focus-within:ring-blue-900/10'
+                          : 'border-gray-200 hover:border-gray-300 focus-within:border-[#032e92] focus-within:ring-2 focus-within:ring-blue-900/10'
                         } ${status === 'submitting' ? 'bg-gray-50 opacity-80' : ''}`}
                     >
-                      {/* Country Code Dropdown */}
+                      {/* Country Code Trigger */}
                       <button
                         type="button"
                         onClick={() => {
@@ -445,10 +463,9 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                         }}
                         disabled={status === 'submitting'}
                         aria-label="Select Country Code"
-                        className="flex items-center gap-1.5 px-3.5 py-3 border-r border-gray-200 bg-gray-50/90 hover:bg-blue-50/60 rounded-l-xl transition-all cursor-pointer select-none group flex-shrink-0 disabled:cursor-not-allowed focus:outline-none"
+                        className="flex items-center gap-1.5 px-3.5 py-3 border-r border-gray-200 bg-white hover:bg-gray-50 rounded-l-xl transition-all cursor-pointer select-none group flex-shrink-0 disabled:cursor-not-allowed focus:outline-none"
                       >
-                        {/* <span className="text-lg leading-none filter drop-shadow-sm">{selectedCountry.flag}</span> */}
-                        <span className="text-xs font-bold text-gray-800 font-mono tracking-tight">
+                        <span className="text-sm font-bold text-gray-800 tracking-tight">
                           {selectedCountry.code}
                         </span>
                         <FontAwesomeIcon
@@ -467,8 +484,8 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                         value={formData.phone}
                         onChange={handleChange}
                         disabled={status === 'submitting'}
-                        placeholder={selectedCountry.placeholder}
-                        className="w-full px-3.5 py-3 outline-none text-sm bg-transparent disabled:bg-gray-50 tracking-wider text-gray-900 placeholder:text-gray-400 rounded-r-xl"
+                        placeholder={selectedCountry.placeholder || "98765 43210"}
+                        className="w-full px-3.5 py-3 outline-none text-sm bg-transparent disabled:bg-gray-50 text-gray-800 placeholder:text-gray-400 rounded-r-xl"
                       />
                     </div>
 
@@ -560,9 +577,9 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                             setErrors((prev) => ({ ...prev, terms: '' }));
                           }
                         }}
-                        className="mt-1 w-4 h-4 text-[#0665d0] rounded border-gray-300 focus:ring-[#0665d0] cursor-pointer"
+                        className="mt-0.5 w-4 h-4 text-[#032e92] rounded border-gray-300 focus:ring-[#032e92] cursor-pointer"
                       />
-                      <label htmlFor="modal-terms" className="text-[12px] sm:text-[13px] text-gray-500 leading-relaxed cursor-pointer select-none">
+                      <label htmlFor="modal-terms" className="text-xs sm:text-[13px] text-gray-500 leading-relaxed cursor-pointer select-none">
                         I agree to be contacted by a KNAPS representative and accept the
                         {' '}
                         <a href="/terms-and-conditions" className="text-[#0665d0] hover:underline" target="_blank" rel="noopener noreferrer">
@@ -571,21 +588,23 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                       </label>
                     </div>
                     {errors.terms && (
-                      <p className="text-red-500 text-[11px] mt-1 font-medium pl-6.5">{errors.terms}</p>
+                      <p className="text-red-500 text-xs mt-1 font-medium pl-6.5">{errors.terms}</p>
                     )}
                   </div>
 
                   <button
                     type="submit"
                     disabled={status === 'submitting'}
-                    className="w-full btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 mt-2 disabled:opacity-70 cursor-pointer"
+                    className="w-full btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-bold bg-[#032e92] hover:bg-[#022475] text-white shadow-lg shadow-[#032e92]/25 hover:shadow-xl hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 mt-2 disabled:opacity-70 cursor-pointer"
                   >
                     {status === 'submitting' ? (
                       <>
-                        <FontAwesomeIcon icon={faSpinner} className="animate-spin" />
-                        Submitting...
+                        <FontAwesomeIcon icon={faSpinner} className="animate-spin text-sm" />
+                        <span>Submitting...</span>
                       </>
-                    ) : 'Get Started'}
+                    ) : (
+                      'Get Started'
+                    )}
                   </button>
                 </form>
               )}

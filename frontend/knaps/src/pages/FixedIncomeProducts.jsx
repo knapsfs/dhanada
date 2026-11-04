@@ -42,7 +42,7 @@ export default function FixedIncomeProducts() {
         <HowFixedDepositWorks />
 
         {/* 5. Key Features */}
-        <FixedDepositKeyFeatures />
+        {/* <FixedDepositKeyFeatures /> */}
 
         {/* 6. Product Catalogue: Fixed Deposits (FD) & Government of India (GoI) Bonds */}
         <FixedDepositTypes />
@@ -51,19 +51,19 @@ export default function FixedIncomeProducts() {
         <FixedDepositComparison />
 
         {/* 8. Interactive Dual Calculator: FD Maturity & GoI Bond Cashflow */}
-        <FixedDepositCalculator />
+        {/* <FixedDepositCalculator /> */}
 
         {/* 9. Interest Payout & Compounding Dynamics */}
-        <FixedDepositInterestMaturity />
+        {/* <FixedDepositInterestMaturity /> */}
 
         {/* 10. Who Should Consider Fixed Income Products? */}
-        <WhoShouldConsiderFD />
+        {/* <WhoShouldConsiderFD /> */}
 
         {/* 11. Important Risks & Due Diligence */}
-        <FixedDepositRisks />
+        {/* <FixedDepositRisks /> */}
 
         {/* 12. Taxation, TDS & Section 54EC Exemptions */}
-        <FixedDepositTaxation />
+        {/* <FixedDepositTaxation /> */}
 
         {/* 13. Frequently Asked Questions */}
         <FixedDepositFAQ />

@@ -1692,22 +1692,13 @@ export default function NpsModelExplorer() {
                         <tr>
                           <th className="py-3 px-3 sm:px-4 font-bold text-gray-900 w-[16%]">Age</th>
                           <th
-                            className={`py-3 px-3 sm:px-4 font-bold w-[21%] border-l border-gray-200 transition-colors ${modalActiveStrategy === 'aggressive'
+                            className={`py-3 px-3 sm:px-4 font-bold w-[21%] border-l border-gray-200 transition-colors ${modalActiveStrategy === 'low'
                               ? 'bg-blue-100/80 text-[#032e92]'
                               : 'text-[#032e92]'
                               }`}
                           >
-                            <div>Life Cycle – Aggressive</div>
-                            <div className="text-[11px] font-normal text-gray-500">(35E/55Y)</div>
-                          </th>
-                          <th
-                            className={`py-3 px-3 sm:px-4 font-bold w-[21%] border-l border-gray-200 transition-colors ${modalActiveStrategy === 'high'
-                              ? 'bg-blue-100/80 text-[#032e92]'
-                              : 'text-[#032e92]'
-                              }`}
-                          >
-                            <div>Life Cycle 75 – High</div>
-                            <div className="text-[11px] font-normal text-gray-500">(15E/55Y)</div>
+                            <div>Low</div>
+                            <div className="text-[11px] font-normal text-gray-500">(LC 25 • 5E/55Y)</div>
                           </th>
                           <th
                             className={`py-3 px-3 sm:px-4 font-bold w-[21%] border-l border-gray-200 transition-colors ${modalActiveStrategy === 'moderate'
@@ -1715,17 +1706,26 @@ export default function NpsModelExplorer() {
                               : 'text-[#032e92]'
                               }`}
                           >
-                            <div>Life Cycle 50 – Moderate</div>
-                            <div className="text-[11px] font-normal text-gray-500">(10E/55Y)</div>
+                            <div>Moderate</div>
+                            <div className="text-[11px] font-normal text-gray-500">(LC 50 • 10E/55Y)</div>
                           </th>
                           <th
-                            className={`py-3 px-3 sm:px-4 font-bold w-[21%] border-l border-gray-200 transition-colors ${modalActiveStrategy === 'low'
+                            className={`py-3 px-3 sm:px-4 font-bold w-[21%] border-l border-gray-200 transition-colors ${modalActiveStrategy === 'high'
                               ? 'bg-blue-100/80 text-[#032e92]'
                               : 'text-[#032e92]'
                               }`}
                           >
-                            <div>Life Cycle 25 – Low</div>
-                            <div className="text-[11px] font-normal text-gray-500">(5E/55Y)</div>
+                            <div>High</div>
+                            <div className="text-[11px] font-normal text-gray-500">(LC 75 • 15E/55Y)</div>
+                          </th>
+                          <th
+                            className={`py-3 px-3 sm:px-4 font-bold w-[21%] border-l border-gray-200 transition-colors ${modalActiveStrategy === 'aggressive'
+                              ? 'bg-blue-100/80 text-[#032e92]'
+                              : 'text-[#032e92]'
+                              }`}
+                          >
+                            <div>Aggressive</div>
+                            <div className="text-[11px] font-normal text-gray-500">(Life Cycle • 35E/55Y)</div>
                           </th>
                         </tr>
                       </thead>
@@ -1740,20 +1740,12 @@ export default function NpsModelExplorer() {
                               {row.age}
                             </td>
                             <td
-                              className={`py-2.5 px-3 sm:px-4 border-l border-gray-100 font-medium transition-colors ${modalActiveStrategy === 'aggressive'
+                              className={`py-2.5 px-3 sm:px-4 border-l border-gray-100 font-medium transition-colors ${modalActiveStrategy === 'low'
                                 ? 'bg-blue-50/80 font-bold text-[#032e92]'
                                 : 'text-gray-700'
                                 }`}
                             >
-                              {row.aggressive}
-                            </td>
-                            <td
-                              className={`py-2.5 px-3 sm:px-4 border-l border-gray-100 font-medium transition-colors ${modalActiveStrategy === 'high'
-                                ? 'bg-blue-50/80 font-bold text-[#032e92]'
-                                : 'text-gray-700'
-                                }`}
-                            >
-                              {row.lc75}
+                              {row.lc25}
                             </td>
                             <td
                               className={`py-2.5 px-3 sm:px-4 border-l border-gray-100 font-medium transition-colors ${modalActiveStrategy === 'moderate'
@@ -1764,12 +1756,20 @@ export default function NpsModelExplorer() {
                               {row.lc50}
                             </td>
                             <td
-                              className={`py-2.5 px-3 sm:px-4 border-l border-gray-100 font-medium transition-colors ${modalActiveStrategy === 'low'
+                              className={`py-2.5 px-3 sm:px-4 border-l border-gray-100 font-medium transition-colors ${modalActiveStrategy === 'high'
                                 ? 'bg-blue-50/80 font-bold text-[#032e92]'
                                 : 'text-gray-700'
                                 }`}
                             >
-                              {row.lc25}
+                              {row.lc75}
+                            </td>
+                            <td
+                              className={`py-2.5 px-3 sm:px-4 border-l border-gray-100 font-medium transition-colors ${modalActiveStrategy === 'aggressive'
+                                ? 'bg-blue-50/80 font-bold text-[#032e92]'
+                                : 'text-gray-700'
+                                }`}
+                            >
+                              {row.aggressive}
                             </td>
                           </tr>
                         ))}

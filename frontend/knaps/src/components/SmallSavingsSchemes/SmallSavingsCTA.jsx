@@ -56,25 +56,12 @@ export default function SmallSavingsCTA() {
                 className="w-full sm:w-auto btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-white text-[#032e92] hover:bg-blue-50 shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-2.5 group cursor-pointer"
               >
                 <span>Apply for Post Office Schemes</span>
-                <FontAwesomeIcon
-                  icon={faArrowRight}
-                  className="text-xs transition-transform duration-300 group-hover:translate-x-1"
-                />
-              </button>
-
-              <button
-                type="button"
-                onClick={scrollToComparison}
-                className="w-full sm:w-auto btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all duration-300 flex items-center justify-center gap-2.5 backdrop-blur-sm cursor-pointer"
-              >
-                <span>Calculate Returns</span>
               </button>
 
               <a
                 href="tel:+919990243143"
                 className="w-full sm:w-auto btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all duration-300 flex items-center justify-center gap-2.5 backdrop-blur-sm cursor-pointer"
               >
-                <FontAwesomeIcon icon={faPhone} className="text-xs text-blue-200" />
                 <span>Talk to Us</span>
               </a>
             </div>

@@ -39,7 +39,7 @@ export default function WhatAreSmallSavingsSchemes() {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
-            What are <span className="text-[#032e92]">Post Office Small Savings Schemes</span>?
+            What are <span className="text-[#032e92]">Post Office Small Savings Schemes?</span>
           </h2>
           <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             Post Office Small Savings Schemes are government-sponsored savings instruments administered by the Ministry of Finance, Government of India, and operated through the Department of Posts to mobilize household savings with 100% sovereign security.
@@ -54,9 +54,9 @@ export default function WhatAreSmallSavingsSchemes() {
               className="p-8 rounded-3xl bg-[#f7f9fc] border border-slate-200/80 hover:border-[#032e92]/30 hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
             >
               <div>
-                <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 text-[#032e92] group-hover:bg-[#032e92] group-hover:text-white flex items-center justify-center text-lg transition-all duration-300 shadow-sm mb-6">
+                {/* <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 text-[#032e92] group-hover:bg-[#032e92] group-hover:text-white flex items-center justify-center text-lg transition-all duration-300 shadow-sm mb-6">
                   <FontAwesomeIcon icon={pillar.icon} />
-                </div>
+                </div> */}
                 <h3 className="text-lg font-bold text-slate-900 mb-3 group-hover:text-[#032e92] transition-colors">
                   {pillar.title}
                 </h3>
@@ -87,7 +87,7 @@ export default function WhatAreSmallSavingsSchemes() {
             className="px-6 py-3 rounded-xl bg-[#032e92] text-white font-bold text-xs sm:text-sm shadow-md hover:bg-[#021d63] transition-colors flex items-center gap-2 shrink-0 cursor-pointer"
           >
             <span>Talk to an Expert</span>
-            <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+            {/* <FontAwesomeIcon icon={faArrowRight} className="text-xs" /> */}
           </button>
         </div>
       </div>

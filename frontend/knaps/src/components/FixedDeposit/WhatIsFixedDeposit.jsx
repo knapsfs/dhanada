@@ -31,12 +31,12 @@ export default function WhatIsFixedDeposit() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
           {/* Pillar 1: Fixed Deposits */}
           <div className="bg-[#f7f9fc] rounded-3xl p-8 border border-gray-200/90 hover:bg-white hover:shadow-2xl hover:border-blue-200 transition-all duration-300 relative group">
-            <div className="w-14 h-14 rounded-2xl bg-blue-50 border border-blue-200/70 flex items-center justify-center text-[#032e92] mb-6 group-hover:bg-[#032e92] group-hover:text-white transition-all shadow-xs">
+            {/* <div className="w-14 h-14 rounded-2xl bg-blue-50 border border-blue-200/70 flex items-center justify-center text-[#032e92] mb-6 group-hover:bg-[#032e92] group-hover:text-white transition-all shadow-xs">
               <FontAwesomeIcon icon={faBuildingColumns} className="text-2xl" />
-            </div>
-            <div className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-blue-100/70 text-[#032e92] mb-3">
+            </div> */}
+            {/* <div className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-blue-100/70 text-[#032e92] mb-3">
               Pillar 1: Term Deposits
-            </div>
+            </div> */}
             <h3 className="text-2xl font-bold text-[#0a192f] mb-3 group-hover:text-[#032e92] transition-colors">
               Fixed Deposits (FD)
             </h3>
@@ -61,12 +61,12 @@ export default function WhatIsFixedDeposit() {
 
           {/* Pillar 2: GoI Bonds */}
           <div className="bg-[#f7f9fc] rounded-3xl p-8 border border-gray-200/90 hover:bg-white hover:shadow-2xl hover:border-blue-200 transition-all duration-300 relative group">
-            <div className="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200/70 flex items-center justify-center text-emerald-700 mb-6 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-xs">
+            {/* <div className="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200/70 flex items-center justify-center text-emerald-700 mb-6 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-xs">
               <FontAwesomeIcon icon={faLandmark} className="text-2xl" />
-            </div>
-            <div className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100/70 text-emerald-800 mb-3">
+            </div> */}
+            {/* <div className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100/70 text-emerald-800 mb-3">
               Pillar 2: Sovereign Debt
-            </div>
+            </div> */}
             <h3 className="text-2xl font-bold text-[#0a192f] mb-3 group-hover:text-emerald-700 transition-colors">
               Government of India (GoI) Bonds
             </h3>
@@ -94,9 +94,9 @@ export default function WhatIsFixedDeposit() {
         <div className="bg-gradient-to-br from-[#0a192f] to-[#021d63] rounded-3xl p-6 sm:p-10 lg:p-12 text-white shadow-xl">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-7 space-y-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-blue-300">
+              {/* <span className="text-xs font-bold uppercase tracking-wider text-blue-300">
                 Strategic Portfolio Ballast
-              </span>
+              </span> */}
               <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
                 Why Combine FDs and GoI Bonds in Your Wealth Plan?
               </h3>
@@ -125,7 +125,6 @@ export default function WhatIsFixedDeposit() {
                 className="w-full btn-ripple py-3 px-4 rounded-xl text-xs sm:text-sm font-semibold bg-white text-[#032e92] hover:bg-blue-50 transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span>Speak with a Fixed Income Specialist</span>
-                <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
               </button>
             </div>
           </div>

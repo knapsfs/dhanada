@@ -11,7 +11,7 @@ const comparisonData = [
   {
     name: "Scheduled Bank FD",
     category: "Fixed Deposit",
-    isPrimary: true,
+    isPrimary: false,
     safetyMechanism: "DICGC Insured up to ₹5 Lakh per bank",
     indicativeYield: "6.50% - 7.50% (+0.50% Seniors)",
     creditRisk: "Extremely Low (RBI Regulated)",
@@ -35,7 +35,7 @@ const comparisonData = [
   {
     name: "RBI Floating Rate Savings Bonds (FRSB)",
     category: "GoI Bond",
-    isPrimary: true,
+    isPrimary: false,
     safetyMechanism: "100% Sovereign Guarantee (Govt of India)",
     indicativeYield: "8.05% p.a. (Floating, NSC + 35 bps)",
     creditRisk: "Zero (Direct Sovereign Backing)",
@@ -106,38 +106,7 @@ export default function FixedDepositComparison() {
             Understand how Bank FDs, Corporate FDs, and Sovereign Government Bonds compare across security, returns, liquidity, and taxation.
           </p>
 
-          {/* Tab Filter */}
-          <div className="flex items-center justify-center gap-2 mt-6">
-            <button
-              onClick={() => setActiveTab("all")}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${activeTab === "all"
-                ? "bg-[#032e92] text-white shadow-xs"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                }`}
-            >
-              All Instruments
-            </button>
-            <button
-              onClick={() => setActiveTab("fd")}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${activeTab === "fd"
-                ? "bg-[#032e92] text-white shadow-xs"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                }`}
-            >
-              <FontAwesomeIcon icon={faBuildingColumns} className="text-xs" />
-              <span>Fixed Deposits</span>
-            </button>
-            <button
-              onClick={() => setActiveTab("bonds")}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${activeTab === "bonds"
-                ? "bg-[#032e92] text-white shadow-xs"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                }`}
-            >
-              <FontAwesomeIcon icon={faLandmark} className="text-xs" />
-              <span>GoI Bonds</span>
-            </button>
-          </div>
+
         </div>
 
         {/* Comparison Table */}
@@ -168,9 +137,9 @@ export default function FixedDepositComparison() {
                       )}
                       <div>
                         <div>{row.name}</div>
-                        <span className="text-[10px] text-gray-500 font-normal uppercase tracking-wider">
+                        {/* <span className="text-[10px] text-gray-500 font-normal uppercase tracking-wider">
                           {row.category}
-                        </span>
+                        </span> */}
                       </div>
                     </div>
                   </td>

@@ -71,7 +71,7 @@ export default function LifeInsuranceHero() {
               >
                 <FontAwesomeIcon icon={faCalculator} className="text-xs" />
                 <span>Estimate My Ideal Cover</span>
-                <FontAwesomeIcon icon={faArrowRight} className="text-xs group-hover:translate-x-1 transition-transform" />
+                {/* <FontAwesomeIcon icon={faArrowRight} className="text-xs group-hover:translate-x-1 transition-transform" /> */}
               </button>
 
               <button
@@ -155,12 +155,10 @@ export default function LifeInsuranceHero() {
                 className="w-full py-3.5 rounded-xl bg-[#eef4ff] hover:bg-[#032e92] text-[#032e92] hover:text-white font-bold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer group"
               >
                 <span>Check Your Customized Premium</span>
-                <FontAwesomeIcon icon={faArrowRight} className="text-xs group-hover:translate-x-1 transition-transform" />
+                {/* <FontAwesomeIcon icon={faArrowRight} className="text-xs group-hover:translate-x-1 transition-transform" /> */}
               </button>
 
-              <p className="text-[10px] text-gray-400 text-center italic mt-3">
-                *Premium illustrative for a 28-year-old healthy non-smoker male, 30-year policy tenure.
-              </p>
+
             </div>
           </motion.div>
         </div>

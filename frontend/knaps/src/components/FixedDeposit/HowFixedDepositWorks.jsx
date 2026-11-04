@@ -84,14 +84,7 @@ export default function HowFixedDepositWorks() {
               className="bg-[#f7f9fc] rounded-3xl p-6 sm:p-7 border border-gray-200/80 hover:bg-white hover:shadow-xl hover:border-blue-200 transition-all duration-300 flex flex-col justify-between group"
             >
               <div>
-                <div className="flex items-center justify-between mb-6">
-                  <span className="text-2xl font-black text-[#032e92]/30 group-hover:text-[#032e92] transition-colors">
-                    {st.stepNumber}
-                  </span>
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-[#032e92] group-hover:bg-[#032e92] group-hover:text-white transition-all shadow-xs">
-                    <FontAwesomeIcon icon={st.icon} className="text-sm" />
-                  </div>
-                </div>
+
 
                 <h3 className="text-base sm:text-lg font-bold text-[#0a192f] mb-2 group-hover:text-[#032e92] transition-colors">
                   {st.title}
@@ -113,16 +106,7 @@ export default function HowFixedDepositWorks() {
           ))}
         </div>
 
-        {/* Action Button */}
-        <div className="mt-12 text-center">
-          <button
-            onClick={() => openLeadModal({ title: "Start Fixed Income Allocation", defaultService: "Fixed Income Products" })}
-            className="btn-ripple inline-flex items-center gap-2 px-7 py-3.5 rounded-xl text-sm font-semibold bg-[#032e92] text-white hover:bg-[#021d63] shadow-md transition-all cursor-pointer"
-          >
-            <span>Start Your Fixed Income Investment</span>
-            <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
-          </button>
-        </div>
+
       </div>
     </section>
   );

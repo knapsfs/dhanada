@@ -144,15 +144,7 @@ export default function HealthInsurancePlans() {
                 className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-200/80 shadow-xs hover:shadow-xl hover:border-blue-200/90 transition-all duration-300 flex flex-col justify-between group"
               >
                 <div>
-                  {/* Top Badge & Icon */}
-                  <div className="flex items-center justify-between mb-5">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100/70 border border-blue-200/60 flex items-center justify-center text-[#032e92] group-hover:bg-[#032e92] group-hover:text-white transition-all duration-300 shadow-xs">
-                      <FontAwesomeIcon icon={plan.icon} className="text-lg" />
-                    </div>
-                    <span className={`text-xs font-semibold px-3 py-1 rounded-full border ${plan.badgeColor}`}>
-                      {plan.badge}
-                    </span>
-                  </div>
+
 
                   {/* Title & Tagline */}
                   <h3 className="text-xl font-bold text-[#0a192f] mb-2 group-hover:text-[#032e92] transition-colors">
@@ -192,7 +184,7 @@ export default function HealthInsurancePlans() {
                     className="w-full btn-ripple py-3 px-4 rounded-xl text-xs sm:text-sm font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 group-hover:scale-[1.01] cursor-pointer"
                   >
                     <span>Get Customized {plan.title.split(' ')[0]} Quote</span>
-                    <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+                    {/* <FontAwesomeI.con icon={faArrowRight} className="text-xs" /> */}
                   </button>
                 </div>
               </div>
@@ -200,24 +192,7 @@ export default function HealthInsurancePlans() {
           })}
         </div>
 
-        {/* Guidance Banner */}
-        <div className="mt-14 p-6 sm:p-8 rounded-3xl bg-white border border-blue-100 shadow-md flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="space-y-1 text-center md:text-left">
-            <h4 className="text-lg font-bold text-[#0a192f]">
-              Confused between Family Floater vs Super Top-Up combinations?
-            </h4>
-            <p className="text-xs sm:text-sm text-gray-600">
-              Our IRDAI certified health insurance specialists help you design the most cost-effective 1-Crore cover structure with zero broker bias.
-            </p>
-          </div>
-          <button
-            onClick={() => openLeadModal({ title: 'Request Health Plan Recommendation', defaultService: 'Health Insurance' })}
-            className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center gap-2 flex-shrink-0 cursor-pointer"
-          >
-            <span>Request Free Plan Comparison</span>
-            <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
-          </button>
-        </div>
+
       </div>
     </section>
   );

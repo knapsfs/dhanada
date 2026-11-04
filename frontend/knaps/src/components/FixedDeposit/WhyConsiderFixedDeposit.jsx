@@ -76,14 +76,14 @@ export default function WhyConsiderFixedDeposit() {
               className="bg-white rounded-3xl p-7 sm:p-8 border border-gray-200/80 shadow-xs hover:shadow-xl hover:border-blue-200 transition-all duration-300 flex flex-col justify-between group"
             >
               <div>
-                <div className="flex items-center justify-between mb-6">
+                {/* <div className="flex items-center justify-between mb-6">
                   <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200/60 flex items-center justify-center text-[#032e92] group-hover:bg-[#032e92] group-hover:text-white transition-all shadow-xs">
                     <FontAwesomeIcon icon={item.icon} className="text-lg" />
                   </div>
                   <span className="text-[11px] font-semibold text-[#032e92] bg-blue-50/70 border border-blue-100 px-2.5 py-1 rounded-full">
                     {item.highlight}
                   </span>
-                </div>
+                </div> */}
 
                 <h3 className="text-lg sm:text-xl font-bold text-[#0a192f] mb-3 group-hover:text-[#032e92] transition-colors leading-snug">
                   {item.title}
@@ -103,7 +103,6 @@ export default function WhyConsiderFixedDeposit() {
             className="btn-ripple inline-flex items-center gap-2 px-8 py-3.5 rounded-xl text-sm font-semibold bg-[#032e92] text-white hover:bg-[#021d63] shadow-md hover:shadow-lg transition-all cursor-pointer"
           >
             <span>Plan Your Fixed Income Allocation</span>
-            <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
           </button>
         </div>
       </div>

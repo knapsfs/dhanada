@@ -37,13 +37,13 @@ export default function LifeInsurance() {
         <LifeInsuranceCalculator />
 
         {/* 5. How It Works */}
-        <LifeInsuranceHowItWorks />
+        {/* <LifeInsuranceHowItWorks /> */}
 
         {/* 6. Key Benefits */}
-        <LifeInsuranceBenefits />
+        {/* <LifeInsuranceBenefits /> */}
 
         {/* 7. Who Should Consider Life Insurance? */}
-        <LifeInsuranceWhoShouldBuy />
+        {/* <LifeInsuranceWhoShouldBuy /> */}
 
         {/* 8. Why Choose Us */}
         <LifeInsuranceWhyChooseUs />

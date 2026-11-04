@@ -197,8 +197,8 @@ export default function LifeInsuranceCalculator() {
                         type="button"
                         onClick={() => setDependents(d)}
                         className={`py-2.5 rounded-xl font-bold text-xs sm:text-sm border-2 transition-all cursor-pointer ${isSelected
-                            ? 'border-[#032e92] bg-[#eef4ff] text-[#032e92] shadow-sm'
-                            : 'border-[#e8edf7] bg-white text-gray-700 hover:border-gray-300'
+                          ? 'border-[#032e92] bg-[#eef4ff] text-[#032e92] shadow-sm'
+                          : 'border-[#e8edf7] bg-white text-gray-700 hover:border-gray-300'
                           }`}
                       >
                         {d === 5 ? '5+' : d}
@@ -315,12 +315,12 @@ export default function LifeInsuranceCalculator() {
                   className="btn-ripple w-full py-3.5 px-5 rounded-xl text-sm font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-md hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer group"
                 >
                   <span>Get Official Quotes For This Cover</span>
-                  <FontAwesomeIcon icon={faArrowRight} className="text-xs group-hover:translate-x-1 transition-transform" />
+                  {/* <FontAwesomeIcon icon={faArrowRight} className="text-xs group-hover:translate-x-1 transition-transform" /> */}
                 </button>
 
-                <p className="text-[10px] text-gray-400 text-center italic mt-2.5 leading-tight">
+                {/* <p className="text-[10px] text-gray-400 text-center italic mt-2.5 leading-tight">
                   *Illustrative estimation for healthy non-smokers. Final premiums subject to insurer underwriting.
-                </p>
+                </p> */}
               </div>
             </div>
 

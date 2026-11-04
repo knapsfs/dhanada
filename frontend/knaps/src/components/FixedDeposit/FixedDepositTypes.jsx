@@ -195,38 +195,6 @@ export default function FixedDepositTypes() {
             Select between high-yield Fixed Deposits and default-free Government of India (GoI) Bonds to match your liquidity needs, tax bracket, and investment horizon.
           </p>
 
-          {/* Interactive Category Filter Tabs */}
-          <div className="flex flex-wrap items-center justify-center gap-3 mt-8">
-            <button
-              onClick={() => setSelectedCategory("all")}
-              className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${selectedCategory === "all"
-                  ? "bg-[#032e92] text-white shadow-md shadow-[#032e92]/20"
-                  : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
-                }`}
-            >
-              All Products ({products.length})
-            </button>
-            <button
-              onClick={() => setSelectedCategory("fd")}
-              className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-2 ${selectedCategory === "fd"
-                  ? "bg-[#032e92] text-white shadow-md shadow-[#032e92]/20"
-                  : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
-                }`}
-            >
-              <FontAwesomeIcon icon={faBuildingColumns} className="text-xs" />
-              <span>Fixed Deposits (FD)</span>
-            </button>
-            <button
-              onClick={() => setSelectedCategory("bonds")}
-              className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-2 ${selectedCategory === "bonds"
-                  ? "bg-[#032e92] text-white shadow-md shadow-[#032e92]/20"
-                  : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
-                }`}
-            >
-              <FontAwesomeIcon icon={faLandmark} className="text-xs" />
-              <span>Government of India (GoI) Bonds</span>
-            </button>
-          </div>
         </div>
 
         {/* Product Cards Grid */}
@@ -237,20 +205,7 @@ export default function FixedDepositTypes() {
               className="bg-white rounded-3xl p-6 border border-gray-200/80 shadow-xs hover:shadow-xl hover:border-blue-200 transition-all duration-300 flex flex-col justify-between group"
             >
               <div>
-                {/* Header Badge & Category */}
-                <div className="flex items-center justify-between mb-4">
-                  <span className={`text-[11px] font-semibold px-2.5 py-1 rounded-full border ${prod.badgeColor}`}>
-                    {prod.badge}
-                  </span>
-                  <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
-                    {prod.categoryLabel}
-                  </span>
-                </div>
 
-                {/* Icon & Title */}
-                <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-[#032e92] mb-4 group-hover:bg-[#032e92] group-hover:text-white transition-all shadow-xs">
-                  <FontAwesomeIcon icon={prod.icon} className="text-xl" />
-                </div>
 
                 <h3 className="text-lg font-bold text-[#0a192f] mb-2 group-hover:text-[#032e92] transition-colors leading-snug">
                   {prod.title}
@@ -288,7 +243,7 @@ export default function FixedDepositTypes() {
                 className="w-full btn-ripple py-2.5 px-4 rounded-xl text-xs font-semibold bg-[#f7f9fc] text-[#032e92] hover:bg-[#032e92] hover:text-white border border-blue-200/60 transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-auto"
               >
                 <span>Invest in {prod.category === "bonds" ? "Bond" : "FD"}</span>
-                <FontAwesomeIcon icon={faArrowRight} className="text-[10px]" />
+                {/* <FontAwesomeIcon icon={faArrowRight} className="text-[10px]" /> */}
               </button>
             </div>
           ))}
