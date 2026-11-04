@@ -49,7 +49,7 @@ export default function WhyConsiderSmallSavings() {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
-            Why Consider <span className="text-[#032e92]">Post Office Small Savings Schemes</span>?
+            Why Consider <span className="text-[#032e92]">Post Office Small Savings Schemes?</span>
           </h2>
           <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             Discover why millions of Indian savers trust Post Office savings certificates and term deposits for safe compounding, capital doubling, and tax efficiency.
@@ -64,9 +64,9 @@ export default function WhyConsiderSmallSavings() {
               className="p-8 rounded-3xl bg-white border border-slate-200/80 hover:border-[#032e92]/30 hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
             >
               <div>
-                <div className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-200 text-[#032e92] group-hover:bg-[#032e92] group-hover:text-white flex items-center justify-center text-lg transition-all duration-300 shadow-sm mb-6">
+                {/* <div className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-200 text-[#032e92] group-hover:bg-[#032e92] group-hover:text-white flex items-center justify-center text-lg transition-all duration-300 shadow-sm mb-6">
                   <FontAwesomeIcon icon={item.icon} />
-                </div>
+                </div> */}
                 <h3 className="text-lg font-bold text-slate-900 mb-3 group-hover:text-[#032e92] transition-colors">
                   {item.title}
                 </h3>

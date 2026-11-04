@@ -73,49 +73,20 @@ export default function HowSmallSavingsWork() {
                   <span className="text-3xl font-black text-[#032e92]/20 group-hover:text-[#032e92]/40 transition-colors">
                     {step.number}
                   </span>
-                  <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 text-[#032e92] flex items-center justify-center text-lg shadow-sm group-hover:bg-[#032e92] group-hover:text-white transition-all duration-300">
-                    <FontAwesomeIcon icon={step.icon} />
-                  </div>
+
                 </div>
 
-                <div className="text-[11px] font-bold text-blue-600 uppercase tracking-wider mb-1">
-                  {step.subtitle}
-                </div>
+
                 <h3 className="text-lg font-bold text-slate-900 mb-3">{step.title}</h3>
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{step.description}</p>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-slate-200/60 flex items-center justify-between text-[11px] font-semibold text-slate-400">
-                <span>Phase {idx + 1} of 4</span>
-                <span className="w-2 h-2 rounded-full bg-[#032e92]/30 group-hover:bg-[#032e92] transition-colors" />
-              </div>
+
             </div>
           ))}
         </div>
 
-        {/* Informative Callout */}
-        <div className="p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-blue-50/70 via-indigo-50/40 to-slate-50 border border-blue-100 flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="space-y-1">
-            <h4 className="text-base sm:text-lg font-bold text-slate-900">
-              Need assistance opening a Post Office savings scheme or completing formalities?
-            </h4>
-            <p className="text-xs sm:text-sm text-slate-600">
-              Our specialists assist you with documentation, scheme selection, nomination registration, and maturity planning.
-            </p>
-          </div>
-          <button
-            onClick={() =>
-              openLeadModal({
-                title: 'Post Office Scheme Assistance',
-                defaultService: 'Post Office Small Savings Scheme'
-              })
-            }
-            className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center gap-2 shrink-0 cursor-pointer"
-          >
-            <span>Get Scheme Setup Assistance</span>
-            <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
-          </button>
-        </div>
+
       </div>
     </section>
   );

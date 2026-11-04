@@ -45,9 +45,9 @@ export default function WhyHealthInsurance() {
         {/* 3 Core Financial Realities Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-10 sm:mb-12">
           <div className="bg-[#f7f9fc] rounded-2xl p-7 border border-gray-200/80 shadow-xs hover:shadow-lg transition-all duration-300">
-            <div className="w-12 h-12 rounded-xl bg-rose-50 border border-rose-200/60 flex items-center justify-center text-rose-600 mb-5">
+            {/* <div className="w-12 h-12 rounded-xl bg-rose-50 border border-rose-200/60 flex items-center justify-center text-rose-600 mb-5">
               <FontAwesomeIcon icon={faArrowTrendUp} className="text-lg" />
-            </div>
+            </div> */}
             <h3 className="text-lg font-bold text-[#0a192f] mb-2">14% Annual Medical Inflation</h3>
             <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
               Healthcare costs in India are escalating twice as fast as overall consumer inflation. Regular fixed deposits or debt funds cannot keep up with future hospital bills.
@@ -55,9 +55,9 @@ export default function WhyHealthInsurance() {
           </div>
 
           <div className="bg-[#f7f9fc] rounded-2xl p-7 border border-gray-200/80 shadow-xs hover:shadow-lg transition-all duration-300">
-            <div className="w-12 h-12 rounded-xl bg-amber-50 border border-amber-200/60 flex items-center justify-center text-amber-600 mb-5">
+            {/* <div className="w-12 h-12 rounded-xl bg-amber-50 border border-amber-200/60 flex items-center justify-center text-amber-600 mb-5">
               <FontAwesomeIcon icon={faTriangleExclamation} className="text-lg" />
-            </div>
+            </div> */}
             <h3 className="text-lg font-bold text-[#0a192f] mb-2">Corporate Cover is Inadequate</h3>
             <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
               Typical employer health covers provide only ₹3L–₹5L, which can be exhausted in a single ICU admission. Furthermore, corporate cover ends the day you switch jobs or retire.
@@ -65,9 +65,9 @@ export default function WhyHealthInsurance() {
           </div>
 
           <div className="bg-[#f7f9fc] rounded-2xl p-7 border border-gray-200/80 shadow-xs hover:shadow-lg transition-all duration-300">
-            <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-200/60 flex items-center justify-center text-[#032e92] mb-5">
+            {/* <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-200/60 flex items-center justify-center text-[#032e92] mb-5">
               <FontAwesomeIcon icon={faCoins} className="text-lg" />
-            </div>
+            </div> */}
             <h3 className="text-lg font-bold text-[#0a192f] mb-2">Preserves Long-Term Wealth</h3>
             <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
               When high medical bills strike, uninsured families are forced to liquidate mutual funds, break FDs, or sell property in distress. Insurance shields your net worth intact.
@@ -95,7 +95,7 @@ export default function WhyHealthInsurance() {
                 </div>
                 <div>
                   <h4 className="text-lg font-bold text-rose-200">Without Health Insurance</h4>
-                  <p className="text-xs text-blue-200">Unprotected Lifetime Savings</p>
+                  {/* <p className="text-xs text-blue-200">Unprotected Lifetime Savings</p> */}
                 </div>
               </div>
 
@@ -130,8 +130,8 @@ export default function WhyHealthInsurance() {
                   <FontAwesomeIcon icon={faCheckCircle} className="text-lg" />
                 </div>
                 <div>
-                  <h4 className="text-lg font-bold text-emerald-200">With KNAPS Health Insurance</h4>
-                  <p className="text-xs text-blue-200">Zero-Stress Recovery</p>
+                  <h4 className="text-lg font-bold text-emerald-200">With Health Insurance</h4>
+                  {/* <p className="text-xs text-blue-200">Zero-Stress Recovery</p> */}
                 </div>
               </div>
 
@@ -157,50 +157,7 @@ export default function WhyHealthInsurance() {
           </div>
         </div>
 
-        {/* Real-World Cost Benchmarks in Indian Private Hospitals */}
-        <div className="bg-[#f7f9fc] rounded-3xl p-6 sm:p-8 lg:p-10 border border-gray-200/80">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
-            <div>
-              <h3 className="text-xl sm:text-2xl font-bold text-[#0a192f]">
-                Estimated Treatment Costs in Top Private Hospitals (Tier 1 Metros)
-              </h3>
-              <p className="text-xs sm:text-sm text-gray-600 mt-1">
-                Typical expenses for common procedures before medicines and post-discharge rehabilitation.
-              </p>
-            </div>
-            <span className="px-3 py-1 rounded-full bg-blue-100/80 text-[#032e92] text-xs font-semibold">
-              Industry Estimates 2025–2026
-            </span>
-          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {costBenchmarks.map((item, idx) => (
-              <div key={idx} className="bg-white rounded-2xl p-5 border border-gray-200/80 shadow-xs flex flex-col justify-between">
-                <div>
-                  <h4 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">{item.procedure}</h4>
-                  <div className="text-lg sm:text-xl font-extrabold text-[#032e92] my-1">{item.cost}</div>
-                </div>
-                <div className="text-[11px] text-gray-500 pt-2 border-t border-gray-100 flex items-center gap-1.5">
-                  <FontAwesomeIcon icon={faHospitalUser} className="text-[#032e92]" />
-                  <span>{item.duration}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-8 pt-6 border-t border-gray-200/70 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-gray-500 text-center sm:text-left">
-              Ensure your sum insured is at least <strong>₹25 Lakh to ₹50 Lakh</strong> to comfortably weather these benchmarks.
-            </p>
-            <button
-              onClick={() => openLeadModal({ title: 'Schedule Health Insurance Review', defaultService: 'Health Insurance' })}
-              className="btn-ripple px-6 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer"
-            >
-              <span>Get Adequate Health Cover</span>
-              <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
-            </button>
-          </div>
-        </div>
       </div>
     </section>
   );

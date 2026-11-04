@@ -7,7 +7,6 @@ import SmallSavingsHero from '../components/SmallSavingsSchemes/SmallSavingsHero
 import WhatAreSmallSavingsSchemes from '../components/SmallSavingsSchemes/WhatAreSmallSavingsSchemes';
 import WhyConsiderSmallSavings from '../components/SmallSavingsSchemes/WhyConsiderSmallSavings';
 import HowSmallSavingsWork from '../components/SmallSavingsSchemes/HowSmallSavingsWork';
-import PopularSmallSavingsSchemes from '../components/SmallSavingsSchemes/PopularSmallSavingsSchemes';
 import SchemeExplorer from '../components/SmallSavingsSchemes/SchemeExplorer';
 import SmallSavingsKeyFeatures from '../components/SmallSavingsSchemes/SmallSavingsKeyFeatures';
 import CompareSmallSavingsSchemes from '../components/SmallSavingsSchemes/CompareSmallSavingsSchemes';
@@ -44,51 +43,48 @@ export default function SmallSavingsSchemes() {
         <WhyConsiderSmallSavings />
 
         {/* 4. How Post Office Small Savings Schemes Work */}
-        <HowSmallSavingsWork />
+        {/* <HowSmallSavingsWork /> */}
 
-        {/* 5. Popular Post Office Schemes (POTD, KVP, NSC, PORD) */}
-        <PopularSmallSavingsSchemes />
-
-        {/* 6. Comprehensive Scheme Explorer */}
+        {/* 5. Comprehensive Scheme Explorer */}
         <SchemeExplorer />
 
-        {/* 7. Key Features */}
-        <SmallSavingsKeyFeatures />
+        {/* 6. Key Features */}
+        {/* <SmallSavingsKeyFeatures /> */}
 
-        {/* 8. Comprehensive Comparison Table */}
-        <CompareSmallSavingsSchemes />
+        {/* 7. Comprehensive Comparison Table */}
+        {/* <CompareSmallSavingsSchemes /> */}
 
-        {/* 9. Interactive Post Office Savings Calculator */}
+        {/* 8. Interactive Post Office Savings Calculator */}
         <SmallSavingsCalculator />
 
-        {/* 10. Goal-Based Savings Alignment */}
-        <GoalBasedSavings />
+        {/* 9. Goal-Based Savings Alignment */}
+        {/* <GoalBasedSavings /> */}
 
-        {/* 11. Tax Benefits & Rules (Section 80C & Deemed Reinvestment) */}
-        <SmallSavingsTaxBenefits />
+        {/* 10. Tax Benefits & Rules (Section 80C & Deemed Reinvestment) */}
+        {/* <SmallSavingsTaxBenefits /> */}
 
-        {/* 12. Interest Rates & Government Notifications */}
-        <InterestRateNotifications />
+        {/* 11. Interest Rates & Government Notifications */}
+        {/* <InterestRateNotifications /> */}
 
-        {/* 13. Liquidity, Withdrawals & Premature Exit Rules */}
-        <LiquidityAndWithdrawals />
+        {/* 12. Liquidity, Withdrawals & Premature Exit Rules */}
+        {/* <LiquidityAndWithdrawals /> */}
 
-        {/* 14. Small Savings vs Other Investments (FD, RD, Debt Mutual Funds) */}
-        <SmallSavingsVsOthers />
+        {/* 13. Small Savings vs Other Investments (FD, RD, Debt Mutual Funds) */}
+        {/* <SmallSavingsVsOthers /> */}
 
-        {/* 15. Who May Consider Post Office Schemes? */}
-        <WhoShouldConsiderSmallSavings />
+        {/* 14. Who May Consider Post Office Schemes? */}
+        {/* <WhoShouldConsiderSmallSavings /> */}
 
-        {/* 16. Risks & Things to Know */}
-        <SmallSavingsRisks />
+        {/* 15. Risks & Things to Know */}
+        {/* <SmallSavingsRisks /> */}
 
-        {/* 17. Important Considerations & Operational Rules */}
-        <SmallSavingsImportantConsiderations />
+        {/* 16. Important Considerations & Operational Rules */}
+        {/* <SmallSavingsImportantConsiderations /> */}
 
-        {/* 18. Frequently Asked Questions (Accordion + Search) */}
+        {/* 17. Frequently Asked Questions */}
         <SmallSavingsFAQ />
 
-        {/* 19. Final CTA with Lead Capture */}
+        {/* 18. Final CTA with Lead Capture */}
         <SmallSavingsCTA />
       </main>
 

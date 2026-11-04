@@ -68,13 +68,13 @@ export default function WhyLifeInsurance() {
             >
               <div>
                 {/* Icon */}
-                <div className="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center text-[#032e92] mb-5 group-hover:scale-110 transition-transform duration-300 border border-[#e8edf7]">
+                {/* <div className="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center text-[#032e92] mb-5 group-hover:scale-110 transition-transform duration-300 border border-[#e8edf7]">
                   <FontAwesomeIcon icon={pillar.icon} className="text-xl" />
-                </div>
+                </div> */}
 
-                <span className="inline-block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">
+                {/* <span className="inline-block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">
                   {pillar.highlight}
-                </span>
+                </span> */}
 
                 <h3 className="text-xl font-bold text-[#0a192f] mb-3 group-hover:text-[#032e92] transition-colors leading-snug">
                   {pillar.title}
@@ -85,11 +85,11 @@ export default function WhyLifeInsurance() {
                 </p>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-gray-200/70 flex items-center gap-1.5 text-[11px] font-bold text-[#032e92]">
+              {/* <div className="mt-6 pt-4 border-t border-gray-200/70 flex items-center gap-1.5 text-[11px] font-bold text-[#032e92]">
                 <span>Pillar 0{idx + 1}</span>
                 <span className="text-gray-300">•</span>
                 <span className="text-gray-500 font-semibold">Core Protection</span>
-              </div>
+              </div> */}
             </motion.div>
           ))}
         </div>

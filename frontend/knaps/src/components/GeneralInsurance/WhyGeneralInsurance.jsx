@@ -72,9 +72,9 @@ export default function WhyGeneralInsurance() {
                   <FontAwesomeIcon icon={pillar.icon} className="text-xl" />
                 </div>
 
-                <span className="inline-block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">
+                {/* <span className="inline-block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">
                   {pillar.highlight}
-                </span>
+                </span> */}
 
                 <h3 className="text-xl font-bold text-[#0a192f] mb-3 group-hover:text-[#032e92] transition-colors leading-snug">
                   {pillar.title}
@@ -85,11 +85,11 @@ export default function WhyGeneralInsurance() {
                 </p>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-gray-200/70 flex items-center gap-1.5 text-[11px] font-bold text-[#032e92]">
+              {/* <div className="mt-6 pt-4 border-t border-gray-200/70 flex items-center gap-1.5 text-[11px] font-bold text-[#032e92]">
                 <span>Pillar 0{idx + 1}</span>
                 <span className="text-gray-300">•</span>
                 <span className="text-gray-500 font-semibold">Asset Security</span>
-              </div>
+              </div> */}
             </motion.div>
           ))}
         </div>
@@ -131,7 +131,7 @@ export default function WhyGeneralInsurance() {
             <div className="bg-white/10 rounded-2xl p-6 border border-white/20 shadow-inner">
               <div className="flex items-center gap-3 text-emerald-300 font-bold text-base mb-4">
                 <FontAwesomeIcon icon={faCircleCheck} className="text-xl" />
-                <span>With KNAPS General Cover</span>
+                <span>With General Cover</span>
               </div>
               <ul className="space-y-3 text-xs sm:text-sm text-blue-50 font-medium">
                 <li className="flex items-start gap-2.5">

@@ -70,9 +70,9 @@ export default function GeneralInsuranceHero() {
                 onClick={scrollToFinder}
                 className="btn-ripple bg-gradient-to-r from-[#032e92] to-[#021d63] text-white px-6 py-3 rounded-xl text-[15px] font-semibold hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer group"
               >
-                <FontAwesomeIcon icon={faShieldHalved} className="text-xs" />
+                {/* <FontAwesomeIcon icon={faShieldHalved} className="text-xs" /> */}
                 <span>Find the Right Cover</span>
-                <FontAwesomeIcon icon={faArrowRight} className="text-xs group-hover:translate-x-1 transition-transform" />
+                {/* <FontAwesomeIcon icon={faArrowRight} className="text-xs group-hover:translate-x-1 transition-transform" /> */}
               </button>
 
               <button

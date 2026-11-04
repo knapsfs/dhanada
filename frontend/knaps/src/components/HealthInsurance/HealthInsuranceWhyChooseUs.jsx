@@ -83,7 +83,7 @@ export default function HealthInsuranceWhyChooseUs() {
                 className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center gap-2 cursor-pointer"
               >
                 <span>Speak with a Health Specialist</span>
-                <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+                {/* <FontAwesomeIcon icon={faArrowRight} className="text-xs" /> */}
               </button>
             </div>
           </div>
@@ -109,21 +109,7 @@ export default function HealthInsuranceWhyChooseUs() {
           </div>
         </div>
 
-        {/* Stats Row */}
-        <div className="mt-16 sm:mt-20 pt-12 border-t border-gray-200/80">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-            {stats.map((stat, idx) => (
-              <div key={idx} className="text-center">
-                <div className="text-3xl sm:text-4xl lg:text-5xl font-black bg-gradient-to-r from-[#032e92] to-[#0066cc] bg-clip-text text-transparent">
-                  {stat.value}
-                </div>
-                <div className="mt-2 text-xs sm:text-sm font-semibold text-gray-600">
-                  {stat.label}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+
       </div>
     </section>
   );

@@ -45,7 +45,7 @@ const GeneralInsuranceCTA = () => {
                 className="w-full sm:w-auto btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-white text-[#032e92] hover:bg-blue-50 shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 group cursor-pointer"
               >
                 <span>Get Free Comparative Quote</span>
-                <FontAwesomeIcon icon={faArrowRight} className="text-[#032e92] group-hover:translate-x-1 transition-transform" />
+
               </button>
 
               <a

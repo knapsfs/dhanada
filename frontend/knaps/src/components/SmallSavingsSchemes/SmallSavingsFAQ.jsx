@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import {
+  faPlus,
+  faMinus,
+  faHeadset,
+  faArrowRight
+} from '@fortawesome/free-solid-svg-icons';
+import { useLeadModal } from '../../context/LeadModalContext';
 
 const FAQS = [
   {
@@ -32,82 +39,125 @@ const FAQS = [
     id: 6,
     question: "Can the interest rate on my POTD, KVP, or NSC change after I deposit?",
     answer: "No. For POTD, KVP, NSC, and PORD, the interest rate prevailing on your date of deposit is locked in for the entire duration of that deposit. Even if the Ministry of Finance reduces notified rates in subsequent quarters, your deposit continues to earn the original locked-in rate until maturity."
-  },
-  {
-    id: 7,
-    question: "What is the minimum deposit required to open a Post Office Recurring Deposit (PORD)?",
-    answer: "You can start a Post Office Recurring Deposit (PORD) with as little as ₹100 per month (in multiples of ₹10), with no upper limit. It runs for 5 years (60 installments) and compounds quarterly at 6.7% p.a., with up to 50% loan facility after 1 year."
-  },
-  {
-    id: 8,
-    question: "Is TDS (Tax Deducted at Source) deducted on Post Office scheme maturity?",
-    answer: "The Department of Posts generally does NOT deduct TDS on interest paid or accumulated on POTD, KVP, NSC, or PORD. However, the interest earned is taxable under 'Income from Other Sources' at your applicable slab rate, and depositors are responsible for reporting it in their annual Income Tax Returns."
-  },
-  {
-    id: 9,
-    question: "Can I transfer my Post Office deposit if I relocate to another city?",
-    answer: "Yes. All Post Office accounts and certificates can be transferred smoothly from one post office to any other post office across India by submitting a transfer application at either the originating or destination post office branch."
-  },
-  {
-    id: 10,
-    question: "Can NRIs invest in Post Office Small Savings Schemes?",
-    answer: "No. Non-Resident Indians (NRIs) are not eligible to open new POTD, KVP, NSC, or PORD accounts. If a resident opens an account and subsequently acquires NRI status, the account can continue until maturity on a non-repatriable basis but cannot be renewed or extended."
   }
 ];
 
-const SmallSavingsFAQ = () => {
-  const [openIndex, setOpenIndex] = useState(0);
+export default function SmallSavingsFAQ() {
+  const [openId, setOpenId] = useState(1);
+  const { openLeadModal } = useLeadModal();
+
+  const toggleFAQ = (id) => {
+    setOpenId((prev) => (prev === id ? null : id));
+  };
+
+  const mid = Math.ceil(FAQS.length / 2);
+  const leftFaqs = FAQS.slice(0, mid);
+  const rightFaqs = FAQS.slice(mid);
+
+  const renderFaqItem = (faq) => {
+    const isOpen = openId === faq.id;
+
+    return (
+      <div
+        key={faq.id}
+        className={`rounded-2xl border transition-all duration-300 overflow-hidden ${isOpen
+          ? 'border-[#032e92] bg-white shadow-lg shadow-blue-900/5'
+          : 'border-slate-100 bg-[#f8fafc] hover:bg-white hover:border-slate-200'
+          }`}
+      >
+        <button
+          type="button"
+          onClick={() => toggleFAQ(faq.id)}
+          className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 focus:outline-none cursor-pointer"
+          aria-expanded={isOpen}
+        >
+          <span
+            className={`text-[15px] md:text-[16px] font-bold transition-colors duration-300 ${isOpen ? 'text-[#032e92]' : 'text-slate-900'
+              }`}
+          >
+            {faq.question}
+          </span>
+          <div
+            className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-300 ${isOpen
+              ? 'bg-[#032e92] text-white'
+              : 'border border-slate-200 bg-white text-slate-400'
+              }`}
+          >
+            <FontAwesomeIcon icon={isOpen ? faMinus : faPlus} className="text-xs" />
+          </div>
+        </button>
+
+        <AnimatePresence initial={false}>
+          {isOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              className="overflow-hidden"
+            >
+              <div className="px-6 pb-6 pt-2 text-[14px] md:text-[15px] text-slate-600 leading-relaxed border-t border-slate-100/70 mt-1">
+                {faq.answer}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    );
+  };
 
   return (
     <section id="small-savings-faq" className="py-12 sm:py-16 bg-white relative overflow-hidden">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
             Frequently Asked <span className="text-[#032e92]">Questions</span>
           </h2>
           <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
-            Clear, transparent answers about our 4 core Post Office small savings schemes: POTD, KVP, NSC, and PORD.
+            Clear, transparent answers about our core Post Office small savings schemes: POTD, KVP, NSC, and PORD.
           </p>
         </div>
 
-        {/* Accordion FAQ List */}
-        <div className="space-y-4">
-          {FAQS.map((faq, index) => {
-            const isOpen = openIndex === index;
-            return (
-              <div
-                key={faq.id}
-                className="rounded-2xl border border-slate-200 overflow-hidden bg-white shadow-xs transition-all duration-200"
-              >
-                <button
-                  type="button"
-                  onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="w-full py-5 px-6 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-slate-50 transition-colors"
-                >
-                  <span className="text-base font-bold text-slate-900 leading-snug">
-                    {faq.question}
-                  </span>
-                  <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-300 ${isOpen ? 'bg-[#032e92] text-white rotate-180' : 'bg-slate-100 text-slate-600'
-                      }`}
-                  >
-                    <FontAwesomeIcon icon={faChevronDown} className="text-xs" />
-                  </div>
-                </button>
+        {/* 2-Column Split FAQ Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-5 items-start">
+          {/* Left Column */}
+          <div className="space-y-4">
+            {leftFaqs.map(renderFaqItem)}
+          </div>
 
-                {isOpen && (
-                  <div className="px-6 pb-6 pt-1 text-sm text-slate-600 leading-relaxed border-t border-slate-100 font-normal">
-                    {faq.answer}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+          {/* Right Column */}
+          <div className="space-y-4">
+            {rightFaqs.map(renderFaqItem)}
+          </div>
+        </div>
+
+        {/* Bottom Help Card */}
+        <div className="mt-12 text-center p-6 rounded-2xl bg-[#f8fbff] border border-blue-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3 text-left">
+            <div className="w-10 h-10 rounded-xl bg-blue-100 text-[#032e92] flex items-center justify-center shrink-0">
+              <FontAwesomeIcon icon={faHeadset} />
+            </div>
+            <div>
+              <div className="text-sm font-bold text-slate-800">Still have questions about Post Office Schemes?</div>
+              <p className="text-xs text-slate-600 mt-0.5">Connect with our specialists for tailored guidance on POTD, KVP, NSC, and PORD.</p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() =>
+              openLeadModal({
+                title: 'Post Office Schemes Consultation',
+                defaultService: 'Post Office Small Savings Schemes'
+              })
+            }
+            className="px-5 py-2.5 rounded-xl bg-[#032e92] text-white text-xs sm:text-sm font-bold hover:bg-[#021d63] transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs shrink-0"
+          >
+            <span>Ask a Specialist</span>
+            {/* <FontAwesomeIcon icon={faArrowRight} className="text-xs" /> */}
+          </button>
         </div>
       </div>
     </section>
   );
-};
-
-export default SmallSavingsFAQ;
+}

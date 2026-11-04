@@ -77,21 +77,6 @@ export default function FixedDepositHero() {
               Preserve your wealth and generate predictable income with structured debt instruments. Choose from scheduled Bank Fixed Deposits, AAA-rated Corporate FDs, and 100% sovereign-guaranteed Government of India (GoI) Bonds.
             </p>
 
-            {/* Key Value Highlights */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-              <div className="flex items-center gap-2.5 p-3 rounded-xl bg-white/80 border border-gray-200/80 shadow-xs">
-                <FontAwesomeIcon icon={faBuildingColumns} className="text-[#032e92] flex-shrink-0 text-sm" />
-                <span className="text-xs font-semibold text-gray-800">Bank & Corporate FDs</span>
-              </div>
-              <div className="flex items-center gap-2.5 p-3 rounded-xl bg-white/80 border border-gray-200/80 shadow-xs">
-                <FontAwesomeIcon icon={faLandmark} className="text-emerald-600 flex-shrink-0 text-sm" />
-                <span className="text-xs font-semibold text-gray-800">GoI Sovereign Bonds</span>
-              </div>
-              <div className="flex items-center gap-2.5 p-3 rounded-xl bg-white/80 border border-gray-200/80 shadow-xs">
-                <FontAwesomeIcon icon={faHandHoldingDollar} className="text-amber-600 flex-shrink-0 text-sm" />
-                <span className="text-xs font-semibold text-gray-800">Flexible Regular Payouts</span>
-              </div>
-            </div>
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-4">
@@ -100,30 +85,9 @@ export default function FixedDepositHero() {
                 className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer"
               >
                 <span>Invest in Fixed Income</span>
-                <FontAwesomeIcon icon={faArrowRight} className="text-xs group-hover:translate-x-1 transition-transform" />
-              </button>
-
-              <button
-                onClick={scrollToProducts}
-                className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-white hover:bg-blue-50 text-[#032e92] border border-[#032e92]/20 shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <FontAwesomeIcon icon={faVault} className="text-xs text-[#032e92]" />
-                <span>Explore FD vs GoI Bonds</span>
-              </button>
-
-              <button
-                onClick={scrollToCalculator}
-                className="btn-ripple px-5 py-3 rounded-xl text-[15px] font-semibold text-gray-700 hover:text-[#032e92] hover:bg-gray-100/70 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <FontAwesomeIcon icon={faCalculator} className="text-xs text-[#032e92]" />
-                <span>Yield Calculator</span>
               </button>
             </div>
 
-            {/* Trust & Regulatory Note */}
-            <div className="pt-4 border-t border-gray-200/70 text-xs text-gray-500 leading-relaxed">
-              <span>Scheduled Bank FDs are protected by DICGC insurance up to ₹5 Lakh per depositor per bank. Government of India (GoI) Bonds carry a 100% sovereign guarantee with zero credit risk. Corporate deposits are subject to issuer credit ratings (CRISIL/ICRA AAA/AA).</span>
-            </div>
           </motion.div>
 
           {/* Right Column: Premium Snapshot Card (5 cols) */}

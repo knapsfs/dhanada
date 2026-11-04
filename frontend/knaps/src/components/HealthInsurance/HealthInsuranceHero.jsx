@@ -98,14 +98,13 @@ export default function HealthInsuranceHero() {
                 className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer"
               >
                 <span>Compare Health Plans</span>
-                <FontAwesomeIcon icon={faArrowRight} className="text-xs group-hover:translate-x-1 transition-transform" />
               </button>
 
               <button
                 onClick={scrollToCalculator}
                 className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-white hover:bg-blue-50 text-[#032e92] border border-[#032e92]/20 shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
               >
-                <FontAwesomeIcon icon={faCalculator} className="text-xs text-[#032e92]" />
+                {/* <FontAwesomeIcon icon={faCalculator} className="text-xs text-[#032e92]" /> */}
                 <span>Calculate Needed Cover</span>
               </button>
             </div>

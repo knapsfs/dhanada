@@ -112,7 +112,7 @@ export default function Footer() {
           <p className="text-gray-400 text-xs text-center md:text-left">
             &copy; {currentYear} Knaps Private Limited. All rights reserved. AMFI Registered : ARN-367144.
           </p>
-          <div className="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-2 text-xs text-gray-500">
+          <div className="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-2 text-xs text-gray-400">
             <Link to="/regulatory-disclosures" className="hover:text-white transition-colors">Regulatory Disclosures</Link>
             <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
             <Link to="/terms-and-conditions" className="hover:text-white transition-colors">Terms &amp; Conditions</Link>

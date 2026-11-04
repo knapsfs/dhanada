@@ -47,9 +47,9 @@ export default function WhyInvestMf() {
             >
               <div>
                 <div className="flex items-center justify-between mb-5">
-                  <div className="w-12 h-12 rounded-2xl bg-white border border-blue-100 flex items-center justify-center text-[#032e92] shadow-xs">
+                  {/* <div className="w-12 h-12 rounded-2xl bg-white border border-blue-100 flex items-center justify-center text-[#032e92] shadow-xs">
                     <FontAwesomeIcon icon={getIcon(item.icon)} className="text-xl" />
-                  </div>
+                  </div> */}
                   <span className="text-xs font-semibold px-3 py-1 rounded-full bg-blue-100/70 text-[#032e92]">
                     {item.badge}
                   </span>
@@ -58,10 +58,10 @@ export default function WhyInvestMf() {
                 <p className="text-sm text-slate-600 leading-relaxed font-normal">{item.desc}</p>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-blue-100/60 flex items-center gap-2 text-xs font-semibold text-[#032e92]">
+              {/* <div className="mt-6 pt-4 border-t border-blue-100/60 flex items-center gap-2 text-xs font-semibold text-[#032e92]">
                 <FontAwesomeIcon icon={faCircleCheck} className="text-emerald-500" />
                 <span>Verified KNAPS Advantage</span>
-              </div>
+              </div> */}
             </div>
           ))}
         </div>

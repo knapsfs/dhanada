@@ -42,7 +42,7 @@ export default function MfRisksAndTaxation() {
               </div>
               <div>
                 <h3 className="text-lg font-bold text-slate-900">Market Fluctuations & Volatility</h3>
-                <span className="text-xs font-semibold text-slate-500">Capital Value Moves With Markets</span>
+                {/* <span className="text-xs font-semibold text-slate-500">Capital Value Moves With Markets</span> */}
               </div>
             </div>
             <p className="text-sm text-slate-600 leading-relaxed">
@@ -58,7 +58,7 @@ export default function MfRisksAndTaxation() {
               </div>
               <div>
                 <h3 className="text-lg font-bold text-slate-900">Total Expense Ratio (TER)</h3>
-                <span className="text-xs font-semibold text-slate-500">Fund Management & Operating Expenses</span>
+                {/* <span className="text-xs font-semibold text-slate-500">Fund Management & Operating Expenses</span> */}
               </div>
             </div>
             <p className="text-sm text-slate-600 leading-relaxed">
@@ -74,7 +74,7 @@ export default function MfRisksAndTaxation() {
               </div>
               <div>
                 <h3 className="text-lg font-bold text-slate-900">Exit Loads & Redemption Horizons</h3>
-                <span className="text-xs font-semibold text-slate-500">Premature Withdrawal Considerations</span>
+                {/* <span className="text-xs font-semibold text-slate-500">Premature Withdrawal Considerations</span> */}
               </div>
             </div>
             <p className="text-sm text-slate-600 leading-relaxed">
@@ -90,7 +90,7 @@ export default function MfRisksAndTaxation() {
               </div>
               <div>
                 <h3 className="text-lg font-bold text-slate-900">Standardized SEBI Risk-o-meter</h3>
-                <span className="text-xs font-semibold text-slate-500">Mandated 6-Tier Risk Gauge</span>
+                {/* <span className="text-xs font-semibold text-slate-500">Mandated 6-Tier Risk Gauge</span> */}
               </div>
             </div>
             <p className="text-sm text-slate-600 leading-relaxed mb-4">

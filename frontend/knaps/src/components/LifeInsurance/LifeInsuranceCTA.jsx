@@ -43,14 +43,12 @@ export default function LifeInsuranceCTA() {
                 className="btn-ripple w-full sm:w-auto px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-white text-[#032e92] hover:bg-blue-50 shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 cursor-pointer group"
               >
                 <span>Get Free Insurance Consultation</span>
-                <FontAwesomeIcon icon={faArrowRight} className="text-xs group-hover:translate-x-1 transition-transform" />
               </button>
 
               <a
                 href="tel:+919990243143"
                 className="btn-ripple w-full sm:w-auto px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/25 backdrop-blur-md transition-all duration-300 flex items-center justify-center gap-3 cursor-pointer"
               >
-                <FontAwesomeIcon icon={faPhone} className="text-xs text-emerald-300" />
                 <span>Call Us: (+91) 9990243143</span>
               </a>
             </div>

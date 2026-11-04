@@ -419,12 +419,5 @@ export const MF_FAQS = [
 		q: "How are Mutual Funds regulated in India? Can a fund house run away with my money?",
 		a: "Mutual funds in India are among the most strictly regulated financial instruments globally, governed by SEBI (Mutual Funds) Regulations, 1996. Crucially, your money is NOT held by the Asset Management Company (AMC); it is held in trust by an independent SEBI-registered Custodian (like Deutsche Bank, HDFC Bank, SBI). Even in the extreme event an AMC shuts down, investor assets remain safely protected with the Custodian and are returned to unit holders.",
 	},
-	{
-		q: "What is an Expense Ratio (TER) and Exit Load?",
-		a: "The Total Expense Ratio (TER) is the annual percentage fee deducted by the AMC to manage the fund, cover research, administration, and compliance costs. It is capped by SEBI regulations and automatically reflected in the daily published NAV. An Exit Load is a nominal percentage fee (typically 0.5% - 1%) charged only if you redeem units before a specified timeframe (e.g., within 365 days in equity funds); after this duration, exit is 100% free.",
-	},
-	{
-		q: "How does ELSS save taxes under Section 80C?",
-		a: "Equity Linked Savings Schemes (ELSS) qualify for tax deductions of up to ₹1,50,000 under Section 80C of the Income Tax Act (Old Tax Regime), potentially saving up to ₹46,800 in taxes annually. ELSS has the shortest mandatory lock-in period of just 3 years, compared to 5 years for Tax-Saving Fixed Deposits and 15 years for PPF.",
-	},
+
 ];

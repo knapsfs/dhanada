@@ -69,18 +69,18 @@ export default function HowToInvestMf() {
                   <span className="text-xs font-extrabold px-3 py-1 rounded-full bg-[#032e92] text-white">
                     STEP {item.step}
                   </span>
-                  <div className="w-11 h-11 rounded-2xl bg-white border border-blue-100 flex items-center justify-center text-[#032e92] shadow-xs">
+                  {/* <div className="w-11 h-11 rounded-2xl bg-white border border-blue-100 flex items-center justify-center text-[#032e92] shadow-xs">
                     <FontAwesomeIcon icon={item.icon} className="text-lg" />
-                  </div>
+                  </div> */}
                 </div>
                 <h3 className="text-lg font-bold text-slate-900 mb-2.5">{item.title}</h3>
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">{item.desc}</p>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-blue-100/60 flex items-center justify-between text-xs font-semibold text-[#032e92]">
+              {/* <div className="mt-6 pt-4 border-t border-blue-100/60 flex items-center justify-between text-xs font-semibold text-[#032e92]">
                 <span>{item.duration}</span>
                 <span className="text-blue-400">→</span>
-              </div>
+              </div> */}
             </div>
           ))}
         </div>
@@ -99,7 +99,6 @@ export default function HowToInvestMf() {
             className="px-6 py-3 rounded-xl bg-[#032e92] text-white font-bold text-xs sm:text-sm shadow-md hover:bg-[#021d63] transition-colors flex items-center gap-2 flex-shrink-0 cursor-pointer"
           >
             <span>Request Free Portfolio Call</span>
-            <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
           </button>
         </div>
       </div>

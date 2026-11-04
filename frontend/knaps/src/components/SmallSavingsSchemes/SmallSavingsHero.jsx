@@ -67,10 +67,7 @@ export default function SmallSavingsHero() {
                 className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer"
               >
                 <span>Explore Post Office Schemes</span>
-                <FontAwesomeIcon
-                  icon={faArrowRight}
-                  className="text-xs transition-transform duration-300 group-hover:translate-x-1"
-                />
+
               </button>
 
               <button
@@ -114,9 +111,7 @@ export default function SmallSavingsHero() {
                       <FontAwesomeIcon icon={faShieldHalved} className="text-lg" />
                     </div>
                     <div>
-                      <div className="text-xs text-blue-200 font-medium uppercase tracking-wider">
-                        India Post Sovereign Framework
-                      </div>
+
                       <div className="text-lg font-bold text-white">4 Flagship Schemes</div>
                     </div>
                   </div>

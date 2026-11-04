@@ -58,8 +58,8 @@ export default function MfTypes() {
                 type="button"
                 onClick={() => setActiveCategoryId(cat.id)}
                 className={`flex-shrink-0 flex items-center gap-2 px-4 sm:px-5 py-3 rounded-2xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${isSelected
-                    ? 'bg-[#032e92] text-white shadow-md shadow-[#032e92]/20 scale-[1.02]'
-                    : 'bg-white text-slate-700 border border-slate-200 hover:border-blue-300 hover:bg-blue-50/50'
+                  ? 'bg-[#032e92] text-white shadow-md shadow-[#032e92]/20 scale-[1.02]'
+                  : 'bg-white text-slate-700 border border-slate-200 hover:border-blue-300 hover:bg-blue-50/50'
                   }`}
               >
                 <FontAwesomeIcon icon={getCategoryIcon(cat.id)} className={isSelected ? 'text-blue-300' : 'text-[#032e92]'} />
@@ -93,9 +93,9 @@ export default function MfTypes() {
                     <p className="text-xs sm:text-sm text-slate-500 font-medium">SEBI Regulated Asset Category</p>
                   </div>
                 </div>
-                <p className="text-sm sm:text-base text-slate-700 leading-relaxed pt-1">
+                {/* <p className="text-sm sm:text-base text-slate-700 leading-relaxed pt-1">
                   {activeCategory.shortDesc}
-                </p>
+                </p> */}
               </div>
 
               {/* 3 Metric Pills */}
@@ -155,7 +155,7 @@ export default function MfTypes() {
                 className="px-5 py-2.5 rounded-xl bg-[#032e92] text-white text-xs sm:text-sm font-bold hover:bg-[#021d63] transition-colors flex items-center gap-2 cursor-pointer shadow-xs"
               >
                 <span>Find Suitable {activeCategory.name}</span>
-                <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
+                {/* <FontAwesomeIcon icon={faArrowRight} className="text-xs" /> */}
               </button>
             </div>
           </motion.div>

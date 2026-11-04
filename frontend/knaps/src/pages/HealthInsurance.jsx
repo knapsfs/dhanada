@@ -37,13 +37,13 @@ export default function HealthInsurance() {
         <HealthInsuranceBenefits />
 
         {/* 5. How It Works (4-step visual journey) */}
-        <HealthInsuranceHowItWorks />
+        {/* <HealthInsuranceHowItWorks /> */}
 
         {/* 6. Interactive Coverage Explorer */}
-        <HealthInsuranceCoverageExplorer />
+        {/* <HealthInsuranceCoverageExplorer /> */}
 
         {/* 7. Health Insurance Calculator / Estimator */}
-        <HealthInsuranceCalculator />
+        {/* <HealthInsuranceCalculator /> */}
 
         {/* 8. Why Choose Us */}
         <HealthInsuranceWhyChooseUs />

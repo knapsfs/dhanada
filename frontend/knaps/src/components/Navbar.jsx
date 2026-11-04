@@ -259,13 +259,15 @@ export default function Navbar() {
                     transition={{ duration: 0.2, ease: "easeOut" }}
                     className="absolute top-full right-0 mt-2 w-48 bg-white rounded-2xl shadow-xl shadow-blue-900/10 border border-gray-100 py-2.5 overflow-hidden origin-top-right z-50"
                   >
-                    <Link
-                      to="/"
+                    <a
+                      href="https://login.knaps.in/client-login"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       onClick={() => setActiveDropdown(null)}
                       className="block px-5 py-2.5 text-[14px] text-gray-600 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors font-medium"
                     >
                       Investor Login
-                    </Link>
+                    </a>
                     <a
                       href="/login?redirect-to=%2Fdesk"
                       className="block px-5 py-2.5 text-[14px] text-gray-600 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors font-medium"
@@ -274,160 +276,160 @@ export default function Navbar() {
                     </a>
                   </motion.div>
                 )}
-              </AnimatePresence>
-            </div>
-          </div>
-
-          {/* Mobile Right Controls: Gift Box & Toggle */}
-          <div className="xl:hidden flex items-center gap-3 sm:gap-4 relative z-50">
-            {/* Gift Box Mobile Trigger (shifted left with bottom breathing room) */}
-            <button
-              type="button"
-              onClick={handleOpenGiftFromNavbar}
-              aria-label="Open financial toolkit mystery box"
-              className="w-11 h-11 flex items-center justify-center relative transition-transform hover:scale-110 active:scale-90 cursor-pointer select-none shrink-0 mr-1.5"
-            >
-              <div
-                ref={mobileGiftRef}
-                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[57%] w-[114px] h-[68px] flex items-center justify-center filter drop-shadow-[0_3px_8px_rgba(0,0,0,0.15)] pointer-events-none"
-              />
-            </button>
-
-            {/* Mobile Toggle */}
-            <button
-              type="button"
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="w-11 h-11 flex items-center justify-center rounded-xl bg-[#eef5ff] text-[#032e92] relative transition-transform hover:scale-105 active:scale-95 cursor-pointer pointer-events-auto select-none shrink-0"
-              aria-label="Toggle navigation menu"
-            >
-              <FontAwesomeIcon icon={mobileOpen ? faXmark : faBars} className="text-lg pointer-events-none" />
-            </button>
+            </AnimatePresence>
           </div>
         </div>
 
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {mobileOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="xl:hidden bg-white rounded-3xl mt-4 shadow-2xl border border-gray-100 overflow-hidden absolute left-4 right-4"
-            >
-              <div className="p-4 sm:p-5 space-y-1 max-h-[75vh] overflow-y-auto">
-                {navLinks.map((link) => (
-                  <div key={link.label}>
-                    {link.dropdown ? (
-                      <div>
-                        {/* Collapsible Dropdown Header Button */}
-                        <button
-                          type="button"
-                          onClick={() => toggleMobileDropdown(link.label)}
-                          className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-[15px] font-semibold transition-all cursor-pointer ${openMobileDropdown === link.label
-                            ? 'bg-[#eef5ff] text-[#032e92]'
-                            : 'text-gray-800 hover:bg-gray-50'
-                            }`}
-                        >
-                          <span>{link.label}</span>
-                          <FontAwesomeIcon
-                            icon={faChevronDown}
-                            className={`text-xs transition-transform duration-300 ${openMobileDropdown === link.label ? 'rotate-180 text-[#032e92]' : 'text-gray-400'
-                              }`}
-                          />
-                        </button>
+        {/* Mobile Right Controls: Gift Box & Toggle */}
+        <div className="xl:hidden flex items-center gap-3 sm:gap-4 relative z-50">
+          {/* Gift Box Mobile Trigger (shifted left with bottom breathing room) */}
+          <button
+            type="button"
+            onClick={handleOpenGiftFromNavbar}
+            aria-label="Open financial toolkit mystery box"
+            className="w-11 h-11 flex items-center justify-center relative transition-transform hover:scale-110 active:scale-90 cursor-pointer select-none shrink-0 mr-1.5"
+          >
+            <div
+              ref={mobileGiftRef}
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[57%] w-[114px] h-[68px] flex items-center justify-center filter drop-shadow-[0_3px_8px_rgba(0,0,0,0.15)] pointer-events-none"
+            />
+          </button>
 
-                        {/* Collapsible Dropdown Items */}
-                        <AnimatePresence>
-                          {openMobileDropdown === link.label && (
-                            <motion.div
-                              initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: 'auto' }}
-                              exit={{ opacity: 0, height: 0 }}
-                              transition={{ duration: 0.25, ease: "easeInOut" }}
-                              className="overflow-hidden bg-[#f8fbff] rounded-2xl my-1 p-2 border border-blue-50/80 space-y-0.5"
-                            >
-                              {link.dropdown.map((item) => (
-                                item.href.startsWith('http') ? (
-                                  <a
-                                    key={item.label}
-                                    href={item.href}
-                                    onClick={() => setMobileOpen(false)}
-                                    className="block px-3.5 py-2 text-[14px] font-medium text-gray-600 hover:bg-white hover:text-[#032e92] hover:shadow-xs rounded-xl transition-all"
-                                  >
-                                    {item.label}
-                                  </a>
-                                ) : (
-                                  <Link
-                                    key={item.label}
-                                    to={item.href}
-                                    onClick={() => setMobileOpen(false)}
-                                    className={`block px-3.5 py-2 text-[14px] font-medium rounded-xl transition-all ${location.pathname === item.href
-                                      ? 'bg-white text-[#032e92] font-semibold shadow-xs'
-                                      : 'text-gray-600 hover:bg-white hover:text-[#032e92]'
-                                      }`}
-                                  >
-                                    {item.label}
-                                  </Link>
-                                )
-                              ))}
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
+          {/* Mobile Toggle */}
+          <button
+            type="button"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="w-11 h-11 flex items-center justify-center rounded-xl bg-[#eef5ff] text-[#032e92] relative transition-transform hover:scale-105 active:scale-95 cursor-pointer pointer-events-auto select-none shrink-0"
+            aria-label="Toggle navigation menu"
+          >
+            <FontAwesomeIcon icon={mobileOpen ? faXmark : faBars} className="text-lg pointer-events-none" />
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="xl:hidden bg-white rounded-3xl mt-4 shadow-2xl border border-gray-100 overflow-hidden absolute left-4 right-4"
+          >
+            <div className="p-4 sm:p-5 space-y-1 max-h-[75vh] overflow-y-auto">
+              {navLinks.map((link) => (
+                <div key={link.label}>
+                  {link.dropdown ? (
+                    <div>
+                      {/* Collapsible Dropdown Header Button */}
+                      <button
+                        type="button"
+                        onClick={() => toggleMobileDropdown(link.label)}
+                        className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-[15px] font-semibold transition-all cursor-pointer ${openMobileDropdown === link.label
+                          ? 'bg-[#eef5ff] text-[#032e92]'
+                          : 'text-gray-800 hover:bg-gray-50'
+                          }`}
+                      >
+                        <span>{link.label}</span>
+                        <FontAwesomeIcon
+                          icon={faChevronDown}
+                          className={`text-xs transition-transform duration-300 ${openMobileDropdown === link.label ? 'rotate-180 text-[#032e92]' : 'text-gray-400'
+                            }`}
+                        />
+                      </button>
+
+                      {/* Collapsible Dropdown Items */}
+                      <AnimatePresence>
+                        {openMobileDropdown === link.label && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.25, ease: "easeInOut" }}
+                            className="overflow-hidden bg-[#f8fbff] rounded-2xl my-1 p-2 border border-blue-50/80 space-y-0.5"
+                          >
+                            {link.dropdown.map((item) => (
+                              item.href.startsWith('http') ? (
+                                <a
+                                  key={item.label}
+                                  href={item.href}
+                                  onClick={() => setMobileOpen(false)}
+                                  className="block px-3.5 py-2 text-[14px] font-medium text-gray-600 hover:bg-white hover:text-[#032e92] hover:shadow-xs rounded-xl transition-all"
+                                >
+                                  {item.label}
+                                </a>
+                              ) : (
+                                <Link
+                                  key={item.label}
+                                  to={item.href}
+                                  onClick={() => setMobileOpen(false)}
+                                  className={`block px-3.5 py-2 text-[14px] font-medium rounded-xl transition-all ${location.pathname === item.href
+                                    ? 'bg-white text-[#032e92] font-semibold shadow-xs'
+                                    : 'text-gray-600 hover:bg-white hover:text-[#032e92]'
+                                    }`}
+                                >
+                                  {item.label}
+                                </Link>
+                              )
+                            ))}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  ) : (
+                    link.href.startsWith('http') ? (
+                      <a
+                        href={link.href}
+                        onClick={() => setMobileOpen(false)}
+                        className="block px-4 py-3 rounded-2xl text-[15px] font-semibold text-gray-800 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors"
+                      >
+                        {link.label}
+                      </a>
                     ) : (
-                      link.href.startsWith('http') ? (
-                        <a
-                          href={link.href}
-                          onClick={() => setMobileOpen(false)}
-                          className="block px-4 py-3 rounded-2xl text-[15px] font-semibold text-gray-800 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors"
-                        >
-                          {link.label}
-                        </a>
-                      ) : (
-                        <Link
-                          to={link.href}
-                          onClick={() => setMobileOpen(false)}
-                          className={`block px-4 py-3 rounded-2xl text-[15px] font-semibold transition-colors ${location.pathname === link.href
-                            ? 'text-[#032e92] bg-[#eef5ff]'
-                            : 'text-gray-800 hover:bg-[#eef5ff] hover:text-[#032e92]'
-                            }`}
-                        >
-                          {link.label}
-                        </Link>
-                      )
-                    )}
-                  </div>
-                ))}
+                      <Link
+                        to={link.href}
+                        onClick={() => setMobileOpen(false)}
+                        className={`block px-4 py-3 rounded-2xl text-[15px] font-semibold transition-colors ${location.pathname === link.href
+                          ? 'text-[#032e92] bg-[#eef5ff]'
+                          : 'text-gray-800 hover:bg-[#eef5ff] hover:text-[#032e92]'
+                          }`}
+                      >
+                        {link.label}
+                      </Link>
+                    )
+                  )}
+                </div>
+              ))}
 
-                {/* Mobile Action Buttons */}
-                <div className="pt-3 mt-2 border-t border-gray-100 space-y-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMobileOpen(false);
-                      openLeadModal('Navbar Mobile: Invest Now');
-                    }}
-                    className="w-full py-3.5 px-5 rounded-2xl text-[15px] font-bold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-lg shadow-[#032e92]/20 flex items-center justify-center transition-all cursor-pointer hover:shadow-xl active:scale-[0.99]"
-                  >
-                    Invest Now
-                  </button>
+              {/* Mobile Action Buttons */}
+              <div className="pt-3 mt-2 border-t border-gray-100 space-y-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileOpen(false);
+                    openLeadModal('Navbar Mobile: Invest Now');
+                  }}
+                  className="w-full py-3.5 px-5 rounded-2xl text-[15px] font-bold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-lg shadow-[#032e92]/20 flex items-center justify-center transition-all cursor-pointer hover:shadow-xl active:scale-[0.99]"
+                >
+                  Invest Now
+                </button>
 
-                  <button
-                    type="button"
-                    onClick={() => setMobileLoginOpen(!mobileLoginOpen)}
-                    className="w-full py-3.5 px-5 rounded-2xl text-[15px] font-bold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-lg shadow-[#032e92]/20 flex items-center justify-center gap-2.5 transition-all cursor-pointer hover:shadow-xl active:scale-[0.99]"
-                  >
-                    <span>Login</span>
-                    <FontAwesomeIcon
-                      icon={faChevronDown}
-                      className={`text-xs transition-transform duration-300 ${mobileLoginOpen ? 'rotate-180' : ''
-                        }`}
-                    />
-                  </button>
+                <button
+                  type="button"
+                  onClick={() => setMobileLoginOpen(!mobileLoginOpen)}
+                  className="w-full py-3.5 px-5 rounded-2xl text-[15px] font-bold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-lg shadow-[#032e92]/20 flex items-center justify-center gap-2.5 transition-all cursor-pointer hover:shadow-xl active:scale-[0.99]"
+                >
+                  <span>Login</span>
+                  <FontAwesomeIcon
+                    icon={faChevronDown}
+                    className={`text-xs transition-transform duration-300 ${mobileLoginOpen ? 'rotate-180' : ''
+                      }`}
+                  />
+                </button>
 
-                  <AnimatePresence>
-                    {mobileLoginOpen && (
+                <AnimatePresence>
+                  {mobileLoginOpen && (
                       <motion.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
@@ -435,8 +437,10 @@ export default function Navbar() {
                         transition={{ duration: 0.2 }}
                         className="overflow-hidden bg-[#f8fbff] rounded-2xl mt-2 p-2 border border-blue-100/80 space-y-1"
                       >
-                        <Link
-                          to="/"
+                        <a
+                          href="https://login.knaps.in/client-login"
+                          target="_blank"
+                          rel="noopener noreferrer"
                           onClick={() => {
                             setMobileOpen(false);
                             setMobileLoginOpen(false);
@@ -444,7 +448,7 @@ export default function Navbar() {
                           className="block px-4 py-2.5 rounded-xl text-[14px] font-semibold text-gray-700 hover:bg-white hover:text-[#032e92] hover:shadow-xs transition-all"
                         >
                           Investor Login
-                        </Link>
+                        </a>
                         <a
                           href="/login?redirect-to=%2Fdesk"
                           onClick={() => {
@@ -457,13 +461,13 @@ export default function Navbar() {
                         </a>
                       </motion.div>
                     )}
-                  </AnimatePresence>
-                </div>
-              </div>
+              </AnimatePresence>
+            </div>
+          </div>
             </motion.div>
           )}
-        </AnimatePresence>
-      </nav>
-    </header>
+    </AnimatePresence>
+      </nav >
+    </header >
   );
 }

@@ -40,45 +40,17 @@ export default function MfCTA() {
               Whether you are taking your very first step with a ₹500 SIP or structuring an established high-net-worth portfolio, KNAPS provides the research, technology, and dedicated guidance to grow your wealth.
             </p>
 
-            {/* Trust Checklist */}
-            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 pt-2 text-xs sm:text-sm text-blue-100 font-medium">
-              <span className="flex items-center gap-1.5">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-cyan-400" />
-                100% Paperless KYC
-              </span>
-              <span className="flex items-center gap-1.5">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-cyan-400" />
-                40+ Vetted AMCs
-              </span>
-              <span className="flex items-center gap-1.5">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-cyan-400" />
-                No Hidden Fees
-              </span>
-              <span className="flex items-center gap-1.5">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-cyan-400" />
-                SEBI & AMFI Compliant
-              </span>
-            </div>
 
             {/* Action Buttons */}
             <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
               <button
                 type="button"
                 onClick={() => openLeadModal('Mutual Funds: Final CTA Start Journey')}
-                className="px-8 py-4 rounded-2xl bg-white text-[#032e92] font-extrabold text-sm sm:text-base shadow-xl shadow-black/20 hover:bg-blue-50 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2.5 cursor-pointer"
+                className="btn-ripple w-full sm:w-auto px-6 py-3 rounded-xl text-[15px] font-semibold bg-white text-[#032e92] hover:bg-blue-50 shadow-md hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
               >
                 <span>Start Your Investment Journey</span>
-                <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
               </button>
 
-              <button
-                type="button"
-                onClick={scrollToExplore}
-                className="px-8 py-4 rounded-2xl bg-white/10 hover:bg-white/15 text-white font-bold text-sm sm:text-base border border-white/20 backdrop-blur-md transition-all flex items-center gap-2.5 cursor-pointer"
-              >
-                <FontAwesomeIcon icon={faCompass} className="text-cyan-400" />
-                <span>Explore Mutual Funds</span>
-              </button>
             </div>
 
           </div>

@@ -20,7 +20,7 @@ export function LeadModalProvider({ children }) {
   const [leadSource, setLeadSource] = useState('');
 
   const openLeadModal = (source = '') => {
-    setLeadSource(typeof source === 'string' ? source : '');
+    setLeadSource(source || '');
     setIsOpen(true);
   };
 

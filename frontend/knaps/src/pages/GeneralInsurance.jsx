@@ -33,16 +33,16 @@ export default function GeneralInsurance() {
         <GeneralInsuranceCategories />
 
         {/* 4. Find the Right Cover (Interactive Category/Requirement Selector) */}
-        <GeneralInsuranceFinder />
+        {/* <GeneralInsuranceFinder /> */}
 
         {/* 5. How It Works (4-Step Visual Journey) */}
-        <GeneralInsuranceHowItWorks />
+        {/* <GeneralInsuranceHowItWorks /> */}
 
         {/* 6. Key Benefits (Risk Transfer, Cashless Network, Zero Dep, 80D, RSA) */}
-        <GeneralInsuranceBenefits />
+        {/* <GeneralInsuranceBenefits /> */}
 
         {/* 7. Why Choose Us (Unbiased Guidance, Claims Concierge, Trust Metrics) */}
-        <GeneralInsuranceWhyChooseUs />
+        {/* <GeneralInsuranceWhyChooseUs /> */}
 
         {/* 8. FAQ Section */}
         <GeneralInsuranceFAQ />

@@ -145,33 +145,25 @@ export default function GeneralInsuranceCategories() {
                   <div className={`w-12 h-12 rounded-2xl ${item.accent} flex items-center justify-center text-xl shadow-sm group-hover:scale-110 transition-transform duration-300`}>
                     <FontAwesomeIcon icon={item.icon} />
                   </div>
-                  <span className="text-[11px] font-bold text-gray-500 bg-gray-50 px-3 py-1 rounded-full border border-gray-200/80">
+                  {/* <span className="text-[11px] font-bold text-gray-500 bg-gray-50 px-3 py-1 rounded-full border border-gray-200/80">
                     {item.badge}
-                  </span>
+                  </span> */}
                 </div>
 
                 {/* Title & Subtitle */}
                 <h3 className="text-xl font-bold text-[#0a192f] group-hover:text-[#032e92] transition-colors mb-1 leading-snug">
                   {item.title}
                 </h3>
-                <p className="text-xs font-bold text-[#032e92] mb-3 uppercase tracking-wider">
+                {/* <p className="text-xs font-bold text-[#032e92] mb-3 uppercase tracking-wider">
                   {item.subtitle}
-                </p>
+                </p> */}
 
                 {/* Description */}
                 <p className="text-gray-600 text-sm leading-relaxed font-medium mb-5">
                   {item.desc}
                 </p>
 
-                {/* Ideal For Pill */}
-                <div className="bg-[#f8fafc] rounded-xl p-3 border border-[#e8edf7] mb-6">
-                  <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">
-                    Recommended For:
-                  </p>
-                  <p className="text-xs text-gray-700 font-semibold leading-relaxed">
-                    {item.idealFor}
-                  </p>
-                </div>
+
 
                 {/* Key Benefits Checklist */}
                 <div className="space-y-2.5 mb-7">
@@ -193,10 +185,10 @@ export default function GeneralInsuranceCategories() {
                 className="btn-ripple w-full py-3 px-5 rounded-xl text-xs sm:text-sm font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-md hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer group/btn"
               >
                 <span>Get {item.title.split(' ')[0]} Quote</span>
-                <FontAwesomeIcon
+                {/* <FontAwesomeIcon
                   icon={faArrowRight}
                   className="text-xs group-hover/btn:translate-x-1 transition-transform"
-                />
+                /> */}
               </button>
             </motion.div>
           ))}

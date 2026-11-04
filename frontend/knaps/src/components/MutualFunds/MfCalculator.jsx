@@ -203,8 +203,8 @@ export default function MfCalculator() {
               type="button"
               onClick={() => handleModeSwitch('sip')}
               className={`px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${calcMode === 'sip'
-                  ? 'bg-[#032e92] text-white shadow-md'
-                  : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-[#032e92] text-white shadow-md'
+                : 'text-slate-600 hover:text-slate-900'
                 }`}
             >
               Systematic Investment Plan (SIP)
@@ -213,8 +213,8 @@ export default function MfCalculator() {
               type="button"
               onClick={() => handleModeSwitch('lumpsum')}
               className={`px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${calcMode === 'lumpsum'
-                  ? 'bg-[#032e92] text-white shadow-md'
-                  : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-[#032e92] text-white shadow-md'
+                : 'text-slate-600 hover:text-slate-900'
                 }`}
             >
               One-Time Lumpsum
@@ -329,34 +329,7 @@ export default function MfCalculator() {
                   className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#032e92]"
                 />
 
-                {/* Return Rate Presets */}
-                <div className="flex items-center gap-2 pt-1">
-                  <span className="text-[11px] text-slate-500 font-medium">Presets:</span>
-                  <button
-                    type="button"
-                    onClick={() => setReturnRate(8)}
-                    className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-colors cursor-pointer ${returnRate === 8 ? 'bg-[#032e92] text-white' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
-                      }`}
-                  >
-                    Debt / Conservative (8%)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setReturnRate(12)}
-                    className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-colors cursor-pointer ${returnRate === 12 ? 'bg-[#032e92] text-white' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
-                      }`}
-                  >
-                    Hybrid / Moderate (12%)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setReturnRate(15)}
-                    className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-colors cursor-pointer ${returnRate === 15 ? 'bg-[#032e92] text-white' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
-                      }`}
-                  >
-                    Equity Alpha (15%)
-                  </button>
-                </div>
+
               </div>
 
               {/* Start Plan CTA */}
@@ -426,13 +399,7 @@ export default function MfCalculator() {
                 </div>
               </div>
 
-              {/* Explicit Mandatory Statutory Disclaimer */}
-              <div className="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200 flex items-start gap-2.5">
-                <FontAwesomeIcon icon={faCircleInfo} className="text-amber-700 text-sm mt-0.5 flex-shrink-0" />
-                <p className="text-[11px] sm:text-xs text-amber-900 leading-relaxed font-medium">
-                  <strong>Statutory Notice:</strong> Output figures generated above are purely educational estimates based on assumed compound annual growth rates. Mutual fund returns are market-linked and are NOT guaranteed. Past performance is not indicative of future results.
-                </p>
-              </div>
+
             </div>
           </div>
         </div>

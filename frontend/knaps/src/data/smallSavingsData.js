@@ -22,7 +22,7 @@ export const SMALL_SAVINGS_SCHEMES = [
 		maxDeposit: 0, // No upper limit
 		depositFrequency: "Lump Sum in multiples of ₹100",
 		taxStatus: "5-Year TD qualifies for Sec 80C deduction; Interest is taxable at slab",
-		taxSection: "Section 80C (5-Year only)",
+		taxSection: "Section 80C",
 		payoutType: "Annual Interest or Cumulative",
 		liquidity:
 			"Premature closure allowed after 6 months (PO savings rate applied between 6-12 months)",
@@ -43,7 +43,7 @@ export const SMALL_SAVINGS_SCHEMES = [
 		category: "Guaranteed Capital Doubling",
 		interestRate: 7.5,
 		compounding: "Annually compounded to double investment",
-		tenure: "115 Months (9 Years & 7 Months to double)",
+		tenure: "115 Months",
 		tenureYears: 9.58,
 		doublingPeriodMonths: 115,
 		minDeposit: 1000,
@@ -96,7 +96,7 @@ export const SMALL_SAVINGS_SCHEMES = [
 		category: "Monthly Savings Discipline",
 		interestRate: 6.7,
 		compounding: "Quarterly compounded",
-		tenure: "5 Years (60 Monthly Installments)",
+		tenure: "5 Years",
 		tenureYears: 5,
 		minDeposit: 100,
 		maxDeposit: 0, // No upper limit
