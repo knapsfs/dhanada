@@ -80,21 +80,7 @@ export default function SmallSavingsHero() {
               </button>
             </div>
 
-            {/* Trust Checklist */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-4 border-t border-slate-200/80">
-              <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-600 font-medium">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-500 shrink-0" />
-                <span>100% Sovereign Safety</span>
-              </div>
-              <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-600 font-medium">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-500 shrink-0" />
-                <span>Quarterly Notified Rates</span>
-              </div>
-              <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-600 font-medium">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-500 shrink-0" />
-                <span>Section 80C Tax Savings</span>
-              </div>
-            </div>
+
           </div>
 
           {/* Right Column: Visual Summary Glassmorphic Card */}
