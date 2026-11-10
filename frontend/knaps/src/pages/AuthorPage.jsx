@@ -15,6 +15,8 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import CTA from "../components/CTA";
 import BlogCard from "../components/BlogCard";
+import SEO from "../components/seo/SEO";
+import { PAGE_SEO } from "../components/seo/seoConfig";
 import { getAuthorProfile } from "../services/blogService";
 
 export default function AuthorPage() {
@@ -54,8 +56,37 @@ export default function AuthorPage() {
     };
   }, [slug]);
 
+  const authorSchema = author ? {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": author.author_name,
+    "jobTitle": author.designation || "Financial Advisor & Researcher",
+    "worksFor": {
+      "@type": "FinancialService",
+      "name": "KNAPS",
+      "url": "https://knaps.in/"
+    },
+    "url": `https://knaps.in/author/${slug || "editorial-team"}`,
+    ...(author.profile_image ? { "image": author.profile_image } : {}),
+    ...(author.linkedin && author.linkedin !== "#" ? { "sameAs": [author.linkedin.startsWith("http") ? author.linkedin : `https://${author.linkedin}`] } : {})
+  } : null;
+
   return (
     <div className="font-sans text-gray-900 bg-gray-50 min-h-screen flex flex-col justify-between">
+      <SEO
+        title={author?.author_name ? `${author.author_name} - Financial Author & Advisor | KNAPS` : PAGE_SEO.author.title}
+        description={author?.author_name ? `Read market insights, mutual fund research, and financial planning articles published by ${author.author_name} at KNAPS.` : PAGE_SEO.author.description}
+        canonicalPath={slug ? `/author/${slug}` : "/author"}
+        ogType="profile"
+        ogImage={author?.profile_image}
+        ogImageAlt={author?.author_name || "KNAPS Author"}
+        schema={authorSchema}
+        breadcrumbs={[
+          { name: "Home", url: "/" },
+          { name: "Blogs", url: "/blogs" },
+          ...(author?.author_name ? [{ name: author.author_name, url: `/author/${slug}` }] : [{ name: "Authors", url: "/author" }])
+        ]}
+      />
       <Navbar />
 
       <main className="flex-1">

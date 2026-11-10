@@ -15,6 +15,7 @@ import BankDetailsSection from "../../components/forms/BankDetailsSection";
 import FormReviewSection from "../../components/forms/FormReviewSection";
 import FormSuccessState from "../../components/forms/FormSuccessState";
 import FormErrorState from "../../components/forms/FormErrorState";
+import SEO from "../../components/seo/SEO";
 
 export default function ClientOnboardingWorkflowPage() {
   const { token } = useParams();
@@ -305,6 +306,7 @@ export default function ClientOnboardingWorkflowPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 pb-20">
+      <SEO title="Client Onboarding | KNAPS" noindex={true} />
       <FormHeader
         title="Client Onboarding Form"
         subtitle="Complete your personal KYC, nomination, and registered bank details."

@@ -8,6 +8,7 @@ import {
   faRightFromBracket, faBuilding, faBars, faXmark, faSpinner
 } from '@fortawesome/free-solid-svg-icons';
 import { crmService } from '../services/crmService';
+import SEO from '../components/seo/SEO';
 
 // CRM Views
 import CrmDashboardView from '../components/crm/CrmDashboardView';
@@ -222,6 +223,7 @@ export default function KnapsCrmPortal() {
 
   return (
     <div className="flex h-screen bg-[#f4f7fc] font-sans text-gray-900 overflow-hidden">
+      <SEO title="CRM Portal | KNAPS" noindex={true} />
       {/* SIDEBAR */}
       <aside
         className={`${isSidebarOpen ? 'w-64' : 'w-20'

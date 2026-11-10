@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import SEO from '../components/seo/SEO';
+import { PAGE_SEO } from '../components/seo/seoConfig';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBuildingColumns,
@@ -109,6 +111,13 @@ export default function RegulatoryDisclosures() {
 
   return (
     <div className="font-sans text-gray-900 bg-[#f8fafd] min-h-screen">
+      <SEO
+        {...PAGE_SEO.regulatory}
+        breadcrumbs={[
+          { name: "Home", url: "/" },
+          { name: "Regulatory Disclosures", url: "/regulatory-disclosures" }
+        ]}
+      />
       <Navbar />
 
       {/* Hero Header matching KNAPS Standard */}

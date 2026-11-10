@@ -2,6 +2,8 @@ import { useState, useMemo, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import SEO from "../components/seo/SEO";
+import { PAGE_SEO } from "../components/seo/seoConfig";
 
 // Blogs Components
 import BlogsHero from "../components/blogs/BlogsHero";
@@ -89,8 +91,30 @@ export default function Blogs() {
     }
   };
 
+  const isCatFilter = selectedCategory && selectedCategory !== "All";
+  const catTitle = isCatFilter
+    ? `${selectedCategory} Articles & Insights | Market Analysis | KNAPS`
+    : PAGE_SEO.blogs.title;
+  const catDesc = isCatFilter
+    ? `Explore expert financial articles, analysis, and investment guides on ${selectedCategory} published by KNAPS certified advisors.`
+    : PAGE_SEO.blogs.description;
+  const canonicalPath = isCatFilter
+    ? `/blogs/${encodeURIComponent(selectedCategory)}`
+    : "/blogs";
+
   return (
     <div className="font-sans text-gray-900 bg-gray-50 min-h-screen">
+      <SEO
+        title={catTitle}
+        description={catDesc}
+        canonicalPath={canonicalPath}
+        keywords={isCatFilter ? [selectedCategory, "finance blog", "investment insights"] : PAGE_SEO.blogs.secondaryKeywords}
+        breadcrumbs={[
+          { name: "Home", url: "/" },
+          { name: "Blogs", url: "/blogs" },
+          ...(isCatFilter ? [{ name: selectedCategory, url: canonicalPath }] : [])
+        ]}
+      />
       <Navbar />
 
       <main>

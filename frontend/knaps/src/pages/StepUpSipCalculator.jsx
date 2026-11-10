@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import SEO from '../components/seo/SEO'
+import { PAGE_SEO } from '../components/seo/seoConfig'
 import StepUpSipHero from '../components/StepUpSipHero'
 import StepUpSipCalculatorForm from '../components/StepUpSipCalculatorForm'
 import StepUpSipSummaryCards from '../components/StepUpSipSummaryCards'
@@ -188,6 +190,14 @@ export default function StepUpSipCalculator() {
 
   return (
     <div className="min-h-screen bg-[#f7f9fc]">
+      <SEO
+        {...PAGE_SEO.stepUpSipCalculator}
+        breadcrumbs={[
+          { name: "Home", url: "/" },
+          { name: "Calculators", url: "/calculators/sip" },
+          { name: "Step-Up SIP Calculator", url: "/calculators/step-up-sip" }
+        ]}
+      />
       <Navbar />
 
       <main className="pt-2">

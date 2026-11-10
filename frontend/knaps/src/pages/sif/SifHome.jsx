@@ -5,6 +5,8 @@ import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
 // Layout
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
+import SEO from '../../components/seo/SEO'
+import { PAGE_SEO } from '../../components/seo/seoConfig'
 
 // API
 import { fetchFundsList } from '../../api/funds'
@@ -47,6 +49,21 @@ export default function SifHome() {
 
   return (
     <div className="min-h-screen bg-[#f7f9fc] font-sans text-gray-900">
+      {/* 
+        =======================================================================
+        PAGE SEO CONFIGURATION
+        Managed centrally in src/components/seo/seoConfig.js (under PAGE_SEO.sif).
+        To change title, description, or keywords, simply edit seoConfig.js!
+        =======================================================================
+      */}
+      <SEO
+        pageKey="sif"
+        breadcrumbs={[
+          { name: "Home", url: "/" },
+          { name: "Products", url: "/products" },
+          { name: "SIF", url: "/sif" }
+        ]}
+      />
       <Navbar />
 
       <main>
