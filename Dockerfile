@@ -50,6 +50,13 @@ RUN rm -rf /home/frappe/frappe-bench/apps/dhanada/frontend
 
 RUN python3 -c "from pathlib import Path; p=Path('/home/frappe/frappe-bench/sites/apps.txt'); names=p.read_text().splitlines(); names=[n for n in names if n]; names.append('dhanada') if 'dhanada' not in names else None; p.write_text('\n'.join(names) + '\n')"
 
+# Ensure clean manifest state before build without destroying base assets if symlinked
+RUN if [ -L /home/frappe/frappe-bench/sites/assets ]; then \
+        unlink /home/frappe/frappe-bench/sites/assets; \
+    fi && \
+    mkdir -p /home/frappe/frappe-bench/sites/assets && \
+    rm -f /home/frappe/frappe-bench/sites/assets/assets.json /home/frappe/frappe-bench/sites/assets/assets-rtl.json
+
 # Build bundled assets
 RUN bench build --production
 
