@@ -55,7 +55,7 @@ def get_appointment_settings():
 		"end_time": "17:00:00",
 		"break_start": "13:00:00",
 		"break_end": "14:00:00",
-		"working_days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+		"working_days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
 		"min_advance_hours": 2,
 		"max_advance_days": 30,
 		"buffer_minutes": 0,
@@ -160,11 +160,32 @@ def get_available_slots(appointment_date=None):
 
 	today_date = get_ist_date()
 	if not appointment_date:
+		fd = getattr(frappe, "form_dict", {}) or {}
+		appointment_date = fd.get("appointment_date")
+	if not appointment_date:
 		appointment_date = str(today_date)
 
-	try:
-		target_date = getdate(appointment_date)
-	except Exception:
+	target_date = None
+	appointment_date_clean = str(appointment_date).strip()
+	if re.match(r"^\d{2}-\d{2}-\d{4}$", appointment_date_clean):
+		try:
+			p = appointment_date_clean.split("-")
+			target_date = datetime(int(p[2]), int(p[1]), int(p[0])).date()
+		except Exception:
+			target_date = None
+	elif re.match(r"^\d{2}/\d{2}/\d{4}$", appointment_date_clean):
+		try:
+			p = appointment_date_clean.split("/")
+			target_date = datetime(int(p[2]), int(p[1]), int(p[0])).date()
+		except Exception:
+			target_date = None
+	else:
+		try:
+			target_date = getdate(appointment_date_clean)
+		except Exception:
+			target_date = None
+
+	if not target_date:
 		return {
 			"success": False,
 			"message": _("Invalid date format. Expected YYYY-MM-DD."),

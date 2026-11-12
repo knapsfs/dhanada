@@ -32,6 +32,7 @@ import {
   faCalendarWeek,
 } from "@fortawesome/free-solid-svg-icons";
 import { crmService } from "../../services/crmService";
+import { getIstTodayStr, formatLocalDate, parseLocalDateStr } from "../../utils/dateUtils";
 
 const STATUS_CONFIG = {
   Confirmed: {
@@ -66,8 +67,6 @@ const MEETING_TYPE_ICONS = {
   "Phone Call": { icon: faPhone, label: "Phone", color: "text-emerald-600 bg-emerald-50" },
   "In Person": { icon: faBuilding, label: "In Person", color: "text-purple-600 bg-purple-50" },
 };
-
-import { getIstTodayStr, formatLocalDate, parseLocalDateStr } from "../../utils/dateUtils";
 
 export default function CrmAppointmentsView({
   onSelectLead,
