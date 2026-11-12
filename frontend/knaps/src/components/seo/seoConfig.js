@@ -76,12 +76,12 @@ export const PAGE_SEO = {
 
   // 2. About Us
   about: {
-    title: "About KNAPS Private Limited | Trusted Mutual Funds Distributor in Delhi",
-    description: "Discover KNAPS's three-decade legacy in wealth management. Learn about our leadership, investment philosophy, AMFI registration, and client-first financial planning.",
+    title: "About KNAPS Private Limited |AMFI Registered Mutual Funds Distributor in Delhi",
+    description: "Discover KNAPS's three-decade legacy in Mutual Funds. Learn about our leadership, investment philosophy, AMFI registration, and client-first financial planning.",
     canonicalPath: "/about",
     keywords: ["about KNAPS", "KNAPS financial services", "wealth advisory team Delhi", "AMFI registered distributor", "financial planning company"],
     primaryKeyword: "about KNAPS",
-    secondaryKeywords: ["KNAPS financial services", "wealth advisory team Delhi", "AMFI registered distributor", "financial planning company"],
+    secondaryKeywords: ["KNAPS financial services", "AMFI registered distributor", "financial planning company"],
     h1: "Three Decades of Financial Clarity & Trust",
     ogType: "website",
     schemaType: "AboutPage"
@@ -89,7 +89,7 @@ export const PAGE_SEO = {
 
   // 3. Products Hub
   products: {
-    title: "Investment & Wealth Products | Mutual Funds, SIF, NPS & Insurance | KNAPS",
+    title: "Investment & Wealth Products | Mutual Funds, SIF, NPS & Insurance",
     description: "Explore KNAPS's comprehensive portfolio of investment products: Mutual Funds, SIF, NPS, Post Office Schemes, Fixed Income, and Life, Health & General Insurance.",
     canonicalPath: "/products",
     keywords: ["investment products India", "financial products", "wealth investment options", "mutual funds NPS insurance", "SIP fixed deposits"],
@@ -102,7 +102,7 @@ export const PAGE_SEO = {
 
   // 4. Mutual Funds
   mutualFunds: {
-    title: "Mutual Funds Investment in India | Systematic Investment (SIP) & Wealth | KNAPS",
+    title: "Mutual Funds Investment in India | Systematic Investment (SIP) & Wealth",
     description: "Invest in top-rated mutual funds in India. Build disciplined wealth through SIPs and lumpsum investments across equity, debt, and hybrid funds with KNAPS guidance.",
     canonicalPath: "/mutual-funds",
     keywords: ["mutual funds in India", "mutual fund investment", "best SIP plans", "equity mutual funds", "debt mutual funds", "tax saving ELSS"],
@@ -115,7 +115,7 @@ export const PAGE_SEO = {
 
   // 5. Specialised Investment Funds (SIF)
   sif: {
-    title: "Specialised Investment Funds (SIF) in India | Strategies & NAV | KNAPS",
+    title: "Specialised Investment Funds (SIF) in India | Strategies & NAV",
     description: "Discover SEBI-regulated Specialised Investment Funds (SIF) with ₹10 Lakh minimum investment. Compare curated SIF schemes, track NAV performance, and optimize returns.",
     canonicalPath: "/sif",
     keywords: ["specialised investment funds", "SIF in India", "SIF vs mutual funds", "AIF investment India", "high net worth investment strategies"],
@@ -128,7 +128,7 @@ export const PAGE_SEO = {
 
   // 6. National Pension System (NPS)
   nps: {
-    title: "National Pension System (NPS) India | Tier I & Tier II Retirement Tax Saving | KNAPS",
+    title: "National Pension System (NPS) India | Tier I & Tier II Retirement Tax Saving",
     description: "Plan a secure retirement with the National Pension System (NPS). Enjoy triple tax benefits under Section 80CCD, active/auto choice asset allocation, and compounding growth.",
     canonicalPath: "/products/nps",
     keywords: ["national pension system", "NPS investment India", "NPS tax benefits 80CCD", "Tier 1 Tier 2 NPS", "retirement pension planning"],
@@ -141,7 +141,7 @@ export const PAGE_SEO = {
 
   // 7. Post Office Small Savings Schemes
   smallSavings: {
-    title: "Post Office Small Savings Schemes | POTD, NSC, KVP, SCSS & PPF | KNAPS",
+    title: "Post Office Small Savings Schemes | POTD, NSC, KVP, SCSS & PPF",
     description: "Sovereign-guaranteed government savings schemes. Compare Post Office Time Deposits (POTD), National Savings Certificates (NSC), KVP, and Senior Citizens Savings Scheme.",
     canonicalPath: "/products/post-office-small-savings-schemes",
     keywords: ["post office small savings schemes", "post office time deposit POTD", "national savings certificate NSC", "KVP interest rates", "SCSS senior citizen savings"],
@@ -154,7 +154,7 @@ export const PAGE_SEO = {
 
   // 8. Fixed Income Products
   fixedIncome: {
-    title: "Fixed Income Products | High-Yield Corporate FDs & GoI Sovereign Bonds | KNAPS",
+    title: "Fixed Income Products | High-Yield Corporate FDs & GoI Sovereign Bonds",
     description: "Invest in AAA-rated corporate fixed deposits and 100% sovereign Government of India (GoI) bonds. Stable, predictable capital preservation and regular income streams.",
     canonicalPath: "/products/fixed-income-products",
     keywords: ["fixed income products India", "corporate fixed deposits", "GoI sovereign bonds", "high yield FD", "capital protection investment"],
@@ -167,7 +167,7 @@ export const PAGE_SEO = {
 
   // 9. Life Insurance
   lifeInsurance: {
-    title: "Life Insurance Plans | Term Life Cover, Savings & Family Protection | KNAPS",
+    title: "Life Insurance Plans | Term Life Cover, Savings & Family Protection",
     description: "Secure your family's future with tailored life insurance and term insurance plans. Compare top IRDAI-approved insurers, high claim settlement ratios, and affordable premiums.",
     canonicalPath: "/products/life-insurance",
     keywords: ["life insurance plans India", "term insurance cover", "best life insurance policy", "family financial security", "IRDAI life insurance"],
@@ -180,7 +180,7 @@ export const PAGE_SEO = {
 
   // 10. Health Insurance
   healthInsurance: {
-    title: "Health & Medical Insurance Plans | Cashless Hospitalization Cover | KNAPS",
+    title: "Health & Medical Insurance Plans | Cashless Hospitalization Cover",
     description: "Comprehensive mediclaim and health insurance policies in India. Protect your family from rising medical inflation with zero-deductible cashless hospital network covers.",
     canonicalPath: "/products/health-insurance",
     keywords: ["health insurance India", "mediclaim policy", "cashless hospitalization cover", "family floater health plan", "critical illness insurance"],
@@ -193,7 +193,7 @@ export const PAGE_SEO = {
 
   // 11. General Insurance
   generalInsurance: {
-    title: "General Insurance Policies | Motor, Commercial, Property & Travel | KNAPS",
+    title: "General Insurance Policies | Motor, Commercial, Property & Travel",
     description: "Safeguard your valuable assets with KNAPS general insurance. Comprehensive motor, property, travel, and business risk liability coverage with expedited claims.",
     canonicalPath: "/products/general-insurance",
     keywords: ["general insurance policies", "motor vehicle insurance", "commercial property insurance", "travel insurance policy", "asset risk protection"],
@@ -206,7 +206,7 @@ export const PAGE_SEO = {
 
   // 12. SIP Calculator
   sipCalculator: {
-    title: "SIP Calculator | Calculate Systematic Investment Plan Returns & Maturity | KNAPS",
+    title: "SIP Calculator | Calculate Systematic Investment Plan Returns & Maturity",
     description: "Free online SIP calculator. Calculate the future value of your monthly mutual fund investments, estimate compounding returns, and factor in inflation adjustments.",
     canonicalPath: "/calculators/sip",
     keywords: ["SIP calculator", "systematic investment plan calculator", "mutual fund SIP returns", "monthly investment growth", "SIP compounding calculator"],
@@ -219,7 +219,7 @@ export const PAGE_SEO = {
 
   // 13. Step-Up SIP Calculator
   stepUpSipCalculator: {
-    title: "Step-Up SIP Calculator | Annual SIP Increment & Corpus Growth | KNAPS",
+    title: "Step-Up SIP Calculator | Annual SIP Increment & Corpus Growth",
     description: "Calculate how annual SIP top-ups accelerate your wealth compounding. Estimate the dramatic impact of incrementing your monthly SIP by 5% to 15% each year.",
     canonicalPath: "/calculators/step-up-sip",
     keywords: ["step up SIP calculator", "top up SIP calculator", "annual SIP increment", "accelerated compounding calculator", "step-up investment return"],
@@ -232,7 +232,7 @@ export const PAGE_SEO = {
 
   // 14. SWP Calculator
   swpCalculator: {
-    title: "SWP Calculator | Systematic Withdrawal Plan & Monthly Income | KNAPS",
+    title: "SWP Calculator | Systematic Withdrawal Plan & Monthly Income",
     description: "Plan regular monthly pension or retirement cash flow with our SWP calculator. Evaluate remaining portfolio balance and sustainable withdrawal rates over time.",
     canonicalPath: "/calculators/swp",
     keywords: ["SWP calculator", "systematic withdrawal plan calculator", "mutual fund monthly income", "retirement cashflow calculator", "SWP taxation returns"],
@@ -245,7 +245,7 @@ export const PAGE_SEO = {
 
   // 15. Lumpsum Calculator
   lumpsumCalculator: {
-    title: "Lumpsum Mutual Fund Calculator | One-Time Investment Return Calculator | KNAPS",
+    title: "Lumpsum Mutual Fund Calculator | One-Time Investment Return Calculator",
     description: "Calculate future returns on one-time lumpsum mutual fund investments. Forecast wealth accumulation across equity and debt funds with real-time growth charts.",
     canonicalPath: "/calculators/lumpsum",
     keywords: ["lumpsum calculator", "one-time investment calculator", "mutual fund lumpsum returns", "lumpsum vs SIP calculator", "future wealth estimator"],
@@ -258,7 +258,7 @@ export const PAGE_SEO = {
 
   // 16. Retirement Calculator
   retirementCalculator: {
-    title: "Retirement Planning Calculator | Estimate Retirement Corpus & Monthly Pension | KNAPS",
+    title: "Retirement Planning Calculator | Estimate Retirement Corpus & Monthly Pension",
     description: "Plan for financial freedom after retirement. Calculate your required retirement nest egg considering inflation, life expectancy, current expenses, and post-retirement yield.",
     canonicalPath: "/calculators/retirement",
     keywords: ["retirement planning calculator", "retirement corpus calculator", "pension calculator India", "financial freedom calculator", "post retirement monthly expense"],
@@ -271,7 +271,7 @@ export const PAGE_SEO = {
 
   // 17. Future Value Calculator
   futureValueCalculator: {
-    title: "Future Value & Goal Calculator | Child Education, Marriage & House | KNAPS",
+    title: "Future Value & Goal Calculator | Child Education, Marriage & House",
     description: "Calculate the inflation-adjusted cost of future life milestones—higher education, child marriage, dream home, or vacation—and the monthly savings needed to reach them.",
     canonicalPath: "/calculators/future-value",
     keywords: ["future value calculator", "goal based financial calculator", "child education cost calculator", "inflation adjusted future cost", "goal planning calculator"],
@@ -284,7 +284,7 @@ export const PAGE_SEO = {
 
   // 18. SIP + Lumpsum Calculator
   sipLumpsumCalculator: {
-    title: "SIP + Lumpsum Calculator | Combined Investment Return Estimator | KNAPS",
+    title: "SIP + Lumpsum Calculator | Combined Investment Return Estimator",
     description: "Calculate combined returns from an initial lumpsum deposit plus ongoing monthly SIP contributions. Visualize portfolio compounding over 5 to 30 years.",
     canonicalPath: "/calculators/sip-lumpsum",
     keywords: ["SIP plus lumpsum calculator", "combined SIP lumpsum return", "dual investment strategy", "hybrid mutual fund calculator", "total corpus projection"],
@@ -297,7 +297,7 @@ export const PAGE_SEO = {
 
   // 19. Blogs Listing
   blogs: {
-    title: "Financial Insights & Investment Articles | Market Analysis & Guides | KNAPS",
+    title: "Financial Insights & Investment Articles | Market Analysis & Guides",
     description: "Read expert financial articles, market analysis, mutual fund guides, SIF investment strategies, and personal finance tips written by certified KNAPS advisors.",
     canonicalPath: "/blogs",
     keywords: ["investment articles India", "mutual fund guides", "personal finance blog", "financial planning tips", "SIF market insights"],
@@ -310,7 +310,7 @@ export const PAGE_SEO = {
 
   // 20. Author Hub
   author: {
-    title: "Author Profile & Editorial Team | Financial Experts & Researchers | KNAPS",
+    title: "Author Profile & Editorial Team | Financial Experts & Researchers",
     description: "Meet the certified wealth advisors, financial researchers, and market analysts behind KNAPS investment research, financial articles, and portfolio guides.",
     canonicalPath: "/author",
     keywords: ["KNAPS authors and experts", "financial research team", "certified wealth advisor", "market analyst profile", "KNAPS editorial team"],
@@ -323,8 +323,8 @@ export const PAGE_SEO = {
 
   // 21. Contact Us
   contact: {
-    title: "Contact KNAPS | Wealth Advisory & Office Location Mayur Vihar Delhi",
-    description: "Get in touch with KNAPS financial advisors. Visit our New Delhi headquarters at DLF Galleria Mayur Vihar, call +91-9990243143, or schedule a 1-on-1 portfolio consultation.",
+    title: "Contact KNAPS AMFI Registered Mutual Funds Distributor",
+    description: "Get in touch with KNAPS. Visit our New Delhi office at DLF Galleria Mayur Vihar, call +91-9990243143, or schedule a 1-on-1 portfolio consultation.",
     canonicalPath: "/contact",
     keywords: ["contact KNAPS", "financial advisor Mayur Vihar", "wealth management Delhi office", "investment consultation contact", "KNAPS phone number"],
     primaryKeyword: "contact KNAPS",
@@ -336,7 +336,7 @@ export const PAGE_SEO = {
 
   // 22. Regulatory Disclosures
   regulatory: {
-    title: "Regulatory Disclosures & AMFI Registration | Compliance & Standards | KNAPS",
+    title: "Regulatory Disclosures & AMFI Registration | Compliance & Standards",
     description: "View official regulatory disclosures, AMFI registration credentials, ARN details, code of conduct, and statutory investor protection policies for KNAPS Private Limited.",
     canonicalPath: "/regulatory-disclosures",
     keywords: ["regulatory disclosures KNAPS", "AMFI code of conduct", "ARN registration details", "mutual fund statutory disclosure", "SEBI investor protection"],
@@ -349,7 +349,7 @@ export const PAGE_SEO = {
 
   // 23. Privacy Policy
   privacy: {
-    title: "Privacy Policy | Data Protection & Security Practices | KNAPS",
+    title: "Privacy Policy | Data Protection & Security Practices",
     description: "Understand how KNAPS Private Limited collects, stores, and protects your personal and financial information in strict compliance with Indian privacy regulations.",
     canonicalPath: "/privacy-policy",
     keywords: ["privacy policy KNAPS", "data protection policy", "investor privacy security", "personal data compliance", "financial data confidentiality"],
@@ -362,7 +362,7 @@ export const PAGE_SEO = {
 
   // 24. Terms & Conditions
   terms: {
-    title: "Terms and Conditions | Website Usage & Advisory Terms | KNAPS",
+    title: "Terms and Conditions | Website Usage & Advisory Terms",
     description: "Read the terms and conditions governing the use of the KNAPS website, financial tools, content, and mutual fund distribution advisory services.",
     canonicalPath: "/terms-and-conditions",
     keywords: ["terms and conditions KNAPS", "website terms of use", "financial advisory terms", "disclaimer and limitation of liability", "distribution terms"],
