@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import SEO from '../components/seo/SEO';
+import { PAGE_SEO } from '../components/seo/seoConfig';
 
 // Life Insurance Modular Components
 import LifeInsuranceHero from '../components/LifeInsurance/LifeInsuranceHero';
@@ -21,6 +23,21 @@ export default function LifeInsurance() {
 
   return (
     <div className="font-sans text-gray-900 bg-[#f7f9fc] min-h-screen">
+      {/* 
+        =======================================================================
+        PAGE SEO CONFIGURATION
+        Managed centrally in src/components/seo/seoConfig.js (under PAGE_SEO.lifeInsurance).
+        To change title, description, or keywords, simply edit seoConfig.js!
+        =======================================================================
+      */}
+      <SEO
+        pageKey="lifeInsurance"
+        breadcrumbs={[
+          { name: "Home", url: "/" },
+          { name: "Products", url: "/products" },
+          { name: "Life Insurance", url: "/products/life-insurance" }
+        ]}
+      />
       <Navbar />
 
       <main>

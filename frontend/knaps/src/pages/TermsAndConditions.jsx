@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import CTA from '../components/CTA';
+import SEO from '../components/seo/SEO';
+import { PAGE_SEO } from '../components/seo/seoConfig';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChevronRight,
@@ -74,6 +76,13 @@ export default function TermsAndConditions() {
 
   return (
     <div className="font-sans text-gray-900 bg-[#f8fafd] min-h-screen">
+      <SEO
+        {...PAGE_SEO.terms}
+        breadcrumbs={[
+          { name: "Home", url: "/" },
+          { name: "Terms and Conditions", url: "/terms-and-conditions" }
+        ]}
+      />
       <Navbar />
 
       {/* Hero Header */}

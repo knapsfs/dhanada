@@ -13,6 +13,7 @@ import {
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import Newsletter from '../../components/sif/Newsletter'
+import SEO from '../../components/seo/SEO'
 
 // Context & Utils
 import { useLeadModal } from '../../context/LeadModalContext'
@@ -435,6 +436,30 @@ export default function SifFundDetails() {
 
   return (
     <div className="min-h-screen bg-white font-sans text-gray-900">
+      <SEO
+        title={`${fund.name} | SIF NAV, Performance & Strategy | KNAPS`}
+        description={`Explore ${fund.name} by ${fund.amc}. Current NAV ${fund.nav}, asset allocation, returns benchmarked against ${fund.benchmark}, and SEBI risk rating.`}
+        canonicalPath={`/sif/${encodeURIComponent(rawId)}`}
+        keywords={[fund.name, fund.amc, "SIF scheme", "specialised investment fund NAV", "AIF fund details"]}
+        breadcrumbs={[
+          { name: "Home", url: "/" },
+          { name: "Products", url: "/products" },
+          { name: "SIF", url: "/sif" },
+          { name: fund.name, url: `/sif/${encodeURIComponent(rawId)}` }
+        ]}
+        schema={{
+          "@type": "FinancialProduct",
+          "name": fund.name,
+          "description": fund.objective || `Specialised Investment Fund scheme by ${fund.amc}`,
+          "provider": {
+            "@type": "FinancialService",
+            "name": fund.amc
+          },
+          "category": fund.category,
+          "feesAndCommissionsSpecification": `Expense Ratio: ${fund.expenseRatio}`,
+          "areaServed": "IN"
+        }}
+      />
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16">

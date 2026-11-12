@@ -1,6 +1,8 @@
 import { useMemo, useState, useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import SEO from '../components/seo/SEO'
+import { PAGE_SEO } from '../components/seo/seoConfig'
 import FutureValueHero from '../components/FutureValueHero'
 import FutureValueCalculatorForm from '../components/FutureValueCalculatorForm'
 import FutureValueSummaryCards from '../components/FutureValueSummaryCards'
@@ -133,6 +135,14 @@ export default function FutureValueCalculatorPage() {
 
   return (
     <div className="min-h-screen bg-[#f7f9fc]">
+      <SEO
+        {...PAGE_SEO.futureValueCalculator}
+        breadcrumbs={[
+          { name: "Home", url: "/" },
+          { name: "Calculators", url: "/calculators/sip" },
+          { name: "Future Value & Goal Calculator", url: "/calculators/future-value" }
+        ]}
+      />
       <Navbar />
 
       <main className="pt-2">

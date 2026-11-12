@@ -23,6 +23,7 @@ import BankDetailsSection from "../../components/forms/BankDetailsSection";
 import FormReviewSection from "../../components/forms/FormReviewSection";
 import FormSuccessState from "../../components/forms/FormSuccessState";
 import FormErrorState from "../../components/forms/FormErrorState";
+import SEO from "../../components/seo/SEO";
 
 export default function CombinedOnboardingWorkflowPage() {
   const { token } = useParams();
@@ -431,6 +432,7 @@ export default function CombinedOnboardingWorkflowPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 pb-20">
+      <SEO title="Client Onboarding & Risk Profiler | KNAPS" noindex={true} />
       <FormHeader
         title="Client Onboarding & Risk Profiler"
         subtitle="Complete your comprehensive account setup and investor assessment in one seamless journey."

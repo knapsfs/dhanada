@@ -1,6 +1,8 @@
 import { useMemo, useState, useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import SEO from '../components/seo/SEO'
+import { PAGE_SEO } from '../components/seo/seoConfig'
 import CTA from '../components/CTA'
 import SipLumpsumHero from '../components/SipLumpsumHero'
 import SipLumpsumCalculatorForm from '../components/SipLumpsumCalculatorForm'
@@ -155,6 +157,14 @@ export default function SipLumpsumCalculator() {
 
   return (
     <div className="min-h-screen bg-[#f7f9fc]">
+      <SEO
+        {...PAGE_SEO.sipLumpsumCalculator}
+        breadcrumbs={[
+          { name: "Home", url: "/" },
+          { name: "Calculators", url: "/calculators/sip" },
+          { name: "SIP + Lumpsum Calculator", url: "/calculators/sip-lumpsum" }
+        ]}
+      />
       <Navbar />
 
       <main>

@@ -14,6 +14,7 @@ import RiskQuestionCard from "../../components/forms/RiskQuestionCard";
 import FormReviewSection from "../../components/forms/FormReviewSection";
 import FormSuccessState from "../../components/forms/FormSuccessState";
 import FormErrorState from "../../components/forms/FormErrorState";
+import SEO from "../../components/seo/SEO";
 
 export default function RiskProfilerWorkflowPage() {
   const { token } = useParams();
@@ -162,6 +163,7 @@ export default function RiskProfilerWorkflowPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 pb-20">
+      <SEO title="Investor Risk Profiler | KNAPS" noindex={true} />
       <FormHeader
         title="Investor Risk Profiler Questionnaire"
         subtitle="Help us understand your investment horizon, risk appetite, and financial priorities."

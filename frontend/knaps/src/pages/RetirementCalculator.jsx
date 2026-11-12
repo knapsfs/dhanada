@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import SEO from '../components/seo/SEO'
+import { PAGE_SEO } from '../components/seo/seoConfig'
 import RetirementHero from '../components/RetirementHero'
 import RetirementCalculatorForm from '../components/RetirementCalculatorForm'
 import RetirementOutput from '../components/RetirementOutput'
@@ -126,6 +128,14 @@ export default function RetirementCalculator() {
 
   return (
     <div className="min-h-screen bg-[#f7f9fc]">
+      <SEO
+        {...PAGE_SEO.retirementCalculator}
+        breadcrumbs={[
+          { name: "Home", url: "/" },
+          { name: "Calculators", url: "/calculators/sip" },
+          { name: "Retirement Calculator", url: "/calculators/retirement" }
+        ]}
+      />
       <Navbar />
 
       <main className="pt-10">

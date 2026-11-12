@@ -1,4 +1,6 @@
 import Navbar from '../components/Navbar';
+import SEO from '../components/seo/SEO';
+import { PAGE_SEO } from '../components/seo/seoConfig';
 import Hero from '../components/Hero';
 import WhyInvestWithUs from '../components/WhyInvestWithUs';
 import OurProducts from '../components/OurProducts';
@@ -19,6 +21,14 @@ import Footer from '../components/Footer';
 export default function Home() {
   return (
     <div className="font-sans text-gray-900 bg-white">
+      {/* 
+        =======================================================================
+        PAGE SEO CONFIGURATION
+        Managed centrally in src/components/seo/seoConfig.js (under PAGE_SEO.home).
+        To change title, description, or keywords, simply edit seoConfig.js!
+        =======================================================================
+      */}
+      <SEO pageKey="home" />
       <Navbar />
 
       <main>

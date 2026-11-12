@@ -3,11 +3,12 @@ import { useParams, useLocation, Link } from 'react-router-dom';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import SEO from '../components/seo/SEO';
 import BlogHeader from '../components/blog-details/BlogHeader';
 import BlogContent from '../components/blog-details/BlogContent';
 import BlogCard from '../components/BlogCard';
 import CTA from '../components/CTA';
-import { getBlogPostByRoute } from '../services/blogService';
+import { getBlogPostByRoute, getFrappeImageUrl, getBlogExcerpt } from '../services/blogService';
 
 export default function BlogDetails() {
   const { id, slug } = useParams();
@@ -44,15 +45,6 @@ export default function BlogDetails() {
 
         if (data && data.blog) {
           setBlog(data.blog);
-
-          // Update SEO Title and Meta Description dynamically
-          if (data.blog.title) {
-            document.title = `${data.blog.title} | KNAPS`;
-          }
-          const metaDesc = document.querySelector('meta[name="description"]');
-          if (metaDesc && data.blog.description) {
-            metaDesc.setAttribute('content', data.blog.description);
-          }
         } else {
           setError(data?.message || 'Article not found');
         }
@@ -109,6 +101,24 @@ export default function BlogDetails() {
 
   return (
     <div className="font-sans text-gray-900 bg-white min-h-screen relative">
+      <SEO
+        title={`${blog.title} | KNAPS`}
+        description={getBlogExcerpt(blog, 160)}
+        canonicalPath={location.pathname}
+        ogType="article"
+        ogImage={blog.meta_image || blog.cover_image || blog.image ? getFrappeImageUrl(blog.meta_image || blog.cover_image || blog.image) : undefined}
+        ogImageAlt={blog.title}
+        publishedTime={blog.published_on || blog.creation}
+        modifiedTime={blog.modified}
+        author={blog.blogger_name || blog.blogger || "KNAPS Research Team"}
+        section={blog.category || blog.blog_category || "Finance"}
+        breadcrumbs={[
+          { name: "Home", url: "/" },
+          { name: "Blogs", url: "/blogs" },
+          ...(blog.category ? [{ name: blog.category, url: `/blogs/${encodeURIComponent(blog.category)}` }] : []),
+          { name: blog.title, url: location.pathname }
+        ]}
+      />
       {/* Top Reading Progress Bar */}
       <motion.div
         className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#032e92] via-[#2563eb] to-[#38bdf8] z-50 origin-left pointer-events-none"

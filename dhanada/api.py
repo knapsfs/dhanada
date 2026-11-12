@@ -56,6 +56,9 @@ from dhanada.APIs.scheme_details import (
 	get_historical_nav_for_sif,
 )
 
+# Dynamic production sitemap XML
+from dhanada.APIs.sitemap import get_sitemap_xml
+
 # Website testimonials laata hai.
 from dhanada.APIs.testimonials import get_testimonials
 
@@ -80,6 +83,7 @@ __all__ = [
 	"get_historical_nav_for_sif",
 	"get_performance_for_sif",
 	"get_scheme_heatmap_performance",
+	"get_sitemap_xml",
 	"get_testimonials",
 	"mask_invalid_returns",
 	"save_chat_message",

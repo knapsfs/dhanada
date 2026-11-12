@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import SEO from '../components/seo/SEO'
+import { PAGE_SEO } from '../components/seo/seoConfig'
 import SwpHero from '../components/SwpHero'
 import SwpCalculatorForm from '../components/SwpCalculatorForm'
 import SwpSummaryCards from '../components/SwpSummaryCards'
@@ -128,6 +130,14 @@ export default function SwpCalculator() {
 
   return (
     <div className="min-h-screen bg-[#f7f9fc]">
+      <SEO
+        {...PAGE_SEO.swpCalculator}
+        breadcrumbs={[
+          { name: "Home", url: "/" },
+          { name: "Calculators", url: "/calculators/sip" },
+          { name: "SWP Calculator", url: "/calculators/swp" }
+        ]}
+      />
       <Navbar />
 
       <main className="pt-2">

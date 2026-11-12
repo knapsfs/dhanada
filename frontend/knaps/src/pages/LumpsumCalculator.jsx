@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import SEO from '../components/seo/SEO'
+import { PAGE_SEO } from '../components/seo/seoConfig'
 import LumpsumHero from '../components/LumpsumHero'
 import LumpsumCalculatorForm from '../components/LumpsumCalculatorForm'
 import LumpsumSummaryCards from '../components/LumpsumSummaryCards'
@@ -105,6 +107,14 @@ export default function LumpsumCalculator() {
 
   return (
     <div className="min-h-screen bg-[#f7f9fc]">
+      <SEO
+        {...PAGE_SEO.lumpsumCalculator}
+        breadcrumbs={[
+          { name: "Home", url: "/" },
+          { name: "Calculators", url: "/calculators/sip" },
+          { name: "Lumpsum Calculator", url: "/calculators/lumpsum" }
+        ]}
+      />
       <Navbar />
 
       <main className="pt-2">

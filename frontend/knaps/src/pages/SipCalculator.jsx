@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import SEO from '../components/seo/SEO'
+import { PAGE_SEO } from '../components/seo/seoConfig'
 import SipHero from '../components/SipHero'
 import SipCalculatorForm from '../components/SipCalculatorForm'
 import SipSummaryCards from '../components/SipSummaryCards'
@@ -133,6 +135,14 @@ export default function SipCalculator() {
 
   return (
     <div className="min-h-screen bg-[#f7f9fc]">
+      <SEO
+        {...PAGE_SEO.sipCalculator}
+        breadcrumbs={[
+          { name: "Home", url: "/" },
+          { name: "Calculators", url: "/calculators/sip" },
+          { name: "SIP Calculator", url: "/calculators/sip" }
+        ]}
+      />
       <Navbar />
 
       <main className="pt-2">
