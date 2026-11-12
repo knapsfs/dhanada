@@ -314,4 +314,51 @@ export const crmService = {
 
 	sendWhatsAppMessage: (data) =>
 		fetchCrmApi("/api/method/dhanada.crm_api.send_crm_whatsapp_message", "POST", data),
+
+	// Appointment Management APIs
+	getAppointments: (params = {}) => {
+		const cleanParams = Object.fromEntries(
+			Object.entries(params).filter(([_, v]) => v !== undefined && v !== null && v !== "")
+		);
+		const query = new URLSearchParams(cleanParams).toString();
+		return fetchCrmApi(`/api/method/dhanada.crm_api.get_appointments?${query}`);
+	},
+
+	getAppointmentStats: () =>
+		fetchCrmApi("/api/method/dhanada.crm_api.get_appointment_dashboard_stats"),
+
+	getAppointmentDetails: (appointmentId) =>
+		fetchCrmApi(
+			`/api/method/dhanada.crm_api.get_appointment_details?appointment_id=${encodeURIComponent(
+				appointmentId
+			)}`
+		),
+
+	createAppointment: (appointmentData) =>
+		fetchCrmApi("/api/method/dhanada.crm_api.create_crm_appointment", "POST", appointmentData),
+
+	rescheduleAppointment: (appointmentId, newDate, newStartTime, reason = "") =>
+		fetchCrmApi("/api/method/dhanada.crm_api.reschedule_appointment", "POST", {
+			appointment_id: appointmentId,
+			new_date: newDate,
+			new_start_time: newStartTime,
+			reason,
+		}),
+
+	cancelAppointment: (appointmentId, cancellationReason = "") =>
+		fetchCrmApi("/api/method/dhanada.crm_api.cancel_appointment", "POST", {
+			appointment_id: appointmentId,
+			cancellation_reason: cancellationReason,
+		}),
+
+	updateAppointmentStatus: (appointmentId, status) =>
+		fetchCrmApi("/api/method/dhanada.crm_api.update_appointment_status", "POST", {
+			appointment_id: appointmentId,
+			status,
+		}),
+
+	getAvailableSlots: (date) =>
+		fetchCrmApi(
+			`/api/method/dhanada.api.get_available_slots?appointment_date=${encodeURIComponent(date)}`
+		),
 };

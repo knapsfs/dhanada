@@ -1,0 +1,197 @@
+{
+ "actions": [],
+ "allow_import": 0,
+ "allow_rename": 0,
+ "creation": "2026-11-12 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "timing_section",
+  "meeting_duration",
+  "slot_interval",
+  "buffer_minutes",
+  "column_break_hours",
+  "start_time",
+  "end_time",
+  "break_start",
+  "break_end",
+  "rules_section",
+  "working_days",
+  "min_advance_hours",
+  "max_advance_days",
+  "column_break_rules",
+  "timezone",
+  "allow_website_booking",
+  "auto_confirm",
+  "holidays_section",
+  "holiday_dates"
+ ],
+ "fields": [
+  {
+   "fieldname": "timing_section",
+   "fieldtype": "Section Break",
+   "label": "Working Hours & Slot Duration"
+  },
+  {
+   "default": "30",
+   "description": "Duration of each meeting in minutes (default 30 min)",
+   "fieldname": "meeting_duration",
+   "fieldtype": "Int",
+   "label": "Meeting Duration (Minutes)",
+   "reqd": 1
+  },
+  {
+   "default": "30",
+   "description": "Interval between generated slot start times in minutes (default 30 min)",
+   "fieldname": "slot_interval",
+   "fieldtype": "Int",
+   "label": "Slot Interval (Minutes)",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "description": "Buffer gap between back-to-back appointments in minutes",
+   "fieldname": "buffer_minutes",
+   "fieldtype": "Int",
+   "label": "Buffer Between Meetings (Minutes)"
+  },
+  {
+   "fieldname": "column_break_hours",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "10:00:00",
+   "fieldname": "start_time",
+   "fieldtype": "Time",
+   "label": "Working Start Time",
+   "reqd": 1
+  },
+  {
+   "default": "17:00:00",
+   "fieldname": "end_time",
+   "fieldtype": "Time",
+   "label": "Working End Time",
+   "reqd": 1
+  },
+  {
+   "default": "13:00:00",
+   "fieldname": "break_start",
+   "fieldtype": "Time",
+   "label": "Lunch Break Start Time"
+  },
+  {
+   "default": "14:00:00",
+   "fieldname": "break_end",
+   "fieldtype": "Time",
+   "label": "Lunch Break End Time"
+  },
+  {
+   "fieldname": "rules_section",
+   "fieldtype": "Section Break",
+   "label": "Booking Rules & Availability"
+  },
+  {
+   "default": "Monday\nTuesday\nWednesday\nThursday\nFriday",
+   "description": "List of working days (one per line, e.g. Monday, Tuesday...)",
+   "fieldname": "working_days",
+   "fieldtype": "Small Text",
+   "label": "Working Days"
+  },
+  {
+   "default": "2",
+   "description": "Minimum advance notice required before meeting time in hours",
+   "fieldname": "min_advance_hours",
+   "fieldtype": "Int",
+   "label": "Minimum Advance Booking (Hours)"
+  },
+  {
+   "default": "30",
+   "description": "Maximum number of days in the future customers can book",
+   "fieldname": "max_advance_days",
+   "fieldtype": "Int",
+   "label": "Maximum Advance Booking (Days)"
+  },
+  {
+   "fieldname": "column_break_rules",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Asia/Kolkata",
+   "fieldname": "timezone",
+   "fieldtype": "Data",
+   "label": "Timezone"
+  },
+  {
+   "default": "1",
+   "fieldname": "allow_website_booking",
+   "fieldtype": "Check",
+   "label": "Allow Website Booking"
+  },
+  {
+   "default": "1",
+   "description": "Automatically mark new website appointments as Confirmed (otherwise Pending)",
+   "fieldname": "auto_confirm",
+   "fieldtype": "Check",
+   "label": "Auto Confirm Appointments"
+  },
+  {
+   "fieldname": "holidays_section",
+   "fieldtype": "Section Break",
+   "label": "Holidays & Blocked Dates"
+  },
+  {
+   "description": "Dates blocked for booking in YYYY-MM-DD format (one per line or comma-separated)",
+   "fieldname": "holiday_dates",
+   "fieldtype": "Small Text",
+   "label": "Configured Holiday Dates"
+  }
+ ],
+ "issingle": 1,
+ "modified": "2026-11-12 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Dhanada",
+ "name": "Appointment Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 0,
+   "delete": 0,
+   "email": 0,
+   "export": 0,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Manager",
+   "share": 0,
+   "write": 1
+  },
+  {
+   "create": 0,
+   "delete": 0,
+   "email": 0,
+   "export": 0,
+   "print": 1,
+   "read": 1,
+   "report": 0,
+   "role": "Sales User",
+   "share": 0,
+   "write": 0
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
+

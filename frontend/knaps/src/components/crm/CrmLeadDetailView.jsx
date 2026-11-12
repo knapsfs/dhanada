@@ -7,7 +7,7 @@ import {
   faCheckCircle, faCircleExclamation, faTriangleExclamation,
   faClock, faFloppyDisk, faUser, faTrash, faCopy, faCheck,
   faLocationDot, faCoins, faFileLines, faPlus, faXmark, faComments,
-  faLink, faArrowUpRightFromSquare
+  faLink, faArrowUpRightFromSquare, faCalendarDays
 } from "@fortawesome/free-solid-svg-icons";
 import CrmSelect from "./CrmSelect";
 import CrmSendFormModal from "./CrmSendFormModal";
@@ -33,6 +33,7 @@ export default function CrmLeadDetailView({
   onDeleteLead,
   onLogInteraction,
   onNewTask,
+  onScheduleAppointment,
   onNavigateToClient,
   refreshKey = 0,
 }) {
@@ -398,6 +399,16 @@ export default function CrmLeadDetailView({
           >
             <FontAwesomeIcon icon={faPaperPlane} className="text-[#032e92] text-xs" />
             <span className="hidden sm:inline">Send Form</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => onScheduleAppointment && onScheduleAppointment(leadData)}
+            className="px-3 py-2 rounded-xl text-xs font-semibold bg-white border border-blue-200 text-[#032e92] hover:bg-blue-50 flex items-center gap-1.5 shadow-2xs cursor-pointer transition-colors"
+            title="Schedule an Appointment with this Lead"
+          >
+            <FontAwesomeIcon icon={faCalendarDays} className="text-[#032e92] text-xs" />
+            <span className="hidden sm:inline">Schedule Meeting</span>
           </button>
 
           {/* Linked Client Badge or Map to Existing Client */}

@@ -5,7 +5,8 @@ import {
   faUsers, faUserPlus, faUserCheck, faChartPie, faListCheck,
   faRotateRight, faSearch, faPlus, faArrowsRotate, faArrowRight,
   faShieldHalved, faTableColumns, faList, faCommentDots, faArrowUpRightFromSquare,
-  faRightFromBracket, faBuilding, faBars, faXmark, faSpinner
+  faRightFromBracket, faBuilding, faBars, faXmark, faSpinner,
+  faCalendarDays
 } from '@fortawesome/free-solid-svg-icons';
 import { crmService } from '../services/crmService';
 
@@ -16,6 +17,7 @@ import CrmLeadsListView from '../components/crm/CrmLeadsListView';
 import CrmClientsView from '../components/crm/CrmClientsView';
 import CrmTasksView from '../components/crm/CrmTasksView';
 import CrmRenewalsView from '../components/crm/CrmRenewalsView';
+import CrmAppointmentsView from '../components/crm/CrmAppointmentsView';
 
 // Modals & Drawer
 import CrmLeadDetailView from '../components/crm/CrmLeadDetailView';
@@ -23,16 +25,35 @@ import CrmClientDetailView from '../components/crm/CrmClientDetailView';
 import CrmNewLeadModal from '../components/crm/CrmNewLeadModal';
 import CrmNewInteractionModal from '../components/crm/CrmNewInteractionModal';
 import CrmNewTaskModal from '../components/crm/CrmNewTaskModal';
+import CrmNewAppointmentModal from '../components/crm/CrmNewAppointmentModal';
 // CrmLoginForm superseded by Frappe native /login
 
 export default function KnapsCrmPortal() {
-  const [activeTab, setActiveTab] = useState('leads'); // dashboard, leads, clients, tasks, renewals
+  const getInitialTab = () => {
+    try {
+      const path = window.location.pathname.toLowerCase();
+      const searchParams = new URLSearchParams(window.location.search);
+      const tabParam = searchParams.get('tab') || searchParams.get('view');
+      if (tabParam) return tabParam;
+      if (path.includes('/appointments')) return 'appointments';
+      if (path.includes('/dashboard')) return 'dashboard';
+      if (path.includes('/clients')) return 'clients';
+      if (path.includes('/tasks')) return 'tasks';
+      if (path.includes('/renewals')) return 'renewals';
+    } catch {
+      // ignore
+    }
+    return 'leads';
+  };
+
+  const [activeTab, setActiveTab] = useState(getInitialTab); // dashboard, leads, appointments, clients, tasks, renewals
   const [leadsViewMode, setLeadsViewMode] = useState('list'); // 'list' or 'kanban'
   const [bootstrapData, setBootstrapData] = useState(null);
   const [leads, setLeads] = useState([]);
   const [clients, setClients] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [renewals, setRenewals] = useState([]);
+  const [appointmentStats, setAppointmentStats] = useState({ total: 0, today: 0, upcoming: 0, pending: 0 });
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
@@ -47,7 +68,11 @@ export default function KnapsCrmPortal() {
   const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
   const [isInteractionModalOpen, setIsInteractionModalOpen] = useState(false);
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
+  const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
+  const [appointmentRefreshKey, setAppointmentRefreshKey] = useState(0);
   const [modalTargetLead, setModalTargetLead] = useState(null);
+  const [modalTargetAppointmentLead, setModalTargetAppointmentLead] = useState(null);
+  const [modalTargetAppointmentDate, setModalTargetAppointmentDate] = useState(null);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
 
@@ -68,17 +93,19 @@ export default function KnapsCrmPortal() {
       setBootstrapData(bData);
       setAuthRequired(false);
 
-      const [lData, cData, tData, rData] = await Promise.all([
+      const [lData, cData, tData, rData, aStats] = await Promise.all([
         crmService.getLeads().catch(() => []),
         crmService.getClients().catch(() => []),
         crmService.getTasks().catch(() => []),
         crmService.getRenewals().catch(() => []),
+        crmService.getAppointmentStats().catch(() => ({ total: 0, today: 0, upcoming: 0, pending: 0 })),
       ]);
 
       setLeads(lData);
       setClients(cData);
       setTasks(tData);
       setRenewals(rData);
+      setAppointmentStats(aStats || { total: 0, today: 0, upcoming: 0, pending: 0 });
     } catch (err) {
       console.warn("CRM Auth/Data load failed:", err);
       setBootstrapData(null);
@@ -195,8 +222,9 @@ export default function KnapsCrmPortal() {
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: faChartPie },
     { id: 'leads', label: 'All Leads', icon: faUsers, badge: leads.length },
-    { id: 'clients', label: 'Clients', icon: faUserCheck, badge: clients.length },
+    { id: 'appointments', label: 'Appointments', icon: faCalendarDays, badge: appointmentStats?.upcoming || appointmentStats?.today || 0 },
     { id: 'tasks', label: 'Tasks & Follow-ups', icon: faListCheck, badge: tasks.filter(t => t.status === 'Open').length },
+    { id: 'clients', label: 'Clients', icon: faUserCheck, badge: clients.length },
     { id: 'renewals', label: 'Renewals', icon: faRotateRight, badge: renewals.filter(r => r.status === 'Upcoming').length },
   ];
 
@@ -405,6 +433,17 @@ export default function KnapsCrmPortal() {
             </button>
 
             <button
+              onClick={() => {
+                setModalTargetAppointmentLead(null);
+                setIsAppointmentModalOpen(true);
+              }}
+              className="hidden sm:flex px-3.5 py-2 rounded-xl border border-blue-200 bg-blue-50 text-[#032e92] hover:bg-blue-100 text-xs font-bold items-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
+            >
+              <FontAwesomeIcon icon={faCalendarDays} className="text-[#032e92]" />
+              <span>New Appointment</span>
+            </button>
+
+            <button
               onClick={() => setIsLeadModalOpen(true)}
               className="btn-ripple px-4 py-2 rounded-xl text-xs font-bold bg-[#032e92] hover:bg-[#021d63] text-white shadow-md hover:shadow-lg transition-all flex items-center gap-1.5 cursor-pointer"
             >
@@ -424,6 +463,10 @@ export default function KnapsCrmPortal() {
               onDeleteLead={handleLeadDeleted}
               onLogInteraction={handleOpenInteractionModal}
               onNewTask={handleOpenTaskModal}
+              onScheduleAppointment={(lead) => {
+                setModalTargetAppointmentLead(lead);
+                setIsAppointmentModalOpen(true);
+              }}
               onNavigateToClient={(clientName) => {
                 setSelectedLeadName(null);
                 setSelectedClientName(clientName);
@@ -509,6 +552,22 @@ export default function KnapsCrmPortal() {
                 />
               )}
 
+              {activeTab === 'appointments' && (
+                <CrmAppointmentsView
+                  onSelectLead={(name) => {
+                    setSelectedLeadName(name);
+                    setSelectedClientName(null);
+                    setActiveTab('leads');
+                  }}
+                  onNewAppointment={(date) => {
+                    setModalTargetAppointmentLead(null);
+                    setModalTargetAppointmentDate(date || null);
+                    setIsAppointmentModalOpen(true);
+                  }}
+                  refreshTrigger={appointmentRefreshKey}
+                />
+              )}
+
               {activeTab === 'clients' && (
                 <CrmClientsView
                   clients={clients}
@@ -573,6 +632,23 @@ export default function KnapsCrmPortal() {
           setLeadRefreshKey((k) => k + 1);
         }}
         relatedLead={modalTargetLead}
+      />
+
+      {/* New Appointment Modal */}
+      <CrmNewAppointmentModal
+        isOpen={isAppointmentModalOpen}
+        onClose={() => {
+          setIsAppointmentModalOpen(false);
+          setModalTargetAppointmentLead(null);
+          setModalTargetAppointmentDate(null);
+        }}
+        onCreated={() => {
+          setAppointmentRefreshKey((k) => k + 1);
+          loadCrmData();
+        }}
+        leads={leads}
+        preselectedLead={modalTargetAppointmentLead}
+        preselectedDate={modalTargetAppointmentDate}
       />
 
       {/* Logout Confirmation Modal */}

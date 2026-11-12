@@ -412,35 +412,87 @@ def create_website_lead():
 			product=product,
 		)
 
+		# Appointment scheduling check
+		schedule_meeting_raw = str(
+			payload.get("schedule_meeting") or payload.get("scheduleMeeting") or ""
+		).strip().lower()
+		schedule_meeting = schedule_meeting_raw in ("yes", "1", "true")
+
+		appointment_date = payload.get("appointment_date") or payload.get("appointmentDate")
+		appointment_time = (
+			payload.get("appointment_time")
+			or payload.get("appointmentTime")
+			or payload.get("appointment_start_time")
+		)
+		meeting_type = payload.get("meeting_type") or payload.get("meetingType") or "Online"
+
+		# If user requested to schedule a meeting, validate required appointment fields
+		if schedule_meeting:
+			if not appointment_date:
+				frappe.throw(_("Please select an appointment date to schedule your meeting."))
+			if not appointment_time:
+				frappe.throw(_("Please select an available time slot for your appointment."))
+
 		if duplicate_lead:
-			# Exact duplicate detected across all relevant submitted fields.
-			# Do not create another record and do not silently overwrite the existing record.
-			return {
-				"success": True,
-				"lead_name": duplicate_lead,
-				"is_duplicate": True,
-				"message": _("An identical enquiry has already been received."),
+			# Existing customer submitting an inquiry / appointment
+			created_lead_name = duplicate_lead
+		else:
+			doc_data = {
+				"doctype": "Lead",
+				"first_name": first_name,
+				"last_name": last_name,
+				"lead_name": full_name,
+				"email": email or None,
+				"mobile_no": phone or None,
+				"source": source,
+				"status": "New",
+				"product_interest": product or None,
+				"notes": notes or None,
+				"chat_context": context_msg or None,
 			}
+			lead = frappe.get_doc(doc_data)
+			lead.insert(ignore_permissions=True)
+			created_lead_name = lead.name
 
-		doc_data = {
-			"doctype": "Lead",
-			"first_name": first_name,
-			"last_name": last_name,
-			"lead_name": full_name,
-			"email": email or None,
-			"mobile_no": phone or None,
-			"source": source,
-			"status": "New",
-			"product_interest": product or None,
-			"notes": notes or None,
-			"chat_context": context_msg or None,
-		}
-		lead = frappe.get_doc(doc_data)
-		lead.insert(ignore_permissions=True)
+		# If an appointment was requested, book it atomically linked to this Lead
+		appointment_name = None
+		if schedule_meeting:
+			from dhanada.appointment_api import book_appointment_internal
+
+			try:
+				apt_doc = book_appointment_internal(
+					customer_name=full_name,
+					email=email,
+					phone=phone,
+					appointment_date=appointment_date,
+					start_time=appointment_time,
+					meeting_type=meeting_type,
+					lead_id=created_lead_name,
+					notes=notes,
+					created_from="Website",
+					auto_commit=False,
+				)
+				appointment_name = apt_doc.name
+			except Exception as apt_err:
+				frappe.db.rollback()
+				frappe.local.response["http_status_code"] = 409
+				return {"success": False, "message": str(apt_err)}
+
 		frappe.db.commit()
-		created_lead_name = lead.name
 
-		return {"success": True, "lead_name": created_lead_name, "is_duplicate": False}
+		response_data = {
+			"success": True,
+			"lead_name": created_lead_name,
+			"is_duplicate": bool(duplicate_lead),
+		}
+
+		if appointment_name:
+			response_data["appointment_id"] = appointment_name
+			response_data["appointment_date"] = str(appointment_date)
+			response_data["appointment_time"] = str(appointment_time)
+			response_data["meeting_type"] = meeting_type
+
+		return response_data
 	except Exception as e:
 		frappe.log_error(message=frappe.get_traceback(), title="Website Lead Creation Failed")
 		frappe.local.response["http_status_code"] = 400

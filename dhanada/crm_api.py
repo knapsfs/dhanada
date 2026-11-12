@@ -45,6 +45,8 @@ def get_crm_bootstrap():
 		else ["Website Form", "Website Chatbot", "WhatsApp", "Referral", "Manual"]
 	)
 
+	from dhanada.appointment_api import get_ist_date
+
 	return {
 		"user": {
 			"name": user.name,
@@ -55,6 +57,8 @@ def get_crm_bootstrap():
 		},
 		"metrics": metrics,
 		"sources": source_list,
+		"today_date": str(get_ist_date()),
+		"timezone": "Asia/Kolkata",
 		"products": [
 			"NPS (National Pension System)",
 			"SIF (Specialized Investment Fund)",
@@ -1766,3 +1770,18 @@ def send_crm_whatsapp_message(
 		template_name=template_name,
 		template_params=params,
 	)
+
+
+# -------------------------------------------------------------
+# APPOINTMENT MANAGEMENT RE-EXPORTS FOR CRM
+# -------------------------------------------------------------
+from dhanada.appointment_api import (
+	cancel_appointment,
+	create_crm_appointment,
+	get_appointment_dashboard_stats,
+	get_appointment_details,
+	get_appointments,
+	reschedule_appointment,
+	update_appointment_status,
+)
+

@@ -58,12 +58,15 @@ from dhanada.APIs.scheme_details import (
 
 # Website testimonials laata hai.
 from dhanada.APIs.testimonials import get_testimonials
+from dhanada.appointment_api import get_appointment_details, get_available_slots
 
 __all__ = [
 	"associate_lead_to_conversation",
 	"chatbot_response",
 	"create_chatbot_lead",
 	"create_website_lead",
+	"get_appointment_details",
+	"get_available_slots",
 	"get_author_profile",
 	"get_blog_categories",
 	"get_blog_post_details",

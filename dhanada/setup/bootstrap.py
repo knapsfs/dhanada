@@ -28,6 +28,7 @@ def ensure_master_data():
 	ensure_knaps_crm_workspace()
 	ensure_sif_desktop_icon()
 	ensure_knaps_crm_desktop_icon()
+	ensure_appointment_settings()
 	frappe.logger().info("Finished Dhanada bootstrap process.")
 
 
@@ -362,3 +363,39 @@ def boot_knaps_crm(bootinfo):
 					"icon_image": None,
 				}
 			)
+
+
+def ensure_appointment_settings():
+	"""
+	Ensures default Appointment Settings exist.
+	"""
+	if not frappe.db.exists("DocType", "Appointment Settings"):
+		return
+
+	try:
+		doc = frappe.get_single("Appointment Settings")
+		if not doc.working_days:
+			doc.working_days = "Monday\nTuesday\nWednesday\nThursday\nFriday"
+		if not doc.meeting_duration:
+			doc.meeting_duration = 30
+		if not doc.slot_interval:
+			doc.slot_interval = 30
+		if not doc.start_time:
+			doc.start_time = "10:00:00"
+		if not doc.end_time:
+			doc.end_time = "17:00:00"
+		if not doc.break_start:
+			doc.break_start = "13:00:00"
+		if not doc.break_end:
+			doc.break_end = "14:00:00"
+		if not doc.min_advance_hours:
+			doc.min_advance_hours = 2
+		if not doc.max_advance_days:
+			doc.max_advance_days = 30
+		if not doc.timezone:
+			doc.timezone = "Asia/Kolkata"
+		doc.flags.ignore_permissions = True
+		doc.save()
+		frappe.logger().info("Configured default Appointment Settings.")
+	except Exception as e:
+		frappe.logger().error(f"Failed to ensure Appointment Settings: {e!s}")
