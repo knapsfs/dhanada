@@ -79,7 +79,7 @@ export const PAGE_SEO = {
     title: "About KNAPS Private Limited |AMFI Registered Mutual Funds Distributor in Delhi",
     description: "Discover KNAPS's three-decade legacy in Mutual Funds. Learn about our leadership, investment philosophy, AMFI registration, and client-first financial planning.",
     canonicalPath: "/about",
-    keywords: ["about KNAPS", "KNAPS financial services", "wealth advisory team Delhi", "AMFI registered distributor", "financial planning company"],
+    keywords: ["about KNAPS", "KNAPS financial services", "AMFI registered distributor", "financial planning company"],
     primaryKeyword: "about KNAPS",
     secondaryKeywords: ["KNAPS financial services", "AMFI registered distributor", "financial planning company"],
     h1: "Three Decades of Financial Clarity & Trust",
@@ -298,7 +298,7 @@ export const PAGE_SEO = {
   // 19. Blogs Listing
   blogs: {
     title: "Financial Insights & Investment Articles | Market Analysis & Guides",
-    description: "Read expert financial articles, market analysis, mutual fund guides, SIF investment strategies, and personal finance tips written by certified KNAPS advisors.",
+    description: "Read expert financial articles, market analysis, mutual fund guides, SIF investment strategies, and personal finance tips written by certified KNAPS experts.",
     canonicalPath: "/blogs",
     keywords: ["investment articles India", "mutual fund guides", "personal finance blog", "financial planning tips", "SIF market insights"],
     primaryKeyword: "investment articles India",
@@ -311,12 +311,12 @@ export const PAGE_SEO = {
   // 20. Author Hub
   author: {
     title: "Author Profile & Editorial Team | Financial Experts & Researchers",
-    description: "Meet the certified wealth advisors, financial researchers, and market analysts behind KNAPS investment research, financial articles, and portfolio guides.",
+    description: "Meet the amfi registered mutual fund distributor, financial researchers, and market analysts behind KNAPS investment research, financial articles, and portfolio guides.",
     canonicalPath: "/author",
-    keywords: ["KNAPS authors and experts", "financial research team", "certified wealth advisor", "market analyst profile", "KNAPS editorial team"],
+    keywords: ["KNAPS authors and experts", "financial research team", "market analyst profile", "KNAPS editorial team"],
     primaryKeyword: "KNAPS authors and experts",
-    secondaryKeywords: ["financial research team", "certified wealth advisor", "market analyst profile", "KNAPS editorial team"],
-    h1: "Expert Editorial & Investment Advisory Team",
+    secondaryKeywords: ["financial research team", "market analyst profile", "KNAPS editorial team"],
+    h1: "KNAPS Investment Research Team",
     ogType: "profile",
     schemaType: "ProfilePage"
   },
@@ -326,9 +326,9 @@ export const PAGE_SEO = {
     title: "Contact KNAPS AMFI Registered Mutual Funds Distributor",
     description: "Get in touch with KNAPS. Visit our New Delhi office at DLF Galleria Mayur Vihar, call +91-9990243143, or schedule a 1-on-1 portfolio consultation.",
     canonicalPath: "/contact",
-    keywords: ["contact KNAPS", "financial advisor Mayur Vihar", "wealth management Delhi office", "investment consultation contact", "KNAPS phone number"],
+    keywords: ["contact KNAPS", "AMFI Registered Mutual Fund Distributor", "Mutual Fund Distributor Delhi office", "investment consultation contact", "KNAPS phone number"],
     primaryKeyword: "contact KNAPS",
-    secondaryKeywords: ["financial advisor Mayur Vihar", "wealth management Delhi office", "investment consultation contact", "KNAPS phone number"],
+    secondaryKeywords: ["AMFI Registered Mutual Fund Distributor", "Mutual Fund Distributor Delhi office", "investment consultation contact", "KNAPS phone number"],
     h1: "Talk To Our Financial Experts",
     ogType: "website",
     schemaType: "ContactPage"
@@ -362,12 +362,12 @@ export const PAGE_SEO = {
 
   // 24. Terms & Conditions
   terms: {
-    title: "Terms and Conditions | Website Usage & Advisory Terms",
-    description: "Read the terms and conditions governing the use of the KNAPS website, financial tools, content, and mutual fund distribution advisory services.",
+    title: "Terms and Conditions | Website Usage & Terms",
+    description: "Read the terms and conditions governing the use of the KNAPS website, financial tools, content, and mutual fund distribution services.",
     canonicalPath: "/terms-and-conditions",
-    keywords: ["terms and conditions KNAPS", "website terms of use", "financial advisory terms", "disclaimer and limitation of liability", "distribution terms"],
+    keywords: ["terms and conditions KNAPS", "website terms of use", "disclaimer and limitation of liability", "distribution terms"],
     primaryKeyword: "terms and conditions KNAPS",
-    secondaryKeywords: ["website terms of use", "financial advisory terms", "disclaimer and limitation of liability", "distribution terms"],
+    secondaryKeywords: ["website terms of use", "disclaimer and limitation of liability", "distribution terms"],
     h1: "Terms & Conditions of Service",
     ogType: "website",
     schemaType: "WebPage"
