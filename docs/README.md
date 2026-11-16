@@ -1,95 +1,67 @@
-# Dhanada software design
+# Dhanada design documentation
 
 Status: Draft. Last updated: 2026-11-16.
 
-Dhanada is a Frappe app for KNAPS. It supports a multi-product financial distribution business.
+This folder is the design reference for the Dhanada platform. It separates the business model from the implementation model so the product, domain, decisions, and examples remain easy to review and change.
 
 ## Purpose
 
-This documentation set is the design reference for the Dhanada back-office suite. It covers the business scope, domain model, data model, access rules, and open decisions. It does not contain code.
+The design set defines a working operating model for a multi-product financial distribution business. It explains:
 
-## Audience
+- what the business does and why
+- what objects exist in the domain and how they relate
+- how the model is represented in records and controls
+- which decisions are accepted, proposed, or still open
+- how the model behaves in representative scenarios
 
-- Product owners
-- Engineers
-- Compliance and operations
-- Relationship managers
+## Documentation map
 
-## Reading order
+| Layer | Focus | Start here |
+|---|---|---|
+| [01-product](01-product/README.md) | Business context, scope, roles, and requirements | [01-product/README.md](01-product/README.md) |
+| [02-domain](02-domain/README.md) | Business objects, relationships, and operating rules | [02-domain/README.md](02-domain/README.md) |
+| [03-data-model](03-data-model/README.md) | Records, conventions, access control, and lifecycles | [03-data-model/README.md](03-data-model/README.md) |
+| [04-decisions](04-decisions/README.md) | ADRs and the open-question register | [04-decisions/README.md](04-decisions/README.md) |
+| [05-examples](05-examples/README.md) | Worked examples with the same family and participants | [05-examples/README.md](05-examples/README.md) |
 
-1. [`01-product/vision-and-scope.md`](01-product/vision-and-scope.md)
-2. [`01-product/personas-and-roles.md`](01-product/personas-and-roles.md)
-3. [`01-product/requirements.md`](01-product/requirements.md)
-4. [`01-product/glossary.md`](01-product/glossary.md)
-5. [`02-domain/context-map.md`](02-domain/context-map.md)
-6. [`02-domain/clients-and-families.md`](02-domain/clients-and-families.md)
-7. [`02-domain/related-parties.md`](02-domain/related-parties.md)
-8. [`02-domain/products-and-providers.md`](02-domain/products-and-providers.md)
-9. [`02-domain/product-model/README.md`](02-domain/product-model/README.md)
-10. [`03-data-model/conventions.md`](03-data-model/conventions.md)
-11. [`03-data-model/erd.md`](03-data-model/erd.md)
-12. [`03-data-model/field-dictionary/README.md`](03-data-model/field-dictionary/README.md)
-13. [`03-data-model/access-control.md`](03-data-model/access-control.md)
-14. [`03-data-model/lifecycles.md`](03-data-model/lifecycles.md)
-15. [`04-decisions/open-questions.md`](04-decisions/open-questions.md)
+## Reading paths
 
-Then read the worked examples in [`05-examples/README.md`](05-examples/README.md). They are the fastest way to understand the design.
+### Business-first path
 
-## Status labels
+1. [01-product/vision-and-scope.md](01-product/vision-and-scope.md)
+2. [01-product/personas-and-roles.md](01-product/personas-and-roles.md)
+3. [02-domain/context-map.md](02-domain/context-map.md)
+4. [02-domain/clients-and-families.md](02-domain/clients-and-families.md)
+5. [04-decisions/open-questions.md](04-decisions/open-questions.md)
 
-- **Decided**: confirmed by the business. A change needs an ADR update.
-- **Proposed**: recommended design. Needs confirmation.
-- **Deferred**: the decision is pushed to a later phase.
-- **Open**: not decided. See the open questions register.
+### Implementation path
 
-## Scope summary
+1. [01-product/requirements.md](01-product/requirements.md)
+2. [02-domain/products-and-providers.md](02-domain/products-and-providers.md)
+3. [02-domain/product-model/README.md](02-domain/product-model/README.md)
+4. [03-data-model/conventions.md](03-data-model/conventions.md)
+5. [03-data-model/erd.md](03-data-model/erd.md)
+6. [03-data-model/field-dictionary/README.md](03-data-model/field-dictionary/README.md)
 
-Phase 1 is a back-office suite and a public website. It covers all product lines for catalog and holdings, with full category detail. Transactions are entered manually. The client portal comes later.
+### Example-led path
 
-## Current status
+1. [05-examples/README.md](05-examples/README.md)
+2. [05-examples/sharma-family.md](05-examples/sharma-family.md)
+3. [05-examples/new-client-journey.md](05-examples/new-client-journey.md)
+4. [05-examples/minor-and-guardian.md](05-examples/minor-and-guardian.md)
+5. [05-examples/joint-holders-and-nominee.md](05-examples/joint-holders-and-nominee.md)
 
-- **Decided**: Party layer, client code, Client statuses with no Prospect, duplicate rules, Family as a grouping of Parties, Party-based Family membership, a mandatory primary-Family Head, a flat Family model, the employee Family view, separate entity AUM, holder ranks with no owner share, holding-level guardians, nominee shares, and holding-based client reports.
-- **Deferred**: Aadhaar collection, POA, and Family visibility consent for clients.
-- **Proposed**: hybrid product model, employee and RM model, licensing rules.
-- **Open**: product category depth, ownership history, beneficial owner depth, legal entity structure, commission calculation, website features, migration, retention, currency, and naming. See the register.
+## Decision and status rules
 
-## Document map
+- Use the glossary as the naming reference.
+- Keep policy and rationale in the ADRs and open-question register.
+- Keep illustrative scenarios in the example folder.
+- Keep implementation detail in the data-model folder.
+- Treat the open-question register as the single source of truth for unresolved items.
 
-| Folder | Document | Status | Purpose |
-|---|---|---|---|
-| 01-product | [Vision and scope](01-product/vision-and-scope.md) | Draft | Business context, goals, phase 1 scope, non-goals. |
-| 01-product | [Personas and roles](01-product/personas-and-roles.md) | Draft | Employee and client personas. |
-| 01-product | [Requirements](01-product/requirements.md) | Draft | Functional and non-functional requirements by module. |
-| 01-product | [Glossary](01-product/glossary.md) | Draft | One name for one concept. |
-| 02-domain | [Context map](02-domain/context-map.md) | Draft | Business contexts and their links. |
-| 02-domain | [Clients and families](02-domain/clients-and-families.md) | Draft | Core identity, Client, Family, lineage, employee views. |
-| 02-domain | [Related parties](02-domain/related-parties.md) | Draft | Roles, owner ranks, guardian scope, AUM, scenarios. |
-| 02-domain | [Products and providers](02-domain/products-and-providers.md) | Proposed | Product catalog, plans, applications, holdings, commission. |
-| 02-domain | [Product model](02-domain/product-model/README.md) | Proposed | The hybrid spine, category catalog, values, question bank, draft model. |
-| 03-data-model | [Conventions](03-data-model/conventions.md) | Draft | Frappe naming, keys, audit, PII, deletion, indexes. |
-| 03-data-model | [ERD](03-data-model/erd.md) | Draft | Identity, family, and distribution diagrams. |
-| 03-data-model | [Field dictionary](03-data-model/field-dictionary/README.md) | Draft | Core and distribution DocType fields. |
-| 03-data-model | [Access control](03-data-model/access-control.md) | Draft | Roles, permissions, PII masking, audit. |
-| 03-data-model | [Lifecycles](03-data-model/lifecycles.md) | Draft | State diagrams. |
-| 04-decisions | [Open questions](04-decisions/open-questions.md) | Live | Single register of open decisions. |
-| 04-decisions | [ADR-0001](04-decisions/adr-0001-party-layer.md) | Accepted | Party layer. |
-| 04-decisions | [ADR-0002](04-decisions/adr-0002-family-model.md) | Accepted | Family model. |
-| 04-decisions | [ADR-0003](04-decisions/adr-0003-product-model.md) | Proposed | Product and Plan model. |
-| 04-decisions | [ADR-0004](04-decisions/adr-0004-client-identity-and-lifecycle.md) | Accepted | Client code, Client statuses, duplicate rules, Aadhaar deferral. |
-| 04-decisions | [ADR-0005](04-decisions/adr-0005-family-scope-and-employee-view.md) | Accepted | Family scope, mandatory Head, employee views, entity AUM. |
-| 04-decisions | [ADR-0006](04-decisions/adr-0006-family-membership-by-party.md) | Accepted | Family membership links a Party. |
-| 04-decisions | [ADR-0007](04-decisions/adr-0007-holdings-holders-and-nominees.md) | Accepted | Holder ranks, nominee shares, holding-level guardian. |
-| 04-decisions | [ADR-0008](04-decisions/adr-0008-client-reports-are-holding-based.md) | Accepted | Client reports use Holdings, not the Family. |
-| 05-examples | [Worked examples](05-examples/README.md) | Draft | The Sharma family and six client journeys. |
+## Current design status
 
-## Rules for this documentation
-
-- Use one name for one concept. The glossary is the reference.
-- Use Mermaid for diagrams.
-- Give every open question an ID in the register.
-- Put a plain-language explanation before a technical table.
-- Do not put code in this folder.
-
-## Open questions
-
-The register is the single list: [`04-decisions/open-questions.md`](04-decisions/open-questions.md).
+- Decided: party layer, identity and duplicate rules, family structure, employee view, holder ranking, guardianship on holdings, nominee handling, and holding-based client reports.
+- Deferred: Aadhaar collection, POA, and family visibility consent for clients.
+- Proposed: hybrid product model, employee and RM model, licensing rules, and category depth decisions.
+- Open: ownership history, beneficial-owner depth, legal entity structure, commission calculation, website scope, migration, retention, naming, and currency.
