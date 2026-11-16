@@ -2,66 +2,102 @@
 
 Status: Draft. Last updated: 2026-11-16.
 
-This folder is the design reference for the Dhanada platform. It separates the business model from the implementation model so the product, domain, decisions, and examples remain easy to review and change.
+This folder is the design reference for the Dhanada platform. It explains the business, the records, and the rules that connect them.
 
-## Purpose
-
-The design set defines a working operating model for a multi-product financial distribution business. It explains:
-
-- what the business does and why
-- what objects exist in the domain and how they relate
-- how the model is represented in records and controls
-- which decisions are accepted, proposed, or still open
-- how the model behaves in representative scenarios
+The set is organised by **concept**, not by document type. One page holds everything a reader needs for one concept: what it is, how it works, the rules, the records and fields, access, lifecycle, decisions, and a worked example. Reference material supports the pages but is not required reading.
 
 ## Documentation map
 
-| Layer | Focus | Start here |
+| Section | What it holds | Start here |
 |---|---|---|
-| [01-product](01-product/README.md) | Business context, scope, roles, and requirements | [01-product/README.md](01-product/README.md) |
-| [02-domain](02-domain/README.md) | Business objects, relationships, and operating rules | [02-domain/README.md](02-domain/README.md) |
-| [03-data-model](03-data-model/README.md) | Records, conventions, access control, and lifecycles | [03-data-model/README.md](03-data-model/README.md) |
-| [04-decisions](04-decisions/README.md) | ADRs and the open-question register | [04-decisions/README.md](04-decisions/README.md) |
-| [05-examples](05-examples/README.md) | Worked examples with the same family and participants | [05-examples/README.md](05-examples/README.md) |
+| [01-foundations](01-foundations/) | Why the business and system exist: vision, roles, glossary, requirements | [vision and scope](01-foundations/vision-and-scope.md) |
+| [02-model](02-model/) | One self-contained page per business concept | [model overview](02-model/README.md) |
+| [03-reference](03-reference/) | Data model, decision records, open questions, question bank | [data model](03-reference/data-model.md) |
+| [04-scenarios](04-scenarios/) | Worked examples with the same family and cast | [scenarios](04-scenarios/README.md) |
+
+### Model pages
+
+| Page | Concept |
+|---|---|
+| [Party and Client](02-model/01-party-and-client.md) | Identity, client relationship, client types, lifecycle |
+| [Family](02-model/02-family.md) | Household grouping, membership, Head, lineage, employee view |
+| [Related parties and ownership](02-model/03-related-parties-and-ownership.md) | Roles, owners, nominees, guardians, AUM attribution |
+| [Products and providers](02-model/04-products-and-providers.md) | Provider, Product, Plan, category details, rate and NAV |
+| [Leads and applications](02-model/05-leads-and-applications.md) | Sales pipeline and purchase request |
+| [Holdings and investments](02-model/06-holdings-and-investments.md) | What the Client owns, valuation, transactions |
+| [Commission](02-model/07-commission.md) | Rules, earnings, statements, reconciliation |
+| [Servicing](02-model/08-servicing.md) | Requests, reviews, reminders, claims, consent |
+| [Access and audit](02-model/09-access-and-audit.md) | Roles, row-level access, PII, audit, maker-checker |
 
 ## Reading paths
 
-### Business-first path
+### New reader
 
-1. [01-product/vision-and-scope.md](01-product/vision-and-scope.md)
-2. [01-product/personas-and-roles.md](01-product/personas-and-roles.md)
-3. [02-domain/context-map.md](02-domain/context-map.md)
-4. [02-domain/clients-and-families.md](02-domain/clients-and-families.md)
-5. [04-decisions/open-questions.md](04-decisions/open-questions.md)
+1. [Vision and scope](01-foundations/vision-and-scope.md)
+2. [Personas and roles](01-foundations/personas-and-roles.md)
+3. [Party and Client](02-model/01-party-and-client.md)
+4. [Family](02-model/02-family.md)
+5. [Related parties and ownership](02-model/03-related-parties-and-ownership.md)
+6. [The Sharma family](04-scenarios/sharma-family.md)
 
-### Implementation path
+### Implementer
 
-1. [01-product/requirements.md](01-product/requirements.md)
-2. [02-domain/products-and-providers.md](02-domain/products-and-providers.md)
-3. [02-domain/product-model/README.md](02-domain/product-model/README.md)
-4. [03-data-model/conventions.md](03-data-model/conventions.md)
-5. [03-data-model/erd.md](03-data-model/erd.md)
-6. [03-data-model/field-dictionary/README.md](03-data-model/field-dictionary/README.md)
+1. [Data model](03-reference/data-model.md)
+2. [Party and Client](02-model/01-party-and-client.md)
+3. [Products and providers](02-model/04-products-and-providers.md)
+4. [Holdings and investments](02-model/06-holdings-and-investments.md)
+5. [Access and audit](02-model/09-access-and-audit.md)
+6. [Open questions](03-reference/open-questions.md)
 
-### Example-led path
+### Reviewer or decision maker
 
-1. [05-examples/README.md](05-examples/README.md)
-2. [05-examples/sharma-family.md](05-examples/sharma-family.md)
-3. [05-examples/new-client-journey.md](05-examples/new-client-journey.md)
-4. [05-examples/minor-and-guardian.md](05-examples/minor-and-guardian.md)
-5. [05-examples/joint-holders-and-nominee.md](05-examples/joint-holders-and-nominee.md)
+1. [Open questions](03-reference/open-questions.md)
+2. [Decision records](03-reference/decisions/README.md)
+3. [Product question bank](03-reference/product-question-bank.md)
+4. [Requirements](01-foundations/requirements.md)
 
-## Decision and status rules
+### Example-led reader
 
-- Use the glossary as the naming reference.
-- Keep policy and rationale in the ADRs and open-question register.
-- Keep illustrative scenarios in the example folder.
-- Keep implementation detail in the data-model folder.
-- Treat the open-question register as the single source of truth for unresolved items.
+1. [Scenarios](04-scenarios/README.md)
+2. [The Sharma family](04-scenarios/sharma-family.md)
+3. [New client journey](04-scenarios/new-client-journey.md)
+4. [Minor and guardian](04-scenarios/minor-and-guardian.md)
+5. [Joint holders and nominee](04-scenarios/joint-holders-and-nominee.md)
+
+## How each model page is built
+
+Every model page uses the same parts, in this order where the concept has them:
+
+1. **In plain words**: the idea in business language.
+2. **How it works**: the rules and the flow.
+3. **Rules and invariants**: the short list an implementer must not break.
+4. **Records and fields**: the records, with the full field list in a collapsed block.
+5. **Who can see or change it**: access rules for this concept.
+6. **Lifecycle**: the states, where the concept has them.
+7. **Decisions and open questions**: the current status and links to the record.
+8. **Worked example**: the rule shown with real people.
+
+A concept may add a section before the rules when it needs one, such as a catalog, a scope note, or trade-offs. A proposed concept may stop at the proposed fields. Read one page and stop. The page is complete for that concept. Follow a link only when you need another concept or the supporting evidence.
+
+## Status labels
+
+- **Decided**: accepted and recorded in a decision record.
+- **Proposed**: recommended, not confirmed.
+- **Open**: no decision. The open-question register is the single source of truth.
+- **Deferred**: pushed to a later phase.
 
 ## Current design status
 
-- Decided: party layer, identity and duplicate rules, family structure, employee view, holder ranking, guardianship on holdings, nominee handling, and holding-based client reports.
-- Deferred: Aadhaar collection, POA, and family visibility consent for clients.
-- Proposed: hybrid product model, employee and RM model, licensing rules, and category depth decisions.
-- Open: ownership history, beneficial-owner depth, legal entity structure, commission calculation, website scope, migration, retention, naming, and currency.
+- **Decided:** party layer, client identity and duplicate rules, client code, client statuses, family structure, family membership by Party, Family Head, employee family view, holder ranks, guardian on the Holding, nominee handling, and holding-based client reports.
+- **Proposed:** hybrid product model, application and holding model, commission recording and reconciliation, employee and RM roles, and category depth.
+- **Deferred:** Aadhaar collection, POA, and family visibility consent for clients.
+- **Open:** ownership history, beneficial-owner depth, legal entity structure, commission calculation, website scope, migration, retention, naming, and currency.
+
+## Rules of use
+
+- Use the [glossary](01-foundations/glossary.md) as the naming reference.
+- State each rule in one place. Link to it from other pages. Do not restate it.
+- Keep the current rule on the model page. Keep the rationale in a decision record.
+- Keep unresolved items in the [open-question register](03-reference/open-questions.md).
+- Keep illustrative stories in [scenarios](04-scenarios/README.md).
+- Keep the full field list on the model page. Keep cross-cutting schema rules in the [data model](03-reference/data-model.md).
