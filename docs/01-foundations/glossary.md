@@ -68,19 +68,40 @@ Use one name for one concept. This page is the reference for names in the docume
 | Relationship Manager (RM) | An employee who manages client relationships. Use RM, not Advisor. Adviser is a regulated term. | Advisor, Agent |
 | Team | A group of employees with a leader. Used for client assignment and visibility. | Department |
 | Client Assignment | The link between a Client and an RM or another employee role. | Ownership |
-| Commission | Revenue earned from a Provider or Distribution Partner on an Application, Holding, or Transaction. | Revenue, Fee |
+| Commission | Revenue earned from a Provider or Distribution Partner on an Application, Holding, or Referral Case. Commission tracking starts in phase 2. | Revenue, Fee |
 
 ## Product categories
 
 | Term | Definition |
 |---|---|
-| SIF | Specialised Investment Fund. A SEBI product category. |
-| MF | Mutual Fund. |
-| NPS | National Pension System. |
-| PMS | Portfolio Management Service. |
-| AIF | Alternative Investment Fund. |
-| NBFC FD | A fixed deposit with a Non-Banking Financial Company. |
+| MF | Mutual Fund. A pooled fund with units and a NAV. |
+| SIF | Specialised Investment Fund. A SEBI product category with strategies such as long-short equity. |
+| Regular Plan | A plan that pays distribution commission. KNAPS sells regular plans only. |
+| Fixed Deposit (FD) | A lump sum placed with a bank, a company, or an NBFC for a fixed term at a fixed rate. Bank, corporate, and NBFC deposits are one product family. |
+| Corporate Deposit | A fixed deposit with a company. A corporate deposit is an FD, not a bond. |
+| RBI Floating Rate Savings Bond | A non-tradable savings bond issued by the RBI. The coupon resets at intervals. |
+| 54EC Capital Gains Bond | A bond under Section 54EC with a five-year lock-in and an annual investment cap. |
+| NPS | National Pension System. Tier I and Tier II accounts with units and a NAV per scheme. |
+| NPS Vatsalya | An NPS account for a minor, opened and operated by a guardian until the minor turns 18. |
+| Corporate NPS | An NPS account with an employer contribution. |
+| PMS | Portfolio Management Service. A manager runs a portfolio in the Client's name. |
+| AIF | Alternative Investment Fund. A pooled fund for a small number of large investors. |
 | Post Office Scheme | A small savings or recurring deposit scheme offered by India Post. |
+
+## Distribution and referral
+
+| Term | Definition |
+|---|---|
+| Scheme Master | The provider file that lists sellable scheme rows, their codes, ISIN, amounts, cutoffs, and flags. AMFI and BSE Star are the sources for MF and SIF. |
+| Plan Transaction Rule | The per-plan rules for purchase, redemption, SIP, STP, SWP, and switch. It holds the minimum, maximum, multiple, cutoff, mode, and settlement code. |
+| NFO | New Fund Offer. A plan is open for purchase for a short window before regular trading starts. |
+| Distributor Code | A firm registration or partner code. Examples: ARN, APMI, AMC channel code, NBFC code, DP code. |
+| ARN | AMFI Registration Number. KNAPS holds one ARN for mutual fund and SIF distribution. |
+| APMI | Association of Portfolio Managers in India membership code. KNAPS holds one APMI. |
+| Referral Case | A record of a demat, CASA, or loan referral to a partner. It is not a Holding and it does not add to AUM. |
+| Demat Referral | A Referral Case where KNAPS opens a demat account for the Client with Aditya Birla Money. |
+| CASA Referral | A Referral Case where KNAPS opens a savings or current account for the Client with HDFC Bank. |
+| Loan Referral | A Referral Case where KNAPS refers the Client to a bank or NBFC for a loan. The payout basis is the disbursed amount. |
 
 ## Measures and records
 
@@ -90,6 +111,7 @@ Use one name for one concept. This page is the reference for names in the docume
 | AUM | Assets Under Management. The total value of Holdings owned by Clients, counted by the ownership rules. |
 | Personal AUM | AUM of individual Clients. |
 | Entity AUM | AUM of entity Clients, such as an HUF or a company. Reported on a separate line from personal AUM. |
+| Valuation | One value of one Holding on one date, with a source. A new value is a new Valuation row. |
 | RTA | Registrar and Transfer Agent. A service provider for mutual fund records. |
 
 ## Naming rules

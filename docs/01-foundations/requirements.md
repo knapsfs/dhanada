@@ -37,21 +37,25 @@ This page lists the functional and non-functional requirements by module. It is 
 | SL-03 | Track an onboarding checklist and approvals. | 1 | Proposed |
 | SL-04 | Create an Application for a Product and Plan. | 1 | Decided |
 | SL-05 | Record applicant, holder, nominee, guardian, and payer roles. Store holder rank, nominee share, and the minor a guardian acts for. | 1 | Decided |
-| SL-06 | Create a Holding from an approved Application. | 1 | Decided |
-| SL-07 | Enter transactions manually for every product. | 1 | Decided |
-| SL-08 | Import RTA, CAS, and provider statements. | 2 | Proposed |
-| SL-09 | Record commission and reconcile provider statements. | 1 | Open, OQ-020 |
+| SL-06 | Create a Holding from an approved Application, or enter it directly at the service desk with a reason. | 1 | Decided |
+| SL-07 | Enter Holdings manually for every product. Do not record transactions in phase 1. | 1 | Decided |
+| SL-08 | Import RTA, CAS, AMFI, BSE Star, and provider data. | 2 | Proposed |
+| SL-09 | Record commission and reconcile provider statements. | 2 | Deferred, OQ-020 |
 | SL-10 | Track licenses and block a sale when a license is expired. | 1 | Open, OQ-024 |
 | SL-11 | Use maker-checker for high-risk changes. | 1 | Open, OQ-025 |
 | SL-12 | Record the business source and Distribution Partner on each Application. | 1 | Decided |
 | SL-13 | Record up to three holders in order, with no ownership share. | 1 | Decided |
 | SL-14 | Record an ownership event on death, claim, gift, or transfer. Handle a nominee change through a Service Request. | 1 | Proposed, OQ-011 |
+| SL-15 | Record a Valuation row for each manual value update, with an as-on date and a source. | 1 | Proposed |
+| SL-16 | Create a Referral Case for demat, CASA, and loan referrals. A referral never creates a Holding. | 1 | Proposed, OQ-034 |
+| SL-17 | Sell regular plans only. Do not create a direct plan. | 1 | Decided |
+| SL-18 | Store the firm ARN, APMI, one code per NBFC, and one code per AMC in a Distributor Code record. | 1 | Proposed |
 
 ## 5. Servicing
 
 | ID | Requirement | Phase | Status |
 |---|---|---|---|
-| SV-01 | Record a portfolio value for each Holding. | 1 | Proposed |
+| SV-01 | Record a current value and a Valuation row for each Holding, with an as-on date and a source. | 1 | Proposed |
 | SV-02 | Create reminders for premium due, maturity, SIP failure, KYC expiry, and review due. | 1 | Decided |
 | SV-03 | Schedule and record review meetings. | 1 | Decided |
 | SV-04 | Track Service Requests and Grievances. | 1 | Decided |
@@ -64,6 +68,7 @@ This page lists the functional and non-functional requirements by module. It is 
 | SV-11 | Record maturity instructions and renewal outcomes. | 1 | Proposed |
 | SV-12 | Report personal AUM and entity AUM on separate lines at Family level. | 1 | Decided |
 | SV-13 | Build client reports from Holdings, not from the Family. Show a Joint Holder with a Joint badge and no value. | 1 | Decided |
+| SV-14 | Follow up on an open Referral Case and record its outcome. | 1 | Proposed |
 
 ## 6. Marketing
 
@@ -105,6 +110,9 @@ This page lists the functional and non-functional requirements by module. It is 
 | PL-20 | Never edit a Rate Card or NAV row after use. Add a new row. | 1 | Proposed |
 | PL-21 | Read only Product and Plan data on the public website. | 1 | Proposed |
 | PL-22 | Allow direct Holding entry with a reason, for migration and backfill. | 1 | Proposed, P-103 |
+| PL-23 | Store firm registrations and partner codes in a Distributor Code record. | 1 | Proposed |
+| PL-24 | Record demat, CASA, and loan referrals in a Referral Case record. | 1 | Proposed, OQ-034 |
+| PL-25 | Filter the catalog and the website to regular plans only. | 1 | Decided |
 
 ## 8. Non-functional requirements
 
@@ -127,7 +135,9 @@ See the [open questions register](../03-reference/open-questions.md). The major 
 
 - Employee and RM model
 - Legal entity structure
-- Commission calculation
+- Referral case scope
+- SIF minimum investment
+- Scheme master import
 - Website features
 - Data migration
 - Retention

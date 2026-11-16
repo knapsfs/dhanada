@@ -31,10 +31,10 @@ Status: Live. Last updated: 2026-11-16.
 | OQ-014 | POA | Is POA scope and expiry in phase 1? | No. Defer the role and the approval workflow. | Deferred |
 | OQ-015 | Entity | Is beneficial owner tracking in phase 1? | Basic fields. Needs a decision on depth. | Open |
 | OQ-016 | Reporting | Do related people appear in client reports? | No. Client reports are holding-based, not family-based. | Closed, [ADR-0008](decisions/adr-0008-client-reports-are-holding-based.md) |
-| OQ-017 | Product | Is the hybrid Product and Plan model accepted? | Yes. One common spine plus one category detail record. See [Products and providers](../02-model/04-products-and-providers.md). | Open |
-| OQ-018 | Product | Which category details are phase 1? | All categories in detail. Depth per category is in the question bank. | Open |
+| OQ-017 | Product | Is the hybrid Product and Plan model accepted? | Yes. One common spine plus one category detail record, in three commercial shapes. See [Products and providers](../02-model/04-products-and-providers.md). | Open |
+| OQ-018 | Product | Which category details are phase 1? | All twelve investment and protection lines. Depth per family is in the question bank. Referral lines are separate. | Open |
 | OQ-019 | Legal entity | Which products sit in which legal entity? | Model a Legal Entity record even if one entity is used now. | Open |
-| OQ-020 | Commission | Is phase 1 calculation, reconciliation, or both? | Record and reconcile first. Calculate later. | Open |
+| OQ-020 | Commission | Is phase 1 calculation, reconciliation, or both? | No commission tracking in phase 1. Record and reconcile in phase 2. | Deferred |
 | OQ-021 | Website | Which website features are phase 1? | Product pages, lead capture, appointment booking, risk profiler, blog and SEO. | Open |
 | OQ-022 | Documents | Are simple private attachments allowed without a document vault? | Yes. Use categories and access control. | Open |
 | OQ-023 | Employees | What is the RM model? | One primary RM per Client. Optional secondary RM or product specialist. Team Lead sees the team. | Open |
@@ -48,6 +48,14 @@ Status: Live. Last updated: 2026-11-16.
 | OQ-031 | Currency | INR only or multi-currency? | INR only in phase 1. | Open |
 | OQ-032 | Migration | How do we migrate the existing Client, Family, and Lead data? | Map to Party, Client, and Family. Dedupe. Keep a legacy ID. | Open |
 | OQ-033 | Reporting | Is entity AUM part of the Family personal total? | No. Report entity AUM on a separate line. | Closed, [ADR-0005](decisions/adr-0005-family-scope-and-employee-view.md) |
+| OQ-034 | Referral | Is a referral only a referral and a payout, or do we also track balances and loan liability? | Referral only in phase 1. Do not track a balance or a liability. | Open |
+| OQ-035 | Referral | Which loan types do we refer, and do we track EMI or outstanding? | Record the referral and the disbursed amount. No EMI schedule. | Open |
+| OQ-036 | Product | The scheme master shows a ₹1,00,000 SIF minimum. The page said ₹10,00,000. Which applies? | Confirm with the AMC and the current SEBI rule. | Open |
+| OQ-037 | Product | Which bonds are in scope? | RBI Floating Rate Savings Bonds and 54EC Capital Gains Bonds only. No T-Bills, SDL, dated GoI, or SGB. | Open |
+| OQ-038 | Holding | Do some MF or SIF units sit in demat? The scheme master has DP and P modes. | Assume physical in phase 1. Confirm the mode meaning. | Open |
+| OQ-039 | Product | Which scheme master sources and filters apply? | AMFI and BSE Star. Regular plans only. Separate importers in phase 2. | Open |
+| OQ-040 | Holding | Do we keep every Valuation row or only the latest? | Keep every row, with a source and an as-on date. | Open |
+| OQ-041 | Product | What do the L1 rows, the AMC_IND column, and the INSURED rows mean in the scheme master? | Ask the RTA. Exclude INSURED rows until confirmed. | Open |
 
 ## OQ-011: ownership history
 
@@ -124,12 +132,23 @@ When it reopens, decide:
 - Whether a POA change needs maker-checker.
 - Whether the POA holder can see the Client's portfolio.
 
+### OQ-020: commission
+
+Commission is deferred to phase 2. Phase 1 stores no commission rule, earning, statement, or reconciliation.
+
+When it reopens, decide:
+
+- Whether phase 2 calculates or only records and reconciles.
+- How the demat brokerage share, the CASA payout, and the loan payout are linked.
+- Which legal entity earns each commission.
+
 ## Product discussion
 
 OQ-017 and OQ-018 need a full discussion. The working pages are:
 
 - The hybrid model in plain words: [Products and providers](../02-model/04-products-and-providers.md).
 - Category examples and depth: [Products and providers](../02-model/04-products-and-providers.md#category-recording-guide).
+- The referral lines: [Referrals](../02-model/10-referrals.md).
 - The question bank: [Product question bank](product-question-bank.md).
 
 ## Related decisions

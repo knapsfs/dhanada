@@ -21,7 +21,13 @@ This page holds the reference rules for Frappe DocTypes in Dhanada. The model pa
 | Party Relationship | DocType | Independent relationship with dates and status. |
 | Identity Document | DocType | Needs verification status and audit. |
 | Holding Party | DocType | Role on a Holding with rank, guardian link, and dates. |
+| Valuation | DocType | One value on one date, with a source and audit. |
+| Referral Case | DocType | One referral, with its own identity, status, and audit. |
+| Referral Note | DocType | A follow-up note on a Referral Case. |
+| Distributor Code | DocType | A firm registration or partner code with validity. |
 | Visibility Grant | DocType | Portal phase. Consent record with evidence and expiry. |
+
+Transaction and Commission are phase 2. Do not build them in phase 1.
 
 ## Keys and naming
 
@@ -40,6 +46,7 @@ Confirm the UUID naming method on Frappe 16 during implementation. If the framew
 | Lead | `name` | `LEAD-2026-00001` | Proposed |
 | Application | `name` | `APP-2026-00001` | Proposed |
 | Holding | `name` | `HLD-2026-00001` | Proposed |
+| Referral Case | `name` | `REF-2026-00001` | Proposed |
 
 A code is unique and immutable. It is not a security key. Do not use PAN, mobile, or email as a key.
 
@@ -109,6 +116,9 @@ The role rules are in [Access and audit](../02-model/09-access-and-audit.md).
 - Unique: one Owner per `holder_rank` per Holding.
 - Unique: one active Guardian per minor Party per Holding.
 - Nominee shares on one Holding total 100 when there is more than one nominee.
+- Unique: one Valuation per Holding per date.
+- Unique: one active Referral Case per Client, partner, and type.
+- Unique: one active Distributor Code per code type and provider.
 - Search: legal name, mobile, email, client code.
 - Index: status, primary RM, primary Family, PAN.
 
@@ -125,9 +135,12 @@ The role rules are in [Access and audit](../02-model/09-access-and-audit.md).
 Proposed Frappe modules:
 
 - **Dhanada Core:** Party, Client, Family, Identity, Visibility.
-- **Dhanada Distribution:** Provider, Product, Plan, Lead, Application, Holding, Transaction, Commission.
+- **Dhanada Distribution:** Provider, Product, Plan, Plan Transaction Rule, Distributor Code, Lead, Application, Holding, Valuation.
+- **Dhanada Referral:** Referral Case, Referral Note.
 - **Dhanada Servicing:** Service Request, Review, Reminder.
 - **Dhanada Marketing:** Campaign, Segment, Consent use.
+
+Commission and Transaction are phase 2.
 
 The split is proposed. See OQ-028.
 
@@ -168,6 +181,7 @@ erDiagram
     PROVIDER ||--o{ PRODUCT : offers
     PRODUCT ||--o{ PLAN : has
     PLAN ||--o| CATEGORY_DETAIL : "has one"
+    PLAN ||--o{ PLAN_TRANSACTION_RULE : "has rules"
     PLAN ||--o{ RATE_CARD : "has rates"
     PLAN ||--o{ NAV_HISTORY : "has values"
     CLIENT ||--o{ APPLICATION : submits
@@ -177,11 +191,15 @@ erDiagram
     APPLICATION ||--o| HOLDING : creates
     HOLDING ||--o{ HOLDING_PARTY : has
     PARTY ||--o{ HOLDING_PARTY : "plays role"
-    HOLDING ||--o{ TRANSACTION : records
+    HOLDING ||--o{ VALUATION : "valued by"
     HOLDING ||--o{ OWNERSHIP_EVENT : "history"
-    HOLDING ||--o{ COMMISSION : earns
+    CLIENT ||--o{ REFERRAL_CASE : "is referred"
+    PROVIDER ||--o{ REFERRAL_CASE : "partner in"
+    REFERRAL_CASE ||--o{ REFERRAL_NOTE : has
+    DISTRIBUTOR_CODE }o--o| PROVIDER : "code for"
     LEAD ||--o| CLIENT : converts
     LEAD ||--o| APPLICATION : "starts"
+    LEAD ||--o| REFERRAL_CASE : "starts"
 ```
 
 Notes:
@@ -189,13 +207,17 @@ Notes:
 - A Holding links to owners and roles through Holding Party. There is no separate owner column and no owner share.
 - `holder_rank` orders the owners. Rank 1 is the Primary Holder. A Holding has at most three owners.
 - `CATEGORY_DETAIL` is a logical name. Each category group has one detail DocType, linked one-to-one to Plan.
+- `Plan Transaction Rule` holds purchase, redemption, SIP, STP, SWP, and switch rules. One row per plan and transaction type.
 - `Rate Card` holds time-based rates for FD and post office. `NAV History` holds time-based values for market-linked products.
 - An Application has at most one Holding. One Client can have many Holdings.
-- A Lead can convert to a Client or start an Application for an existing Client.
+- A Holding has one or more Valuation rows. The latest row supplies the current value.
+- A Lead can convert to a Client, start an Application, or start a Referral Case.
+- A Referral Case links one Client to one partner. It never creates a Holding.
 - `Product` and `Plan` store the catalog. The Application and Holding keep a snapshot of the name and code for audit.
 - `Ownership Event` is append-only history. The current owners stay in Holding Party.
-- Commission links to the Holding and optionally to the Transaction or Application.
-- `Provider` covers AMC, insurer, NBFC, post office, NPS, PMS manager, AIF manager, and national distributor.
+- `Distributor Code` holds the ARN, APMI, AMC codes, and NBFC codes.
+- `Provider` covers AMC, insurer, bank, NBFC, corporate, post office, NPS, PMS manager, AIF manager, national distributor, and depository participant.
+- Commission and Transaction are phase 2. They are not in the phase 1 schema.
 
 ### Reading rules
 
@@ -207,6 +229,8 @@ Notes:
 6. A Family cannot own a Holding.
 7. A Related Person becomes a Client without a data copy.
 8. An entity Client is the owner of its Holdings. Beneficial Owners are not Holding owners.
+9. A Referral Case links to a Client, not to a Holding. It never adds to AUM.
+10. A Valuation belongs to one Holding. A new value is a new row.
 
 ## Field specifications
 
@@ -218,6 +242,7 @@ Every model page carries its own full field list in a collapsed block:
 - [Products and providers](../02-model/04-products-and-providers.md#records-and-fields)
 - [Leads and applications](../02-model/05-leads-and-applications.md#records-and-fields)
 - [Holdings and investments](../02-model/06-holdings-and-investments.md#records-and-fields)
+- [Referrals](../02-model/10-referrals.md#records-and-fields)
 - [Commission](../02-model/07-commission.md#records-and-fields)
 - [Servicing](../02-model/08-servicing.md#records-and-fields)
 
@@ -228,10 +253,12 @@ Every model page carries its own full field list in a collapsed block:
 | Client portfolio | Holding, Holding Party | Plan, Product |
 | AUM by category | Holding, Product | Plan |
 | Maturity calendar | Holding | Plan, Product |
-| Commission by product | Commission, Holding | Plan, Product, Provider |
-| Website product page | Product, Plan, Category Detail | None |
+| Valuation history | Valuation | Holding, Plan |
+| Referral pipeline | Referral Case | Client, Provider |
+| Website product page | Product, Plan, Plan Transaction Rule | None |
 | Rate history | Rate Card | Plan |
 | NAV chart | NAV History | Plan |
+| Commission by product | Commission, Holding | Plan, Product, Provider. Phase 2. |
 
 The client portfolio and the website never share a query path. That keeps client data out of the public tier.
 
@@ -239,18 +266,21 @@ The client portfolio and the website never share a query path. That keeps client
 
 | Step | Build | Why first |
 |---|---|---|
-| 1 | Provider, Product, Plan | The catalog is the base. |
-| 2 | MF and FD detail, Rate Card, NAV History | These cover most of the book. |
-| 3 | Application and Holding | The core transaction flow. |
-| 4 | Holding Party | Owners, nominees, and guardian. |
-| 5 | Insurance and NPS detail | Larger field sets. |
-| 6 | Post office, bond, PMS, AIF detail | Lower volume. |
-| 7 | Transaction types by family | Manual entry. |
+| 1 | Provider, Product, Plan, Distributor Code | The catalog is the base. |
+| 2 | MF and FD detail, Plan Transaction Rule, Rate Card, NAV History | These cover most of the book. |
+| 3 | Application and Holding | The core position flow. |
+| 4 | Valuation | Every manual value update. |
+| 5 | Holding Party | Owners, nominees, and guardian. |
+| 6 | Referral Case | Demat, CASA, and loan referrals. |
+| 7 | Insurance, NPS, bond, post office, PMS, and AIF detail | The remaining families. |
 | 8 | Website product pages | Public read of the catalog. |
-| 9 | Reports and commission | After the data exists. |
+| 9 | Reports | After the data exists. |
 
-Do not build yet:
+Do not build in phase 1:
 
+- A Transaction record or a transaction engine.
+- Commission or payout records.
+- AMFI, BSE Star, RTA, or provider feeds.
 - A separate portfolio DocType per category.
 - Fund accounting for PMS or AIF.
 - Insurance quotes or benefit illustrations.
@@ -281,5 +311,8 @@ See OQ-032.
 - OQ-028: Module split.
 - OQ-031: Currency.
 - OQ-032: Migration.
+- OQ-034: Referral case scope.
+- OQ-039: Scheme master import.
+- OQ-040: Valuation history.
 
 See [Open questions](open-questions.md).

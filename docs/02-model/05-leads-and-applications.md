@@ -70,6 +70,8 @@ An Application is the bridge between the sales work and the Holding.
 - An Application is never deleted. Use status.
 - An Application can carry Application Party rows: applicant, nominee, life assured, guardian, payer, and signatory. See [Related parties and ownership](03-related-parties-and-ownership.md).
 
+A referral does not use an Application. Demat, CASA, and loan referrals use a **Referral Case**. A referral has no Plan and creates no Holding. See [Referrals](10-referrals.md).
+
 ### Application lifecycle
 
 ```mermaid
@@ -122,6 +124,7 @@ A newborn or a nominee can be a Party before becoming a Client. The Lead is opti
 8. An Application can create at most one Holding.
 9. An Application keeps the name snapshots it was submitted with.
 10. A Lead or Application with history is not hard deleted. Use status.
+11. A referral line uses a Referral Case, not an Application.
 
 ## Records and fields
 
@@ -148,6 +151,7 @@ The Lead field list is proposed. Phase 1 is not fully specified.
 | campaign | Link (Campaign) | No | Attribution. |
 | product_interest | Link (Product) | No | What the Lead asked about. |
 | plan_interest | Link (Plan) | No | Optional. A Lead can name a Plan. |
+| referral_type | Select | No | Demat, CASA, Loan. Set when the Lead asks for a referral line. |
 | assigned_to | Link (User) | No | RM who owns the follow-up. |
 | status | Select | Yes | New, Contacted, Qualified, Nurturing, Proposal, Won, Lost, Junk. |
 | lost_reason | Small Text | Conditional | Required for Lost or Junk. |
@@ -205,6 +209,7 @@ Rules:
 | RM model | Open | One primary RM per Client, optional secondary RM. | OQ-023 |
 | Migration | Open | Map existing Lead data and keep a legacy ID. | OQ-032 |
 | P-103 | Open | Can a Holding be entered without an Application? | P-103 |
+| Referrals | Accepted | Demat, CASA, and loans use a Referral Case, not an Application. | [ADR-0009](../03-reference/decisions/adr-0009-phase-1-product-scope.md) |
 
 ## Worked examples
 

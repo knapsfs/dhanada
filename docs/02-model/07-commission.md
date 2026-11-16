@@ -1,16 +1,16 @@
 # Commission
 
-Status: Proposed. Last updated: 2026-11-16. OQ-020 is open.
+Status: Deferred to phase 2. Last updated: 2026-11-16. OQ-020 is deferred.
 
-This page explains how Dhanada records the money KNAPS earns from a Provider or a Distribution Partner.
+This page explains how Dhanada will record the money KNAPS earns from a Provider or a Distribution Partner. It is a phase 2 design. Phase 1 does not track commission or payouts.
 
 ## In plain words
 
-KNAPS earns commission when a Client buys or holds a product. The provider or the national distributor pays it.
+KNAPS earns commission when a Client buys or holds a product, opens an account, or takes a loan. The provider or the partner pays it.
 
 Commission is revenue. It is not the Client's money. It is not part of AUM.
 
-Phase 1 records and reconciles commission. It does not calculate it. See OQ-020.
+Phase 2 records and reconciles commission. It does not calculate it. See OQ-020.
 
 ## How it works
 
@@ -43,7 +43,7 @@ A rule is effective-dated. Do not edit a rule that an Earning already used. Add 
 
 ### Commission Earning
 
-An Earning links a Holding or Transaction to a Rule for a period:
+An Earning links a Holding, a Transaction, or a Referral Case to a Rule for a period:
 
 - Gross amount.
 - GST.
@@ -70,27 +70,29 @@ flowchart LR
     E -->|compared in| C
 ```
 
-## Phase 1 scope
+## Phase 2 scope
 
-- Record commission per Holding and Transaction.
-- Record provider statements.
+- Record commission per Holding, Transaction, and Referral Case.
+- Record provider and partner statements.
 - Reconcile statement lines to Earnings.
 - Show commission by product, provider, and period.
+- Record the demat brokerage share, the CASA payout, and the loan payout on the disbursed amount.
 - Do not calculate complex slab or trail commission. Do it manually or in the payer system.
 
 ## Rules and invariants
 
-1. A Commission Earning links to one Rule and one Holding or Transaction.
+1. A Commission Earning links to one Rule and one Holding, Transaction, or Referral Case.
 2. A Rule is effective-dated and is never edited after use.
 3. A Reconciliation line links to one Statement line and at most one Earning.
 4. Commission is revenue. It is never added to AUM.
 5. A commission adjustment is a high-risk action. It needs maker-checker.
 6. A statement file is private. It can contain client-level data.
 7. Commission amounts are masked for roles without the permission.
+8. Phase 1 stores no commission, payout, or reconciliation record.
 
 ## Records and fields
 
-Phase 1 is not fully specified. These fields are a starting point.
+Phase 2 is not fully specified. These fields are a starting point.
 
 <details>
 <summary>Proposed field list: Commission Rule</summary>
@@ -101,8 +103,8 @@ Phase 1 is not fully specified. These fields are a starting point.
 | provider | Link (Provider) | Yes | Who pays. |
 | product | Link (Product) | No | Rule at product level. |
 | plan | Link (Plan) | No | Rule at plan level. |
-| transaction_type | Select | No | Purchase, SIP, Renewal, Trail, Claim, Other. |
-| basis | Select | Yes | Percentage of AUM, Percentage of Premium, Flat Amount. |
+| transaction_type | Select | No | Purchase, SIP, Renewal, Trail, Claim, Referral, Other. |
+| basis | Select | Yes | Percentage of AUM, Percentage of Premium, Percentage of Disbursed Amount, Flat per Account, Flat Amount. |
 | rate | Percent or Currency | Yes | Depends on basis. |
 | frequency | Select | Yes | One-time, Monthly, Quarterly, Yearly. |
 | effective_from | Date | Yes | Start date. |
@@ -123,6 +125,7 @@ Phase 1 is not fully specified. These fields are a starting point.
 | rule | Link (Commission Rule) | Yes | Pricing rule. |
 | holding | Link (Holding) | No | Source position. |
 | transaction | Link (Transaction) | No | Source transaction. |
+| referral_case | Link (Referral Case) | No | Source referral. |
 | period_from | Date | Yes | Start of the earning period. |
 | period_to | Date | Yes | End of the earning period. |
 | gross_amount | Currency | Yes | Before tax. |
@@ -184,9 +187,9 @@ The full matrix is in [Access and audit](09-access-and-audit.md).
 
 | Topic | Status | Decision | Record |
 |---|---|---|---|
-| Commission scope | Open | Record and reconcile first, calculate later. | OQ-020 |
+| Commission scope | Deferred | Record and reconcile in phase 2, not phase 1. Calculate later. | OQ-020 |
 | Legal entity | Open | Which legal entity earns which commission? | OQ-019 |
 | Maker-checker | Open | Does a commission adjustment need approval? | OQ-025 |
 | P-125 | Open | Do you need commission by product and provider? | P-125 |
 
-Related: [Products and providers](04-products-and-providers.md), [Holdings and investments](06-holdings-and-investments.md), and [Open questions](../03-reference/open-questions.md).
+Related: [Products and providers](04-products-and-providers.md), [Holdings and investments](06-holdings-and-investments.md), [Referrals](10-referrals.md), and [Open questions](../03-reference/open-questions.md).

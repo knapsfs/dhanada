@@ -80,6 +80,7 @@ Reminders cover:
 - SIP failure.
 - KYC expiry.
 - Review due.
+- Referral follow-up.
 - License or registration expiry.
 - Document expiry.
 
@@ -164,7 +165,7 @@ Use either `client` or `family`, not both.
 | client | Link (Client) | No | Who must act. |
 | holding | Link (Holding) | No | Related position. |
 | license | Link (License) | No | Registration expiry. |
-| reminder_type | Select | Yes | Premium Due, Lapse, Maturity, NPS Contribution, SIP Failure, KYC Expiry, Review Due, License Expiry, Document Expiry, Other. |
+| reminder_type | Select | Yes | Premium Due, Lapse, Maturity, NPS Contribution, SIP Failure, KYC Expiry, Review Due, Referral Follow-Up, License Expiry, Document Expiry, Other. |
 | due_on | Date | Yes | When it is due. |
 | owner | Link (User) | Yes | Employee responsible. |
 | status | Select | Yes | Open, Done, Snoozed, Cancelled. |
@@ -185,7 +186,7 @@ Use either `client` or `family`, not both.
 
 | Topic | Status | Decision | Record |
 |---|---|---|---|
-| Servicing scope | Decided | Premium, lapse, maturity, NPS, SIP, KYC, review, claim, grievance | Requirements SV-01 to SV-13 |
+| Servicing scope | Decided | Premium, lapse, maturity, NPS, SIP, KYC, review, claim, grievance, referral follow-up | Requirements SV-01 to SV-14 |
 | Grievance SLA | Open | What target applies? | Requirements SV-04 |
 | Portal consent | Open | When is the portal planned, and how is consent captured? | OQ-029 |
 | Maker-checker | Open | Does a bank or nominee change need approval? | OQ-025 |
