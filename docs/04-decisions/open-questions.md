@@ -1,6 +1,6 @@
 # Open questions
 
-Status: Live. Last updated: 2026-11-14.
+Status: Live. Last updated: 2026-11-16.
 
 ## How to use this register
 
@@ -9,7 +9,7 @@ Status: Live. Last updated: 2026-11-14.
 - Do not delete a question. Mark it **Closed** or **Deferred** and link the decision.
 - **Open** means no decision.
 - **Deferred** means the decision is pushed to a later phase. The question stays visible.
-- A **Closed** item names the ADR that records the decision.
+- A **Closed** item names the ADR or document that records the decision.
 
 ## Register
 
@@ -21,18 +21,18 @@ Status: Live. Last updated: 2026-11-14.
 | OQ-004 | Identity | How is Aadhaar stored? | Keep Aadhaar out of phase 1. Decide before the portal. | Deferred |
 | OQ-005 | Family | Must the Family Head be an Individual Client? | Yes. An entity can be a member, not the Head. | Closed, [ADR-0005](adr-0005-family-scope-and-employee-view.md) |
 | OQ-006 | Family | Does the Head see detailed holdings or only totals? | Not applicable in phase 1. Decide with the portal. | Deferred |
-| OQ-007 | Family | Is lineage derived from shared Clients, or an explicit parent-family link? | Shared Clients. Family stays flat. Views are derived. | Closed, [ADR-0005](adr-0005-family-scope-and-employee-view.md) |
-| OQ-008 | Family | Can a Family contain a person who is not a Client? | No. A Related Person joins a Family only after becoming a Client. | Open |
-| OQ-009 | Family | Must the Head be limited to the primary Family? | Yes. | Open |
-| OQ-010 | Ownership | Do you need joint ownership shares? | Yes. Shares must sum to 100%. | Open |
-| OQ-011 | Ownership | Do you need ownership history on Holdings? | Yes. Death, claim, gift, and transfer need an audit trail. | Open |
-| OQ-012 | Ownership | Do you need nominee history? | Yes. Insurers and regulators ask for changes. | Open |
-| OQ-013 | Guardian | Can a minor have more than one guardian? Must a guardian be a Client? | One primary guardian. A guardian can be a Related Person. | Open |
-| OQ-014 | POA | Is POA scope and expiry in phase 1? | Record scope and expiry. No approval workflow in phase 1. | Open |
-| OQ-015 | Entity | Is beneficial owner tracking in phase 1? | Basic fields in phase 1. Full KYC later. | Open |
-| OQ-016 | Reporting | Do related people appear in client reports? | Yes in employee views. No in client reports without consent. | Open |
-| OQ-017 | Product | Is the hybrid Product and Plan model accepted? | Yes. Generic core plus category detail. | Open |
-| OQ-018 | Product | Which category details are phase 1? | Basic fields for all. Rate cards for FD and post office. NAV for MF, SIF, and NPS. | Open |
+| OQ-007 | Family | Is lineage derived from shared Clients, or an explicit parent-family link? | Shared Parties. Family stays flat. Views are derived. | Closed, [ADR-0005](adr-0005-family-scope-and-employee-view.md) |
+| OQ-008 | Family | Can a Family contain a person who is not a Client? | Yes. A Family Membership links a Party. The Client link is optional. | Closed, [ADR-0006](adr-0006-family-membership-by-party.md) |
+| OQ-009 | Family | Must the Head be limited to the primary Family? | Yes. A Client heads only their primary Family. | Closed, [ADR-0006](adr-0006-family-membership-by-party.md) |
+| OQ-010 | Ownership | Do you need joint ownership shares? | No. Store holder rank 1 to 3. Maximum three holders. | Closed, [ADR-0007](adr-0007-holdings-holders-and-nominees.md) |
+| OQ-011 | Ownership | Do you need ownership history on Holdings? | Yes. Use an append-only Ownership Event log. Needs confirmation. | Open |
+| OQ-012 | Ownership | Do you need nominee history? | No separate table. Keep the application snapshot, the current nominee, a Service Request, and the audit trail. | Closed, [ADR-0007](adr-0007-holdings-holders-and-nominees.md) |
+| OQ-013 | Guardian | Can a minor have more than one guardian? Must a guardian be a Client? | One guardian per minor per Holding. A guardian can be a Related Person. No client-level guardian. | Closed, [ADR-0007](adr-0007-holdings-holders-and-nominees.md) |
+| OQ-014 | POA | Is POA scope and expiry in phase 1? | No. Defer the role and the approval workflow. | Deferred |
+| OQ-015 | Entity | Is beneficial owner tracking in phase 1? | Basic fields. Needs a decision on depth. | Open |
+| OQ-016 | Reporting | Do related people appear in client reports? | No. Client reports are holding-based, not family-based. | Closed, [ADR-0008](adr-0008-client-reports-are-holding-based.md) |
+| OQ-017 | Product | Is the hybrid Product and Plan model accepted? | Yes. One common spine plus one category detail record. See [`02-domain/product-model/01-product-model.md`](../02-domain/product-model/01-product-model.md). | Open |
+| OQ-018 | Product | Which category details are phase 1? | All categories in detail. Depth per category is in the question bank. | Open |
 | OQ-019 | Legal entity | Which products sit in which legal entity? | Model a Legal Entity record even if one entity is used now. | Open |
 | OQ-020 | Commission | Is phase 1 calculation, reconciliation, or both? | Record and reconcile first. Calculate later. | Open |
 | OQ-021 | Website | Which website features are phase 1? | Product pages, lead capture, appointment booking, risk profiler, blog and SEO. | Open |
@@ -48,6 +48,48 @@ Status: Live. Last updated: 2026-11-14.
 | OQ-031 | Currency | INR only or multi-currency? | INR only in phase 1. | Open |
 | OQ-032 | Migration | How do we migrate the existing Client, Family, and Lead data? | Map to Party, Client, and Family. Dedupe. Keep a legacy ID. | Open |
 | OQ-033 | Reporting | Is entity AUM part of the Family personal total? | No. Report entity AUM on a separate line. | Closed, [ADR-0005](adr-0005-family-scope-and-employee-view.md) |
+
+## OQ-011: ownership history
+
+`Ownership Event` records each change. The current owners stay in Holding Party.
+
+| Option | What it stores | Pros | Cons |
+|---|---|---|---|
+| 1. Current state only | Owner rows | Simplest | No answer to "who owned it then". Claims rely on provider records. |
+| 2. Ownership Event log | Append-only row per change: date, type, Holding, from Party, to Party, Service Request, evidence | Readable history, claim-ready, small build | One more DocType. Staff must record the event. |
+| 3. Full temporal owner rows | Every row has `effective_from` and `effective_to` | Query any date | Complex validation, many rows, date errors |
+
+Recommendation: **option 2**.
+
+Rules:
+
+1. Owner rows stay current.
+2. The event log is append-only.
+3. A wrong event is reversed by a new event, never edited.
+4. A claim or transfer Service Request links to the event.
+5. Event types: Death, Survivor Transfer, Claim Settlement, Gift, Sale, Transfer, Correction.
+
+Example: Ram dies. The FD has Ram at rank 1 and Sita at rank 2.
+
+- Event: Survivor Transfer, from Ram, to Sita, with the Service Request.
+- Owner rows: Ram becomes Inactive, Sita becomes rank 1.
+- History is one readable line.
+
+## OQ-015: beneficial owner depth
+
+The question is how much beneficial-owner data phase 1 needs.
+
+| Option | What is stored | Best for |
+|---|---|---|
+| A. Basic | Name, PAN, share, role, start date | Most distribution work. Enough to see who controls the entity. |
+| B. Full KYC | Basic plus address, DOB, identity documents, verification status | A compliance team that must file beneficial-owner data. |
+| C. Percentage only | Name and share | A light register. Weak for audit. |
+
+Recommendation: **A** in phase 1, with fields that can grow to B.
+
+Why it matters: a company, LLP, trust, or partnership can hide its real controller. Regulators ask who ultimately owns or controls the entity. The answer is not the same as the entity's Holdings.
+
+What A does not do: it does not verify the identity of the beneficial owner, and it does not store their documents. If KNAPS must file or verify, choose B.
 
 ## Deferred questions
 
@@ -71,6 +113,25 @@ In phase 1, no client sees Family data. Employees see Family data by role and as
 
 Decide this with OQ-029.
 
+### OQ-014: POA
+
+POA is deferred. Do not add the POA Holder role, the scope field, or the expiry rule in phase 1.
+
+When it reopens, decide:
+
+- Which actions a POA holder can perform.
+- Whether the POA deed is an attachment or a separate record.
+- Whether a POA change needs maker-checker.
+- Whether the POA holder can see the Client's portfolio.
+
+## Product discussion
+
+OQ-017 and OQ-018 need a full discussion. The working papers are in [`../02-domain/product-model/`](../02-domain/product-model/README.md).
+
+- The hybrid model in plain words: [`01-product-model.md`](../02-domain/product-model/01-product-model.md).
+- Category examples and depth: [`02-category-catalog.md`](../02-domain/product-model/02-category-catalog.md).
+- The question bank: [`04-question-bank.md`](../02-domain/product-model/04-question-bank.md).
+
 ## Related decisions
 
 - [`adr-0001-party-layer.md`](adr-0001-party-layer.md)
@@ -78,3 +139,6 @@ Decide this with OQ-029.
 - [`adr-0003-product-model.md`](adr-0003-product-model.md)
 - [`adr-0004-client-identity-and-lifecycle.md`](adr-0004-client-identity-and-lifecycle.md)
 - [`adr-0005-family-scope-and-employee-view.md`](adr-0005-family-scope-and-employee-view.md)
+- [`adr-0006-family-membership-by-party.md`](adr-0006-family-membership-by-party.md)
+- [`adr-0007-holdings-holders-and-nominees.md`](adr-0007-holdings-holders-and-nominees.md)
+- [`adr-0008-client-reports-are-holding-based.md`](adr-0008-client-reports-are-holding-based.md)

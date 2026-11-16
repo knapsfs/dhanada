@@ -30,7 +30,7 @@ This is new business, not a new client. Dhanada creates a new **Lead** linked to
 | Lead | New row, linked to Ram's Client, product interest Health Insurance |
 | Application | New row, same Client, new Plan |
 | Holding | New row, type Policy |
-| Holding Party | Ram as Primary Owner, or the insurer's required owner structure |
+| Holding Party | Ram as Owner, rank 1, or the insurer's required owner structure |
 
 ## The shape
 

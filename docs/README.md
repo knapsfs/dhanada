@@ -1,6 +1,6 @@
 # Dhanada software design
 
-Status: Draft. Last updated: 2026-11-14.
+Status: Draft. Last updated: 2026-11-16.
 
 Dhanada is a Frappe app for KNAPS. It supports a multi-product financial distribution business.
 
@@ -25,12 +25,13 @@ This documentation set is the design reference for the Dhanada back-office suite
 6. [`02-domain/clients-and-families.md`](02-domain/clients-and-families.md)
 7. [`02-domain/related-parties.md`](02-domain/related-parties.md)
 8. [`02-domain/products-and-providers.md`](02-domain/products-and-providers.md)
-9. [`03-data-model/conventions.md`](03-data-model/conventions.md)
-10. [`03-data-model/erd.md`](03-data-model/erd.md)
-11. [`03-data-model/field-dictionary/README.md`](03-data-model/field-dictionary/README.md)
-12. [`03-data-model/access-control.md`](03-data-model/access-control.md)
-13. [`03-data-model/lifecycles.md`](03-data-model/lifecycles.md)
-14. [`04-decisions/open-questions.md`](04-decisions/open-questions.md)
+9. [`02-domain/product-model/README.md`](02-domain/product-model/README.md)
+10. [`03-data-model/conventions.md`](03-data-model/conventions.md)
+11. [`03-data-model/erd.md`](03-data-model/erd.md)
+12. [`03-data-model/field-dictionary/README.md`](03-data-model/field-dictionary/README.md)
+13. [`03-data-model/access-control.md`](03-data-model/access-control.md)
+14. [`03-data-model/lifecycles.md`](03-data-model/lifecycles.md)
+15. [`04-decisions/open-questions.md`](04-decisions/open-questions.md)
 
 Then read the worked examples in [`05-examples/README.md`](05-examples/README.md). They are the fastest way to understand the design.
 
@@ -43,14 +44,14 @@ Then read the worked examples in [`05-examples/README.md`](05-examples/README.md
 
 ## Scope summary
 
-Phase 1 is a back-office suite and a public website. It covers all product lines for catalog and holdings. Transactions are entered manually. The client portal comes later.
+Phase 1 is a back-office suite and a public website. It covers all product lines for catalog and holdings, with full category detail. Transactions are entered manually. The client portal comes later.
 
 ## Current status
 
-- **Decided**: Party layer, client code, Client statuses with no Prospect, duplicate rules, Family as a grouping, a mandatory Family Head, a flat Family model, the employee Family view, and separate entity AUM.
-- **Deferred**: Aadhaar collection, and Family visibility consent for clients.
+- **Decided**: Party layer, client code, Client statuses with no Prospect, duplicate rules, Family as a grouping of Parties, Party-based Family membership, a mandatory primary-Family Head, a flat Family model, the employee Family view, separate entity AUM, holder ranks with no owner share, holding-level guardians, nominee shares, and holding-based client reports.
+- **Deferred**: Aadhaar collection, POA, and Family visibility consent for clients.
 - **Proposed**: hybrid product model, employee and RM model, licensing rules.
-- **Open**: legal entity structure, commission calculation, website features, migration, retention, currency, and naming. See the register.
+- **Open**: product category depth, ownership history, beneficial owner depth, legal entity structure, commission calculation, website features, migration, retention, currency, and naming. See the register.
 
 ## Document map
 
@@ -62,11 +63,12 @@ Phase 1 is a back-office suite and a public website. It covers all product lines
 | 01-product | [Glossary](01-product/glossary.md) | Draft | One name for one concept. |
 | 02-domain | [Context map](02-domain/context-map.md) | Draft | Business contexts and their links. |
 | 02-domain | [Clients and families](02-domain/clients-and-families.md) | Draft | Core identity, Client, Family, lineage, employee views. |
-| 02-domain | [Related parties](02-domain/related-parties.md) | Draft | Roles, ownership rules, AUM, scenarios. |
+| 02-domain | [Related parties](02-domain/related-parties.md) | Draft | Roles, owner ranks, guardian scope, AUM, scenarios. |
 | 02-domain | [Products and providers](02-domain/products-and-providers.md) | Proposed | Product catalog, plans, applications, holdings, commission. |
+| 02-domain | [Product model](02-domain/product-model/README.md) | Proposed | The hybrid spine, category catalog, values, question bank, draft model. |
 | 03-data-model | [Conventions](03-data-model/conventions.md) | Draft | Frappe naming, keys, audit, PII, deletion, indexes. |
 | 03-data-model | [ERD](03-data-model/erd.md) | Draft | Identity, family, and distribution diagrams. |
-| 03-data-model | [Field dictionary](03-data-model/field-dictionary/README.md) | Draft | Core DocType fields. |
+| 03-data-model | [Field dictionary](03-data-model/field-dictionary/README.md) | Draft | Core and distribution DocType fields. |
 | 03-data-model | [Access control](03-data-model/access-control.md) | Draft | Roles, permissions, PII masking, audit. |
 | 03-data-model | [Lifecycles](03-data-model/lifecycles.md) | Draft | State diagrams. |
 | 04-decisions | [Open questions](04-decisions/open-questions.md) | Live | Single register of open decisions. |
@@ -75,7 +77,10 @@ Phase 1 is a back-office suite and a public website. It covers all product lines
 | 04-decisions | [ADR-0003](04-decisions/adr-0003-product-model.md) | Proposed | Product and Plan model. |
 | 04-decisions | [ADR-0004](04-decisions/adr-0004-client-identity-and-lifecycle.md) | Accepted | Client code, Client statuses, duplicate rules, Aadhaar deferral. |
 | 04-decisions | [ADR-0005](04-decisions/adr-0005-family-scope-and-employee-view.md) | Accepted | Family scope, mandatory Head, employee views, entity AUM. |
-| 05-examples | [Worked examples](05-examples/README.md) | Draft | The Sharma family and five client journeys. |
+| 04-decisions | [ADR-0006](04-decisions/adr-0006-family-membership-by-party.md) | Accepted | Family membership links a Party. |
+| 04-decisions | [ADR-0007](04-decisions/adr-0007-holdings-holders-and-nominees.md) | Accepted | Holder ranks, nominee shares, holding-level guardian. |
+| 04-decisions | [ADR-0008](04-decisions/adr-0008-client-reports-are-holding-based.md) | Accepted | Client reports use Holdings, not the Family. |
+| 05-examples | [Worked examples](05-examples/README.md) | Draft | The Sharma family and six client journeys. |
 
 ## Rules for this documentation
 

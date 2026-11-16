@@ -28,6 +28,7 @@ Rules:
 - A Party has at most one Client.
 - A Party can hold many roles.
 - A merged Party is read-only.
+- A Party can be a Family member without a Client record.
 - Addresses use Frappe Address with a link to Party. Do not copy the address into Party.
 - A login is linked from Client, not from Party.
 
@@ -88,9 +89,9 @@ Rules:
 - One Client per Party.
 - `client_type` is a business classification. It does not replace `Party.party_type`.
 - There is no Prospect status. A sales opportunity is a Lead. See [ADR-0004](../../04-decisions/adr-0004-client-identity-and-lifecycle.md).
-- A Minor must have an active Guardian before activation.
-- A Minor becomes an adult on `majority_date`. Create a review task and change `client_type` to Individual.
-- `primary_family` must have an active Family Membership for the Client.
+- A Minor Client can be Active with no Holding and no Guardian. The guardian is recorded on each Holding that names the minor.
+- A Minor becomes an adult on `majority_date`. Create a review task and change `client_type` to Individual. The Guardian rows on Holdings expire on the same date.
+- `primary_family` must have an active Family Membership for the Client's Party.
 - `primary_rm` follows the active Client Assignment. Do not edit it directly.
 - A Client with status Closed keeps its Holdings and history.
 - A Client is not hard deleted.

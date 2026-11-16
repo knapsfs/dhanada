@@ -83,6 +83,9 @@ The employee is the primary user in phase 1. The design must not require technic
 - One client identity across products.
 - Family is a grouping, not a legal owner.
 - A role is not ownership.
+- A client report lists Holdings, not Family.
+- A Holding has at most three Owners and no owner share.
+- A guardian belongs to a Holding.
 - One source of truth for each fact.
 - High-risk actions are auditable.
 - Use plain business terms in the UI.
@@ -101,12 +104,12 @@ The employee is the primary user in phase 1. The design must not require technic
 2. Every Client has a client code, `CL-000001`. It is unique and immutable.
 3. There is no Prospect status. A sales opportunity is a Lead. Client statuses are Onboarding, Active, Dormant, Closed.
 4. HUF, company, trust, and LLP are Client types. Family is always a grouping.
-5. A Client may have no Family. A Client may belong to more than one Family, with one primary Family.
-6. Family membership is back-office only. Only the current state is kept, with active and inactive members.
-7. Every Active Family has a Head. The Head is an Individual Client. A Client can head at most one active Family.
-8. Family stays flat. Lineage is derived from shared Clients. The employee view uses Families as nodes, plus a two-hop people map. No Tree DocType is used for Family.
+5. A Party may have no Family. A Party may belong to more than one Family. A member can be a Client or a Related Person.
+6. Family membership is back-office only. It links a Party. Only the current state is kept, with active and inactive members.
+7. Every Active Family has a Head. The Head is an Individual Client and must head their primary Family. A Client can head at most one active Family.
+8. Family stays flat. Lineage is derived from shared Parties. The employee view uses Families as nodes, plus a two-hop people map. No Tree DocType is used for Family.
 9. Entity AUM is reported on a separate line. It is never added to personal AUM.
-10. Minors are Clients and need a guardian.
+10. Minors are Clients. A guardian is recorded on each Holding that names the minor. There is no client-level guardian.
 11. A Lead is separate and can link to an existing Client. One Client can have many Leads over time.
 12. Frappe `Address` and `User` are reused.
 13. The app is one KNAPS instance. NPS, MF, SIF, PMS, and AIF sit in one legal entity.
@@ -119,6 +122,10 @@ The employee is the primary user in phase 1. The design must not require technic
 20. Consent is captured per product and per channel, with history. Family visibility consent is a portal-phase feature.
 21. Aadhaar is not collected in phase 1. See OQ-004.
 22. Website is in phase 1. Chatbot, accounting, payroll, tax filing, trading terminal, and document vault are out.
+23. A Holding has one to three Owners, ordered by rank. The Primary Holder is rank 1. No owner share is stored.
+24. Two or more Nominees on a Holding carry shares that total 100.
+25. A client report is built from Holdings. A Joint Holder sees a Joint badge and no value.
+26. POA is deferred. Do not build a POA role in phase 1.
 
 ## 9. Assumptions
 
@@ -129,6 +136,9 @@ The employee is the primary user in phase 1. The design must not require technic
 - One KYC record per Client in phase 1.
 - No Aadhaar in phase 1.
 - Family is an employee grouping in phase 1.
+- A Family member can be a Related Person.
+- A guardian exists only on a Holding.
+- Client reports are holding-based.
 - No document vault.
 - Website is in phase 1.
 - Client portal is later.

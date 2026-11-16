@@ -38,7 +38,7 @@ Dhanada must show the entity as a member of Family A, and still keep the entity'
 | Party Relationship | Ram to company, Beneficial Owner, 60% |
 | Party Relationship | Mohan to company, Beneficial Owner, 40% |
 | Holding | Company FD, ₹1,20,00,000 |
-| Holding Party | Sharma Textiles, Primary Owner, 100% |
+| Holding Party | Sharma Textiles, Owner, rank 1 |
 
 The company is the only owner of the company FD. The two shareholders are beneficial owners of the company. They are not owners of the FD.
 
@@ -54,7 +54,7 @@ flowchart LR
     RAM -.->|Beneficial Owner 60%| CO
     MOH -.->|Beneficial Owner 40%| CO
     MOH -->|Authorized Signatory| CO
-    CO -->|Owner 100%| FD
+    CO -->|Owner, rank 1| FD
 ```
 
 ## Sharma HUF
@@ -76,7 +76,7 @@ flowchart LR
 | Identity Document | PAN, verified |
 | Party Relationship | Ram to HUF, Karta |
 | Holding | HUF FD, ₹48,00,000 |
-| Holding Party | Sharma HUF, Primary Owner, 100% |
+| Holding Party | Sharma HUF, Owner, rank 1 |
 
 The HUF owns the FD. Ram acts for the HUF as Karta. Family members do not own the HUF assets in their personal names.
 
@@ -89,7 +89,7 @@ flowchart LR
     FD["HUF FD<br/>₹48,00,000"]
 
     RAM -->|Karta| HUF
-    HUF -->|Owner 100%| FD
+    HUF -->|Owner, rank 1| FD
 ```
 
 ## AUM

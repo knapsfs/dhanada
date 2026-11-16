@@ -13,9 +13,9 @@ Use one name for one concept. This page is the reference for names in the docume
 | Related Person | A Party known to KNAPS that is not a Client. It can hold roles such as nominee, guardian, or signatory. | Contact, Nominee (as a general term) |
 | Client Code | A short human-readable code shown to employees. It sits beside the UUID. Format `CL-000001`. Unique and immutable. | Client ID |
 | UUID | A random identifier used as the internal key. It is not a business identifier. | Primary key, PAN |
-| Family | A grouping of Clients used by employees to track a household. A Family is not a legal entity and cannot own assets. | Household, Group, HUF |
-| Family Head | The Client who coordinates a Family. Every Active Family has one. The Head must be an Individual Client. A Client can head only one active Family. | Patriarch, Group Head |
-| Family Membership | The link between a Client and a Family. It has a role and an active or inactive status. | Family Member (as a record name) |
+| Family | A grouping of Parties used by employees to track a household. Most members are Clients; a member can be a Related Person. A Family is not a legal entity and cannot own assets. | Household, Group, HUF |
+| Family Head | The Client who coordinates a Family. Every Active Family has one. The Head must be an Individual Client and must head their primary Family. A Client can head only one active Family. | Patriarch, Group Head |
+| Family Membership | The link between a Party and a Family. It has a role and an active or inactive status. The optional Client link is read-only. | Family Member (as a record name) |
 | Primary Family | The Family that represents a Client's own household. A Client has at most one. | Main Family |
 | Family View | The employee screen that groups Clients by Family. It has two forms: Families as nodes and People as nodes. | Family Tree |
 | People Map | A read-only view of the Parties around one Client, to a depth of two hops. It is a graph, not a stored tree. | Family Tree |
@@ -30,15 +30,20 @@ Use one name for one concept. This page is the reference for names in the docume
 | Provider | An organization that issues or manages a product. Examples: AMC, insurer, NBFC, post office, NPS, PMS manager, AIF manager, national distributor. | Company, Vendor |
 | Product | A sellable product family. Examples: a mutual fund scheme, an insurance plan, an FD product. | Scheme (as the generic term) |
 | Plan | A sellable variant of a Product. Examples: direct or regular plan, growth or IDCW option, rider, tenure and rate slab. Use the UI label Scheme for MF and NPS, and Plan for insurance. | Variant, Option (as the record name) |
+| Category Detail | The extra fields that belong to one product category, linked one-to-one to a Plan. Examples: ISIN for MF, sum assured for insurance, rate card for FD. | Attribute Table |
 | Application | A request to buy a product or onboard into it. An Application can create at most one Holding. | Proposal, Order |
 | Holding | The Client's position in a Product. Examples: policy, folio, PRAN, FD receipt, post office account, PMS account, AIF account. The UI label is Investment. | Account, Portfolio |
-| Owner | A Party with an ownership share in a Holding. The legal owner of an entity Holding is the entity Client. | Holder |
-| Primary Owner | The main owner of a Holding. A sole owner has 100%. | Primary Holder |
-| Joint Holder | An Owner with another Owner on the same Holding. A Joint Holder has a share. | Co-holder |
-| Nominee | A Party named to receive the value of a Holding on the owner's death. A Nominee is not an Owner until a claim or transfer. | Beneficiary |
+| Holding Party | The role row that links a Party to a Holding: Owner, Nominee, Guardian, Life Assured, Payer. | Owner Table |
+| Ownership Event | An append-only record of an ownership change on a Holding: death, survivor transfer, claim, gift, sale, transfer, or correction. | Owner History |
+| Owner | A Party with an ownership role on a Holding. Owners are ordered by rank. The legal owner of an entity Holding is the entity Client. | Holder |
+| Primary Holder | The Owner with rank 1 on a Holding. The full value counts in this Client's personal AUM. | Primary Owner, First Holder |
+| Joint Holder | An Owner with rank 2 or 3 on a Holding. A Joint Holder has no stored share and sees the Holding with a Joint badge and no value. | Co-holder, Secondary Holder |
+| Holder Rank | The order of Owners on a Holding: 1, 2, or 3. Rank 1 is the Primary Holder. | Share, Percentage |
+| Mode of Holding | How the owners hold the Investment: Single, Joint, Anyone or Survivor, Former or Survivor. | Joint Type |
+| Nominee | A Party named to receive the value of a Holding on the owner's death. A Nominee is not an Owner until a claim or transfer. Two or more Nominees carry shares that total 100. | Beneficiary |
 | Beneficiary | A Party entitled to a benefit from a trust or Holding. A Beneficiary is not an Owner until vesting or transfer. | Nominee |
-| Guardian | A Party who acts for a minor Client. The role expires at majority. | Custodian |
-| POA Holder | A Party with a power of attorney to act for a Client. It has a scope and an expiry. | Authorized Signatory |
+| Guardian | A Party who acts for a minor on one Holding. The Guardian row names the minor in `acts_for` and expires at majority. A Guardian is not a Client-level role. | Custodian, Appointee |
+| POA Holder | A Party with a power of attorney to act for a Client. It has a scope and an expiry. Deferred to a later phase. | Authorized Signatory |
 | Authorized Signatory | A Party who can sign for an entity Client. | Director |
 | Beneficial Owner | A Party who ultimately owns or controls an entity Client. A Beneficial Owner is not an Owner of the entity's Holdings. | Shareholder |
 | Business Source | How the business arrived. Examples: direct, national distributor, website, referral, campaign. | Lead Source |
@@ -93,6 +98,7 @@ Use one name for one concept. This page is the reference for names in the docume
 - Use **Family** in the UI. Do not use Household or Group.
 - Use **Related Person** for a Party without a Client record.
 - Use **Investment** as the UI label for Holding. Show the type beside it: Policy, Folio, FD, PRAN.
+- Use **Primary Holder** and **Joint Holder** in the UI. Use **Owner** in the data model.
 - Use **Plan** in the data model. Show Scheme for MF and NPS, and Plan for insurance.
 - Use **Provider** in the data model. Show AMC, Insurer, NBFC, or Post Office by category.
 - Use **RM** in the UI. Do not use Advisor.

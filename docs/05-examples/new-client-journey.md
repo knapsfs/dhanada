@@ -35,7 +35,7 @@ The folio is issued. The Client becomes **Active**.
 | Identity Document | PAN, verified. No Aadhaar record. |
 | Application | Client, Plan, amount, business source Direct, RM |
 | Holding | Plan, folio number, start date, value |
-| Holding Party | Rahul, Primary Owner, 100% |
+| Holding Party | Rahul, Owner, rank 1. Sole owner, so no joint rank and no share. |
 
 ## Status flow
 

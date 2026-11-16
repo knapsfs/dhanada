@@ -24,7 +24,7 @@ Examples:
 | Family Membership | DocType | Many-to-many link with its own status and dates. |
 | Party Relationship | DocType | Independent relationship with dates and status. |
 | Identity Document | DocType | Needs verification status and audit. |
-| Holding Party | DocType | Role on a Holding with share and dates. |
+| Holding Party | DocType | Role on a Holding with rank, guardian link, and dates. |
 | Visibility Grant | DocType | Portal phase. Consent record with evidence and expiry. |
 
 ## 3. Keys and naming
@@ -67,8 +67,8 @@ Use a naming series only for records that employees must quote, such as Leads an
 
 - A link stores the DocType name of the target record.
 - A role links to `Party`, not to a copied name or PAN.
-- An ownership row links to `Party` and `Holding`.
-- A Family membership links to `Client` and `Family`.
+- An ownership row links to `Party` and `Holding`. It carries `holder_rank`, not a share.
+- A Family membership links to `Party` and `Family`. The optional Client link is read-only.
 - Do not share child tables across DocTypes.
 - Do not store the same fact in two places. Derive it or link it.
 
@@ -111,10 +111,14 @@ Use a naming series only for records that employees must quote, such as Leads an
 ## 10. Indexes and constraints
 
 - Unique: `client_code`, `family_code`, PAN when present.
-- Unique: Family Membership on `family` and `client`.
+- Unique: Family Membership on `family` and `party`.
 - Unique: one Client per Party.
 - Unique: one active Head per Family.
 - Unique: one primary Family per Client.
+- Maximum three Owner rows per Holding.
+- Unique: one Owner per `holder_rank` per Holding.
+- Unique: one active Guardian per minor Party per Holding.
+- Nominee shares on one Holding total 100 when there is more than one nominee.
 - Search: legal name, mobile, email, client code.
 - Index: status, primary RM, primary Family, PAN.
 
@@ -156,7 +160,6 @@ See OQ-032.
 
 ## 14. Open questions
 
-- OQ-001: Client code.
 - OQ-026: Naming.
 - OQ-028: Module split.
 - OQ-031: Currency.

@@ -36,7 +36,7 @@ This page lists the functional and non-functional requirements by module. It is 
 | SL-02 | Track KYC status and identity documents. | 1 | Decided |
 | SL-03 | Track an onboarding checklist and approvals. | 1 | Proposed |
 | SL-04 | Create an Application for a Product and Plan. | 1 | Decided |
-| SL-05 | Record applicant, joint applicant, nominee, guardian, and payer roles. | 1 | Decided |
+| SL-05 | Record applicant, holder, nominee, guardian, and payer roles. Store holder rank, nominee share, and the minor a guardian acts for. | 1 | Decided |
 | SL-06 | Create a Holding from an approved Application. | 1 | Decided |
 | SL-07 | Enter transactions manually for every product. | 1 | Decided |
 | SL-08 | Import RTA, CAS, and provider statements. | 2 | Proposed |
@@ -44,8 +44,8 @@ This page lists the functional and non-functional requirements by module. It is 
 | SL-10 | Track licenses and block a sale when a license is expired. | 1 | Open, OQ-024 |
 | SL-11 | Use maker-checker for high-risk changes. | 1 | Open, OQ-025 |
 | SL-12 | Record the business source and Distribution Partner on each Application. | 1 | Decided |
-| SL-13 | Record ownership shares for joint holders. | 1 | Open, OQ-010 |
-| SL-14 | Keep ownership and nominee history. | 1 | Open, OQ-011, OQ-012 |
+| SL-13 | Record up to three holders in order, with no ownership share. | 1 | Decided |
+| SL-14 | Record an ownership event on death, claim, gift, or transfer. Handle a nominee change through a Service Request. | 1 | Proposed, OQ-011 |
 
 ## 5. Servicing
 
@@ -63,6 +63,7 @@ This page lists the functional and non-functional requirements by module. It is 
 | SV-10 | Show service levels and aging by owner. | 1 | Proposed |
 | SV-11 | Record maturity instructions and renewal outcomes. | 1 | Proposed |
 | SV-12 | Report personal AUM and entity AUM on separate lines at Family level. | 1 | Decided |
+| SV-13 | Build client reports from Holdings, not from the Family. Show a Joint Holder with a Joint badge and no value. | 1 | Decided |
 
 ## 6. Marketing
 
@@ -96,6 +97,14 @@ This page lists the functional and non-functional requirements by module. It is 
 | PL-12 | Support a mobile app. | Out | Open, OQ-027 |
 | PL-13 | Show a Family list, a Family card, and a two-hop people map to employees. | 1 | Decided |
 | PL-14 | Require a Head on every Active Family. | 1 | Decided |
+| PL-15 | Allow a Related Person to be a Family member before becoming a Client. | 1 | Decided |
+| PL-16 | Record a guardian on each Holding, with the minor named in `acts_for`. | 1 | Decided |
+| PL-17 | Store a Rate Card and a NAV History with effective dates. | 1 | Proposed |
+| PL-18 | Store full category detail per Plan for every product line. | 1 | Proposed, OQ-017, OQ-018 |
+| PL-19 | Keep a snapshot of the deal terms on the Holding: provider, product, plan, rate, tenure, amount. | 1 | Proposed |
+| PL-20 | Never edit a Rate Card or NAV row after use. Add a new row. | 1 | Proposed |
+| PL-21 | Read only Product and Plan data on the public website. | 1 | Proposed |
+| PL-22 | Allow direct Holding entry with a reason, for migration and backfill. | 1 | Proposed, P-103 |
 
 ## 8. Non-functional requirements
 

@@ -12,7 +12,7 @@ erDiagram
     PARTY ||--o{ IDENTITY_DOCUMENT : has
     PARTY ||--o{ PARTY_RELATIONSHIP : "from party"
     PARTY ||--o{ PARTY_RELATIONSHIP : "to party"
-    CLIENT ||--o{ FAMILY_MEMBERSHIP : "member of"
+    PARTY ||--o{ FAMILY_MEMBERSHIP : "member of"
     FAMILY ||--o{ FAMILY_MEMBERSHIP : has
     FAMILY }o--|| CLIENT : "headed by"
     CLIENT }o--o| FAMILY : "primary family"
@@ -24,7 +24,7 @@ Notes:
 
 - `Party` owns identity data. `Client` adds the client relationship.
 - `Related Person` is a Party without a Client record. It is not a separate DocType.
-- `Family Membership` is the only link between a Client and a Family.
+- `Family Membership` links a Party to a Family. The optional Client link is read-only.
 - `Client.primary_family` is the pointer to the primary Family. The Family Membership row carries the role and status.
 - Family lineage is derived. The schema stores no parent-family link and no tree fields.
 - `Visibility Grant` is a portal-phase record. It is not part of the phase 1 schema.
@@ -36,6 +36,9 @@ Notes:
 erDiagram
     PROVIDER ||--o{ PRODUCT : offers
     PRODUCT ||--o{ PLAN : has
+    PLAN ||--o| CATEGORY_DETAIL : "has one"
+    PLAN ||--o{ RATE_CARD : "has rates"
+    PLAN ||--o{ NAV_HISTORY : "has values"
     CLIENT ||--o{ APPLICATION : submits
     PLAN ||--o{ APPLICATION : "requested in"
     APPLICATION ||--o{ APPLICATION_PARTY : has
@@ -44,6 +47,7 @@ erDiagram
     HOLDING ||--o{ HOLDING_PARTY : has
     PARTY ||--o{ HOLDING_PARTY : "plays role"
     HOLDING ||--o{ TRANSACTION : records
+    HOLDING ||--o{ OWNERSHIP_EVENT : "history"
     HOLDING ||--o{ COMMISSION : earns
     LEAD ||--o| CLIENT : converts
     LEAD ||--o| APPLICATION : "starts"
@@ -51,31 +55,38 @@ erDiagram
 
 Notes:
 
-- A Holding links to owners and roles through Holding Party. There is no separate owner column.
+- A Holding links to owners and roles through Holding Party. There is no separate owner column and no owner share.
+- `holder_rank` orders the owners. Rank 1 is the Primary Holder. A Holding has at most three owners.
+- `CATEGORY_DETAIL` is a logical name. Each category group has one detail DocType, linked one-to-one to Plan.
+- `Rate Card` holds time-based rates for FD and post office. `NAV History` holds time-based values for market-linked products.
 - An Application has at most one Holding. One Client can have many Holdings.
 - A Lead can convert to a Client or start an Application for an existing Client.
 - `Product` and `Plan` store the catalog. The Application and Holding keep a snapshot of the name and code for audit.
+- `Ownership Event` is append-only history. The current owners stay in Holding Party.
 - Commission links to the Holding and optionally to the Transaction or Application.
 - `Provider` covers AMC, insurer, NBFC, post office, NPS, PMS manager, AIF manager, and national distributor.
 
 ## 3. Reading rules
 
 1. A role links to Party. Never copy name or PAN into a role record.
-2. Ownership is a Holding Party role. Do not add a second owner field.
-3. Family membership is current state only. Inactive rows stay.
-4. A Family cannot own a Holding.
-5. A Related Person becomes a Client without a data copy.
-6. An entity Client is the owner of its Holdings. Beneficial Owners are not Holding owners.
+2. Ownership is a Holding Party role. Do not add a second owner field and do not store an owner share.
+3. A Holding has at most three owners, ordered by `holder_rank`.
+4. A Guardian is a Holding Party role with `acts_for`. There is no client-level guardian.
+5. Family membership is current state only. Inactive rows stay.
+6. A Family cannot own a Holding.
+7. A Related Person becomes a Client without a data copy.
+8. An entity Client is the owner of its Holdings. Beneficial Owners are not Holding owners.
 
 ## 4. Field specifications
 
 - [`field-dictionary/identity.md`](field-dictionary/identity.md)
 - [`field-dictionary/family.md`](field-dictionary/family.md)
 - [`field-dictionary/related-parties.md`](field-dictionary/related-parties.md)
+- [`field-dictionary/distribution.md`](field-dictionary/distribution.md)
 
 ## 5. Open questions
 
-- OQ-010: Joint ownership shares.
+- OQ-011: Ownership history options.
 - OQ-017: Product model.
 - OQ-019: Legal entity.
 - OQ-020: Commission scope.

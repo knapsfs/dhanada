@@ -89,9 +89,13 @@ Aadhaar is not collected in phase 1. Do not add the document type, a partial num
 
 ### 4.4 Minors
 
-A minor is a Client of type Minor. The minor may have no PAN. A Guardian relationship is required before activation. The Guardian role has an end date at majority.
+A minor is a Client of type Minor. The minor may have no PAN. A minor can be Active with no Holding and no guardian. The guardian is recorded on each Holding, not on the Client.
 
-At majority, the Guardian role expires. Create a review task for KYC refresh and account control. The minor becomes the decision maker.
+One holding may name the father as guardian. Another holding may name the mother. The Holding Party row carries `acts_for`, which points to the minor. The guardian role has an end date at majority.
+
+At majority, the guardian roles on the Holdings expire. Create a review task for KYC refresh and account control. The minor becomes the decision maker.
+
+A minor cannot be a joint holder. A minor owner is the only owner on the Holding.
 
 Worked example: [`../05-examples/minor-and-guardian.md`](../05-examples/minor-and-guardian.md).
 
@@ -164,38 +168,46 @@ State diagram: [`../03-data-model/lifecycles.md`](../03-data-model/lifecycles.md
 
 ### 7.1 Definition
 
-A Family is a grouping of Clients for employee tracking, reporting, and relationship management. It has no PAN, no KYC, no bank account, and no Investment. It is not a legal entity.
+A Family is a grouping of Parties for employee tracking, reporting, and relationship management. Most members are Clients. A member can be a Related Person, such as a newborn, a spouse who has not onboarded, or an elderly parent. It has no PAN, no KYC, no bank account, and no Investment. It is not a legal entity.
 
-The Family answers one employee question: "Which Clients belong together?"
+The Family answers one employee question: "Which people belong together?"
 
 ### 7.2 Membership
 
-- A Client may have no Family.
-- A Client may belong to more than one Family.
+- A Party may have no Family.
+- A Party may belong to more than one Family.
 - A Client has at most one primary Family. The primary Family is the Client's own household.
+- A member can be a Client or a Related Person.
+- A non-client member has no KYC, no login, no Investment, and no AUM.
 - Membership is back-office only. A client does not see it in phase 1.
 - Membership has a role and an active or inactive status.
 - Only the current state is kept. Inactive rows stay for reference. The system does not keep a full membership history.
+- The membership links a Party. When the Party gets a Client record, the membership is unchanged.
+
+The newborn case is the reason for the Party link. KNAPS knows the baby from day one. The baby has a name, a date of birth, and a place in the family. The baby has no PAN, no KYC, and no reason to be a Client yet. A Client record is created only when the family opens an Investment for the baby.
+
+Worked example: [`../05-examples/newborn-in-family.md`](../05-examples/newborn-in-family.md).
 
 ### 7.3 Family Head
 
 - Every Active Family has one Head. The Head is mandatory.
 - The Head must be an Individual Client and an active member of the Family.
 - A Client can head at most one active Family.
+- The Head must head their **primary** Family. A Client cannot head a Family that is not their primary Family.
 - An employee chooses the Head.
 - The Head is a coordination label. Employees call the Head to coordinate the household.
 - The Head label does not grant ownership of Family assets. It does not grant access to another member's data.
 
-A Family cannot become Active without a Head. Build the Family first with status Draft, add the members, then set the Head and move to Active.
+A Family cannot become Active without a Head. Build the Family first with status Draft, add the members, then set the Head and move to Active. A Family with no Client member stays in Draft.
 
 ### 7.4 Lineage
 
-Lineage comes from shared Clients. A Client who belongs to two Families links them. The system stores no parent-family field.
+Lineage comes from shared Parties. A Party who belongs to two Families links them. The system stores no parent-family field.
 
 | Family | Head | Members | Link to the next generation |
 |---|---|---|---|
 | Family A | Ram Sharma | Sita, Mohan, Suresh, Sharma HUF, Sharma Textiles | Mohan is also in Family B. Suresh is also in Family C. |
-| Family B | Mohan Sharma | Radha, Aarav, Diya | Radha is also in Family D. |
+| Family B | Mohan Sharma | Radha, Aarav, Diya, Baby Sharma (Related Person) | Radha is also in Family D. |
 | Family C | Suresh Sharma | Suresh | Suresh is also in Family A. |
 | Family D | Mr Verma | Mrs Verma, Radha | Radha is also in Family B. |
 
@@ -215,7 +227,7 @@ Employees need two views of the same data. Both are derived from Family, Family 
 
 ### 8.1 Families as nodes
 
-This is the default view. Each node is a Family. Each line is a Client who belongs to two Families.
+This is the default view. Each node is a Family. Each line is a Party who belongs to two Families.
 
 ```mermaid
 flowchart LR
@@ -234,7 +246,7 @@ The screen shows a list first:
 | Family | Head | Members | Linked by | Personal AUM | Entity AUM |
 |---|---|---|---|---|---|
 | Family A | Ram Sharma | 6 Clients | Mohan, Suresh | ₹1.36 Cr | ₹1.68 Cr |
-| Family B | Mohan Sharma | 4 Clients | Mohan, Radha | ₹59.00 L | None |
+| Family B | Mohan Sharma | 4 Clients + 1 Related Person | Mohan, Radha | ₹59.00 L | None |
 | Family C | Suresh Sharma | 1 Client | Suresh | ₹12.00 L | None |
 | Family D | Mr Verma | 3 Clients | Radha | ₹92.00 L | None |
 
@@ -242,6 +254,7 @@ Open Family A and the card shows:
 
 - The Head, with a link to the Client record.
 - Each member with role, status, and personal value.
+- A **Related Person** badge on a member who is not a Client. Baby Sharma is an example.
 - Entity members with the role that links them: Karta, Director.
 - Links to other Families: "Mohan Sharma is also in Family B".
 - Primary RM and notes.
@@ -259,6 +272,7 @@ flowchart TB
     Suresh["Suresh Sharma<br/>Client"]
     Aarav["Aarav Sharma<br/>Minor Client"]
     Diya["Diya Sharma<br/>Minor Client"]
+    Baby["Baby Sharma<br/>Related Person"]
     HUF["Sharma HUF<br/>Client"]
     Co["Sharma Textiles Pvt Ltd<br/>Client"]
     PV["Mr Verma<br/>Client"]
@@ -268,8 +282,10 @@ flowchart TB
     Ram -->|parent| Mohan
     Ram -->|parent| Suresh
     Mohan ---|spouse| Radha
-    Mohan -->|guardian| Aarav
-    Mohan -->|guardian| Diya
+    Mohan -->|parent| Aarav
+    Mohan -->|parent| Diya
+    Mohan -->|parent| Baby
+    Radha -->|parent| Baby
     PV -->|parent| Radha
     PV ---|spouse| PM
     Ram -.->|Karta| HUF
@@ -277,6 +293,8 @@ flowchart TB
 ```
 
 Sita is also a parent of Mohan and Suresh. The line is left out to keep the drawing readable. The record exists.
+
+Baby Sharma is a Related Person. The node shows the **Related Person** badge and no client code. The parent lines exist from birth. A guardian is not shown, because a guardian exists only on a Holding.
 
 The map opens from a Client or a Family. It shows two hops from the centre. Each node shows name, client code, type, and status. A node the employee cannot read shows as **Restricted**.
 
@@ -312,21 +330,27 @@ The grant record is designed but not built in phase 1. The field list is in [`..
 
 1. One Party has at most one Client.
 2. One Client links to exactly one Party.
-3. A Client may belong to zero or many Families.
+3. A Party may belong to zero or many Families.
 4. A Client has at most one primary Family.
 5. A primary Family must contain the Client as an active member.
 6. An Active Family has exactly one Head.
-7. The Head must be an active member and an Individual Client.
+7. The Head must be an active Client member, an Individual, and the Head of their primary Family.
 8. A Client heads at most one active Family.
 9. A Family cannot own an Investment.
 10. A Family cannot be a Client.
 11. A Related Person becomes a Client without a data copy.
-12. A minor Client needs at least one active Guardian before activation.
-13. PAN is unique when present.
-14. Client code is unique and immutable.
-15. Client, Party, and Family records are not hard deleted. Use status and merge.
-16. A merge is audited and approved.
-17. Entity Investments are never added to the personal Family total.
+12. A Family membership links a Party. A non-client member has no KYC, Investment, or AUM.
+13. A Guardian is a Holding-level role. A minor Client can be Active with no Holding and no guardian.
+14. A Holding has one to three Owners, ordered by `holder_rank`.
+15. Exactly one Owner has rank 1. The others are Joint Holders.
+16. Do not store an ownership share. A minor owner is the only owner and cannot be a joint holder.
+17. Two or more Nominee rows on a Holding total 100.
+18. PAN is unique when present.
+19. Client code is unique and immutable.
+20. Client, Party, and Family records are not hard deleted. Use status and merge.
+21. A merge is audited and approved.
+22. Entity Investments are never added to the personal Family total.
+23. Client reports are holding-based. They do not use the Family view.
 
 ## 11. Data model
 
@@ -336,7 +360,7 @@ erDiagram
     PARTY ||--o{ IDENTITY_DOCUMENT : has
     PARTY ||--o{ PARTY_RELATIONSHIP : "from party"
     PARTY ||--o{ PARTY_RELATIONSHIP : "to party"
-    CLIENT ||--o{ FAMILY_MEMBERSHIP : "member of"
+    PARTY ||--o{ FAMILY_MEMBERSHIP : "member of"
     FAMILY ||--o{ FAMILY_MEMBERSHIP : has
     FAMILY }o--|| CLIENT : "headed by"
     CLIENT }o--o| FAMILY : "primary family"
@@ -349,8 +373,8 @@ erDiagram
 | Party | Identity of a person or organization. | User, Address |
 | Identity Document | Identity proof and verification. | Party |
 | Client | Client role and client-specific data. | Party, Family, Lead |
-| Family | Grouping of Clients. | Head Client |
-| Family Membership | Link between a Client and a Family. | Family, Client |
+| Family | Grouping of Parties. | Head Client |
+| Family Membership | Link between a Party and a Family. | Family, Party, optional Client |
 | Party Relationship | Global relationship between two Parties. | Party, Party |
 | Client Assignment | Link between a Client and an employee. | Client, User |
 | Visibility Grant | Portal phase only. Consent for one Client to see another Client's data. | Family, Client, Client |
@@ -364,17 +388,18 @@ Field-level specifications are in [`../03-data-model/field-dictionary/README.md`
 | [The Sharma family](../05-examples/sharma-family.md) | The full cast, memberships, both views, and the AUM split. |
 | [New client journey](../05-examples/new-client-journey.md) | Website Lead to Active Client. |
 | [Existing client cross-sell](../05-examples/existing-client-cross-sell.md) | A new Lead for an existing Client. No second Client. |
-| [Minor and guardian](../05-examples/minor-and-guardian.md) | A minor Client, the guardian role, and majority. |
-| [Joint holders and nominee](../05-examples/joint-holders-and-nominee.md) | Shared ownership, AUM split, and a claim. |
+| [Newborn in the family](../05-examples/newborn-in-family.md) | A Related Person joins a Family before becoming a Client. |
+| [Minor and guardian](../05-examples/minor-and-guardian.md) | A minor owner and the holding-level guardian. |
+| [Joint holders and nominee](../05-examples/joint-holders-and-nominee.md) | Holder ranks, nominee shares, and a claim. |
 | [Company and HUF](../05-examples/company-and-huf.md) | Entity Clients, signatory, Karta, and entity AUM. |
 
 ## 13. Open questions
 
 - OQ-004: Aadhaar storage. Deferred.
-- OQ-008: Can a Family contain non-Clients.
-- OQ-009: Head limited to the primary Family.
-- OQ-013: Multiple guardians and guardian eligibility.
-- OQ-016: Related people in client reports.
+- OQ-011: Ownership history options.
+- OQ-014: POA scope and expiry. Deferred.
+- OQ-015: Beneficial owner depth.
+- OQ-017 and OQ-018: Product model and category depth.
 - OQ-029: Portal consent capture.
 - OQ-030: Data retention.
 - OQ-031: Currency.

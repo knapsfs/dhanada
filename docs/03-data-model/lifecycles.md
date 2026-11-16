@@ -53,7 +53,7 @@ Notes:
 
 - There is no Prospect state. A sales opportunity is a Lead. See [ADR-0004](../04-decisions/adr-0004-client-identity-and-lifecycle.md).
 - A Client can be Active with zero Investments. A newly onboarded family member is an example.
-- A Minor becomes an adult on the majority date. Create a review task. The status stays Active.
+- A Minor becomes an adult on the majority date. Create a review task. The status stays Active. Guardian rows on Holdings expire on the same date. A Minor has no guardian on the Client record.
 - A Closed Client keeps Holdings and history.
 - A Client does not reopen. Create a new relationship instead.
 - A death sets the status to Closed, with the reason Deceased, and starts a Family Head review.

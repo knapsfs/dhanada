@@ -104,14 +104,15 @@ Rules:
 In phase 1, only employees see Family data. Family access has two parts:
 
 1. **Family record access** uses roles and Client Assignment.
-2. **Member access** uses the Client permission rules. An employee can always see that a Client is a member. The member value, Holdings, and PII follow the Client rules.
+2. **Member access** uses the Client permission rules for a Client member and the Related Person rules for a non-client member. An employee can always see that a Party is a member. The member value, Holdings, and PII follow the access rules.
+3. A non-client member has no Holdings and no value. Their contact and identity data follow the related-person rules: masked by default and opened with a separate permission.
 
 A Family Head does not get access to another member's data, to an employee or to a client.
 
 The two family views follow the same rules:
 
 - **Families as nodes** shows the Family list and the members the employee can read.
-- **People as nodes** shows a node as Restricted when the employee cannot read that Client, Party, or Holding.
+- **People as nodes** shows a node as Restricted when the employee cannot read that Client, Party, or Holding. A non-client member can show as a Related Person node.
 
 When the portal is built, it must add a Visibility Grant and check it before showing another Client's data. See OQ-029.
 

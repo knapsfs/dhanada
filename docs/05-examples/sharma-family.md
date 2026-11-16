@@ -12,7 +12,7 @@ Dhanada groups them into four Families. A person can be in two Families. That is
 
 ## The cast
 
-| Client | Code | Type | Age | Status |
+| Person or entity | Code | Type | Age | Status |
 |---|---|---|---|---|
 | Ram Sharma | CL-000101 | Individual | 68 | Active |
 | Sita Sharma | CL-000102 | Individual | 65 | Active |
@@ -25,6 +25,7 @@ Dhanada groups them into four Families. A person can be in two Families. That is
 | Sharma Textiles Pvt Ltd | CL-000109 | Company | Not applicable | Active |
 | Mr Verma | CL-000110 | Individual | 70 | Active |
 | Mrs Verma | CL-000111 | Individual | 66 | Active |
+| Baby Sharma | No client code | Related Person | 3 months | Not a Client |
 
 ## The Families
 
@@ -49,6 +50,7 @@ Dhanada groups them into four Families. A person can be in two Families. That is
 | Family B | Radha Sharma | Spouse | No. Family D is primary. |
 | Family B | Aarav Sharma | Child | Yes |
 | Family B | Diya Sharma | Child | Yes |
+| Family B | Baby Sharma | Child | Not applicable. Related Person. |
 | Family C | Suresh Sharma | Head | Yes |
 | Family D | Mr Verma | Head | Yes |
 | Family D | Mrs Verma | Spouse | Yes |
@@ -61,7 +63,7 @@ Radha has a primary Family and a married Family. The primary Family is the house
 ```mermaid
 flowchart LR
     FA["Family A<br/>Ram and Sita household<br/>Head: Ram Sharma<br/>Members: Sita, Mohan, Suresh,<br/>Sharma HUF, Sharma Textiles"]
-    FB["Family B<br/>Mohan and Radha household<br/>Head: Mohan Sharma<br/>Members: Radha, Aarav, Diya"]
+    FB["Family B<br/>Mohan and Radha household<br/>Head: Mohan Sharma<br/>Members: Radha, Aarav, Diya,<br/>Baby (Related Person)"]
     FC["Family C<br/>Suresh household<br/>Head: Suresh Sharma<br/>Members: Suresh"]
     FD["Family D<br/>Verma household<br/>Head: Mr Verma<br/>Members: Mrs Verma, Radha"]
 
@@ -83,6 +85,7 @@ flowchart TB
     Suresh["Suresh Sharma<br/>CL-000107"]
     Aarav["Aarav Sharma<br/>CL-000105"]
     Diya["Diya Sharma<br/>CL-000106"]
+    Baby["Baby Sharma<br/>Related Person"]
     HUF["Sharma HUF<br/>CL-000108"]
     Co["Sharma Textiles<br/>CL-000109"]
     PV["Mr Verma<br/>CL-000110"]
@@ -92,8 +95,10 @@ flowchart TB
     Ram -->|parent| Mohan
     Ram -->|parent| Suresh
     Mohan ---|spouse| Radha
-    Mohan -->|guardian| Aarav
-    Mohan -->|guardian| Diya
+    Mohan -->|parent| Aarav
+    Mohan -->|parent| Diya
+    Mohan -->|parent| Baby
+    Radha -->|parent| Baby
     PV -->|parent| Radha
     PV ---|spouse| PM
     Ram -.->|Karta| HUF
@@ -102,11 +107,13 @@ flowchart TB
 
 Sita is also a parent of Mohan and Suresh. The drawing leaves those lines out to stay readable.
 
+Baby Sharma has no client code. The node shows a **Related Person** badge. The parent lines exist from birth. The family view is complete before the baby becomes a Client.
+
 ## AUM split
 
 Values are illustrative.
 
-| Client | Personal value | Family A | Family B | Family C | Family D |
+| Person or entity | Personal value | Family A | Family B | Family C | Family D |
 |---|---|---|---|---|---|
 | Ram Sharma | ₹64,00,000 | Yes | | | |
 | Sita Sharma | ₹38,00,000 | Yes | | | |
@@ -115,6 +122,7 @@ Values are illustrative.
 | Suresh Sharma | ₹12,00,000 | Yes | | Yes | |
 | Aarav Sharma | ₹5,00,000 | | Yes | | |
 | Diya Sharma | ₹0 | | Yes | | |
+| Baby Sharma | Not a Client | | Member | | |
 | Mr Verma | ₹40,00,000 | | | | Yes |
 | Mrs Verma | ₹20,00,000 | | | | Yes |
 | Sharma HUF | ₹48,00,000 | Entity | | | |
@@ -134,6 +142,8 @@ Notes:
 - Radha's ₹32,00,000 appears in Family B and Family D. The firm total counts it once.
 - The HUF and the company are never added to Family A's personal total.
 - Aarav holds one FD. Diya is a Client with zero Investments. A Client can be Active with no Investments.
+- Baby Sharma is a Related Person. She has no client code, no KYC, no Investment, and no AUM. She is in Family B because the family wants her on record.
+- Family B has 4 Clients and 1 Related Person. The Family AUM counts the Clients only.
 
 ## What the employee does
 
@@ -146,7 +156,8 @@ Notes:
 ## Why it matters
 
 - A Family is a grouping. It is not an owner and holds no assets.
-- One Client can sit in two Families. The model does not force a choice.
-- Lineage comes from shared Clients. No tree is stored.
+- One Party can sit in two Families. The model does not force a choice.
+- A Related Person can be a member before becoming a Client.
+- Lineage comes from shared Parties. No tree is stored.
 - Entity money is separate. The report never double counts.
 - Every Active Family has a Head. Family A cannot go Active until Ram is set.
