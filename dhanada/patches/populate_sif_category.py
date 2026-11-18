@@ -34,14 +34,25 @@ def execute():
 
 	# 3. Populate Category and Investment Strategy on SIF Scheme
 	if frappe.db.table_exists("SIF Scheme"):
-		frappe.db.sql(
-			"""
-			UPDATE `tabSIF Scheme` s
-			INNER JOIN `tabSIF Investment Strategy Subcategory` sub ON s.scheme_subcategory = sub.name
-			SET s.category = sub.category,
-			    s.investment_strategy = sub.category
-			WHERE s.scheme_subcategory IS NOT NULL AND s.scheme_subcategory != ''
-			"""
-		)
+		has_category_col = frappe.db.has_column("SIF Scheme", "category")
+		if has_category_col:
+			frappe.db.sql(
+				"""
+				UPDATE `tabSIF Scheme` s
+				INNER JOIN `tabSIF Investment Strategy Subcategory` sub ON s.scheme_subcategory = sub.name
+				SET s.category = sub.category,
+				    s.investment_strategy = sub.category
+				WHERE s.scheme_subcategory IS NOT NULL AND s.scheme_subcategory != ''
+				"""
+			)
+		else:
+			frappe.db.sql(
+				"""
+				UPDATE `tabSIF Scheme` s
+				INNER JOIN `tabSIF Investment Strategy Subcategory` sub ON s.scheme_subcategory = sub.name
+				SET s.investment_strategy = sub.category
+				WHERE s.scheme_subcategory IS NOT NULL AND s.scheme_subcategory != ''
+				"""
+			)
 
 	frappe.db.commit()
