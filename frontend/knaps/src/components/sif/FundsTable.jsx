@@ -111,7 +111,7 @@ function TableDropdown({ value, onChange, options, minWidth = 'min-w-[140px]' })
   )
 }
 
-import { fetchFundsList, fetchFundsSelectorList } from '../../api/funds'
+import { fetchFundsList, fetchFundsSelectorList, fetchSifFilters } from '../../api/funds'
 
 const PAGE_SIZE = 50
 
@@ -125,6 +125,8 @@ export default function FundsTable({
   const [tableLoading, setTableLoading] = useState(loading)
   const [totalCount, setTotalCount] = useState(0)
   const [selectorFunds, setSelectorFunds] = useState([])
+  const [categoryOptions, setCategoryOptions] = useState([])
+  const [subcategoryOptions, setSubcategoryOptions] = useState([])
   const [filters, setFilters] = useState({
     search: '',
     investmentStrategy: 'All',
@@ -133,14 +135,23 @@ export default function FundsTable({
   })
   const [sortConfig, setSortConfig] = useState({ key: 'returns1M', direction: 'desc' })
 
-  // Load distinct filter metadata using cached selector list (0 additional network requests)
+  // Load distinct filter metadata: Categories from Category DocType and subcategories from SIF Investment Strategy Subcategory
   useEffect(() => {
     let isMounted = true;
     async function loadFilterMetadata() {
       try {
-        const list = await fetchFundsSelectorList();
-        if (isMounted && Array.isArray(list)) {
-          setSelectorFunds(list);
+        const [filtersRes, selectorRes] = await Promise.allSettled([
+          fetchSifFilters(),
+          fetchFundsSelectorList()
+        ]);
+        if (isMounted) {
+          if (filtersRes.status === 'fulfilled' && filtersRes.value) {
+            setCategoryOptions(filtersRes.value.categories || []);
+            setSubcategoryOptions(filtersRes.value.subcategories || []);
+          }
+          if (selectorRes.status === 'fulfilled' && Array.isArray(selectorRes.value)) {
+            setSelectorFunds(selectorRes.value);
+          }
         }
       } catch (err) {
         console.error('Failed to load filter metadata:', err);
@@ -186,71 +197,107 @@ export default function FundsTable({
     return () => { isMounted = false; };
   }, [filters.search, filters.investmentStrategy, filters.schemeSubcategory, filters.risk, sortConfig.key, sortConfig.direction]);
 
-  // Unique Investment Strategies dynamically derived from dataset
+  // Unique Investment Strategies (Categories) dynamically derived from available/listed funds
   const investmentStrategies = useMemo(() => {
-    if (!selectorFunds.length) return ['Equity', 'Hybrid'];
-    const set = new Set();
-    selectorFunds.forEach(f => {
-      if (f.strategy) set.add(f.strategy);
-    });
-    return Array.from(set).filter(Boolean).sort();
-  }, [selectorFunds]);
+    // 1. If categoryOptions from API is available (only contains categories of available schemes)
+    if (categoryOptions && categoryOptions.length > 0) {
+      return [...categoryOptions].sort();
+    }
+    // 2. Derive from available selectorFunds/localFunds
+    const availableFunds = selectorFunds.length > 0 ? selectorFunds : localFunds;
+    if (availableFunds && availableFunds.length > 0) {
+      const set = new Set();
+      availableFunds.forEach(f => {
+        const cat = f.investmentStrategy || f.strategy || f.category;
+        if (cat) set.add(cat);
+      });
+      const list = Array.from(set).filter(Boolean).sort();
+      if (list.length > 0) return list;
+    }
+    // Fallback if no funds loaded yet: only available categories
+    return ['Equity', 'Hybrid'];
+  }, [categoryOptions, selectorFunds, localFunds]);
 
-  // Unique Scheme Subcategories dynamically derived and filtered by selected investmentStrategy
+  // Unique Scheme Subcategories available for the selected Strategy/Category
   const schemeSubcategories = useMemo(() => {
-    if (!selectorFunds.length) {
-      if (filters.investmentStrategy === 'Hybrid') {
-        return ['Active Asset Allocator Long-Short Fund', 'Hybrid Long-Short Fund'];
+    const selectedCategory = filters.investmentStrategy;
+
+    // 1. If we have subcategories loaded from available funds API
+    if (subcategoryOptions && subcategoryOptions.length > 0) {
+      let list = subcategoryOptions;
+      if (selectedCategory && selectedCategory !== 'All') {
+        list = subcategoryOptions.filter(s => s.category === selectedCategory);
       }
-      if (filters.investmentStrategy === 'Equity') {
-        return [
-          'Active Asset Allocator Long-Short Fund',
-          'Equity Ex-Top 100 Long-Short Fund',
-          'Equity Long-Short Fund',
-          'Sector Rotation Long-Short Fund',
-        ];
-      }
+      return list.map(s => s.name).filter(Boolean).sort();
+    }
+
+    // 2. Fallback to selectorFunds / localFunds dataset
+    const availableFunds = selectorFunds.length > 0 ? selectorFunds : localFunds;
+    if (availableFunds && availableFunds.length > 0) {
+      const set = new Set();
+      availableFunds.forEach(f => {
+        const catMatches =
+          !selectedCategory ||
+          selectedCategory === 'All' ||
+          f.investmentStrategy === selectedCategory ||
+          f.strategy === selectedCategory ||
+          f.category === selectedCategory;
+        const sub = f.schemeSubcategory;
+        if (catMatches && sub) {
+          set.add(sub);
+        }
+      });
+      return Array.from(set).filter(Boolean).sort();
+    }
+
+    // 3. Fallback defaults if not yet loaded
+    if (selectedCategory === 'Hybrid') {
+      return ['Active Asset Allocator Long-Short Fund', 'Hybrid Long-Short Fund'];
+    }
+    if (selectedCategory === 'Equity') {
       return [
         'Active Asset Allocator Long-Short Fund',
         'Equity Ex-Top 100 Long-Short Fund',
         'Equity Long-Short Fund',
-        'Hybrid Long-Short Fund',
         'Sector Rotation Long-Short Fund',
       ];
     }
+    return [
+      'Active Asset Allocator Long-Short Fund',
+      'Equity Ex-Top 100 Long-Short Fund',
+      'Equity Long-Short Fund',
+      'Hybrid Long-Short Fund',
+      'Sector Rotation Long-Short Fund',
+    ];
+  }, [subcategoryOptions, selectorFunds, localFunds, filters.investmentStrategy]);
 
-    const set = new Set();
-    selectorFunds.forEach(f => {
-      const stratMatches =
-        !filters.investmentStrategy ||
-        filters.investmentStrategy === 'All' ||
-        f.strategy === filters.investmentStrategy;
-      const sub = f.category || f.schemeSubcategory;
-      if (stratMatches && sub) {
-        set.add(sub);
-      }
-    });
-    return Array.from(set).filter(Boolean).sort();
-  }, [selectorFunds, filters.investmentStrategy]);
-
-  // Handle Strategy change with subcategory cascade reset if needed
+  // Handle Strategy/Category change with subcategory cascade reset if needed
   const handleStrategyChange = (newStrategy) => {
     setFilters(prev => {
       let nextSubcategory = prev.schemeSubcategory;
-      if (newStrategy !== 'All' && prev.schemeSubcategory !== 'All') {
-        const validForNew = selectorFunds.length
-          ? selectorFunds.some(
-              f =>
-                f.strategy === newStrategy &&
-                (f.category === prev.schemeSubcategory || f.schemeSubcategory === prev.schemeSubcategory)
-            )
-          : (newStrategy === 'Hybrid' && ['Hybrid Long-Short Fund', 'Active Asset Allocator Long-Short Fund'].includes(prev.schemeSubcategory)) ||
-            (newStrategy === 'Equity' && ['Equity Long-Short Fund', 'Equity Ex-Top 100 Long-Short Fund', 'Sector Rotation Long-Short Fund', 'Active Asset Allocator Long-Short Fund'].includes(prev.schemeSubcategory));
 
-        if (!validForNew) {
+      if (newStrategy === 'All' || !newStrategy) {
+        // Changing or clearing Category resets the selected Subcategory
+        nextSubcategory = 'All';
+      } else if (prev.schemeSubcategory !== 'All') {
+        // Check if prev.schemeSubcategory belongs to newStrategy
+        let belongsToNew = false;
+        if (subcategoryOptions && subcategoryOptions.length > 0) {
+          belongsToNew = subcategoryOptions.some(
+            s => s.name === prev.schemeSubcategory && s.category === newStrategy
+          );
+        } else if (selectorFunds && selectorFunds.length > 0) {
+          belongsToNew = selectorFunds.some(
+            f =>
+              (f.category === newStrategy || f.strategy === newStrategy) &&
+              f.schemeSubcategory === prev.schemeSubcategory
+          );
+        }
+        if (!belongsToNew) {
           nextSubcategory = 'All';
         }
       }
+
       return {
         ...prev,
         investmentStrategy: newStrategy,
@@ -507,8 +554,8 @@ export default function FundsTable({
                   const riskConfig = getRiskLevelConfig(fund.riskLevel)
                   const returnVal1M = fund.returns1M != null ? fund.returns1M : (fund.returns_1m != null ? fund.returns_1m : null)
                   const fundCode = fund.id || fund.sebi_code || fund.name
-                  const strategyVal = fund.investmentStrategy || fund.investment_strategy || 'Equity'
-                  const subcategoryVal = fund.schemeSubcategory || fund.scheme_subcategory || fund.category || 'Specialized Fund'
+                  const strategyVal = fund.category || fund.investmentStrategy || fund.investment_strategy || 'Equity'
+                  const subcategoryVal = fund.schemeSubcategory || fund.scheme_subcategory || 'Specialized Fund'
 
                   return (
                     <motion.tr

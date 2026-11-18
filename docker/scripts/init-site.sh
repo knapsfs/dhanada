@@ -17,9 +17,6 @@ else
     echo "Site ${SITE_NAME} already exists."
 fi
 
-echo "Installing CRM app..."
-/docker/scripts/install-app.sh crm
-
 echo "Installing Dhanada app..."
 /docker/scripts/install-app.sh dhanada
 

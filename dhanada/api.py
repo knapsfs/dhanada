@@ -54,6 +54,7 @@ from dhanada.APIs.scheme_details import (
 	get_funds_selector_list,
 	get_historical_nav,
 	get_historical_nav_for_sif,
+	get_sif_filter_options,
 )
 
 # Dynamic production sitemap XML
@@ -83,6 +84,7 @@ __all__ = [
 	"get_historical_nav_for_sif",
 	"get_performance_for_sif",
 	"get_scheme_heatmap_performance",
+	"get_sif_filter_options",
 	"get_sitemap_xml",
 	"get_testimonials",
 	"mask_invalid_returns",

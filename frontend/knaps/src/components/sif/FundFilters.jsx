@@ -18,9 +18,9 @@ export default function FundFilters({ filters, setFilters, onClear, amcList = []
     setFilters(prev => ({ ...prev, [key]: val === 'All' ? '' : val }))
   }
 
-  // Use investmentStrategy for the UI "Scheme Type" based on user requirements
-  const dynamicSchemeTypes = ['All', ...Array.from(new Set(fundsData.map(f => f.investmentStrategy).filter(Boolean))).sort()];
-  const dynamicCategories = ['All', ...Array.from(new Set(fundsData.map(f => f.category).filter(Boolean))).sort()];
+  // Use Category for Strategy / Scheme Type and schemeSubcategory for Category
+  const dynamicSchemeTypes = ['All', ...Array.from(new Set(fundsData.map(f => f.category || f.investmentStrategy).filter(Boolean))).sort()];
+  const dynamicCategories = ['All', ...Array.from(new Set(fundsData.map(f => f.schemeSubcategory || f.category).filter(Boolean))).sort()];
   const dynamicRiskLevels = useMemo(() => {
     const risks = new Set()
     fundsData.forEach(f => {

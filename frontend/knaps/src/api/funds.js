@@ -77,6 +77,41 @@ export async function fetchFundsList(params = {}) {
 	}
 }
 
+let sifFiltersCache = null;
+let sifFiltersPromise = null;
+
+export async function fetchSifFilters() {
+	if (sifFiltersCache) {
+		return sifFiltersCache;
+	}
+	if (sifFiltersPromise) {
+		return sifFiltersPromise;
+	}
+
+	sifFiltersPromise = (async () => {
+		try {
+			const response = await fetch("/api/method/dhanada.api.get_sif_filter_options");
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+			const result = await response.json();
+			const data = result.message || result;
+			if (data.status === "success") {
+				sifFiltersCache = data.data;
+				return sifFiltersCache;
+			} else {
+				throw new Error(data.message || "Failed to fetch SIF filter options");
+			}
+		} catch (error) {
+			sifFiltersPromise = null;
+			console.error("Failed to fetch SIF filters:", error);
+			throw error;
+		}
+	})();
+
+	return sifFiltersPromise;
+}
+
 let fundsSelectorCache = null;
 let fundsSelectorPromise = null;
 

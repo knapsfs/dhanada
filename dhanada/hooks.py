@@ -320,6 +320,7 @@ after_request = ["dhanada.utils.login.fix_login_response"]
 fixtures = [
 	"Workflow",
 	"Workflow State",
+	"Category",
 	{
 		"dt": "SIF Investment Strategy Subcategory",
 		"filters": [

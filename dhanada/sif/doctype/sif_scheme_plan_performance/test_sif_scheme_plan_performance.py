@@ -10,6 +10,7 @@ from dhanada.api import (
 	get_heatmap_filters,
 	get_historical_nav,
 	get_scheme_heatmap_performance,
+	get_sif_filter_options,
 )
 from dhanada.sif.sync.importer import DataImporter
 from dhanada.sif.sync.mapper import DataMapper
@@ -47,6 +48,7 @@ class IntegrationTestSIFSchemePlanPerformance(IntegrationTestCase):
 			scheme_name = scheme.name
 		else:
 			scheme_name = existing_scheme
+			frappe.db.set_value("SIF Scheme", scheme_name, "investment_strategy", "Equity")
 
 		# Create a dummy test scheme plan
 		if not frappe.db.exists("SIF Scheme Plan", "INFTEST00001"):
@@ -338,3 +340,90 @@ class IntegrationTestSIFSchemePlanPerformance(IntegrationTestCase):
 		finally:
 			if frappe.db.exists("SIF Scheme Plan", "INFTEST00002"):
 				frappe.delete_doc("SIF Scheme Plan", "INFTEST00002", force=1)
+
+	def test_get_sif_filter_options_structure(self):
+		"""Verifies that get_sif_filter_options returns distinct Categories and subcategories with their Category."""
+		res = get_sif_filter_options()
+		self.assertEqual(res.get("status"), "success")
+		self.assertIn("data", res)
+		data = res["data"]
+		self.assertIn("categories", data)
+		self.assertIn("subcategories", data)
+
+		categories = data["categories"]
+		self.assertIsInstance(categories, list)
+		# Ensure only available categories from active schemes are returned (Equity and Hybrid, not Debt)
+		self.assertEqual(len(categories), len(set(categories)))
+		self.assertIn("Equity", categories)
+		self.assertIn("Hybrid", categories)
+		self.assertNotIn("Debt", categories)
+
+		subcategories = data["subcategories"]
+		self.assertIsInstance(subcategories, list)
+		self.assertGreater(len(subcategories), 0)
+		for sub in subcategories:
+			self.assertIn("name", sub)
+			self.assertIn("category", sub)
+			self.assertIn(sub["category"], categories)
+
+	def test_get_funds_selector_list_category_relationship(self):
+		"""Verifies get_funds_selector_list returns category and schemeSubcategory correctly populated."""
+		res = get_funds_selector_list()
+		self.assertEqual(res.get("status"), "success")
+		data = res.get("data", [])
+		self.assertGreater(len(data), 0)
+		for fund in data:
+			self.assertIn("id", fund)
+			self.assertIn("name", fund)
+			self.assertIn("category", fund)
+			self.assertIn("strategy", fund)
+			self.assertIn("schemeSubcategory", fund)
+			# Category name should be a category (e.g. Equity, Hybrid, Debt), not subcategory
+			self.assertIn(fund["category"], ["Equity", "Hybrid", "Debt"])
+			self.assertIn(fund["strategy"], ["Equity", "Hybrid", "Debt"])
+
+	def test_get_funds_list_strategy_category_filtering(self):
+		"""Verifies get_funds_list with strategy/category filters on Category DocType relationship."""
+		res_equity = get_funds_list(page=1, page_size=20, strategy="Equity")
+		self.assertEqual(res_equity.get("status"), "success")
+		equity_funds = res_equity.get("data", [])
+		self.assertGreater(len(equity_funds), 0)
+		for f in equity_funds:
+			self.assertEqual(f.get("category"), "Equity")
+			self.assertEqual(f.get("investmentStrategy"), "Equity")
+
+		res_hybrid = get_funds_list(page=1, page_size=20, strategy="Hybrid")
+		self.assertEqual(res_hybrid.get("status"), "success")
+		hybrid_funds = res_hybrid.get("data", [])
+		self.assertGreater(len(hybrid_funds), 0)
+		for f in hybrid_funds:
+			self.assertEqual(f.get("category"), "Hybrid")
+			self.assertEqual(f.get("investmentStrategy"), "Hybrid")
+
+	def test_get_funds_list_subcategory_filtering(self):
+		"""Verifies get_funds_list filters accurately by schemeSubcategory."""
+		target_sub = "Hybrid Long-Short Fund"
+		res = get_funds_list(page=1, page_size=20, subcategory=target_sub)
+		self.assertEqual(res.get("status"), "success")
+		funds = res.get("data", [])
+		self.assertGreater(len(funds), 0)
+		for f in funds:
+			self.assertEqual(f.get("schemeSubcategory"), target_sub)
+			self.assertEqual(f.get("category"), "Hybrid")
+
+	def test_get_funds_list_dependent_filtering(self):
+		"""Verifies that compatible Category + Subcategory matches and incompatible filters return 0."""
+		# Compatible
+		res_compat = get_funds_list(
+			page=1, page_size=20, strategy="Hybrid", subcategory="Hybrid Long-Short Fund"
+		)
+		self.assertEqual(res_compat.get("status"), "success")
+		self.assertGreater(len(res_compat.get("data", [])), 0)
+
+		# Incompatible (Equity strategy + Hybrid subcategory)
+		res_incompat = get_funds_list(
+			page=1, page_size=20, strategy="Equity", subcategory="Hybrid Long-Short Fund"
+		)
+		self.assertEqual(res_incompat.get("status"), "success")
+		self.assertEqual(len(res_incompat.get("data", [])), 0)
+		self.assertEqual(res_incompat["pagination"]["total"], 0)

@@ -86,8 +86,8 @@ export default function HeatmapSection() {
 
     // 1. Ingest from selectorFunds (comprehensive list of all active funds)
     selectorFunds.forEach((f) => {
-      const strat = f.strategy || f.investmentStrategy || (f.category?.toLowerCase().includes("hybrid") ? "Hybrid" : "Equity");
-      const cat = f.category || f.schemeSubcategory;
+      const strat = f.category || f.strategy || f.investmentStrategy || (f.schemeSubcategory?.toLowerCase().includes("hybrid") ? "Hybrid" : "Equity");
+      const cat = f.schemeSubcategory || f.category;
       if (cat) {
         allSubcatsSet.add(cat);
         if (!strategySubcatsMap[strat]) {
@@ -99,8 +99,8 @@ export default function HeatmapSection() {
 
     // 2. Ingest from filtersList (from SIF Scheme query)
     filtersList.forEach((item) => {
-      const strat = item.investmentStrategy || item.strategy || (item.category?.toLowerCase().includes("hybrid") ? "Hybrid" : "Equity");
-      const cat = item.category;
+      const strat = item.category || item.investmentStrategy || item.strategy || (item.schemeSubcategory?.toLowerCase().includes("hybrid") ? "Hybrid" : "Equity");
+      const cat = item.schemeSubcategory || item.category;
       if (cat) {
         allSubcatsSet.add(cat);
         if (!strategySubcatsMap[strat]) {

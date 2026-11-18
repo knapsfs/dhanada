@@ -165,7 +165,7 @@ class IntegrationTestSIFScheme(IntegrationTestCase):
 		]:
 			existing = frappe.db.get_value(dt, key, "name")
 			if existing:
-				frappe.delete_doc(dt, existing, ignore_permissions=True, force=True)
+				_safe_delete_doc(dt, existing)
 
 		payload = self._sample_scheme_payload(
 			sebi_code=test_code, isid_url="https://portal.amfiindia.com/spages/S-888.pdf"
@@ -535,7 +535,7 @@ class IntegrationTestSIFScheme(IntegrationTestCase):
 		]:
 			existing = frappe.db.get_value(dt, key, "name")
 			if existing:
-				frappe.delete_doc(dt, existing, ignore_permissions=True, force=True)
+				_safe_delete_doc(dt, existing)
 
 		payload = self._sample_scheme_payload(sebi_code=test_code)
 		payload["sif_name"] = "Apex SIF"
@@ -1437,3 +1437,107 @@ class IntegrationTestSIFScheme(IntegrationTestCase):
 
 		scheme.reload()
 		self.assertEqual(scheme.risk_band, 2)
+
+	def test_scheme_subcategory_auto_populates_category_and_investment_strategy(self):
+		"""Verify that selecting Scheme Subcategory auto-populates Investment Strategy with Category value."""
+		test_code = "TEST/AUTOPOP/001/ABSL"
+		scheme = frappe.get_doc(
+			{
+				"doctype": "SIF Scheme",
+				"sebi_code": test_code,
+				"scheme_name": "AutoPop Hybrid Fund",
+				"scheme_subcategory": "Hybrid Long-Short Fund",
+				"scheme_objective": "Test AutoPop Objective",
+				"amc": self._get_or_create_test_amc(),
+			}
+		)
+		scheme.flags.from_approval = True
+		scheme.insert(ignore_permissions=True)
+
+		self.assertEqual(scheme.investment_strategy, "Hybrid")
+
+	def test_scheme_subcategory_update_updates_both_fields(self):
+		"""Verify that updating Scheme Subcategory updates Investment Strategy."""
+		test_code = "TEST/AUTOPOP/002/ABSL"
+		scheme = frappe.get_doc(
+			{
+				"doctype": "SIF Scheme",
+				"sebi_code": test_code,
+				"scheme_name": "Update Test Fund",
+				"scheme_subcategory": "Hybrid Long-Short Fund",
+				"scheme_objective": "Test Update Objective",
+				"amc": self._get_or_create_test_amc(),
+			}
+		)
+		scheme.flags.from_approval = True
+		scheme.insert(ignore_permissions=True)
+		self.assertEqual(scheme.investment_strategy, "Hybrid")
+
+		# Update subcategory to an Equity subcategory
+		scheme.flags.from_approval = True
+		scheme.scheme_subcategory = "Equity Long-Short Fund"
+		scheme.save(ignore_permissions=True)
+
+		self.assertEqual(scheme.investment_strategy, "Equity")
+
+	def test_scheme_subcategory_clear_clears_both_fields(self):
+		"""Verify that clearing Scheme Subcategory clears Investment Strategy."""
+		test_code = "TEST/AUTOPOP/003/ABSL"
+		scheme = frappe.get_doc(
+			{
+				"doctype": "SIF Scheme",
+				"sebi_code": test_code,
+				"scheme_name": "Clear Test Fund",
+				"scheme_subcategory": "Debt Long-Short Fund",
+				"scheme_objective": "Test Clear Objective",
+				"amc": self._get_or_create_test_amc(),
+			}
+		)
+		scheme.flags.from_approval = True
+		scheme.insert(ignore_permissions=True)
+		self.assertEqual(scheme.investment_strategy, "Debt")
+
+		# Clear subcategory
+		scheme.flags.from_approval = True
+		scheme.flags.ignore_mandatory = True
+		scheme.scheme_subcategory = None
+		scheme.save(ignore_permissions=True)
+
+		self.assertIsNone(scheme.investment_strategy)
+
+	def test_server_side_validation_enforces_category_consistency(self):
+		"""Verify that server-side validation enforces consistent category value on investment_strategy."""
+		test_code = "TEST/AUTOPOP/004/ABSL"
+		scheme = frappe.get_doc(
+			{
+				"doctype": "SIF Scheme",
+				"sebi_code": test_code,
+				"scheme_name": "Tamper Test Fund",
+				"scheme_subcategory": "Equity Long-Short Fund",
+				"investment_strategy": "Debt",
+				"scheme_objective": "Test Tamper Objective",
+				"amc": self._get_or_create_test_amc(),
+			}
+		)
+		scheme.flags.from_approval = True
+		scheme.insert(ignore_permissions=True)
+
+		# Server-side validation must enforce correct category on investment_strategy
+		self.assertEqual(scheme.investment_strategy, "Equity")
+
+	def test_invalid_subcategory_raises_validation_error(self):
+		"""Verify that assigning a non-existent subcategory raises a ValidationError."""
+		test_code = "TEST/AUTOPOP/005/ABSL"
+		scheme = frappe.get_doc(
+			{
+				"doctype": "SIF Scheme",
+				"sebi_code": test_code,
+				"scheme_name": "Invalid Subcat Fund",
+				"scheme_subcategory": "NonExistentSubcategory",
+				"scheme_objective": "Test Invalid Subcat Objective",
+				"amc": self._get_or_create_test_amc(),
+			}
+		)
+		scheme.flags.from_approval = True
+		with self.assertRaises((frappe.ValidationError, frappe.LinkValidationError)):
+			scheme.insert(ignore_permissions=True)
