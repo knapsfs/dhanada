@@ -302,6 +302,8 @@ def boot_knaps_crm(bootinfo):
 					"app_title": "KNAPS CRM",
 					"app_route": "/knaps-crm",
 					"app_logo_url": "/assets/dhanada/images/CRM.jpg",
+					"on_apps_screen": True,
+					"sequence_id": 200,
 					"modules": ["Dhanada"],
 					"workspaces": ["KNAPS CRM"],
 				}
