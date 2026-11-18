@@ -135,8 +135,8 @@ function App() {
             {/* Modern KNAPS CRM Portal Routes */}
             <Route path="/knaps-crm" element={<KnapsCrmPortal />} />
             <Route path="/knaps-crm/*" element={<KnapsCrmPortal />} />
-            <Route path="/crm" element={<KnapsCrmPortal />} />
-            <Route path="/crm/*" element={<KnapsCrmPortal />} />
+            <Route path="/crm" element={<Navigate to="/knaps-crm" replace />} />
+            <Route path="/crm/*" element={<Navigate to="/knaps-crm" replace />} />
 
             {/* Dedicated Customer Form Workflow Routes */}
             <Route path="/forms/risk-profiler/:token" element={<RiskProfilerWorkflowPage />} />
