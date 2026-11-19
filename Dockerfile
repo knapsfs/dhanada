@@ -58,16 +58,24 @@ RUN if [ -L /home/frappe/frappe-bench/sites/assets ]; then \
     rm -f /home/frappe/frappe-bench/sites/assets/assets.json /home/frappe/frappe-bench/sites/assets/assets-rtl.json
 
 # Ensure build-time common_site_config.json contains socketio_port without overwriting existing settings
-RUN python3 -c "\
-import json, os; \
-p = '/home/frappe/frappe-bench/sites/common_site_config.json'; \
-os.makedirs(os.path.dirname(p), exist_ok=True); \
-data = json.load(open(p)) if os.path.exists(p) and os.path.getsize(p) > 0 else {}; \
-data.setdefault('socketio_port', 9000); \
-with open(p, 'w') as f: \
-    json.dump(data, f, indent=1); \
-    f.write('\n'); \
-"
+RUN python3 - <<'PY'
+import json
+import os
+
+p = '/home/frappe/frappe-bench/sites/common_site_config.json'
+os.makedirs(os.path.dirname(p), exist_ok=True)
+data = json.load(open(p)) if os.path.exists(p) and os.path.getsize(p) > 0 else {}
+if 'socketio_port' not in data:
+    data['socketio_port'] = 9000
+
+with open(p, 'w') as f:
+    json.dump(data, f, indent=1)
+    f.write('\n')
+
+with open(p) as f:
+    verified = json.load(f)
+    assert verified.get('socketio_port') == 9000, "socketio_port verification failed"
+PY
 
 # Build bundled assets
 RUN bench build --production
