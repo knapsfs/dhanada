@@ -1,0 +1,342 @@
+app_name = "dhanada"
+app_title = "SIF"
+app_publisher = "KNAPS Private Limited"
+app_description = "Investment Platform for KNAPS "
+app_email = "piyush.sawhney@knaps.in"
+app_license = "mit"
+
+app_home = "/desk/sif"
+
+add_to_apps_screen = [
+	{
+		"name": "dhanada",
+		"logo": "/assets/dhanada/images/SIF-Assets-Favicon.png",
+		"title": "SIF",
+		"route": "/desk/sif",
+	},
+	{
+		"name": "knaps_crm",
+		"logo": "/assets/dhanada/images/CRM.jpg",
+		"title": "KNAPS CRM",
+		"route": "/knaps-crm",
+	},
+]
+
+extend_bootinfo = ["dhanada.setup.bootstrap.boot_knaps_crm"]
+
+# Apps
+# ------------------
+
+required_apps = []
+
+# Each item in the list will be shown as an app in the apps page
+# add_to_apps_screen = [
+# 	{
+# 		"name": "dhanada",
+# 		"logo": "/assets/dhanada/logo.png",
+# 		"title": "Dhanada",
+# 		"route": "/dhanada",
+# 		"has_permission": "dhanada.api.permission.has_app_permission"
+# 	}
+# ]
+
+# Includes in <head>
+# ------------------
+
+# include js, css files in header of desk.html
+# app_include_css = "/assets/dhanada/css/dhanada.css"
+# app_include_js = "/assets/dhanada/js/dhanada.js"
+
+# include js, css files in header of web template
+web_include_css = "/assets/dhanada/css/knaps_login.css"
+web_include_js = "/assets/dhanada/js/knaps_login.js"
+
+app_logo_url = "/assets/dhanada/images/knaps-logo.webp"
+
+# include custom scss in every website theme (without file extension ".scss")
+# website_theme_scss = "dhanada/public/scss/website"
+
+# include js, css files in header of web form
+# webform_include_js = {"doctype": "public/js/doctype.js"}
+# webform_include_css = {"doctype": "public/css/doctype.css"}
+
+# include js in page
+# page_js = {"page" : "public/js/file.js"}
+
+# include js in doctype views
+# doctype_js = {"doctype" : "public/js/doctype.js"}
+# doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
+# doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
+# doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
+
+# Svg Icons
+# ------------------
+# include app icons in desk
+# app_include_icons = "dhanada/public/icons.svg"
+
+# Home Pages
+# ----------
+website_route_rules = [
+	{"from_route": "/", "to_route": "knaps"},
+	{"from_route": "/about", "to_route": "knaps"},
+	{"from_route": "/products", "to_route": "knaps"},
+	{"from_route": "/products/<path:app_path>", "to_route": "knaps"},
+	{"from_route": "/mutual-funds", "to_route": "knaps"},
+	{"from_route": "/mutual-funds/<path:app_path>", "to_route": "knaps"},
+	{"from_route": "/sif", "to_route": "knaps"},
+	{"from_route": "/sif/<path:app_path>", "to_route": "knaps"},
+	{"from_route": "/calculators", "to_route": "knaps"},
+	{"from_route": "/calculators/<path:app_path>", "to_route": "knaps"},
+	{"from_route": "/blog", "to_route": "knaps"},
+	{"from_route": "/blog/<path:app_path>", "to_route": "knaps"},
+	{"from_route": "/blogs", "to_route": "knaps"},
+	{"from_route": "/blogs/<path:app_path>", "to_route": "knaps"},
+	{"from_route": "/author", "to_route": "knaps"},
+	{"from_route": "/author/<path:app_path>", "to_route": "knaps"},
+	{"from_route": "/contact", "to_route": "knaps"},
+	{"from_route": "/contact-us", "to_route": "knaps"},
+	{"from_route": "/privacy-policy", "to_route": "knaps"},
+	{"from_route": "/terms-and-conditions", "to_route": "knaps"},
+	{"from_route": "/regulatory-disclosures", "to_route": "knaps"},
+	{"from_route": "/regulatory-disclosures/<path:app_path>", "to_route": "knaps"},
+	{"from_route": "/regulatory-disclosure", "to_route": "knaps"},
+	{"from_route": "/registrations", "to_route": "knaps"},
+	{"from_route": "/post-office-small-savings-schemes", "to_route": "knaps"},
+	{"from_route": "/life-insurance", "to_route": "knaps"},
+	{"from_route": "/general-insurance", "to_route": "knaps"},
+	{"from_route": "/health-insurance", "to_route": "knaps"},
+	{"from_route": "/fixed-income-products", "to_route": "knaps"},
+	{"from_route": "/nps", "to_route": "knaps"},
+	{"from_route": "/national-pension-system", "to_route": "knaps"},
+	{"from_route": "/knaps-crm", "to_route": "knaps"},
+	{"from_route": "/knaps-crm/<path:app_path>", "to_route": "knaps"},
+	# {"from_route": "/crm", "to_route": "knaps"},
+	# {"from_route": "/crm/<path:app_path>", "to_route": "knaps"},
+	{"from_route": "/forms", "to_route": "knaps"},
+	{"from_route": "/forms/<path:app_path>", "to_route": "knaps"},
+]
+
+# application home page (will override Website Settings)
+home_page = "knaps"
+
+# website user home page (by Role)
+# role_home_page = {
+# 	"Role": "home_page"
+# }
+
+# Generators
+# ----------
+
+# automatically create page for each record of this doctype
+# website_generators = ["Web Page"]
+
+# automatically load and sync documents of this doctype from downstream apps
+# importable_doctypes = [doctype_1]
+
+# Jinja
+# ----------
+
+# add methods and filters to jinja environment
+# jinja = {
+# 	"methods": "dhanada.utils.jinja_methods",
+# 	"filters": "dhanada.utils.jinja_filters"
+# }
+
+# Installation
+# ------------
+
+# before_install = "dhanada.install.before_install"
+after_install = "dhanada.setup.bootstrap.after_install"
+after_migrate = ["dhanada.utils.patch_crm_layout.patch_layout", "dhanada.setup.bootstrap.after_migrate"]
+
+
+get_desktop_icons = "dhanada.config.desktop.get_data"
+
+
+# Uninstallation
+# ------------
+
+# before_uninstall = "dhanada.uninstall.before_uninstall"
+# after_uninstall = "dhanada.uninstall.after_uninstall"
+
+# Integration Setup
+# ------------------
+# To set up dependencies/integrations with other apps
+# Name of the app being installed is passed as an argument
+
+# before_app_install = "dhanada.utils.before_app_install"
+# after_app_install = "dhanada.utils.after_app_install"
+
+# Integration Cleanup
+# -------------------
+# To clean up dependencies/integrations with other apps
+# Name of the app being uninstalled is passed as an argument
+
+# before_app_uninstall = "dhanada.utils.before_app_uninstall"
+# after_app_uninstall = "dhanada.utils.after_app_uninstall"
+
+# Build
+# ------------------
+# To hook into the build process
+
+# after_build = "dhanada.build.after_build"
+
+# Desk Notifications
+# ------------------
+# See frappe.core.notifications.get_notification_config
+
+# notification_config = "dhanada.notifications.get_notification_config"
+
+# Permissions
+# -----------
+# Permissions evaluated in scripted ways
+
+# permission_query_conditions = {
+# 	"Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
+# }
+#
+# has_permission = {
+# 	"Event": "frappe.desk.doctype.event.event.has_permission",
+# }
+
+# Document Events
+# ---------------
+# Hook on document methods and events
+# Advanced CRM communication hooks (Email Queue, Communication, WhatsApp)
+# are reserved for the feat/crm branch.
+doc_events = {}
+
+# Scheduled Tasks
+# ---------------
+
+scheduler_events = {
+	"cron": {
+		"0 12 * * *": [
+			"dhanada.scheduler.sync_nav_data.sync_nav_data",
+			"dhanada.scheduler.sync_nav_performance.sync_nav_performance",
+		],
+		"0 12 * * 0": [
+			"dhanada.scheduler.sync_scheme_details.sync_scheme_details",
+		],
+	},
+}
+
+# Testing
+# -------
+
+before_tests = "dhanada.setup.bootstrap.before_tests"
+
+
+# Extend DocType Class
+# ------------------------------
+#
+# Specify custom mixins to extend the standard doctype controller.
+# extend_doctype_class = {
+# 	"Task": "dhanada.custom.task.CustomTaskMixin"
+# }
+
+# Advanced Email Account override is reserved for feat/crm
+# override_doctype_class = {"Email Account": "dhanada.overrides.custom_email_account.CustomEmailAccount"}
+
+# Overriding Methods
+# ------------------------------
+#
+# override_whitelisted_methods = {
+# 	"frappe.desk.doctype.event.event.get_events": "dhanada.event.get_events"
+# }
+#
+# each overriding function accepts a `data` argument;
+# generated from the base implementation of the doctype dashboard,
+# along with any modifications made in other Frappe apps
+# override_doctype_dashboards = {
+# 	"Task": "dhanada.task.get_dashboard_data"
+# }
+
+# exempt linked doctypes from being automatically cancelled
+#
+# auto_cancel_exempted_doctypes = ["Auto Repeat"]
+
+# Ignore links to specified DocTypes when deleting documents
+# -----------------------------------------------------------
+
+# ignore_links_on_delete = ["Communication", "ToDo"]
+
+# Request Events
+# ----------------
+# before_request = ["dhanada.utils.before_request"]
+# after_request = ["dhanada.utils.after_request"]
+
+# Job Events
+# ----------
+# before_job = ["dhanada.utils.before_job"]
+# after_job = ["dhanada.utils.after_job"]
+
+# User Data Protection
+# --------------------
+
+# user_data_fields = [
+# 	{
+# 		"doctype": "{doctype_1}",
+# 		"filter_by": "{filter_by}",
+# 		"redact_fields": ["{field_1}", "{field_2}"],
+# 		"partial": 1,
+# 	},
+# 	{
+# 		"doctype": "{doctype_2}",
+# 		"filter_by": "{filter_by}",
+# 		"partial": 1,
+# 	},
+# 	{
+# 		"doctype": "{doctype_3}",
+# 		"strict": False,
+# 	},
+# 	{
+# 		"doctype": "{doctype_4}"
+# 	}
+# ]
+
+# Authentication and authorization
+# --------------------------------
+
+# auth_hooks = [
+# 	"dhanada.auth.validate"
+# ]
+
+after_request = ["dhanada.utils.login.fix_login_response"]
+
+
+# Automatically update python controller files with type annotations for this app.
+# export_python_type_annotations = True
+
+# default_log_clearing_doctypes = {
+# 	"Logging DocType Name": 30  # days to retain logs
+# }
+
+# Translation
+# ------------
+# List of apps whose translatable strings should be excluded from this app's translations.
+# ignore_translatable_strings_from = []
+
+fixtures = [
+	"Workflow",
+	"Workflow State",
+	"Category",
+	{
+		"dt": "SIF Investment Strategy Subcategory",
+		"filters": [
+			[
+				"name",
+				"in",
+				[
+					"Equity Long-Short Fund",
+					"Equity Ex-Top 100 Long-Short Fund",
+					"Sector Rotation Long-Short Fund",
+					"Debt Long-Short Fund",
+					"Sectoral Debt Long-Short Fund",
+					"Active Asset Allocator Long-Short Fund",
+					"Hybrid Long-Short Fund",
+				],
+			]
+		],
+	},
+]
