@@ -7,6 +7,65 @@ from dhanada.sif.sync.constants import EDITABLE_FIELDS
 
 
 class SIFScheme(Document):
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		if getattr(self, "scheme_subcategory", None):
+			self.populate_category_and_strategy()
+
+	def populate_category_and_strategy(self):
+		if self.scheme_subcategory:
+			sub_cat = frappe.db.get_value(
+				"SIF Investment Strategy Subcategory",
+				self.scheme_subcategory,
+				["name", "category"],
+				as_dict=True,
+			)
+			if sub_cat and sub_cat.category:
+				self.investment_strategy = sub_cat.category
+				self.category = sub_cat.category
+		else:
+			self.investment_strategy = None
+			self.category = None
+
+	def insert(self, *args, **kwargs):
+		self.populate_category_and_strategy()
+		return super().insert(*args, **kwargs)
+
+	def save(self, *args, **kwargs):
+		self.populate_category_and_strategy()
+		return super().save(*args, **kwargs)
+
+	def validate(self):
+		self.validate_subcategory_and_category()
+
+	def validate_subcategory_and_category(self):
+		if self.scheme_subcategory:
+			sub_cat = frappe.db.get_value(
+				"SIF Investment Strategy Subcategory",
+				self.scheme_subcategory,
+				["name", "category"],
+				as_dict=True,
+			)
+			if not sub_cat:
+				frappe.throw(
+					frappe._("Scheme Subcategory '{0}' does not exist").format(self.scheme_subcategory),
+					frappe.ValidationError,
+				)
+			if not sub_cat.category:
+				frappe.throw(
+					frappe._("Scheme Subcategory '{0}' has no assigned Category").format(
+						self.scheme_subcategory
+					),
+					frappe.ValidationError,
+				)
+
+			# Enforce server-side auto-population and consistency (investment_strategy has Category value)
+			self.investment_strategy = sub_cat.category
+			self.category = sub_cat.category
+		else:
+			self.investment_strategy = None
+			self.category = None
+
 	def before_insert(self):
 		if not self.flags.from_approval:
 			frappe.throw(

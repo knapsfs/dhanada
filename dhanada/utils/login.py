@@ -1,6 +1,8 @@
 import json
 import frappe
 
+import frappe
+
 
 def fix_login_response(request, response):
 	"""

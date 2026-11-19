@@ -69,4 +69,3 @@ def get_sitemap_xml():
 	frappe.response["type"] = "xml"
 	frappe.response["data"] = xml
 	return xml
-

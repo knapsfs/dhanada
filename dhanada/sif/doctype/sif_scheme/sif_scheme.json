@@ -69,12 +69,12 @@
   },
   {
    "fieldname": "investment_strategy",
-   "fieldtype": "Select",
+   "fieldtype": "Link",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Investment Strategy",
-   "options": "\nEquity\nHybrid\nDebt",
-   "reqd": 1
+   "options": "Category",
+   "read_only": 1
   },
   {
    "fieldname": "scheme_type",

@@ -109,6 +109,68 @@ def get_historical_nav(
 		return {"status": "error", "message": str(e)}
 
 
+# SIF public listing page ke filters (Categories & Subcategories) laata hai.
+@frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
+@rate_limit(limit=60, seconds=60, ip_based=True)
+def get_sif_filter_options():
+	"""
+	Fetches distinct Categories and Subcategories that are ACTUALLY AVAILABLE
+	among active SIF schemes. For example, if no Debt funds are listed,
+	only Equity and Hybrid are returned.
+	"""
+	try:
+		Scheme = DocType("SIF Scheme")
+		query = (
+			frappe.qb.from_(Scheme)
+			.select(
+				Scheme.investment_strategy.as_("strategy"),
+				Scheme.scheme_subcategory.as_("subcategory"),
+			)
+			.where(
+				(Scheme.docstatus < 2)
+				& (Scheme.investment_strategy.isnotnull())
+				& (Scheme.investment_strategy != "")
+			)
+			.distinct()
+		)
+		rows = query.run(as_dict=True)
+
+		seen_cats = set()
+		category_list = []
+		subcat_list = []
+		seen_subcats = set()
+
+		for r in rows:
+			strat = (r.get("strategy") or "").strip()
+			sub = (r.get("subcategory") or "").strip()
+			if strat and strat not in seen_cats:
+				seen_cats.add(strat)
+				category_list.append(strat)
+			if sub and sub not in seen_subcats:
+				seen_subcats.add(sub)
+				subcat_list.append(
+					{
+						"name": sub,
+						"category": strat,
+					}
+				)
+
+		# Fallback if no active schemes in DB
+		if not category_list:
+			category_list = ["Equity", "Hybrid"]
+
+		return {
+			"status": "success",
+			"data": {
+				"categories": sorted(category_list),
+				"subcategories": subcat_list,
+			},
+		}
+	except Exception as e:
+		frappe.log_error(title="get_sif_filter_options API Error", message=frappe.get_traceback())
+		return {"status": "error", "message": str(e)}
+
+
 # Fund selector ke liye minimal funds list (id, name, category, risk) laata hai.
 @frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
 @rate_limit(limit=60, seconds=60, ip_based=True)
@@ -125,9 +187,10 @@ def get_funds_selector_list():
 				Scheme.name.as_("id"),
 				Scheme.sebi_code,
 				Scheme.scheme_name.as_("name"),
-				Scheme.scheme_subcategory.as_("category"),
+				Scheme.investment_strategy.as_("category"),
 				Scheme.scheme_subcategory.as_("schemeSubcategory"),
 				Scheme.investment_strategy.as_("strategy"),
+				Scheme.investment_strategy.as_("investmentStrategy"),
 				Scheme.risk_band.as_("risk"),
 			)
 			.where(Scheme.docstatus < 2)
@@ -153,10 +216,12 @@ def get_funds_list(
 	sort_by: str = "returns1M",
 	sort_order: str = "desc",
 	all_records: bool | str = False,
+	category: str | None = None,
 ):
 	"""
 	Optimized, paginated SIF Listing API using Frappe Query Builder.
 	Projects only fields required by the listing UI and computes DB-level pagination.
+	Supports filtering by Category (Strategy) and Scheme Subcategory.
 	"""
 	try:
 		# 1. Parse and validate pagination parameters
@@ -165,12 +230,12 @@ def get_funds_list(
 
 		try:
 			page = max(1, int(page))
-		except ValueError, TypeError:
+		except (ValueError, TypeError):
 			page = 1
 
 		try:
 			page_size = max(1, min(100, int(page_size))) if not all_records else 1000
-		except ValueError, TypeError:
+		except (ValueError, TypeError):
 			page_size = 5
 
 		# 2. Build Query Builder objects
@@ -187,12 +252,15 @@ def get_funds_list(
 			conditions &= (
 				Scheme.scheme_name.like(q)
 				| Scheme.amc.like(q)
+				| Scheme.category.like(q)
 				| Scheme.investment_strategy.like(q)
 				| Scheme.scheme_subcategory.like(q)
 			)
 
-		if strategy and strategy.strip() and strategy.strip().lower() != "all":
-			conditions &= Scheme.investment_strategy == strategy.strip()
+		cat_filter = category or strategy
+		if cat_filter and cat_filter.strip() and cat_filter.strip().lower() != "all":
+			target_cat = cat_filter.strip()
+			conditions &= (Scheme.category == target_cat) | (Scheme.investment_strategy == target_cat)
 
 		if subcategory and subcategory.strip() and subcategory.strip().lower() != "all":
 			conditions &= Scheme.scheme_subcategory == subcategory.strip()
@@ -215,6 +283,7 @@ def get_funds_list(
 			"scheme_name": Scheme.scheme_name,
 			"investmentstrategy": Scheme.investment_strategy,
 			"strategy": Scheme.investment_strategy,
+			"category": Scheme.investment_strategy,
 			"schemesubcategory": Scheme.scheme_subcategory,
 			"subcategory": Scheme.scheme_subcategory,
 			"risk": Scheme.risk_band,
@@ -241,7 +310,9 @@ def get_funds_list(
 				AMC.amc_name.as_("amc_name"),
 				AMC.amc_logo,
 				Scheme.scheme_subcategory.as_("schemeSubcategory"),
+				Scheme.investment_strategy.as_("category"),
 				Scheme.investment_strategy.as_("investmentStrategy"),
+				Scheme.investment_strategy.as_("strategy"),
 				Scheme.risk_band.as_("risk"),
 				Scheme.nfo_start_date,
 				Scheme.nfo_allotment_date,
@@ -268,7 +339,9 @@ def get_funds_list(
 					AMC.amc_name.as_("amc_name"),
 					AMC.amc_logo,
 					Scheme.scheme_subcategory.as_("schemeSubcategory"),
+					Scheme.investment_strategy.as_("category"),
 					Scheme.investment_strategy.as_("investmentStrategy"),
+					Scheme.investment_strategy.as_("strategy"),
 					Scheme.risk_band.as_("risk"),
 					Scheme.nfo_start_date,
 					Scheme.nfo_allotment_date,
@@ -291,7 +364,9 @@ def get_funds_list(
 					AMC.amc_name.as_("amc_name"),
 					AMC.amc_logo,
 					Scheme.scheme_subcategory.as_("schemeSubcategory"),
+					Scheme.investment_strategy.as_("category"),
 					Scheme.investment_strategy.as_("investmentStrategy"),
+					Scheme.investment_strategy.as_("strategy"),
 					Scheme.risk_band.as_("risk"),
 					Scheme.nfo_start_date,
 					Scheme.nfo_allotment_date,
@@ -394,7 +469,9 @@ def get_funds_list(
 					"amc_logo": amc_logo,
 					"name": s.get("name"),
 					"amc": amc_name,
-					"investmentStrategy": s.get("investmentStrategy"),
+					"category": s.get("category"),
+					"investmentStrategy": s.get("category") or s.get("investmentStrategy"),
+					"strategy": s.get("category") or s.get("strategy"),
 					"schemeSubcategory": s.get("schemeSubcategory"),
 					"risk": s.get("risk"),
 					"riskLevel": s.get("risk"),
@@ -473,7 +550,8 @@ def get_fund_details(
 				Scheme.amc.as_("amc_code"),
 				AMC.amc_name.as_("amc_name"),
 				AMC.amc_logo,
-				Scheme.scheme_subcategory.as_("category"),
+				Scheme.investment_strategy.as_("category"),
+				Scheme.scheme_subcategory.as_("schemeSubcategory"),
 				Scheme.scheme_type.as_("schemeType"),
 				Scheme.investment_strategy.as_("investmentStrategy"),
 				Scheme.benchmark_tier_1.as_("benchmarkTier1"),
@@ -682,6 +760,7 @@ def get_fund_details(
 			"amcLogo": amc_logo,
 			"logo": amc_logo,
 			"category": scheme.get("category"),
+			"schemeSubcategory": scheme.get("schemeSubcategory"),
 			"schemeType": scheme.get("schemeType"),
 			"investmentStrategy": scheme.get("investmentStrategy"),
 			"benchmarkTier1": scheme.get("benchmarkTier1"),

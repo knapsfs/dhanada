@@ -419,5 +419,4 @@ export const MF_FAQS = [
 		q: "How are Mutual Funds regulated in India? Can a fund house run away with my money?",
 		a: "Mutual funds in India are among the most strictly regulated financial instruments globally, governed by SEBI (Mutual Funds) Regulations, 1996. Crucially, your money is NOT held by the Asset Management Company (AMC); it is held in trust by an independent SEBI-registered Custodian (like Deutsche Bank, HDFC Bank, SBI). Even in the extreme event an AMC shuts down, investor assets remain safely protected with the Custodian and are returned to unit holders.",
 	},
-
 ];

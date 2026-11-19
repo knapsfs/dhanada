@@ -7,7 +7,8 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "subcategory_name"
+  "subcategory_name",
+  "category"
  ],
  "fields": [
   {
@@ -17,12 +18,21 @@
    "label": "Subcategory Name",
    "reqd": 1,
    "unique": 1
+  },
+  {
+   "fieldname": "category",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Category",
+   "options": "Category",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-15 16:52:22.593908",
+ "modified": "2026-11-18 14:00:00.000000",
  "modified_by": "Administrator",
  "module": "SIF",
  "name": "SIF Investment Strategy Subcategory",

@@ -29,7 +29,13 @@ export const productOptions = goalOptions;
 export const getPageProduct = (val, currentPath = "") => {
 	let rawStr = "";
 	if (val && typeof val === "object") {
-		rawStr = val.defaultProduct || val.defaultService || val.product || val.service || val.title || "";
+		rawStr =
+			val.defaultProduct ||
+			val.defaultService ||
+			val.product ||
+			val.service ||
+			val.title ||
+			"";
 	} else if (typeof val === "string") {
 		rawStr = val;
 	}
@@ -53,11 +59,7 @@ export const getPageProduct = (val, currentPath = "") => {
 		) {
 			return financialProductOptions.find((p) => p.value === "mutual-funds");
 		}
-		if (
-			s.includes("sif") ||
-			s.includes("specialised") ||
-			s.includes("specialized")
-		) {
+		if (s.includes("sif") || s.includes("specialised") || s.includes("specialized")) {
 			return financialProductOptions.find((p) => p.value === "sif");
 		}
 		if (
@@ -158,10 +160,7 @@ export const getPageProduct = (val, currentPath = "") => {
 		) {
 			return financialProductOptions.find((p) => p.value === "fixed-income");
 		}
-		if (
-			path.includes("/nps") ||
-			path.includes("/national-pension-system")
-		) {
+		if (path.includes("/nps") || path.includes("/national-pension-system")) {
 			return financialProductOptions.find((p) => p.value === "nps");
 		}
 	}
@@ -200,7 +199,12 @@ export const findGoalOption = (val) => {
 	if (s.includes("income") || s.includes("swp")) {
 		return goalOptions.find((g) => g.value === "regular-income");
 	}
-	if (s.includes("marriage") || s.includes("education") || s.includes("house") || s.includes("child")) {
+	if (
+		s.includes("marriage") ||
+		s.includes("education") ||
+		s.includes("house") ||
+		s.includes("child")
+	) {
 		return goalOptions.find((g) => g.value === "marriage-education-house");
 	}
 	if (s.includes("retire") || s.includes("pension")) {

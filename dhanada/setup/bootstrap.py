@@ -24,6 +24,7 @@ def ensure_master_data():
 	frappe.logger().info("Starting Dhanada bootstrap process...")
 	ensure_lead_sources()
 	ensure_crm_sources()
+	ensure_sif_categories()
 	ensure_sif_subcategories()
 	ensure_knaps_crm_workspace()
 	ensure_sif_desktop_icon()
@@ -67,25 +68,78 @@ def ensure_lead_sources():
 				frappe.logger().error(f"Failed to create Lead Source '{source}': {e!s}")
 
 
+SUBCATEGORY_CATEGORY_MAP = {
+	"Equity Long-Short Fund": "Equity",
+	"Equity Ex-Top 100 Long-Short Fund": "Equity",
+	"Sector Rotation Long-Short Fund": "Equity",
+	"Debt Long-Short Fund": "Debt",
+	"Sectoral Debt Long-Short Fund": "Debt",
+	"Active Asset Allocator Long-Short Fund": "Hybrid",
+	"Hybrid Long-Short Fund": "Hybrid",
+}
+
+
+def ensure_sif_categories():
+	"""
+	Ensure canonical Categories (Equity, Hybrid, Debt) exist.
+	"""
+	canonical_categories = ["Equity", "Hybrid", "Debt"]
+
+	if not frappe.db.exists("DocType", "Category"):
+		return
+
+	for cat in canonical_categories:
+		if not frappe.db.exists("Category", cat):
+			try:
+				doc = frappe.get_doc(
+					{
+						"doctype": "Category",
+						"category_name": cat,
+					}
+				)
+				doc.insert(ignore_permissions=True)
+				frappe.logger().info(f"Created Category: {cat}")
+			except Exception as e:
+				frappe.logger().error(f"Failed to create Category '{cat}': {e!s}")
+
+
 def ensure_sif_subcategories():
 	"""
-	Ensure all 7 canonical SIF Investment Strategy Subcategories exist from fixtures.
+	Ensure all 7 canonical SIF Investment Strategy Subcategories exist with their Category assigned.
 	"""
-	from dhanada.sif.sync.constants import APPROVED_SUBCATEGORIES
+	ensure_sif_categories()
 
-	for sub in APPROVED_SUBCATEGORIES:
+	if not frappe.db.exists("DocType", "SIF Investment Strategy Subcategory"):
+		return
+
+	for sub, cat in SUBCATEGORY_CATEGORY_MAP.items():
 		if not frappe.db.exists("SIF Investment Strategy Subcategory", sub):
 			try:
 				doc = frappe.get_doc(
 					{
 						"doctype": "SIF Investment Strategy Subcategory",
 						"subcategory_name": sub,
+						"category": cat,
 					}
 				)
 				doc.insert(ignore_permissions=True)
-				frappe.logger().info(f"Created SIF Subcategory: {sub}")
+				frappe.logger().info(f"Created SIF Subcategory: {sub} ({cat})")
 			except Exception as e:
 				frappe.logger().error(f"Failed to create SIF Subcategory '{sub}': {e!s}")
+		else:
+			# If category is missing or different on existing record, update it
+			curr_cat = frappe.db.get_value("SIF Investment Strategy Subcategory", sub, "category")
+			if curr_cat != cat:
+				try:
+					frappe.db.set_value(
+						"SIF Investment Strategy Subcategory",
+						sub,
+						"category",
+						cat,
+						update_modified=False,
+					)
+				except Exception as e:
+					frappe.logger().error(f"Failed to update Category for '{sub}': {e!s}")
 
 
 def ensure_crm_sources():
@@ -302,6 +356,8 @@ def boot_knaps_crm(bootinfo):
 					"app_title": "KNAPS CRM",
 					"app_route": "/knaps-crm",
 					"app_logo_url": "/assets/dhanada/images/CRM.jpg",
+					"on_apps_screen": True,
+					"sequence_id": 200,
 					"modules": ["Dhanada"],
 					"workspaces": ["KNAPS CRM"],
 				}

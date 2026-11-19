@@ -106,8 +106,10 @@ def get_heatmap_filters():
 			frappe.qb.from_(Scheme)
 			.select(
 				Scheme.investment_strategy.as_("investmentStrategy"),
+				Scheme.investment_strategy.as_("strategy"),
 				Scheme.scheme_type.as_("schemeType"),
 				Scheme.scheme_subcategory.as_("category"),
+				Scheme.scheme_subcategory.as_("schemeSubcategory"),
 			)
 			.where(Scheme.docstatus < 2)
 			.distinct()
@@ -147,8 +149,10 @@ def get_heatmap_data(
 				Scheme.name.as_("id"),
 				Scheme.scheme_name.as_("name"),
 				Scheme.investment_strategy.as_("investmentStrategy"),
+				Scheme.investment_strategy.as_("strategy"),
 				Scheme.scheme_type.as_("schemeType"),
 				Scheme.scheme_subcategory.as_("category"),
+				Scheme.scheme_subcategory.as_("schemeSubcategory"),
 				Scheme.nfo_start_date,
 				Scheme.nfo_allotment_date,
 				Plan.name.as_("plan_name"),
@@ -167,7 +171,10 @@ def get_heatmap_data(
 			schemes_query = schemes_query.where(Scheme.scheme_type == scheme_type.strip())
 
 		if category and category.strip() and category.lower() != "all":
-			schemes_query = schemes_query.where(Scheme.scheme_subcategory == category.strip())
+			schemes_query = schemes_query.where(
+				(Scheme.scheme_subcategory == category.strip())
+				| (Scheme.investment_strategy == category.strip())
+			)
 
 		schemes_rows = schemes_query.run(as_dict=True)
 		if not schemes_rows:
@@ -277,9 +284,11 @@ def get_heatmap_data(
 				{
 					"id": s["id"],
 					"name": s.get("name"),
-					"investmentStrategy": s.get("investmentStrategy") or "Equity",
+					"investmentStrategy": s.get("investmentStrategy") or s.get("strategy") or "Equity",
+					"strategy": s.get("strategy") or s.get("investmentStrategy") or "Equity",
 					"schemeType": s.get("schemeType") or "Open Ended",
 					"category": s.get("category"),
+					"schemeSubcategory": s.get("schemeSubcategory") or s.get("category"),
 					"launchDate": nav_date_str,
 					"monthlyReturns": m_returns,
 				}
