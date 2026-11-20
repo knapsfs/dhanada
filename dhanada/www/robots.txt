@@ -1,0 +1,22 @@
+# robots.txt for KNAPS (https://knaps.in/)
+User-agent: *
+Allow: /
+Allow: /assets/
+Allow: /files/
+
+# Block administrative, internal CRM, and workflow endpoints
+Disallow: /knaps-crm/
+Disallow: /knaps-crm/*
+Disallow: /crm/
+Disallow: /crm/*
+Disallow: /forms/
+Disallow: /forms/*
+Disallow: /desk/
+Disallow: /desk/*
+Disallow: /app/
+Disallow: /app/*
+Disallow: /api/method/dhanada.api.create_website_lead
+
+# Production XML Sitemap
+Sitemap: https://knaps.in/sitemap.xml
+
