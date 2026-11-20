@@ -86,8 +86,9 @@ export default function HeatmapSection() {
 
     // 1. Ingest from selectorFunds (comprehensive list of all active funds)
     selectorFunds.forEach((f) => {
-      const strat = f.category || f.strategy || f.investmentStrategy || (f.schemeSubcategory?.toLowerCase().includes("hybrid") ? "Hybrid" : "Equity");
-      const cat = f.schemeSubcategory || f.category;
+      const rawStrat = f.strategy || f.investmentStrategy || (f.category === "Equity" || f.category === "Hybrid" ? f.category : null);
+      const strat = rawStrat || (f.schemeSubcategory?.toLowerCase().includes("hybrid") ? "Hybrid" : "Equity");
+      const cat = f.schemeSubcategory || (f.category !== "Equity" && f.category !== "Hybrid" ? f.category : null);
       if (cat) {
         allSubcatsSet.add(cat);
         if (!strategySubcatsMap[strat]) {
@@ -99,8 +100,9 @@ export default function HeatmapSection() {
 
     // 2. Ingest from filtersList (from SIF Scheme query)
     filtersList.forEach((item) => {
-      const strat = item.category || item.investmentStrategy || item.strategy || (item.schemeSubcategory?.toLowerCase().includes("hybrid") ? "Hybrid" : "Equity");
-      const cat = item.schemeSubcategory || item.category;
+      const rawStrat = item.investmentStrategy || item.strategy || (item.category === "Equity" || item.category === "Hybrid" ? item.category : null);
+      const strat = rawStrat || (item.schemeSubcategory?.toLowerCase().includes("hybrid") ? "Hybrid" : "Equity");
+      const cat = item.schemeSubcategory || (item.category !== "Equity" && item.category !== "Hybrid" ? item.category : null);
       if (cat) {
         allSubcatsSet.add(cat);
         if (!strategySubcatsMap[strat]) {
@@ -119,7 +121,7 @@ export default function HeatmapSection() {
       allSubcatsSet.add("Sector Rotation Long-Short Fund");
     }
 
-    if (!strategySubcatsMap.Equity.size) {
+    if (!strategySubcatsMap.Equity || !strategySubcatsMap.Equity.size) {
       strategySubcatsMap.Equity = new Set([
         "Active Asset Allocator Long-Short Fund",
         "Equity Ex-Top 100 Long-Short Fund",
@@ -128,7 +130,7 @@ export default function HeatmapSection() {
       ]);
     }
 
-    if (!strategySubcatsMap.Hybrid.size) {
+    if (!strategySubcatsMap.Hybrid || !strategySubcatsMap.Hybrid.size) {
       strategySubcatsMap.Hybrid = new Set([
         "Active Asset Allocator Long-Short Fund",
         "Hybrid Long-Short Fund",
@@ -147,7 +149,7 @@ export default function HeatmapSection() {
       ],
     };
 
-    // Sort strategy keys (Equity, Hybrid, ...)
+    // Sort strategy keys (Equity, Hybrid)
     const strategyKeys = Object.keys(strategySubcatsMap).sort();
     const strategyGroups = strategyKeys.map((strat) => {
       const subcats = Array.from(strategySubcatsMap[strat]).sort();
