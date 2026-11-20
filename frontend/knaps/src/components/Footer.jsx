@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebookF, faLinkedinIn, faInstagram, faXTwitter } from '@fortawesome/free-brands-svg-icons';
+import { faFacebookF, faLinkedinIn, faInstagram, faXTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { faLocationDot, faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import logo from '../assets/knaps-logo.webp';
 
@@ -22,22 +22,39 @@ export default function Footer() {
               <img src={logo} alt="Knaps" className="h-14 md:h-14 w-auto group-hover:scale-105 transition-all duration-300 brightness-0 invert opacity-90 hover:opacity-100" />
             </Link>
 
-            <p className="text-gray-400 text-sm leading-relaxed mb-8 pr-4">
+            <p className="text-gray-400 text-sm leading-relaxed mb-6 pr-4">
               At KNAPS, we believe investing should be simple, transparent, and focused on helping investors achieve their financial goals. With a wide range of investment products across Mutual Funds, SIF, PMS, AIF, NPS, Post Office Deposits, and more, we help investors find products that align with their goals, risk profile, and investment horizon.
             </p>
 
+            <div className="space-y-3 mb-8 text-xs">
+              <div>
+                <p className="text-gray-300 font-semibold">AMFI registered Mutual Fund Distributor</p>
+                <p className="text-gray-400 mt-0.5">ARN - 367144 Validity: 04-AUG-2026 To 03-AUG-2029</p>
+              </div>
+              <div>
+                <p className="text-gray-300 font-semibold">AMFI registered SIF Distributor</p>
+                <p className="text-gray-400 mt-0.5">ARN - 367144 Validity: 23-OCT-2026 To 22-OCT-2029</p>
+              </div>
+            </div>
+
             <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-300 hover:bg-[#032e92] hover:text-white hover:border-[#032e92] transition-all duration-300">
+              <a href="https://www.facebook.com/people/KNAPS-Be-Financially-Free/61596409281261/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-300 hover:bg-[#032e92] hover:text-white hover:border-[#032e92] transition-all duration-300">
                 <FontAwesomeIcon icon={faFacebookF} />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-300 hover:bg-[#032e92] hover:text-white hover:border-[#032e92] transition-all duration-300">
+              <a href="https://www.linkedin.com/company/knaps-private-limited/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-300 hover:bg-[#032e92] hover:text-white hover:border-[#032e92] transition-all duration-300">
                 <FontAwesomeIcon icon={faLinkedinIn} />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-300 hover:bg-[#c10000] hover:text-white hover:border-[#c10000] transition-all duration-300">
+              <a href="https://www.instagram.com/knaps_be_financially_free/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-300 hover:bg-[#c10000] hover:text-white hover:border-[#c10000] transition-all duration-300">
                 <FontAwesomeIcon icon={faInstagram} />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-300 hover:bg-gray-700 hover:text-white hover:border-gray-700 transition-all duration-300">
-                <FontAwesomeIcon icon={faXTwitter} />
+              <a
+                href="https://www.youtube.com/@Knaps_Be_Financially_Free"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="YouTube"
+                className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-300 hover:bg-[#c10000] hover:text-white hover:border-[#c10000] transition-all duration-300"
+              >
+                <FontAwesomeIcon icon={faYoutube} />
               </a>
             </div>
           </div>
@@ -59,9 +76,9 @@ export default function Footer() {
 
           {/* Resources */}
           <div>
-            <h4 className="text-white font-bold mb-6">Resources</h4>
+            <h4 className="text-white font-bold mb-6">Disclosures</h4>
             <ul className="space-y-4">
-              <li><Link to="/regulatory-disclosures" className="text-gray-400 hover:text-white text-sm transition-colors">Regulatory Disclosures</Link></li>
+              {/* <li><Link to="/regulatory-disclosures" className="text-gray-400 hover:text-white text-sm transition-colors">Regulatory Disclosures</Link></li> */}
               <li><Link to="https://www.sebi.gov.in/filings/mutual-funds.html" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white text-sm transition-colors">SID/SAI/KIM</Link></li>
               <li><Link to="https://www.amfiindia.com/uploads/Revised_Codeof_Conductfor_Mutual_Fund_Distributors_April2022_57d91fe1c4.pdf" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white text-sm transition-colors">Code of Conduct</Link></li>
               <li><Link to="https://www.sebi.gov.in/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white text-sm transition-colors">SEBI Circulars</Link></li>
@@ -113,7 +130,7 @@ export default function Footer() {
             &copy; {currentYear} Knaps Private Limited. All rights reserved. AMFI Registered : ARN-367144.
           </p>
           <div className="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-2 text-xs text-gray-400">
-            <Link to="/regulatory-disclosures" className="hover:text-white transition-colors">Regulatory Disclosures</Link>
+            {/* <Link to="/regulatory-disclosures" className="hover:text-white transition-colors">Regulatory Disclosures</Link> */}
             <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
             <Link to="/terms-and-conditions" className="hover:text-white transition-colors">Terms &amp; Conditions</Link>
           </div>

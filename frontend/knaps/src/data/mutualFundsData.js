@@ -13,23 +13,27 @@ export const MF_CATEGORIES = [
 		subcategories: [
 			{
 				name: "Large Cap Funds",
-				desc: "Top 100 established market leaders with proven stability and steady growth.",
+				desc: "Top 100 companies by market capitalisation",
 			},
 			{
 				name: "Flexi Cap Funds",
-				desc: "Dynamic allocation across large, mid, and small cap companies based on market opportunities.",
+				desc: "Flexible allocation across large, mid and small caps",
 			},
 			{
 				name: "Mid Cap Funds",
-				desc: "Next 150 emerging leaders offering higher growth potential with moderate volatility.",
+				desc: "Companies ranked 101–250",
 			},
 			{
 				name: "Small Cap Funds",
-				desc: "High-growth potential companies with agile business models, suitable for aggressive investors.",
+				desc: "Companies ranked 251 onwards",
 			},
 			{
 				name: "Sectoral / Thematic",
-				desc: "Focused exposure to specific high-growth sectors like Banking, Tech, Pharma, or Infrastructure.",
+				desc: "Invest in a specific sector such as banking, pharma or IT",
+			},
+			{
+				name: "Value/ Contra Funds",
+				desc: "Invest in stocks considered undervalued compared to their fundamentals",
 			},
 		],
 	},
@@ -45,20 +49,28 @@ export const MF_CATEGORIES = [
 		icon: "faShieldHalved",
 		subcategories: [
 			{
-				name: "Liquid & Overnight",
-				desc: "Highest liquidity, zero exit load after 7 days, ideal for emergency funds.",
+				name: "Liquid Funds",
+				desc: "Invest in short-term debt instruments maturing within 91 days. Suitable for short-term parking of money.",
+			},
+			{
+				name: "Money Market Funds",
+				desc: "Invest in money market instruments with maturities of up to 1 year.",
 			},
 			{
 				name: "Short Duration Funds",
-				desc: "Invest in debt papers with 1 to 3 year maturity for steady returns with low interest rate risk.",
+				desc: "Invest in debt instruments with a portfolio duration of 1–3 years.",
 			},
 			{
 				name: "Corporate Bond Funds",
-				desc: "At least 80% invested in top-rated AA+ corporate bonds for reliable regular yield.",
+				desc: "Invest at least 80% in AA+ and above-rated corporate bonds.",
 			},
 			{
 				name: "Gilt Funds",
-				desc: "Invested exclusively in Central and State Government securities with zero credit risk.",
+				desc: "Invest at least 80% in government securities.",
+			},
+			{
+				name: "Dynamic Bond Funds",
+				desc: "Flexibly manage portfolio duration based on interest rate expectations and market conditions.",
 			},
 		],
 	},
@@ -117,7 +129,7 @@ export const MF_CATEGORIES = [
 	},
 	{
 		id: "elss",
-		name: "ELSS (Tax Saver)",
+		name: "ELSS ( Equity Linked Savings Scheme )",
 		shortDesc: "Equity-linked tax saving mutual funds eligible for Section 80C deduction.",
 		riskLevel: "High",
 		riskColor: "violet",
@@ -135,31 +147,7 @@ export const MF_CATEGORIES = [
 			},
 		],
 	},
-	{
-		id: "liquid",
-		name: "Liquid & Money Market",
-		shortDesc:
-			"Park surplus funds with high safety, capital preservation, and instant liquidity.",
-		riskLevel: "Low",
-		riskColor: "teal",
-		idealHorizon: "1 Day to 6 Months",
-		taxTreatment: "Taxed at investor income slab rate",
-		icon: "faCoins",
-		subcategories: [
-			{
-				name: "Overnight Funds",
-				desc: "Matures in 1 day with virtually zero interest rate or default risk.",
-			},
-			{
-				name: "Liquid Funds",
-				desc: "Matures in up to 91 days. Better alternatives to traditional savings bank accounts.",
-			},
-			{
-				name: "Money Market Funds",
-				desc: "Invests in commercial papers and CDs with maturities up to 1 year.",
-			},
-		],
-	},
+
 ];
 
 export const EXPLORE_FUNDS_DATA = [

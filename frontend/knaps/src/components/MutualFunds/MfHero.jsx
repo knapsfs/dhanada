@@ -86,10 +86,10 @@ export default function MfHero() {
           <div className="lg:col-span-5">
             <div className="relative bg-white rounded-3xl p-6 sm:p-8 border border-blue-100 shadow-xl shadow-blue-950/5">
               {/* Floating Top Badge */}
-              <div className="flex items-center justify-between border-b border-slate-100 pb-5 mb-5">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-5">
                 <div>
                   {/* <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">KNAPS Smart Wealth</div> */}
-                  <div className="text-lg font-bold text-[#032e92]">Disciplined Compounding</div>
+                  <div className="text-lg font-bold text-[#032e92]">Power Of Compounding</div>
                 </div>
                 <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-[#032e92]">
                   <FontAwesomeIcon icon={faChartLine} className="text-xl" />

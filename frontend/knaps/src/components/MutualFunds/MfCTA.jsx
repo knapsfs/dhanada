@@ -32,12 +32,12 @@ export default function MfCTA() {
 
             {/* Main Headline */}
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-white leading-tight">
-              Start Your Mutual Fund Journey Today
+              Start Investing in Mutual Funds with Confidence
             </h2>
 
             {/* Subtitle */}
             <p className="text-sm sm:text-base text-blue-100/90 leading-relaxed font-normal max-w-2xl sm:max-w-3xl mx-auto mt-3.5">
-              Whether you are taking your very first step with a ₹500 SIP or structuring an established high-net-worth portfolio, KNAPS provides the research, technology, and dedicated guidance to grow your wealth.
+              From choosing the right funds to building a long-term portfolio, get the clarity and support to make informed investment decisions.
             </p>
 
 
