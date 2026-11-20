@@ -98,7 +98,7 @@ def get_scheme_heatmap_performance(
 @rate_limit(limit=60, seconds=60, ip_based=True)
 def get_heatmap_filters():
 	"""
-	Lightweight distinct filter options for Heatmap (investment strategies, scheme types, and categories).
+	Lightweight distinct filter options for Heatmap (investment strategies, scheme types, and subcategories).
 	"""
 	try:
 		Scheme = DocType("SIF Scheme")
@@ -106,10 +106,13 @@ def get_heatmap_filters():
 			frappe.qb.from_(Scheme)
 			.select(
 				Scheme.investment_strategy.as_("investmentStrategy"),
+				Scheme.investment_strategy.as_("investment_strategy"),
 				Scheme.investment_strategy.as_("strategy"),
+				Scheme.investment_strategy.as_("category"),
 				Scheme.scheme_type.as_("schemeType"),
-				Scheme.scheme_subcategory.as_("category"),
 				Scheme.scheme_subcategory.as_("schemeSubcategory"),
+				Scheme.scheme_subcategory.as_("scheme_subcategory"),
+				Scheme.scheme_subcategory.as_("subcategory"),
 			)
 			.where(Scheme.docstatus < 2)
 			.distinct()
@@ -130,10 +133,12 @@ def get_heatmap_data(
 	category: str | None = None,
 	investment_strategy: str | None = None,
 	strategy: str | None = None,
+	scheme_subcategory: str | None = None,
+	subcategory: str | None = None,
 ):
 	"""
 	Lightweight API tailored for the SIF Heatmap UI component.
-	Returns schemes grouped by strategy and category, populated with monthly returns.
+	Returns schemes grouped by strategy and subcategory, populated with monthly returns.
 	"""
 	try:
 		Scheme = DocType("SIF Scheme")
@@ -149,10 +154,13 @@ def get_heatmap_data(
 				Scheme.name.as_("id"),
 				Scheme.scheme_name.as_("name"),
 				Scheme.investment_strategy.as_("investmentStrategy"),
+				Scheme.investment_strategy.as_("investment_strategy"),
 				Scheme.investment_strategy.as_("strategy"),
+				Scheme.investment_strategy.as_("category"),
 				Scheme.scheme_type.as_("schemeType"),
-				Scheme.scheme_subcategory.as_("category"),
 				Scheme.scheme_subcategory.as_("schemeSubcategory"),
+				Scheme.scheme_subcategory.as_("scheme_subcategory"),
+				Scheme.scheme_subcategory.as_("subcategory"),
 				Scheme.nfo_start_date,
 				Scheme.nfo_allotment_date,
 				Plan.name.as_("plan_name"),
@@ -170,11 +178,16 @@ def get_heatmap_data(
 		if scheme_type and scheme_type.strip() and scheme_type.lower() != "all":
 			schemes_query = schemes_query.where(Scheme.scheme_type == scheme_type.strip())
 
+		subcat = scheme_subcategory or subcategory
 		if category and category.strip() and category.lower() != "all":
-			schemes_query = schemes_query.where(
-				(Scheme.scheme_subcategory == category.strip())
-				| (Scheme.investment_strategy == category.strip())
-			)
+			cat_val = category.strip()
+			if not strat and cat_val in ("Equity", "Hybrid", "Debt"):
+				schemes_query = schemes_query.where(Scheme.investment_strategy == cat_val)
+			elif not subcat:
+				subcat = cat_val
+
+		if subcat and subcat.strip() and subcat.lower() != "all":
+			schemes_query = schemes_query.where(Scheme.scheme_subcategory == subcat.strip())
 
 		schemes_rows = schemes_query.run(as_dict=True)
 		if not schemes_rows:
@@ -190,8 +203,13 @@ def get_heatmap_data(
 					"id": row["id"],
 					"name": row.get("name"),
 					"investmentStrategy": row.get("investmentStrategy") or "Equity",
+					"investment_strategy": row.get("investmentStrategy") or "Equity",
+					"strategy": row.get("investmentStrategy") or "Equity",
+					"category": row.get("investmentStrategy") or "Equity",
 					"schemeType": row.get("schemeType") or "Open Ended",
-					"category": row.get("category"),
+					"schemeSubcategory": row.get("schemeSubcategory"),
+					"scheme_subcategory": row.get("schemeSubcategory"),
+					"subcategory": row.get("schemeSubcategory"),
 					"nfo_start_date": row.get("nfo_start_date"),
 					"nfo_allotment_date": row.get("nfo_allotment_date"),
 				}
@@ -280,15 +298,21 @@ def get_heatmap_data(
 				else (str(launch_date) if launch_date else None)
 			)
 
+			strat_val = s.get("investmentStrategy") or s.get("strategy") or "Equity"
+			subcat_val = s.get("schemeSubcategory") or s.get("scheme_subcategory") or s.get("subcategory")
+
 			result.append(
 				{
 					"id": s["id"],
 					"name": s.get("name"),
-					"investmentStrategy": s.get("investmentStrategy") or s.get("strategy") or "Equity",
-					"strategy": s.get("strategy") or s.get("investmentStrategy") or "Equity",
+					"investmentStrategy": strat_val,
+					"investment_strategy": strat_val,
+					"strategy": strat_val,
+					"category": strat_val,
 					"schemeType": s.get("schemeType") or "Open Ended",
-					"category": s.get("category"),
-					"schemeSubcategory": s.get("schemeSubcategory") or s.get("category"),
+					"schemeSubcategory": subcat_val,
+					"scheme_subcategory": subcat_val,
+					"subcategory": subcat_val,
 					"launchDate": nav_date_str,
 					"monthlyReturns": m_returns,
 				}

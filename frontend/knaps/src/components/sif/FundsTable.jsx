@@ -239,10 +239,10 @@ export default function FundsTable({
         const catMatches =
           !selectedCategory ||
           selectedCategory === 'All' ||
+          f.investment_strategy === selectedCategory ||
           f.investmentStrategy === selectedCategory ||
-          f.strategy === selectedCategory ||
-          f.category === selectedCategory;
-        const sub = f.schemeSubcategory;
+          f.strategy === selectedCategory;
+        const sub = f.scheme_subcategory || f.schemeSubcategory || f.subcategory;
         if (catMatches && sub) {
           set.add(sub);
         }
@@ -256,7 +256,6 @@ export default function FundsTable({
     }
     if (selectedCategory === 'Equity') {
       return [
-        'Active Asset Allocator Long-Short Fund',
         'Equity Ex-Top 100 Long-Short Fund',
         'Equity Long-Short Fund',
         'Sector Rotation Long-Short Fund',
@@ -284,13 +283,13 @@ export default function FundsTable({
         let belongsToNew = false;
         if (subcategoryOptions && subcategoryOptions.length > 0) {
           belongsToNew = subcategoryOptions.some(
-            s => s.name === prev.schemeSubcategory && s.category === newStrategy
+            s => s.name === prev.schemeSubcategory && (s.investment_strategy === newStrategy || s.investmentStrategy === newStrategy || s.category === newStrategy)
           );
         } else if (selectorFunds && selectorFunds.length > 0) {
           belongsToNew = selectorFunds.some(
             f =>
-              (f.category === newStrategy || f.strategy === newStrategy) &&
-              f.schemeSubcategory === prev.schemeSubcategory
+              (f.investment_strategy === newStrategy || f.investmentStrategy === newStrategy || f.strategy === newStrategy) &&
+              (f.scheme_subcategory === prev.schemeSubcategory || f.schemeSubcategory === prev.schemeSubcategory || f.subcategory === prev.schemeSubcategory)
           );
         }
         if (!belongsToNew) {
@@ -428,7 +427,7 @@ export default function FundsTable({
                       onClick={() => handleSort('investmentStrategy')}
                       className="flex items-center gap-1 text-[12px] font-extrabold text-[#032e92] uppercase tracking-wider group cursor-pointer"
                     >
-                      <span>Strategy</span>
+                      <span>Investment Strategy</span>
                       {renderSortIcon('investmentStrategy')}
                     </button>
                     <TableDropdown
@@ -442,7 +441,7 @@ export default function FundsTable({
                   </div>
                 </th>
 
-                {/* 3. Scheme Subcategory + Dropdown (Cascades based on Strategy) */}
+                {/* 3. Subcategory + Dropdown (Cascades based on Strategy) */}
                 <th className="py-4 px-3 align-top min-w-[220px]">
                   <div className="flex flex-col gap-2">
                     <button
@@ -450,7 +449,7 @@ export default function FundsTable({
                       onClick={() => handleSort('schemeSubcategory')}
                       className="flex items-center gap-1 text-[12px] font-extrabold text-[#032e92] uppercase tracking-wider group cursor-pointer"
                     >
-                      <span>Scheme Subcategory</span>
+                      <span>Subcategory</span>
                       {renderSortIcon('schemeSubcategory')}
                     </button>
                     <TableDropdown
@@ -554,8 +553,8 @@ export default function FundsTable({
                   const riskConfig = getRiskLevelConfig(fund.riskLevel)
                   const returnVal1M = fund.returns1M != null ? fund.returns1M : (fund.returns_1m != null ? fund.returns_1m : null)
                   const fundCode = fund.id || fund.sebi_code || fund.name
-                  const strategyVal = fund.category || fund.investmentStrategy || fund.investment_strategy || 'Equity'
-                  const subcategoryVal = fund.schemeSubcategory || fund.scheme_subcategory || 'Specialized Fund'
+                  const strategyVal = fund.investment_strategy || fund.investmentStrategy || fund.strategy || ''
+                  const subcategoryVal = fund.scheme_subcategory || fund.schemeSubcategory || fund.subcategory || ''
 
                   return (
                     <motion.tr

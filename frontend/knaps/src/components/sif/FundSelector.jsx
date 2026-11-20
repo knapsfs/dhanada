@@ -32,10 +32,14 @@ export default function FundSelector({ selectedFunds = [null, null, null], onFun
   const options = useMemo(() => {
     return availableFunds.map(fund => {
       const riskInfo = getRiskDisplay(fund);
+      const strategy = fund.investment_strategy || fund.investmentStrategy || fund.strategy || '';
+      const subcategory = fund.scheme_subcategory || fund.schemeSubcategory || fund.subcategory || '';
       return {
         value: fund.id,
         label: fund.name,
-        category: fund.category || fund.subCategory || fund.strategy || 'Equity Long-Short',
+        strategy,
+        subcategory,
+        category: strategy,
         risk: riskInfo.label,
         fund: fund
       };
@@ -129,14 +133,16 @@ export default function FundSelector({ selectedFunds = [null, null, null], onFun
         {[0, 1, 2].map(index => {
           const currentFund = selectedFunds[index];
           const riskDisplay = currentFund ? getRiskDisplay(currentFund) : null;
+          const fundStrategy = currentFund ? (currentFund.investment_strategy || currentFund.investmentStrategy || currentFund.strategy || '') : '';
+          const fundSubcategory = currentFund ? (currentFund.scheme_subcategory || currentFund.schemeSubcategory || currentFund.subcategory || '') : '';
           const value = currentFund ? {
             value: currentFund.id,
             label: currentFund.name,
-            category: currentFund.category || currentFund.subCategory || currentFund.strategy,
+            strategy: fundStrategy,
+            subcategory: fundSubcategory,
+            category: fundStrategy,
             risk: riskDisplay ? riskDisplay.label : ''
           } : null;
-
-          const fundCategory = currentFund ? (currentFund.category || currentFund.subCategory || currentFund.strategy || 'Equity Long-Short') : '';
 
           return (
             <div key={index} className="flex flex-col justify-start">
@@ -169,20 +175,31 @@ export default function FundSelector({ selectedFunds = [null, null, null], onFun
                 noOptionsMessage={() => "No funds found"}
               />
 
-              {/* Fund Category and Risk Band Display directly below the Select field */}
-              {currentFund && riskDisplay && (
+              {/* Fund Strategy, Subcategory and Risk Band Display directly below the Select field */}
+              {currentFund && (
                 <div className="flex flex-wrap items-center gap-2 mt-3 animate-in fade-in duration-300">
-                  {/* Fund Category Badge */}
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-bold bg-[#eef4ff] text-[#032e92] border border-blue-100/80 shadow-sm">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#032e92]"></span>
-                    {fundCategory}
-                  </span>
+                  {/* Strategy Badge */}
+                  {fundStrategy && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-bold bg-[#eef4ff] text-[#032e92] border border-blue-100/80 shadow-sm">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#032e92]"></span>
+                      {fundStrategy}
+                    </span>
+                  )}
+
+                  {/* Subcategory Badge */}
+                  {fundSubcategory && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-semibold bg-gray-100 text-gray-700 border border-gray-200/80 shadow-sm">
+                      {fundSubcategory}
+                    </span>
+                  )}
 
                   {/* Risk Band Badge */}
-                  <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-bold border shadow-sm ${riskDisplay.classes}`}>
-                    <span className="w-1.5 h-1.5 rounded-full bg-current"></span>
-                    {riskDisplay.label}
-                  </span>
+                  {riskDisplay && (
+                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-bold border shadow-sm ${riskDisplay.classes}`}>
+                      <span className="w-1.5 h-1.5 rounded-full bg-current"></span>
+                      {riskDisplay.label}
+                    </span>
+                  )}
                 </div>
               )}
             </div>

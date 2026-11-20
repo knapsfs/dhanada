@@ -1,3 +1,71 @@
+const KNOWN_PARENT_STRATEGIES = new Set(["Equity", "Hybrid", "Debt"]);
+
+/**
+ * Validates whether a value is a legitimate parent Investment Strategy
+ * and NOT a child Subcategory or ambiguous string.
+ */
+function isVerifiedStrategy(val) {
+	if (!val || typeof val !== "string") return false;
+	const trimmed = val.trim();
+	if (KNOWN_PARENT_STRATEGIES.has(trimmed)) return true;
+	// Subcategories invariably include terms like "Fund", "Long-Short", "Rotation", "Allocator", etc.
+	if (/fund|long-short|rotation|allocator|arbitrage|index|etf/i.test(trimmed)) {
+		return false;
+	}
+	return false;
+}
+
+/**
+ * Normalizes an item returned by SIF fund APIs.
+ * Ensures:
+ * - investmentStrategy / investment_strategy ONLY receives explicit and verified parent strategy values.
+ * - Under NO circumstance is item.category used as an unverified fallback for Investment Strategy.
+ * - Subcategories are NEVER interpreted as an Investment Strategy.
+ */
+function normalizeFundData(item) {
+	if (!item || typeof item !== "object") return item;
+
+	// Extract explicit and verified strategy fields only
+	let strategy = "";
+	if (item.investment_strategy && isVerifiedStrategy(item.investment_strategy)) {
+		strategy = item.investment_strategy.trim();
+	} else if (item.investmentStrategy && isVerifiedStrategy(item.investmentStrategy)) {
+		strategy = item.investmentStrategy.trim();
+	} else if (item.strategy && isVerifiedStrategy(item.strategy)) {
+		strategy = item.strategy.trim();
+	}
+
+	// Extract subcategory fields
+	let subcategory = item.scheme_subcategory || item.schemeSubcategory || item.subcategory || "";
+	if (typeof subcategory === "string") {
+		subcategory = subcategory.trim();
+	} else {
+		subcategory = "";
+	}
+
+	// Handle legacy endpoints where category may have held the subcategory:
+	// If subcategory is missing but item.category exists and is NOT a parent strategy,
+	// item.category was historically a subcategory.
+	if (
+		!subcategory &&
+		item.category &&
+		typeof item.category === "string" &&
+		!isVerifiedStrategy(item.category)
+	) {
+		subcategory = item.category.trim();
+	}
+
+	return {
+		...item,
+		investment_strategy: strategy,
+		investmentStrategy: strategy,
+		strategy: strategy,
+		scheme_subcategory: subcategory,
+		schemeSubcategory: subcategory,
+		subcategory: subcategory,
+	};
+}
+
 export async function fetchFundsList(params = {}) {
 	function extractNumericRisk(val) {
 		if (val == null) return "N/A";
@@ -55,10 +123,13 @@ export async function fetchFundsList(params = {}) {
 		const result = await response.json();
 		const data = result.message || result;
 		if (data.status === "success") {
-			const mappedList = (data.data || []).map((f) => ({
-				...f,
-				riskLevel: extractNumericRisk(f.risk),
-			}));
+			const mappedList = (data.data || []).map((f) => {
+				const normalized = normalizeFundData(f);
+				return {
+					...normalized,
+					riskLevel: extractNumericRisk(f.risk),
+				};
+			});
 			mappedList.pagination = data.pagination || {
 				page: page,
 				page_size: pageSize,
@@ -142,10 +213,13 @@ export async function fetchFundsSelectorList() {
 			const result = await response.json();
 			const data = result.message || result;
 			if (data.status === "success") {
-				const mapped = (data.data || []).map((f) => ({
-					...f,
-					riskLevel: extractNumericRisk(f.risk),
-				}));
+				const mapped = (data.data || []).map((f) => {
+					const normalized = normalizeFundData(f);
+					return {
+						...normalized,
+						riskLevel: extractNumericRisk(f.risk),
+					};
+				});
 				fundsSelectorCache = mapped;
 				return mapped;
 			} else {
@@ -181,7 +255,7 @@ export async function fetchHeatmapFilters() {
 			const result = await response.json();
 			const data = result.message || result;
 			if (data.status === "success") {
-				heatmapFiltersCache = data.data || [];
+				heatmapFiltersCache = (data.data || []).map(normalizeFundData);
 				return heatmapFiltersCache;
 			} else {
 				throw new Error(data.message || "API returned an error");
@@ -226,7 +300,7 @@ export async function fetchFundDetails(identifier, planId = null) {
 		const result = await response.json();
 		const data = result.message || result;
 		if (data.status === "success") {
-			const fundData = data.data;
+			const fundData = normalizeFundData(data.data || {});
 			return {
 				...fundData,
 				riskLevel: extractNumericRisk(fundData.risk),
@@ -262,7 +336,7 @@ export async function fetchComparisonData(schemeIds = []) {
 		const result = await response.json();
 		const data = result.message || result;
 		if (data.status === "success") {
-			return data.data || [];
+			return (data.data || []).map(normalizeFundData);
 		} else {
 			throw new Error(data.message || "API returned an error");
 		}
@@ -298,7 +372,7 @@ export async function fetchHeatmapData(params = {}) {
 		const result = await response.json();
 		const data = result.message || result;
 		if (data.status === "success") {
-			return data.data || [];
+			return (data.data || []).map(normalizeFundData);
 		} else {
 			throw new Error(data.message || "API returned an error");
 		}

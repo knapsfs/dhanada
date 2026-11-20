@@ -152,6 +152,9 @@ def get_sif_filter_options():
 					{
 						"name": sub,
 						"category": strat,
+						"investment_strategy": strat,
+						"investmentStrategy": strat,
+						"strategy": strat,
 					}
 				)
 
@@ -163,6 +166,8 @@ def get_sif_filter_options():
 			"status": "success",
 			"data": {
 				"categories": sorted(category_list),
+				"investment_strategies": sorted(category_list),
+				"investmentStrategies": sorted(category_list),
 				"subcategories": subcat_list,
 			},
 		}
@@ -176,7 +181,7 @@ def get_sif_filter_options():
 @rate_limit(limit=60, seconds=60, ip_based=True)
 def get_funds_selector_list():
 	"""
-	Lightweight selector list API. Returns only {id, name, category, risk}
+	Lightweight selector list API. Returns only {id, name, investmentStrategy, schemeSubcategory, risk}
 	for populating the 3-slot comparator dropdowns with minimal payload.
 	"""
 	try:
@@ -188,9 +193,12 @@ def get_funds_selector_list():
 				Scheme.sebi_code,
 				Scheme.scheme_name.as_("name"),
 				Scheme.investment_strategy.as_("category"),
-				Scheme.scheme_subcategory.as_("schemeSubcategory"),
 				Scheme.investment_strategy.as_("strategy"),
 				Scheme.investment_strategy.as_("investmentStrategy"),
+				Scheme.investment_strategy.as_("investment_strategy"),
+				Scheme.scheme_subcategory.as_("schemeSubcategory"),
+				Scheme.scheme_subcategory.as_("scheme_subcategory"),
+				Scheme.scheme_subcategory.as_("subcategory"),
 				Scheme.risk_band.as_("risk"),
 			)
 			.where(Scheme.docstatus < 2)
@@ -211,7 +219,9 @@ def get_funds_list(
 	page_size: int = 5,
 	search: str | None = None,
 	strategy: str | None = None,
+	investment_strategy: str | None = None,
 	subcategory: str | None = None,
+	scheme_subcategory: str | None = None,
 	risk: str | None = None,
 	sort_by: str = "returns1M",
 	sort_order: str = "desc",
@@ -221,7 +231,7 @@ def get_funds_list(
 	"""
 	Optimized, paginated SIF Listing API using Frappe Query Builder.
 	Projects only fields required by the listing UI and computes DB-level pagination.
-	Supports filtering by Category (Strategy) and Scheme Subcategory.
+	Supports filtering by Investment Strategy (Category) and Scheme Subcategory.
 	"""
 	try:
 		# 1. Parse and validate pagination parameters
@@ -256,13 +266,14 @@ def get_funds_list(
 				| Scheme.scheme_subcategory.like(q)
 			)
 
-		cat_filter = category or strategy
+		cat_filter = investment_strategy or strategy or category
 		if cat_filter and cat_filter.strip() and cat_filter.strip().lower() != "all":
 			target_cat = cat_filter.strip()
 			conditions &= Scheme.investment_strategy == target_cat
 
-		if subcategory and subcategory.strip() and subcategory.strip().lower() != "all":
-			conditions &= Scheme.scheme_subcategory == subcategory.strip()
+		subcat_filter = scheme_subcategory or subcategory
+		if subcat_filter and subcat_filter.strip() and subcat_filter.strip().lower() != "all":
+			conditions &= Scheme.scheme_subcategory == subcat_filter.strip()
 
 		if risk and risk.strip() and risk.strip().lower() != "all":
 			risk_num_match = re.search(r"\d+", risk)
@@ -309,9 +320,12 @@ def get_funds_list(
 				AMC.amc_name.as_("amc_name"),
 				AMC.amc_logo,
 				Scheme.scheme_subcategory.as_("schemeSubcategory"),
-				Scheme.investment_strategy.as_("category"),
+				Scheme.scheme_subcategory.as_("scheme_subcategory"),
+				Scheme.scheme_subcategory.as_("subcategory"),
 				Scheme.investment_strategy.as_("investmentStrategy"),
+				Scheme.investment_strategy.as_("investment_strategy"),
 				Scheme.investment_strategy.as_("strategy"),
+				Scheme.investment_strategy.as_("category"),
 				Scheme.risk_band.as_("risk"),
 				Scheme.nfo_start_date,
 				Scheme.nfo_allotment_date,
@@ -338,9 +352,12 @@ def get_funds_list(
 					AMC.amc_name.as_("amc_name"),
 					AMC.amc_logo,
 					Scheme.scheme_subcategory.as_("schemeSubcategory"),
-					Scheme.investment_strategy.as_("category"),
+					Scheme.scheme_subcategory.as_("scheme_subcategory"),
+					Scheme.scheme_subcategory.as_("subcategory"),
 					Scheme.investment_strategy.as_("investmentStrategy"),
+					Scheme.investment_strategy.as_("investment_strategy"),
 					Scheme.investment_strategy.as_("strategy"),
+					Scheme.investment_strategy.as_("category"),
 					Scheme.risk_band.as_("risk"),
 					Scheme.nfo_start_date,
 					Scheme.nfo_allotment_date,
@@ -363,9 +380,12 @@ def get_funds_list(
 					AMC.amc_name.as_("amc_name"),
 					AMC.amc_logo,
 					Scheme.scheme_subcategory.as_("schemeSubcategory"),
-					Scheme.investment_strategy.as_("category"),
+					Scheme.scheme_subcategory.as_("scheme_subcategory"),
+					Scheme.scheme_subcategory.as_("subcategory"),
 					Scheme.investment_strategy.as_("investmentStrategy"),
+					Scheme.investment_strategy.as_("investment_strategy"),
 					Scheme.investment_strategy.as_("strategy"),
+					Scheme.investment_strategy.as_("category"),
 					Scheme.risk_band.as_("risk"),
 					Scheme.nfo_start_date,
 					Scheme.nfo_allotment_date,
@@ -462,16 +482,22 @@ def get_funds_list(
 				else (str(nav_date) if nav_date else None)
 			)
 
+			strat_val = s.get("investmentStrategy") or s.get("strategy") or "Equity"
+			subcat_val = s.get("schemeSubcategory") or s.get("scheme_subcategory") or s.get("subcategory")
+
 			result.append(
 				{
 					"id": s["id"],  # True document identifier from SIF Scheme.name
 					"amc_logo": amc_logo,
 					"name": s.get("name"),
 					"amc": amc_name,
-					"category": s.get("category"),
-					"investmentStrategy": s.get("category") or s.get("investmentStrategy"),
-					"strategy": s.get("category") or s.get("strategy"),
-					"schemeSubcategory": s.get("schemeSubcategory"),
+					"investmentStrategy": strat_val,
+					"investment_strategy": strat_val,
+					"strategy": strat_val,
+					"category": strat_val,
+					"schemeSubcategory": subcat_val,
+					"scheme_subcategory": subcat_val,
+					"subcategory": subcat_val,
 					"risk": s.get("risk"),
 					"riskLevel": s.get("risk"),
 					"nav": plan_nav,
@@ -549,10 +575,14 @@ def get_fund_details(
 				Scheme.amc.as_("amc_code"),
 				AMC.amc_name.as_("amc_name"),
 				AMC.amc_logo,
+				Scheme.investment_strategy.as_("investmentStrategy"),
+				Scheme.investment_strategy.as_("investment_strategy"),
+				Scheme.investment_strategy.as_("strategy"),
 				Scheme.investment_strategy.as_("category"),
 				Scheme.scheme_subcategory.as_("schemeSubcategory"),
+				Scheme.scheme_subcategory.as_("scheme_subcategory"),
+				Scheme.scheme_subcategory.as_("subcategory"),
 				Scheme.scheme_type.as_("schemeType"),
-				Scheme.investment_strategy.as_("investmentStrategy"),
 				Scheme.benchmark_tier_1.as_("benchmarkTier1"),
 				Scheme.benchmark_tier_2.as_("benchmarkTier2"),
 				Scheme.nfo_start_date,
@@ -749,6 +779,11 @@ def get_fund_details(
 		)
 		allocations = alloc_query.run(as_dict=True)
 
+		strat_val = scheme.get("investmentStrategy") or scheme.get("strategy") or "Equity"
+		subcat_val = (
+			scheme.get("schemeSubcategory") or scheme.get("scheme_subcategory") or scheme.get("subcategory")
+		)
+
 		data = {
 			"id": scheme["id"],  # True internal identifier
 			"sebi_code": scheme.get("sebi_code"),
@@ -758,10 +793,14 @@ def get_fund_details(
 			"amc_logo": amc_logo,
 			"amcLogo": amc_logo,
 			"logo": amc_logo,
-			"category": scheme.get("category"),
-			"schemeSubcategory": scheme.get("schemeSubcategory"),
+			"investmentStrategy": strat_val,
+			"investment_strategy": strat_val,
+			"strategy": strat_val,
+			"category": strat_val,
+			"schemeSubcategory": subcat_val,
+			"scheme_subcategory": subcat_val,
+			"subcategory": subcat_val,
 			"schemeType": scheme.get("schemeType"),
-			"investmentStrategy": scheme.get("investmentStrategy"),
 			"benchmarkTier1": scheme.get("benchmarkTier1"),
 			"benchmarkTier2": scheme.get("benchmarkTier2"),
 			"launchDate": launch_date,
