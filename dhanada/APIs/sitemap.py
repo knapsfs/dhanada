@@ -29,7 +29,7 @@ STATIC_ROUTES = [
 ]
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method - public read-only sitemap xml
 def get_sitemap_xml():
 	"""Public Guest-whitelisted API to return dynamic production sitemap XML for https://knaps.in/.
 

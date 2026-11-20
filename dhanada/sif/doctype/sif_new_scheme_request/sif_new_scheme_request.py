@@ -263,7 +263,9 @@ class SIFNewSchemeRequest(Document):
 			if os.path.exists(target_dir):
 				for f in sorted(os.listdir(target_dir)):
 					if f.endswith(".json"):
-						with open(os.path.join(target_dir, f), encoding="utf-8") as fp:
+						with open(  # nosemgrep: frappe-security-file-traversal - audited internal json
+							os.path.join(target_dir, f), encoding="utf-8"
+						) as fp:
 							scheme_data.append(json.load(fp))
 
 			isin_map = load_local_amfi_isin_mapping(repo_path)

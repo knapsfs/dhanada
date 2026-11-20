@@ -27,6 +27,9 @@ class SIFScheme(Document):
 			self.investment_strategy = None
 			self.category = None
 
+	def onload(self):
+		self.populate_category_and_strategy()
+
 	def insert(self, *args, **kwargs):
 		self.populate_category_and_strategy()
 		return super().insert(*args, **kwargs)

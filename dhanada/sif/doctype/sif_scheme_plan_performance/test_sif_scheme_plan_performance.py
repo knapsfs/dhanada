@@ -32,6 +32,10 @@ class IntegrationTestSIFSchemePlanPerformance(IntegrationTestCase):
 			frappe.delete_doc("SIF Scheme Plan Performance", "INFTEST00001", force=1)
 		if frappe.db.exists("SIF Scheme Plan", "INFTEST00001"):
 			frappe.delete_doc("SIF Scheme Plan", "INFTEST00001", force=1)
+		if frappe.db.exists("SIF Scheme Plan Performance", "INFTEST_HYB_01"):
+			frappe.delete_doc("SIF Scheme Plan Performance", "INFTEST_HYB_01", force=1)
+		if frappe.db.exists("SIF Scheme Plan", "INFTEST_HYB_01"):
+			frappe.delete_doc("SIF Scheme Plan", "INFTEST_HYB_01", force=1)
 
 		existing_scheme = frappe.db.get_value("SIF Scheme", {"sebi_code": "TEST/PERF/001"}, "name")
 		if not existing_scheme:
@@ -62,6 +66,35 @@ class IntegrationTestSIFSchemePlanPerformance(IntegrationTestCase):
 			plan.flags.ignore_links = True
 			plan.insert(ignore_permissions=True)
 
+		# Ensure Hybrid test scheme and plan exist for filter tests
+		existing_hybrid = frappe.db.get_value("SIF Scheme", {"sebi_code": "TEST/PERF/002"}, "name")
+		if not existing_hybrid:
+			h_scheme = frappe.new_doc("SIF Scheme")
+			h_scheme.scheme_name = "Test Scheme Perf 2 Hybrid"
+			h_scheme.sebi_code = "TEST/PERF/002"
+			h_scheme.investment_strategy = "Hybrid"
+			h_scheme.scheme_subcategory = "Hybrid Long-Short Fund"
+			h_scheme.risk_level = 1
+			h_scheme.flags.from_approval = True
+			h_scheme.flags.ignore_mandatory = True
+			h_scheme.flags.ignore_links = True
+			h_scheme.insert(ignore_permissions=True)
+			hybrid_name = h_scheme.name
+		else:
+			hybrid_name = existing_hybrid
+			frappe.db.set_value("SIF Scheme", hybrid_name, "investment_strategy", "Hybrid")
+
+		if not frappe.db.exists("SIF Scheme Plan", "INFTEST_HYB_01"):
+			h_plan = frappe.new_doc("SIF Scheme Plan")
+			h_plan.scheme = hybrid_name
+			h_plan.isin = "INFTEST_HYB_01"
+			h_plan.sif_code = "SIF-TEST-HYB"
+			h_plan.type = "Regular"
+			h_plan.option = "Growth"
+			h_plan.flags.ignore_mandatory = True
+			h_plan.flags.ignore_links = True
+			h_plan.insert(ignore_permissions=True)
+
 		# Create historical NAV data for SIF-TEST-1
 		if not frappe.db.exists("SIF NAV Historical Data", "SIF-TEST-1"):
 			nav_doc = frappe.new_doc("SIF NAV Historical Data")
@@ -76,11 +109,22 @@ class IntegrationTestSIFSchemePlanPerformance(IntegrationTestCase):
 			frappe.delete_doc("SIF Scheme Plan Performance", "INFTEST00001", force=1)
 		if frappe.db.exists("SIF Scheme Plan", "INFTEST00001"):
 			frappe.delete_doc("SIF Scheme Plan", "INFTEST00001", force=1)
+		if frappe.db.exists("SIF Scheme Plan", "INFTEST00002"):
+			frappe.delete_doc("SIF Scheme Plan", "INFTEST00002", force=1)
+		if frappe.db.exists("SIF Scheme Plan Performance", "INFTEST_HYB_01"):
+			frappe.delete_doc("SIF Scheme Plan Performance", "INFTEST_HYB_01", force=1)
+		if frappe.db.exists("SIF Scheme Plan", "INFTEST_HYB_01"):
+			frappe.delete_doc("SIF Scheme Plan", "INFTEST_HYB_01", force=1)
 		if frappe.db.exists("SIF NAV Historical Data", "SIF-TEST-1"):
 			frappe.delete_doc("SIF NAV Historical Data", "SIF-TEST-1", force=1)
+		if frappe.db.exists("SIF NAV Historical Data", "SIF-TEST-HYB"):
+			frappe.delete_doc("SIF NAV Historical Data", "SIF-TEST-HYB", force=1)
 		existing_scheme = frappe.db.get_value("SIF Scheme", {"sebi_code": "TEST/PERF/001"}, "name")
 		if existing_scheme:
 			frappe.delete_doc("SIF Scheme", existing_scheme, force=1)
+		existing_hybrid = frappe.db.get_value("SIF Scheme", {"sebi_code": "TEST/PERF/002"}, "name")
+		if existing_hybrid:
+			frappe.delete_doc("SIF Scheme", existing_hybrid, force=1)
 		super().tearDown()
 
 	def test_mapper_and_importer_monthly_returns_flow(self):
@@ -218,7 +262,7 @@ class IntegrationTestSIFSchemePlanPerformance(IntegrationTestCase):
 
 	def test_get_funds_list_pagination_and_id(self):
 		"""Verifies get_funds_list returns paginated response, correct ID and minimal projection."""
-		res = get_funds_list(page=1, page_size=10, search="Test Scheme Perf")
+		res = get_funds_list(page=1, page_size=10, search="Test Scheme Perf 1")
 		self.assertEqual(res.get("status"), "success")
 		data = res.get("data", [])
 		self.assertGreaterEqual(len(data), 1)
