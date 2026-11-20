@@ -1,0 +1,205 @@
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faChartSimple,
+  faSeedling,
+  faShieldHalved,
+  faShield,
+  faHeartPulse,
+  faCoins,
+  faUser,
+  faFileLines,
+  faArrowRight,
+  faChevronDown,
+  faChevronUp,
+} from '@fortawesome/free-solid-svg-icons';
+
+const products = [
+  {
+    title: 'Mutual Funds',
+    description: 'Invest money across stocks, bonds and other securities through a mutual fund scheme.',
+    icon: faChartSimple,
+    iconBg: 'bg-purple-50 text-purple-600',
+    route: '/mutual-funds',
+  },
+  {
+    title: 'SIF (Specialised Investment Funds)',
+    description: ' Invest in specialised strategies with higher flexibility and a minimum investment of ₹10 lakh.',
+    icon: faSeedling,
+    iconBg: 'bg-emerald-50 text-emerald-600',
+    route: '/sif',
+  },
+  {
+    title: 'National Pension System (NPS)',
+    description: 'Build a retirement corpus through contributions invested across equity, debt, and G-sec.',
+    icon: faUser,
+    iconBg: 'bg-blue-50 text-blue-600',
+    route: '/products/nps',
+  },
+  {
+    title: 'Life Insurance',
+    description: " Protect your family’s financial future with life cover and benefits.",
+    icon: faShieldHalved,
+    iconBg: 'bg-rose-50 text-rose-600',
+    route: '/products/life-insurance',
+  },
+  {
+    title: 'General Insurance',
+    description: ' Cover risks related to vehicles, property, travel and other non-life assets.',
+    icon: faShield,
+    iconBg: 'bg-blue-50 text-blue-600',
+    route: '/products/general-insurance',
+  },
+  {
+    title: 'Health Insurance',
+    description: "Cover medical expenses and protect your savings from healthcare costs.",
+    icon: faHeartPulse,
+    iconBg: 'bg-emerald-50 text-emerald-600',
+    route: '/products/health-insurance',
+  },
+  {
+    title: 'Fixed Income Products',
+    description: 'Invest in high-grade Fixed Deposits (Bank & Corporate) and 100% sovereign-backed Government of India (GoI) Bonds.',
+    icon: faCoins,
+    iconBg: 'bg-amber-50 text-amber-600',
+    route: '/products/fixed-income-products',
+  },
+  {
+    title: 'Post Office Small Savings',
+    description: ' Save through schemes such as PPF, NSC, SCSS and Post Office Time Deposits.',
+    icon: faFileLines,
+    iconBg: 'bg-green-50 text-green-600',
+    route: '/products/post-office-small-savings-schemes',
+  },
+];
+
+export default function OurProducts() {
+  const navigate = useNavigate();
+  const [showAllMobile, setShowAllMobile] = useState(false);
+
+  const handleCardClick = (product) => {
+    if (product.route) {
+      navigate(product.route);
+    }
+  };
+
+  return (
+    <section className="py-12 sm:py-16 bg-white relative overflow-hidden">
+      <div className="max-w-7xl mx-auto text-center px-4 sm:px-6 lg:px-8 relative z-10">
+
+        {/* Header Tag */}
+        {/* <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="inline-block px-4 py-2 rounded-full border border-[#032e92]/20 text-[#032e92] bg-[#eef5ff] font-semibold text-sm mb-4 uppercase tracking-wider text-center"
+        >
+          OUR PRODUCTS
+        </motion.p> */}
+
+        {/* Heading */}
+        <motion.h2
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-black tracking-tight leading-tight max-w-4xl mx-auto"
+        >
+          A Wide Range of{' '}
+          <span className="text-[#032e92] block sm:inline">Financial Products</span>
+        </motion.h2>
+
+        {/* Subtitle */}
+        <motion.p
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl mx-auto leading-relaxed mt-3.5 text-center"
+        >
+          From protecting your wealth to growing it, we offer a wide range of regulated financial products to support every stage of life.
+        </motion.p>
+
+        {/* 3-Column Grid of Products */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 mt-10 sm:mt-12 text-left">
+          {products.map((item, idx) => {
+            const isHiddenOnMobile = !showAllMobile && idx >= 3;
+            return (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: 0.05 * (idx % 3) }}
+                whileHover={{ y: -4, scale: 1.015 }}
+                onClick={() => handleCardClick(item)}
+                className={`${isHiddenOnMobile ? 'hidden sm:flex' : 'flex'
+                  } bg-white rounded-2xl border border-gray-100 shadow-md shadow-blue-900/4 p-5 sm:p-6 items-center justify-between gap-4 hover:shadow-xl hover:border-blue-100 transition-all duration-300 group cursor-pointer`}
+              >
+                {/* Left Content */}
+                <div className="flex items-center gap-4 min-w-0">
+                  {/* Icon Box */}
+                  <div className={`w-12 h-12 sm:w-13 sm:h-13 rounded-2xl flex items-center justify-center text-lg sm:text-xl flex-shrink-0 transition-transform group-hover:scale-110 ${item.iconBg}`}>
+                    <FontAwesomeIcon icon={item.icon} />
+                  </div>
+
+                  {/* Text */}
+                  <div className="min-w-0">
+                    <h3 className="text-sm sm:text-base font-bold text-gray-900 leading-snug group-hover:text-[#032e92] transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs sm:text-[13.5px] text-gray-500 font-normal leading-relaxed mt-1 line-clamp-2">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Arrow Pill */}
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-50 group-hover:bg-[#032e92] text-gray-400 group-hover:text-white flex items-center justify-center text-xs sm:text-sm transition-all flex-shrink-0 ml-1 shadow-2xs">
+                  <FontAwesomeIcon icon={faArrowRight} />
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* Mobile View All / View Less Button */}
+        <div className="mt-8 text-center sm:hidden">
+          {!showAllMobile ? (
+            <button
+              type="button"
+              onClick={() => setShowAllMobile(true)}
+              className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <span>View All</span>
+              <FontAwesomeIcon icon={faChevronDown} className="text-xs" />
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setShowAllMobile(false)}
+              className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <span>View Less</span>
+              <FontAwesomeIcon icon={faChevronUp} className="text-xs" />
+            </button>
+          )}
+        </div>
+
+        {/* Desktop CTA Button */}
+        <div className="mt-12 text-center hidden sm:block">
+          <button
+            type="button"
+            onClick={() => navigate('/products')}
+            className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
+          >
+            Explore All Products
+          </button>
+        </div>
+
+      </div>
+    </section>
+  );
+}
