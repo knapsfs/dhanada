@@ -65,7 +65,7 @@ def sync_lead_email_status(lead_doc):
 		lead_doc.flags.ignore_permissions = True
 		lead_doc.save()
 		lead_doc.reload()
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep: frappe-manual-commit - lifecycle transaction boundary
 
 
 def on_email_queue_update(doc, method=None):
@@ -138,8 +138,8 @@ def normalize_mobile(mobile_no):
 # ============================================================================
 
 
-@frappe.whitelist()
-def send_welcome_message(lead_id):
+@frappe.whitelist(methods=["POST"])
+def send_welcome_message(lead_id: str):
 	"""
 	Sends an approved welcome message to an eligible native Lead via Frappe built-in email.
 	- Checks user permissions.
@@ -221,7 +221,7 @@ def send_welcome_message(lead_id):
 			else:
 				# Stale sending lock from timed out/killed worker: reset to Not Sent so retry can proceed
 				frappe.db.set_value("Email Queue", in_flight.get("name"), "status", "Not Sent")
-				frappe.db.commit()
+				frappe.db.commit()  # nosemgrep: frappe-manual-commit - lifecycle transaction boundary
 		else:
 			frappe.throw(
 				_(
@@ -282,7 +282,7 @@ def send_welcome_message(lead_id):
 			queue_entry.error = None
 			queue_entry.retry = 0
 			queue_entry.save(ignore_permissions=True)
-			frappe.db.commit()
+			frappe.db.commit()  # nosemgrep: frappe-manual-commit - lifecycle transaction boundary
 
 	if not queue_entry:
 		try:
@@ -300,7 +300,7 @@ def send_welcome_message(lead_id):
 			lead.welcome_email_sent_on = None
 			lead.flags.ignore_permissions = True
 			lead.save()
-			frappe.db.commit()
+			frappe.db.commit()  # nosemgrep: frappe-manual-commit - lifecycle transaction boundary
 			frappe.log_error(title="Welcome Email Queue Dispatch Failure", message=frappe.get_traceback())
 			frappe.throw(
 				_("Failed to dispatch welcome email via Frappe mail service: {0}").format(str(e)),
@@ -371,7 +371,7 @@ def send_welcome_message(lead_id):
 		lead.welcome_email_sent_on = now_datetime()
 		lead.flags.ignore_permissions = True
 		lead.save()
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep: frappe-manual-commit - lifecycle transaction boundary
 
 		return {
 			"success": True,
@@ -387,7 +387,7 @@ def send_welcome_message(lead_id):
 		lead.welcome_email_sent_on = None
 		lead.flags.ignore_permissions = True
 		lead.save()
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep: frappe-manual-commit - lifecycle transaction boundary
 
 		clean_err = (
 			smtp_error_message.strip().splitlines()[-1] if "\n" in smtp_error_message else smtp_error_message
@@ -404,7 +404,7 @@ def send_welcome_message(lead_id):
 		lead.welcome_email_sent_on = None
 		lead.flags.ignore_permissions = True
 		lead.save()
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep: frappe-manual-commit - lifecycle transaction boundary
 
 		return {
 			"success": True,
@@ -465,8 +465,8 @@ def validate_lead_doc(doc, method=None):
 # ============================================================================
 
 
-@frappe.whitelist()
-def update_lead_interest(lead_id, interest_status, reason=None):
+@frappe.whitelist(methods=["POST"])
+def update_lead_interest(lead_id: str, interest_status: str, reason: str | None = None):
 	"""
 	Assigned user updates lead status across the 6 canonical lifecycle states:
 	New, Interested, Not Interested, Nurturing, Converted, Junk.
@@ -521,7 +521,7 @@ def update_lead_interest(lead_id, interest_status, reason=None):
 
 	lead.flags.ignore_permissions = True
 	lead.save()
-	frappe.db.commit()
+	frappe.db.commit()  # nosemgrep: frappe-manual-commit - lifecycle transaction boundary
 
 	return {
 		"success": True,
@@ -531,8 +531,8 @@ def update_lead_interest(lead_id, interest_status, reason=None):
 	}
 
 
-@frappe.whitelist()
-def mark_lead_junk(lead_id, reason="Junk"):
+@frappe.whitelist(methods=["POST"])
+def mark_lead_junk(lead_id: str, reason: str = "Junk"):
 	"""Convenience action to mark a lead as Junk."""
 	return update_lead_interest(lead_id, "Junk", reason)
 
@@ -542,8 +542,8 @@ def mark_lead_junk(lead_id, reason="Junk"):
 # ============================================================================
 
 
-@frappe.whitelist()
-def send_onboarding_and_risk_profiler(lead_id):
+@frappe.whitelist(methods=["POST"])
+def send_onboarding_and_risk_profiler(lead_id: str):
 	"""
 	Sends Onboarding and Risk Profiler links for Interested leads via Frappe email.
 	- Validates lead is in 'Interested' or 'Nurturing'.
@@ -623,7 +623,7 @@ def send_onboarding_and_risk_profiler(lead_id):
 				)
 			else:
 				frappe.db.set_value("Email Queue", in_flight.get("name"), "status", "Not Sent")
-				frappe.db.commit()
+				frappe.db.commit()  # nosemgrep: frappe-manual-commit - lifecycle transaction boundary
 		else:
 			frappe.throw(
 				_(
@@ -746,7 +746,7 @@ def send_onboarding_and_risk_profiler(lead_id):
 				queue_entry.error = None
 				queue_entry.retry = 0
 				queue_entry.save(ignore_permissions=True)
-				frappe.db.commit()
+				frappe.db.commit()  # nosemgrep: frappe-manual-commit - lifecycle transaction boundary
 
 	if not queue_entry:
 		try:
@@ -820,7 +820,7 @@ def send_onboarding_and_risk_profiler(lead_id):
 		lead.risk_profiler_status = "Sent"
 	lead.flags.ignore_permissions = True
 	lead.save()
-	frappe.db.commit()
+	frappe.db.commit()  # nosemgrep: frappe-manual-commit - lifecycle transaction boundary
 
 	delivery_msg = (
 		_("Onboarding and Risk Profiler email accepted by SMTP server for delivery to {0}.").format(email)
@@ -885,8 +885,8 @@ def get_risk_profiler_url(lead=None, token=None):
 	return base_url
 
 
-@frappe.whitelist()
-def send_risk_profiler(lead_id):
+@frappe.whitelist(methods=["POST"])
+def send_risk_profiler(lead_id: str):
 	"""
 	Sends a concise email to the lead containing a link to the Risk Profiler form.
 	- Validates lead exists and user write permissions.
@@ -959,7 +959,7 @@ def send_risk_profiler(lead_id):
 				)
 			else:
 				frappe.db.set_value("Email Queue", in_flight.get("name"), "status", "Not Sent")
-				frappe.db.commit()
+				frappe.db.commit()  # nosemgrep: frappe-manual-commit - lifecycle transaction boundary
 		else:
 			frappe.throw(
 				_(
@@ -1054,7 +1054,7 @@ Team KNAPS</p>"""
 				queue_entry.error = None
 				queue_entry.retry = 0
 				queue_entry.save(ignore_permissions=True)
-				frappe.db.commit()
+				frappe.db.commit()  # nosemgrep: frappe-manual-commit - lifecycle transaction boundary
 
 	if not queue_entry:
 		try:
@@ -1122,7 +1122,7 @@ Team KNAPS</p>"""
 		lead.risk_profiler_status = "Sent"
 	lead.flags.ignore_permissions = True
 	lead.save()
-	frappe.db.commit()
+	frappe.db.commit()  # nosemgrep: frappe-manual-commit - lifecycle transaction boundary
 
 	return {
 		"status": "success",
@@ -1140,8 +1140,8 @@ Team KNAPS</p>"""
 # ============================================================================
 
 
-@frappe.whitelist(allow_guest=True, methods=["POST"])
-def submit_client_onboarding(token, payload=None):
+@frappe.whitelist(allow_guest=True, methods=["POST"])  # fmt: skip # nosemgrep: guest-whitelisted-method - token authenticated client onboarding
+def submit_client_onboarding(token: str, payload: dict | str | None = None):
 	"""
 	Server-side endpoint for client onboarding form submission.
 	- Validates token against persisted Client Onboarding Submission record.
@@ -1236,7 +1236,7 @@ def submit_client_onboarding(token, payload=None):
 		lead.onboarding_completed_on = now_datetime()
 		lead.flags.ignore_permissions = True
 		lead.save()
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep: frappe-manual-commit - lifecycle transaction boundary
 
 		# Check if risk profiler is also complete
 		check_and_auto_convert(lead_id)
@@ -1249,8 +1249,8 @@ def submit_client_onboarding(token, payload=None):
 	}
 
 
-@frappe.whitelist(allow_guest=True, methods=["POST"])
-def submit_risk_profile_for_lead(token, payload=None):
+@frappe.whitelist(allow_guest=True, methods=["POST"])  # fmt: skip # nosemgrep: guest-whitelisted-method - token authenticated risk profile submission
+def submit_risk_profile_for_lead(token: str, payload: dict | str | None = None):
 	"""
 	Server-side endpoint for Risk Profiler submission associated with a Lead.
 	- Validates token against persisted Risk Profiler Submission record.
@@ -1339,7 +1339,7 @@ def submit_risk_profile_for_lead(token, payload=None):
 		lead.risk_profiler_completed_on = now_datetime()
 		lead.flags.ignore_permissions = True
 		lead.save()
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep: frappe-manual-commit - lifecycle transaction boundary
 
 		# Check if onboarding is also complete
 		check_and_auto_convert(lead_id)
@@ -1375,8 +1375,8 @@ def check_and_auto_convert(lead_id):
 # ============================================================================
 
 
-@frappe.whitelist()
-def convert_lead_to_client(lead_id):
+@frappe.whitelist(methods=["POST"])
+def convert_lead_to_client(lead_id: str):
 	"""
 	Converts native Dhanada Lead into a Dhanada Client record.
 	- Validates server-side that both Onboarding and Risk Profiler submissions are completed.
@@ -1424,7 +1424,7 @@ def convert_lead_to_client(lead_id):
 				"status": "Converted",
 			},
 		)
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep: frappe-manual-commit - lifecycle transaction boundary
 		return {
 			"success": True,
 			"already_converted": True,
@@ -1577,7 +1577,7 @@ def convert_lead_to_client(lead_id):
 	lead.status = "Converted"
 	lead.flags.ignore_permissions = True
 	lead.save()
-	frappe.db.commit()
+	frappe.db.commit()  # nosemgrep: frappe-manual-commit - lifecycle transaction boundary
 
 	return {
 		"success": True,
@@ -1590,7 +1590,7 @@ def convert_lead_to_client(lead_id):
 
 
 @frappe.whitelist()
-def get_lead_lifecycle_status(lead_id):
+def get_lead_lifecycle_status(lead_id: str):
 	"""
 	Returns current lifecycle and submission status for a native Lead.
 	Synchronizes email status with Frappe Email Queue state.

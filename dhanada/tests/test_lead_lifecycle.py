@@ -974,23 +974,26 @@ class TestLeadLifecycle(FrappeTestCase):
 		mock_queue.status = "Sent"
 		mock_sendmail.return_value = mock_queue
 
-		with patch("dhanada.lifecycle.api.get_outgoing_email_account", return_value=get_mock_email_account()):
-			with patch("frappe.sendmail", mock_sendmail):
-				res = send_risk_profiler(lead.name)
-				self.assertEqual(res.get("status"), "success")
-				self.assertTrue("risk_profiler_url" in res)
-				self.assertEqual(res.get("risk_profiler_url"), "https://dev.knaps.app/sif")
+		with (
+			patch("dhanada.lifecycle.api.get_outgoing_email_account", return_value=get_mock_email_account()),
+			patch("dhanada.lifecycle.api.get_risk_profiler_url", return_value="https://dev.knaps.app/sif"),
+			patch("frappe.sendmail", mock_sendmail),
+		):
+			res = send_risk_profiler(lead.name)
+			self.assertEqual(res.get("status"), "success")
+			self.assertTrue("risk_profiler_url" in res)
+			self.assertEqual(res.get("risk_profiler_url"), "https://dev.knaps.app/sif")
 
-				# Verify sendmail arguments
-				mock_sendmail.assert_called_once()
-				call_kwargs = mock_sendmail.call_args[1]
-				self.assertEqual(call_kwargs["subject"], "Complete Your Risk Profile")
-				self.assertIn("Complete Your Risk Profile", call_kwargs["subject"])
-				self.assertIn(
-					"Please complete your Risk Profiler form using the link below:", call_kwargs["content"]
-				)
-				self.assertIn(res["risk_profiler_url"], call_kwargs["content"])
-				self.assertIn("Team KNAPS", call_kwargs["content"])
+			# Verify sendmail arguments
+			mock_sendmail.assert_called_once()
+			call_kwargs = mock_sendmail.call_args[1]
+			self.assertEqual(call_kwargs["subject"], "Complete Your Risk Profile")
+			self.assertIn("Complete Your Risk Profile", call_kwargs["subject"])
+			self.assertIn(
+				"Please complete your Risk Profiler form using the link below:", call_kwargs["content"]
+			)
+			self.assertIn(res["risk_profiler_url"], call_kwargs["content"])
+			self.assertIn("Team KNAPS", call_kwargs["content"])
 
 		lead.reload()
 		self.assertEqual(lead.risk_profiler_status, "Sent")

@@ -183,12 +183,14 @@ def get_crm_whatsapp_conversations(doctype: str, name: str, page: int = 1, page_
 	where_clause = " OR ".join(clauses)
 	offset = (int(page) - 1) * int(page_length)
 
-	total_count = frappe.db.sql(
-		f"SELECT COUNT(*) FROM `tabCRM WhatsApp Message` WHERE {where_clause}",  # nosec
-		params,
-	)[0][0]
+	total_count = (
+		frappe.db.sql(  # nosemgrep: frappe-sql-format-injection - parameterized dynamic where clause
+			f"SELECT COUNT(*) FROM `tabCRM WhatsApp Message` WHERE {where_clause}",  # nosec
+			params,
+		)[0][0]
+	)
 
-	messages = frappe.db.sql(
+	messages = frappe.db.sql(  # nosemgrep: frappe-sql-format-injection - parameterized dynamic where clause
 		f"""
 		SELECT
 			name,
@@ -277,7 +279,7 @@ def send_crm_whatsapp_message(
 	)
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=True)  # fmt: skip # nosemgrep: guest-whitelisted-method - Meta webhook requires unauthenticated access for verification and events
 def whatsapp_webhook():
 	"""Webhook endpoint for Meta WhatsApp Cloud API (inbound messages and status updates)."""
 	method = frappe.request.method
@@ -349,5 +351,4 @@ def whatsapp_webhook():
 					inbound_doc.flags.ignore_permissions = True
 					inbound_doc.insert()
 
-		frappe.db.commit()
 		return {"status": "ok"}

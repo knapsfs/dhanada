@@ -102,8 +102,8 @@ def _format_post_dict(doc, category_map=None, blogger_map=None):
 	}
 
 
-@frappe.whitelist(allow_guest=True)
-def get_blog_posts(category=None, limit=20, offset=0, blogger=None):
+@frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method - public read-only blog list
+def get_blog_posts(category: str | None = None, limit: int = 20, offset: int = 0, blogger: str | None = None):
 	"""Public Guest-whitelisted API to fetch published blog posts directly from Frappe DB.
 
 	Guarantees real-time accuracy for guest visitors without permission errors.
@@ -184,8 +184,8 @@ def get_blog_posts(category=None, limit=20, offset=0, blogger=None):
 	}
 
 
-@frappe.whitelist(allow_guest=True)
-def get_blog_post_details(route_or_slug):
+@frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method - public read-only blog details
+def get_blog_post_details(route_or_slug: str):
 	"""Public Guest-whitelisted API to fetch full single blog post by name, route, or slug.
 
 	Includes related articles and full rich HTML content.
@@ -287,7 +287,7 @@ def get_blog_post_details(route_or_slug):
 	return {"blog": formatted}
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method - public read-only categories
 def get_blog_categories():
 	"""Returns all published Blog Categories that have active posts or are marked published."""
 	categories = frappe.get_all(
@@ -299,8 +299,8 @@ def get_blog_categories():
 	return {"categories": categories}
 
 
-@frappe.whitelist(allow_guest=True)
-def get_author_profile(blogger_name):
+@frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method - public read-only author profile
+def get_author_profile(blogger_name: str):
 	"""Returns blogger profile information and their published articles."""
 	if not blogger_name:
 		return {"author": None, "posts": []}

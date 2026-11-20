@@ -72,11 +72,11 @@ class TestWhatsAppAdapter(FrappeTestCase):
 		frappe.db.delete("Client", {"email": "test_wa_client@example.com"})
 		if frappe.db.table_exists("CRM WhatsApp Message"):
 			frappe.db.delete("CRM WhatsApp Message", {"recipient": ["like", "%98765%"]})
-		if hasattr(self, "test_lead") and self.test_lead:
-			frappe.db.delete("WA Message", {"reference_docname": self.test_lead.name})
-		if hasattr(self, "test_client") and self.test_client:
-			frappe.db.delete("WA Message", {"reference_docname": self.test_client.name})
 		if frappe.db.table_exists("WA Message"):
+			if hasattr(self, "test_lead") and self.test_lead:
+				frappe.db.delete("WA Message", {"reference_docname": self.test_lead.name})
+			if hasattr(self, "test_client") and self.test_client:
+				frappe.db.delete("WA Message", {"reference_docname": self.test_client.name})
 			frappe.db.delete("WA Message", {"message_id": ["like", "%e2e%"]})
 		if frappe.db.table_exists("WA Account"):
 			frappe.db.delete("WA Account", {"account_name": ["like", "_Test WA%"]})

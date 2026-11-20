@@ -25,6 +25,6 @@ class CRMFormToken(Document):
 		if self.expires_at and now_datetime() > self.expires_at:
 			self.status = "Expired"
 			self.save(ignore_permissions=True)
-			frappe.db.commit()
+			frappe.db.commit()  # nosemgrep: frappe-manual-commit - persist expired status immediately
 			return False
 		return True
