@@ -144,17 +144,9 @@ def get_comparison_data(scheme_ids: str | list | None = None):
 					perf_data = mask_invalid_returns(perf_dict, launch_date, historical_nav=historical_nav)
 
 			# Canonical parent Strategy and child Subcategory
-			strat_val = (
-				s.get("investment_strategy")
-				or s.get("investmentStrategy")
-				or s.get("strategy")
-				or ""
-			)
+			strat_val = s.get("investment_strategy") or s.get("investmentStrategy") or s.get("strategy") or ""
 			subcat_val = (
-				s.get("scheme_subcategory")
-				or s.get("schemeSubcategory")
-				or s.get("subcategory")
-				or ""
+				s.get("scheme_subcategory") or s.get("schemeSubcategory") or s.get("subcategory") or ""
 			)
 
 			result.append(

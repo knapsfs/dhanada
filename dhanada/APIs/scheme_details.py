@@ -780,7 +780,9 @@ def get_fund_details(
 		allocations = alloc_query.run(as_dict=True)
 
 		strat_val = scheme.get("investmentStrategy") or scheme.get("strategy") or "Equity"
-		subcat_val = scheme.get("schemeSubcategory") or scheme.get("scheme_subcategory") or scheme.get("subcategory")
+		subcat_val = (
+			scheme.get("schemeSubcategory") or scheme.get("scheme_subcategory") or scheme.get("subcategory")
+		)
 
 		data = {
 			"id": scheme["id"],  # True internal identifier

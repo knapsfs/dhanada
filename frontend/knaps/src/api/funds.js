@@ -36,11 +36,7 @@ function normalizeFundData(item) {
 	}
 
 	// Extract subcategory fields
-	let subcategory =
-		item.scheme_subcategory ||
-		item.schemeSubcategory ||
-		item.subcategory ||
-		"";
+	let subcategory = item.scheme_subcategory || item.schemeSubcategory || item.subcategory || "";
 	if (typeof subcategory === "string") {
 		subcategory = subcategory.trim();
 	} else {
@@ -50,7 +46,12 @@ function normalizeFundData(item) {
 	// Handle legacy endpoints where category may have held the subcategory:
 	// If subcategory is missing but item.category exists and is NOT a parent strategy,
 	// item.category was historically a subcategory.
-	if (!subcategory && item.category && typeof item.category === "string" && !isVerifiedStrategy(item.category)) {
+	if (
+		!subcategory &&
+		item.category &&
+		typeof item.category === "string" &&
+		!isVerifiedStrategy(item.category)
+	) {
 		subcategory = item.category.trim();
 	}
 
