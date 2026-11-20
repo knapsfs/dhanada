@@ -108,7 +108,7 @@ class TestCRMMigration(FrappeTestCase):
 				}
 			).insert(ignore_permissions=True)
 
-			frappe.get_doc(
+			crm_lead = frappe.get_doc(
 				{
 					"doctype": "CRM Lead",
 					"name": test_legacy_id,
@@ -118,7 +118,11 @@ class TestCRMMigration(FrappeTestCase):
 					"mobile_no": "9876543210",
 					"status": "New Lead",
 				}
-			).insert(ignore_permissions=True)
+			)
+			crm_lead.flags.ignore_permissions = True
+			crm_lead.flags.ignore_mandatory = True
+			crm_lead.flags.ignore_links = True
+			crm_lead.insert()
 
 			existing = frappe.get_doc("Lead", {"email": test_email})
 			self.assertIsNotNone(existing)
@@ -145,7 +149,7 @@ class TestCRMMigration(FrappeTestCase):
 		try:
 			# Ensure at least one legacy CRM Lead exists to test idempotency
 			if not frappe.db.exists("CRM Lead", "CRM-LEAD-IDEMPOTENT-01"):
-				frappe.get_doc(
+				idem_doc = frappe.get_doc(
 					{
 						"doctype": "CRM Lead",
 						"name": "CRM-LEAD-IDEMPOTENT-01",
@@ -155,7 +159,11 @@ class TestCRMMigration(FrappeTestCase):
 						"mobile_no": "9876543299",
 						"status": "New Lead",
 					}
-				).insert(ignore_permissions=True)
+				)
+				idem_doc.flags.ignore_permissions = True
+				idem_doc.flags.ignore_mandatory = True
+				idem_doc.flags.ignore_links = True
+				idem_doc.insert()
 
 			# First run
 			migrate_historical_crm_leads(dry_run=False, include_test_records=False)
