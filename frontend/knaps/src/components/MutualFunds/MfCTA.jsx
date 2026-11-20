@@ -21,7 +21,7 @@ export default function MfCTA() {
   };
 
   return (
-    <section className="py-20 lg:py-24 bg-[#f7f9fc] relative">
+    <section className="py-12 sm:py-16 bg-[#f7f9fc] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative rounded-3xl bg-gradient-to-br from-[#032e92] via-[#021d63] to-[#011347] text-white p-8 sm:p-12 lg:p-16 overflow-hidden shadow-2xl shadow-blue-950/20">
           {/* Subtle Ambient Decorative Glows */}

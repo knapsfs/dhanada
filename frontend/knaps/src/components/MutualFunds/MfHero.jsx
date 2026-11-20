@@ -22,7 +22,7 @@ export default function MfHero() {
   };
 
   return (
-    <section className="relative pt-32 pb-20 lg:pt-36 lg:pb-28 overflow-hidden bg-gradient-to-b from-blue-50/70 via-[#f7f9fc] to-white">
+    <section className="relative pt-32 lg:pt-36 lg:pb-10 overflow-hidden bg-gradient-to-b from-blue-50/70 via-[#f7f9fc] to-white">
       {/* Decorative Blur Background Orbs */}
       <div className="absolute top-12 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-r from-blue-400/10 via-cyan-400/10 to-indigo-400/10 rounded-full blur-3xl pointer-events-none -z-10" />
 
@@ -42,31 +42,31 @@ export default function MfHero() {
 
             {/* Main Headline */}
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900 leading-tight">
-              Invest Smarter with <span className="text-[#032e92]">Mutual Funds</span>
+              Invest in Mutual Funds with <span className="text-[#032e92]">Confidence</span>
             </h1>
 
             {/* Hero Copy */}
             <p className="text-sm sm:text-base text-gray-600 font-normal leading-relaxed mt-3.5">
-              Harness the power of professional fund management, instant asset diversification, and compounding wealth creation. Whether you are building an emergency cushion or planning for generational wealth, mutual funds help you achieve your goals with discipline.
+              Mutual funds are SEBI-regulated investments that are professionally managed and diversified across a range of securities. With a wide choice of AMCs and fund houses, you can choose investments that match your financial goals and risk profile.
             </p>
 
             {/* Trust Points Checklist */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
               <div className="flex items-center gap-2.5 text-slate-700 text-sm font-medium">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 text-base flex-shrink-0" />
-                <span>SIP starts from just ₹500 / month</span>
+                {/* <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 text-base flex-shrink-0" /> */}
+                <span>Power of Compounding</span>
               </div>
               <div className="flex items-center gap-2.5 text-slate-700 text-sm font-medium">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 text-base flex-shrink-0" />
-                <span>40+ Leading AMCs & Fund Houses</span>
+                {/* <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 text-base flex-shrink-0" /> */}
+                <span>SEBI-Regulated</span>
               </div>
               <div className="flex items-center gap-2.5 text-slate-700 text-sm font-medium">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 text-base flex-shrink-0" />
-                <span>Rupee-cost averaging advantage</span>
+                {/* <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 text-base flex-shrink-0" /> */}
+                <span>Highly Liquid & Flexible</span>
               </div>
               <div className="flex items-center gap-2.5 text-slate-700 text-sm font-medium">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 text-base flex-shrink-0" />
-                <span>100% Paperless KYC & Setup</span>
+                {/* <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 text-base flex-shrink-0" /> */}
+                <span>Start Small, Build Long term Wealth</span>
               </div>
             </div>
 
@@ -75,12 +75,10 @@ export default function MfHero() {
               <button
                 type="button"
                 onClick={() => openLeadModal('Mutual Funds: Hero Start SIP')}
-                className="px-7 py-3.5 rounded-2xl bg-gradient-to-r from-[#032e92] to-[#021d63] text-white font-bold text-sm sm:text-base shadow-lg shadow-[#032e92]/25 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center gap-2 cursor-pointer"
+                className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
               >
-                <span>Start Your Investment Journey</span>
-                {/* <FontAwesomeIcon icon={faArrowRight} className="text-xs" /> */}
+                <span>Invest in Mutual Funds</span>
               </button>
-
             </div>
           </div>
 
@@ -90,7 +88,7 @@ export default function MfHero() {
               {/* Floating Top Badge */}
               <div className="flex items-center justify-between border-b border-slate-100 pb-5 mb-5">
                 <div>
-                  <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">KNAPS Smart Wealth</div>
+                  {/* <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">KNAPS Smart Wealth</div> */}
                   <div className="text-lg font-bold text-[#032e92]">Disciplined Compounding</div>
                 </div>
                 <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-[#032e92]">
@@ -132,26 +130,9 @@ export default function MfHero() {
                   </div>
                 </div>
 
-                {/* 3 Quick Pill Metrics */}
-                <div className="grid grid-cols-3 gap-2.5 pt-1">
-                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 text-center">
-                    <div className="text-[11px] font-semibold text-slate-500">Min. SIP</div>
-                    <div className="text-sm font-extrabold text-[#032e92]">₹500 / mo</div>
-                  </div>
-                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 text-center">
-                    <div className="text-[11px] font-semibold text-slate-500">Liquidity</div>
-                    <div className="text-sm font-extrabold text-emerald-700">T+1 to T+2</div>
-                  </div>
-                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 text-center">
-                    <div className="text-[11px] font-semibold text-slate-500">Regulator</div>
-                    <div className="text-sm font-extrabold text-[#032e92]">SEBI / AMFI</div>
-                  </div>
-                </div>
 
-                {/* Statutory Micro Disclaimer */}
-                <p className="text-[11px] text-slate-400 leading-tight italic pt-1 text-center">
-                  *Returns shown are for educational illustration. Mutual funds are subject to market risks.
-                </p>
+
+
               </div>
             </div>
           </div>

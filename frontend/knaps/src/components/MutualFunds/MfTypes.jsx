@@ -36,7 +36,7 @@ export default function MfTypes() {
   const activeCategory = MF_CATEGORIES.find((c) => c.id === activeCategoryId) || MF_CATEGORIES[0];
 
   return (
-    <section id="mf-types" className="py-20 lg:py-24 bg-[#f7f9fc] relative">
+    <section id="mf-types" className="py-12 sm:py-16 bg-[#f7f9fc] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
@@ -81,7 +81,7 @@ export default function MfTypes() {
           >
             {/* Top Bar with Category Overview & Metrics */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pb-8 border-b border-slate-100 items-start">
-              <div className="lg:col-span-7 space-y-3">
+              <div className="lg:col-span-5 space-y-3">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-[#032e92]">
                     <FontAwesomeIcon icon={getCategoryIcon(activeCategory.id)} className="text-xl" />
@@ -99,7 +99,7 @@ export default function MfTypes() {
               </div>
 
               {/* 3 Metric Pills */}
-              <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="p-3.5 rounded-2xl bg-[#f8fbff] border border-blue-100/80">
                   <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium mb-1">
                     <FontAwesomeIcon icon={faTriangleExclamation} className="text-amber-500 text-xs" />
@@ -145,19 +145,16 @@ export default function MfTypes() {
             </div>
 
             {/* Bottom Action strip */}
-            <div className="mt-8 pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <p className="text-xs text-slate-500 italic">
-                *Asset allocation mandates follow SEBI circular SEBI/HO/IMD/DF3/CIR/P/2017/114.
-              </p>
+            {/* <div className="mt-8 pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+
               <button
                 type="button"
                 onClick={() => openLeadModal(`Mutual Funds: Explore ${activeCategory.name}`)}
                 className="px-5 py-2.5 rounded-xl bg-[#032e92] text-white text-xs sm:text-sm font-bold hover:bg-[#021d63] transition-colors flex items-center gap-2 cursor-pointer shadow-xs"
               >
                 <span>Find Suitable {activeCategory.name}</span>
-                {/* <FontAwesomeIcon icon={faArrowRight} className="text-xs" /> */}
               </button>
-            </div>
+            </div> */}
           </motion.div>
         </AnimatePresence>
       </div>
