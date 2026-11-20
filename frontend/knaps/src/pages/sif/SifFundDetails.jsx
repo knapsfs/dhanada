@@ -219,8 +219,10 @@ export default function SifFundDetails() {
       amc_logo: apiFund.amc_logo || apiFund.amcLogo || apiFund.logo,
       amcLogo: apiFund.amc_logo || apiFund.amcLogo || apiFund.logo,
       logo: apiFund.amc_logo || apiFund.amcLogo || apiFund.logo,
-      category: apiFund.category || 'Hybrid',
-      strategy: apiFund.investmentStrategy || apiFund.category || 'Hybrid Long short',
+      investmentStrategy: apiFund.investment_strategy || apiFund.investmentStrategy || apiFund.strategy || '',
+      subcategory: apiFund.scheme_subcategory || apiFund.schemeSubcategory || apiFund.subcategory || '',
+      category: apiFund.investment_strategy || apiFund.investmentStrategy || apiFund.strategy || '',
+      strategy: apiFund.investment_strategy || apiFund.investmentStrategy || apiFund.strategy || '',
       schemeType: apiFund.schemeType || 'Open-ended',
       benchmark: apiFund.benchmarkTier1 || 'Nifty 500 TRI',
       launchDate: formattedLaunch,
@@ -455,7 +457,8 @@ export default function SifFundDetails() {
             "@type": "FinancialService",
             "name": fund.amc
           },
-          "category": fund.category,
+          "category": fund.investmentStrategy || fund.category,
+          "subcategory": fund.subcategory,
           "feesAndCommissionsSpecification": `Expense Ratio: ${fund.expenseRatio}`,
           "areaServed": "IN"
         }}
@@ -648,17 +651,17 @@ export default function SifFundDetails() {
                   <p className="text-sm font-semibold text-gray-700 mt-1">{fund.launchDate}</p>
                 </div>
 
-                {/* Card 5: Category */}
+                {/* Card 5: Investment Strategy */}
                 <div className="bg-[#f0f4f9] rounded-2xl p-4 border border-[#e2e8f0]/60">
-                  <p className="text-xs font-bold text-gray-900">Category</p>
-                  <p className="text-sm font-semibold text-gray-700 mt-1">{fund.category}</p>
+                  <p className="text-xs font-bold text-gray-900">Investment Strategy</p>
+                  <p className="text-sm font-semibold text-gray-700 mt-1">{fund.investmentStrategy || 'N/A'}</p>
                 </div>
 
-                {/* Card 6: Strategy */}
+                {/* Card 6: Subcategory */}
                 <div className="bg-[#f0f4f9] rounded-2xl p-4 border border-[#e2e8f0]/60">
-                  <p className="text-xs font-bold text-gray-900">Strategy</p>
-                  <p className="text-sm font-semibold text-gray-700 mt-1" title={fund.strategy}>
-                    {fund.strategy}
+                  <p className="text-xs font-bold text-gray-900">Subcategory</p>
+                  <p className="text-sm font-semibold text-gray-700 mt-1" title={fund.subcategory}>
+                    {fund.subcategory || 'N/A'}
                   </p>
                 </div>
               </div>

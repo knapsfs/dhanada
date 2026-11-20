@@ -53,7 +53,9 @@ export default function TopFunds({
     const source = selectorFunds.length > 0 ? selectorFunds : fundsData;
     if (activeTab === 'All') return source
     return source.filter(f => {
-      const textToSearch = `${f.schemeType || ''} ${f.category || ''} ${f.investmentStrategy || ''}`.toLowerCase()
+      const strat = f.investment_strategy || f.investmentStrategy || f.strategy || '';
+      const sub = f.scheme_subcategory || f.schemeSubcategory || f.subcategory || '';
+      const textToSearch = `${f.schemeType || ''} ${strat} ${sub}`.toLowerCase()
       return textToSearch.includes(activeTab.toLowerCase())
     })
   }, [activeTab, selectorFunds, fundsData])

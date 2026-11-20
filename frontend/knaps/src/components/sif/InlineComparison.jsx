@@ -135,15 +135,32 @@ const InlineComparison = forwardRef(function InlineComparison(
       // Benchmark
       const benchmark = details?.benchmarkTier1 || details?.benchmark || fund.benchmarkTier1 || fund.benchmark || 'N/A';
 
-      // Category
-      const category = details?.category || fund.category || fund.subCategory || fund.investmentStrategy || 'Equity Long-Short';
+      // Investment Strategy & Subcategory (explicit, canonical fields only)
+      const investmentStrategy =
+        details?.investment_strategy ||
+        details?.investmentStrategy ||
+        details?.strategy ||
+        fund.investment_strategy ||
+        fund.investmentStrategy ||
+        fund.strategy ||
+        '';
+      const subcategory =
+        details?.scheme_subcategory ||
+        details?.schemeSubcategory ||
+        details?.subcategory ||
+        fund.scheme_subcategory ||
+        fund.schemeSubcategory ||
+        fund.subcategory ||
+        '';
 
       return {
         fund,
         slotIndex,
         details,
         name: details?.name || fund.name,
-        category,
+        investmentStrategy,
+        subcategory,
+        category: investmentStrategy,
         nav: formattedNav,
         aum: formattedAum,
         riskLevel,
@@ -316,7 +333,8 @@ const InlineComparison = forwardRef(function InlineComparison(
   }
 
   const parameters = [
-    { label: 'Category', key: 'category' },
+    { label: 'Investment Strategy', key: 'investmentStrategy' },
+    { label: 'Subcategory', key: 'subcategory' },
     { label: 'Current NAV', key: 'nav' },
     { label: 'AUM (Cr)', key: 'aum' },
     { label: 'Risk Band', key: 'riskLevel', isRiskBand: true },

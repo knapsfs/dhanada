@@ -86,29 +86,43 @@ export default function HeatmapSection() {
 
     // 1. Ingest from selectorFunds (comprehensive list of all active funds)
     selectorFunds.forEach((f) => {
-      const rawStrat = f.strategy || f.investmentStrategy || (f.category === "Equity" || f.category === "Hybrid" ? f.category : null);
-      const strat = rawStrat || (f.schemeSubcategory?.toLowerCase().includes("hybrid") ? "Hybrid" : "Equity");
-      const cat = f.schemeSubcategory || (f.category !== "Equity" && f.category !== "Hybrid" ? f.category : null);
-      if (cat) {
-        allSubcatsSet.add(cat);
-        if (!strategySubcatsMap[strat]) {
-          strategySubcatsMap[strat] = new Set();
+      const strat =
+        f.investment_strategy ||
+        f.investmentStrategy ||
+        f.strategy;
+      const subcategory =
+        f.scheme_subcategory ||
+        f.schemeSubcategory ||
+        f.subcategory;
+      if (subcategory) {
+        allSubcatsSet.add(subcategory);
+        if (strat) {
+          if (!strategySubcatsMap[strat]) {
+            strategySubcatsMap[strat] = new Set();
+          }
+          strategySubcatsMap[strat].add(subcategory);
         }
-        strategySubcatsMap[strat].add(cat);
       }
     });
 
     // 2. Ingest from filtersList (from SIF Scheme query)
     filtersList.forEach((item) => {
-      const rawStrat = item.investmentStrategy || item.strategy || (item.category === "Equity" || item.category === "Hybrid" ? item.category : null);
-      const strat = rawStrat || (item.schemeSubcategory?.toLowerCase().includes("hybrid") ? "Hybrid" : "Equity");
-      const cat = item.schemeSubcategory || (item.category !== "Equity" && item.category !== "Hybrid" ? item.category : null);
-      if (cat) {
-        allSubcatsSet.add(cat);
-        if (!strategySubcatsMap[strat]) {
-          strategySubcatsMap[strat] = new Set();
+      const strat =
+        item.investment_strategy ||
+        item.investmentStrategy ||
+        item.strategy;
+      const subcategory =
+        item.scheme_subcategory ||
+        item.schemeSubcategory ||
+        item.subcategory;
+      if (subcategory) {
+        allSubcatsSet.add(subcategory);
+        if (strat) {
+          if (!strategySubcatsMap[strat]) {
+            strategySubcatsMap[strat] = new Set();
+          }
+          strategySubcatsMap[strat].add(subcategory);
         }
-        strategySubcatsMap[strat].add(cat);
       }
     });
 
@@ -123,7 +137,6 @@ export default function HeatmapSection() {
 
     if (!strategySubcatsMap.Equity || !strategySubcatsMap.Equity.size) {
       strategySubcatsMap.Equity = new Set([
-        "Active Asset Allocator Long-Short Fund",
         "Equity Ex-Top 100 Long-Short Fund",
         "Equity Long-Short Fund",
         "Sector Rotation Long-Short Fund",
@@ -142,7 +155,7 @@ export default function HeatmapSection() {
       id: "All",
       label: "All",
       subCategories: [
-        { id: "All", name: "All Categories" },
+        { id: "All", name: "All Subcategories" },
         ...Array.from(allSubcatsSet)
           .sort()
           .map((c) => ({ id: c, name: c })),
@@ -157,7 +170,7 @@ export default function HeatmapSection() {
         id: strat,
         label: strat,
         subCategories: [
-          { id: "All", name: `All ${strat} Categories` },
+          { id: "All", name: `All ${strat} Subcategories` },
           ...subcats.map((c) => ({ id: c, name: c })),
         ],
       };
@@ -188,8 +201,10 @@ export default function HeatmapSection() {
         setLoading(true);
         const data = await fetchHeatmapData({
           time_filter: timeFilter,
-          strategy: activeStrategy === "All" ? undefined : activeStrategy,
           investment_strategy: activeStrategy === "All" ? undefined : activeStrategy,
+          strategy: activeStrategy === "All" ? undefined : activeStrategy,
+          scheme_subcategory: activeSubCategory === "All" ? undefined : activeSubCategory,
+          subcategory: activeSubCategory === "All" ? undefined : activeSubCategory,
           category: activeSubCategory === "All" ? undefined : activeSubCategory,
         });
         if (isMounted && Array.isArray(data)) {
@@ -254,11 +269,11 @@ export default function HeatmapSection() {
                 </div>
               </div>
 
-              {/* 2. CATEGORY (Sub-Categories) */}
+              {/* 2. SUBCATEGORY (Scheme Subcategories) */}
               {currentStrategyData && currentStrategyData.subCategories.length > 0 && (
                 <div className="flex flex-col gap-2.5 lg:border-l lg:border-gray-100 lg:pl-10 flex-1">
                   <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
-                    Category
+                    Subcategory
                   </span>
                   <div className="flex flex-wrap items-center gap-2">
                     {currentStrategyData.subCategories.map((sub) => (

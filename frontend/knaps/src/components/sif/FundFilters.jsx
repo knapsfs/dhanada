@@ -12,15 +12,25 @@ const sortOptions = [
 ]
 
 export default function FundFilters({ filters, setFilters, onClear, amcList = [], fundsData = [] }) {
-  const [activeTab, setActiveTab] = useState('schemeType')
+  const [activeTab, setActiveTab] = useState('investmentStrategy')
 
   const handleChange = (key, val) => {
-    setFilters(prev => ({ ...prev, [key]: val === 'All' ? '' : val }))
+    setFilters(prev => {
+      const cleanVal = val === 'All' ? '' : val;
+      const updated = { ...prev, [key]: cleanVal };
+      if (key === 'investmentStrategy') {
+        updated.strategy = cleanVal;
+        updated.category = cleanVal;
+      } else if (key === 'schemeSubcategory') {
+        updated.subcategory = cleanVal;
+      }
+      return updated;
+    });
   }
 
-  // Use Category for Strategy / Scheme Type and schemeSubcategory for Category
-  const dynamicSchemeTypes = ['All', ...Array.from(new Set(fundsData.map(f => f.category || f.investmentStrategy).filter(Boolean))).sort()];
-  const dynamicCategories = ['All', ...Array.from(new Set(fundsData.map(f => f.schemeSubcategory || f.category).filter(Boolean))).sort()];
+  // Canonical mapping: investment_strategy for Investment Strategy and scheme_subcategory for Subcategory
+  const dynamicInvestmentStrategies = ['All', ...Array.from(new Set(fundsData.map(f => f.investment_strategy || f.investmentStrategy || f.strategy).filter(Boolean))).sort()];
+  const dynamicSubcategories = ['All', ...Array.from(new Set(fundsData.map(f => f.scheme_subcategory || f.schemeSubcategory || f.subcategory).filter(Boolean))).sort()];
   const dynamicRiskLevels = useMemo(() => {
     const risks = new Set()
     fundsData.forEach(f => {
@@ -32,8 +42,8 @@ export default function FundFilters({ filters, setFilters, onClear, amcList = []
   }, [fundsData])
 
   const tabs = [
-    { id: 'schemeType', label: 'Scheme Type', options: dynamicSchemeTypes },
-    { id: 'category', label: 'Fund Category', options: dynamicCategories },
+    { id: 'investmentStrategy', label: 'Investment Strategy', options: dynamicInvestmentStrategies },
+    { id: 'schemeSubcategory', label: 'Subcategory', options: dynamicSubcategories },
     { id: 'risk', label: 'Risk Level', options: dynamicRiskLevels },
   ]
 
@@ -42,13 +52,13 @@ export default function FundFilters({ filters, setFilters, onClear, amcList = []
   return (
     <section className="bg-[#f7f9fc] pb-4">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        
+
         {/* Unified Container */}
         <div className="bg-white rounded-[2rem] shadow-sm border border-[#e8edf7] flex flex-col overflow-hidden">
-          
+
           {/* Main Filter Bar (Top) */}
           <div className="p-3 lg:px-4 lg:py-3 flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-[#e8edf7]">
-            
+
             {/* Left Side: Category Toggles */}
             <div className="flex flex-wrap items-center gap-2">
               {tabs.map(tab => {
@@ -58,15 +68,15 @@ export default function FundFilters({ filters, setFilters, onClear, amcList = []
                     key={tab.id}
                     onClick={() => setActiveTab(isActive ? null : tab.id)}
                     className={`flex items-center gap-2 px-4 py-2 rounded-2xl text-sm font-semibold transition-all duration-200 ${
-                      isActive 
-                        ? 'bg-[#eef4ff] text-[#032e92]' 
+                      isActive
+                        ? 'bg-[#eef4ff] text-[#032e92]'
                         : 'bg-transparent text-gray-600 hover:bg-gray-50'
                     }`}
                   >
                     {tab.label}
-                    <FontAwesomeIcon 
-                      icon={faChevronDown} 
-                      className={`text-[10px] transition-transform duration-200 ${isActive ? 'rotate-180' : ''}`} 
+                    <FontAwesomeIcon
+                      icon={faChevronDown}
+                      className={`text-[10px] transition-transform duration-200 ${isActive ? 'rotate-180' : ''}`}
                     />
                   </button>
                 )
@@ -125,26 +135,26 @@ export default function FundFilters({ filters, setFilters, onClear, amcList = []
                     <h3 className="text-xs font-bold tracking-wider text-gray-500 uppercase">
                       {activeTabData.label}
                     </h3>
-                    <button 
+                    <button
                       onClick={() => handleChange(activeTabData.id, 'All')}
                       className="text-xs font-medium text-gray-400 hover:text-gray-600 transition-colors"
                     >
                       All selected
                     </button>
                   </div>
-                  
+
                   <div className="flex flex-wrap gap-x-8 gap-y-5">
                     {activeTabData.options.map(opt => {
                       const isChecked = (filters[activeTabData.id] || 'All') === opt
                       return (
-                        <label 
+                        <label
                           key={opt}
                           onClick={() => handleChange(activeTabData.id, opt)}
                           className="flex items-center gap-3 cursor-pointer group w-full sm:w-[calc(50%-2rem)] md:w-[calc(33.33%-2rem)] lg:w-[calc(25%-2rem)]"
                         >
                           <div className={`w-5 h-5 rounded-full border-[6px] flex-shrink-0 transition-all ${
-                            isChecked 
-                              ? 'border-[#032e92] bg-white' 
+                            isChecked
+                              ? 'border-[#032e92] bg-white'
                               : 'border-gray-200 bg-white group-hover:border-gray-300'
                           }`} />
                           <span className={`text-sm font-medium leading-tight ${

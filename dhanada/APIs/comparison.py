@@ -18,7 +18,9 @@ def get_comparison_data(scheme_ids: str | list | None = None):
 	using Frappe Query Builder.
 	"""
 	try:
-		if isinstance(scheme_ids, str):
+		if isinstance(scheme_ids, (int, float)):
+			scheme_ids = [str(scheme_ids)]
+		elif isinstance(scheme_ids, str):
 			try:
 				parsed = json.loads(scheme_ids)
 				if isinstance(parsed, list):
@@ -46,10 +48,13 @@ def get_comparison_data(scheme_ids: str | list | None = None):
 				Scheme.name.as_("id"),
 				Scheme.sebi_code,
 				Scheme.scheme_name.as_("name"),
-				Scheme.investment_strategy.as_("category"),
-				Scheme.investment_strategy.as_("strategy"),
-				Scheme.scheme_subcategory.as_("schemeSubcategory"),
 				Scheme.investment_strategy.as_("investmentStrategy"),
+				Scheme.investment_strategy.as_("investment_strategy"),
+				Scheme.investment_strategy.as_("strategy"),
+				Scheme.investment_strategy.as_("category"),
+				Scheme.scheme_subcategory.as_("schemeSubcategory"),
+				Scheme.scheme_subcategory.as_("scheme_subcategory"),
+				Scheme.scheme_subcategory.as_("subcategory"),
 				Scheme.benchmark_tier_1.as_("benchmarkTier1"),
 				Scheme.risk_band.as_("risk"),
 				Scheme.nfo_start_date,
@@ -138,13 +143,36 @@ def get_comparison_data(scheme_ids: str | list | None = None):
 					}
 					perf_data = mask_invalid_returns(perf_dict, launch_date, historical_nav=historical_nav)
 
+			# Canonical parent Strategy and child Subcategory
+			strat_val = (
+				s.get("investment_strategy")
+				or s.get("investmentStrategy")
+				or s.get("strategy")
+				or ""
+			)
+			subcat_val = (
+				s.get("scheme_subcategory")
+				or s.get("schemeSubcategory")
+				or s.get("subcategory")
+				or ""
+			)
+
 			result.append(
 				{
 					"id": s["id"],
 					"sebi_code": s.get("sebi_code"),
 					"name": s.get("name"),
-					"category": s.get("category"),
-					"investmentStrategy": s.get("investmentStrategy"),
+					# Unambiguous Strategy & Subcategory fields
+					"investmentStrategy": strat_val,
+					"investment_strategy": strat_val,
+					"strategy": strat_val,
+					# Legacy category response field: preserved for backwards compatibility with
+					# earlier consumers/tests; strictly set to parent strategy so it cannot conflict
+					# with scheme_subcategory.
+					"category": strat_val,
+					"schemeSubcategory": subcat_val,
+					"scheme_subcategory": subcat_val,
+					"subcategory": subcat_val,
 					"benchmarkTier1": s.get("benchmarkTier1"),
 					"benchmark": s.get("benchmarkTier1"),
 					"risk": s.get("risk"),
