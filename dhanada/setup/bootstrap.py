@@ -13,6 +13,7 @@ def before_tests():
 	from frappe.utils.fixtures import sync_fixtures
 
 	ensure_roles()
+	ensure_email_accounts()
 	sync_fixtures("dhanada")
 	ensure_master_data()
 
@@ -24,6 +25,7 @@ def ensure_master_data():
 	"""
 	frappe.logger().info("Starting Dhanada bootstrap process...")
 	ensure_roles()
+	ensure_email_accounts()
 	ensure_lead_sources()
 	ensure_crm_sources()
 	ensure_sif_categories()
@@ -32,6 +34,34 @@ def ensure_master_data():
 	ensure_sif_desktop_icon()
 	ensure_knaps_crm_desktop_icon()
 	frappe.logger().info("Finished Dhanada bootstrap process.")
+
+
+def ensure_email_accounts():
+	"""
+	Ensure default outgoing Email Account ('Knaps Official') exists for tests and notifications.
+	"""
+	if not frappe.db.exists("DocType", "Email Account"):
+		return
+
+	if not frappe.db.exists("Email Account", "Knaps Official"):
+		try:
+			doc = frappe.get_doc(
+				{
+					"doctype": "Email Account",
+					"email_account_name": "Knaps Official",
+					"email_id": "advisor@knaps.in",
+					"enable_outgoing": 1,
+					"default_outgoing": 1,
+					"enable_incoming": 1,
+					"default_incoming": 1,
+				}
+			)
+			doc.flags.ignore_permissions = True
+			doc.flags.ignore_mandatory = True
+			doc.insert()
+			frappe.logger().info("Created default Email Account: Knaps Official")
+		except Exception as e:
+			frappe.logger().error(f"Failed to create Email Account 'Knaps Official': {e!s}")
 
 
 def ensure_roles():

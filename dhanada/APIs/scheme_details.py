@@ -252,7 +252,6 @@ def get_funds_list(
 			conditions &= (
 				Scheme.scheme_name.like(q)
 				| Scheme.amc.like(q)
-				| Scheme.category.like(q)
 				| Scheme.investment_strategy.like(q)
 				| Scheme.scheme_subcategory.like(q)
 			)
@@ -260,7 +259,7 @@ def get_funds_list(
 		cat_filter = category or strategy
 		if cat_filter and cat_filter.strip() and cat_filter.strip().lower() != "all":
 			target_cat = cat_filter.strip()
-			conditions &= (Scheme.category == target_cat) | (Scheme.investment_strategy == target_cat)
+			conditions &= Scheme.investment_strategy == target_cat
 
 		if subcategory and subcategory.strip() and subcategory.strip().lower() != "all":
 			conditions &= Scheme.scheme_subcategory == subcategory.strip()
