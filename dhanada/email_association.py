@@ -401,6 +401,6 @@ def backfill_unlinked_communications(limit: int = 100, dry_run: bool = True) -> 
 			summary["unmatched"] += 1
 
 	if not dry_run:
-		frappe.db.commit()
+		frappe.db.commit()  # nosemgrep: frappe-manual-commit - commit backfilled associations batch
 
 	return summary

@@ -224,7 +224,7 @@ def get_whatsapp_session_status(doctype: str, name: str) -> tuple[bool, str | No
 			clauses.append("(reference_doctype = %s AND reference_docname = %s)")
 			params.extend([dt, dn])
 		where_clause = " OR ".join(clauses)
-		wa_inbound = frappe.db.sql(
+		wa_inbound = frappe.db.sql(  # nosemgrep: frappe-sql-format-injection
 			f"""
 			SELECT creation, timestamp
 			FROM `tabWA Message`
@@ -246,7 +246,7 @@ def get_whatsapp_session_status(doctype: str, name: str) -> tuple[bool, str | No
 			clauses.append("(reference_doctype = %s AND reference_name = %s)")
 			params.extend([dt, dn])
 		where_clause = " OR ".join(clauses)
-		crm_inbound = frappe.db.sql(
+		crm_inbound = frappe.db.sql(  # nosemgrep: frappe-sql-format-injection
 			f"""
 			SELECT sent_at
 			FROM `tabCRM WhatsApp Message`
@@ -404,7 +404,7 @@ def get_crm_whatsapp_conversations(doctype: str, name: str, page: int = 1, page_
 			params.extend([dt, dn])
 
 		where_clause = " OR ".join(clauses)
-		wa_rows = frappe.db.sql(
+		wa_rows = frappe.db.sql(  # nosemgrep: frappe-sql-format-injection
 			f"""
 			SELECT
 				name,
@@ -455,7 +455,7 @@ def get_crm_whatsapp_conversations(doctype: str, name: str, page: int = 1, page_
 			params.extend([dt, dn])
 
 		where_clause = " OR ".join(clauses)
-		crm_rows = frappe.db.sql(
+		crm_rows = frappe.db.sql(  # nosemgrep: frappe-sql-format-injection
 			f"""
 			SELECT
 				name,

@@ -18,6 +18,10 @@ class TestCRMMigration(FrappeTestCase):
 	def setUp(self):
 		frappe.set_user("Administrator")
 
+	def _require_crm_lead(self):
+		if not frappe.db.exists("DocType", "CRM Lead"):
+			self.skipTest("CRM Lead DocType not present in database.")
+
 	def test_phone_normalization(self):
 		"""
 		Verify phone normalization handles +91, 91, 0, spaces, and dashes.
@@ -48,6 +52,7 @@ class TestCRMMigration(FrappeTestCase):
 		"""
 		Verify dry-run mode returns comprehensive simulation results with zero database changes.
 		"""
+		self._require_crm_lead()
 		lead_count_before = frappe.db.count("Lead")
 		crm_lead_count_before = frappe.db.count("CRM Lead")
 		source_count_before = frappe.db.count("Lead Source")
@@ -66,6 +71,7 @@ class TestCRMMigration(FrappeTestCase):
 		"""
 		Verify legacy CRM tables are never deleted or truncated during migration.
 		"""
+		self._require_crm_lead()
 		initial_crm_leads = frappe.db.count("CRM Lead")
 		initial_crm_sources = frappe.db.count("CRM Lead Source")
 
@@ -79,22 +85,53 @@ class TestCRMMigration(FrappeTestCase):
 		Verify that when a native Lead already exists with the same email,
 		the migration reconciles the legacy ID rather than creating a duplicate.
 		"""
+		self._require_crm_lead()
+		test_email = "crm-migration-test@example.com"
+		test_legacy_id = "CRM-LEAD-RECONCILE-01"
+
 		# Run migration in a savepoint transaction so test changes are rolled back
 		frappe.db.begin()
 		try:
-			# Satyam Raj (satyambpl.2004@gmail.com) exists as LEAD-2026-00004
-			existing = frappe.get_doc("Lead", {"email": "satyambpl.2004@gmail.com"})
+			# Ensure test fixtures exist cleanly for idempotent test execution
+			frappe.db.delete("Lead", {"email": test_email})
+			frappe.db.delete("CRM Lead", {"name": test_legacy_id})
+
+			frappe.get_doc(
+				{
+					"doctype": "Lead",
+					"lead_name": "CRM Migration Test",
+					"first_name": "CRM Migration",
+					"last_name": "Test",
+					"email": test_email,
+					"mobile_no": "9876543210",
+					"status": "New",
+				}
+			).insert(ignore_permissions=True)
+
+			frappe.get_doc(
+				{
+					"doctype": "CRM Lead",
+					"name": test_legacy_id,
+					"first_name": "CRM Migration",
+					"last_name": "Test",
+					"email": test_email,
+					"mobile_no": "9876543210",
+					"status": "New Lead",
+				}
+			).insert(ignore_permissions=True)
+
+			existing = frappe.get_doc("Lead", {"email": test_email})
 			self.assertIsNotNone(existing)
 
 			report = migrate_historical_crm_leads(dry_run=False, include_test_records=False)
 
-			# Assert that all 3 Satyam CRM leads were reconciled and not duplicated
+			# Assert that the synthetic legacy CRM lead was reconciled and not duplicated
 			self.assertGreaterEqual(len(report["reconciled"]), 1)
 			reconciled_ids = [r["legacy_id"] for r in report["reconciled"]]
-			self.assertIn("CRM-LEAD-2026-00407", reconciled_ids)
+			self.assertIn(test_legacy_id, reconciled_ids)
 
 			# Verify no duplicate Lead document was created
-			matching_leads = frappe.get_all("Lead", filters={"email": "satyambpl.2004@gmail.com"})
+			matching_leads = frappe.get_all("Lead", filters={"email": test_email})
 			self.assertEqual(len(matching_leads), 1, "Must not create duplicate Lead record")
 		finally:
 			frappe.db.rollback()
@@ -103,8 +140,23 @@ class TestCRMMigration(FrappeTestCase):
 		"""
 		Verify that rerunning the migration after records are already linked skips them safely.
 		"""
+		self._require_crm_lead()
 		frappe.db.begin()
 		try:
+			# Ensure at least one legacy CRM Lead exists to test idempotency
+			if not frappe.db.exists("CRM Lead", "CRM-LEAD-IDEMPOTENT-01"):
+				frappe.get_doc(
+					{
+						"doctype": "CRM Lead",
+						"name": "CRM-LEAD-IDEMPOTENT-01",
+						"first_name": "Idempotent",
+						"last_name": "Tester",
+						"email": "idempotent.test@example.com",
+						"mobile_no": "9876543299",
+						"status": "New Lead",
+					}
+				).insert(ignore_permissions=True)
+
 			# First run
 			migrate_historical_crm_leads(dry_run=False, include_test_records=False)
 
@@ -121,6 +173,7 @@ class TestCRMMigration(FrappeTestCase):
 		"""
 		Verify migration safely handles records with missing first_name, source, or phone.
 		"""
+		self._require_crm_lead()
 		frappe.db.begin()
 		try:
 			# Insert dummy legacy lead with missing name and unknown status

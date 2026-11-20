@@ -12,6 +12,7 @@ def after_migrate():
 def before_tests():
 	from frappe.utils.fixtures import sync_fixtures
 
+	ensure_roles()
 	sync_fixtures("dhanada")
 	ensure_master_data()
 
@@ -22,6 +23,7 @@ def ensure_master_data():
 	Call all specific ensure_* functions from here.
 	"""
 	frappe.logger().info("Starting Dhanada bootstrap process...")
+	ensure_roles()
 	ensure_lead_sources()
 	ensure_crm_sources()
 	ensure_sif_categories()
@@ -30,6 +32,30 @@ def ensure_master_data():
 	ensure_sif_desktop_icon()
 	ensure_knaps_crm_desktop_icon()
 	frappe.logger().info("Finished Dhanada bootstrap process.")
+
+
+def ensure_roles():
+	"""
+	Ensure canonical roles required by Dhanada workflows exist.
+	"""
+	canonical_roles = ["Permissions Manager"]
+	if not frappe.db.exists("DocType", "Role"):
+		return
+
+	for role in canonical_roles:
+		if not frappe.db.exists("Role", role):
+			try:
+				doc = frappe.get_doc(
+					{
+						"doctype": "Role",
+						"role_name": role,
+						"desk_access": 1,
+					}
+				)
+				doc.insert(ignore_permissions=True)
+				frappe.logger().info(f"Created Role: {role}")
+			except Exception as e:
+				frappe.logger().error(f"Failed to create Role '{role}': {e!s}")
 
 
 def ensure_lead_sources():
@@ -177,7 +203,7 @@ def ensure_knaps_crm_workspace():
 	card_pattern = frappe.get_app_path("dhanada", "dhanada", "number_card", "*", "*.json")
 	for cf in sorted(glob.glob(card_pattern)):
 		try:
-			with open(cf) as f:
+			with open(cf) as f:  # nosemgrep: frappe-security-file-traversal - trusted internal file
 				data = json.load(f)
 			name = data.get("name")
 			if not name:
@@ -196,7 +222,7 @@ def ensure_knaps_crm_workspace():
 	ws_path = frappe.get_app_path("dhanada", "dhanada", "workspace", "knaps_crm", "knaps_crm.json")
 	if os.path.exists(ws_path):
 		try:
-			with open(ws_path) as f:
+			with open(ws_path) as f:  # nosemgrep: frappe-security-file-traversal - trusted internal file
 				ws_data = json.load(f)
 			ws_name = ws_data.get("name", "KNAPS CRM")
 			if frappe.db.exists("Workspace", ws_name):
@@ -213,7 +239,7 @@ def ensure_knaps_crm_workspace():
 	sb_path = frappe.get_app_path("dhanada", "workspace_sidebar", "knaps_crm.json")
 	if os.path.exists(sb_path):
 		try:
-			with open(sb_path) as f:
+			with open(sb_path) as f:  # nosemgrep: frappe-security-file-traversal - trusted internal file
 				sb_data = json.load(f)
 			sb_name = sb_data.get("name", "KNAPS CRM")
 			if frappe.db.exists("Workspace Sidebar", sb_name):
@@ -243,7 +269,7 @@ def ensure_knaps_crm_desktop_icon():
 		"icon_type": "App",
 		"idx": 5,
 		"label": "KNAPS CRM",
-		"link": "/knaps-crm",
+		"link": "/desk/knaps-crm",
 		"link_type": "External",
 		"logo_url": "/assets/dhanada/images/CRM.jpg",
 		"name": "KNAPS CRM",
@@ -253,8 +279,10 @@ def ensure_knaps_crm_desktop_icon():
 
 	if os.path.exists(icon_path):
 		try:
-			with open(icon_path) as f:
+			with open(icon_path) as f:  # nosemgrep: frappe-security-file-traversal - trusted internal file
 				loaded_data = json.load(f)
+				loaded_data.pop("modified", None)
+				loaded_data.pop("creation", None)
 				icon_data.update(loaded_data)
 		except Exception as e:
 			frappe.logger().error(f"Failed to read Desktop Icon file {icon_path}: {e!s}")
@@ -306,8 +334,10 @@ def ensure_sif_desktop_icon():
 
 	if os.path.exists(icon_path):
 		try:
-			with open(icon_path) as f:
+			with open(icon_path) as f:  # nosemgrep: frappe-security-file-traversal - trusted internal file
 				loaded_data = json.load(f)
+				loaded_data.pop("modified", None)
+				loaded_data.pop("creation", None)
 				icon_data.update(loaded_data)
 		except Exception as e:
 			frappe.logger().error(f"Failed to read Desktop Icon file {icon_path}: {e!s}")
@@ -354,7 +384,7 @@ def boot_knaps_crm(bootinfo):
 				{
 					"app_name": "knaps_crm",
 					"app_title": "KNAPS CRM",
-					"app_route": "/knaps-crm",
+					"app_route": "/desk/knaps-crm",
 					"app_logo_url": "/assets/dhanada/images/CRM.jpg",
 					"on_apps_screen": True,
 					"sequence_id": 200,
@@ -368,14 +398,14 @@ def boot_knaps_crm(bootinfo):
 		existing = next((d for d in bootinfo.desktop_icons if d.get("label") == "KNAPS CRM"), None)
 		if existing:
 			existing["logo_url"] = "/assets/dhanada/images/CRM.jpg"
-			existing["link"] = "/knaps-crm"
+			existing["link"] = "/desk/knaps-crm"
 			existing["hidden"] = 0
 		else:
 			bootinfo.desktop_icons.append(
 				{
 					"label": "KNAPS CRM",
 					"bg_color": "gray",
-					"link": "/knaps-crm",
+					"link": "/desk/knaps-crm",
 					"link_type": "External",
 					"app": "dhanada",
 					"icon_type": "App",

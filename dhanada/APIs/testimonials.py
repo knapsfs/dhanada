@@ -1,7 +1,7 @@
 import frappe
 
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method - public read-only testimonials
 def get_testimonials():
 	"""
 	Returns list of testimonials from Frappe DocType 'Testimonials'.

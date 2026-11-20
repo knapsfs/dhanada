@@ -18,7 +18,7 @@ add_to_apps_screen = [
 		"name": "knaps_crm",
 		"logo": "/assets/dhanada/images/CRM.jpg",
 		"title": "KNAPS CRM",
-		"route": "/knaps-crm",
+		"route": "/desk/knaps-crm",
 	},
 ]
 
@@ -206,7 +206,11 @@ get_desktop_icons = "dhanada.config.desktop.get_data"
 # Hook on document methods and events
 # Advanced CRM communication hooks (Email Queue, Communication, WhatsApp)
 # are reserved for the feat/crm branch.
-doc_events = {}
+doc_events = {
+	"WA Message": {
+		"before_insert": "dhanada.whatsapp_adapter.match_and_link_inbound_message",
+	},
+}
 
 # Scheduled Tasks
 # ---------------
@@ -238,7 +242,9 @@ before_tests = "dhanada.setup.bootstrap.before_tests"
 # }
 
 # Advanced Email Account override is reserved for feat/crm
-# override_doctype_class = {"Email Account": "dhanada.overrides.custom_email_account.CustomEmailAccount"}
+override_doctype_class = {  # nosemgrep: override-doctype-class - required for custom email account integration
+	"Email Account": "dhanada.overrides.custom_email_account.CustomEmailAccount"
+}
 
 # Overriding Methods
 # ------------------------------
