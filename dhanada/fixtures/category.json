@@ -1,0 +1,24 @@
+[
+ {
+  "category_name": "Equity",
+  "docstatus": 0,
+  "doctype": "Category",
+  "modified": "2026-11-18 14:00:00.000000",
+  "name": "Equity"
+ },
+ {
+  "category_name": "Hybrid",
+  "docstatus": 0,
+  "doctype": "Category",
+  "modified": "2026-11-18 14:00:00.000000",
+  "name": "Hybrid"
+ },
+ {
+  "category_name": "Debt",
+  "docstatus": 0,
+  "doctype": "Category",
+  "modified": "2026-11-18 14:00:00.000000",
+  "name": "Debt"
+ }
+]
+

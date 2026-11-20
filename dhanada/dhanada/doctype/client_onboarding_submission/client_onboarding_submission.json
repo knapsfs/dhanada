@@ -1,0 +1,502 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "COS-.YYYY.-.#####",
+ "creation": "2026-10-15 14:00:00.000000",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "lead",
+  "token",
+  "status",
+  "submitted_on",
+  "column_break_meta",
+  "client_type",
+  "full_name",
+  "first_name",
+  "last_name",
+  "salutation",
+  "contact_section",
+  "email",
+  "mobile_no",
+  "alternate_mobile_no",
+  "column_break_contact",
+  "pan",
+  "pan_verification_status",
+  "kyc_status",
+  "dob",
+  "gender",
+  "address_section",
+  "address_line1",
+  "address_line2",
+  "city",
+  "column_break_address",
+  "state",
+  "pincode",
+  "country",
+  "investment_section",
+  "investor_category",
+  "investment_horizon",
+  "column_break_inv",
+  "investment_experience",
+  "investment_capacity",
+  "investment_objectives",
+  "system_section",
+  "verified_on",
+  "ip_address",
+  "client",
+  "workflow_type",
+  "income_slab",
+  "place_of_birth",
+  "occupation",
+  "nominee_section",
+  "nominee_name",
+  "nominee_relationship",
+  "nominee_dob",
+  "is_nominee_minor",
+  "statement_name",
+  "column_break_nominee",
+  "nominee_id_type",
+  "nominee_id_number",
+  "nominee_mobile",
+  "nominee_email",
+  "nominee_address",
+  "guardian_section",
+  "guardian_name",
+  "guardian_relationship",
+  "guardian_pan",
+  "bank_section",
+  "bank_entry_method",
+  "bank_name",
+  "bank_account_no",
+  "bank_ifsc",
+  "bank_proof_file",
+  "submission_json"
+ ],
+ "fields": [
+  {
+   "fieldname": "lead",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Lead",
+   "options": "Lead",
+   "reqd": 0
+  },
+  {
+   "fieldname": "token",
+   "fieldtype": "Data",
+   "label": "Secure Token",
+   "read_only": 1,
+   "reqd": 1,
+   "search_index": 1,
+   "unique": 1
+  },
+  {
+   "default": "Draft",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Draft\nSubmitted\nVerified\nRejected",
+   "reqd": 1
+  },
+  {
+   "fieldname": "submitted_on",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Submitted On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_meta",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Individual",
+   "fieldname": "client_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Client Type",
+   "options": "Individual\nOrganization\nFamily",
+   "reqd": 1
+  },
+  {
+   "fieldname": "full_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Full Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "first_name",
+   "fieldtype": "Data",
+   "label": "First Name"
+  },
+  {
+   "fieldname": "last_name",
+   "fieldtype": "Data",
+   "label": "Last Name"
+  },
+  {
+   "fieldname": "salutation",
+   "fieldtype": "Select",
+   "label": "Salutation",
+   "options": "\nMr\nMrs\nMs\nDr"
+  },
+  {
+   "fieldname": "contact_section",
+   "fieldtype": "Section Break",
+   "label": "Contact & Identification"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "mobile_no",
+   "fieldtype": "Data",
+   "label": "Mobile No",
+   "options": "Phone"
+  },
+  {
+   "fieldname": "alternate_mobile_no",
+   "fieldtype": "Data",
+   "label": "Alternate Mobile No",
+   "options": "Phone"
+  },
+  {
+   "fieldname": "column_break_contact",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "pan",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "PAN",
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "default": "Pending",
+   "fieldname": "pan_verification_status",
+   "fieldtype": "Select",
+   "label": "PAN Verification Status",
+   "options": "Pending\nVerified\nFailed"
+  },
+  {
+   "default": "In Progress",
+   "fieldname": "kyc_status",
+   "fieldtype": "Select",
+   "label": "KYC Status",
+   "options": "Pending\nIn Progress\nVerified\nFailed"
+  },
+  {
+   "fieldname": "dob",
+   "fieldtype": "Date",
+   "label": "Date of Birth"
+  },
+  {
+   "fieldname": "gender",
+   "fieldtype": "Select",
+   "label": "Gender",
+   "options": "\nMale\nFemale\nOther"
+  },
+  {
+   "fieldname": "address_section",
+   "fieldtype": "Section Break",
+   "label": "Address Details"
+  },
+  {
+   "fieldname": "address_line1",
+   "fieldtype": "Data",
+   "label": "Address Line 1"
+  },
+  {
+   "fieldname": "address_line2",
+   "fieldtype": "Data",
+   "label": "Address Line 2"
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Data",
+   "label": "City"
+  },
+  {
+   "fieldname": "column_break_address",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "state",
+   "fieldtype": "Data",
+   "label": "State"
+  },
+  {
+   "fieldname": "pincode",
+   "fieldtype": "Data",
+   "label": "Pincode"
+  },
+  {
+   "default": "India",
+   "fieldname": "country",
+   "fieldtype": "Link",
+   "label": "Country",
+   "options": "Country"
+  },
+  {
+   "fieldname": "investment_section",
+   "fieldtype": "Section Break",
+   "label": "Investment Profile"
+  },
+  {
+   "default": "Retail",
+   "fieldname": "investor_category",
+   "fieldtype": "Select",
+   "label": "Investor Category",
+   "options": "Retail\nHNI\nUltra HNI\nCorporate\nInstitutional"
+  },
+  {
+   "fieldname": "investment_horizon",
+   "fieldtype": "Select",
+   "label": "Investment Horizon",
+   "options": "\nShort Term (< 1 Year)\nMedium Term (1-3 Years)\nLong Term (3-5 Years)\nVery Long Term (5+ Years)"
+  },
+  {
+   "fieldname": "column_break_inv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "investment_experience",
+   "fieldtype": "Select",
+   "label": "Investment Experience",
+   "options": "\nBeginner (< 1 Year)\nIntermediate (1-5 Years)\nExperienced (5+ Years)"
+  },
+  {
+   "fieldname": "investment_capacity",
+   "fieldtype": "Select",
+   "label": "Investment Capacity",
+   "options": "\nBelow 10 Lakhs\n10-25 Lakhs\n25-50 Lakhs\n50 Lakhs - 1 Crore\nAbove 1 Crore"
+  },
+  {
+   "fieldname": "investment_objectives",
+   "fieldtype": "Small Text",
+   "label": "Investment Objectives"
+  },
+  {
+   "fieldname": "system_section",
+   "fieldtype": "Section Break",
+   "label": "Verification & System"
+  },
+  {
+   "fieldname": "verified_on",
+   "fieldtype": "Datetime",
+   "label": "Verified On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ip_address",
+   "fieldtype": "Data",
+   "label": "IP Address",
+   "read_only": 1
+  },
+  {
+   "fieldname": "client",
+   "fieldtype": "Link",
+   "label": "Client",
+   "options": "Client"
+  },
+  {
+   "fieldname": "workflow_type",
+   "fieldtype": "Select",
+   "label": "Workflow Type",
+   "options": "client_onboarding\ncombined_onboarding",
+   "default": "client_onboarding"
+  },
+  {
+   "fieldname": "income_slab",
+   "fieldtype": "Data",
+   "label": "Income Slab"
+  },
+  {
+   "fieldname": "place_of_birth",
+   "fieldtype": "Data",
+   "label": "Place of Birth (City)"
+  },
+  {
+   "fieldname": "occupation",
+   "fieldtype": "Data",
+   "label": "Occupation"
+  },
+  {
+   "fieldname": "nominee_section",
+   "fieldtype": "Section Break",
+   "label": "Nominee Details"
+  },
+  {
+   "fieldname": "nominee_name",
+   "fieldtype": "Data",
+   "label": "Nominee Name"
+  },
+  {
+   "fieldname": "nominee_relationship",
+   "fieldtype": "Data",
+   "label": "Nominee Relationship"
+  },
+  {
+   "fieldname": "nominee_dob",
+   "fieldtype": "Date",
+   "label": "Nominee Date of Birth"
+  },
+  {
+   "fieldname": "is_nominee_minor",
+   "fieldtype": "Check",
+   "label": "Is Nominee Minor"
+  },
+  {
+   "fieldname": "statement_name",
+   "fieldtype": "Data",
+   "label": "Name on Statement"
+  },
+  {
+   "fieldname": "column_break_nominee",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "nominee_id_type",
+   "fieldtype": "Data",
+   "label": "Nominee ID Type"
+  },
+  {
+   "fieldname": "nominee_id_number",
+   "fieldtype": "Data",
+   "label": "Nominee ID Number"
+  },
+  {
+   "fieldname": "nominee_mobile",
+   "fieldtype": "Data",
+   "label": "Nominee Mobile"
+  },
+  {
+   "fieldname": "nominee_email",
+   "fieldtype": "Data",
+   "label": "Nominee Email"
+  },
+  {
+   "fieldname": "nominee_address",
+   "fieldtype": "Small Text",
+   "label": "Nominee Address"
+  },
+  {
+   "fieldname": "guardian_section",
+   "fieldtype": "Section Break",
+   "label": "Guardian Details (if Nominee is Minor)"
+  },
+  {
+   "fieldname": "guardian_name",
+   "fieldtype": "Data",
+   "label": "Guardian Name"
+  },
+  {
+   "fieldname": "guardian_relationship",
+   "fieldtype": "Data",
+   "label": "Guardian Relationship"
+  },
+  {
+   "fieldname": "guardian_pan",
+   "fieldtype": "Data",
+   "label": "Guardian PAN / ID"
+  },
+  {
+   "fieldname": "bank_section",
+   "fieldtype": "Section Break",
+   "label": "Bank Details"
+  },
+  {
+   "fieldname": "bank_entry_method",
+   "fieldtype": "Select",
+   "label": "Bank Entry Method",
+   "options": "Manual\nUpload",
+   "default": "Manual"
+  },
+  {
+   "fieldname": "bank_name",
+   "fieldtype": "Data",
+   "label": "Bank Name"
+  },
+  {
+   "fieldname": "bank_account_no",
+   "fieldtype": "Data",
+   "label": "Bank Account Number"
+  },
+  {
+   "fieldname": "bank_ifsc",
+   "fieldtype": "Data",
+   "label": "Bank IFSC Code"
+  },
+  {
+   "fieldname": "bank_proof_file",
+   "fieldtype": "Attach",
+   "label": "Bank Proof File"
+  },
+  {
+   "fieldname": "submission_json",
+   "fieldtype": "Code",
+   "label": "Full Submission JSON",
+   "options": "JSON"
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-15 14:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Dhanada",
+ "name": "Client Onboarding Submission",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 0,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 0,
+   "email": 0,
+   "export": 0,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales User",
+   "share": 0,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
