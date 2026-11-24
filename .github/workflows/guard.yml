@@ -1,0 +1,33 @@
+name: Guard
+
+# GitHub rulesets cannot express "a PR to main must come from develop".
+# This check does. It uses pull_request_target so a PR cannot edit the guard
+# in its own branch to make itself pass.
+
+on:
+  pull_request_target:
+    branches: [main]
+
+permissions:
+  pull-requests: read
+
+jobs:
+  source:
+    name: guard-source
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Only develop, release/*, or hotfix/* may target main
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          set -euo pipefail
+          case "$HEAD_REF" in
+            develop|release/*|hotfix/*)
+              echo "ok: $HEAD_REF may target main"
+              ;;
+            *)
+              echo "::error::PRs into main must come from develop (or release/*, hotfix/*). Got '$HEAD_REF'."
+              exit 1
+              ;;
+          esac
