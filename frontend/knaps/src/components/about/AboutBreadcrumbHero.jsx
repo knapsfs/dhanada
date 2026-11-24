@@ -27,7 +27,7 @@ export default function AboutBreadcrumbHero() {
             </h1>
 
             {/* Breadcrumb Navigation */}
-            <div className="flex items-center gap-3 text-[15px] font-medium text-gray-500">
+            <div className="flex items-center gap-3 text-sm font-medium text-gray-500">
               <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
               <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
               <span className="text-[#032e92]">About Us</span>

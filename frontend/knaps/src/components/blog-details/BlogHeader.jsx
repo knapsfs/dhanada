@@ -79,7 +79,7 @@ export default function BlogHeader({ blog }) {
           className="text-center"
         >
           {/* Category Pill */}
-          <div className="inline-flex items-center gap-2 bg-[#eef5ff] text-[#032e92] font-bold text-xs px-4 py-1.5 rounded-full uppercase tracking-wider mb-6 border border-blue-100 shadow-sm">
+          <div className="inline-flex items-center gap-2 bg-[#eef5ff] text-[#032e92] font-bold text-xs px-4 py-1.5 rounded-full uppercase mb-6 border border-blue-100 shadow-sm">
             <span className="w-1.5 h-1.5 rounded-full bg-[#032e92]"></span>
             <span>{blog?.category || 'Mutual Funds'}</span>
           </div>
@@ -136,7 +136,7 @@ export default function BlogHeader({ blog }) {
 
             {/* Social Share Buttons */}
             <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider mr-1 flex items-center gap-1">
+              <span className="text-xs font-semibold text-gray-400 uppercase mr-1 flex items-center gap-1">
                 <FontAwesomeIcon icon={faShareNodes} /> Share:
               </span>
               <a

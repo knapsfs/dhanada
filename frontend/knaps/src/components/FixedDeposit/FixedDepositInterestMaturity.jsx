@@ -91,7 +91,7 @@ export default function FixedDepositInterestMaturity() {
         <div className="overflow-x-auto rounded-3xl border border-gray-200/90 shadow-md bg-white">
           <table className="w-full text-left border-collapse min-w-[640px]">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-200 text-gray-600 text-xs uppercase font-bold tracking-wider">
+              <tr className="bg-gray-50 border-b border-gray-200 text-gray-600 text-xs uppercase font-bold">
                 <th className="py-3.5 px-5">Instrument</th>
                 <th className="py-3.5 px-5">Category</th>
                 <th className="py-3.5 px-5">Tenure</th>

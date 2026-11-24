@@ -120,7 +120,7 @@ export default function QuizQuestion({
               </div>
 
               <div className="mb-1.5 text-xs">
-                <span className="font-black text-gray-600 uppercase tracking-wider">
+                <span className="font-black text-gray-600 uppercase">
                   Correct Answer:
                 </span>
                 <span className={`ml-1.5 font-black text-gray-600 uppercase`}>

@@ -8,7 +8,7 @@ import AboutTimeline from '../components/about/AboutTimeline';
 import AboutWhyTrust from '../components/about/AboutWhyTrust';
 import AboutLeadership from '../components/about/AboutLeadership';
 import Stats from '../components/Stats';
-import CTA from '../components/CTA';
+import AboutCTA from '../components/about/AboutCTA';
 
 export default function AboutUs() {
   return (
@@ -35,7 +35,7 @@ export default function AboutUs() {
         <AboutTimeline />
         <AboutWhyTrust />
         <Stats className="pt-8 pb-16 sm:pt-10 sm:pb-20" />
-        <CTA />
+        <AboutCTA />
       </main>
 
       <Footer />

@@ -75,16 +75,14 @@ export default function NpsCalculator() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          {/* <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#032e92]/10 border border-[#032e92]/20 text-[#032e92] text-xs font-semibold uppercase tracking-wider mb-4">
+          {/* <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#032e92]/10 border border-[#032e92]/20 text-[#032e92] text-xs font-semibold uppercase mb-4">
             <FontAwesomeIcon icon={faCalculator} />
             <span>Retirement Forecaster</span>
           </div> */}
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#032e92] tracking-tight mb-4">
-            Interactive NPS Retirement Calculator
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-slate-900 tracking-tight mb-4">
+            Interactive NPS <span class="text-[#032e92]">Retirement Calculator</span>
           </h2>
-          <p className="text-base sm:text-lg text-slate-600">
-            Project your multi-decade retirement corpus, 60% tax-free lump-sum exit, and lifelong monthly pension based on customizable contribution and return assumptions.
-          </p>
+
         </div>
 
         {/* Calculator Main Grid */}
@@ -119,7 +117,7 @@ export default function NpsCalculator() {
                   />
                   <div className="flex justify-between text-[11px] text-slate-400">
                     <span>18 Yrs</span>
-                    <span>40 Yrs</span>
+
                     <span>65 Yrs</span>
                   </div>
                 </div>
@@ -145,7 +143,7 @@ export default function NpsCalculator() {
                   />
                   <div className="flex justify-between text-[11px] text-slate-400">
                     <span>55 Yrs</span>
-                    <span>60 Yrs</span>
+
                     <span>75 Yrs</span>
                   </div>
                 </div>
@@ -184,8 +182,7 @@ export default function NpsCalculator() {
                 />
                 <div className="flex justify-between text-[11px] text-slate-400">
                   <span>₹1,000</span>
-                  <span>₹25,000</span>
-                  <span>₹75,000</span>
+
                   <span>₹1,50,000</span>
                 </div>
               </div>
@@ -223,7 +220,7 @@ export default function NpsCalculator() {
                 />
                 <div className="flex justify-between text-[11px] text-slate-400">
                   <span>6.0% (Conservative)</span>
-                  <span>10.0% (Moderate)</span>
+
                   <span>15.0% (Aggressive)</span>
                 </div>
               </div>
@@ -249,7 +246,7 @@ export default function NpsCalculator() {
                   />
                   <div className="flex justify-between text-[10px] text-slate-400">
                     <span>40% (Min)</span>
-                    <span>60%</span>
+
                     <span>100%</span>
                   </div>
                 </div>
@@ -273,7 +270,7 @@ export default function NpsCalculator() {
                   />
                   <div className="flex justify-between text-[10px] text-slate-400">
                     <span>5.0%</span>
-                    <span>6.0% (Average)</span>
+
                     <span>8.0%</span>
                   </div>
                 </div>
@@ -284,7 +281,7 @@ export default function NpsCalculator() {
             <div className="lg:col-span-5 flex flex-col justify-between">
               <div className="bg-gradient-to-br from-[#032e92] via-[#021d63] to-[#0a192f] text-white rounded-3xl p-7 sm:p-8 shadow-2xl border border-blue-900/50 space-y-6">
                 <div>
-                  <div className="text-xs text-blue-200 uppercase tracking-wider font-semibold mb-1">
+                  <div className="text-xs text-blue-200 uppercase font-semibold mb-1">
                     Total Estimated Corpus at Age {retirementAge}
                   </div>
                   <div className="text-3xl sm:text-4xl font-black tracking-tight text-white">
@@ -339,7 +336,7 @@ export default function NpsCalculator() {
 
                 {/* Monthly Pension Highlight Box */}
                 <div className="p-4 rounded-2xl bg-blue-950/70 border border-emerald-500/30 text-center">
-                  <span className="text-xs font-semibold text-emerald-300 uppercase tracking-wider block mb-0.5">
+                  <span className="text-xs font-semibold text-emerald-300 uppercase block mb-0.5">
                     Estimated Monthly Pension for Life
                   </span>
                   <div className="text-2xl sm:text-3xl font-black text-emerald-400">
@@ -361,12 +358,7 @@ export default function NpsCalculator() {
                   className="w-full py-3.5 rounded-xl text-sm font-semibold bg-white text-[#032e92] hover:bg-blue-50 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md"
                 >
                   <span>Explore NPS Strategy for This Plan</span>
-                  <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
                 </button>
-
-                <p className="text-[10px] text-blue-200/70 text-center leading-relaxed">
-                  * Disclaimer: Projections are illustrative calculations based on user-provided return and annuity assumptions. Market-linked returns are not guaranteed. Actual retirement corpus and pension depend on PFM performance, prevailing ASP annuity rates, and regulatory guidelines at exit.
-                </p>
               </div>
             </div>
           </div>

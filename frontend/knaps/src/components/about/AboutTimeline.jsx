@@ -44,11 +44,11 @@ export default function AboutTimeline() {
   ];
 
   return (
-    <section className="py-14 sm:py-20 bg-[#f8fafc] relative overflow-hidden border-t border-b border-gray-100">
+    <section className="py-12 sm:py-16 bg-[#f8fafc] relative overflow-hidden border-t border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
           <motion.h2
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -77,7 +77,7 @@ export default function AboutTimeline() {
           <div className="absolute left-6 md:left-1/2 top-4 bottom-4 -translate-x-1/2 w-[3px] bg-gray-200 rounded-full" />
 
           {/* Milestones Items */}
-          <div className="space-y-8 sm:space-y-12">
+          <div className="space-y-4 sm:space-y-6">
             {milestones.map((item, idx) => {
               const isEven = idx % 2 === 0; // Even items on left on desktop, odd on right
 
@@ -98,7 +98,7 @@ export default function AboutTimeline() {
                       }`}
                   >
                     {/* The Milestone Card */}
-                    <div className="relative bg-white rounded-xl sm:rounded-2xl border border-gray-200/80 shadow-sm hover:shadow-md hover:border-[#032e92]/30 transition-all duration-300 p-5 sm:p-6 overflow-hidden group">
+                    <div className="relative bg-white rounded-xl sm:rounded-2xl border border-gray-200/80 shadow-sm hover:shadow-md hover:border-[#032e92]/30 transition-all duration-300 p-4 sm:p-5 overflow-hidden group">
 
                       {/* Desktop pointer for Left card (points right toward center line) */}
                       {isEven ? (
@@ -118,7 +118,7 @@ export default function AboutTimeline() {
                       />
 
                       {/* Year & Icon Row above Title */}
-                      <div className="flex items-center justify-between gap-3 mb-2.5">
+                      <div className="flex items-center justify-between gap-3 mb-2">
                         <span className="text-xl sm:text-2xl font-bold text-[#032e92] tracking-tight">
                           {item.year}
                         </span>

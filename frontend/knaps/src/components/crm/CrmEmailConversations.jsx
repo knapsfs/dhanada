@@ -77,7 +77,7 @@ function EmailCard({ email, onReply }) {
           <div className="min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
               <span
-                className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${
+                className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
                   isSent
                     ? "bg-blue-50 text-[#032e92] border border-blue-200/60"
                     : "bg-emerald-50 text-emerald-700 border border-emerald-200/60"
@@ -415,7 +415,7 @@ export default function CrmEmailConversations({
       <div className="flex items-center justify-between gap-3 pb-2 border-b border-gray-100 flex-wrap">
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-[#032e92]" />
-          <h3 className="text-xs font-bold text-gray-800 uppercase tracking-wider">
+          <h3 className="text-xs font-bold text-gray-800 uppercase">
             Email Communications
           </h3>
           <span className="text-[11px] font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">

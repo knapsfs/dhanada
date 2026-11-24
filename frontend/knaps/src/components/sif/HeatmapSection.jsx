@@ -249,7 +249,7 @@ export default function HeatmapSection() {
             <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6 lg:gap-10 pb-2 w-full">
               {/* 1. INVESTMENT STRATEGY */}
               <div className="flex flex-col gap-2.5 flex-shrink-0">
-                <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+                <span className="text-[11px] font-bold text-gray-400 uppercase">
                   Investment Strategy
                 </span>
                 <div className="flex flex-wrap items-center gap-2">
@@ -272,7 +272,7 @@ export default function HeatmapSection() {
               {/* 2. SUBCATEGORY (Scheme Subcategories) */}
               {currentStrategyData && currentStrategyData.subCategories.length > 0 && (
                 <div className="flex flex-col gap-2.5 lg:border-l lg:border-gray-100 lg:pl-10 flex-1">
-                  <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+                  <span className="text-[11px] font-bold text-gray-400 uppercase">
                     Subcategory
                   </span>
                   <div className="flex flex-wrap items-center gap-2">

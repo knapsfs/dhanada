@@ -467,7 +467,7 @@ export default function SifFundDetails() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16">
         {/* Breadcrumbs */}
-        <div className="flex items-center gap-2 text-xs font-medium text-gray-400 mb-6">
+        <div className="flex items-center gap-2 text-sm font-medium text-gray-500 mb-6">
           <Link to="/" className="hover:text-gray-700 transition-colors">Home</Link>
           <FontAwesomeIcon icon={faArrowRight} className="text-[9px]" />
           <Link to="/sif" className="hover:text-gray-700 transition-colors">SIF</Link>
@@ -494,7 +494,7 @@ export default function SifFundDetails() {
                   <circle cx="65" cy="55" r="28" fill="#c2a649" filter="blur(7px)" />
                   <path d="M 20 50 Q 50 15 80 50 T 20 50" fill="#eed994" filter="blur(4px)" />
                 </svg>
-                <span className="absolute font-black text-amber-900/60 text-lg tracking-wider select-none">
+                <span className="absolute font-black text-amber-900/60 text-lg select-none">
                   {fund.name.charAt(0)}
                 </span>
               </div>
@@ -531,7 +531,7 @@ export default function SifFundDetails() {
                     exit={{ opacity: 0, y: 5 }}
                     className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 p-2 z-30 space-y-1"
                   >
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 px-3 py-1">Select Plan</p>
+                    <p className="text-[10px] font-bold uppercase text-gray-400 px-3 py-1">Select Plan</p>
                     {availablePlans.map((p, idx) => (
                       <button
                         key={idx}
@@ -615,7 +615,7 @@ export default function SifFundDetails() {
                   <button
                     type="button"
                     onClick={() => openLeadModal(fund.name)}
-                    className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center gap-2 cursor-pointer"
+                    className="btn-ripple px-6 py-3 rounded-xl text-md font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center gap-2 cursor-pointer"
                   >
                     Invest Now
                   </button>

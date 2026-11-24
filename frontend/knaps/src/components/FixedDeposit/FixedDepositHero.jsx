@@ -46,7 +46,7 @@ export default function FixedDepositHero() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Breadcrumb Navigation */}
-        <div className="flex items-center pb-4 sm:pb-5 gap-3 text-[15px] font-medium text-gray-500">
+        <div className="flex items-center pb-4 sm:pb-5 gap-3 text-sm font-medium text-gray-500">
           <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
           <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
           <Link to="/products" className="hover:text-[#032e92] transition-colors">Products</Link>
@@ -82,7 +82,7 @@ export default function FixedDepositHero() {
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-4">
               <button
                 onClick={() => openLeadModal({ title: "Explore Fixed Income Options", defaultService: "Fixed Income Products" })}
-                className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer"
+                className="btn-ripple px-6 py-3 rounded-xl text-md font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer"
               >
                 <span>Invest in Fixed Income</span>
               </button>
@@ -121,7 +121,7 @@ export default function FixedDepositHero() {
                 <div className="p-3.5 rounded-2xl bg-blue-50/50 border border-blue-100/60">
                   <div className="flex items-center gap-2 text-[#032e92] mb-1">
                     <FontAwesomeIcon icon={faBuildingColumns} className="text-xs" />
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-500">Bank & Corp FDs</span>
+                    <span className="text-[11px] font-semibold uppercase text-gray-500">Bank & Corp FDs</span>
                   </div>
                   <div className="text-lg font-extrabold text-[#0a192f]">Up to 8.60%</div>
                   <p className="text-[11px] text-gray-600 leading-tight">High liquidity & senior perks</p>
@@ -130,7 +130,7 @@ export default function FixedDepositHero() {
                 <div className="p-3.5 rounded-2xl bg-emerald-50/50 border border-emerald-100/60">
                   <div className="flex items-center gap-2 text-emerald-700 mb-1">
                     <FontAwesomeIcon icon={faLandmark} className="text-xs" />
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-500">GoI FRSB Bonds</span>
+                    <span className="text-[11px] font-semibold uppercase text-gray-500">GoI FRSB Bonds</span>
                   </div>
                   <div className="text-lg font-extrabold text-[#0a192f]">8.05% p.a.</div>
                   <p className="text-[11px] text-gray-600 leading-tight">100% Sovereign backing</p>
@@ -139,7 +139,7 @@ export default function FixedDepositHero() {
                 <div className="p-3.5 rounded-2xl bg-indigo-50/50 border border-indigo-100/60">
                   <div className="flex items-center gap-2 text-indigo-700 mb-1">
                     <FontAwesomeIcon icon={faShieldHalved} className="text-xs" />
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-500">Safety Net</span>
+                    <span className="text-[11px] font-semibold uppercase text-gray-500">Safety Net</span>
                   </div>
                   <div className="text-lg font-extrabold text-[#0a192f]">Sovereign / DICGC</div>
                   <p className="text-[11px] text-gray-600 leading-tight">Zero default credit rating</p>
@@ -148,7 +148,7 @@ export default function FixedDepositHero() {
                 <div className="p-3.5 rounded-2xl bg-amber-50/50 border border-amber-100/60">
                   <div className="flex items-center gap-2 text-amber-700 mb-1">
                     <FontAwesomeIcon icon={faHandHoldingDollar} className="text-xs" />
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-500">Payout Modes</span>
+                    <span className="text-[11px] font-semibold uppercase text-gray-500">Payout Modes</span>
                   </div>
                   <div className="text-lg font-extrabold text-[#0a192f]">Flexible</div>
                   <p className="text-[11px] text-gray-600 leading-tight">Monthly, Semi-Annual, Cumulative</p>
@@ -158,7 +158,7 @@ export default function FixedDepositHero() {
               {/* Informative Highlights Box */}
               <div className="p-4 rounded-2xl bg-gradient-to-br from-[#0a192f] to-[#021d63] text-white shadow-md space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-blue-300">The Power of Fixed Income</span>
+                  <span className="text-xs font-bold uppercase text-blue-300">The Power of Fixed Income</span>
                   <span className="text-xs font-semibold px-2 py-0.5 rounded bg-blue-500/20 text-blue-200 border border-blue-400/30">
                     Dual Protection
                   </span>

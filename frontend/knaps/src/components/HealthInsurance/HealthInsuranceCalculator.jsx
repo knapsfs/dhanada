@@ -120,7 +120,7 @@ export default function HealthInsuranceCalculator() {
           <div className="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 lg:p-10 border border-gray-200/90 shadow-lg space-y-6">
             {/* Input 1: Family Composition */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-3 flex items-center justify-between">
+              <label className="block text-xs font-bold uppercase text-gray-500 mb-3 flex items-center justify-between">
                 <span>Who Do You Want to Cover?</span>
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
@@ -148,7 +148,7 @@ export default function HealthInsuranceCalculator() {
             {/* Input 2: Age of Eldest Member */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-bold uppercase tracking-wider text-gray-500">
+                <label className="text-xs font-bold uppercase text-gray-500">
                   Age of Eldest Covered Member
                 </label>
                 <span className="text-base font-bold text-[#032e92] bg-blue-50 px-3 py-0.5 rounded-lg border border-blue-100">
@@ -173,7 +173,7 @@ export default function HealthInsuranceCalculator() {
 
             {/* Input 3: City Tier */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2.5">
+              <label className="block text-xs font-bold uppercase text-gray-500 mb-2.5">
                 City of Residence (Hospital Cost Tier)
               </label>
               <div className="grid grid-cols-2 gap-3">
@@ -203,7 +203,7 @@ export default function HealthInsuranceCalculator() {
 
             {/* Input 4: Existing Employer / Corporate Cover */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2.5">
+              <label className="block text-xs font-bold uppercase text-gray-500 mb-2.5">
                 Existing Employer / Corporate Health Cover
               </label>
               <div className="grid grid-cols-4 gap-2">
@@ -262,7 +262,7 @@ export default function HealthInsuranceCalculator() {
 
               {/* Headline Sum Insured */}
               <div className="space-y-1">
-                <span className="text-xs font-medium text-blue-200 uppercase tracking-wider">Total Recommended Safety Net</span>
+                <span className="text-xs font-medium text-blue-200 uppercase">Total Recommended Safety Net</span>
                 <div className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white">
                   {formatLakhCrore(results.totalShield)}
                 </div>

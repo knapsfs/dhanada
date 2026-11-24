@@ -39,7 +39,7 @@ export default function Leadership() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-block px-4 py-2 rounded-full border border-gray-200 text-gray-600 font-semibold text-sm mb-4 tracking-wider uppercase"
+            className="inline-block px-4 py-2 rounded-full border border-gray-200 text-gray-600 font-semibold text-sm mb-4 uppercase"
           >
             Our Experts
           </motion.div>

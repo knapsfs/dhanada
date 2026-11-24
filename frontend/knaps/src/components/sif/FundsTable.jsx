@@ -403,7 +403,7 @@ export default function FundsTable({
                 {/* 1. FUND / AMC + Search */}
                 <th className="py-4 px-4 sm:px-6 align-top min-w-[260px] max-w-[340px]">
                   <div className="flex flex-col gap-2">
-                    <span className="text-[12px] font-extrabold text-[#032e92] uppercase tracking-wider">
+                    <span className="text-[12px] font-extrabold text-[#032e92] uppercase">
                       FUND/AMC
                     </span>
                     <div className="relative">
@@ -425,7 +425,7 @@ export default function FundsTable({
                     <button
                       type="button"
                       onClick={() => handleSort('investmentStrategy')}
-                      className="flex items-center gap-1 text-[12px] font-extrabold text-[#032e92] uppercase tracking-wider group cursor-pointer"
+                      className="flex items-center gap-1 text-[12px] font-extrabold text-[#032e92] uppercase group cursor-pointer"
                     >
                       <span>Investment Strategy</span>
                       {renderSortIcon('investmentStrategy')}
@@ -447,7 +447,7 @@ export default function FundsTable({
                     <button
                       type="button"
                       onClick={() => handleSort('schemeSubcategory')}
-                      className="flex items-center gap-1 text-[12px] font-extrabold text-[#032e92] uppercase tracking-wider group cursor-pointer"
+                      className="flex items-center gap-1 text-[12px] font-extrabold text-[#032e92] uppercase group cursor-pointer"
                     >
                       <span>Subcategory</span>
                       {renderSortIcon('schemeSubcategory')}
@@ -470,7 +470,7 @@ export default function FundsTable({
                     <button
                       type="button"
                       onClick={() => handleSort('riskLevel')}
-                      className="flex items-center gap-1 text-[12px] font-extrabold text-[#032e92] uppercase tracking-wider group cursor-pointer"
+                      className="flex items-center gap-1 text-[12px] font-extrabold text-[#032e92] uppercase group cursor-pointer"
                     >
                       <span>Risk Band</span>
                       {renderSortIcon('riskLevel')}
@@ -496,7 +496,7 @@ export default function FundsTable({
                     <button
                       type="button"
                       onClick={() => handleSort('nav')}
-                      className="flex items-center gap-1 text-[12px] font-extrabold text-[#032e92] uppercase tracking-wider group cursor-pointer"
+                      className="flex items-center gap-1 text-[12px] font-extrabold text-[#032e92] uppercase group cursor-pointer"
                     >
                       <span>NAV</span>
                       {renderSortIcon('nav')}
@@ -513,7 +513,7 @@ export default function FundsTable({
                     <button
                       type="button"
                       onClick={() => handleSort('returns1M')}
-                      className="flex items-center gap-1 text-[12px] font-extrabold text-[#032e92] uppercase tracking-wider group cursor-pointer"
+                      className="flex items-center gap-1 text-[12px] font-extrabold text-[#032e92] uppercase group cursor-pointer"
                     >
                       <span>1M Return</span>
                       {renderSortIcon('returns1M')}
@@ -526,7 +526,7 @@ export default function FundsTable({
 
                 {/* 7. Action */}
                 <th className="py-4 px-4 sm:px-6 align-top text-center min-w-[170px]">
-                  <span className="text-[12px] font-extrabold text-[#032e92] uppercase tracking-wider block">
+                  <span className="text-[12px] font-extrabold text-[#032e92] uppercase block">
                     Action
                   </span>
                 </th>

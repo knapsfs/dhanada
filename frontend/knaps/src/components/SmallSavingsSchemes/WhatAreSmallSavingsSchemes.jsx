@@ -60,7 +60,7 @@ export default function WhatAreSmallSavingsSchemes() {
                 <h3 className="text-lg font-bold text-slate-900 mb-3 group-hover:text-[#032e92] transition-colors">
                   {pillar.title}
                 </h3>
-                <p className="text-sm text-slate-600 leading-relaxed">{pillar.description}</p>
+                <p className="text-sm text-gray-600 leading-relaxed">{pillar.description}</p>
               </div>
             </div>
           ))}
@@ -72,7 +72,7 @@ export default function WhatAreSmallSavingsSchemes() {
             <h4 className="text-base sm:text-lg font-bold text-[#032e92]">
               Need Assistance Opening a Post Office Scheme?
             </h4>
-            <p className="text-xs sm:text-sm text-slate-600">
+            <p className="text-xs sm:text-sm text-gray-600">
               Our experts provide end-to-end guidance for KYC, post office processing, and certificate management.
             </p>
           </div>

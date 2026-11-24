@@ -52,7 +52,7 @@ export default function BlogSection() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="inline-block px-4 py-2 rounded-full bg-[#eef5ff] text-[#032e92] font-semibold text-sm mb-4 uppercase tracking-wider"
+              className="inline-block px-4 py-2 rounded-full bg-[#eef5ff] text-[#032e92] font-semibold text-sm mb-4 uppercase"
             >
               Latest Insights
             </motion.div> */}
@@ -73,7 +73,7 @@ export default function BlogSection() {
             transition={{ delay: 0.2 }}
             className="w-full sm:w-auto flex justify-center"
           >
-            <Link to="/blogs" className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center justify-center cursor-pointer">
+            <Link to="/blogs" className="btn-ripple px-6 py-3 rounded-xl text-md font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center justify-center cursor-pointer">
               View All Articles
             </Link>
           </motion.div>

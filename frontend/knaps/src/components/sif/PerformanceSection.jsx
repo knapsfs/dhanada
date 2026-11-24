@@ -264,7 +264,7 @@ export default function PerformanceSection({ fund, planSelectorProps }) {
 
           {activeReturnInfo && activeReturnInfo.hasValue && (
             <div className="flex items-center gap-2.5 bg-[#f7f9fc] border border-[#e8edf7] px-4 py-2 rounded-2xl self-start sm:self-auto shadow-sm">
-              <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">
+              <span className="text-xs font-bold text-gray-500 uppercase">
                 {activeReturnInfo.periodLabel}
               </span>
               <span className={`text-base font-bold font-mono ${

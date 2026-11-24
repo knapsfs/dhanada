@@ -121,7 +121,7 @@ export default function ExploreFunds() {
 
           {/* Filter 1: Fund Type */}
           <div>
-            <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-wider mb-2.5">
+            <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase mb-2.5">
               <span>Fund Type:</span>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -132,7 +132,7 @@ export default function ExploreFunds() {
                   onClick={() => setSelectedType(type)}
                   className={`px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${selectedType === type
                       ? 'bg-[#032e92] text-white shadow-xs'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      : 'bg-slate-100 text-gray-600 hover:bg-slate-200'
                     }`}
                 >
                   {type}
@@ -143,7 +143,7 @@ export default function ExploreFunds() {
 
           {/* Filter 2: Risk Profile */}
           <div>
-            <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-wider mb-2.5">
+            <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase mb-2.5">
               <span>Risk Tolerance:</span>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -154,7 +154,7 @@ export default function ExploreFunds() {
                   onClick={() => setSelectedRisk(risk)}
                   className={`px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${selectedRisk === risk
                       ? 'bg-[#032e92] text-white shadow-xs'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      : 'bg-slate-100 text-gray-600 hover:bg-slate-200'
                     }`}
                 >
                   {risk}
@@ -165,7 +165,7 @@ export default function ExploreFunds() {
 
           {/* Filter 3: Horizon */}
           <div>
-            <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-wider mb-2.5">
+            <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase mb-2.5">
               <span>Time Horizon:</span>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -176,7 +176,7 @@ export default function ExploreFunds() {
                   onClick={() => setSelectedHorizon(h)}
                   className={`px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${selectedHorizon === h
                       ? 'bg-[#032e92] text-white shadow-xs'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      : 'bg-slate-100 text-gray-600 hover:bg-slate-200'
                     }`}
                 >
                   {h}
@@ -189,7 +189,7 @@ export default function ExploreFunds() {
         {/* Funds Grid */}
         {filteredFunds.length === 0 ? (
           <div className="bg-white rounded-3xl p-12 text-center border border-slate-200">
-            <p className="text-base text-slate-600 font-medium">No mutual fund strategies match your selected combination of filters.</p>
+            <p className="text-base text-gray-600 font-medium">No mutual fund strategies match your selected combination of filters.</p>
             <button
               type="button"
               onClick={resetFilters}
@@ -215,7 +215,7 @@ export default function ExploreFunds() {
                     {/* Header: Title and Badge */}
                     <div className="flex items-start justify-between gap-2 mb-3">
                       <div>
-                        <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600">
+                        <span className="text-[11px] font-bold uppercase text-blue-600">
                           {fund.category} Mutual Fund
                         </span>
                         <h3 className="text-lg font-bold text-slate-900 mt-0.5">{fund.name}</h3>
@@ -237,7 +237,7 @@ export default function ExploreFunds() {
                       </span>
                     </div>
 
-                    <p className="text-xs text-slate-600 leading-relaxed font-normal mb-4">
+                    <p className="text-xs text-gray-600 leading-relaxed font-normal mb-4">
                       {fund.idealFor}
                     </p>
 
@@ -260,7 +260,7 @@ export default function ExploreFunds() {
                     {/* Features list */}
                     <div className="space-y-1.5 mb-5">
                       {fund.features.map((feat, idx) => (
-                        <div key={idx} className="flex items-center gap-2 text-xs text-slate-600">
+                        <div key={idx} className="flex items-center gap-2 text-xs text-gray-600">
                           <FontAwesomeIcon icon={faCheck} className="text-emerald-500 text-[10px]" />
                           <span>{feat}</span>
                         </div>

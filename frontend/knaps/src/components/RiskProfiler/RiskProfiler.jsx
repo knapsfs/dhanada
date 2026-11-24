@@ -108,12 +108,12 @@ export default function RiskProfiler({ isModal = false, onClose }) {
 
           <div className={`bg-white rounded-2xl shadow-md shadow-blue-900/5 border border-gray-100 ${isModal ? 'p-5 mb-4' : 'p-8 rounded-3xl shadow-xl mb-10'}`}>
             <div className={`flex justify-center items-center gap-6 ${isModal ? 'mb-4' : 'mb-8'}`}>
-              <div className="flex items-center gap-2 text-gray-500 font-bold uppercase text-xs tracking-wider">
+              <div className="flex items-center gap-2 text-gray-500 font-bold uppercase text-xs">
                 <span className="w-2 h-2 rounded-full bg-[#032e92]"></span>
                 5 Questions
               </div>
               <div className="w-1 h-1 rounded-full bg-gray-300"></div>
-              <div className="flex items-center gap-2 text-gray-500 font-bold uppercase text-xs tracking-wider">
+              <div className="flex items-center gap-2 text-gray-500 font-bold uppercase text-xs">
                 <span className="w-2 h-2 rounded-full bg-[#c10000]"></span>
                 Takes ~1 Minute
               </div>
@@ -121,7 +121,7 @@ export default function RiskProfiler({ isModal = false, onClose }) {
 
             <button
               onClick={handleStart}
-              className={`btn-ripple rounded-xl font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 cursor-pointer ${isModal ? 'w-full sm:w-auto px-6 py-3 text-[14px]' : 'w-full md:w-auto px-8 py-3.5 text-[15px]'}`}
+              className={`btn-ripple rounded-xl font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 cursor-pointer ${isModal ? 'w-full sm:w-auto px-6 py-3 text-[14px]' : 'w-full md:w-auto px-8 py-3.5 text-md'}`}
             >
               Start Risk Assessment
             </button>

@@ -87,10 +87,10 @@ export default function FutureValueSummaryCards({
                 <div className="w-10 h-10 rounded-xl bg-white/15 backdrop-blur-md flex items-center justify-center group-hover:scale-105 transition-transform flex-shrink-0">
                   <FontAwesomeIcon icon={faCalendarDays} className="text-white text-base" />
                 </div>
-                <span className="text-xs font-bold text-blue-200 uppercase tracking-wider">SIP Option</span>
+                <span className="text-xs font-bold text-blue-200 uppercase">SIP Option</span>
               </div>
 
-              <p className="text-xs font-bold text-blue-200 uppercase tracking-wider mb-2">
+              <p className="text-xs font-bold text-blue-200 uppercase mb-2">
                 MONTHLY INVESTMENT NEEDED
               </p>
 
@@ -111,7 +111,7 @@ export default function FutureValueSummaryCards({
               </div>
 
               {/* Exact Description text requested */}
-              <p className="text-sm sm:text-[15px] font-medium text-blue-100 leading-relaxed mt-3 mb-0">
+              <p className="text-sm sm:text-md font-medium text-blue-100 leading-relaxed mt-3 mb-0">
                 This is what you could invest starting today each month to reach your goal.
               </p>
             </div>
@@ -146,10 +146,10 @@ export default function FutureValueSummaryCards({
                 <div className="w-10 h-10 rounded-xl bg-white/15 backdrop-blur-md flex items-center justify-center group-hover:scale-105 transition-transform flex-shrink-0">
                   <FontAwesomeIcon icon={faCoins} className="text-white text-base" />
                 </div>
-                <span className="text-xs font-bold text-blue-200 uppercase tracking-wider">One-Time Option</span>
+                <span className="text-xs font-bold text-blue-200 uppercase">One-Time Option</span>
               </div>
 
-              <p className="text-xs font-bold text-blue-200 uppercase tracking-wider mb-2">
+              <p className="text-xs font-bold text-blue-200 uppercase mb-2">
                 LUMP SUM INVESTMENT NEEDED
               </p>
 
@@ -167,7 +167,7 @@ export default function FutureValueSummaryCards({
               </div>
 
               {/* Exact Description text requested */}
-              <p className="text-sm sm:text-[15px] font-medium text-blue-100 leading-relaxed mt-3 mb-0">
+              <p className="text-sm sm:text-md font-medium text-blue-100 leading-relaxed mt-3 mb-0">
                 This is the lump sum amount you could invest today to reach your goal.
               </p>
             </div>

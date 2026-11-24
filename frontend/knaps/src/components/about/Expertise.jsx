@@ -77,7 +77,7 @@ export default function Expertise() {
               viewport={{ once: true }}
               className="mb-10"
             >
-              <span className="text-[#c10000] font-semibold text-sm uppercase tracking-wider mb-4 block">Our Expertise</span>
+              <span className="text-[#c10000] font-semibold text-sm uppercase mb-4 block">Our Expertise</span>
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">Proven Competence in Wealth Creation</h2>
               <p className="text-gray-600 leading-relaxed text-lg">
                 Our team possesses deep domain knowledge across a wide spectrum of financial instruments, allowing us to build robust and diversified portfolios.
@@ -88,7 +88,7 @@ export default function Expertise() {
               {expertiseStats.map((stat, idx) => (
                 <div key={idx} className="relative">
                   <div className="flex justify-between items-end mb-2">
-                    <span className="font-semibold text-gray-900 text-[15px]">{stat.label}</span>
+                    <span className="font-semibold text-gray-900 text-md">{stat.label}</span>
                     <span className="font-bold text-[#032e92]">
                       {isInView ? (
                         <AnimatedCounter value={stat.percentage} duration={2} suffix="%" />

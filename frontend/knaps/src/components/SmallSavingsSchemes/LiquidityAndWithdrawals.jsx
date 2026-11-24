@@ -56,7 +56,7 @@ export default function LiquidityAndWithdrawals() {
                     Tenure: {item.tenure}
                   </span>
                 </div>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{item.rule}</p>
+                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">{item.rule}</p>
               </div>
 
               <div className="pt-4 mt-4 border-t border-slate-100 flex items-center gap-2 text-xs text-slate-500 font-medium">

@@ -145,7 +145,7 @@ export default function FixedDepositCalculator() {
               {/* Input 1: Principal Amount */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-bold uppercase tracking-wider text-gray-500">
+                  <label className="text-xs font-bold uppercase text-gray-500">
                     Total Deposit Amount
                   </label>
                   <span className="text-base font-bold text-[#032e92] bg-blue-50 px-3 py-0.5 rounded-lg border border-blue-100">
@@ -171,7 +171,7 @@ export default function FixedDepositCalculator() {
               {/* Input 2: Base Interest Rate & Senior Citizen Toggle */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-bold uppercase tracking-wider text-gray-500">
+                  <label className="text-xs font-bold uppercase text-gray-500">
                     Annual Interest Rate (% p.a.)
                   </label>
                   <span className="text-base font-bold text-[#032e92] bg-blue-50 px-3 py-0.5 rounded-lg border border-blue-100">
@@ -221,7 +221,7 @@ export default function FixedDepositCalculator() {
               {/* Input 3: Tenure (Years) */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-bold uppercase tracking-wider text-gray-500">
+                  <label className="text-xs font-bold uppercase text-gray-500">
                     Deposit Tenure (Years)
                   </label>
                   <span className="text-base font-bold text-[#032e92] bg-blue-50 px-3 py-0.5 rounded-lg border border-blue-100">
@@ -246,7 +246,7 @@ export default function FixedDepositCalculator() {
 
               {/* Input 4: Compounding Frequency */}
               <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-gray-500 block mb-2">
+                <label className="text-xs font-bold uppercase text-gray-500 block mb-2">
                   Compounding Frequency
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -278,7 +278,7 @@ export default function FixedDepositCalculator() {
             {/* Right Column: Output Summary Card (5 cols) */}
             <div className="lg:col-span-5 bg-gradient-to-br from-[#0a192f] via-[#032e92] to-[#021d63] rounded-3xl p-6 sm:p-8 text-white shadow-2xl relative overflow-hidden space-y-6">
               <div>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-blue-200 block mb-1">
+                <span className="text-[11px] font-bold uppercase text-blue-200 block mb-1">
                   Maturity Value (Cumulative)
                 </span>
                 <div className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
@@ -292,7 +292,7 @@ export default function FixedDepositCalculator() {
               {/* Breakdown Grid */}
               <div className="grid grid-cols-2 gap-3 pt-2">
                 <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15">
-                  <span className="text-[11px] text-blue-200 uppercase tracking-wider block mb-1">
+                  <span className="text-[11px] text-blue-200 uppercase block mb-1">
                     Principal Invested
                   </span>
                   <div className="text-base sm:text-lg font-bold text-white">
@@ -301,7 +301,7 @@ export default function FixedDepositCalculator() {
                 </div>
 
                 <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15">
-                  <span className="text-[11px] text-emerald-300 uppercase tracking-wider block mb-1">
+                  <span className="text-[11px] text-emerald-300 uppercase block mb-1">
                     Total Interest Earned
                   </span>
                   <div className="text-base sm:text-lg font-bold text-emerald-400">
@@ -312,7 +312,7 @@ export default function FixedDepositCalculator() {
 
               {/* Non-Cumulative Income Estimates */}
               <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2">
-                <span className="text-xs font-bold text-blue-200 uppercase tracking-wider block">
+                <span className="text-xs font-bold text-blue-200 uppercase block">
                   Regular Payout Estimates (Non-Cumulative)
                 </span>
                 <div className="grid grid-cols-2 gap-2 text-xs">
@@ -350,7 +350,7 @@ export default function FixedDepositCalculator() {
             <div className="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 lg:p-10 border border-gray-200/90 shadow-lg space-y-6">
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-bold uppercase tracking-wider text-gray-500">
+                  <label className="text-xs font-bold uppercase text-gray-500">
                     Investment Amount in GoI Bonds
                   </label>
                   <span className="text-base font-bold text-[#032e92] bg-blue-50 px-3 py-0.5 rounded-lg border border-blue-100">
@@ -376,7 +376,7 @@ export default function FixedDepositCalculator() {
               {/* Coupon Rate */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-bold uppercase tracking-wider text-gray-500">
+                  <label className="text-xs font-bold uppercase text-gray-500">
                     RBI FRSB Coupon Rate (% p.a.)
                   </label>
                   <span className="text-base font-bold text-emerald-700 bg-emerald-50 px-3 py-0.5 rounded-lg border border-emerald-200">
@@ -418,7 +418,7 @@ export default function FixedDepositCalculator() {
             {/* Right Column: Bond Output Summary (5 cols) */}
             <div className="lg:col-span-5 bg-gradient-to-br from-[#0a192f] via-[#054a36] to-[#022e22] rounded-3xl p-6 sm:p-8 text-white shadow-2xl relative overflow-hidden space-y-6">
               <div>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-200 block mb-1">
+                <span className="text-[11px] font-bold uppercase text-emerald-200 block mb-1">
                   Total Interest Earnings (Across 7 Years)
                 </span>
                 <div className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
@@ -432,7 +432,7 @@ export default function FixedDepositCalculator() {
               {/* Breakdown Grid */}
               <div className="grid grid-cols-2 gap-3 pt-2">
                 <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15">
-                  <span className="text-[11px] text-emerald-200 uppercase tracking-wider block mb-1">
+                  <span className="text-[11px] text-emerald-200 uppercase block mb-1">
                     Principal Invested
                   </span>
                   <div className="text-base sm:text-lg font-bold text-white">
@@ -442,7 +442,7 @@ export default function FixedDepositCalculator() {
                 </div>
 
                 <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15">
-                  <span className="text-[11px] text-emerald-200 uppercase tracking-wider block mb-1">
+                  <span className="text-[11px] text-emerald-200 uppercase block mb-1">
                     Every 6 Months Payout
                   </span>
                   <div className="text-base sm:text-lg font-bold text-emerald-300">
@@ -454,7 +454,7 @@ export default function FixedDepositCalculator() {
 
               {/* Total Payouts + Principal */}
               <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-1">
-                <span className="text-xs font-bold text-emerald-200 uppercase tracking-wider block">
+                <span className="text-xs font-bold text-emerald-200 uppercase block">
                   Total Cumulative Cash Realized
                 </span>
                 <div className="text-xl font-bold text-white">

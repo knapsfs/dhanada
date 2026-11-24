@@ -28,7 +28,7 @@ export default function SmallSavingsHero() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb Navigation */}
-        <div className="flex items-center pb-4 sm:pb-5 gap-3 text-[15px] font-medium text-gray-500">
+        <div className="flex items-center pb-4 sm:pb-5 gap-3 text-sm font-medium text-gray-500">
           <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
           <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
           <Link to="/products" className="hover:text-[#032e92] transition-colors">Products</Link>
@@ -50,7 +50,7 @@ export default function SmallSavingsHero() {
               Explore sovereign-backed Post Office savings schemes designed to encourage disciplined saving, capital safety, and assured long-term wealth growth.
             </p>
 
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+            <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
               Administered through India Post and backed directly by the Government of India, our core offerings include <strong>Post Office Time Deposit (POTD)</strong>, <strong>Kisan Vikas Patra (KVP)</strong>, <strong>National Savings Certificate (NSC)</strong>, and <strong>Post Office Recurring Deposit (PORD)</strong>—combining absolute sovereign security with high notified yields and tax-deductible compounding.
             </p>
 
@@ -64,7 +64,7 @@ export default function SmallSavingsHero() {
                     defaultService: 'Post Office Small Savings Schemes'
                   })
                 }
-                className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer"
+                className="btn-ripple px-6 py-3 rounded-xl text-md font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer"
               >
                 <span>Explore Post Office Schemes</span>
 
@@ -73,7 +73,7 @@ export default function SmallSavingsHero() {
               <button
                 type="button"
                 onClick={scrollToCalculator}
-                className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-white hover:bg-blue-50 text-[#032e92] border border-[#032e92]/20 shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
+                className="btn-ripple px-6 py-3 rounded-xl text-md font-semibold bg-white hover:bg-blue-50 text-[#032e92] border border-[#032e92]/20 shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
               >
                 <FontAwesomeIcon icon={faCalculator} className="text-[#032e92]" />
                 <span>Calculate Scheme Returns</span>

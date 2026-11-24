@@ -84,7 +84,7 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-[#f8fafc] text-[11px] font-bold text-gray-500 uppercase tracking-wider border-b border-gray-200/80">
+            <tr className="bg-[#f8fafc] text-[11px] font-bold text-gray-500 uppercase border-b border-gray-200/80">
               <th className="py-3 px-4 sm:px-6">Client</th>
               <th className="py-3 px-4">Contact</th>
               <th className="py-3 px-4">PAN & KYC</th>
@@ -302,7 +302,7 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
 
             {/* Current Latest Remark Box */}
             <div className="bg-slate-50 rounded-xl p-3.5 border border-gray-200 text-xs">
-              <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider block mb-1">Current Latest Remark</span>
+              <span className="text-[10px] font-bold text-gray-500 uppercase block mb-1">Current Latest Remark</span>
               {selectedClientForRemark.latest_remark ? (
                 <div>
                   <p className="text-gray-900 font-medium leading-relaxed whitespace-pre-wrap">
@@ -334,7 +334,7 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
 
             {/* Record New Remark Form */}
             <form onSubmit={handleSaveClientRemark} className="space-y-3 pt-1">
-              <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider">
+              <label className="block text-[11px] font-bold text-gray-700 uppercase">
                 Record New Contact Remark
               </label>
               <textarea

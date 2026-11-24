@@ -29,12 +29,12 @@ export default function QuizIntro({ onStart, isModal = false, totalQuestions = 5
         </p>
 
         <div className={`flex items-center ${isModal ? 'gap-4 mb-5 text-xs' : 'flex-col sm:flex-row gap-6 mb-10 text-sm'}`}>
-          <div className="flex items-center gap-1.5 text-gray-500 font-bold uppercase tracking-wider">
+          <div className="flex items-center gap-1.5 text-gray-500 font-bold uppercase">
             <span className="w-2 h-2 rounded-full bg-[#032e92]"></span>
             {totalQuestions} Questions
           </div>
           <div className="w-1 h-1 rounded-full bg-gray-300"></div>
-          <div className="flex items-center gap-1.5 text-gray-500 font-bold uppercase tracking-wider">
+          <div className="flex items-center gap-1.5 text-gray-500 font-bold uppercase">
             <span className="w-2 h-2 rounded-full bg-[#c10000]"></span>
             ~1 Minute
           </div>

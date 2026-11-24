@@ -78,7 +78,7 @@ export default function HowSmallSavingsWork() {
 
 
                 <h3 className="text-lg font-bold text-slate-900 mb-3">{step.title}</h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{step.description}</p>
+                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">{step.description}</p>
               </div>
 
 

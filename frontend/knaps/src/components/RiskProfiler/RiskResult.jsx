@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { useLeadModal } from '../../context/LeadModalContext';
 
 export default function RiskResult({ result, onRetake, isModal = false }) {
-  const { openLeadModal } = useLeadModal ? useLeadModal() : { openLeadModal: () => {} };
+  const { openLeadModal } = useLeadModal();
   const categories = ['Conservative', 'Moderate', 'Aggressive'];
   const profileIndex = Math.max(0, categories.indexOf(result.profile));
   // Spread position across 3 bands: Conservative (10%), Moderate (50%), Aggressive (90%)
@@ -51,7 +51,7 @@ export default function RiskResult({ result, onRetake, isModal = false }) {
             transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
             className="absolute top-0 -translate-x-1/2 flex flex-col items-center"
           >
-            <div className="bg-[#0a192f] text-white text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded mb-1 whitespace-nowrap shadow-sm">
+            <div className="bg-[#0a192f] text-white text-[10px] font-bold uppercase px-2 py-0.5 rounded mb-1 whitespace-nowrap shadow-sm">
               YOU
             </div>
             <div className="w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-[#0a192f]"></div>
@@ -71,19 +71,19 @@ export default function RiskResult({ result, onRetake, isModal = false }) {
       {result?.metrics && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-8 sm:mb-10">
           <div className="bg-gray-50 rounded-2xl p-4 sm:p-5 border border-gray-100 text-center">
-            <p className="text-gray-400 text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1">Risk Comfort</p>
+            <p className="text-gray-400 text-[10px] sm:text-xs font-bold uppercase mb-1">Risk Comfort</p>
             <p className="text-[#0a192f] text-sm sm:text-base font-black">{result.metrics.riskComfort}</p>
           </div>
           <div className="bg-gray-50 rounded-2xl p-4 sm:p-5 border border-gray-100 text-center">
-            <p className="text-gray-400 text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1">Flexibility</p>
+            <p className="text-gray-400 text-[10px] sm:text-xs font-bold uppercase mb-1">Flexibility</p>
             <p className="text-[#0a192f] text-sm sm:text-base font-black">{result.metrics.financialFlexibility}</p>
           </div>
           <div className="bg-gray-50 rounded-2xl p-4 sm:p-5 border border-gray-100 text-center">
-            <p className="text-gray-400 text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1">Experience</p>
+            <p className="text-gray-400 text-[10px] sm:text-xs font-bold uppercase mb-1">Experience</p>
             <p className="text-[#0a192f] text-sm sm:text-base font-black">{result.metrics.experience}</p>
           </div>
           <div className="bg-gray-50 rounded-2xl p-4 sm:p-5 border border-gray-100 text-center">
-            <p className="text-gray-400 text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1">Horizon</p>
+            <p className="text-gray-400 text-[10px] sm:text-xs font-bold uppercase mb-1">Horizon</p>
             <p className="text-[#0a192f] text-sm sm:text-base font-black">{result.metrics.horizon}</p>
           </div>
         </div>

@@ -48,7 +48,7 @@ export default function AboutStory() {
             The Story of <span className="text-[#032e92]">KNAPS</span>
           </motion.h2>
 
-          <motion.p
+          {/* <motion.p
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -56,7 +56,7 @@ export default function AboutStory() {
             className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed"
           >
             Built on relationships, experience, and the trust of people who chose to invest with us across market cycles.
-          </motion.p>
+          </motion.p> */}
         </div>
 
         {/* Story Narrative Box & Timeline Cards */}
@@ -116,7 +116,7 @@ export default function AboutStory() {
                     <FontAwesomeIcon icon={card.icon} className="text-sm" />
                   </div>
                   <div>
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-[#032e92] block mb-0.5">
+                    <span className="text-[11px] font-semibold uppercase text-[#032e92] block mb-0.5">
                       {card.title}
                     </span>
                     <h3 className="text-sm sm:text-base font-bold text-black mb-1">

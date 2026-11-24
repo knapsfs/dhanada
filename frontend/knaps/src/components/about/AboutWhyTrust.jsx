@@ -30,7 +30,7 @@ export default function AboutWhyTrust() {
     {
       icon: faAward,
       title: "30+ Years of Experience",
-      description: "Decades of experience across market cycles and investments..",
+      description: "Leverage decades of experience to make informed decisions across market cycles.",
       // tag: "Since 1996"
     }
   ];
@@ -53,7 +53,7 @@ export default function AboutWhyTrust() {
             Why Thousands of Investors <span className="text-[#032e92]">Trust Us </span>
           </motion.h2>
 
-          <motion.p
+          {/* <motion.p
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -61,7 +61,7 @@ export default function AboutWhyTrust() {
             className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed"
           >
             Our approach is built on integrity, transparency, and a long-term commitment to your financial well-being.
-          </motion.p>
+          </motion.p> */}
         </div>
 
         {/* 4 Pillars Non-Boxy Architectural Strip */}

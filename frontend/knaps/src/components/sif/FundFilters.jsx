@@ -132,7 +132,7 @@ export default function FundFilters({ filters, setFilters, onClear, amcList = []
               >
                 <div className="p-6 lg:p-8">
                   <div className="flex justify-between items-center mb-6">
-                    <h3 className="text-xs font-bold tracking-wider text-gray-500 uppercase">
+                    <h3 className="text-xs font-bold text-gray-500 uppercase">
                       {activeTabData.label}
                     </h3>
                     <button

@@ -97,7 +97,7 @@ export default function GoalFocus() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="inline-block px-4 py-2 rounded-full border border-[#032e92]/20 text-[#032e92] bg-[#eef5ff] font-semibold text-sm mb-4 uppercase tracking-wider text-center"
+              className="inline-block px-4 py-2 rounded-full border border-[#032e92]/20 text-[#032e92] bg-[#eef5ff] font-semibold text-sm mb-4 uppercase text-center"
             >
               GOAL FOCUS
             </motion.span> */}
@@ -142,7 +142,7 @@ export default function GoalFocus() {
                   <div className={`w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-transform duration-300 group-hover:scale-108 ${item.iconBg}`}>
                     {item.icon}
                   </div>
-                  <h3 className="text-xs sm:text-[13.5px] font-bold text-slate-800 leading-tight mt-2.5 group-hover:text-[#032e92] transition-colors truncate w-full px-1">
+                  <h3 className="text-xs sm:text-sm font-bold text-slate-800 leading-tight mt-2.5 group-hover:text-[#032e92] transition-colors truncate w-full px-1">
                     {item.title}
                   </h3>
                 </div>

@@ -211,7 +211,7 @@ export default function FundSelector({ selectedFunds = [null, null, null], onFun
         <button
           type="button"
           onClick={handleReset}
-          className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-white hover:bg-blue-50 text-[#032e92] border border-[#032e92]/20 shadow-sm hover:shadow-md transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
+          className="btn-ripple px-6 py-3 rounded-xl text-md font-semibold bg-white hover:bg-blue-50 text-[#032e92] border border-[#032e92]/20 shadow-sm hover:shadow-md transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
         >
           Reset
         </button>
@@ -219,7 +219,7 @@ export default function FundSelector({ selectedFunds = [null, null, null], onFun
           type="button"
           onClick={onCompare}
           disabled={!canCompare}
-          className={`px-6 py-3 rounded-xl text-[15px] font-semibold transition-all duration-300 inline-flex items-center justify-center ${canCompare
+          className={`px-6 py-3 rounded-xl text-md font-semibold transition-all duration-300 inline-flex items-center justify-center ${canCompare
             ? 'btn-ripple bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 cursor-pointer'
             : 'bg-gray-200 text-gray-400 border border-gray-200 cursor-not-allowed shadow-none'
             }`}

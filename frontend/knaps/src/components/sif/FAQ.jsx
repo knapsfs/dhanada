@@ -41,7 +41,7 @@ export default function FAQ() {
               <div className="flex gap-3">
                 <a
                   href="tel:+919990243143"
-                  className="flex-1 btn-ripple text-center px-6 py-3 rounded-xl bg-white text-[#032e92] text-[15px] font-semibold hover:bg-blue-50 shadow-md hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
+                  className="flex-1 btn-ripple text-center px-6 py-3 rounded-xl bg-white text-[#032e92] text-md font-semibold hover:bg-blue-50 shadow-md hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
                 >
                   Talk to Us
                 </a>

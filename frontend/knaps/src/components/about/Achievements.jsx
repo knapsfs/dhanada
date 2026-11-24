@@ -59,7 +59,7 @@ export default function Achievements() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-block px-4 py-2 rounded-full border border-white/20 text-blue-100 bg-white/5 backdrop-blur-sm font-semibold text-sm mb-4 tracking-wider uppercase"
+            className="inline-block px-4 py-2 rounded-full border border-white/20 text-blue-100 bg-white/5 backdrop-blur-sm font-semibold text-sm mb-4 uppercase"
           >
             By The Numbers
           </motion.div>

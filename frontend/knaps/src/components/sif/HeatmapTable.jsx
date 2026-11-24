@@ -116,13 +116,13 @@ export default function HeatmapTable({ funds = [], timeFilter = '12M', activeSub
               </tr>
             )}
             <tr className="border-b border-[#e8edf7] bg-white">
-              <th className="sticky left-0 bg-white z-30 py-4 px-3 sm:px-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider min-w-[150px] sm:min-w-[220px] lg:min-w-[280px]">
+              <th className="sticky left-0 bg-white z-30 py-4 px-3 sm:px-4 text-left text-xs font-bold text-gray-500 uppercase min-w-[150px] sm:min-w-[220px] lg:min-w-[280px]">
                 FUND
               </th>
               {displayMonths.map((m) => (
                 <th
                   key={m.key}
-                  className="py-4 px-2 text-center text-[11px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider min-w-[75px] sm:min-w-[90px] bg-white"
+                  className="py-4 px-2 text-center text-[11px] sm:text-xs font-bold text-gray-500 uppercase min-w-[75px] sm:min-w-[90px] bg-white"
                 >
                   {m.label}
                 </th>

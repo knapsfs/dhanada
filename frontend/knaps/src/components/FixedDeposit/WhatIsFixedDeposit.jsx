@@ -94,7 +94,7 @@ export default function WhatIsFixedDeposit() {
         <div className="bg-gradient-to-br from-[#0a192f] to-[#021d63] rounded-3xl p-6 sm:p-10 lg:p-12 text-white shadow-xl">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-7 space-y-4">
-              {/* <span className="text-xs font-bold uppercase tracking-wider text-blue-300">
+              {/* <span className="text-xs font-bold uppercase text-blue-300">
                 Strategic Portfolio Ballast
               </span> */}
               <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">

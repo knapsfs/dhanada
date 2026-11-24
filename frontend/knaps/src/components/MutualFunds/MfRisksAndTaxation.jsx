@@ -45,7 +45,7 @@ export default function MfRisksAndTaxation() {
                 {/* <span className="text-xs font-semibold text-slate-500">Capital Value Moves With Markets</span> */}
               </div>
             </div>
-            <p className="text-sm text-slate-600 leading-relaxed">
+            <p className="text-sm text-gray-600 leading-relaxed">
               Mutual fund Net Asset Values (NAVs) fluctuate in response to underlying stock market movements, macroeconomic factors, interest rate cycles, and corporate earnings. While equity markets experience short-term drawdowns, history shows holding a diversified portfolio across a 5 to 7+ year horizon dramatically minimizes loss probabilities.
             </p>
           </div>
@@ -61,7 +61,7 @@ export default function MfRisksAndTaxation() {
                 {/* <span className="text-xs font-semibold text-slate-500">Fund Management & Operating Expenses</span> */}
               </div>
             </div>
-            <p className="text-sm text-slate-600 leading-relaxed">
+            <p className="text-sm text-gray-600 leading-relaxed">
               The TER represents the annual percentage deducted proportionally from the fund's assets to cover management, research, administration, and compliance. SEBI strictly caps TER based on fund size (from ~0.10% for index funds up to 2.25% for smaller active funds). The daily published NAV is already net of the expense ratio.
             </p>
           </div>
@@ -77,7 +77,7 @@ export default function MfRisksAndTaxation() {
                 {/* <span className="text-xs font-semibold text-slate-500">Premature Withdrawal Considerations</span> */}
               </div>
             </div>
-            <p className="text-sm text-slate-600 leading-relaxed">
+            <p className="text-sm text-gray-600 leading-relaxed">
               An Exit Load is a fee charged by the fund house if you redeem your units within a specified duration (typically 1% if redeemed within 365 days for equity funds; graded exit load for liquid funds during the first 7 days). After this period, redemptions carry zero exit load. ELSS funds have a mandatory 3-year statutory lock-in.
             </p>
           </div>
@@ -93,7 +93,7 @@ export default function MfRisksAndTaxation() {
                 {/* <span className="text-xs font-semibold text-slate-500">Mandated 6-Tier Risk Gauge</span> */}
               </div>
             </div>
-            <p className="text-sm text-slate-600 leading-relaxed mb-4">
+            <p className="text-sm text-gray-600 leading-relaxed mb-4">
               Every mutual fund in India is mandated by SEBI to evaluate and publish its objective risk profile on the 10th of every month across 6 standardized levels:
             </p>
             {/* Risk-o-meter visual pills */}
@@ -128,7 +128,7 @@ export default function MfRisksAndTaxation() {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm border-collapse">
               <thead>
-                <tr className="border-b border-slate-200 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50/70">
+                <tr className="border-b border-slate-200 text-xs font-bold text-slate-500 uppercase bg-slate-50/70">
                   <th className="py-3.5 px-4 rounded-l-xl">Fund Category</th>
                   <th className="py-3.5 px-4">Holding Period for LTCG</th>
                   <th className="py-3.5 px-4">LTCG Tax Rate</th>
@@ -171,10 +171,10 @@ export default function MfRisksAndTaxation() {
                     <span className="text-xs font-normal text-slate-500">(&le; 35% Equity, post-Apr 2023)</span>
                   </td>
                   <td className="py-4 px-4">No LTCG benefit</td>
-                  <td className="py-4 px-4 text-slate-600">
+                  <td className="py-4 px-4 text-gray-600">
                     Taxed at individual Income Tax Slab Rate
                   </td>
-                  <td className="py-4 px-4 text-slate-600">
+                  <td className="py-4 px-4 text-gray-600">
                     Taxed at individual Income Tax Slab Rate
                   </td>
                 </tr>
@@ -188,7 +188,7 @@ export default function MfRisksAndTaxation() {
                   <td className="py-4 px-4 font-bold text-slate-900">
                     12.5% (No indexation benefit)
                   </td>
-                  <td className="py-4 px-4 text-slate-600">
+                  <td className="py-4 px-4 text-gray-600">
                     Taxed at individual Income Tax Slab Rate
                   </td>
                 </tr>

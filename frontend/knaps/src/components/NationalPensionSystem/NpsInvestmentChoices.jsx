@@ -65,14 +65,14 @@ export default function NpsInvestmentChoices() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#032e92]/10 border border-[#032e92]/20 text-[#032e92] text-xs font-semibold uppercase tracking-wider mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#032e92]/10 border border-[#032e92]/20 text-[#032e92] text-xs font-semibold uppercase mb-4">
             <FontAwesomeIcon icon={faChartPie} />
             <span>Asset Universe</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#032e92] tracking-tight mb-4">
             NPS Investment Choices — The 4 Asset Classes
           </h2>
-          <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+          <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
             NPS allows subscribers to construct a balanced, multi-asset portfolio across four regulated asset classes, balancing growth with capital safety.
           </p>
         </div>
@@ -102,9 +102,9 @@ export default function NpsInvestmentChoices() {
                   </span>
                 </div>
 
-                <p className="text-sm text-slate-600 leading-relaxed">{item.description}</p>
+                <p className="text-sm text-gray-600 leading-relaxed">{item.description}</p>
 
-                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-600 space-y-1">
+                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 text-xs text-gray-600 space-y-1">
                   <span className="font-bold text-slate-800 block">Underlying Securities:</span>
                   <span>{item.composition}</span>
                 </div>

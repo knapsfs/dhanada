@@ -62,7 +62,7 @@ export default function WhyChooseServices() {
                   </div>
                   <div>
                     <p className="text-[#0a192f] font-black text-2xl leading-none mb-1">99.8%</p>
-                    <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">Client Retention & Trust</p>
+                    <p className="text-gray-500 text-xs font-bold uppercase">Client Retention & Trust</p>
                   </div>
                 </div>
 
@@ -107,7 +107,7 @@ export default function WhyChooseServices() {
             <button
               type="button"
               onClick={openLeadModal}
-              className="btn-ripple bg-gradient-to-r from-[#032e92] to-[#021d63] text-white px-8 py-3.5 rounded-xl font-semibold shadow-md hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 text-[15px] flex items-center gap-3 cursor-pointer"
+              className="btn-ripple bg-gradient-to-r from-[#032e92] to-[#021d63] text-white px-8 py-3.5 rounded-xl font-semibold shadow-md hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 text-md flex items-center gap-3 cursor-pointer"
             >
               <span>Schedule Free Consultation</span>
               <FontAwesomeIcon icon={faArrowRight} className="text-xs" />

@@ -128,14 +128,14 @@ export default function HealthInsuranceHowItWorks() {
           <div className="flex flex-wrap items-center gap-3">
             <button
               onClick={() => openLeadModal({ title: 'Request Immediate Health Consultation', defaultService: 'Health Insurance' })}
-              className="btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-white text-[#032e92] hover:bg-blue-50 shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
+              className="btn-ripple px-6 py-3.5 rounded-xl text-md font-semibold bg-white text-[#032e92] hover:bg-blue-50 shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>Speak with Claims Desk</span>
               <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
             </button>
             <a
               href="tel:+918080808080"
-              className="btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-transparent border-2 border-white/30 text-white hover:bg-white/10 hover:border-white/50 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
+              className="btn-ripple px-6 py-3.5 rounded-xl text-md font-semibold bg-transparent border-2 border-white/30 text-white hover:bg-white/10 hover:border-white/50 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
             >
               <FontAwesomeIcon icon={faPhone} className="text-xs" />
               <span>+91 8080808080</span>

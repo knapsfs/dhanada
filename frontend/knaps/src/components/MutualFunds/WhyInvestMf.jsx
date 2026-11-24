@@ -55,7 +55,7 @@ export default function WhyInvestMf() {
                   </span>
                 </div>
                 <h3 className="text-lg font-bold text-slate-900 mb-3">{item.title}</h3>
-                <p className="text-sm text-slate-600 leading-relaxed font-normal">{item.desc}</p>
+                <p className="text-sm text-gray-600 leading-relaxed font-normal">{item.desc}</p>
               </div>
 
               {/* <div className="mt-6 pt-4 border-t border-blue-100/60 flex items-center gap-2 text-xs font-semibold text-[#032e92]">

@@ -68,7 +68,7 @@ export default function TrustBar() {
               </div>
               <div>
                 <h4 className="text-lg font-bold text-gray-700 group-hover:text-[#032e92] transition-colors">{partner.name}</h4>
-                <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">{partner.type}</p>
+                <p className="text-[10px] uppercase font-bold text-gray-400">{partner.type}</p>
               </div>
             </div>
           ))}

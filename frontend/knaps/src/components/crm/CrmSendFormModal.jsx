@@ -337,7 +337,7 @@ export default function CrmSendFormModal({
             <div className="space-y-4 pt-2 border-t border-gray-100">
               {/* Form URL Box */}
               <div>
-                <label className="text-[10px] font-extrabold uppercase tracking-wider text-gray-500 block mb-1">
+                <label className="text-[10px] font-extrabold uppercase text-gray-500 block mb-1">
                   Secure Customer Link (Expiring Token)
                 </label>
                 <div className="flex items-center gap-2">

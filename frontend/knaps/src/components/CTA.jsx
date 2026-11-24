@@ -1,46 +1,58 @@
-import { motion } from 'framer-motion';
+import React from 'react';
 import { useLeadModal } from '../context/LeadModalContext';
 
-export default function CTA() {
+export default function CTA({
+  title = "Ready to Start Investing for Your Goals?",
+  subtitle = "Take the first step towards financial freedom. Schedule a one-on-one session with us to discuss your investment goals.",
+  buttonText = "Start Investing Now",
+  leadSource = "CTA: Start Investing Now",
+  onButtonClick,
+  secondaryButton = null,
+  className = ""
+}) {
   const { openLeadModal } = useLeadModal();
 
+  const handleAction = () => {
+    if (onButtonClick) {
+      onButtonClick();
+    } else {
+      openLeadModal(leadSource);
+    }
+  };
+
   return (
-    <section className="py-14 sm:py-18 relative overflow-hidden">
-      {/* Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#032e92] via-[#021d63] to-[#c10000] z-0"></div>
+    <section className={`py-12 sm:py-16 bg-[#f7f9fc] relative ${className}`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative rounded-3xl bg-gradient-to-br from-[#032e92] via-[#021d63] to-[#011347] text-white p-8 sm:p-12 lg:p-16 overflow-hidden shadow-2xl shadow-blue-950/20">
+          {/* Subtle Ambient Decorative Glows */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-cyan-400/15 rounded-full blur-3xl pointer-events-none -ml-20 -mb-20" />
 
-      {/* Background Shapes */}
-      <div className="absolute top-0 right-0 w-full h-full overflow-hidden z-0">
-        <div className="absolute -top-[20%] -right-[10%] w-[500px] h-[500px] rounded-full border-[40px] border-white/5 opacity-50 blur-sm"></div>
-        <div className="absolute bottom-[10%] -left-[10%] w-[300px] h-[300px] rounded-full bg-white/10 opacity-30 blur-2xl"></div>
-        <div className="absolute top-[40%] right-[20%] w-32 h-32 rounded-full bg-[#c10000]/40 blur-xl"></div>
-      </div>
+          <div className="relative z-10 max-w-3xl mx-auto text-center space-y-6">
+            {/* Main Headline */}
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-white leading-tight">
+              {title}
+            </h2>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-white mb-6 leading-tight">
-            Ready to Start Investing <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-white">for Your Goals?</span>
-          </h2>
+            {/* Subtitle */}
+            <p className="text-sm sm:text-base text-blue-100/90 leading-relaxed font-normal max-w-2xl sm:max-w-3xl mx-auto mt-3.5">
+              {subtitle}
+            </p>
 
-          <p className="text-sm md:text-lg lg:text-xl text-blue-100 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Take the first step towards financial freedom. Schedule a one-on-one session with us to discuss your investment goals.
-          </p>
+            {/* Action Buttons */}
+            <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
+              <button
+                type="button"
+                onClick={handleAction}
+                className="btn-ripple w-full sm:w-auto px-6 py-3 rounded-xl text-md font-semibold bg-white text-[#032e92] hover:bg-blue-50 shadow-md hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
+              >
+                <span>{buttonText}</span>
+              </button>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
-            <button
-              type="button"
-              onClick={openLeadModal}
-              className="btn-ripple px-8 py-3.5 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:border-white/60 hover:shadow-xl hover:shadow-[#032e92]/50 transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
-            >
-              Start Investing Now
-            </button>
+              {secondaryButton}
+            </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

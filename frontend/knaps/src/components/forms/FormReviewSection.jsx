@@ -96,7 +96,7 @@ export default function FormReviewSection({
             </div>
             <div>
               <span className="text-gray-400 block text-[10px] uppercase font-bold">PAN</span>
-              <span className="font-bold text-gray-900 tracking-wider uppercase">
+              <span className="font-bold text-gray-900 uppercase">
                 {personalData.pan || "—"}
               </span>
             </div>

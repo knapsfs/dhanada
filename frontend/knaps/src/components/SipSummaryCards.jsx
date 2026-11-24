@@ -80,7 +80,7 @@ export default function SipSummaryCards({
               <FontAwesomeIcon icon={faWallet} className="text-[#032e92] text-base" />
             </div>
             <div>
-              <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Total Invested Amount</p>
+              <p className="text-xs font-bold text-gray-400 uppercase mb-1">Total Invested Amount</p>
               <p className="text-2xl lg:text-3xl xl:text-4xl font-extrabold text-[#032e92] leading-tight">
                 <CountUpNumber
                   target={results.totalInvested || 0}
@@ -102,7 +102,7 @@ export default function SipSummaryCards({
               <FontAwesomeIcon icon={faArrowTrendUp} className="text-green-600 text-base" />
             </div>
             <div>
-              <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Gain</p>
+              <p className="text-xs font-bold text-gray-400 uppercase mb-1">Gain</p>
               <p className="text-2xl lg:text-3xl xl:text-4xl font-extrabold text-green-600 leading-tight">
                 <CountUpNumber
                   target={results.wealthGained || 0}
@@ -211,7 +211,7 @@ export default function SipSummaryCards({
                   >
                     {/* Left: Without Inflation */}
                     <div className="bg-white/10 rounded-2xl p-3 border border-white/15 backdrop-blur-sm flex flex-col justify-between">
-                      <p className="text-xs font-bold text-blue-200 uppercase tracking-wider mb-1">
+                      <p className="text-xs font-bold text-blue-200 uppercase mb-1">
                         Future Value
                       </p>
                       <p className="text-2xl lg:text-3xl xl:text-4xl font-extrabold text-white tracking-tight leading-tight">
@@ -225,7 +225,7 @@ export default function SipSummaryCards({
 
                     {/* Right: With Inflation */}
                     <div className="bg-white/20 rounded-2xl p-3 border border-white/25 backdrop-blur-md flex flex-col justify-between shadow-inner">
-                      <p className="text-xs font-bold text-blue-100 uppercase tracking-wider mb-1">
+                      <p className="text-xs font-bold text-blue-100 uppercase mb-1">
                         Inflation Adjusted Value ({inflationRate}%)
                       </p>
                       <p className="text-2xl lg:text-3xl xl:text-4xl font-extrabold text-white tracking-tight leading-tight">
@@ -245,7 +245,7 @@ export default function SipSummaryCards({
                     exit={{ opacity: 0, y: -4 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <p className="text-xs font-bold text-blue-200 uppercase tracking-wider mb-1">Future Value</p>
+                    <p className="text-xs font-bold text-blue-200 uppercase mb-1">Future Value</p>
                     <p className="text-2xl lg:text-3xl xl:text-4xl font-extrabold text-white tracking-tight leading-tight">
                       <CountUpNumber
                         target={nominalValue}

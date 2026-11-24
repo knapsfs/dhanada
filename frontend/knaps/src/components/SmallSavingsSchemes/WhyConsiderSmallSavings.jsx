@@ -70,7 +70,7 @@ export default function WhyConsiderSmallSavings() {
                 <h3 className="text-lg font-bold text-slate-900 mb-3 group-hover:text-[#032e92] transition-colors">
                   {item.title}
                 </h3>
-                <p className="text-sm text-slate-600 leading-relaxed">{item.description}</p>
+                <p className="text-sm text-gray-600 leading-relaxed">{item.description}</p>
               </div>
             </div>
           ))}

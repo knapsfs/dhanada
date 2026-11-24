@@ -111,19 +111,19 @@ export default function WhyConsiderNps() {
         {/* Top Bar: Icon + Badge */}
         <div className="flex items-center justify-between mb-5">
           <div
-            className={`w-12 h-12 rounded-2xl flex items-center justify-center text-lg sm:text-xl border transition-all duration-300 group-hover:scale-110 shadow-xs ${item.theme.iconBg}`}
+            className={`w-12 h-12 rounded-2xl flex items-center justify-center text-lg sm:text-lg border transition-all duration-300 group-hover:scale-110 shadow-xs ${item.theme.iconBg}`}
           >
             <FontAwesomeIcon icon={item.icon} />
           </div>
           {/* <span
-            className={`text-[11px] font-bold px-3 py-1 rounded-full border uppercase tracking-wider ${item.theme.badgeBg}`}
+            className={`text-[11px] font-bold px-3 py-1 rounded-full border uppercase ${item.theme.badgeBg}`}
           >
             {item.badge}
           </span> */}
         </div>
 
         {/* Title */}
-        <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-1.5 group-hover:text-[#032e92] transition-colors leading-snug">
+        <h3 className="text-lg sm:text-lg font-bold text-slate-900 mb-1.5 group-hover:text-[#032e92] transition-colors leading-snug">
           {item.title}
         </h3>
 
@@ -137,7 +137,7 @@ export default function WhyConsiderNps() {
         </div> */}
 
         {/* Description */}
-        <p className="text-xs sm:text-[13.5px] text-slate-600 leading-relaxed font-normal mb-5">
+        <p className="text-sm sm:text-md text-gray-600 leading-relaxed font-normal mb-5">
           {item.description}
         </p>
       </div>
@@ -161,7 +161,7 @@ export default function WhyConsiderNps() {
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-block px-4 py-2 rounded-full border border-[#032e92]/20 text-[#032e92] bg-[#eef5ff] font-semibold text-sm mb-4 uppercase tracking-wider"
+            className="inline-block px-4 py-2 rounded-full border border-[#032e92]/20 text-[#032e92] bg-[#eef5ff] font-semibold text-sm mb-4 uppercase"
           >
             Why Choose NPS
           </motion.div> */}

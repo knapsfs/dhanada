@@ -118,7 +118,7 @@ export default function HowItWorks() {
                   <h3 className="text-xl font-bold text-gray-900 mb-3 leading-snug">
                     {step.title}
                   </h3>
-                  <p className="text-gray-500 text-[15px] leading-relaxed">
+                  <p className="text-gray-500 text-md leading-relaxed">
                     {step.description}
                   </p>
                 </div>

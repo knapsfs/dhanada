@@ -24,7 +24,7 @@ export default function SmallSavingsTaxBenefits() {
           {/* Card 1: Section 80C Deduction */}
           <div className="p-8 rounded-3xl bg-white border-2 border-emerald-300 shadow-md space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-emerald-700 uppercase tracking-wider">
+              <span className="text-xs font-bold text-emerald-700 uppercase">
                 Tax Deduction
               </span>
               <span className="text-xs font-black px-3 py-1 rounded-full bg-emerald-100 text-emerald-800">
@@ -35,7 +35,7 @@ export default function SmallSavingsTaxBenefits() {
             <div className="text-xs font-bold text-blue-600">
               Schemes: NSC (VIII Issue) & 5-Year Time Deposit (POTD)
             </div>
-            <p className="text-sm text-slate-600 leading-relaxed">
+            <p className="text-sm text-gray-600 leading-relaxed">
               Deduction on the principal deposit under Section 80C of the Income Tax Act (Old Tax Regime):
             </p>
             <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700">
@@ -57,7 +57,7 @@ export default function SmallSavingsTaxBenefits() {
           {/* Card 2: Deemed Reinvestment Benefit */}
           <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">
+              <span className="text-xs font-bold text-blue-600 uppercase">
                 Compounding Benefit
               </span>
               <span className="text-xs font-black px-3 py-1 rounded-full bg-blue-100 text-[#032e92]">
@@ -68,7 +68,7 @@ export default function SmallSavingsTaxBenefits() {
             <div className="text-xs font-bold text-blue-600">
               Scheme: National Savings Certificate (NSC)
             </div>
-            <p className="text-sm text-slate-600 leading-relaxed">
+            <p className="text-sm text-gray-600 leading-relaxed">
               Unique tax advantage where interest accrued annually is deemed reinvested:
             </p>
             <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700">
@@ -90,7 +90,7 @@ export default function SmallSavingsTaxBenefits() {
           {/* Card 3: Taxable at Slab Rate (Zero TDS) */}
           <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+              <span className="text-xs font-bold text-slate-500 uppercase">
                 Income Slab Tax
               </span>
               <span className="text-xs font-black px-3 py-1 rounded-full bg-slate-100 text-slate-700">
@@ -101,7 +101,7 @@ export default function SmallSavingsTaxBenefits() {
             <div className="text-xs font-bold text-blue-600">
               Schemes: KVP, 1/2/3-Yr POTD, and PORD
             </div>
-            <p className="text-sm text-slate-600 leading-relaxed">
+            <p className="text-sm text-gray-600 leading-relaxed">
               No Section 80C deduction on deposit. Interest is taxable at your applicable slab rate:
             </p>
             <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700">

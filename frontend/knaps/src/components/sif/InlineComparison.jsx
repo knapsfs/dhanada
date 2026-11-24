@@ -430,13 +430,13 @@ const InlineComparison = forwardRef(function InlineComparison(
           <table className="w-full text-left min-w-[600px]">
             <thead>
               <tr className="bg-[#f7f9fc]">
-                <th className="p-4 lg:p-5 text-xs font-bold text-[#64748b] uppercase tracking-wider w-1/4">
+                <th className="p-4 lg:p-5 text-xs font-bold text-[#64748b] uppercase w-1/4">
                   Parameter
                 </th>
                 {enrichedActiveFunds.map((item, idx) => {
                   const color = SLOT_COLORS[item.slotIndex % 3];
                   return (
-                    <th key={idx} className="p-4 lg:p-5 text-xs font-bold text-[#1e293b] uppercase tracking-wider border-l border-[#e8edf7]">
+                    <th key={idx} className="p-4 lg:p-5 text-xs font-bold text-[#1e293b] uppercase border-l border-[#e8edf7]">
                       <div className="flex flex-col gap-1">
                         <span className={`inline-block text-[10px] font-extrabold px-2 py-0.5 rounded-md border w-fit ${color.badge}`}>
                           Fund {item.slotIndex + 1}

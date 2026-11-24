@@ -32,7 +32,7 @@ export default function GeneralInsuranceHero() {
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         {/* Breadcrumb Navigation */}
-        <div className="flex items-center pb-4 sm:pb-5 gap-3 text-[15px] font-medium text-gray-500">
+        <div className="flex items-center pb-4 sm:pb-5 gap-3 text-sm font-medium text-gray-500">
           <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
           <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
           <Link to="/products" className="hover:text-[#032e92] transition-colors">Products</Link>
@@ -68,7 +68,7 @@ export default function GeneralInsuranceHero() {
               <button
                 type="button"
                 onClick={scrollToFinder}
-                className="btn-ripple bg-gradient-to-r from-[#032e92] to-[#021d63] text-white px-6 py-3 rounded-xl text-[15px] font-semibold hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer group"
+                className="btn-ripple bg-gradient-to-r from-[#032e92] to-[#021d63] text-white px-6 py-3 rounded-xl text-md font-semibold hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer group"
               >
                 {/* <FontAwesomeIcon icon={faShieldHalved} className="text-xs" /> */}
                 <span>Find the Right Cover</span>
@@ -78,7 +78,7 @@ export default function GeneralInsuranceHero() {
               <button
                 type="button"
                 onClick={openLeadModal}
-                className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-white hover:bg-blue-50 text-[#032e92] border border-[#032e92]/20 shadow-md hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer"
+                className="btn-ripple px-6 py-3 rounded-xl text-md font-semibold bg-white hover:bg-blue-50 text-[#032e92] border border-[#032e92]/20 shadow-md hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span>Speak with an Insurance Specialist</span>
               </button>
@@ -132,7 +132,7 @@ export default function GeneralInsuranceHero() {
               {/* Cover Amount Highlight */}
               <div className="bg-gradient-to-br from-[#032e92] to-[#021d63] text-white rounded-2xl p-5 mb-6 relative overflow-hidden shadow-md">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none" />
-                <p className="text-xs font-bold text-blue-200 uppercase tracking-wider mb-1">
+                <p className="text-xs font-bold text-blue-200 uppercase mb-1">
                   Cashless Claim Network
                 </p>
                 <div className="flex items-baseline gap-2">

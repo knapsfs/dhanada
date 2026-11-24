@@ -71,7 +71,7 @@ export default function NpsFAQ() {
           aria-expanded={isOpen}
         >
           <span
-            className={`text-[15px] md:text-[16px] font-bold transition-colors duration-300 ${isOpen ? 'text-[#032e92]' : 'text-slate-900'
+            className={`text-md md:text-[16px] font-bold transition-colors duration-300 ${isOpen ? 'text-[#032e92]' : 'text-slate-900'
               }`}
           >
             {faq.question}
@@ -95,7 +95,7 @@ export default function NpsFAQ() {
               transition={{ duration: 0.3, ease: 'easeInOut' }}
               className="overflow-hidden"
             >
-              <div className="px-6 pb-6 pt-2 text-[14px] md:text-[15px] text-slate-600 leading-relaxed border-t border-slate-100/70 mt-1">
+              <div className="px-6 pb-6 pt-2 text-[14px] md:text-md text-gray-600 leading-relaxed border-t border-slate-100/70 mt-1">
                 {faq.answer}
               </div>
             </motion.div>
@@ -110,7 +110,7 @@ export default function NpsFAQ() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          {/* <div className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-[#032e92] text-xs font-semibold tracking-wider uppercase mb-3">
+          {/* <div className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-[#032e92] text-xs font-semibold uppercase mb-3">
             FAQ
           </div> */}
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight">

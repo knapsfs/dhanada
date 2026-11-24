@@ -46,7 +46,7 @@ export default function MfCTA() {
               <button
                 type="button"
                 onClick={() => openLeadModal('Mutual Funds: Final CTA Start Journey')}
-                className="btn-ripple w-full sm:w-auto px-6 py-3 rounded-xl text-[15px] font-semibold bg-white text-[#032e92] hover:bg-blue-50 shadow-md hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
+                className="btn-ripple w-full sm:w-auto px-6 py-3 rounded-xl text-md font-semibold bg-white text-[#032e92] hover:bg-blue-50 shadow-md hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
               >
                 <span>Start Your Investment Journey</span>
               </button>

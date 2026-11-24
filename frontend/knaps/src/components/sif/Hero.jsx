@@ -76,13 +76,13 @@ export default function Hero() {
               <button
                 type="button"
                 onClick={openLeadModal}
-                className="btn-ripple flex-1 sm:flex-none px-4 sm:px-8 py-3 sm:py-3.5 rounded-xl text-sm sm:text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white border border-white/30 hover:border-white/60 hover:shadow-xl hover:shadow-[#032e92]/50 transition-all duration-300 inline-flex items-center justify-center cursor-pointer whitespace-nowrap"
+                className="btn-ripple flex-1 sm:flex-none px-4 sm:px-8 py-3 sm:py-3.5 rounded-xl text-sm sm:text-md font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white border border-white/30 hover:border-white/60 hover:shadow-xl hover:shadow-[#032e92]/50 transition-all duration-300 inline-flex items-center justify-center cursor-pointer whitespace-nowrap"
               >
                 Invest Now
               </button>
               <a
                 href="#top-funds"
-                className="btn-ripple flex-1 sm:flex-none px-4 sm:px-7 py-3 sm:py-3.5 rounded-xl text-sm sm:text-[15px] font-semibold bg-white/10 hover:bg-white/15 text-white border border-white/20 hover:border-white/40 backdrop-blur-md shadow-sm hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center cursor-pointer whitespace-nowrap"
+                className="btn-ripple flex-1 sm:flex-none px-4 sm:px-7 py-3 sm:py-3.5 rounded-xl text-sm sm:text-md font-semibold bg-white/10 hover:bg-white/15 text-white border border-white/20 hover:border-white/40 backdrop-blur-md shadow-sm hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center cursor-pointer whitespace-nowrap"
               >
                 Explore Funds
               </a>
@@ -105,7 +105,7 @@ export default function Hero() {
                 </svg>
               </div>
               <div>
-                <p className="text-[11px] font-bold tracking-wider uppercase text-cyan-300">SEBI Regulated Framework</p>
+                <p className="text-[11px] font-bold uppercase text-cyan-300">SEBI Regulated Framework</p>
               </div>
             </motion.div>
 
@@ -122,7 +122,7 @@ export default function Hero() {
                 </svg>
               </div>
               <div>
-                <p className="text-[11px] font-bold tracking-wider uppercase text-blue-300">Bridges gap between Mutual Funds and PMS</p>
+                <p className="text-[11px] font-bold uppercase text-blue-300">Bridges gap between Mutual Funds and PMS</p>
               </div>
             </motion.div>
 

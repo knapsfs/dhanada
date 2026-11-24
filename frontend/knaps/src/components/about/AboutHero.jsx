@@ -19,7 +19,7 @@ export default function AboutHero() {
           className="mb-8 sm:mb-10"
         >
           {/* Breadcrumb Navigation */}
-          <div className="flex items-center pb-4 sm:pb-5 gap-3 text-[15px] font-medium text-gray-500">
+          <div className="flex items-center pb-4 sm:pb-5 gap-3 text-sm font-medium text-gray-500">
             <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
             <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
             <span className="text-[#032e92]">About Us</span>
@@ -59,7 +59,7 @@ export default function AboutHero() {
               <button
                 type="button"
                 onClick={openLeadModal}
-                className="btn-ripple px-8 py-3.5 rounded-xl text-[15px] font-semibold bg-[#032e92] hover:bg-[#022169] text-white shadow-md hover:shadow-lg transition-all duration-300 inline-flex items-center gap-2.5 cursor-pointer"
+                className="btn-ripple px-8 py-3.5 rounded-xl text-md font-semibold bg-[#032e92] hover:bg-[#022169] text-white shadow-md hover:shadow-lg transition-all duration-300 inline-flex items-center gap-2.5 cursor-pointer"
               >
                 <span>Plan Your Goals With Us</span>
               </button>

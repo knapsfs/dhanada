@@ -295,7 +295,7 @@ export default function Hero() {
                       setErrors({});
                       setAgreedToTerms(false);
                     }}
-                    className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer"
+                    className="btn-ripple px-6 py-3 rounded-xl text-md font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer"
                   >
                     Submit Another Enquiry
                   </button>
@@ -315,7 +315,7 @@ export default function Hero() {
 
                   {/* Product Dropdown - Consistent Underline Style */}
                   <div className="relative" ref={dropdownRef}>
-                    <label className="block text-[11px] font-bold text-gray-600 uppercase tracking-wider mb-1">
+                    <label className="block text-[11px] font-bold text-gray-600 uppercase mb-1">
                       What’s your goal? <span className="text-red-500">*</span>
                     </label>
 
@@ -401,7 +401,7 @@ export default function Hero() {
 
                   {/* Name */}
                   <div>
-                    <label className="block text-[11px] font-bold text-gray-600 uppercase tracking-wider mb-1">
+                    <label className="block text-[11px] font-bold text-gray-600 uppercase mb-1">
                       Full Name <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -423,7 +423,7 @@ export default function Hero() {
 
                   {/* Email */}
                   <div>
-                    <label className="block text-[11px] font-bold text-gray-600 uppercase tracking-wider mb-1">
+                    <label className="block text-[11px] font-bold text-gray-600 uppercase mb-1">
                       Email Address <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -446,7 +446,7 @@ export default function Hero() {
                   {/* Mobile */}
                   <div className="relative" ref={countryDropdownRef}>
                     <div className="flex items-center justify-between mb-1">
-                      <label className="block text-[11px] font-bold text-gray-600 uppercase tracking-wider">
+                      <label className="block text-[11px] font-bold text-gray-600 uppercase">
                         Mobile Number <span className="text-red-500">*</span>
                       </label>
                       {/* <span className={`text-[10px] font-medium transition-colors ${formData.mobile.length === selectedCountry.maxDigits
@@ -499,7 +499,7 @@ export default function Hero() {
                         onChange={handleChange}
                         disabled={status === 'submitting'}
                         placeholder={selectedCountry.placeholder || 'Enter mobile number'}
-                        className="w-full bg-transparent text-sm text-gray-800 placeholder-gray-400 focus:outline-none disabled:opacity-60 tracking-wider"
+                        className="w-full bg-transparent text-sm text-gray-800 placeholder-gray-400 focus:outline-none disabled:opacity-60"
                       />
                     </div>
                     {errors.mobile && (
@@ -610,7 +610,7 @@ export default function Hero() {
                   <button
                     type="submit"
                     disabled={status === 'submitting'}
-                    className="w-full btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 mt-2 disabled:opacity-75 cursor-pointer active:scale-[0.99]"
+                    className="w-full btn-ripple px-6 py-3.5 rounded-xl text-md font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 mt-2 disabled:opacity-75 cursor-pointer active:scale-[0.99]"
                   >
                     {status === 'submitting' ? (
                       <>

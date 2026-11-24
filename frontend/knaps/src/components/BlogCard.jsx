@@ -30,7 +30,7 @@ export default function BlogCard({ blog }) {
               e.currentTarget.src = 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?q=80&w=1600&auto=format&fit=crop';
             }}
           />
-          <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold text-[#c10000] uppercase tracking-wider shadow-sm">
+          <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold text-[#c10000] uppercase shadow-sm">
             {categoryName}
           </div>
         </Link>

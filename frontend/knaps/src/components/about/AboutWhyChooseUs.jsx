@@ -32,7 +32,7 @@ export default function AboutWhyChooseUs() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-block px-4 py-2 rounded-full bg-white/10 text-white font-semibold text-sm mb-4 tracking-wider backdrop-blur-sm"
+            className="inline-block px-4 py-2 rounded-full bg-white/10 text-white font-semibold text-sm mb-4 backdrop-blur-sm"
           >
             Why Choose Knaps
           </motion.div>
