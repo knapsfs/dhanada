@@ -100,9 +100,11 @@ jobs:
       - name: Install
         working-directory: /home/runner/frappe-bench
         run: |
+          bench get-app whatsapp https://github.com/frappe/whatsapp.git --branch main
           bench get-app dhanada $GITHUB_WORKSPACE
           bench setup requirements --dev
           bench new-site --db-root-password root --admin-password admin test_site
+          bench --site test_site install-app whatsapp
           bench --site test_site install-app dhanada
           bench build
         env:
