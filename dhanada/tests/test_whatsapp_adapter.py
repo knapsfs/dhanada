@@ -35,6 +35,12 @@ from dhanada.whatsapp_api import (
 WHATSAPP_ENABLED = bool(os.environ.get("WHATSAPP_ACCESS_TOKEN"))
 
 
+# Skip WhatsApp adapter tests in CI unless credentials are configured.
+# These tests require WhatsApp Business API access and should run in an
+# integration environment with real credentials.
+WHATSAPP_ENABLED = bool(os.environ.get("WHATSAPP_ACCESS_TOKEN"))
+
+
 class TestWhatsAppAdapter(FrappeTestCase):
 	def setUp(self):
 		if not WHATSAPP_ENABLED:
