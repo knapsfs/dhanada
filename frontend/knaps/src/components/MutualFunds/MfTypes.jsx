@@ -49,7 +49,7 @@ export default function MfTypes() {
         </div>
 
         {/* Tab Navigation Pill Bar */}
-        <div className="flex items-center justify-start sm:justify-center overflow-x-auto pb-4 gap-2.5 sm:gap-3 scrollbar-none mb-10">
+        <div className="flex items-center justify-start sm:justify-center overflow-x-auto pb-2 gap-2.5 sm:gap-3 scrollbar-none mb-5">
           {MF_CATEGORIES.map((cat) => {
             const isSelected = activeCategoryId === cat.id;
             return (
@@ -62,7 +62,7 @@ export default function MfTypes() {
                   : 'bg-white text-slate-700 border border-slate-200 hover:border-blue-300 hover:bg-blue-50/50'
                   }`}
               >
-                <FontAwesomeIcon icon={getCategoryIcon(cat.id)} className={isSelected ? 'text-blue-300' : 'text-[#032e92]'} />
+                {/* <FontAwesomeIcon icon={getCategoryIcon(cat.id)} className={isSelected ? 'text-blue-300' : 'text-[#032e92]'} /> */}
                 <span>{cat.name}</span>
               </button>
             );
@@ -80,12 +80,12 @@ export default function MfTypes() {
             className="bg-white rounded-3xl border border-blue-100 shadow-xl shadow-blue-900/5 p-6 sm:p-8 lg:p-10"
           >
             {/* Top Bar with Category Overview & Metrics */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pb-8 border-b border-slate-100 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 pb-4 border-b border-slate-100 items-start">
               <div className="lg:col-span-5 space-y-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-[#032e92]">
+                  {/* <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-[#032e92]">
                     <FontAwesomeIcon icon={getCategoryIcon(activeCategory.id)} className="text-xl" />
-                  </div>
+                  </div> */}
                   <div>
                     <h3 className="text-xl sm:text-2xl font-extrabold text-[#032e92]">
                       {activeCategory.name}
@@ -127,7 +127,7 @@ export default function MfTypes() {
             </div>
 
             {/* Subcategories Breakdown */}
-            <div className="mt-8">
+            <div className="mt-4">
               <h4 className="text-base font-bold text-slate-900 mb-5">
                 Key Fund Subcategories & Mandates in {activeCategory.name}:
               </h4>
@@ -141,6 +141,17 @@ export default function MfTypes() {
                     <p className="text-xs text-slate-600 leading-relaxed font-normal">{sub.desc}</p>
                   </div>
                 ))}
+              </div>
+
+              {/* And more indicator */}
+              <div className="mt-4 flex items-center justify-center sm:justify-end">
+                <button
+                  type="button"
+                  onClick={() => openLeadModal(`Mutual Funds: Explore All ${activeCategory.name} Subcategories`)}
+                  className="inline-flex items-center gap-2.5 px-4 sm:px-5 py-2 sm:py-2.5 rounded-2xl bg-gradient-to-r from-[#f8fbff] to-blue-50/90 border border-blue-200/80 text-[#032e92] text-xs sm:text-sm font-bold shadow-xs hover:shadow-md hover:shadow-blue-900/10 hover:border-blue-400 hover:bg-blue-100/50 transition-all duration-200 cursor-pointer group"
+                >
+                  <span className="tracking-wide">and more... </span>
+                </button>
               </div>
             </div>
 

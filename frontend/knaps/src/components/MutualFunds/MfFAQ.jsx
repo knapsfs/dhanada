@@ -28,11 +28,10 @@ export default function MfFAQ() {
     return (
       <div
         key={index}
-        className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
-          isOpen
+        className={`rounded-2xl border transition-all duration-300 overflow-hidden ${isOpen
             ? 'border-[#032e92] bg-white shadow-lg shadow-blue-900/5'
             : 'border-slate-100 bg-[#f8fafc] hover:bg-white hover:border-slate-200'
-        }`}
+          }`}
       >
         <button
           type="button"
@@ -41,18 +40,16 @@ export default function MfFAQ() {
           aria-expanded={isOpen}
         >
           <span
-            className={`text-[15px] md:text-[16px] font-bold transition-colors duration-300 ${
-              isOpen ? 'text-[#032e92]' : 'text-slate-900'
-            }`}
+            className={`text-[15px] md:text-[16px] font-bold transition-colors duration-300 ${isOpen ? 'text-[#032e92]' : 'text-slate-900'
+              }`}
           >
             {faq.q}
           </span>
           <div
-            className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-300 ${
-              isOpen
+            className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-300 ${isOpen
                 ? 'bg-[#032e92] text-white'
                 : 'border border-slate-200 bg-white text-slate-400'
-            }`}
+              }`}
           >
             <FontAwesomeIcon icon={isOpen ? faMinus : faPlus} className="text-xs" />
           </div>
@@ -103,26 +100,7 @@ export default function MfFAQ() {
           </div>
         </div>
 
-        {/* Bottom Help Card */}
-        <div className="mt-12 text-center p-6 rounded-2xl bg-[#f8fbff] border border-blue-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3 text-left">
-            <div className="w-10 h-10 rounded-xl bg-blue-100 text-[#032e92] flex items-center justify-center shrink-0">
-              <FontAwesomeIcon icon={faHeadset} />
-            </div>
-            <div>
-              <div className="text-sm font-bold text-slate-800">Still have questions about mutual funds?</div>
-              <p className="text-xs text-slate-600 mt-0.5">Connect with our AMFI-registered mutual fund distributors for personalized portfolio guidance.</p>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={() => openLeadModal('Mutual Funds: FAQ Consultation')}
-            className="px-5 py-2.5 rounded-xl bg-[#032e92] text-white text-xs sm:text-sm font-bold hover:bg-[#021d63] transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs shrink-0"
-          >
-            <span>Ask a Specialist</span>
-            <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
-          </button>
-        </div>
+
       </div>
     </section>
   );
