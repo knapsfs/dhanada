@@ -1,5 +1,6 @@
-# Keep the build context small. The image clones the repository itself at
-# APP_COMMIT, so the context only needs the Dockerfile.
+# The dhanada image is built from frappe/frappe_docker's layered Containerfile
+# (see .github/workflows/build.yml). This repo's context is not used for image
+# builds, so this file only excludes noisy directories from local operations.
 .git
 .github
 node_modules

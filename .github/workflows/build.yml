@@ -5,6 +5,10 @@ name: Build image
 #
 # This runs after CI completes successfully on develop, so a red merge never
 # produces an image.
+#
+# Uses frappe_docker's layered Containerfile (frappe/build + frappe/base,
+# version-16). The dhanada app is installed at build time via a secret-mounted
+# apps.json, following the same pattern as frappe/crm.
 
 on:
   workflow_run:
@@ -29,32 +33,21 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:
-      - name: Checkout the commit CI tested
-        uses: actions/checkout@v6
-        with:
-          ref: ${{ github.event.workflow_run.head_sha }}
-
-      - name: Resolve the base image
-        env:
-          # A repository variable is admin-set, but pass it through the
-          # environment so the shell never parses its value as code.
-          BASE_INPUT: ${{ vars.ERPNEXT_IMAGE }}
+      - name: Set branch
         run: |
-          set -euo pipefail
-          BASE="$BASE_INPUT"
-          if [ -z "$BASE" ]; then
-            BASE="frappe/erpnext:develop"
-            echo "::warning::ERPNEXT_IMAGE is not set; using $BASE. Pin a version or digest in repository variables."
-          fi
+          echo "FRAPPE_BRANCH=version-16" >> $GITHUB_ENV
 
-          # A bare `latest` or a floating `develop` defeats "build once": the
-          # base can change between the development build and any later build
-          # of the same commit. Require a version tag or, better, a digest.
-          if [[ "$BASE" == *":latest" ]]; then
-            echo "::error::ERPNEXT_IMAGE must not be :latest. Pin a version or digest."
-            exit 1
-          fi
-          echo "ERPNEXT_IMAGE=$BASE" >> "$GITHUB_ENV"
+      - name: Checkout frappe_docker
+        uses: actions/checkout@v4
+        with:
+          repository: frappe/frappe_docker
+          path: builds
+
+      - name: Write apps.json into build context
+        run: |
+          cat > builds/apps.json << 'EOF'
+[{"url": "https://github.com/knapsfs/dhanada", "branch": "develop"}]
+EOF
 
       - name: Set up Buildx
         uses: docker/setup-buildx-action@v3
@@ -70,13 +63,13 @@ jobs:
         id: push
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: builds
+          file: builds/images/layered/Containerfile
           push: true
           build-args: |
-            APP_COMMIT=${{ github.event.workflow_run.head_sha }}
-            ERPNEXT_IMAGE=${{ env.ERPNEXT_IMAGE }}
-          # sha-<full> is the durable, immutable handle. `develop` is a
-          # convenience alias for humans; deploys never use it.
+            FRAPPE_BRANCH=${{ env.FRAPPE_BRANCH }}
+          secrets: |
+            "apps_json=apps.json"
           tags: |
             ghcr.io/knapsfs/dhanada:sha-${{ github.event.workflow_run.head_sha }}
             ghcr.io/knapsfs/dhanada:develop
@@ -99,7 +92,7 @@ jobs:
             echo "|---|---|"
             echo "| Commit | \`${{ github.event.workflow_run.head_sha }}\` |"
             echo "| Digest | \`${{ steps.push.outputs.digest }}\` |"
-            echo "| Base image | \`${{ env.ERPNEXT_IMAGE }}\` |"
+            echo "| Base image | frappe/build:version-16 + frappe/base:version-16 |"
             echo ""
             echo "Deploy this digest to development, then promote the same digest."
           } >> "$GITHUB_STEP_SUMMARY"
