@@ -29,10 +29,25 @@ Pre-commit is configured to use the following tools for checking and formatting 
 - pyupgrade
 ### CI
 
-This app can use GitHub Actions for CI. The following workflows are configured:
+GitHub Actions runs tests and linters on every pull request, and builds the
+application image when a change lands on `develop`.
 
-- CI: Installs this app and runs unit tests on every push to `develop` branch.
-- Linters: Runs [Frappe Semgrep Rules](https://github.com/frappe/semgrep-rules) and [pip-audit](https://pypi.org/project/pip-audit/) on every pull request.
+- **CI** — installs the app and runs unit tests on PRs and on `develop`.
+- **Linters** — [Frappe Semgrep Rules](https://github.com/frappe/semgrep-rules) and [pip-audit](https://pypi.org/project/pip-audit/) on every pull request.
+- **PR Title Check** — semantic title and issue reference.
+
+### Deployment
+
+One image per commit, promoted by digest:
+
+```
+merge to develop -> build once -> deploy to development -> smoke
+                 -> release tag -> promote the same digest -> approve -> production
+```
+
+See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for the full flow, the required
+secrets and the rollback procedure. The receiving pipeline (servers, Ansible,
+`erp-deploy`) lives in the `knapsfs/deployment` repository.
 
 
 ### License

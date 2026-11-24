@@ -1,0 +1,10 @@
+# The dhanada image is built from frappe/frappe_docker's layered Containerfile
+# (see .github/workflows/build.yml). This repo's context is not used for image
+# builds, so this file only excludes noisy directories from local operations.
+.git
+.github
+node_modules
+**/node_modules
+docs
+*.md
+license.txt

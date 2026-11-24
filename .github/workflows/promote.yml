@@ -1,0 +1,72 @@
+name: Promote to production
+
+# Request a production deploy of a digest that already passed development.
+# The deployment repository enforces two things this workflow cannot:
+#   1. the digest has a successful development deploy and smoke test;
+#   2. the production environment reviewer approves the run.
+#
+# Use this for a normal release (after the release tag exists) and for a
+# rollback (pass the previous digest).
+
+on:
+  workflow_dispatch:
+    inputs:
+      digest:
+        description: 'Digest validated in development (sha256:...)'
+        required: true
+        type: string
+      note:
+        description: 'Why: release, rollback, hotfix'
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: promote-production
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    name: promote
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Validate the digest
+        env:
+          DIGEST: ${{ inputs.digest }}
+        run: |
+          set -euo pipefail
+          DIGEST="$(printf '%s' "$DIGEST" | tr '[:upper:]' '[:lower:]')"
+          if [[ ! "$DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]; then
+            echo "::error::digest must be sha256: followed by 64 lowercase hex characters."
+            exit 1
+          fi
+          # Pass the normalised value on, so the dispatched digest is exactly
+          # the one that was validated.
+          echo "DIGEST=$DIGEST" >> "$GITHUB_ENV"
+
+      - name: Start the approved production deploy
+        env:
+          GH_TOKEN: ${{ secrets.DEPLOYMENT_REPO_DISPATCH_TOKEN }}
+          NOTE: ${{ inputs.note }}
+        run: |
+          set -euo pipefail
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error::DEPLOYMENT_REPO_DISPATCH_TOKEN is not set."
+            exit 1
+          fi
+          gh workflow run deploy-app.yml -R knapsfs/deployment \
+            -f digest="$DIGEST" \
+            -f environment=production
+          {
+            echo "### Production deploy requested"
+            echo ""
+            echo "| Field | Value |"
+            echo "|---|---|"
+            echo "| Digest | \`$DIGEST\` |"
+            echo "| Note | ${NOTE:-none} |"
+            echo ""
+            echo "Approve it in the deployment repository's **production** environment."
+          } >> "$GITHUB_STEP_SUMMARY"
