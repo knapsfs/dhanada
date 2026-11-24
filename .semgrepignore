@@ -1,0 +1,4 @@
+# Exclude agent skill scripts - these are internal audit tools
+# that intentionally read files from the filesystem as part of their
+# security auditing purpose.
+.agents/
