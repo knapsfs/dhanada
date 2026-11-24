@@ -66,6 +66,26 @@ jobs:
           node-version: 24
           check-latest: true
 
+      - name: Get npm cache directory path
+        id: npm-cache-dir-path
+        run: 'echo "dir=$(npm cache dir)" >> $GITHUB_OUTPUT'
+
+      - name: Cache npm
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.npm-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
+      - name: Build React frontend
+        run: |
+          cd frontend
+          npm ci
+          npm run build
+        # Validates the React app compiles. Assets are not baked into the image;
+        # they are built at deploy time by the entrypoint / asset-syncer.
+
       - name: Cache pip
         uses: actions/cache@v4
         with:
@@ -100,11 +120,9 @@ jobs:
       - name: Install
         working-directory: /home/runner/frappe-bench
         run: |
-          bench get-app whatsapp https://github.com/frappe/whatsapp.git --branch main
           bench get-app dhanada $GITHUB_WORKSPACE
           bench setup requirements --dev
           bench new-site --db-root-password root --admin-password admin test_site
-          bench --site test_site install-app whatsapp
           bench --site test_site install-app dhanada
           bench build
         env:

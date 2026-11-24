@@ -19,7 +19,7 @@ export default defineConfig(({ command }) => ({
 	},
 
 	build: {
-		outDir: "../../dhanada/public/knaps",
+		outDir: "../dhanada/public/knaps",
 		emptyOutDir: true,
 	},
 

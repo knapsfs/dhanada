@@ -5,7 +5,7 @@ import frappe
 
 def get_context(context):
 	dist_path = frappe.get_app_path("dhanada", "public", "knaps", "index.html")
-	dev_path = frappe.get_app_path("dhanada", "..", "frontend", "knaps", "index.html")
+	dev_path = frappe.get_app_path("dhanada", "..", "frontend", "index.html")
 	is_prod = os.path.exists(dist_path)
 	index_path = dist_path if is_prod else dev_path
 
