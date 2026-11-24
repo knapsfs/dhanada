@@ -66,14 +66,10 @@ jobs:
           node-version: 24
           check-latest: true
 
-      - name: Get npm cache directory path
-        id: npm-cache-dir-path
-        run: 'echo "dir=$(npm cache dir)" >> $GITHUB_OUTPUT'
-
       - name: Cache npm
         uses: actions/cache@v4
         with:
-          path: ${{ steps.npm-cache-dir-path.outputs.dir }}
+          path: ~/.npm
           key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npm-
