@@ -227,7 +227,7 @@ export default function RegulatoryDisclosures() {
               {/* Column 1: Office & Corporate Coordinates */}
               <div className="space-y-5">
                 <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-gray-400 block mb-1">
+                  <span className="text-xs font-bold uppercase text-gray-400 block mb-1">
                     Registered &amp; Corporate Office
                   </span>
                   <div className="flex items-start gap-3 mt-1.5">
@@ -239,7 +239,7 @@ export default function RegulatoryDisclosures() {
                 </div>
 
                 <div className="pt-2">
-                  <span className="text-xs font-bold uppercase tracking-wider text-gray-400 block mb-1">
+                  <span className="text-xs font-bold uppercase text-gray-400 block mb-1">
                     Corporate Identity (CIN)
                   </span>
                   <p className="text-sm text-gray-800 font-mono font-medium">
@@ -248,7 +248,7 @@ export default function RegulatoryDisclosures() {
                 </div>
 
                 <div className="pt-2">
-                  <span className="text-xs font-bold uppercase tracking-wider text-gray-400 block mb-1">
+                  <span className="text-xs font-bold uppercase text-gray-400 block mb-1">
                     GSTIN Number
                   </span>
                   <p className="text-sm text-gray-800 font-mono font-medium">
@@ -262,7 +262,7 @@ export default function RegulatoryDisclosures() {
               {/* Column 2: Communications & Official Touchpoints */}
               <div className="space-y-5 md:pl-8 pt-5 md:pt-0">
                 <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-gray-400 block mb-1">
+                  <span className="text-xs font-bold uppercase text-gray-400 block mb-1">
                     Telephone Contact
                   </span>
                   <div className="flex items-center gap-3 mt-1.5">
@@ -277,7 +277,7 @@ export default function RegulatoryDisclosures() {
                 </div>
 
                 <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-gray-400 block mb-1">
+                  <span className="text-xs font-bold uppercase text-gray-400 block mb-1">
                     Official Email Addresses
                   </span>
                   <div className="space-y-2 mt-1.5">
@@ -316,7 +316,7 @@ export default function RegulatoryDisclosures() {
                 </div>
 
                 <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-gray-400 block mb-1">
+                  <span className="text-xs font-bold uppercase text-gray-400 block mb-1">
                     Official Web Portal
                   </span>
                   <a
@@ -362,7 +362,7 @@ export default function RegulatoryDisclosures() {
                 <div>
                   {/* Card Header & Status */}
                   {/* <div className="flex items-start justify-between gap-3 mb-4">
-                    <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+                    <span className="text-[11px] font-bold text-gray-400 uppercase">
                       {reg.category}
                     </span>
                     <span className="text-xs font-bold px-2.5 py-1 rounded-full border bg-emerald-50 text-emerald-700 border-emerald-200">
@@ -380,7 +380,7 @@ export default function RegulatoryDisclosures() {
                   {/* Main Identifier Box */}
                   <div className="bg-[#f8fafd] border border-blue-100/80 rounded-2xl p-4 mb-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      <span className="text-xs font-semibold text-gray-500 uppercase">
                         {reg.regNumberLabel}
                       </span>
                       <button
@@ -534,7 +534,7 @@ export default function RegulatoryDisclosures() {
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-gradient-to-r from-[#032e92] to-[#021d63] text-white text-xs font-bold uppercase tracking-wider">
+                  <tr className="bg-gradient-to-r from-[#032e92] to-[#021d63] text-white text-xs font-bold uppercase">
                     <th scope="col" className="py-4 px-4 sm:px-6 w-16 text-center">
                       S. No.
                     </th>
@@ -563,7 +563,7 @@ export default function RegulatoryDisclosures() {
 
                         {/* AMC Name */}
                         <td className="py-3.5 px-4 sm:px-6">
-                          <div className="font-bold text-gray-900 text-sm sm:text-[15px]">
+                          <div className="font-bold text-gray-900 text-sm sm:text-md">
                             {amc.name}
                           </div>
                           {amc.formerName && (
@@ -726,7 +726,7 @@ export default function RegulatoryDisclosures() {
 
             {/* Regulatory Portals (SCORES & SMART ODR) */}
             <div className="p-6 sm:p-8 bg-gray-50/70">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4">
+              <h4 className="text-xs font-bold uppercase text-gray-400 mb-4">
                 Official Regulatory Investor Grievance Portals
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

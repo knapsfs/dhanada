@@ -29,25 +29,25 @@ export default function CompareSmallSavingsSchemes() {
             <table className="w-full text-left border-collapse min-w-[900px]">
               <thead>
                 <tr className="bg-slate-100/90 border-b border-slate-200">
-                  <th className="py-4 px-5 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                  <th className="py-4 px-5 text-xs font-bold text-slate-500 uppercase">
                     Scheme
                   </th>
-                  <th className="py-4 px-5 text-xs font-extrabold text-[#032e92] uppercase tracking-wider">
+                  <th className="py-4 px-5 text-xs font-extrabold text-[#032e92] uppercase">
                     Interest Rate
                   </th>
-                  <th className="py-4 px-5 text-xs font-bold text-slate-700 uppercase tracking-wider">
+                  <th className="py-4 px-5 text-xs font-bold text-slate-700 uppercase">
                     Tenure
                   </th>
-                  <th className="py-4 px-5 text-xs font-bold text-slate-700 uppercase tracking-wider">
+                  <th className="py-4 px-5 text-xs font-bold text-slate-700 uppercase">
                     Min / Max Deposit
                   </th>
-                  <th className="py-4 px-5 text-xs font-bold text-slate-700 uppercase tracking-wider">
+                  <th className="py-4 px-5 text-xs font-bold text-slate-700 uppercase">
                     Payout Type
                   </th>
-                  <th className="py-4 px-5 text-xs font-bold text-slate-700 uppercase tracking-wider">
+                  <th className="py-4 px-5 text-xs font-bold text-slate-700 uppercase">
                     Tax Relief
                   </th>
-                  <th className="py-4 px-5 text-xs font-bold text-slate-700 uppercase tracking-wider">
+                  <th className="py-4 px-5 text-xs font-bold text-slate-700 uppercase">
                     Target Eligibility
                   </th>
                 </tr>
@@ -71,7 +71,7 @@ export default function CompareSmallSavingsSchemes() {
                     </td>
                     <td className="py-4 px-5 text-slate-700">{item.payoutType}</td>
                     <td className="py-4 px-5 font-semibold text-emerald-700">{item.taxStatus}</td>
-                    <td className="py-4 px-5 text-slate-600 max-w-xs">{item.eligibility}</td>
+                    <td className="py-4 px-5 text-gray-600 max-w-xs">{item.eligibility}</td>
                   </tr>
                 ))}
               </tbody>

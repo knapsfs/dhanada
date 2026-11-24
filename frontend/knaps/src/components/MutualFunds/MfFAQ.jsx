@@ -40,7 +40,7 @@ export default function MfFAQ() {
           aria-expanded={isOpen}
         >
           <span
-            className={`text-[15px] md:text-[16px] font-bold transition-colors duration-300 ${isOpen ? 'text-[#032e92]' : 'text-slate-900'
+            className={`text-md md:text-[16px] font-bold transition-colors duration-300 ${isOpen ? 'text-[#032e92]' : 'text-slate-900'
               }`}
           >
             {faq.q}
@@ -64,7 +64,7 @@ export default function MfFAQ() {
               transition={{ duration: 0.3, ease: 'easeInOut' }}
               className="overflow-hidden"
             >
-              <div className="px-6 pb-6 pt-2 text-[14px] md:text-[15px] text-slate-600 leading-relaxed border-t border-slate-100/70 mt-1 whitespace-pre-line">
+              <div className="px-6 pb-6 pt-2 text-[14px] md:text-md text-gray-600 leading-relaxed border-t border-slate-100/70 mt-1 whitespace-pre-line">
                 {faq.a}
               </div>
             </motion.div>

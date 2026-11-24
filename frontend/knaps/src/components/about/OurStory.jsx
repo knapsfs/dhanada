@@ -56,7 +56,7 @@ export default function OurStory() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <span className="text-[#032e92] font-semibold text-sm uppercase tracking-wider mb-4 block">Our Story</span>
+              <span className="text-[#032e92] font-semibold text-sm uppercase mb-4 block">Our Story</span>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Our Journey Towards Financial Excellence</h2>
               <p className="text-gray-600 mb-12 leading-relaxed">
                 Since our inception, our mission has been clear: to empower our clients to achieve financial freedom and build lasting generational wealth. We've continuously evolved our strategies, expanded our expertise, and embraced innovation to ensure our investors are always steps ahead.

@@ -151,7 +151,7 @@ export default function Navbar() {
                 {link.href.startsWith('http') ? (
                   <a
                     href={link.href}
-                    className="relative flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-[14px] 2xl:text-[15px] font-medium text-gray-700 hover:text-[#032e92] hover:bg-[#eef5ff]/60 transition-all duration-300 group"
+                    className="relative flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-[14px] 2xl:text-md font-medium text-gray-700 hover:text-[#032e92] hover:bg-[#eef5ff]/60 transition-all duration-300 group"
                   >
                     {link.label}
                     {link.dropdown && (
@@ -165,7 +165,7 @@ export default function Navbar() {
                 ) : (
                   <Link
                     to={link.href}
-                    className={`relative flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-[14px] 2xl:text-[15px] font-medium transition-all duration-300 group ${activeDropdown === link.label || location.pathname === link.href
+                    className={`relative flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-[14px] 2xl:text-md font-medium transition-all duration-300 group ${activeDropdown === link.label || location.pathname === link.href
                       ? 'text-[#032e92] bg-[#eef5ff]'
                       : 'text-gray-700 hover:text-[#032e92] hover:bg-[#eef5ff]/60'
                       }`}
@@ -232,7 +232,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => openLeadModal('Navbar Invest Now')}
-              className="btn-ripple px-5 py-2.5 2xl:px-6 2xl:py-3 rounded-xl text-[14px] 2xl:text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center gap-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+              className="btn-ripple px-5 py-2.5 2xl:px-6 2xl:py-3 rounded-xl text-[14px] 2xl:text-md font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center gap-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
             >
               Invest Now
             </button>
@@ -245,7 +245,7 @@ export default function Navbar() {
             >
               <button
                 type="button"
-                className="btn-ripple px-5 py-2.5 2xl:px-6 2xl:py-3 rounded-xl text-[14px] 2xl:text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center gap-2 cursor-pointer"
+                className="btn-ripple px-5 py-2.5 2xl:px-6 2xl:py-3 rounded-xl text-[14px] 2xl:text-md font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center gap-2 cursor-pointer"
               >
                 Login
                 <FontAwesomeIcon icon={faChevronDown} className={`text-[10px] transition-transform duration-300 ${activeDropdown === 'LoginBtn' ? 'rotate-180' : ''}`} />
@@ -326,7 +326,7 @@ export default function Navbar() {
                       <button
                         type="button"
                         onClick={() => toggleMobileDropdown(link.label)}
-                        className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-[15px] font-semibold transition-all cursor-pointer ${openMobileDropdown === link.label
+                        className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-md font-semibold transition-all cursor-pointer ${openMobileDropdown === link.label
                           ? 'bg-[#eef5ff] text-[#032e92]'
                           : 'text-gray-800 hover:bg-gray-50'
                           }`}
@@ -382,7 +382,7 @@ export default function Navbar() {
                       <a
                         href={link.href}
                         onClick={() => setMobileOpen(false)}
-                        className="block px-4 py-3 rounded-2xl text-[15px] font-semibold text-gray-800 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors"
+                        className="block px-4 py-3 rounded-2xl text-md font-semibold text-gray-800 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors"
                       >
                         {link.label}
                       </a>
@@ -390,7 +390,7 @@ export default function Navbar() {
                       <Link
                         to={link.href}
                         onClick={() => setMobileOpen(false)}
-                        className={`block px-4 py-3 rounded-2xl text-[15px] font-semibold transition-colors ${location.pathname === link.href
+                        className={`block px-4 py-3 rounded-2xl text-md font-semibold transition-colors ${location.pathname === link.href
                           ? 'text-[#032e92] bg-[#eef5ff]'
                           : 'text-gray-800 hover:bg-[#eef5ff] hover:text-[#032e92]'
                           }`}
@@ -410,7 +410,7 @@ export default function Navbar() {
                     setMobileOpen(false);
                     openLeadModal('Navbar Mobile: Invest Now');
                   }}
-                  className="w-full py-3.5 px-5 rounded-2xl text-[15px] font-bold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-lg shadow-[#032e92]/20 flex items-center justify-center transition-all cursor-pointer hover:shadow-xl active:scale-[0.99]"
+                  className="w-full py-3.5 px-5 rounded-2xl text-md font-bold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-lg shadow-[#032e92]/20 flex items-center justify-center transition-all cursor-pointer hover:shadow-xl active:scale-[0.99]"
                 >
                   Invest Now
                 </button>
@@ -418,7 +418,7 @@ export default function Navbar() {
                 <button
                   type="button"
                   onClick={() => setMobileLoginOpen(!mobileLoginOpen)}
-                  className="w-full py-3.5 px-5 rounded-2xl text-[15px] font-bold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-lg shadow-[#032e92]/20 flex items-center justify-center gap-2.5 transition-all cursor-pointer hover:shadow-xl active:scale-[0.99]"
+                  className="w-full py-3.5 px-5 rounded-2xl text-md font-bold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-lg shadow-[#032e92]/20 flex items-center justify-center gap-2.5 transition-all cursor-pointer hover:shadow-xl active:scale-[0.99]"
                 >
                   <span>Login</span>
                   <FontAwesomeIcon

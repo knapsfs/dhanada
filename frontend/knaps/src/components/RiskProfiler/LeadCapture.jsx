@@ -187,7 +187,7 @@ export default function LeadCapture({ result, answers = [], onRetake, onClose, o
       {/* Left Column: Result Card */}
       <div className={`md:w-5/12 bg-[#032e92] text-white flex flex-col justify-between ${isModal ? 'p-5 sm:p-6' : 'p-7 sm:p-8'}`}>
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-blue-200 text-[11px] font-bold uppercase tracking-wider mb-3">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-blue-200 text-[11px] font-bold uppercase mb-3">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
             Assessment Complete
           </div>
@@ -444,7 +444,7 @@ export default function LeadCapture({ result, answers = [], onRetake, onClose, o
                       if (errors.phone) setErrors((prev) => ({ ...prev, phone: '' }));
                     }}
                     disabled={isSubmitting}
-                    className={`w-full bg-transparent outline-none tracking-wider text-gray-900 placeholder:text-gray-400 rounded-r-xl ${
+                    className={`w-full bg-transparent outline-none text-gray-900 placeholder:text-gray-400 rounded-r-xl ${
                       isModal ? 'px-3 py-2.5 text-xs sm:text-sm' : 'px-4 py-3.5 text-sm'
                     }`}
                   />
@@ -542,7 +542,7 @@ export default function LeadCapture({ result, answers = [], onRetake, onClose, o
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`w-full btn-ripple rounded-xl font-semibold text-white transition-all duration-300 cursor-pointer flex items-center justify-center gap-2 ${isModal ? 'py-3 px-6 text-[14px]' : 'py-3.5 px-6 text-[15px]'
+                className={`w-full btn-ripple rounded-xl font-semibold text-white transition-all duration-300 cursor-pointer flex items-center justify-center gap-2 ${isModal ? 'py-3 px-6 text-[14px]' : 'py-3.5 px-6 text-md'
                   } ${isSubmitting ? 'bg-gray-400 opacity-70 cursor-wait' : 'bg-gradient-to-r from-[#032e92] to-[#021d63] hover:shadow-lg hover:shadow-[#032e92]/30'
                   }`}
               >

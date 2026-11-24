@@ -28,7 +28,7 @@ export default function MfHero() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb Navigation */}
-        <div className="flex items-center pb-4 sm:pb-5 gap-3 text-[15px] font-medium text-gray-500">
+        <div className="flex items-center pb-4 sm:pb-5 gap-3 text-sm font-medium text-gray-500">
           <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
           <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
           <Link to="/products" className="hover:text-[#032e92] transition-colors">Products</Link>
@@ -75,7 +75,7 @@ export default function MfHero() {
               <button
                 type="button"
                 onClick={() => openLeadModal('Mutual Funds: Hero Start SIP')}
-                className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
+                className="btn-ripple px-6 py-3 rounded-xl text-md font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
               >
                 <span>Invest in Mutual Funds</span>
               </button>
@@ -88,7 +88,7 @@ export default function MfHero() {
               {/* Floating Top Badge */}
               <div className="flex items-center justify-between border-b border-slate-100 pb-5">
                 <div>
-                  {/* <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">KNAPS Smart Wealth</div> */}
+                  {/* <div className="text-xs font-semibold text-slate-400 uppercase">KNAPS Smart Wealth</div> */}
                   <div className="text-lg font-bold text-[#032e92]">Power Of Compounding</div>
                 </div>
                 <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-[#032e92]">
@@ -99,7 +99,7 @@ export default function MfHero() {
               {/* Mini Compounding Simulation Graphic */}
               <div className="space-y-4">
                 <div className="p-4 rounded-2xl bg-gradient-to-br from-[#f8fbff] to-blue-50/50 border border-blue-100/80">
-                  <div className="flex justify-between items-center text-xs font-semibold text-slate-600 mb-1">
+                  <div className="flex justify-between items-center text-xs font-semibold text-gray-600 mb-1">
                     <span>Monthly SIP of ₹10,000 for 15 Years</span>
                     <span className="text-[#032e92] font-bold">@ 12% p.a.*</span>
                   </div>

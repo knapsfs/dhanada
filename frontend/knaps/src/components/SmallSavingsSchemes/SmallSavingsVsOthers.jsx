@@ -79,22 +79,22 @@ export default function SmallSavingsVsOthers() {
             <table className="w-full text-left border-collapse min-w-[950px]">
               <thead>
                 <tr className="bg-slate-100/90 border-b border-slate-200">
-                  <th className="py-4 px-5 text-xs font-bold text-slate-500 uppercase tracking-wider w-1/6">
+                  <th className="py-4 px-5 text-xs font-bold text-slate-500 uppercase w-1/6">
                     Parameter
                   </th>
-                  <th className="py-4 px-5 text-xs font-extrabold text-[#032e92] uppercase tracking-wider bg-blue-50/70 border-x border-blue-100 w-1/5">
+                  <th className="py-4 px-5 text-xs font-extrabold text-[#032e92] uppercase bg-blue-50/70 border-x border-blue-100 w-1/5">
                     Post Office Schemes (POTD, KVP, NSC, PORD)
                   </th>
-                  <th className="py-4 px-5 text-xs font-bold text-slate-700 uppercase tracking-wider w-1/6">
+                  <th className="py-4 px-5 text-xs font-bold text-slate-700 uppercase w-1/6">
                     Fixed Deposits (FD)
                   </th>
-                  <th className="py-4 px-5 text-xs font-bold text-slate-700 uppercase tracking-wider w-1/6">
+                  <th className="py-4 px-5 text-xs font-bold text-slate-700 uppercase w-1/6">
                     Recurring Deposits (RD)
                   </th>
-                  <th className="py-4 px-5 text-xs font-bold text-slate-700 uppercase tracking-wider w-1/6">
+                  <th className="py-4 px-5 text-xs font-bold text-slate-700 uppercase w-1/6">
                     Mutual Funds
                   </th>
-                  <th className="py-4 px-5 text-xs font-bold text-slate-700 uppercase tracking-wider w-1/6">
+                  <th className="py-4 px-5 text-xs font-bold text-slate-700 uppercase w-1/6">
                     Bonds / Debentures
                   </th>
                 </tr>

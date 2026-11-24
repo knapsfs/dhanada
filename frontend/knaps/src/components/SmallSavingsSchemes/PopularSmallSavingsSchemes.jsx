@@ -56,22 +56,22 @@ export default function PopularSmallSavingsSchemes() {
 
                 <div className="p-4 rounded-2xl bg-blue-50/50 border border-blue-100 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-slate-600 font-medium">Interest Rate</span>
+                    <span className="text-xs text-gray-600 font-medium">Interest Rate</span>
                     <span className="text-lg font-black text-[#032e92]">
                       {scheme.interestRate}% <span className="text-xs font-normal text-slate-500">p.a.</span>
                     </span>
                   </div>
-                  <div className="flex items-center justify-between text-xs text-slate-600">
+                  <div className="flex items-center justify-between text-xs text-gray-600">
                     <span>Tenure</span>
                     <span className="font-semibold text-slate-800">{scheme.tenure}</span>
                   </div>
-                  <div className="flex items-center justify-between text-xs text-slate-600">
+                  <div className="flex items-center justify-between text-xs text-gray-600">
                     <span>Tax Status</span>
                     <span className="font-semibold text-slate-800">{scheme.taxSection}</span>
                   </div>
                 </div>
 
-                <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">
+                <p className="text-xs text-gray-600 leading-relaxed line-clamp-3">
                   {scheme.description}
                 </p>
               </div>
@@ -110,7 +110,7 @@ export default function PopularSmallSavingsSchemes() {
               <button
                 type="button"
                 onClick={() => setSelectedScheme(null)}
-                className="absolute top-6 right-6 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer"
+                className="absolute top-6 right-6 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-gray-600 flex items-center justify-center transition-colors cursor-pointer"
               >
                 <FontAwesomeIcon icon={faXmark} />
               </button>
@@ -160,7 +160,7 @@ export default function PopularSmallSavingsSchemes() {
                   </div>
                 </div>
 
-                <p className="text-xs text-slate-600 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-200">
+                <p className="text-xs text-gray-600 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-200">
                   {selectedScheme.description}
                 </p>
 
@@ -168,7 +168,7 @@ export default function PopularSmallSavingsSchemes() {
                   <button
                     type="button"
                     onClick={() => setSelectedScheme(null)}
-                    className="px-5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 cursor-pointer"
+                    className="px-5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-gray-600 hover:bg-slate-50 cursor-pointer"
                   >
                     Close
                   </button>

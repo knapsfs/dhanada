@@ -32,8 +32,8 @@ export default function WhatAreMutualFunds() {
         {/* Comparison: Direct Plan Vs. Regular Plan */}
         <div className="mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-8">
-            <h3 className="text-xl sm:text-2xl font-bold text-[#032e92]">
-              Direct Plan Vs. Regular Plan
+            <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
+              Direct Plan Vs. <span class="text-[#032e92]">Regular Plan</span>
             </h3>
           </div>
 
@@ -42,7 +42,7 @@ export default function WhatAreMutualFunds() {
             <table className="w-full border-collapse">
               <thead>
                 <tr className="border-b border-slate-200 bg-slate-50/80">
-                  <th className="py-3.5 sm:py-4 px-4 sm:px-6 text-xs font-bold text-slate-500 uppercase tracking-wider w-[22%] sm:w-[20%] border-r border-slate-200">
+                  <th className="py-3.5 sm:py-4 px-4 sm:px-6 text-xs font-bold text-slate-500 uppercase w-[22%] sm:w-[20%] border-r border-slate-200">
                     Features
                   </th>
                   <th className="py-3.5 sm:py-4 px-4 sm:px-6 text-xs sm:text-sm font-bold text-slate-700 w-[38%] sm:w-[40%] border-r border-slate-200">
@@ -67,7 +67,7 @@ export default function WhatAreMutualFunds() {
                     <td className="py-3.5 sm:py-4 px-4 sm:px-6 font-semibold text-slate-800 align-top border-r border-slate-200">
                       {row.feature}
                     </td>
-                    <td className="py-3.5 sm:py-4 px-4 sm:px-6 text-slate-600 align-top leading-relaxed border-r border-slate-200">
+                    <td className="py-3.5 sm:py-4 px-4 sm:px-6 text-gray-600 align-top leading-relaxed border-r border-slate-200">
                       {row.direct}
                     </td>
                     <td className="py-3.5 sm:py-4 px-4 sm:px-6 text-slate-900 font-medium bg-blue-50/70 hover:bg-blue-100/60 border-l-2 border-blue-400 align-top leading-relaxed transition-colors">

@@ -48,14 +48,14 @@ export default function RetirementCorpusGrowth() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#032e92]/10 border border-[#032e92]/20 text-[#032e92] text-xs font-semibold uppercase tracking-wider mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#032e92]/10 border border-[#032e92]/20 text-[#032e92] text-xs font-semibold uppercase mb-4">
             <FontAwesomeIcon icon={faTimeline} />
             <span>Compounding Horizon</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#032e92] tracking-tight mb-4">
             Retirement Corpus Growth Over Time
           </h2>
-          <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+          <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
             Witness the multi-decade power of compound growth. Assuming a disciplined ₹10,000 monthly contribution at an illustrative 10% CAGR.
           </p>
         </div>
@@ -70,7 +70,7 @@ export default function RetirementCorpusGrowth() {
                 className={`px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                   selectedHorizon === h
                     ? 'bg-[#032e92] text-white shadow-md'
-                    : 'text-slate-600 hover:text-slate-900'
+                    : 'text-gray-600 hover:text-slate-900'
                 }`}
               >
                 {growthHorizons[h].label}
@@ -83,13 +83,13 @@ export default function RetirementCorpusGrowth() {
         <div className="bg-[#f7f9fc] rounded-3xl border border-slate-200/80 p-8 sm:p-12 shadow-sm mb-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-5 space-y-4">
-              <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">
+              <span className="text-xs font-bold text-blue-600 uppercase">
                 Multi-Decade Timeline
               </span>
               <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
                 {data.label}
               </h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
+              <p className="text-sm text-gray-600 leading-relaxed">
                 {data.stageDescription}
               </p>
 

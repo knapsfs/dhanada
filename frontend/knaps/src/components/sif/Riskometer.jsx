@@ -120,7 +120,7 @@ export default function Riskometer({ fund }) {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2, duration: 0.4 }}
-            className={`text-2xl font-black uppercase tracking-wider ${
+            className={`text-2xl font-black uppercase ${
               levelNum === 5 ? 'text-red-600' :
               levelNum === 4 ? 'text-orange-500' :
               levelNum === 3 ? 'text-amber-500' :

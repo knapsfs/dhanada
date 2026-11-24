@@ -50,7 +50,7 @@ export default function FAQ() {
               className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 focus:outline-none"
               onClick={() => toggleAccordion(index)}
             >
-              <span className={`text-[15px] md:text-[16px] font-bold transition-colors duration-300 ${openIndex === index ? 'text-[#032e92]' : 'text-gray-800'}`}>
+              <span className={`text-md md:text-[16px] font-bold transition-colors duration-300 ${openIndex === index ? 'text-[#032e92]' : 'text-gray-800'}`}>
                 {faq.question}
               </span>
               <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-300 ${openIndex === index ? 'bg-[#032e92] text-white' : 'bg-white text-gray-400 border border-gray-200'}`}>
@@ -67,7 +67,7 @@ export default function FAQ() {
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                   className="overflow-hidden"
                 >
-                  <div className="px-6 pb-6 pt-2 text-[14px] md:text-[15px] text-gray-600 leading-relaxed border-t border-gray-100/50 mt-2">
+                  <div className="px-6 pb-6 pt-2 text-[14px] md:text-md text-gray-600 leading-relaxed border-t border-gray-100/50 mt-2">
                     {faq.answer}
                   </div>
                 </motion.div>
@@ -88,7 +88,7 @@ export default function FAQ() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-block px-4 py-2 rounded-full bg-[#eef5ff] text-[#032e92] font-semibold text-sm mb-4 uppercase tracking-wider"
+            className="inline-block px-4 py-2 rounded-full bg-[#eef5ff] text-[#032e92] font-semibold text-sm mb-4 uppercase"
           >
             FAQ
           </motion.div>

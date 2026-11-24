@@ -92,7 +92,7 @@ export default function SchemeExplorer() {
                   </div>
                 </div>
 
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
                   {scheme.description}
                 </p>
               </div>

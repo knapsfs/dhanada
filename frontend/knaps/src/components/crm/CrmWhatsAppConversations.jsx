@@ -47,14 +47,14 @@ function MessageBubble({ msg }) {
         return (
           <span className="text-amber-300 inline-flex items-center gap-1" title="Queued in KNAPS CRM">
             <FontAwesomeIcon icon={faClock} className="text-[9px]" />
-            <span className="text-[9px] uppercase font-bold tracking-wider">Queued</span>
+            <span className="text-[9px] uppercase font-bold">Queued</span>
           </span>
         );
       case "Failed":
         return (
           <span className="text-red-300 inline-flex items-center gap-1" title={msg.error_message || "Message delivery failed"}>
             <FontAwesomeIcon icon={faTriangleExclamation} className="text-[10px]" />
-            <span className="text-[9px] uppercase font-bold tracking-wider">Failed</span>
+            <span className="text-[9px] uppercase font-bold">Failed</span>
           </span>
         );
       default:
@@ -74,7 +74,7 @@ function MessageBubble({ msg }) {
         {/* Template Header Badge */}
         {isTemplate && (
           <div
-            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold tracking-wider uppercase mb-1.5 ${
+            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase mb-1.5 ${
               isOutbound
                 ? "bg-blue-900/60 text-blue-200 border border-blue-400/30"
                 : "bg-purple-50 text-purple-700 border border-purple-200"
@@ -88,7 +88,7 @@ function MessageBubble({ msg }) {
         {/* Origin Label Badge (e.g., MPS Lead, SIF Lead, Client Direct) */}
         {msg.origin_label && (
           <div
-            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold tracking-wider mb-1.5 ${
+            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold mb-1.5 ${
               isTemplate ? "ml-1.5" : ""
             } ${
               isOutbound
@@ -368,7 +368,7 @@ export default function CrmWhatsAppConversations({
       <div className="flex items-center justify-between gap-3 pb-2 border-b border-gray-100 flex-wrap">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-          <h3 className="text-xs font-bold text-gray-800 uppercase tracking-wider">
+          <h3 className="text-xs font-bold text-gray-800 uppercase">
             WhatsApp Communications
           </h3>
           <span className="text-[11px] font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
@@ -686,7 +686,7 @@ export default function CrmWhatsAppConversations({
 
             <div className="space-y-3">
               <div>
-                <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">
+                <label className="block text-[11px] font-bold text-gray-700 uppercase mb-1">
                   Select Template
                 </label>
                 <select
@@ -721,7 +721,7 @@ export default function CrmWhatsAppConversations({
                   {/* Parameter Inputs */}
                   {Array.isArray(currentTemplateObj.params) && currentTemplateObj.params.length > 0 && (
                     <div className="space-y-2 pt-1">
-                      <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider">
+                      <label className="block text-[11px] font-bold text-gray-700 uppercase">
                         Template Parameters
                       </label>
                       {currentTemplateObj.params.map((param) => (
@@ -746,7 +746,7 @@ export default function CrmWhatsAppConversations({
 
                   {/* Live Template Preview */}
                   <div className="pt-2">
-                    <span className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">
+                    <span className="block text-[11px] font-bold text-gray-700 uppercase mb-1">
                       Preview
                     </span>
                     <div className="bg-emerald-50/70 border border-emerald-200/80 rounded-2xl p-3.5 text-xs text-gray-800 leading-relaxed font-sans">

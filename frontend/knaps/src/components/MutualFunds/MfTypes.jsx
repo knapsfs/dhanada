@@ -138,7 +138,7 @@ export default function MfTypes() {
                     className="p-5 rounded-2xl bg-gradient-to-br from-[#fafcff] to-[#f4f7fb] border border-blue-100/70 hover:border-blue-300 transition-all duration-200"
                   >
                     <div className="text-sm font-bold text-[#032e92] mb-1.5">{sub.name}</div>
-                    <p className="text-xs text-slate-600 leading-relaxed font-normal">{sub.desc}</p>
+                    <p className="text-xs text-gray-600 leading-relaxed font-normal">{sub.desc}</p>
                   </div>
                 ))}
               </div>

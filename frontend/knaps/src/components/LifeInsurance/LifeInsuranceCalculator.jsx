@@ -257,7 +257,7 @@ export default function LifeInsuranceCalculator() {
                 <div className="bg-gradient-to-br from-[#032e92] via-[#0948cd] to-[#021d63] text-white rounded-2xl p-5 mb-5 shadow-lg relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none" />
 
-                  <p className="text-xs font-bold text-blue-200 uppercase tracking-wider mb-1">
+                  <p className="text-xs font-bold text-blue-200 uppercase mb-1">
                     Recommended Life Cover
                   </p>
                   <p className="text-3xl sm:text-4xl font-black text-white tracking-tight">
@@ -271,7 +271,7 @@ export default function LifeInsuranceCalculator() {
                 {/* Estimated Monthly Premium Box */}
                 <div className="bg-[#f7f9fc] rounded-2xl p-4 border border-[#e8edf7] mb-6 flex items-center justify-between">
                   <div>
-                    <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+                    <p className="text-[11px] font-bold text-gray-400 uppercase">
                       Est. Monthly Starting Premium
                     </p>
                     <p className="text-2xl font-black text-emerald-600">

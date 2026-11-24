@@ -77,7 +77,6 @@ export default function NpsModelExplorer() {
   const [activeTabKey, setActiveTabKey] = useState('audience');
   const [showAutoChoiceModal, setShowAutoChoiceModal] = useState(false);
   const [modalActiveStrategy, setModalActiveStrategy] = useState('low');
-  const [modalDisplayMode, setModalDisplayMode] = useState('table');
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -109,7 +108,7 @@ export default function NpsModelExplorer() {
     { key: 'audience', label: 'Who is it for?', icon: faUsers },
     { key: 'tax', label: 'Tax-Free Exit', icon: faReceipt },
     { key: 'withdrawals', label: 'Withdrawals & Exit', icon: faMoneyBillTransfer },
-    { key: 'why-vatsalya', label: 'Why NPS Vatsalya', icon: faHeart },
+    { key: 'why-vatsalya', label: 'Why NPS Vatsalya', icon: faChild },
   ];
 
   const corporateTabs = [
@@ -243,7 +242,7 @@ export default function NpsModelExplorer() {
             badge: 'Multi Choice',
             summary:
               'Choose multiple schemes offered by one or more Pension Funds and allocate your investments across them, subject to applicable NPS rules.',
-            actionText: 'View Asset Allocation Table'
+            actionText: 'View Scheme Options'
           },
           commonSchemes: {
             title: 'Common Schemes (CS)',
@@ -260,7 +259,7 @@ export default function NpsModelExplorer() {
               name: 'Auto Choice',
               // badge: 'Age-Based Glide Path',
               summary:
-                'Asset allocation is automatically adjusted according to age through a predefined Life Cycle Fund, generally reducing equity exposure over time.',
+                'Let the fund manager dynamically adjust asset allocation based on market conditions and investment strategy. Choose from Low, Moderate, High, or Aggressive schemes based on your investment goals and risk appetite.',
               lifecycleTitle: 'Auto Choice Life Cycle Options',
               options: [
                 {
@@ -360,7 +359,24 @@ export default function NpsModelExplorer() {
         tax: {
           title: 'Tax-Free Exit',
           description:
-            'At exit, the lump-sum amount withdrawn and the amount used to purchase an annuity are completely tax-free. Only the income received from the annuity is taxable.'
+            'At exit, the lump-sum amount withdrawn and the amount used to purchase an annuity are completely tax-free. Only the income received from the annuity is taxable.',
+          eeeBenefit: {
+            title: 'E-E-E Benefit',
+            items: [
+              {
+                stage: 'Investment',
+                label: 'Exemption on Investment'
+              },
+              {
+                stage: 'Growth',
+                label: 'Exemption during growth'
+              },
+              {
+                stage: 'Withdrawals',
+                label: 'Exemption at the time of withdrawals'
+              }
+            ]
+          }
         },
         withdrawals: {
           title: 'Withdrawals & Exit',
@@ -515,10 +531,10 @@ export default function NpsModelExplorer() {
               // badge: 'Employer Advantage',
               items: [
                 { title: 'Flexible contributions', desc: 'Employers can decide how much to contribute towards NPS.' },
-                { title: 'Lower administrative work', desc: 'No need to manage a separate pension trust or record-keeping.' },
+                // { title: 'Lower administrative work', desc: 'No need to manage a separate pension trust or record-keeping.' },
                 { title: 'Tax benefits', desc: 'Eligible employer contributions can be claimed as a business expense.' },
-                { title: 'Flexible investment management', desc: 'Employers can choose the investment option or let employees choose.' },
-                { title: 'Works with existing benefits', desc: 'NPS can be offered along with PF and other retirement benefits.' },
+                // { title: 'Flexible investment management', desc: 'Employers can choose the investment option or let employees choose.' },
+                { title: 'Employee Retention', desc: 'NPS helps attract and retain employees through long-term retirement benefits.' },
                 { title: 'Employee retirement benefit', desc: 'Provides an additional structured retirement benefit to employees.' }
               ]
             },
@@ -527,9 +543,9 @@ export default function NpsModelExplorer() {
               // badge: 'Employee Advantage',
               items: [
                 { title: 'Low-cost retirement savings', desc: 'Build retirement savings at low fund management costs.' },
-                { title: 'Investment choices', desc: 'Choose from different Pension Fund Managers and investment options.' },
+                // { title: 'Investment choices', desc: 'Choose from different Pension Fund Managers and investment options.' },
                 { title: 'Tax benefits', desc: 'Get eligible tax deductions on employee and employer contributions.' },
-                { title: 'Easy online access', desc: 'Track NPS account, investments and fund performance online.' },
+                // { title: 'Easy online access', desc: 'Track NPS account, investments and fund performance online.' },
                 { title: 'Flexible retirement options', desc: 'Continue investing and choose withdrawal or annuity options as per NPS rules.' },
                 { title: 'Tier II option', desc: 'Invest additional money through an optional Tier II account with flexible withdrawals.' }
               ]
@@ -546,32 +562,38 @@ export default function NpsModelExplorer() {
             },
             employees: {
               title: 'For Employees',
-              // badge: 'Income Tax Act, 1961',
-              subtitle: 'Attractive Tax Benefits under Income Tax Act, 1961:',
-              sections: [
+              tableHeaders: {
+                col1: 'Particulars',
+                col2: 'Tax Treatment'
+              },
+              items: [
                 {
-                  section: 'Section 80CCD(1)',
-                  title: 'Employee Contributions Deduction',
-                  points: [
-                    '10% of salary (Basic + DA) for salaried employees',
-                    '20% of Gross Income for self-employed',
-                    '(Subject to ₹1.5 lakh limit under Section 80CCE)'
-                  ]
+                  title: 'Employer’s Contribution',
+                  desc: 'Deduction up to 14% of Basic Salary + DA'
                 },
                 {
-                  section: 'Section 80CCD(1B)',
-                  title: 'Additional Tax Deduction',
-                  points: [
-                    'Additional tax deduction of ₹50,000 (over and above Section 80C)'
-                  ]
+                  title: 'Employee’s Own Contribution',
+                  desc: 'No tax deduction under the New Tax Regime'
                 },
                 {
-                  section: 'Section 80CCD(2)',
-                  title: 'Employer Contributions Deductible',
-                  points: [
-                    '10% of salary for employees under Old Tax Regime',
-                    '14% of salary for employees under New Tax Regime'
-                  ]
+                  title: 'Section 80CCD(1B)',
+                  desc: 'Additional ₹50,000 deduction not available'
+                },
+                {
+                  title: 'Investment Returns',
+                  desc: 'Tax-free during accumulation'
+                },
+                {
+                  title: 'Lump Sum Withdrawal',
+                  desc: 'Up to 60% of corpus tax-free at exit'
+                },
+                {
+                  title: 'Annuity Purchase',
+                  desc: 'Tax-exempt at the time of purchase'
+                },
+                {
+                  title: 'Pension / Annuity Income',
+                  desc: 'Taxable as per applicable slab'
                 }
               ]
             }
@@ -628,7 +650,7 @@ export default function NpsModelExplorer() {
           {/* LEFT SIDEBAR: The 4 NPS Models */}
           <div className="lg:col-span-3 bg-gray-50/70 border-b lg:border-b-0 lg:border-r border-gray-200/80 p-4 sm:p-5 lg:p-6 flex flex-col">
             <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-gray-200/60">
-              <span className="text-xs font-bold uppercase tracking-wider text-gray-500">
+              <span className="text-xs font-bold uppercase text-gray-500">
                 Compare different NPS Schemes
               </span>
             </div>
@@ -657,7 +679,7 @@ export default function NpsModelExplorer() {
                         <FontAwesomeIcon icon={model.icon} />
                       </div>
                       <div className="min-w-0 pr-1">
-                        <div className="font-bold text-[15px] sm:text-base leading-snug">
+                        <div className="font-bold text-md sm:text-base leading-snug">
                           {model.name}
                         </div>
                         <div
@@ -729,7 +751,7 @@ export default function NpsModelExplorer() {
                 >
                   {/* Top Section Description */}
                   {currentSection.description && (
-                    <div className="mb-5 p-1 text-gray-700 text-xs sm:text-sm md:text-[15px] leading-relaxed">
+                    <div className="mb-5 p-1 text-gray-700 text-xs sm:text-sm md:text-md leading-relaxed">
                       <p>{currentSection.description}</p>
                     </div>
                   )}
@@ -764,7 +786,7 @@ export default function NpsModelExplorer() {
                                 {currentSection.dualAudience.employee.title}
                               </h4>
                             </div>
-                            {/* <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-[#032e92] border border-blue-100 uppercase tracking-wider">
+                            {/* <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-[#032e92] border border-blue-100 uppercase">
                               {currentSection.dualAudience.employee.badge}
                             </span> */}
                           </div>
@@ -797,7 +819,7 @@ export default function NpsModelExplorer() {
                                 {currentSection.dualAudience.employer.title}
                               </h4>
                             </div>
-                            {/* <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase tracking-wider">
+                            {/* <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase">
                               {currentSection.dualAudience.employer.badge}
                             </span> */}
                           </div>
@@ -835,7 +857,7 @@ export default function NpsModelExplorer() {
                                 {currentSection.corporateEligibility.employee.title}
                               </h4>
                             </div>
-                            {/* <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-[#032e92] border border-blue-100 uppercase tracking-wider">
+                            {/* <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-[#032e92] border border-blue-100 uppercase">
                               {currentSection.corporateEligibility.employee.badge}
                             </span> */}
                           </div>
@@ -877,7 +899,7 @@ export default function NpsModelExplorer() {
                                 {currentSection.corporateEligibility.company.title}
                               </h4>
                             </div>
-                            {/* <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase tracking-wider">
+                            {/* <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase">
                               {currentSection.corporateEligibility.company.badge}
                             </span> */}
                           </div>
@@ -919,7 +941,7 @@ export default function NpsModelExplorer() {
                                 {currentSection.corporateBenefits.companies.title}
                               </h4>
                             </div>
-                            {/* <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase tracking-wider">
+                            {/* <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase">
                               {currentSection.corporateBenefits.companies.badge}
                             </span> */}
                           </div>
@@ -957,7 +979,7 @@ export default function NpsModelExplorer() {
                                 {currentSection.corporateBenefits.employees.title}
                               </h4>
                             </div>
-                            {/* <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-[#032e92] border border-blue-100 uppercase tracking-wider">
+                            {/* <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-[#032e92] border border-blue-100 uppercase">
                               {currentSection.corporateBenefits.employees.badge}
                             </span> */}
                           </div>
@@ -1024,41 +1046,47 @@ export default function NpsModelExplorer() {
                           </span> */}
                         </div>
 
-                        <p className="text-xs sm:text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
-                          <span className="w-1.5 h-3.5 bg-[#032e92] rounded-full inline-block"></span>
-                          <span>{currentSection.corporateTax.employees.subtitle}</span>
-                        </p>
+                        {currentSection.corporateTax.employees.subtitle && (
+                          <p className="text-xs sm:text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
+                            <span className="w-1.5 h-3.5 bg-[#032e92] rounded-full inline-block"></span>
+                            <span>{currentSection.corporateTax.employees.subtitle}</span>
+                          </p>
+                        )}
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          {currentSection.corporateTax.employees.sections.map((sec, sIdx) => (
-                            <div
-                              key={sIdx}
-                              className="p-4 sm:p-5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-blue-200 transition-all flex flex-col justify-between"
-                            >
-                              <div>
-                                <div className="mb-2.5">
-                                  <span className="text-xs font-bold px-2.5 py-1 rounded-md bg-[#032e92] text-white">
-                                    {sec.section}
-                                  </span>
-                                </div>
-                                <h5 className="font-bold text-xs sm:text-sm text-gray-900 mb-2.5">
-                                  {sec.title}
-                                </h5>
-                                <ul className="space-y-2 text-xs sm:text-[13px] text-gray-600">
-                                  {sec.points.map((pt, pIdx) => (
-                                    <li key={pIdx} className="flex items-start gap-2">
-                                      {/* <FontAwesomeIcon
-                                        icon={faCircleCheck}
-                                        className="text-emerald-500 text-xs mt-0.5 shrink-0"
-                                      /> */}
-                                      <span className="leading-relaxed">{pt}</span>
-                                    </li>
+                        {currentSection.corporateTax.employees.items && (
+                          <div className="overflow-hidden rounded-xl border border-gray-200 shadow-2xs bg-white">
+                            <div className="overflow-x-auto">
+                              <table className="w-full text-left border-collapse">
+                                <thead>
+                                  <tr className="bg-gray-50/90 border-b border-gray-200 text-xs sm:text-sm text-gray-700">
+                                    <th className="py-3.5 px-4 sm:px-5 font-bold text-gray-900 w-2/5 sm:w-1/3">
+                                      {currentSection.corporateTax.employees.tableHeaders?.col1 || 'Particulars'}
+                                    </th>
+                                    <th className="py-3.5 px-4 sm:px-5 font-bold text-[#032e92] w-3/5 sm:w-2/3 border-l border-gray-200/80">
+                                      {currentSection.corporateTax.employees.tableHeaders?.col2 || 'Tax Treatment'}
+                                    </th>
+                                  </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-100 text-xs sm:text-sm">
+                                  {currentSection.corporateTax.employees.items.map((item, idx) => (
+                                    <tr
+                                      key={idx}
+                                      className={`hover:bg-blue-50/30 transition-colors ${idx % 2 === 1 ? 'bg-gray-50/40' : 'bg-white'
+                                        }`}
+                                    >
+                                      <td className="py-3 px-4 sm:px-5 font-semibold text-gray-900 align-top">
+                                        {item.title}
+                                      </td>
+                                      <td className="py-3 px-4 sm:px-5 text-gray-700 border-l border-gray-100 align-top leading-relaxed font-normal">
+                                        {item.desc}
+                                      </td>
+                                    </tr>
                                   ))}
-                                </ul>
-                              </div>
+                                </tbody>
+                              </table>
                             </div>
-                          ))}
-                        </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   )}
@@ -1088,7 +1116,7 @@ export default function NpsModelExplorer() {
                           >
                             <div>
                               <div className="flex items-center justify-between mb-2">
-                                <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+                                <span className="text-[11px] font-bold text-gray-400 uppercase">
                                   Stage 0{idx + 1}
                                 </span>
                                 {/* <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
@@ -1188,28 +1216,28 @@ export default function NpsModelExplorer() {
                             </span>
                           </div>
 
-                          {/* 3 Step Options in Single Row with 'or' */}
-                          <div className="flex flex-col sm:flex-row items-stretch gap-2 sm:gap-1.5 mb-5">
+                          {/* 3 Step Options - Row by Row */}
+                          <div className="space-y-2 mb-4">
                             {currentSection.vatsalyaWithdrawals.whenTurns18.steps.map((st, sIdx) => (
                               <React.Fragment key={st.id}>
-                                <div className="p-3 sm:p-3.5 rounded-xl bg-gray-50/80 border border-gray-100 hover:border-blue-200 transition-colors flex flex-col justify-between flex-1 min-w-0 w-full sm:w-auto h-auto">
-                                  <div className="mb-2">
-                                    <span
-                                      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] sm:text-xs font-bold border ${st.badgeStyle}`}
-                                    >
-                                      <span>{st.id}</span>
-                                      <span>{st.name}</span>
-                                    </span>
-                                  </div>
-                                  <p className="text-[11px] sm:text-xs text-gray-700 leading-snug font-medium">
+                                <div className="p-3 sm:p-3.5 rounded-xl bg-gray-50/80 border border-gray-200/70 hover:border-blue-200 transition-colors flex items-center gap-3 sm:gap-4">
+                                  <span
+                                    className={`inline-flex items-center justify-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border shrink-0 min-w-[95px] ${st.badgeStyle}`}
+                                  >
+                                    <span>{st.id}</span>
+                                    <span>{st.name}</span>
+                                  </span>
+                                  <p className="text-xs sm:text-[13px] text-gray-800 font-medium leading-relaxed">
                                     {st.desc}
                                   </p>
                                 </div>
                                 {sIdx < currentSection.vatsalyaWithdrawals.whenTurns18.steps.length - 1 && (
-                                  <div className="flex items-center justify-center shrink-0 self-center -my-1 sm:my-0 -mx-0 sm:-mx-2 z-10">
-                                    <span className="text-[10px] sm:text-[11px] font-bold text-gray-600 bg-white p-1 m-2 rounded-full border border-gray-200 shadow-2xs select-none">
+                                  <div className="flex items-center gap-2 px-2">
+                                    <div className="flex-1 h-[1px] bg-gray-100"></div>
+                                    <span className="text-[10px] font-bold text-gray-600 uppercase bg-white px-2 py-0.5 rounded-full border border-gray-200/80 shadow-2xs select-none">
                                       or
                                     </span>
+                                    <div className="flex-1 h-[1px] bg-gray-100"></div>
                                   </div>
                                 )}
                               </React.Fragment>
@@ -1329,12 +1357,12 @@ export default function NpsModelExplorer() {
                               <h4 className="font-bold text-base sm:text-lg text-gray-900">
                                 {currentSection.msf.title}
                               </h4>
-                              {/* <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase tracking-wider">
+                              {/* <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase">
                                 {currentSection.msf.badge || 'Multi Choice'}
                               </span> */}
                             </div>
 
-                            <button
+                            {/* <button
                               type="button"
                               onClick={() => {
                                 setModalActiveStrategy('all');
@@ -1346,7 +1374,7 @@ export default function NpsModelExplorer() {
                               <FontAwesomeIcon icon={faTable} className="text-xs" />
                               <span>{currentSection.msf.actionText || 'View Asset Allocation Table'}</span>
                               <FontAwesomeIcon icon={faArrowRight} className="text-[10px] ml-0.5" />
-                            </button>
+                            </button> */}
                           </div>
 
                           <p className="text-xs sm:text-sm text-gray-600 font-normal leading-relaxed">
@@ -1370,7 +1398,7 @@ export default function NpsModelExplorer() {
                           {/* Active Choice & Auto Choice Grid */}
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {/* Active Choice Card */}
-                            <div className="p-5 rounded-xl bg-white border border-gray-200/90 shadow-2xs hover:border-blue-200 transition-all flex flex-col justify-between">
+                            <div className="p-5 rounded-xl bg-blue-50 border border-gray-200/90 shadow-2xs hover:border-blue-200 transition-all flex flex-col justify-between">
                               <div>
                                 <div className="flex items-center justify-between mb-2">
                                   <span className="font-bold text-sm sm:text-base text-gray-900">
@@ -1387,7 +1415,7 @@ export default function NpsModelExplorer() {
                             </div>
 
                             {/* Auto Choice Card */}
-                            <div className="p-5 rounded-xl bg-white border border-gray-200/90 shadow-2xs hover:border-blue-200 transition-all flex flex-col justify-between">
+                            <div className="p-5 rounded-xl bg-blue-50 border border-gray-200/90 shadow-2xs hover:border-blue-200 transition-all flex flex-col justify-between">
                               <div>
                                 <div className="flex items-center justify-between mb-2">
                                   <span className="font-bold text-sm sm:text-base text-gray-900">
@@ -1403,35 +1431,22 @@ export default function NpsModelExplorer() {
 
                                 {/* Auto Choice Life Cycle Options */}
                                 <div className="pt-3 border-t border-gray-100">
-                                  <div className="text-[11px] font-bold text-gray-800 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-[#032e92]"></span>
-                                    <span>{currentSection.commonSchemes.autoChoice.lifecycleTitle}</span>
+                                  <div className="text-[11px] font-bold text-gray-800 uppercase mb-2.5 flex items-center gap-1.5">
+
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setModalActiveStrategy('low');
+                                        setShowAutoChoiceModal(true);
+                                      }}
+                                      className="self-start sm:self-auto shrink-0 inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-[#032e92] text-white hover:bg-[#022169] shadow-xs hover:shadow-sm transition-all duration-200 cursor-pointer"
+                                    >
+                                      <FontAwesomeIcon icon={faChartLine} className="text-xs" />
+                                      <span>{currentSection.msf.actionText || ' View Scheme Options'}</span>
+                                    </button>
                                   </div>
 
-                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
-                                    {currentSection.commonSchemes.autoChoice.options.map((opt, oIdx) => (
-                                      <button
-                                        key={oIdx}
-                                        type="button"
-                                        onClick={() => {
-                                          setModalActiveStrategy(opt.id);
-                                          setModalDisplayMode('chart');
-                                          setShowAutoChoiceModal(true);
-                                        }}
-                                        className="p-2.5 rounded-lg bg-gray-50 hover:bg-blue-50/60 border border-gray-200 hover:border-[#032e92] text-left transition-all cursor-pointer group/opt shadow-2xs flex items-center"
-                                      >
-                                        <div>
-                                          <span className="text-xs font-bold text-gray-900 group-hover/opt:text-[#032e92] transition-colors block">
-                                            {opt.name}
-                                          </span>
-                                          {/* <span className="text-[11px] text-gray-500 font-medium block">
-                                            {opt.desc}
-                                          </span> */}
-                                        </div>
-                                        <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[9px] text-gray-400 group-hover/opt:text-[#032e92] transition-colors shrink-0 ml-1.5" />
-                                      </button>
-                                    ))}
-                                  </div>
+
 
                                   {/* Footer Note */}
                                   {/* <button
@@ -1488,7 +1503,7 @@ export default function NpsModelExplorer() {
                               <h4 className="font-bold text-sm sm:text-base text-gray-900">
                                 {sc.name}
                               </h4>
-                              <span className="text-[10px] font-bold text-[#032e92] bg-white px-2 py-0.5 rounded-full border border-blue-100 uppercase tracking-wider">
+                              <span className="text-[10px] font-bold text-[#032e92] bg-white px-2 py-0.5 rounded-full border border-blue-100 uppercase">
                                 {sc.tag || sc.badge}
                               </span>
                             </div>
@@ -1541,8 +1556,8 @@ export default function NpsModelExplorer() {
 
             {/* Bottom Panel Action Footer */}
             <div className="mt-8 pt-5 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="text-xs text-gray-500">
-                <span>Want to register or open an account under </span>
+              <div className="text-sm text-gray-500">
+                <span>Want to invest in </span>
                 <strong className="text-gray-900">{currentModel.name}</strong>?
               </div>
 
@@ -1591,7 +1606,7 @@ export default function NpsModelExplorer() {
               <div className="p-5 sm:p-6 border-b border-gray-200 bg-gradient-to-r from-[#0a192f] via-[#032e92] to-[#0a192f] text-white flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    {/* <span className="px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider bg-white/15 text-white border border-white/20">
+                    {/* <span className="px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase bg-white/15 text-white border border-white/20">
                       PFRDA Glide Path
                     </span> */}
                     <span className="text-xs text-blue-200 font-medium hidden sm:inline">NPS Auto Choice</span>
@@ -1610,11 +1625,11 @@ export default function NpsModelExplorer() {
                 </button>
               </div>
 
-              {/* Filter Tabs & View Mode Switcher */}
-              <div className="bg-[#f8fafc] px-4 sm:px-6 py-2.5 border-b border-gray-200 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+              {/* Filter Tabs */}
+              <div className="bg-[#f8fafc] px-4 sm:px-6 py-2.5 border-b border-gray-200 flex flex-wrap items-center justify-between gap-3 text-xs">
                 {/* Strategy Filters */}
                 <div className="flex flex-wrap items-center gap-1.5">
-                  <span className="text-gray-500 font-semibold mr-1 hidden sm:inline">Strategy:</span>
+                  <span className="text-gray-500 font-semibold mr-1 hidden sm:inline">Risk Levels:</span>
                   {STRATEGY_TABS.map((tab) => {
                     const isActive = modalActiveStrategy === tab.id;
                     return (
@@ -1632,253 +1647,118 @@ export default function NpsModelExplorer() {
                     );
                   })}
                 </div>
-
-                {/* View Mode Toggle (Table / Charts) */}
-                <div className="flex items-center gap-1 bg-gray-200/80 p-1 rounded-xl self-start md:self-auto">
-                  <button
-                    type="button"
-                    onClick={() => setModalDisplayMode('table')}
-                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${modalDisplayMode === 'table'
-                      ? 'bg-white text-[#032e92] shadow-2xs'
-                      : 'text-gray-600 hover:text-gray-900'
-                      }`}
-                  >
-                    <FontAwesomeIcon icon={faTable} className="text-[11px]" />
-                    <span>Table View</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setModalDisplayMode('chart')}
-                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${modalDisplayMode === 'chart'
-                      ? 'bg-white text-[#032e92] shadow-2xs'
-                      : 'text-gray-600 hover:text-gray-900'
-                      }`}
-                  >
-                    <FontAwesomeIcon icon={faChartLine} className="text-[11px]" />
-                    <span>Charts View</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Asset Classes Legend Bar */}
-              <div className="bg-[#f0f5ff] px-5 py-2.5 border-b border-blue-100 flex flex-wrap items-center justify-between gap-3 text-xs">
-                <div className="flex flex-wrap items-center gap-3 sm:gap-4 font-semibold text-gray-700">
-                  <span className="text-gray-500 font-medium">Asset Classes:</span>
-                  <span className="inline-flex items-center gap-1.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
-                    <span><strong className="text-blue-900">E:</strong> Equity</span>
-                  </span>
-                  <span className="inline-flex items-center gap-1.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-                    <span><strong className="text-amber-900">C:</strong> Corporate Debt</span>
-                  </span>
-                  <span className="inline-flex items-center gap-1.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
-                    <span><strong className="text-emerald-900">G:</strong> Government Securities</span>
-                  </span>
-                </div>
-                <span className="text-[11px] text-gray-500 font-medium italic">
-                  *Age-based automatic asset rebalancing (Glide Path)
-                </span>
               </div>
 
               {/* Scrollable Content Area */}
               <div className="overflow-y-auto flex-1 p-3 sm:p-5">
-                {modalDisplayMode === 'table' ? (
-                  /* --- TABLE VIEW --- */
-                  <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-2xs">
-                    <table className="w-full text-left text-xs sm:text-sm border-collapse min-w-[680px]">
-                      <thead className="sticky top-0 bg-gray-100/95 backdrop-blur-xs text-gray-800 z-10 border-b border-gray-200">
-                        <tr>
-                          <th className="py-3 px-3 sm:px-4 font-bold text-gray-900 w-[16%]">Age</th>
-                          <th
-                            className={`py-3 px-3 sm:px-4 font-bold w-[21%] border-l border-gray-200 transition-colors ${modalActiveStrategy === 'low'
-                              ? 'bg-blue-100/80 text-[#032e92]'
-                              : 'text-[#032e92]'
-                              }`}
-                          >
-                            <div>Low</div>
-                            <div className="text-[11px] font-normal text-gray-500">(LC 25 • 5E/55Y)</div>
-                          </th>
-                          <th
-                            className={`py-3 px-3 sm:px-4 font-bold w-[21%] border-l border-gray-200 transition-colors ${modalActiveStrategy === 'moderate'
-                              ? 'bg-blue-100/80 text-[#032e92]'
-                              : 'text-[#032e92]'
-                              }`}
-                          >
-                            <div>Moderate</div>
-                            <div className="text-[11px] font-normal text-gray-500">(LC 50 • 10E/55Y)</div>
-                          </th>
-                          <th
-                            className={`py-3 px-3 sm:px-4 font-bold w-[21%] border-l border-gray-200 transition-colors ${modalActiveStrategy === 'high'
-                              ? 'bg-blue-100/80 text-[#032e92]'
-                              : 'text-[#032e92]'
-                              }`}
-                          >
-                            <div>High</div>
-                            <div className="text-[11px] font-normal text-gray-500">(LC 75 • 15E/55Y)</div>
-                          </th>
-                          <th
-                            className={`py-3 px-3 sm:px-4 font-bold w-[21%] border-l border-gray-200 transition-colors ${modalActiveStrategy === 'aggressive'
-                              ? 'bg-blue-100/80 text-[#032e92]'
-                              : 'text-[#032e92]'
-                              }`}
-                          >
-                            <div>Aggressive</div>
-                            <div className="text-[11px] font-normal text-gray-500">(Life Cycle • 35E/55Y)</div>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-gray-100">
-                        {AUTO_CHOICE_ALLOCATION_DATA.map((row, rIdx) => (
-                          <tr
-                            key={rIdx}
-                            className={`hover:bg-blue-50/40 transition-colors ${rIdx % 2 === 1 ? 'bg-gray-50/50' : 'bg-white'
-                              }`}
-                          >
-                            <td className="py-2.5 px-3 sm:px-4 font-bold text-gray-900 whitespace-nowrap">
-                              {row.age}
-                            </td>
-                            <td
-                              className={`py-2.5 px-3 sm:px-4 border-l border-gray-100 font-medium transition-colors ${modalActiveStrategy === 'low'
-                                ? 'bg-blue-50/80 font-bold text-[#032e92]'
-                                : 'text-gray-700'
-                                }`}
-                            >
-                              {row.lc25}
-                            </td>
-                            <td
-                              className={`py-2.5 px-3 sm:px-4 border-l border-gray-100 font-medium transition-colors ${modalActiveStrategy === 'moderate'
-                                ? 'bg-blue-50/80 font-bold text-[#032e92]'
-                                : 'text-gray-700'
-                                }`}
-                            >
-                              {row.lc50}
-                            </td>
-                            <td
-                              className={`py-2.5 px-3 sm:px-4 border-l border-gray-100 font-medium transition-colors ${modalActiveStrategy === 'high'
-                                ? 'bg-blue-50/80 font-bold text-[#032e92]'
-                                : 'text-gray-700'
-                                }`}
-                            >
-                              {row.lc75}
-                            </td>
-                            <td
-                              className={`py-2.5 px-3 sm:px-4 border-l border-gray-100 font-medium transition-colors ${modalActiveStrategy === 'aggressive'
-                                ? 'bg-blue-50/80 font-bold text-[#032e92]'
-                                : 'text-gray-700'
-                                }`}
-                            >
-                              {row.aggressive}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                ) : (
-                  /* --- CHARTS VIEW --- */
-                  <div className="space-y-6">
-                    {/* Strategy Description Banner */}
-                    {(() => {
-                      const curTab = STRATEGY_TABS.find((t) => t.id === modalActiveStrategy) || STRATEGY_TABS[0];
-                      return (
-                        <div className="p-4 rounded-xl bg-gradient-to-r from-blue-50 via-indigo-50 to-blue-50 border border-blue-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                          <div>
-                            <h4 className="font-bold text-sm sm:text-base text-[#032e92]">
-                              {curTab.title}
-                            </h4>
-                            <p className="text-xs text-gray-600 mt-0.5">
-                              {curTab.desc}
-                            </p>
-                          </div>
-                          {curTab.startEq && (
-                            <div className="flex items-center gap-2 self-start sm:self-auto shrink-0 text-xs">
-                              <span className="px-2.5 py-1 rounded-lg bg-blue-600 text-white font-bold">
-                                Initial Equity: {curTab.startEq}
-                              </span>
-                              <span className="text-gray-400">➔</span>
-                              <span className="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold">
-                                At Age 55: {curTab.endEq}
-                              </span>
-                            </div>
-                          )}
+                <div className="space-y-6">
+                  {/* Strategy Description Banner */}
+                  {(() => {
+                    const curTab = STRATEGY_TABS.find((t) => t.id === modalActiveStrategy) || STRATEGY_TABS[0];
+                    return (
+                      <div className="p-4 rounded-xl bg-gradient-to-r from-blue-50 via-indigo-50 to-blue-50 border border-blue-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                          <h4 className="font-bold text-sm sm:text-base text-[#032e92]">
+                            {curTab.title}
+                          </h4>
+                          <p className="text-xs text-gray-600 mt-0.5">
+                            {curTab.desc}
+                          </p>
                         </div>
-                      );
-                    })()}
+                        {curTab.startEq && (
+                          <div className="flex items-center gap-2 self-start sm:self-auto shrink-0 text-xs">
+                            <span className="px-2.5 py-1 rounded-lg bg-blue-600 text-white font-bold">
+                              Initial Equity: {curTab.startEq}
+                            </span>
+                            <span className="text-gray-400">➔</span>
+                            <span className="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold">
+                              At Age 55: {curTab.endEq}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })()}
 
-                    {/* Chart Glide Path Bars */}
-                    {(() => {
-                      const targetKey = modalActiveStrategy === 'all' ? 'lc75' : STRATEGY_TABS.find((t) => t.id === modalActiveStrategy)?.key || 'lc75';
-                      const strategyLabel = STRATEGY_TABS.find((t) => t.key === targetKey)?.label || 'High (LC 75)';
+                  {/* Chart Glide Path Bars */}
+                  {(() => {
+                    const targetKey = modalActiveStrategy === 'all' ? 'lc75' : STRATEGY_TABS.find((t) => t.id === modalActiveStrategy)?.key || 'lc75';
+                    const strategyLabel = STRATEGY_TABS.find((t) => t.key === targetKey)?.label || 'High (LC 75)';
 
-                      return (
-                        <div className="space-y-3">
-                          {modalActiveStrategy === 'all' && (
-                            <div className="text-xs text-gray-500 font-medium italic mb-2">
-                              Displaying representative chart for <strong>{strategyLabel}</strong> (Use top filter buttons to view Low*, Moderate, or Aggressive charts).
-                            </div>
-                          )}
+                    return (
+                      <div className="space-y-3">
+                        {modalActiveStrategy === 'all' && (
+                          <div className="text-xs text-gray-500 font-medium italic mb-2">
+                            Displaying representative chart for <strong>{strategyLabel}</strong> (Use top filter buttons to view Low*, Moderate, or Aggressive charts).
+                          </div>
+                        )}
 
-                          <div className="space-y-2">
-                            {AUTO_CHOICE_ALLOCATION_DATA.map((row, rIdx) => {
-                              const alloc = parseAllocation(row[targetKey]);
-                              return (
-                                <div
-                                  key={rIdx}
-                                  className="p-2 sm:p-2.5 rounded-xl bg-gray-50/80 border border-gray-200/80 hover:border-blue-200 transition-colors flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4"
-                                >
-                                  <div className="w-28 sm:w-32 shrink-0 font-bold text-xs text-gray-900">
-                                    {row.age}
-                                  </div>
-
-                                  {/* Stacked Percentage Bar */}
-                                  <div className="flex-1 flex h-6 rounded-lg overflow-hidden bg-gray-200 text-white text-[11px] font-bold shadow-2xs">
-                                    {alloc.e > 0 && (
-                                      <div
-                                        style={{ width: `${alloc.e}%` }}
-                                        className="bg-blue-600 hover:bg-blue-700 transition-all flex items-center justify-center relative group/bar"
-                                        title={`Equity: ${alloc.e}%`}
-                                      >
-                                        <span className="truncate px-1">E: {alloc.e}%</span>
-                                      </div>
-                                    )}
-                                    {alloc.c > 0 && (
-                                      <div
-                                        style={{ width: `${alloc.c}%` }}
-                                        className="bg-amber-500 hover:bg-amber-600 transition-all flex items-center justify-center relative group/bar"
-                                        title={`Corporate Debt: ${alloc.c}%`}
-                                      >
-                                        <span className="truncate px-1">C: {alloc.c}%</span>
-                                      </div>
-                                    )}
-                                    {alloc.g > 0 && (
-                                      <div
-                                        style={{ width: `${alloc.g}%` }}
-                                        className="bg-emerald-600 hover:bg-emerald-700 transition-all flex items-center justify-center relative group/bar"
-                                        title={`Govt Securities: ${alloc.g}%`}
-                                      >
-                                        <span className="truncate px-1">G: {alloc.g}%</span>
-                                      </div>
-                                    )}
-                                  </div>
+                        <div className="space-y-2">
+                          {AUTO_CHOICE_ALLOCATION_DATA.map((row, rIdx) => {
+                            const alloc = parseAllocation(row[targetKey]);
+                            return (
+                              <div
+                                key={rIdx}
+                                className="p-2 sm:p-2.5 rounded-xl bg-gray-50/80 border border-gray-200/80 hover:border-blue-200 transition-colors flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4"
+                              >
+                                <div className="w-28 sm:w-32 shrink-0 font-bold text-xs text-gray-900">
+                                  {row.age}
                                 </div>
-                              );
-                            })}
-                          </div>
+
+                                {/* Stacked Percentage Bar */}
+                                <div className="flex-1 flex h-6 rounded-lg overflow-hidden bg-gray-200 text-white text-[11px] font-bold shadow-2xs">
+                                  {alloc.e > 0 && (
+                                    <div
+                                      style={{ width: `${alloc.e}%` }}
+                                      className="bg-blue-600 hover:bg-blue-700 transition-all flex items-center justify-center relative group/bar"
+                                      title={`Equity: ${alloc.e}%`}
+                                    >
+                                      <span className="truncate px-1">E: {alloc.e}%</span>
+                                    </div>
+                                  )}
+                                  {alloc.c > 0 && (
+                                    <div
+                                      style={{ width: `${alloc.c}%` }}
+                                      className="bg-amber-500 hover:bg-amber-600 transition-all flex items-center justify-center relative group/bar"
+                                      title={`Corporate Debt: ${alloc.c}%`}
+                                    >
+                                      <span className="truncate px-1">C: {alloc.c}%</span>
+                                    </div>
+                                  )}
+                                  {alloc.g > 0 && (
+                                    <div
+                                      style={{ width: `${alloc.g}%` }}
+                                      className="bg-emerald-600 hover:bg-emerald-700 transition-all flex items-center justify-center relative group/bar"
+                                      title={`Govt Securities: ${alloc.g}%`}
+                                    >
+                                      <span className="truncate px-1">G: {alloc.g}%</span>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            );
+                          })}
                         </div>
-                      );
-                    })()}
-                  </div>
-                )}
+                      </div>
+                    );
+                  })()}
+                </div>
               </div>
 
-              {/* Footnote Bar */}
-              <div className="p-3.5 sm:p-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-gray-600">
-                <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#032e92] shrink-0"></span>
-                  <span className="font-semibold text-gray-700">
-                    The total allocation across all asset classes (E, C, G, and A) cannot exceed 100%.
+              {/* Bottom Asset Classes Legend & Close Bar */}
+              <div className="p-3.5 sm:p-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-gray-700">
+                <div className="flex flex-wrap items-center gap-3 sm:gap-5 font-semibold">
+                  <span className="inline-flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-blue-600 shrink-0"></span>
+                    <span className="text-gray-900">(E) Equity</span>
+                  </span>
+                  <span className="inline-flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0"></span>
+                    <span className="text-gray-900">(C) Corporate Debt</span>
+                  </span>
+                  <span className="inline-flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 shrink-0"></span>
+                    <span className="text-gray-900">(G) Government Securities</span>
                   </span>
                 </div>
                 <button

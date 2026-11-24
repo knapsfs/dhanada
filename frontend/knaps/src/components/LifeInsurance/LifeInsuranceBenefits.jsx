@@ -93,7 +93,7 @@ export default function LifeInsuranceBenefits() {
                 <h3 className="text-lg font-bold text-[#0a192f] group-hover:text-[#032e92] transition-colors mb-1">
                   {item.title}
                 </h3>
-                <p className="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wider">
+                <p className="text-xs font-bold text-gray-400 mb-3 uppercase">
                   {item.subtitle}
                 </p>
 

@@ -72,7 +72,7 @@ export default function SmallSavingsFAQ() {
           aria-expanded={isOpen}
         >
           <span
-            className={`text-[15px] md:text-[16px] font-bold transition-colors duration-300 ${isOpen ? 'text-[#032e92]' : 'text-slate-900'
+            className={`text-md md:text-[16px] font-bold transition-colors duration-300 ${isOpen ? 'text-[#032e92]' : 'text-slate-900'
               }`}
           >
             {faq.question}
@@ -96,7 +96,7 @@ export default function SmallSavingsFAQ() {
               transition={{ duration: 0.3, ease: 'easeInOut' }}
               className="overflow-hidden"
             >
-              <div className="px-6 pb-6 pt-2 text-[14px] md:text-[15px] text-slate-600 leading-relaxed border-t border-slate-100/70 mt-1">
+              <div className="px-6 pb-6 pt-2 text-[14px] md:text-md text-gray-600 leading-relaxed border-t border-slate-100/70 mt-1">
                 {faq.answer}
               </div>
             </motion.div>
@@ -140,7 +140,7 @@ export default function SmallSavingsFAQ() {
             </div>
             <div>
               <div className="text-sm font-bold text-slate-800">Still have questions about Post Office Schemes?</div>
-              <p className="text-xs text-slate-600 mt-0.5">Connect with our specialists for tailored guidance on POTD, KVP, NSC, and PORD.</p>
+              <p className="text-xs text-gray-600 mt-0.5">Connect with our specialists for tailored guidance on POTD, KVP, NSC, and PORD.</p>
             </div>
           </div>
           <button

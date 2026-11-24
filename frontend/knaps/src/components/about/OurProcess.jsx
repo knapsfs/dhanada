@@ -22,7 +22,7 @@ export default function OurProcess() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-block px-4 py-2 rounded-full border border-gray-200 text-[#032e92] bg-white font-semibold text-sm mb-4 tracking-wider uppercase shadow-sm"
+            className="inline-block px-4 py-2 rounded-full border border-gray-200 text-[#032e92] bg-white font-semibold text-sm mb-4 uppercase shadow-sm"
           >
             How We Work
           </motion.div>

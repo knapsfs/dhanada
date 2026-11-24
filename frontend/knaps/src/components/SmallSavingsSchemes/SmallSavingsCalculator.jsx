@@ -112,7 +112,7 @@ export default function SmallSavingsCalculator() {
         <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xl overflow-hidden p-6 sm:p-10">
           {/* Scheme Quick Switcher Chips */}
           <div className="mb-8 pb-6 border-b border-slate-200">
-            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-3">
+            <label className="text-xs font-bold text-slate-500 uppercase block mb-3">
               Select Post Office Scheme to Simulate:
             </label>
             <div className="flex flex-wrap gap-2.5">
@@ -224,7 +224,7 @@ export default function SmallSavingsCalculator() {
               </div>
 
               {/* Key Scheme Rules Bullet Strip */}
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5 text-xs text-slate-600">
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5 text-xs text-gray-600">
                 <div className="font-bold text-slate-800 mb-1">Key Operational Highlights:</div>
                 <div className="flex items-start gap-2">
                   <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-500 mt-0.5 shrink-0" />
@@ -295,7 +295,7 @@ export default function SmallSavingsCalculator() {
 
                 {/* Visual Ratio Bar */}
                 <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-                  <div className="flex justify-between text-xs font-semibold text-slate-600">
+                  <div className="flex justify-between text-xs font-semibold text-gray-600">
                     <span>Deposit: {results.investedPct}%</span>
                     <span>Interest: {results.interestPct}%</span>
                   </div>

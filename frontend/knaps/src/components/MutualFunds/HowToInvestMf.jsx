@@ -74,7 +74,7 @@ export default function HowToInvestMf() {
                   </div> */}
                 </div>
                 <h3 className="text-lg font-bold text-slate-900 mb-2.5">{item.title}</h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">{item.desc}</p>
+                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-normal">{item.desc}</p>
               </div>
 
               {/* <div className="mt-6 pt-4 border-t border-blue-100/60 flex items-center justify-between text-xs font-semibold text-[#032e92]">
@@ -89,7 +89,7 @@ export default function HowToInvestMf() {
         <div className="mt-14 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-blue-50 to-indigo-50/70 border border-blue-200/80 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xs">
           <div className="space-y-1 text-center sm:text-left">
             <h4 className="text-lg font-bold text-[#032e92]">Need Guidance Picking the Right Mutual Funds?</h4>
-            <p className="text-xs sm:text-sm text-slate-600">
+            <p className="text-xs sm:text-sm text-gray-600">
               Speak with our AMFI-registered financial experts for zero-bias portfolio planning tailored to your income and goals.
             </p>
           </div>

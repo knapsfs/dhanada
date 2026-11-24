@@ -17,9 +17,7 @@ import {
   faCoins,
   faBan,
   faGavel,
-  faEnvelope,
   faPhone,
-  faLocationDot,
   faCircleCheck,
   faBuildingColumns,
 } from '@fortawesome/free-solid-svg-icons';
@@ -35,7 +33,6 @@ const SECTIONS = [
   { id: 'prohibited-conduct', label: '8. Prohibited Conduct', icon: faBan },
   { id: 'limitation-liability', label: '9. Limitation of Liability', icon: faTriangleExclamation },
   { id: 'governing-law', label: '10. Governing Law & Disputes', icon: faGavel },
-  { id: 'grievance', label: '11. Grievance Redressal', icon: faEnvelope },
 ];
 
 export default function TermsAndConditions() {
@@ -85,7 +82,7 @@ export default function TermsAndConditions() {
       />
       <Navbar />
 
-      {/* Hero Header */}
+      {/* Hero Header matching website standard */}
       <section className="relative pt-[120px] pb-10 sm:pt-[130px] sm:pb-14 bg-gradient-to-b from-[#eef4ff] via-[#f4f7fc] to-[#f8fafd] border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
           <motion.div
@@ -94,26 +91,19 @@ export default function TermsAndConditions() {
             transition={{ duration: 0.6 }}
             className="max-w-3xl"
           >
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-blue-100 shadow-sm mb-5 text-[#032e92] text-xs font-bold tracking-widest uppercase">
-              <FontAwesomeIcon icon={faFileContract} className="text-[#032e92]" />
-              <span>Legal Terms &amp; Policies</span>
-            </div>
-
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a192f] tracking-tight leading-tight mb-4">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a192f] tracking-tight leading-tight">
               Terms &amp; <span className="text-[#032e92]">Conditions</span>
             </h1>
-
-            <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
-              Please read these terms and conditions carefully before utilizing our website, financial calculators, portfolio review tools, or distribution services.
-            </p>
 
             {/* Breadcrumb & Metadata */}
             <div className="flex flex-wrap items-center gap-3 pt-6 text-sm text-gray-500 font-medium">
               <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
               <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
-              <span className="text-[#032e92] font-semibold">Terms and Conditions</span>
-              <span className="text-gray-300">|</span>
-              <span>Last Updated: October 2026</span>
+              <span className="text-[#032e92]">Terms and Conditions</span>
+              <span className="hidden sm:inline text-gray-300">•</span>
+              <span className="text-xs bg-blue-50 text-[#032e92] px-3 py-1 rounded-full font-semibold border border-blue-100">
+                Effective: October 2026
+              </span>
             </div>
           </motion.div>
         </div>
@@ -122,348 +112,333 @@ export default function TermsAndConditions() {
       {/* Main Content Layout */}
       <section className="py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+
             {/* Sticky Table of Contents Sidebar */}
-            <aside className="lg:col-span-4 xl:col-span-3">
-              <div className="sticky top-28 bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
-                <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">
-                  Table of Contents
-                </h3>
-                <nav className="space-y-1">
-                  {SECTIONS.map((sec) => (
+            <aside className="hidden lg:block lg:col-span-4 sticky top-28 bg-white rounded-3xl p-6 border border-gray-100 shadow-sm">
+              <h3 className="text-xs font-bold uppercase text-gray-400 mb-4 px-3">
+                Contents
+              </h3>
+              <nav className="space-y-1">
+                {SECTIONS.map((sec) => {
+                  const isActive = activeSection === sec.id;
+                  return (
                     <button
                       key={sec.id}
+                      type="button"
                       onClick={() => scrollToSection(sec.id)}
-                      className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all text-left ${
-                        activeSection === sec.id
-                          ? 'bg-[#032e92] text-white shadow-sm'
-                          : 'text-gray-600 hover:bg-gray-50 hover:text-[#032e92]'
-                      }`}
+                      className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-left transition-all cursor-pointer ${isActive
+                        ? 'bg-[#eef5ff] text-[#032e92] font-bold shadow-xs'
+                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                        }`}
                     >
                       <FontAwesomeIcon
                         icon={sec.icon}
-                        className={`text-xs ${activeSection === sec.id ? 'text-white' : 'text-gray-400'}`}
+                        className={`text-xs ${isActive ? 'text-[#032e92]' : 'text-gray-400'}`}
                       />
                       <span className="truncate">{sec.label}</span>
                     </button>
-                  ))}
-                </nav>
+                  );
+                })}
+              </nav>
 
-                <div className="mt-6 pt-6 border-t border-gray-100">
-                  <div className="bg-[#f0f4fd] p-4 rounded-xl border border-blue-100">
-                    <p className="text-xs text-gray-700 font-medium leading-relaxed">
-                      Need clarification regarding our terms or distributor agreement?
-                    </p>
-                    <Link
-                      to="/contact-us"
-                      className="inline-flex items-center gap-1.5 text-xs font-bold text-[#032e92] hover:text-[#c10000] mt-2 transition-colors"
-                    >
-                      <span>Reach Support Team</span>
-                      <FontAwesomeIcon icon={faChevronRight} className="text-[9px]" />
-                    </Link>
-                  </div>
+              <div className="mt-8 pt-6 border-t border-gray-100">
+                <div className="p-4 rounded-2xl bg-gradient-to-br from-[#032e92] to-[#021d63] text-white">
+                  <h4 className="text-sm font-bold mb-1">Need further Clarification?</h4>
+                  <p className="text-xs text-blue-100 leading-relaxed mb-3">
+                    Need clarification regarding our terms or distributor agreement?
+                  </p>
+                  <a
+                    href="tel:+918850257971"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold bg-white text-[#032e92] px-3.5 py-1.5 rounded-lg hover:bg-blue-50 transition-colors"
+                  >
+                    <FontAwesomeIcon icon={faPhone} />
+                    <span>Talk to us</span>
+                  </a>
                 </div>
               </div>
             </aside>
 
-            {/* Terms Content */}
-            <main className="lg:col-span-8 xl:col-span-9 space-y-10">
-              {/* Important Statutory Banner */}
-              <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-l-4 border-amber-500 rounded-xl p-5 shadow-sm">
-                <div className="flex items-start gap-3">
-                  <FontAwesomeIcon icon={faTriangleExclamation} className="text-amber-600 text-lg mt-0.5 flex-shrink-0" />
-                  <div>
-                    <h4 className="text-sm font-bold text-amber-900 mb-1">Statutory Regulatory Notice</h4>
-                    <p className="text-xs text-amber-800 leading-relaxed">
-                      KNAPS Private Limited is an AMFI-registered Mutual Fund Distributor (ARN Holder). Mutual fund investments are subject to market risks. Please read all scheme-related offer documents, Key Information Memorandum (KIM), and Scheme Information Document (SID) issued by respective Asset Management Companies (AMCs) carefully prior to investing.
-                    </p>
-                  </div>
-                </div>
-              </div>
+            {/* Document Body */}
+            <main className="lg:col-span-8 space-y-10">
 
               {/* 1. Acceptance */}
-              <section id="acceptance" className="bg-white rounded-2xl p-7 sm:p-9 border border-gray-100 shadow-sm scroll-mt-28">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#032e92] flex items-center justify-center font-bold text-base">
-                    01
+              <article id="acceptance" className="bg-white rounded-3xl p-8 sm:p-10 border border-gray-100 shadow-sm scroll-mt-28">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#032e92] flex items-center justify-center text-base font-bold">
+                    1
                   </div>
-                  <h2 className="text-xl sm:text-2xl font-bold text-[#0a192f]">
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
                     Acceptance of Terms
                   </h2>
                 </div>
-                <div className="text-gray-600 text-sm sm:text-base leading-relaxed space-y-4">
+                <div className="space-y-4 text-sm sm:text-md text-gray-600 leading-relaxed">
                   <p>
-                    Welcome to the digital platform of <strong>KNAPS Private Limited</strong> (hereinafter referred to as &ldquo;<strong>KNAPS</strong>&rdquo;, &ldquo;<strong>we</strong>&rdquo;, &ldquo;<strong>our</strong>&rdquo;, or &ldquo;<strong>us</strong>&rdquo;). These Terms and Conditions (&ldquo;Terms&rdquo;) govern your access to and use of our website (<span className="text-[#032e92] font-medium">www.knaps.in</span>), investment portals, calculators, financial tools, risk assessment profilers, and allied distribution services.
+                    Welcome to the digital platform of <strong>KNAPS Private Limited</strong> (hereinafter referred to as &ldquo;<strong>KNAPS</strong>&rdquo;, &ldquo;<strong>we</strong>&rdquo;, &ldquo;<strong>our</strong>&rdquo;, or &ldquo;<strong>us</strong>&rdquo;). These Terms and Conditions (&ldquo;Terms&rdquo;) govern your access to and use of our website (<a href="https://knaps.in" className="text-[#032e92] font-semibold underline">knaps.in</a>), investment portals, calculators, financial tools, risk assessment profilers, and allied distribution services.
                   </p>
                   <p>
-                    By browsing, accessing, registering, submitting an inquiry, or executing any mutual fund transaction through KNAPS, you expressly acknowledge and agree to be bound by these Terms, as well as our <Link to="/privacy-policy" className="text-[#032e92] font-semibold underline hover:text-[#c10000]">Privacy Policy</Link>. If you do not agree with any part of these Terms, you must discontinue using our services immediately.
+                    By browsing, accessing, registering, submitting an inquiry, or executing any mutual fund transaction through KNAPS, you expressly acknowledge and agree to be bound by these Terms, as well as our <Link to="/privacy-policy" className="text-[#032e92] font-semibold underline hover:text-[#021d63]">Privacy Policy</Link>. If you do not agree with any part of these Terms, you must discontinue using our services immediately.
                   </p>
                 </div>
-              </section>
+              </article>
 
               {/* 2. Regulatory Status */}
-              <section id="regulatory" className="bg-white rounded-2xl p-7 sm:p-9 border border-gray-100 shadow-sm scroll-mt-28">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#032e92] flex items-center justify-center font-bold text-base">
-                    02
+              <article id="regulatory" className="bg-white rounded-3xl p-8 sm:p-10 border border-gray-100 shadow-sm scroll-mt-28">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#032e92] flex items-center justify-center text-base font-bold">
+                    2
                   </div>
-                  <h2 className="text-xl sm:text-2xl font-bold text-[#0a192f]">
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
                     Regulatory Status &amp; Scope of Services
                   </h2>
                 </div>
-                <div className="text-gray-600 text-sm sm:text-base leading-relaxed space-y-4">
+                <div className="space-y-4 text-sm sm:text-md text-gray-600 leading-relaxed">
                   <p>
-                    KNAPS Private Limited operates as an <strong>AMFI-registered Mutual Fund Distributor</strong> (Association of Mutual Funds in India). Our role is strictly governed by the guidelines and circulars issued by the Securities and Exchange Board of India (SEBI) and AMFI:
+                    KNAPS Private Limited facilitates investments across a wide range of financial products, including Mutual Funds, PMS, SIF, AIF, NPS, Fixed Deposits and Post Office schemes.
                   </p>
-                  <ul className="space-y-3 pl-2">
-                    <li className="flex items-start gap-2.5">
-                      <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] mt-1 text-sm flex-shrink-0" />
-                      <span><strong>Distributor Capacity:</strong> We facilitate the distribution and transaction execution of mutual fund schemes offered by various SEBI-registered Asset Management Companies (AMCs).</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] mt-1 text-sm flex-shrink-0" />
-                      <span><strong>Commission Disclosure:</strong> In accordance with SEBI circulars, KNAPS receives trail commissions directly from Asset Management Companies for mutual fund schemes distributed through us. We do not charge advisory fees from investors for mutual fund distribution.</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] mt-1 text-sm flex-shrink-0" />
-                      <span><strong>Execution Platform:</strong> Transaction orders are routed via recognized transaction platforms including BSE Star MF, NSE NMF II, or directly with respective Mutual Fund AMCs/RTAs (CAMS, KFintech).</span>
-                    </li>
-                  </ul>
+                  <p>
+                    We facilitate the distribution and execution of mutual fund investments offered by SEBI-registered Asset Management Companies (AMCs).
+                  </p>
+                  <p>
+                    We do not charge investors any advisory fees for mutual fund distribution services.
+                  </p>
+
                 </div>
-              </section>
+              </article>
 
               {/* 3. Market Risk */}
-              <section id="market-risk" className="bg-white rounded-2xl p-7 sm:p-9 border border-gray-100 shadow-sm scroll-mt-28">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-red-50 text-[#c10000] flex items-center justify-center font-bold text-base">
-                    03
+              <article id="market-risk" className="bg-white rounded-3xl p-8 sm:p-10 border border-gray-100 shadow-sm scroll-mt-28">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#032e92] flex items-center justify-center text-base font-bold">
+                    3
                   </div>
-                  <h2 className="text-xl sm:text-2xl font-bold text-[#0a192f]">
-                    Market Risks &amp; Non-Guarantee of Returns
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
+                    Market-linked Returns &amp; Disclaimers
                   </h2>
                 </div>
-                <div className="text-gray-600 text-sm sm:text-base leading-relaxed space-y-4">
-                  <div className="p-4 rounded-xl bg-red-50/60 border border-red-100 text-red-950 font-semibold text-sm">
-                    Mutual Fund investments are subject to market risks, read all scheme related documents carefully.
-                  </div>
+                <div className="space-y-4 text-sm sm:text-md text-gray-600 leading-relaxed">
                   <p>
-                    All investments in mutual funds, equities, debt instruments, and related financial products are subject to market fluctuations, interest rate risks, credit risks, liquidity risks, and macroeconomic volatility.
+                    Mutual fund investments are subject to market risks. Please read all scheme-related documents carefully before investing.
                   </p>
-                  <ul className="space-y-2.5 pl-2">
-                    <li className="flex items-start gap-2.5">
-                      <FontAwesomeIcon icon={faCircleCheck} className="text-[#c10000] mt-1 text-sm flex-shrink-0" />
-                      <span><strong>No Assured Returns:</strong> KNAPS does not guarantee, assure, or predict any specific returns, capital preservation, dividend payouts, or Net Asset Value (NAV) appreciation on any investment product.</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <FontAwesomeIcon icon={faCircleCheck} className="text-[#c10000] mt-1 text-sm flex-shrink-0" />
-                      <span><strong>Historical Performance:</strong> Past performance figures displayed on the website or marketing collateral are strictly indicative and do not guarantee future performance.</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <FontAwesomeIcon icon={faCircleCheck} className="text-[#c10000] mt-1 text-sm flex-shrink-0" />
-                      <span><strong>Investor Discretion:</strong> All decisions to purchase, switch, or redeem units of any mutual fund scheme are made solely at the investor’s own discretion and risk assessment.</span>
-                    </li>
-                  </ul>
+                  <p>
+                    We encourage investors to consider equity investments only when they have a long-term investment horizon, typically 5 years or more. Past performance may offer insights but does not guarantee future returns.
+                  </p>
+                  <p>
+                    Markets move through different cycles. We help investors make informed investment decisions along the way.
+                  </p>
                 </div>
-              </section>
+              </article>
 
               {/* 4. Eligibility */}
-              <section id="eligibility" className="bg-white rounded-2xl p-7 sm:p-9 border border-gray-100 shadow-sm scroll-mt-28">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#032e92] flex items-center justify-center font-bold text-base">
-                    04
+              <article id="eligibility" className="bg-white rounded-3xl p-8 sm:p-10 border border-gray-100 shadow-sm scroll-mt-28">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#032e92] flex items-center justify-center text-base font-bold">
+                    4
                   </div>
-                  <h2 className="text-xl sm:text-2xl font-bold text-[#0a192f]">
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
                     Eligibility &amp; Information Accuracy
                   </h2>
                 </div>
-                <div className="text-gray-600 text-sm sm:text-base leading-relaxed space-y-4">
+                <div className="space-y-4 text-sm sm:text-md text-gray-600 leading-relaxed">
                   <p>
                     By engaging with KNAPS, you confirm and warrant that:
                   </p>
-                  <ul className="space-y-3 pl-2">
-                    <li className="flex items-start gap-2.5">
-                      <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] mt-1 text-sm flex-shrink-0" />
-                      <span>You are at least 18 years of age and legally competent to enter into binding legal agreements under the Indian Contract Act, 1872.</span>
+                  <ul className="space-y-3 pt-2">
+                    <li className="flex items-start gap-3">
+                      <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] text-sm mt-1 shrink-0" />
+                      <div>
+                        You are at least 18 years of age and legally competent to enter into binding legal agreements under the Indian Contract Act, 1872.
+                      </div>
                     </li>
-                    <li className="flex items-start gap-2.5">
-                      <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] mt-1 text-sm flex-shrink-0" />
-                      <span>If you are a Non-Resident Indian (NRI) or Person of Indian Origin (PIO), your investments comply fully with the Foreign Exchange Management Act (FEMA), Reserve Bank of India (RBI) regulations, and AMC guidelines.</span>
+                    <li className="flex items-start gap-3">
+                      <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] text-sm mt-1 shrink-0" />
+                      <div>
+                        If you are a Non-Resident Indian (NRI) or Person of Indian Origin (PIO), your investments comply fully with the Foreign Exchange Management Act (FEMA), Reserve Bank of India (RBI) regulations, and AMC guidelines.
+                      </div>
                     </li>
-                    <li className="flex items-start gap-2.5">
-                      <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] mt-1 text-sm flex-shrink-0" />
-                      <span>All information furnished by you (including PAN, Aadhaar, KYC status, bank account details, contact information, and risk profile answers) is truthful, accurate, and up-to-date.</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] mt-1 text-sm flex-shrink-0" />
-                      <span>You consent to receive communications (SMS, WhatsApp, emails, telephone calls) concerning your account status, order updates, OTPs, and statutory disclosures, even if your phone number is registered with the National Do Not Call (NDNC) Registry.</span>
+                    <li className="flex items-start gap-3">
+                      <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] text-sm mt-1 shrink-0" />
+                      <div>
+                        All information furnished by you (including PAN, Aadhaar, KYC status, bank account details, contact information, and risk profile answers) is truthful, accurate, and up-to-date.
+                      </div>
                     </li>
                   </ul>
                 </div>
-              </section>
+              </article>
 
               {/* 5. Services & Tools */}
-              <section id="services" className="bg-white rounded-2xl p-7 sm:p-9 border border-gray-100 shadow-sm scroll-mt-28">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#032e92] flex items-center justify-center font-bold text-base">
-                    05
+              <article id="services" className="bg-white rounded-3xl p-8 sm:p-10 border border-gray-100 shadow-sm scroll-mt-28">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#032e92] flex items-center justify-center text-base font-bold">
+                    5
                   </div>
-                  <h2 className="text-xl sm:text-2xl font-bold text-[#0a192f]">
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
                     Calculators &amp; Informational Tools
                   </h2>
                 </div>
-                <div className="text-gray-600 text-sm sm:text-base leading-relaxed space-y-4">
+                <div className="space-y-4 text-sm sm:text-md text-gray-600 leading-relaxed">
                   <p>
-                    Our platform provides various computational tools, including:
+                    KNAPS provides various computational tools like SIP and lump sum calculators, risk profiling, goal planning tools, and portfolio review reports to help investors evaluate their investments, plan financial goals, and make informed decisions.
                   </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 my-3">
-                    <div className="p-3.5 rounded-xl bg-gray-50 border border-gray-100 text-xs text-gray-700">
-                      <strong>SIP &amp; Lumpsum Calculators:</strong> Mathematical models projecting compound growth based on user-entered hypothetical interest rates.
+                  <p>
+                    These calculations are illustrative and for educational purposes only. They do not constitute investment advice or guarantee returns.
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
+                    <div className="p-4 rounded-2xl bg-gray-50 border border-gray-100">
+                      <strong className="text-gray-900 block mb-1">SIP &amp; Lumpsum Calculators:</strong>
+                      <span className="text-xs sm:text-sm text-gray-600">Mathematical models projecting compound growth based on user-entered hypothetical interest rates.</span>
                     </div>
-                    <div className="p-3.5 rounded-xl bg-gray-50 border border-gray-100 text-xs text-gray-700">
-                      <strong>Risk Profiler Assessment:</strong> Questionnaire-driven risk categorization to help you identify mutual fund categories suitable to your appetite.
+                    <div className="p-4 rounded-2xl bg-gray-50 border border-gray-100">
+                      <strong className="text-gray-900 block mb-1">Risk Profiler Assessment:</strong>
+                      <span className="text-xs sm:text-sm text-gray-600">Questionnaire-driven risk categorization to help you identify mutual fund categories suitable to your appetite.</span>
                     </div>
-                    <div className="p-3.5 rounded-xl bg-gray-50 border border-gray-100 text-xs text-gray-700">
-                      <strong>Goal Planning Tools:</strong> Illustrative estimates for retirement, child education, and major life goals.
+                    <div className="p-4 rounded-2xl bg-gray-50 border border-gray-100">
+                      <strong className="text-gray-900 block mb-1">Goal Planning Tools:</strong>
+                      <span className="text-xs sm:text-sm text-gray-600">Illustrative estimates for retirement, child education, and major life goals.</span>
                     </div>
-                    <div className="p-3.5 rounded-xl bg-gray-50 border border-gray-100 text-xs text-gray-700">
-                      <strong>Portfolio Review Reports:</strong> Aggregated summary reports highlighting asset allocation, overlap, and category diversification.
+                    <div className="p-4 rounded-2xl bg-gray-50 border border-gray-100">
+                      <strong className="text-gray-900 block mb-1">Portfolio Review Reports:</strong>
+                      <span className="text-xs sm:text-sm text-gray-600">Aggregated summary reports highlighting asset allocation, overlap, and category diversification.</span>
                     </div>
                   </div>
-                  <p className="text-xs text-gray-500 italic">
-                    Disclaimer: Calculations generated by these tools are illustrative and intended for educational planning purposes only. They do not constitute an offer, formal investment advice, or guaranteed outcome.
-                  </p>
                 </div>
-              </section>
+              </article>
 
               {/* 6. Transactions & Cut-off */}
-              <section id="transactions" className="bg-white rounded-2xl p-7 sm:p-9 border border-gray-100 shadow-sm scroll-mt-28">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#032e92] flex items-center justify-center font-bold text-base">
-                    06
+              <article id="transactions" className="bg-white rounded-3xl p-8 sm:p-10 border border-gray-100 shadow-sm scroll-mt-28">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#032e92] flex items-center justify-center text-base font-bold">
+                    6
                   </div>
-                  <h2 className="text-xl sm:text-2xl font-bold text-[#0a192f]">
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
                     Transactions, Cut-off Timings &amp; Settlement
                   </h2>
                 </div>
-                <div className="text-gray-600 text-sm sm:text-base leading-relaxed space-y-4">
+                <div className="space-y-4 text-sm sm:text-md text-gray-600 leading-relaxed">
                   <p>
                     All transaction requests (purchases, additional purchases, SIP setups, redemptions, switches) processed through KNAPS or partner exchange portals are governed by strict SEBI regulations:
                   </p>
-                  <ul className="space-y-3 pl-2">
-                    <li className="flex items-start gap-2.5">
-                      <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] mt-1 text-sm flex-shrink-0" />
-                      <span><strong>Cut-off Timings &amp; NAV Applicability:</strong> Applicable NAV for any mutual fund transaction is determined strictly based on SEBI cut-off rules and the actual realization/credit of funds in the AMC’s scheme account, not the time of order placement.</span>
+                  <ul className="space-y-3 pt-2">
+                    <li className="flex items-start gap-3">
+                      <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] text-sm mt-1 shrink-0" />
+                      <div>
+                        <strong className="text-gray-900">Cut-off Timings &amp; NAV Applicability:</strong> Applicable NAV for any mutual fund transaction is determined strictly based on SEBI cut-off rules and the actual realization/credit of funds in the AMC’s scheme account, not the time of order placement.
+                      </div>
                     </li>
-                    <li className="flex items-start gap-2.5">
-                      <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] mt-1 text-sm flex-shrink-0" />
-                      <span><strong>Banking &amp; Payment Gateway Third Parties:</strong> Funds for mutual fund transactions are transferred directly from your verified bank account to the clearing corporation (ICCL/NSE Clearing) or the AMC account. KNAPS never collects or handles investor funds in its own bank accounts.</span>
+                    <li className="flex items-start gap-3">
+                      <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] text-sm mt-1 shrink-0" />
+                      <div>
+                        <strong className="text-gray-900">Banking &amp; Payment Gateway Third Parties:</strong> Funds for mutual fund transactions are transferred directly from your verified bank account to the clearing corporation (ICCL/NSE Clearing) or the AMC account. KNAPS never collects or handles investor funds in its own bank accounts.
+                      </div>
                     </li>
-                    <li className="flex items-start gap-2.5">
-                      <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] mt-1 text-sm flex-shrink-0" />
-                      <span><strong>Third-Party Payment Delays:</strong> KNAPS shall not be held liable for delayed or rejected orders resulting from banking gateway failures, NPCI mandate delays, or network disruptions beyond our control.</span>
+                    <li className="flex items-start gap-3">
+                      <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] text-sm mt-1 shrink-0" />
+                      <div>
+                        <strong className="text-gray-900">Third-Party Payment Delays:</strong> KNAPS shall not be held liable for delayed or rejected orders resulting from banking gateway failures, NPCI mandate delays, or network disruptions beyond our control.
+                      </div>
                     </li>
                   </ul>
                 </div>
-              </section>
+              </article>
 
               {/* 7. Intellectual Property */}
-              <section id="intellectual-property" className="bg-white rounded-2xl p-7 sm:p-9 border border-gray-100 shadow-sm scroll-mt-28">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#032e92] flex items-center justify-center font-bold text-base">
-                    07
+              <article id="intellectual-property" className="bg-white rounded-3xl p-8 sm:p-10 border border-gray-100 shadow-sm scroll-mt-28">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#032e92] flex items-center justify-center text-base font-bold">
+                    7
                   </div>
-                  <h2 className="text-xl sm:text-2xl font-bold text-[#0a192f]">
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
                     Intellectual Property Rights
                   </h2>
                 </div>
-                <div className="text-gray-600 text-sm sm:text-base leading-relaxed space-y-4">
+                <div className="space-y-4 text-sm sm:text-md text-gray-600 leading-relaxed">
                   <p>
-                    All content, including but not limited to logos, trademarks, website layouts, user interfaces, calculator source code, articles, research guides, graphical illustrations, and brand assets displayed on <span className="text-[#032e92] font-semibold">knaps.in</span> are the exclusive intellectual property of <strong>KNAPS Private Limited</strong> or its licensors.
+                    All content, including but not limited to logos, trademarks, website layouts, user interfaces, calculator source code, articles, research guides, graphical illustrations, and brand assets displayed on <a href="https://knaps.in" className="text-[#032e92] font-semibold underline">knaps.in</a> are the exclusive intellectual property of <strong>KNAPS Private Limited</strong> or its licensors.
                   </p>
                   <p>
-                    You are granted a limited, personal, non-exclusive, non-transferable license to access the website for personal financial management. You may not reproduce, copy, distribute, modify, scrape, reverse-engineer, or commercially exploit any material from this site without our prior written consent.
+                    Website content, including text, graphics, and other materials, may be accessed and used for personal, non-commercial purposes. Copying, reproducing, modifying, distributing, or using any content for commercial purposes requires prior written permission from KNAPS Private Limited.
                   </p>
                 </div>
-              </section>
+              </article>
 
               {/* 8. Prohibited Conduct */}
-              <section id="prohibited-conduct" className="bg-white rounded-2xl p-7 sm:p-9 border border-gray-100 shadow-sm scroll-mt-28">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#032e92] flex items-center justify-center font-bold text-base">
-                    08
+              <article id="prohibited-conduct" className="bg-white rounded-3xl p-8 sm:p-10 border border-gray-100 shadow-sm scroll-mt-28">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#032e92] flex items-center justify-center text-base font-bold">
+                    8
                   </div>
-                  <h2 className="text-xl sm:text-2xl font-bold text-[#0a192f]">
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
                     Prohibited Conduct &amp; Platform Security
                   </h2>
                 </div>
-                <div className="text-gray-600 text-sm sm:text-base leading-relaxed space-y-3">
+                <div className="space-y-4 text-sm sm:text-md text-gray-600 leading-relaxed">
                   <p>While using our platform, you agree NOT to:</p>
-                  <ul className="space-y-2.5 pl-2">
-                    <li className="flex items-start gap-2.5">
-                      <FontAwesomeIcon icon={faBan} className="text-red-500 mt-1 text-sm flex-shrink-0" />
-                      <span>Provide forged, fraudulent, or impersonated KYC documents, PAN details, or bank records.</span>
+                  <ul className="space-y-3 pt-2">
+                    <li className="flex items-start gap-3">
+                      <FontAwesomeIcon icon={faBan} className="text-red-500 text-sm mt-1 shrink-0" />
+                      <div>Provide forged, fraudulent, or impersonated KYC documents, PAN details, or bank records.</div>
                     </li>
-                    <li className="flex items-start gap-2.5">
-                      <FontAwesomeIcon icon={faBan} className="text-red-500 mt-1 text-sm flex-shrink-0" />
-                      <span>Use automated spiders, scrapers, data-mining tools, or bots to harvest data from our servers.</span>
+                    <li className="flex items-start gap-3">
+                      <FontAwesomeIcon icon={faBan} className="text-red-500 text-sm mt-1 shrink-0" />
+                      <div>Use automated spiders, scrapers, data-mining tools, or bots to harvest data from our servers.</div>
                     </li>
-                    <li className="flex items-start gap-2.5">
-                      <FontAwesomeIcon icon={faBan} className="text-red-500 mt-1 text-sm flex-shrink-0" />
-                      <span>Introduce malicious computer viruses, trojans, worms, or code designed to compromise website security.</span>
+                    <li className="flex items-start gap-3">
+                      <FontAwesomeIcon icon={faBan} className="text-red-500 text-sm mt-1 shrink-0" />
+                      <div>Introduce malicious computer viruses, trojans, worms, or code designed to compromise website security.</div>
                     </li>
-                    <li className="flex items-start gap-2.5">
-                      <FontAwesomeIcon icon={faBan} className="text-red-500 mt-1 text-sm flex-shrink-0" />
-                      <span>Engage in money laundering, unauthorized third-party investments, or illicit financial activities prohibited under the Prevention of Money Laundering Act (PMLA).</span>
+                    <li className="flex items-start gap-3">
+                      <FontAwesomeIcon icon={faBan} className="text-red-500 text-sm mt-1 shrink-0" />
+                      <div>Engage in money laundering, unauthorized third-party investments, or illicit financial activities prohibited under the Prevention of Money Laundering Act (PMLA).</div>
                     </li>
                   </ul>
                 </div>
-              </section>
+              </article>
 
               {/* 9. Limitation of Liability */}
-              <section id="limitation-liability" className="bg-white rounded-2xl p-7 sm:p-9 border border-gray-100 shadow-sm scroll-mt-28">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#032e92] flex items-center justify-center font-bold text-base">
-                    09
+              <article id="limitation-liability" className="bg-white rounded-3xl p-8 sm:p-10 border border-gray-100 shadow-sm scroll-mt-28">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#032e92] flex items-center justify-center text-base font-bold">
+                    9
                   </div>
-                  <h2 className="text-xl sm:text-2xl font-bold text-[#0a192f]">
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
                     Limitation of Liability &amp; Indemnity
                   </h2>
                 </div>
-                <div className="text-gray-600 text-sm sm:text-base leading-relaxed space-y-4">
+                <div className="space-y-4 text-sm sm:text-md text-gray-600 leading-relaxed">
                   <p>
                     To the maximum extent permitted by applicable Indian law, KNAPS Private Limited, its directors, officers, employees, partners, and agents shall not be liable for:
                   </p>
-                  <ul className="space-y-2.5 pl-2">
-                    <li className="flex items-start gap-2.5">
-                      <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] mt-1 text-sm flex-shrink-0" />
-                      <span>Any direct, indirect, incidental, special, or consequential investment losses resulting from capital depreciation, NAV downward movements, or macroeconomic occurrences.</span>
+                  <ul className="space-y-3 pt-2">
+                    <li className="flex items-start gap-3">
+                      <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] text-sm mt-1 shrink-0" />
+                      <div>Any direct, indirect, incidental, special, or consequential investment losses resulting from capital depreciation, NAV downward movements, or macroeconomic occurrences.</div>
                     </li>
-                    <li className="flex items-start gap-2.5">
-                      <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] mt-1 text-sm flex-shrink-0" />
-                      <span>System interruptions, server downtime, telecommunication latency, or force majeure events preventing timely order placement.</span>
+                    <li className="flex items-start gap-3">
+                      <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] text-sm mt-1 shrink-0" />
+                      <div>System interruptions, server downtime, telecommunication latency, or force majeure events preventing timely order placement.</div>
                     </li>
-                    <li className="flex items-start gap-2.5">
-                      <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] mt-1 text-sm flex-shrink-0" />
-                      <span>Actions, omissions, or delays caused by third-party financial intermediaries (AMCs, RTAs, BSE/NSE, banks, or payment gateways).</span>
+                    <li className="flex items-start gap-3">
+                      <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92] text-sm mt-1 shrink-0" />
+                      <div>Actions, omissions, or delays caused by third-party financial intermediaries (AMCs, RTAs, BSE/NSE, banks, or payment gateways).</div>
                     </li>
                   </ul>
-                  <p>
+                  <p className="pt-2">
                     You agree to indemnify and hold harmless KNAPS and its representatives from any claims, damages, liabilities, or legal expenses arising from your violation of these Terms or infringement of statutory laws.
                   </p>
                 </div>
-              </section>
+              </article>
 
               {/* 10. Governing Law */}
-              <section id="governing-law" className="bg-white rounded-2xl p-7 sm:p-9 border border-gray-100 shadow-sm scroll-mt-28">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#032e92] flex items-center justify-center font-bold text-base">
+              <article id="governing-law" className="bg-white rounded-3xl p-8 sm:p-10 border border-gray-100 shadow-sm scroll-mt-28">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#032e92] flex items-center justify-center text-base font-bold">
                     10
                   </div>
-                  <h2 className="text-xl sm:text-2xl font-bold text-[#0a192f]">
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
                     Governing Law &amp; Dispute Resolution
                   </h2>
                 </div>
-                <div className="text-gray-600 text-sm sm:text-base leading-relaxed space-y-4">
+                <div className="space-y-4 text-sm sm:text-md text-gray-600 leading-relaxed">
                   <p>
                     These Terms and Conditions shall be governed by, construed, and enforced in accordance with the laws of the Republic of India.
                   </p>
@@ -474,67 +449,8 @@ export default function TermsAndConditions() {
                     We reserve the right to revise or update these Terms periodically to align with regulatory amendments or operational enhancements. Continued use of the platform following the publication of revised terms constitutes your acceptance of such updates.
                   </p>
                 </div>
-              </section>
+              </article>
 
-              {/* 11. Grievance Redressal */}
-              <section id="grievance" className="bg-white rounded-2xl p-7 sm:p-9 border border-gray-100 shadow-sm scroll-mt-28">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#032e92] flex items-center justify-center font-bold text-base">
-                    11
-                  </div>
-                  <h2 className="text-xl sm:text-2xl font-bold text-[#0a192f]">
-                    Grievance Redressal &amp; Nodal Officer
-                  </h2>
-                </div>
-                <div className="text-gray-600 text-sm sm:text-base leading-relaxed space-y-4">
-                  <p>
-                    If you have any queries, concerns, or grievances concerning these Terms and Conditions or your investment account, please contact our designated Grievance Officer:
-                  </p>
-
-                  <div className="mt-4 p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-blue-50/50 to-indigo-50/40 border border-blue-100">
-                    <h3 className="text-base font-bold text-[#0a192f] mb-3">
-                      KNAPS Private Limited
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
-                      <div className="flex items-start gap-3">
-                        <FontAwesomeIcon icon={faLocationDot} className="text-[#032e92] mt-1" />
-                        <div>
-                          <p className="font-semibold text-gray-800">Office Address</p>
-                          <p className="text-gray-600">
-                            DG-206A, DLF Galleria, Plot No 1B, Mayur Vihar Phase - 1, East Delhi, Delhi - 110091
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="space-y-3">
-                        <div className="flex items-center gap-3">
-                          <FontAwesomeIcon icon={faEnvelope} className="text-[#032e92]" />
-                          <div>
-                            <p className="font-semibold text-gray-800">Email Address</p>
-                            <a href="mailto:connect@knaps.in" className="text-[#032e92] hover:underline font-medium">
-                              connect@knaps.in
-                            </a>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-3">
-                          <FontAwesomeIcon icon={faPhone} className="text-[#032e92]" />
-                          <div>
-                            <p className="font-semibold text-gray-800">Helpline Phone</p>
-                            <a href="tel:+919990243143" className="text-[#032e92] hover:underline font-medium">
-                              (+91) 9990243143
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <p className="text-xs text-gray-500 pt-2">
-                    Additionally, in compliance with SEBI investor guidelines, investors may also lodge mutual fund related grievances on the SEBI SCORES portal (<span className="text-[#032e92]">scores.sebi.gov.in</span>) or via SMART ODR.
-                  </p>
-                </div>
-              </section>
             </main>
           </div>
         </div>

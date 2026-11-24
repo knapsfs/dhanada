@@ -29,9 +29,9 @@ const SECTIONS = [
   { id: 'sharing', label: '4. Information Sharing', icon: faScaleBalanced },
   { id: 'security', label: '5. Data Security', icon: faLock },
   { id: 'cookies', label: '6. Cookies Policy', icon: faCookieBite },
-  { id: 'rights', label: '7. Your Privacy Rights', icon: faFileContract },
-  { id: 'retention', label: '8. Data Retention', icon: faDatabase },
-  { id: 'grievance', label: '9. Grievance Officer', icon: faEnvelope },
+  // { id: 'rights', label: '7. Your Privacy Rights', icon: faFileContract },
+  { id: 'retention', label: '7. Data Retention', icon: faDatabase },
+  // { id: 'grievance', label: '9. Grievance Officer', icon: faEnvelope },
 ];
 
 export default function PrivacyPolicy() {
@@ -90,18 +90,14 @@ export default function PrivacyPolicy() {
             transition={{ duration: 0.6 }}
             className="max-w-3xl"
           >
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-blue-100 shadow-sm mb-5 text-[#032e92] text-xs font-bold tracking-widest uppercase">
+            {/* <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-blue-100 shadow-sm mb-5 text-[#032e92] text-xs font-bold tracking-widest uppercase">
               <FontAwesomeIcon icon={faShieldHalved} className="text-[#032e92]" />
               <span>Legal &amp; Compliance</span>
-            </div>
+            </div> */}
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a192f] tracking-tight leading-tight mb-4">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0a192f] tracking-tight leading-tight">
               Privacy <span className="text-[#032e92]">Policy</span>
             </h1>
-
-            <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
-              At KNAPS Private Limited, safeguarding your confidential financial details and personal information is our utmost commitment.
-            </p>
 
             {/* Breadcrumb & Metadata */}
             <div className="flex flex-wrap items-center gap-3 pt-6 text-sm text-gray-500 font-medium">
@@ -124,7 +120,7 @@ export default function PrivacyPolicy() {
 
             {/* Sticky Table of Contents Sidebar */}
             <aside className="hidden lg:block lg:col-span-4 sticky top-28 bg-white rounded-3xl p-6 border border-gray-100 shadow-sm">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4 px-3">
+              <h3 className="text-xs font-bold uppercase text-gray-400 mb-4 px-3">
                 Contents
               </h3>
               <nav className="space-y-1">
@@ -135,11 +131,10 @@ export default function PrivacyPolicy() {
                       key={sec.id}
                       type="button"
                       onClick={() => scrollToSection(sec.id)}
-                      className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-left transition-all cursor-pointer ${
-                        isActive
-                          ? 'bg-[#eef5ff] text-[#032e92] font-bold shadow-xs'
-                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                      }`}
+                      className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-left transition-all cursor-pointer ${isActive
+                        ? 'bg-[#eef5ff] text-[#032e92] font-bold shadow-xs'
+                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                        }`}
                     >
                       <FontAwesomeIcon
                         icon={sec.icon}
@@ -153,16 +148,16 @@ export default function PrivacyPolicy() {
 
               <div className="mt-8 pt-6 border-t border-gray-100">
                 <div className="p-4 rounded-2xl bg-gradient-to-br from-[#032e92] to-[#021d63] text-white">
-                  <h4 className="text-sm font-bold mb-1">Need Clarification?</h4>
+                  <h4 className="text-sm font-bold mb-1">Need further Clarification?</h4>
                   <p className="text-xs text-blue-100 leading-relaxed mb-3">
                     Have any questions regarding how your data is handled?
                   </p>
                   <a
-                    href="mailto:connect@knaps.in"
+                    href="tel:+918850257971"
                     className="inline-flex items-center gap-1.5 text-xs font-bold bg-white text-[#032e92] px-3.5 py-1.5 rounded-lg hover:bg-blue-50 transition-colors"
                   >
-                    <FontAwesomeIcon icon={faEnvelope} />
-                    <span>Email Compliance</span>
+                    <FontAwesomeIcon icon={faPhone} />
+                    <span>Talk to us</span>
                   </a>
                 </div>
               </div>
@@ -181,7 +176,7 @@ export default function PrivacyPolicy() {
                     Introduction &amp; Scope
                   </h2>
                 </div>
-                <div className="space-y-4 text-sm sm:text-[15px] text-gray-600 leading-relaxed">
+                <div className="space-y-4 text-sm sm:text-md text-gray-600 leading-relaxed">
                   <p>
                     <strong>KNAPS Private Limited</strong> (&ldquo;KNAPS&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;, or &ldquo;our&rdquo;) is an AMFI-registered financial services distributor dedicated to providing transparent, disciplined, and client-centric wealth creation solutions across India.
                   </p>
@@ -204,7 +199,7 @@ export default function PrivacyPolicy() {
                     Information We Collect
                   </h2>
                 </div>
-                <div className="space-y-4 text-sm sm:text-[15px] text-gray-600 leading-relaxed">
+                <div className="space-y-4 text-sm sm:text-md text-gray-600 leading-relaxed">
                   <p>
                     In order to deliver tailored wealth distribution services and comply with statutory financial regulations, we collect the following categories of data:
                   </p>
@@ -247,7 +242,7 @@ export default function PrivacyPolicy() {
                     How We Use Your Information
                   </h2>
                 </div>
-                <div className="space-y-4 text-sm sm:text-[15px] text-gray-600 leading-relaxed">
+                <div className="space-y-4 text-sm sm:text-md text-gray-600 leading-relaxed">
                   <p>
                     We collect and process your information exclusively for legitimate business and regulatory purposes, including:
                   </p>
@@ -282,7 +277,7 @@ export default function PrivacyPolicy() {
                     Information Sharing &amp; Disclosures
                   </h2>
                 </div>
-                <div className="space-y-4 text-sm sm:text-[15px] text-gray-600 leading-relaxed">
+                <div className="space-y-4 text-sm sm:text-md text-gray-600 leading-relaxed">
                   <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-100 text-emerald-900 text-xs sm:text-sm font-semibold">
                     We do NOT sell, rent, or trade your personal data to any third party for commercial marketing under any circumstances.
                   </div>
@@ -320,7 +315,7 @@ export default function PrivacyPolicy() {
                     Data Security &amp; Storage
                   </h2>
                 </div>
-                <div className="space-y-4 text-sm sm:text-[15px] text-gray-600 leading-relaxed">
+                <div className="space-y-4 text-sm sm:text-md text-gray-600 leading-relaxed">
                   <p>
                     We implement defense-in-depth security standards to protect your electronic records and sensitive personal information against unauthorized disclosure, interception, or alteration:
                   </p>
@@ -354,18 +349,15 @@ export default function PrivacyPolicy() {
                     Cookies &amp; Tracking Technologies
                   </h2>
                 </div>
-                <div className="space-y-4 text-sm sm:text-[15px] text-gray-600 leading-relaxed">
+                <div className="space-y-4 text-sm sm:text-md text-gray-600 leading-relaxed">
                   <p>
-                    Our website utilizes essential session cookies and analytical tokens to maintain secure navigation, retain user preferences (such as calculator entries), and understand aggregate traffic patterns to improve site performance.
-                  </p>
-                  <p>
-                    You may configure your browser settings to decline non-essential cookies; however, certain interactive functionalities (such as calculator projections or authenticated sessions) may be restricted.
+                    Our website utilizes essential session cookies and analytical tokens to maintain secure navigation, retain user preferences and understand traffic patterns to improve site performance for users.
                   </p>
                 </div>
               </article>
 
               {/* Section 7 */}
-              <article id="rights" className="bg-white rounded-3xl p-8 sm:p-10 border border-gray-100 shadow-sm scroll-mt-28">
+              {/* <article id="rights" className="bg-white rounded-3xl p-8 sm:p-10 border border-gray-100 shadow-sm scroll-mt-28">
                 <div className="flex items-center gap-3 mb-5">
                   <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#032e92] flex items-center justify-center text-base font-bold">
                     7
@@ -374,7 +366,7 @@ export default function PrivacyPolicy() {
                     Your Rights &amp; Choices
                   </h2>
                 </div>
-                <div className="space-y-4 text-sm sm:text-[15px] text-gray-600 leading-relaxed">
+                <div className="space-y-4 text-sm sm:text-md text-gray-600 leading-relaxed">
                   <p>
                     Under applicable Indian data protection frameworks, you are entitled to:
                   </p>
@@ -393,19 +385,19 @@ export default function PrivacyPolicy() {
                     </li>
                   </ul>
                 </div>
-              </article>
+              </article> */}
 
               {/* Section 8 */}
               <article id="retention" className="bg-white rounded-3xl p-8 sm:p-10 border border-gray-100 shadow-sm scroll-mt-28">
                 <div className="flex items-center gap-3 mb-5">
                   <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#032e92] flex items-center justify-center text-base font-bold">
-                    8
+                    7
                   </div>
                   <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
                     Data Retention Policy
                   </h2>
                 </div>
-                <div className="space-y-4 text-sm sm:text-[15px] text-gray-600 leading-relaxed">
+                <div className="space-y-4 text-sm sm:text-md text-gray-600 leading-relaxed">
                   <p>
                     In accordance with SEBI Regulations, Prevention of Money Laundering (PMLA) Rules, and relevant tax statutes, records pertaining to client identity, KYC records, and transactions are retained for a minimum statutory period of <strong>eight (8) years</strong> following the cessation of the account or transaction.
                   </p>
@@ -416,7 +408,7 @@ export default function PrivacyPolicy() {
               </article>
 
               {/* Section 9 */}
-              <article id="grievance" className="bg-white rounded-3xl p-8 sm:p-10 border border-gray-100 shadow-sm scroll-mt-28">
+              {/* <article id="grievance" className="bg-white rounded-3xl p-8 sm:p-10 border border-gray-100 shadow-sm scroll-mt-28">
                 <div className="flex items-center gap-3 mb-5">
                   <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#032e92] flex items-center justify-center text-base font-bold">
                     9
@@ -425,7 +417,7 @@ export default function PrivacyPolicy() {
                     Grievance Redressal Officer
                   </h2>
                 </div>
-                <div className="space-y-4 text-sm sm:text-[15px] text-gray-600 leading-relaxed">
+                <div className="space-y-4 text-sm sm:text-md text-gray-600 leading-relaxed">
                   <p>
                     If you have questions, concerns, or grievances concerning our privacy practices or the handling of your data, you may reach our designated Grievance Officer:
                   </p>
@@ -446,7 +438,7 @@ export default function PrivacyPolicy() {
                     </div>
                   </div>
                 </div>
-              </article>
+              </article> */}
 
             </main>
           </div>

@@ -121,7 +121,7 @@ export default function WhyHealthInsurance() {
 
             {/* With Comprehensive Health Insurance */}
             <div className="bg-white/15 backdrop-blur-md rounded-2xl p-6 sm:p-8 border border-emerald-400/40 space-y-4 relative overflow-hidden">
-              <div className="absolute top-0 right-0 px-3 py-1 bg-emerald-500 text-white text-[10px] font-bold uppercase tracking-wider rounded-bl-xl">
+              <div className="absolute top-0 right-0 px-3 py-1 bg-emerald-500 text-white text-[10px] font-bold uppercase rounded-bl-xl">
                 Safe & Protected
               </div>
 

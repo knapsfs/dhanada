@@ -72,14 +72,14 @@ export default function NpsComparisonTable() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#032e92]/10 border border-[#032e92]/20 text-[#032e92] text-xs font-semibold uppercase tracking-wider mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#032e92]/10 border border-[#032e92]/20 text-[#032e92] text-xs font-semibold uppercase mb-4">
             <FontAwesomeIcon icon={faTableList} />
             <span>Comparative Perspective</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#032e92] tracking-tight mb-4">
             NPS vs Mutual Funds vs Fixed Deposits
           </h2>
-          <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+          <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
             Compare purpose, market exposures, liquidity constraints, and tax treatments across India’s premier investment and savings avenues.
           </p>
         </div>
@@ -90,19 +90,19 @@ export default function NpsComparisonTable() {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-slate-50/80 border-b border-slate-200">
-                  <th className="py-5 px-6 text-xs font-bold text-slate-400 uppercase tracking-wider w-1/4">
+                  <th className="py-5 px-6 text-xs font-bold text-slate-400 uppercase w-1/4">
                     Comparison Parameter
                   </th>
-                  <th className="py-5 px-6 text-xs font-extrabold text-[#032e92] uppercase tracking-wider bg-blue-50/60 border-x border-blue-100 w-1/4">
+                  <th className="py-5 px-6 text-xs font-extrabold text-[#032e92] uppercase bg-blue-50/60 border-x border-blue-100 w-1/4">
                     <span className="flex items-center gap-2">
                       <span className="w-2 h-2 rounded-full bg-[#032e92]" />
                       National Pension System (NPS)
                     </span>
                   </th>
-                  <th className="py-5 px-6 text-xs font-bold text-slate-700 uppercase tracking-wider w-1/4">
+                  <th className="py-5 px-6 text-xs font-bold text-slate-700 uppercase w-1/4">
                     Mutual Funds
                   </th>
-                  <th className="py-5 px-6 text-xs font-bold text-slate-700 uppercase tracking-wider w-1/4">
+                  <th className="py-5 px-6 text-xs font-bold text-slate-700 uppercase w-1/4">
                     Fixed Deposits (FD)
                   </th>
                 </tr>
@@ -115,7 +115,7 @@ export default function NpsComparisonTable() {
                       {row.nps}
                     </td>
                     <td className="py-4 px-6 text-slate-700 leading-relaxed">{row.mf}</td>
-                    <td className="py-4 px-6 text-slate-600 leading-relaxed">{row.fd}</td>
+                    <td className="py-4 px-6 text-gray-600 leading-relaxed">{row.fd}</td>
                   </tr>
                 ))}
               </tbody>
@@ -125,7 +125,7 @@ export default function NpsComparisonTable() {
 
         {/* Neutral Balanced Takeaway */}
         <div className="p-6 rounded-2xl bg-white border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
             <strong className="text-slate-900">Portfolio Coexistence:</strong> A sound financial plan rarely relies on just one vehicle. Many individuals utilize Fixed Deposits for short-term liquidity, Mutual Funds for medium-term flexibility, and NPS for dedicated low-cost retirement compounding and Section 80CCD(1B) tax optimization.
           </p>
           <button

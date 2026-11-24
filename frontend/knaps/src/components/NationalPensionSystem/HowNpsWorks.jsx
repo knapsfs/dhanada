@@ -53,14 +53,14 @@ export default function HowNpsWorks() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#032e92]/10 border border-[#032e92]/20 text-[#032e92] text-xs font-semibold uppercase tracking-wider mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#032e92]/10 border border-[#032e92]/20 text-[#032e92] text-xs font-semibold uppercase mb-4">
             <FontAwesomeIcon icon={faRoute} />
             <span>Operational Journey</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#032e92] tracking-tight mb-4">
             How NPS Works — A 4-Step Visual Journey
           </h2>
-          <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+          <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
             From initial PRAN onboarding to final annuity payouts, see how NPS structures your multi-decade retirement accumulation.
           </p>
         </div>
@@ -82,11 +82,11 @@ export default function HowNpsWorks() {
                   </div>
                 </div>
 
-                <div className="text-[11px] font-bold text-blue-600 uppercase tracking-wider mb-1">
+                <div className="text-[11px] font-bold text-blue-600 uppercase mb-1">
                   {step.subtitle}
                 </div>
                 <h3 className="text-lg font-bold text-slate-900 mb-3">{step.title}</h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{step.description}</p>
+                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">{step.description}</p>
               </div>
 
               <div className="mt-6 pt-4 border-t border-slate-200/60 flex items-center justify-between text-[11px] font-semibold text-slate-400">
@@ -103,7 +103,7 @@ export default function HowNpsWorks() {
             <h4 className="text-base sm:text-lg font-bold text-slate-900">
               Need assistance selecting between Active Choice and Auto Lifecycle funds?
             </h4>
-            <p className="text-xs sm:text-sm text-slate-600">
+            <p className="text-xs sm:text-sm text-gray-600">
               Our retirement planners evaluate your risk profile and retirement timeline to configure your initial asset allocation.
             </p>
           </div>
@@ -114,7 +114,7 @@ export default function HowNpsWorks() {
                 defaultService: 'National Pension System (NPS)'
               })
             }
-            className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center gap-2 shrink-0 cursor-pointer"
+            className="btn-ripple px-6 py-3 rounded-xl text-md font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center gap-2 shrink-0 cursor-pointer"
           >
             <span>Configure My NPS Strategy</span>
             <FontAwesomeIcon icon={faArrowRight} className="text-xs" />

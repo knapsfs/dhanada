@@ -25,13 +25,13 @@ export default function InterestRateNotifications() {
           {/* Left Column: The Determination Formula */}
           <div className="lg:col-span-6 p-8 sm:p-10 rounded-3xl bg-[#f7f9fc] border border-slate-200 shadow-sm space-y-5 flex flex-col justify-between">
             <div className="space-y-4">
-              <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">
+              <span className="text-xs font-bold text-blue-600 uppercase">
                 Shyamala Gopinath Committee Formula
               </span>
               <h3 className="text-2xl font-extrabold text-slate-900">
                 How Notified Rates are Calculated
               </h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
+              <p className="text-sm text-gray-600 leading-relaxed">
                 Small savings interest rates are linked formulaically to the secondary market yields of benchmark Government Securities (G-Secs) of comparable maturities traded over the preceding three months, plus a sovereign policy spread.
               </p>
 
@@ -54,13 +54,13 @@ export default function InterestRateNotifications() {
           {/* Right Column: Fixed Rate Lock-in across POTD, KVP, NSC, PORD */}
           <div className="lg:col-span-6 p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-blue-50/70 via-indigo-50/40 to-slate-50 border border-blue-100 shadow-sm space-y-5 flex flex-col justify-between">
             <div className="space-y-4">
-              <span className="text-xs font-bold text-[#032e92] uppercase tracking-wider">
+              <span className="text-xs font-bold text-[#032e92] uppercase">
                 Sovereign Rate Guarantee
               </span>
               <h3 className="text-2xl font-extrabold text-slate-900">
                 Day 1 Rate Lock-in Protection
               </h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
+              <p className="text-sm text-gray-600 leading-relaxed">
                 All 4 Post Office schemes offered (POTD, KVP, NSC, and PORD) lock in your contracted interest rate on the date of account opening:
               </p>
 
@@ -70,7 +70,7 @@ export default function InterestRateNotifications() {
                   <FontAwesomeIcon icon={faLock} />
                   <span>Fixed for Entire Tenure (Immune to Future Rate Cuts)</span>
                 </div>
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-xs text-gray-600 leading-relaxed">
                   <strong>Covered Schemes:</strong> POTD (1, 2, 3, 5 Years), KVP (115 Months), NSC (5 Years), and PORD (5 Years).<br />
                   Once opened, subsequent downward quarterly revisions by the government do not affect your existing deposits. Your contracted yield is 100% sovereign-guaranteed until maturity.
                 </p>
@@ -82,7 +82,7 @@ export default function InterestRateNotifications() {
                   <FontAwesomeIcon icon={faCalendarCheck} />
                   <span>When Do New Rates Apply?</span>
                 </div>
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-xs text-gray-600 leading-relaxed">
                   Newly revised rates apply strictly to fresh deposits opened on or after the effective date of the quarterly notification circular.
                 </p>
               </div>

@@ -313,7 +313,7 @@ export default function CrmLeadsListView({
         {/* Left: Summary & Active Filters */}
         <div className="flex items-center gap-3 flex-wrap w-full sm:w-auto">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-gray-700 uppercase tracking-wider">All Leads</span>
+            <span className="text-xs font-bold text-gray-700 uppercase">All Leads</span>
             <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-50 text-[#032e92] border border-blue-200/60">
               {totalItems} {totalItems === 1 ? "lead" : "leads"}
             </span>
@@ -367,7 +367,7 @@ export default function CrmLeadsListView({
         <table className="w-full text-left border-collapse">
           <thead>
             {/* Column Titles */}
-            <tr className="bg-[#f8fafc] text-[11px] font-bold text-gray-500 uppercase tracking-wider border-b border-gray-200/80">
+            <tr className="bg-[#f8fafc] text-[11px] font-bold text-gray-500 uppercase border-b border-gray-200/80">
               <th className="py-3 px-4 sm:px-6 min-w-[200px]">Lead</th>
               <th className="py-3 px-4 min-w-[170px]">Contact</th>
               <th className="py-3 px-4 min-w-[150px]">Goal / Product</th>

@@ -99,7 +99,7 @@ export default function AuthorPage() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="flex items-center gap-3 text-[15px] font-medium text-gray-500 mb-8 flex-wrap"
+              className="flex items-center gap-3 text-sm font-medium text-gray-500 mb-8 flex-wrap"
             >
               <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
               <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
@@ -233,7 +233,7 @@ export default function AuthorPage() {
                     Explore market insights, research analysis, and wealth creation strategies.
                   </p>
                 </div>
-                <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                <span className="text-xs font-semibold text-gray-400 uppercase">
                   Showing {posts.length} {posts.length === 1 ? "article" : "articles"}
                 </span>
               </div>

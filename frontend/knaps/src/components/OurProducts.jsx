@@ -94,7 +94,7 @@ export default function OurProducts() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="inline-block px-4 py-2 rounded-full border border-[#032e92]/20 text-[#032e92] bg-[#eef5ff] font-semibold text-sm mb-4 uppercase tracking-wider text-center"
+          className="inline-block px-4 py-2 rounded-full border border-[#032e92]/20 text-[#032e92] bg-[#eef5ff] font-semibold text-sm mb-4 uppercase text-center"
         >
           OUR PRODUCTS
         </motion.p> */}
@@ -150,7 +150,7 @@ export default function OurProducts() {
                     <h3 className="text-sm sm:text-base font-bold text-gray-900 leading-snug group-hover:text-[#032e92] transition-colors">
                       {item.title}
                     </h3>
-                    <p className="text-xs sm:text-[13.5px] text-gray-500 font-normal leading-relaxed mt-1 line-clamp-2">
+                    <p className="text-xs sm:text-sm text-gray-500 font-normal leading-relaxed mt-1 line-clamp-2">
                       {item.description}
                     </p>
                   </div>
@@ -171,7 +171,7 @@ export default function OurProducts() {
             <button
               type="button"
               onClick={() => setShowAllMobile(true)}
-              className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer"
+              className="btn-ripple px-6 py-3 rounded-xl text-md font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>View All</span>
               <FontAwesomeIcon icon={faChevronDown} className="text-xs" />
@@ -180,7 +180,7 @@ export default function OurProducts() {
             <button
               type="button"
               onClick={() => setShowAllMobile(false)}
-              className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer"
+              className="btn-ripple px-6 py-3 rounded-xl text-md font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>View Less</span>
               <FontAwesomeIcon icon={faChevronUp} className="text-xs" />
@@ -193,7 +193,7 @@ export default function OurProducts() {
           <button
             type="button"
             onClick={() => navigate('/products')}
-            className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
+            className="btn-ripple px-6 py-3 rounded-xl text-md font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
           >
             Explore All Products
           </button>

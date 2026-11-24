@@ -114,13 +114,13 @@ export default function FixedDepositComparison() {
           <table className="w-full text-left border-collapse min-w-[760px]">
             <thead>
               <tr className="bg-gradient-to-r from-[#0a192f] to-[#032e92] text-white">
-                <th className="py-4 px-5 text-xs font-bold uppercase tracking-wider">Product / Instrument</th>
-                <th className="py-4 px-5 text-xs font-bold uppercase tracking-wider">Safety & Guarantee</th>
-                <th className="py-4 px-5 text-xs font-bold uppercase tracking-wider">Indicative Yield</th>
-                <th className="py-4 px-5 text-xs font-bold uppercase tracking-wider">Credit Risk</th>
-                <th className="py-4 px-5 text-xs font-bold uppercase tracking-wider">Tenure & Lock-in</th>
-                <th className="py-4 px-5 text-xs font-bold uppercase tracking-wider">Income Payout</th>
-                <th className="py-4 px-5 text-xs font-bold uppercase tracking-wider">Tax Treatment</th>
+                <th className="py-4 px-5 text-xs font-bold uppercase">Product / Instrument</th>
+                <th className="py-4 px-5 text-xs font-bold uppercase">Safety & Guarantee</th>
+                <th className="py-4 px-5 text-xs font-bold uppercase">Indicative Yield</th>
+                <th className="py-4 px-5 text-xs font-bold uppercase">Credit Risk</th>
+                <th className="py-4 px-5 text-xs font-bold uppercase">Tenure & Lock-in</th>
+                <th className="py-4 px-5 text-xs font-bold uppercase">Income Payout</th>
+                <th className="py-4 px-5 text-xs font-bold uppercase">Tax Treatment</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 text-xs sm:text-sm">
@@ -137,7 +137,7 @@ export default function FixedDepositComparison() {
                       )}
                       <div>
                         <div>{row.name}</div>
-                        {/* <span className="text-[10px] text-gray-500 font-normal uppercase tracking-wider">
+                        {/* <span className="text-[10px] text-gray-500 font-normal uppercase">
                           {row.category}
                         </span> */}
                       </div>

@@ -65,7 +65,7 @@ export default function Stats({ className = "py-12 sm:py-16" }) {
                     "0"
                   )}
                 </div>
-                <p className="text-blue-100 font-medium text-sm md:text-base uppercase tracking-wider">
+                <p className="text-blue-100 font-medium text-sm md:text-base uppercase">
                   {stat.label}
                 </p>
               </motion.div>

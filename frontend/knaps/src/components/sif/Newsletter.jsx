@@ -15,82 +15,59 @@ export default function Newsletter() {
   ]
 
   return (
-    <section id="newsletter" className="py-12 sm:py-16 bg-white relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <section id="newsletter" className="py-12 sm:py-16 bg-[#f7f9fc] relative">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="relative overflow-hidden rounded-3xl">
+          transition={{ duration: 0.6 }}
+          className="relative rounded-3xl bg-gradient-to-br from-[#032e92] via-[#021d63] to-[#011347] text-white p-8 sm:p-12 lg:p-16 overflow-hidden shadow-2xl shadow-blue-950/20"
+        >
+          {/* Subtle Ambient Decorative Glows */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-cyan-400/15 rounded-full blur-3xl pointer-events-none -ml-20 -mb-20" />
 
-          {/* Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#032e92] via-[#0a4fd4] to-[#021d63]" />
-          <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-[#c10000]/10 blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-72 h-72 rounded-full bg-white/5 blur-3xl" />
-
-          {/* Decorative dots */}
-          <div className="absolute top-8 left-8 grid grid-cols-4 gap-3 opacity-20">
-            {Array.from({ length: 16 }).map((_, i) => (
-              <div key={i} className="w-1.5 h-1.5 rounded-full bg-white" />
-            ))}
-          </div>
-          <div className="absolute bottom-8 right-8 grid grid-cols-4 gap-3 opacity-20">
-            {Array.from({ length: 16 }).map((_, i) => (
-              <div key={i} className="w-1.5 h-1.5 rounded-full bg-white" />
-            ))}
-          </div>
-
-          <div className="relative py-16 px-8 lg:px-16 text-center">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold text-white mb-4">
+          <div className="relative z-10 max-w-3xl mx-auto text-center space-y-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-white leading-tight">
               Start Investing in SIF
             </h2>
-            <p className="text-sm md:text-lg lg:text-xl text-blue-100 mb-10 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-sm sm:text-base text-blue-100/90 leading-relaxed font-normal max-w-2xl sm:max-w-3xl mx-auto mt-3.5">
               Discuss your investment objectives and learn more about Specialised Investment Fund (SIF) strategies.
             </p>
 
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto mb-10">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto py-2">
               {stats.map((item, idx) => (
-                <motion.div
+                <div
                   key={item.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={inView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ delay: 0.2 + idx * 0.1, duration: 0.6 }}
-                  className="py-6 px-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-center hover:bg-white/15 transition-all duration-300 shadow-lg shadow-black/5"
+                  className="py-4 px-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 text-center shadow-sm"
                 >
-                  <div className="text-3xl lg:text-4xl font-bold text-white mb-1">
+                  <div className="text-2xl lg:text-3xl font-bold text-white mb-0.5">
                     {item.value}
                   </div>
-                  <p className="text-blue-200 text-sm font-medium">{item.label}</p>
-                </motion.div>
+                  <p className="text-blue-100/80 text-xs font-medium">{item.label}</p>
+                </div>
               ))}
             </div>
 
             {/* CTA Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.5, duration: 0.6 }}
-              className="flex flex-col sm:flex-row items-center justify-center gap-4"
-            >
+            <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
               <button
                 type="button"
                 onClick={() => openLeadModal()}
-                className="btn-ripple w-full sm:w-auto px-6 py-3 rounded-xl text-[15px] font-semibold bg-white text-[#032e92] hover:bg-blue-50 shadow-md hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
+                className="btn-ripple w-full sm:w-auto px-6 py-3 rounded-xl text-md font-semibold bg-white text-[#032e92] hover:bg-blue-50 shadow-md hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center cursor-pointer"
               >
-                Invest Now
+                <span>Invest Now</span>
               </button>
 
               <a
                 href="tel:+919990243143"
-                className="btn-ripple w-full sm:w-auto px-6 py-3 rounded-xl text-[15px] font-semibold bg-transparent border border-white/30 text-white hover:bg-white/10 hover:border-white/50 transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer"
+                className="btn-ripple w-full sm:w-auto px-6 py-3 rounded-xl text-md font-semibold text-white/95 hover:text-white bg-white/10 hover:bg-white/15 border border-white/20 hover:border-white/30 transition-all duration-300 inline-flex items-center justify-center gap-2 backdrop-blur-sm cursor-pointer"
               >
-                <FontAwesomeIcon icon={faPhone} className="text-xs text-green-400" />
-                <span>Call us  (+91) 9990243143</span>
+                <span>Call us (+91) 9990243143</span>
               </a>
-            </motion.div>
-
+            </div>
           </div>
         </motion.div>
       </div>

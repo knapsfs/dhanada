@@ -342,7 +342,7 @@ const GeneralInsuranceFinder = () => {
               </div>
 
               <div>
-                <h4 className="text-sm font-bold uppercase tracking-wider text-gray-500 mb-3 flex items-center gap-2">
+                <h4 className="text-sm font-bold uppercase text-gray-500 mb-3 flex items-center gap-2">
                   <FontAwesomeIcon icon={faCheckCircle} className="text-[#032e92]" />
                   What is Covered Under This Plan
                 </h4>
@@ -360,7 +360,7 @@ const GeneralInsuranceFinder = () => {
             {/* Right Col: Add-ons & Instant Action Card (5 cols) */}
             <div className="lg:col-span-5 bg-gradient-to-br from-[#f8fafc] to-[#eef4ff] rounded-2xl p-6 sm:p-7 border border-blue-100/80 space-y-6 flex flex-col justify-between h-full">
               <div>
-                <h4 className="text-sm font-bold uppercase tracking-wider text-[#032e92] mb-3 flex items-center gap-2">
+                <h4 className="text-sm font-bold uppercase text-[#032e92] mb-3 flex items-center gap-2">
                   <FontAwesomeIcon icon={faStar} className="text-amber-500" />
                   Recommended Add-Ons for Complete Peace of Mind
                 </h4>

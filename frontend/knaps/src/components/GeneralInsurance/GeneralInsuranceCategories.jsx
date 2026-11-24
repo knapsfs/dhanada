@@ -154,7 +154,7 @@ export default function GeneralInsuranceCategories() {
                 <h3 className="text-xl font-bold text-[#0a192f] group-hover:text-[#032e92] transition-colors mb-1 leading-snug">
                   {item.title}
                 </h3>
-                {/* <p className="text-xs font-bold text-[#032e92] mb-3 uppercase tracking-wider">
+                {/* <p className="text-xs font-bold text-[#032e92] mb-3 uppercase">
                   {item.subtitle}
                 </p> */}
 

@@ -49,14 +49,14 @@ export default function WhoShouldConsiderNps() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#032e92]/10 border border-[#032e92]/20 text-[#032e92] text-xs font-semibold uppercase tracking-wider mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#032e92]/10 border border-[#032e92]/20 text-[#032e92] text-xs font-semibold uppercase mb-4">
             <FontAwesomeIcon icon={faUsersViewfinder} />
             <span>Subscriber Suitability</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#032e92] tracking-tight mb-4">
             Who May Consider the National Pension System?
           </h2>
-          <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+          <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
             NPS offers compelling benefits for individuals seeking a structured, low-cost retirement savings vehicle with institutional oversight.
           </p>
         </div>
@@ -73,14 +73,14 @@ export default function WhoShouldConsiderNps() {
                   <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 text-[#032e92] group-hover:bg-[#032e92] group-hover:text-white flex items-center justify-center text-lg transition-all duration-300 shadow-sm">
                     <FontAwesomeIcon icon={item.icon} />
                   </div>
-                  <span className="text-[11px] font-bold text-blue-700 bg-blue-100/70 px-2.5 py-1 rounded-full uppercase tracking-wider">
+                  <span className="text-[11px] font-bold text-blue-700 bg-blue-100/70 px-2.5 py-1 rounded-full uppercase">
                     {item.badge}
                   </span>
                 </div>
                 <h3 className="text-lg font-bold text-slate-900 mb-3 group-hover:text-[#032e92] transition-colors">
                   {item.title}
                 </h3>
-                <p className="text-sm text-slate-600 leading-relaxed">{item.description}</p>
+                <p className="text-sm text-gray-600 leading-relaxed">{item.description}</p>
               </div>
             </div>
           ))}

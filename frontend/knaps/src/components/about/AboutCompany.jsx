@@ -41,7 +41,7 @@ export default function AboutCompany() {
               className="absolute -bottom-6 -right-6 lg:-right-12 bg-white rounded-2xl p-6 shadow-xl border border-gray-50 flex items-center gap-5"
             >
               <div className="text-[#032e92] font-black text-5xl tracking-tighter">15+</div>
-              <div className="text-gray-500 font-medium text-sm leading-tight uppercase tracking-wider">
+              <div className="text-gray-500 font-medium text-sm leading-tight uppercase">
                 Years<br/>Experience
               </div>
             </motion.div>

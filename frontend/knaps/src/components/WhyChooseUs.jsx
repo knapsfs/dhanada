@@ -51,7 +51,7 @@ export default function WhyChooseUs() {
                 </div>
                 <h3 className="text-2xl font-semibold text-gray-900 mb-2 tracking-tight">Client Centric</h3>
                 {/* <p className="text-sm font-semibold text-[#032e92] mb-3">Your requirements are the top most priority</p> */}
-                <p className="text-gray-500 text-[15px] leading-relaxed">
+                <p className="text-gray-500 text-md leading-relaxed">
                   We put your needs first, delivering personalized financial solutions tailored to your goals, challenges, and long-term success.
                 </p>
               </motion.div>
@@ -69,7 +69,7 @@ export default function WhyChooseUs() {
                 </div>
                 <h3 className="text-2xl font-semibold text-gray-900 mb-2 tracking-tight">Business Continuity</h3>
                 {/* <p className="text-sm font-semibold text-[#032e92] mb-3">27+ years of continuous servicing</p> */}
-                <p className="text-gray-500 text-[15px] leading-relaxed">
+                <p className="text-gray-500 text-md leading-relaxed">
                   Since 1997, we've been delivering trusted financial solutions, helping clients navigate changing markets with confidence.
                 </p>
               </motion.div>
@@ -89,7 +89,7 @@ export default function WhyChooseUs() {
               </div>
               <h3 className="text-2xl font-semibold text-gray-900 mb-2 tracking-tight">Trust</h3>
               {/* <p className="text-sm font-semibold text-[#032e92] mb-3">Clients spanning 2 decades, serving 3 generation of clients</p> */}
-              <p className="text-gray-500 text-[15px] leading-relaxed">
+              <p className="text-gray-500 text-md leading-relaxed">
                 We build lasting relationships by helping families protect and grow their wealth across generations.
               </p>
             </motion.div>
@@ -112,13 +112,13 @@ export default function WhyChooseUs() {
             </div>
 
             <h3 className="text-3xl font-semibold text-white mb-3 tracking-tight relative z-10">Privacy</h3>
-            {/* <p className="text-[15px] font-semibold text-blue-200 mb-6 relative z-10">We keep your financial data secure</p> */}
+            {/* <p className="text-md font-semibold text-blue-200 mb-6 relative z-10">We keep your financial data secure</p> */}
 
-            <p className="text-white/80 text-[15px] leading-relaxed mb-10 relative z-10">
+            <p className="text-white/80 text-md leading-relaxed mb-10 relative z-10">
               We protect your financial information and keep every interaction secure, private, and confidential.
             </p>
 
-            <button className="btn-ripple mt-auto relative z-10 bg-gradient-to-r from-[#c10000] to-[#9d0000] text-white px-6 py-3 rounded-xl text-[15px] font-semibold w-max hover:shadow-lg hover:shadow-red-900/30 transition-all duration-300 flex items-center gap-2 cursor-pointer">
+            <button className="btn-ripple mt-auto relative z-10 bg-gradient-to-r from-[#c10000] to-[#9d0000] text-white px-6 py-3 rounded-xl text-md font-semibold w-max hover:shadow-lg hover:shadow-red-900/30 transition-all duration-300 flex items-center gap-2 cursor-pointer">
               Book Consultation
               <FontAwesomeIcon icon={faArrowRight} />
             </button>

@@ -204,7 +204,7 @@ export default function MfCalculator() {
               onClick={() => handleModeSwitch('sip')}
               className={`px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${calcMode === 'sip'
                 ? 'bg-[#032e92] text-white shadow-md'
-                : 'text-slate-600 hover:text-slate-900'
+                : 'text-gray-600 hover:text-slate-900'
                 }`}
             >
               Systematic Investment Plan (SIP)
@@ -214,7 +214,7 @@ export default function MfCalculator() {
               onClick={() => handleModeSwitch('lumpsum')}
               className={`px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${calcMode === 'lumpsum'
                 ? 'bg-[#032e92] text-white shadow-md'
-                : 'text-slate-600 hover:text-slate-900'
+                : 'text-gray-600 hover:text-slate-900'
                 }`}
             >
               One-Time Lumpsum

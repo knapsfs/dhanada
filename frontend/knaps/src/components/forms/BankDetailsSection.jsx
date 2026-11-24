@@ -172,7 +172,7 @@ export default function BankDetailsSection({
                 onChange={(e) => handleChange("bank_ifsc", e.target.value.toUpperCase().trim())}
                 onBlur={handleIfscBlur}
                 placeholder="e.g. HDFC0000001"
-                className={`w-full text-xs font-bold tracking-wider uppercase px-3.5 py-2.5 rounded-xl border bg-white focus:outline-none focus:ring-2 transition-all ${
+                className={`w-full text-xs font-bold uppercase px-3.5 py-2.5 rounded-xl border bg-white focus:outline-none focus:ring-2 transition-all ${
                   errors.bank_ifsc
                     ? "border-red-400 focus:ring-red-200 text-red-950"
                     : "border-gray-300 focus:border-[#032e92] focus:ring-blue-100 text-gray-900"

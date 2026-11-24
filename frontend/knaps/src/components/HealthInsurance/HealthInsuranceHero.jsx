@@ -40,7 +40,7 @@ export default function HealthInsuranceHero() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Breadcrumb Navigation */}
-        <div className="flex items-center pb-4 sm:pb-5 gap-3 text-[15px] font-medium text-gray-500">
+        <div className="flex items-center pb-4 sm:pb-5 gap-3 text-sm font-medium text-gray-500">
           <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
           <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
           <Link to="/products" className="hover:text-[#032e92] transition-colors">Products</Link>
@@ -95,14 +95,14 @@ export default function HealthInsuranceHero() {
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-4">
               <button
                 onClick={() => openLeadModal({ title: 'Explore Health Insurance Plans', defaultService: 'Health Insurance' })}
-                className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer"
+                className="btn-ripple px-6 py-3 rounded-xl text-md font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer"
               >
                 <span>Compare Health Plans</span>
               </button>
 
               <button
                 onClick={scrollToCalculator}
-                className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-white hover:bg-blue-50 text-[#032e92] border border-[#032e92]/20 shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
+                className="btn-ripple px-6 py-3 rounded-xl text-md font-semibold bg-white hover:bg-blue-50 text-[#032e92] border border-[#032e92]/20 shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
               >
                 {/* <FontAwesomeIcon icon={faCalculator} className="text-xs text-[#032e92]" /> */}
                 <span>Calculate Needed Cover</span>
@@ -145,7 +145,7 @@ export default function HealthInsuranceHero() {
                 <div className="p-3.5 rounded-2xl bg-blue-50/50 border border-blue-100/60">
                   <div className="flex items-center gap-2 text-[#032e92] mb-1">
                     <FontAwesomeIcon icon={faHospital} className="text-xs" />
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-500">Network</span>
+                    <span className="text-[11px] font-semibold uppercase text-gray-500">Network</span>
                   </div>
                   <div className="text-lg font-extrabold text-[#0a192f]">14,000+</div>
                   <p className="text-[11px] text-gray-600 leading-tight">Cashless hospitals nationwide</p>
@@ -154,7 +154,7 @@ export default function HealthInsuranceHero() {
                 <div className="p-3.5 rounded-2xl bg-emerald-50/50 border border-emerald-100/60">
                   <div className="flex items-center gap-2 text-emerald-700 mb-1">
                     <FontAwesomeIcon icon={faClock} className="text-xs" />
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-500">Speed</span>
+                    <span className="text-[11px] font-semibold uppercase text-gray-500">Speed</span>
                   </div>
                   <div className="text-lg font-extrabold text-[#0a192f]">&lt; 45 Mins</div>
                   <p className="text-[11px] text-gray-600 leading-tight">Avg. cashless pre-authorization</p>
@@ -163,7 +163,7 @@ export default function HealthInsuranceHero() {
                 <div className="p-3.5 rounded-2xl bg-indigo-50/50 border border-indigo-100/60">
                   <div className="flex items-center gap-2 text-indigo-700 mb-1">
                     <FontAwesomeIcon icon={faPercent} className="text-xs" />
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-500">Settlement</span>
+                    <span className="text-[11px] font-semibold uppercase text-gray-500">Settlement</span>
                   </div>
                   <div className="text-lg font-extrabold text-[#0a192f]">99.2%</div>
                   <p className="text-[11px] text-gray-600 leading-tight">KNAPS claim assistance rate</p>
@@ -172,7 +172,7 @@ export default function HealthInsuranceHero() {
                 <div className="p-3.5 rounded-2xl bg-amber-50/50 border border-amber-100/60">
                   <div className="flex items-center gap-2 text-amber-700 mb-1">
                     <FontAwesomeIcon icon={faShieldHeart} className="text-xs" />
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-500">Tax Saving</span>
+                    <span className="text-[11px] font-semibold uppercase text-gray-500">Tax Saving</span>
                   </div>
                   <div className="text-lg font-extrabold text-[#0a192f]">₹1,00,000</div>
                   <p className="text-[11px] text-gray-600 leading-tight">Max 80D deduction benefit</p>
@@ -182,7 +182,7 @@ export default function HealthInsuranceHero() {
               {/* Medical Inflation Alert Box */}
               <div className="p-4 rounded-2xl bg-gradient-to-br from-[#0a192f] to-[#021d63] text-white shadow-md space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-blue-300">Reality Check</span>
+                  <span className="text-xs font-bold uppercase text-blue-300">Reality Check</span>
                   <span className="text-xs font-semibold px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">14% Annual Rise</span>
                 </div>
                 <p className="text-xs text-blue-100 leading-relaxed">

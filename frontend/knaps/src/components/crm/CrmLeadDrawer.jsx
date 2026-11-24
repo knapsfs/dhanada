@@ -339,7 +339,7 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
                     <div className="flex items-center justify-between gap-3 flex-wrap">
                       <div className="flex items-center gap-2">
                         <span className="w-2.5 h-2.5 rounded-full bg-[#032e92]" />
-                        <h4 className="text-xs font-bold text-gray-900 uppercase tracking-wider">
+                        <h4 className="text-xs font-bold text-gray-900 uppercase">
                           Latest Contact Remark
                         </h4>
                       </div>
@@ -398,7 +398,7 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
 
                     {/* New Remark Input Form */}
                     <form onSubmit={handleSaveRemark} className="space-y-2.5">
-                      <label className="block text-[11px] font-bold text-gray-600 uppercase tracking-wider">
+                      <label className="block text-[11px] font-bold text-gray-600 uppercase">
                         Record New Contact Remark
                       </label>
                       <textarea
@@ -432,7 +432,7 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
 
                   {/* Key Contacts */}
                   <div className="bg-gray-50 rounded-2xl p-4 sm:p-5 border border-gray-200/80 space-y-3">
-                    <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Contact Profile</h4>
+                    <h4 className="text-xs font-bold text-gray-500 uppercase">Contact Profile</h4>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                       <div>
                         <span className="text-gray-500 block mb-0.5">Mobile Number</span>
@@ -457,7 +457,7 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
 
                   {/* Wealth & Portfolio Objectives */}
                   <div className="bg-gray-50 rounded-2xl p-4 sm:p-5 border border-gray-200/80 space-y-3">
-                    <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Investment Goals & Profiler</h4>
+                    <h4 className="text-xs font-bold text-gray-500 uppercase">Investment Goals & Profiler</h4>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                       <div>
                         <span className="text-gray-500 block mb-0.5">Investment Range</span>
@@ -480,7 +480,7 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
 
                   {/* Submission Status Badges */}
                   <div className="bg-gray-50 rounded-2xl p-4 sm:p-5 border border-gray-200/80 space-y-3">
-                    <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Lifecycle Tracking</h4>
+                    <h4 className="text-xs font-bold text-gray-500 uppercase">Lifecycle Tracking</h4>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
                       <div className="bg-white p-3 rounded-xl border border-gray-200">
                         <span className="text-gray-400 block text-[10px] uppercase font-semibold">Welcome Email</span>
@@ -500,7 +500,7 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
                   {/* Lead Notes */}
                   {leadData?.notes && (
                     <div className="bg-amber-50/50 rounded-2xl p-4 border border-amber-200/60">
-                      <h4 className="text-xs font-bold text-amber-900 uppercase tracking-wider mb-1.5">Advisor Notes</h4>
+                      <h4 className="text-xs font-bold text-amber-900 uppercase mb-1.5">Advisor Notes</h4>
                       <p className="text-xs text-amber-900 leading-relaxed font-normal whitespace-pre-wrap">
                         {leadData.notes}
                       </p>

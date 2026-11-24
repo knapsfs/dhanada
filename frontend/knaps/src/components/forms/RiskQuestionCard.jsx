@@ -22,7 +22,7 @@ export default function RiskQuestionCard({
       }`}
     >
       <div className="flex items-start justify-between gap-3 mb-3 flex-wrap">
-        <span className="text-[10px] font-bold uppercase tracking-wider text-[#032e92] bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-100 flex items-center gap-1.5">
+        <span className="text-[10px] font-bold uppercase text-[#032e92] bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-100 flex items-center gap-1.5">
           <FontAwesomeIcon icon={faShieldHalved} className="text-[9px]" />
           <span>{badge} (Q{question.id})</span>
         </span>

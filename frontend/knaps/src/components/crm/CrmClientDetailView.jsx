@@ -503,7 +503,7 @@ export default function CrmClientDetailView({
 
             {/* Linked Opportunities / Multi-Lead Badges */}
             <div className="flex items-center gap-2 flex-wrap pt-1">
-              <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+              <span className="text-[11px] font-bold text-gray-500 uppercase">
                 Linked Opportunities ({linkedLeads.length || (clientData?.lead ? 1 : 0)}):
               </span>
               {linkedLeads.length > 0 ? (
@@ -553,7 +553,7 @@ export default function CrmClientDetailView({
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 shrink-0">
             {/* Contact Health */}
             <div className="bg-slate-50 p-3.5 rounded-2xl border border-gray-100">
-              <span className="text-[10px] uppercase font-bold text-gray-400 block tracking-wider">Contact Health</span>
+              <span className="text-[10px] uppercase font-bold text-gray-400 block">Contact Health</span>
               <div className="mt-1">
                 {contactInfo.isOverdue ? (
                   <span className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-700">
@@ -570,7 +570,7 @@ export default function CrmClientDetailView({
 
             {/* Risk Profile */}
             <div className="bg-slate-50 p-3.5 rounded-2xl border border-gray-100">
-              <span className="text-[10px] uppercase font-bold text-gray-400 block tracking-wider">Risk Profile</span>
+              <span className="text-[10px] uppercase font-bold text-gray-400 block">Risk Profile</span>
               <p className="text-xs font-bold text-gray-900 mt-1 truncate">
                 {clientData?.risk_profile || "Moderate"}
               </p>
@@ -578,7 +578,7 @@ export default function CrmClientDetailView({
 
             {/* Submission Status */}
             <div className="bg-slate-50 p-3.5 rounded-2xl border border-gray-100 col-span-2 sm:col-span-1">
-              <span className="text-[10px] uppercase font-bold text-gray-400 block tracking-wider">Onboarding Form</span>
+              <span className="text-[10px] uppercase font-bold text-gray-400 block">Onboarding Form</span>
               <p className="text-xs font-bold text-[#032e92] mt-1 flex items-center gap-1 truncate">
                 <FontAwesomeIcon icon={submissionData ? faCheckCircle : faClock} className={submissionData ? "text-emerald-600" : "text-amber-500"} />
                 <span>{submissionData ? submissionData.status || "Submitted" : "No Submission"}</span>
@@ -729,7 +729,7 @@ export default function CrmClientDetailView({
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 text-xs">
               {/* Full Name */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Full Name</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Full Name</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -745,7 +745,7 @@ export default function CrmClientDetailView({
 
               {/* PAN */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">PAN Number</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">PAN Number</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -757,7 +757,7 @@ export default function CrmClientDetailView({
                   />
                 ) : (
                   <div className="flex items-center gap-2 py-1">
-                    <span className="font-mono font-bold text-gray-900 tracking-wider">{panValue || "—"}</span>
+                    <span className="font-mono font-bold text-gray-900">{panValue || "—"}</span>
                     {panValue && (
                       <button
                         type="button"
@@ -774,7 +774,7 @@ export default function CrmClientDetailView({
 
               {/* KYC Status */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">KYC Status</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">KYC Status</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.kyc_status}
@@ -793,7 +793,7 @@ export default function CrmClientDetailView({
 
               {/* Date of Birth */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Date of Birth</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Date of Birth</label>
                 {isEditing ? (
                   <input
                     type="date"
@@ -810,7 +810,7 @@ export default function CrmClientDetailView({
 
               {/* Gender */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Gender</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Gender</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.gender}
@@ -825,7 +825,7 @@ export default function CrmClientDetailView({
 
               {/* Client Type */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Client Type</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Client Type</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.client_type}
@@ -840,7 +840,7 @@ export default function CrmClientDetailView({
 
               {/* Income Slab */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Income Slab</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Income Slab</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.income_slab}
@@ -855,7 +855,7 @@ export default function CrmClientDetailView({
 
               {/* Occupation */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Occupation</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Occupation</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.occupation}
@@ -870,7 +870,7 @@ export default function CrmClientDetailView({
 
               {/* Place of Birth */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Place of Birth</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Place of Birth</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -903,7 +903,7 @@ export default function CrmClientDetailView({
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
               {/* Primary Mobile */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Primary Mobile</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Primary Mobile</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -931,7 +931,7 @@ export default function CrmClientDetailView({
 
               {/* Alternate Mobile */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Alternate Mobile</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Alternate Mobile</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -947,7 +947,7 @@ export default function CrmClientDetailView({
 
               {/* Email Address */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Email Address</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Email Address</label>
                 {isEditing ? (
                   <input
                     type="email"
@@ -992,7 +992,7 @@ export default function CrmClientDetailView({
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
               {/* Address Line 1 */}
               <div className="sm:col-span-2 space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Address Line 1</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Address Line 1</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1008,7 +1008,7 @@ export default function CrmClientDetailView({
 
               {/* Address Line 2 */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Address Line 2</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Address Line 2</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1024,7 +1024,7 @@ export default function CrmClientDetailView({
 
               {/* City */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">City</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">City</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1040,7 +1040,7 @@ export default function CrmClientDetailView({
 
               {/* State */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">State</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">State</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1056,7 +1056,7 @@ export default function CrmClientDetailView({
 
               {/* Pincode */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Pincode</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Pincode</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1073,7 +1073,7 @@ export default function CrmClientDetailView({
 
               {/* Country */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Country</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Country</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1106,7 +1106,7 @@ export default function CrmClientDetailView({
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 text-xs">
               {/* Nominee Name */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Nominee Name</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Nominee Name</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1122,7 +1122,7 @@ export default function CrmClientDetailView({
 
               {/* Relationship */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Relationship</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Relationship</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.nominee_relationship}
@@ -1137,7 +1137,7 @@ export default function CrmClientDetailView({
 
               {/* Nominee DOB */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Nominee Date of Birth</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Nominee Date of Birth</label>
                 {isEditing ? (
                   <input
                     type="date"
@@ -1154,7 +1154,7 @@ export default function CrmClientDetailView({
 
               {/* Is Minor Toggle */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Is Nominee Minor?</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Is Nominee Minor?</label>
                 {isEditing ? (
                   <label className="inline-flex items-center gap-2 py-2 cursor-pointer">
                     <input
@@ -1176,7 +1176,7 @@ export default function CrmClientDetailView({
 
               {/* Statement / Allocation Name */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Statement / Allocation</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Statement / Allocation</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1192,7 +1192,7 @@ export default function CrmClientDetailView({
 
               {/* ID Type */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Nominee ID Type</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Nominee ID Type</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.nominee_id_type}
@@ -1207,7 +1207,7 @@ export default function CrmClientDetailView({
 
               {/* Nominee ID Number */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Nominee ID Number</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Nominee ID Number</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1223,7 +1223,7 @@ export default function CrmClientDetailView({
 
               {/* Nominee Contact Mobile */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Nominee Mobile</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Nominee Mobile</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1239,7 +1239,7 @@ export default function CrmClientDetailView({
 
               {/* Nominee Address */}
               <div className="sm:col-span-2 space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Nominee Address</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Nominee Address</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1258,14 +1258,14 @@ export default function CrmClientDetailView({
             {(isEditing || editFormData.is_nominee_minor || submissionData?.guardian_name) && (
               <div className="mt-4 pt-4 border-t border-gray-100 space-y-3">
                 <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-lg border border-amber-200">
+                  <span className="text-[11px] font-bold uppercase text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-lg border border-amber-200">
                     Guardian Details (Required if Nominee is Minor)
                   </span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
                   <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Guardian Name</label>
+                    <label className="text-[10px] font-bold text-gray-400 uppercase block">Guardian Name</label>
                     {isEditing ? (
                       <input
                         type="text"
@@ -1280,7 +1280,7 @@ export default function CrmClientDetailView({
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Guardian Relationship</label>
+                    <label className="text-[10px] font-bold text-gray-400 uppercase block">Guardian Relationship</label>
                     {isEditing ? (
                       <input
                         type="text"
@@ -1295,7 +1295,7 @@ export default function CrmClientDetailView({
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Guardian PAN</label>
+                    <label className="text-[10px] font-bold text-gray-400 uppercase block">Guardian PAN</label>
                     {isEditing ? (
                       <input
                         type="text"
@@ -1331,7 +1331,7 @@ export default function CrmClientDetailView({
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-xs">
               {/* Bank Name */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Bank Name</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Bank Name</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1347,7 +1347,7 @@ export default function CrmClientDetailView({
 
               {/* Bank Account Number */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Account Number</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Account Number</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1363,7 +1363,7 @@ export default function CrmClientDetailView({
 
               {/* IFSC Code */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">IFSC Code</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">IFSC Code</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1379,7 +1379,7 @@ export default function CrmClientDetailView({
 
               {/* Entry Method */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Verification Method</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Verification Method</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.bank_entry_method}
@@ -1394,7 +1394,7 @@ export default function CrmClientDetailView({
 
               {/* Bank Proof File */}
               <div className="sm:col-span-2 space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Bank Proof Attachment</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Bank Proof Attachment</label>
                 {submissionData?.bank_proof_file ? (
                   <div className="py-1 flex items-center gap-2">
                     <a
@@ -1431,7 +1431,7 @@ export default function CrmClientDetailView({
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
               {/* Risk Profile */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Risk Profile</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Risk Profile</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.risk_profile}
@@ -1446,7 +1446,7 @@ export default function CrmClientDetailView({
 
               {/* Investor Category */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Investor Category</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Investor Category</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.investor_category}
@@ -1461,7 +1461,7 @@ export default function CrmClientDetailView({
 
               {/* Investment Horizon */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Investment Horizon</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Investment Horizon</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.investment_horizon}
@@ -1476,7 +1476,7 @@ export default function CrmClientDetailView({
 
               {/* Investment Experience */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Investment Experience</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Investment Experience</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.investment_experience}
@@ -1491,7 +1491,7 @@ export default function CrmClientDetailView({
 
               {/* Investment Capacity */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Investment Capacity</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Investment Capacity</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.investment_capacity}
@@ -1506,7 +1506,7 @@ export default function CrmClientDetailView({
 
               {/* Objectives */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Investment Objectives</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase block">Investment Objectives</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.investment_objectives}
@@ -1524,7 +1524,7 @@ export default function CrmClientDetailView({
           {/* Section 7: Submission Metadata & Audit */}
           {submissionData && (
             <div className="bg-slate-50 rounded-3xl border border-gray-200/70 p-5 sm:p-6 text-xs text-gray-500">
-              <h4 className="font-bold text-gray-700 uppercase tracking-wider text-[11px] mb-3 flex items-center gap-1.5">
+              <h4 className="font-bold text-gray-700 uppercase text-[11px] mb-3 flex items-center gap-1.5">
                 <FontAwesomeIcon icon={faFileLines} className="text-gray-400" />
                 <span>Onboarding Submission System Audit</span>
               </h4>
@@ -1588,7 +1588,7 @@ export default function CrmClientDetailView({
 
             {/* Current Latest Remark Box */}
             <div className="bg-slate-50 rounded-2xl p-4 border border-gray-200/80 text-xs">
-              <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1.5">
+              <span className="text-[10px] font-bold text-gray-400 uppercase block mb-1.5">
                 Current Latest Remark
               </span>
               {clientData?.latest_remark ? (
@@ -1614,7 +1614,7 @@ export default function CrmClientDetailView({
 
             {/* Record New Remark Form */}
             <form onSubmit={handleSaveRemark} className="space-y-3 pt-2">
-              <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider">
+              <label className="block text-[11px] font-bold text-gray-700 uppercase">
                 Record New Contact Remark
               </label>
               <textarea

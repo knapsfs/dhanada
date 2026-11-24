@@ -429,7 +429,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                   <button
                     type="button"
                     onClick={onClose}
-                    className="w-full btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-semibold bg-[#032e92] hover:bg-[#022475] text-white shadow-lg shadow-[#032e92]/25 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
+                    className="w-full btn-ripple px-6 py-3.5 rounded-xl text-md font-semibold bg-[#032e92] hover:bg-[#022475] text-white shadow-lg shadow-[#032e92]/25 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
                   >
                     Done
                   </button>
@@ -932,7 +932,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                   <button
                     type="submit"
                     disabled={status === 'submitting'}
-                    className="w-full btn-ripple px-6 py-3.5 rounded-xl text-[15px] font-bold bg-[#032e92] hover:bg-[#022475] text-white shadow-lg shadow-[#032e92]/25 hover:shadow-xl hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 mt-2 disabled:opacity-70 cursor-pointer"
+                    className="w-full btn-ripple px-6 py-3.5 rounded-xl text-md font-bold bg-[#032e92] hover:bg-[#022475] text-white shadow-lg shadow-[#032e92]/25 hover:shadow-xl hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 mt-2 disabled:opacity-70 cursor-pointer"
                   >
                     {status === 'submitting' ? (
                       <>

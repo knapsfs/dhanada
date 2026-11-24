@@ -51,14 +51,14 @@ export default function ActiveVsAutoChoice() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#032e92]/10 border border-[#032e92]/20 text-[#032e92] text-xs font-semibold uppercase tracking-wider mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#032e92]/10 border border-[#032e92]/20 text-[#032e92] text-xs font-semibold uppercase mb-4">
             <FontAwesomeIcon icon={faSliders} />
             <span>Investment Strategies</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#032e92] tracking-tight mb-4">
             Active Choice vs Auto Choice
           </h2>
-          <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+          <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
             Choose whether you prefer full hands-on asset allocation control or automated, age-dependent de-risking via PFRDA lifecycle funds.
           </p>
         </div>
@@ -71,7 +71,7 @@ export default function ActiveVsAutoChoice() {
               className={`flex items-center gap-2.5 px-6 py-3 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                 selectedMode === 'auto'
                   ? 'bg-[#032e92] text-white shadow-md'
-                  : 'text-slate-600 hover:text-slate-900'
+                  : 'text-gray-600 hover:text-slate-900'
               }`}
             >
               <FontAwesomeIcon icon={faRobot} />
@@ -82,7 +82,7 @@ export default function ActiveVsAutoChoice() {
               className={`flex items-center gap-2.5 px-6 py-3 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                 selectedMode === 'active'
                   ? 'bg-[#032e92] text-white shadow-md'
-                  : 'text-slate-600 hover:text-slate-900'
+                  : 'text-gray-600 hover:text-slate-900'
               }`}
             >
               <FontAwesomeIcon icon={faUserGear} />
@@ -95,13 +95,13 @@ export default function ActiveVsAutoChoice() {
         {selectedMode === 'auto' ? (
           <div className="bg-[#f7f9fc] rounded-3xl border border-slate-200 p-8 sm:p-12 shadow-sm space-y-8">
             <div className="max-w-3xl">
-              <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">
+              <span className="text-xs font-bold text-blue-600 uppercase">
                 Automated Age-Based De-Risking
               </span>
               <h3 className="text-2xl font-extrabold text-slate-900 mt-1">
                 Lifecycle Funds — Protect Gains as You Mature
               </h3>
-              <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+              <p className="text-sm text-gray-600 mt-2 leading-relaxed">
                 Under Auto Choice, you select a risk tier once. The PFRDA system automatically rebalances your portfolio annually on your birthday, systematically reducing volatile equity exposure as you get closer to retirement age 60.
               </p>
             </div>
@@ -119,7 +119,7 @@ export default function ActiveVsAutoChoice() {
                   className={`py-3 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all border ${
                     selectedLifecycle === item.id
                       ? 'bg-white border-[#032e92] text-[#032e92] shadow-sm'
-                      : 'bg-white/60 border-slate-200 text-slate-600 hover:bg-white'
+                      : 'bg-white/60 border-slate-200 text-gray-600 hover:bg-white'
                   }`}
                 >
                   {item.label}
@@ -148,7 +148,7 @@ export default function ActiveVsAutoChoice() {
                 </div>
               </div>
 
-              <p className="text-sm text-slate-600 leading-relaxed">
+              <p className="text-sm text-gray-600 leading-relaxed">
                 {lifecycleData[selectedLifecycle].description}
               </p>
 
@@ -187,13 +187,13 @@ export default function ActiveVsAutoChoice() {
         ) : (
           <div className="bg-[#f7f9fc] rounded-3xl border border-slate-200 p-8 sm:p-12 shadow-sm space-y-8">
             <div className="max-w-3xl">
-              <span className="text-xs font-bold text-[#032e92] uppercase tracking-wider">
+              <span className="text-xs font-bold text-[#032e92] uppercase">
                 Full Customization Control
               </span>
               <h3 className="text-2xl font-extrabold text-slate-900 mt-1">
                 Active Choice — Define Your Exact Asset Split
               </h3>
-              <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+              <p className="text-sm text-gray-600 mt-2 leading-relaxed">
                 Under Active Choice, you maintain 100% manual discretion over how your money is divided among Asset Classes E, C, G, and A. You can rebalance or modify your allocation up to twice a financial year free of cost.
               </p>
             </div>

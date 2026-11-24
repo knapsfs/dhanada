@@ -331,7 +331,7 @@ export default function CrmMapToClientModal({
                 {suggestedClients.length > 0 && !searchQuery.trim() && (
                   <div className="space-y-2.5">
                     <div className="flex items-center justify-between">
-                      <h4 className="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
+                      <h4 className="text-xs font-bold text-gray-700 uppercase flex items-center gap-1.5">
                         <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
                         <span>Suggested Matches ({suggestedClients.length})</span>
                       </h4>
@@ -355,7 +355,7 @@ export default function CrmMapToClientModal({
                 {/* Section B: Search Results */}
                 {searchQuery.trim() && (
                   <div className="space-y-2.5">
-                    <h4 className="text-xs font-bold text-gray-700 uppercase tracking-wider">
+                    <h4 className="text-xs font-bold text-gray-700 uppercase">
                       Search Results ({searchResults.length})
                     </h4>
 

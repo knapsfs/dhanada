@@ -197,7 +197,7 @@ export default function CrmPipelineView({
                           {/* Latest Remark Preview if any */}
                           {lead.latest_remark && (
                             <div className="mb-2 bg-slate-50 border border-slate-200/80 rounded-lg p-2 text-[11px] text-gray-700 leading-snug">
-                              <span className="font-bold text-gray-500 block text-[9px] uppercase tracking-wider mb-0.5">Latest Remark</span>
+                              <span className="font-bold text-gray-500 block text-[9px] uppercase mb-0.5">Latest Remark</span>
                               <p className="line-clamp-2 italic text-gray-800 font-medium">"{lead.latest_remark}"</p>
                             </div>
                           )}

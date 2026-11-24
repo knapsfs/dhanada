@@ -58,7 +58,7 @@ export default function About() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
           >
-            <div className="inline-block px-4 py-2 rounded-full bg-[#fce8e8] text-[#c10000] font-semibold text-sm mb-6 uppercase tracking-wider">
+            <div className="inline-block px-4 py-2 rounded-full bg-[#fce8e8] text-[#c10000] font-semibold text-sm mb-6 uppercase">
               About Knaps
             </div>
 
@@ -87,7 +87,7 @@ export default function About() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center gap-2 cursor-pointer"
+              className="btn-ripple px-6 py-3 rounded-xl text-md font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center gap-2 cursor-pointer"
             >
               Learn More About Us
               <FontAwesomeIcon icon={faArrowRight} />

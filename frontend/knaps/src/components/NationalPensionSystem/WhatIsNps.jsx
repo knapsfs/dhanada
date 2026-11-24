@@ -102,28 +102,28 @@ export default function WhatIsNps() {
                       <FontAwesomeIcon icon={item.icon} />
                     </div>
                     {item.badge && (
-                      <span className="text-[11px] font-semibold text-[#032e92] bg-[#eef5ff] px-2.5 py-1 rounded-full uppercase tracking-wider">
+                      <span className="text-[11px] font-semibold text-[#032e92] bg-[#eef5ff] px-2.5 py-1 rounded-full uppercase">
                         {item.badge}
                       </span>
                     )}
                   </div>
 
-                  <h3 className="text-base sm:text-lg font-bold text-black mb-0.5 leading-snug">
+                  <h3 className="text-[16px] sm:text-lg font-bold text-black mb-3 leading-snug">
                     {item.title}
                   </h3>
-                  <p className="text-xs font-semibold text-[#032e92] mb-3">
+                  {/* <p className="text-xs font-semibold text-[#032e92] mb-3">
                     {item.subtitle}
-                  </p>
+                  </p> */}
 
-                  <p className="text-xs sm:text-[14px] text-gray-600 leading-relaxed font-normal mb-5">
+                  <p className="text-xs sm:text-[16px] text-gray-600 leading-relaxed font-normal mb-3">
                     {item.description}
                   </p>
                 </div>
 
                 <ul className="space-y-2.5 pt-4 border-t border-gray-200/60">
                   {item.highlights.map((point, pIdx) => (
-                    <li key={pIdx} className="flex items-center gap-2 text-xs font-medium text-gray-700">
-                      <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-500 text-[11px] shrink-0" />
+                    <li key={pIdx} className="flex items-center gap-2 text-[14px] font-medium text-gray-700">
+                      <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-500 text-[12px] shrink-0" />
                       <span>{point}</span>
                     </li>
                   ))}
@@ -143,7 +143,7 @@ export default function WhatIsNps() {
                 defaultService: 'National Pension System (NPS)'
               })
             }
-            className="btn-ripple w-full sm:w-auto px-8 py-3.5 rounded-xl text-[15px] font-semibold bg-[#032e92] hover:bg-[#022169] text-white shadow-md hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center gap-2.5 cursor-pointer"
+            className="btn-ripple w-full sm:w-auto px-8 py-3.5 rounded-xl text-md font-semibold bg-[#032e92] hover:bg-[#022169] text-white shadow-md hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center gap-2.5 cursor-pointer"
           >
             <span>Start Your NPS Investment</span>
           </button>
@@ -151,7 +151,7 @@ export default function WhatIsNps() {
           <button
             type="button"
             onClick={scrollToCalculator}
-            className="w-full sm:w-auto px-8 py-3.5 rounded-xl text-[15px] font-semibold bg-white hover:bg-blue-50 text-[#032e92] border border-[#032e92]/20 shadow-sm hover:shadow-md transition-all duration-300 inline-flex items-center justify-center gap-2.5 cursor-pointer"
+            className="w-full sm:w-auto px-8 py-3.5 rounded-xl text-md font-semibold bg-white hover:bg-blue-50 text-[#032e92] border border-[#032e92]/20 shadow-sm hover:shadow-md transition-all duration-300 inline-flex items-center justify-center gap-2.5 cursor-pointer"
           >
             <FontAwesomeIcon icon={faCalculator} className="text-xs" />
             <span>Calculate Retirement Corpus</span>

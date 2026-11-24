@@ -423,7 +423,7 @@ export default function CrmLeadDetailView({
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 shrink-0">
             {/* Contact Status */}
             <div className="bg-slate-50 p-3.5 rounded-2xl border border-gray-100">
-              <span className="text-[10px] uppercase font-bold text-gray-400 block tracking-wider">Contact Health</span>
+              <span className="text-[10px] uppercase font-bold text-gray-400 block">Contact Health</span>
               <div className="mt-1">
                 {contactInfo.isOverdue ? (
                   <span className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-700">
@@ -440,7 +440,7 @@ export default function CrmLeadDetailView({
 
             {/* Risk Profile */}
             <div className="bg-slate-50 p-3.5 rounded-2xl border border-gray-100">
-              <span className="text-[10px] uppercase font-bold text-gray-400 block tracking-wider">Risk Profile</span>
+              <span className="text-[10px] uppercase font-bold text-gray-400 block">Risk Profile</span>
               <p className="text-xs font-bold text-gray-900 mt-1 truncate">
                 {leadData?.risk_profile || "Pending Profiler"}
               </p>
@@ -448,7 +448,7 @@ export default function CrmLeadDetailView({
 
             {/* Total Touchpoints */}
             <div className="bg-slate-50 p-3.5 rounded-2xl border border-gray-100 col-span-2 sm:col-span-1">
-              <span className="text-[10px] uppercase font-bold text-gray-400 block tracking-wider">Touchpoints</span>
+              <span className="text-[10px] uppercase font-bold text-gray-400 block">Touchpoints</span>
               <p className="text-xs font-bold text-gray-900 mt-1">
                 {interactions.length} {interactions.length === 1 ? "interaction" : "interactions"}
               </p>
@@ -532,7 +532,7 @@ export default function CrmLeadDetailView({
 
             {/* New Remark Input Form */}
             <form onSubmit={handleSaveRemark} className="space-y-3 pt-1">
-              <label className="block text-[11px] font-bold text-gray-600 uppercase tracking-wider">
+              <label className="block text-[11px] font-bold text-gray-600 uppercase">
                 Record New Contact Remark
               </label>
               <textarea
@@ -710,24 +710,24 @@ export default function CrmLeadDetailView({
 
                   {/* Lifecycle Milestones */}
                   <div className="space-y-3">
-                    <h4 className="text-xs font-bold text-gray-600 uppercase tracking-wider">
+                    <h4 className="text-xs font-bold text-gray-600 uppercase">
                       Client Lifecycle Milestones
                     </h4>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                       <div className="bg-slate-50 p-3.5 rounded-2xl border border-gray-200/70">
-                        <span className="text-gray-400 block text-[10px] uppercase font-bold tracking-wider">Welcome Email</span>
+                        <span className="text-gray-400 block text-[10px] uppercase font-bold">Welcome Email</span>
                         <span className="font-bold text-gray-900 text-xs mt-1 block">
                           {leadData?.welcome_email_status || "Not Sent"}
                         </span>
                       </div>
                       <div className="bg-slate-50 p-3.5 rounded-2xl border border-gray-200/70">
-                        <span className="text-gray-400 block text-[10px] uppercase font-bold tracking-wider">Risk Profiler</span>
+                        <span className="text-gray-400 block text-[10px] uppercase font-bold">Risk Profiler</span>
                         <span className="font-bold text-gray-900 text-xs mt-1 block">
                           {leadData?.risk_profiler_status || "Not Initiated"}
                         </span>
                       </div>
                       <div className="bg-slate-50 p-3.5 rounded-2xl border border-gray-200/70">
-                        <span className="text-gray-400 block text-[10px] uppercase font-bold tracking-wider">KYC & Onboarding</span>
+                        <span className="text-gray-400 block text-[10px] uppercase font-bold">KYC & Onboarding</span>
                         <span className="font-bold text-gray-900 text-xs mt-1 block">
                           {leadData?.onboarding_status || "Not Initiated"}
                         </span>
@@ -897,7 +897,7 @@ export default function CrmLeadDetailView({
         <div className="lg:col-span-4 space-y-6">
           {/* Card: Contact Profile */}
           <div className="bg-white rounded-3xl border border-gray-200/90 p-5 sm:p-6 shadow-xs space-y-4">
-            <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
+            <h4 className="text-xs font-bold text-gray-400 uppercase flex items-center gap-2">
               <FontAwesomeIcon icon={faUser} className="text-[#032e92]" />
               <span>Contact Profile</span>
             </h4>
@@ -905,7 +905,7 @@ export default function CrmLeadDetailView({
             <div className="space-y-3.5 text-xs">
               {/* Mobile */}
               <div className="p-3 bg-slate-50 rounded-2xl border border-gray-100">
-                <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1">
+                <span className="text-[10px] text-gray-400 font-bold uppercase block mb-1">
                   Mobile Number
                 </span>
                 <div className="flex items-center justify-between">
@@ -927,7 +927,7 @@ export default function CrmLeadDetailView({
 
               {/* Email */}
               <div className="p-3 bg-slate-50 rounded-2xl border border-gray-100">
-                <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-1">
+                <span className="text-[10px] text-gray-400 font-bold uppercase block mb-1">
                   Email Address
                 </span>
                 <div className="flex items-center justify-between">
@@ -950,7 +950,7 @@ export default function CrmLeadDetailView({
               {/* City / Location */}
               <div className="p-3 bg-slate-50 rounded-2xl border border-gray-100 flex items-center justify-between">
                 <div>
-                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-0.5">
+                  <span className="text-[10px] text-gray-400 font-bold uppercase block mb-0.5">
                     City / Location
                   </span>
                   <span className="font-semibold text-gray-900">
@@ -962,7 +962,7 @@ export default function CrmLeadDetailView({
 
               {/* Lead Source */}
               <div className="p-3 bg-slate-50 rounded-2xl border border-gray-100">
-                <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-0.5">
+                <span className="text-[10px] text-gray-400 font-bold uppercase block mb-0.5">
                   Lead Acquisition Source
                 </span>
                 <span className="font-semibold text-gray-900">
@@ -974,14 +974,14 @@ export default function CrmLeadDetailView({
 
           {/* Card: Investment Goals & Profiler */}
           <div className="bg-white rounded-3xl border border-gray-200/90 p-5 sm:p-6 shadow-xs space-y-4">
-            <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
+            <h4 className="text-xs font-bold text-gray-400 uppercase flex items-center gap-2">
               <FontAwesomeIcon icon={faCoins} className="text-amber-500" />
               <span>Investment Goals & Profiler</span>
             </h4>
 
             <div className="space-y-3.5 text-xs">
               <div className="p-3 bg-slate-50 rounded-2xl border border-gray-100">
-                <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-0.5">
+                <span className="text-[10px] text-gray-400 font-bold uppercase block mb-0.5">
                   Investment Range
                 </span>
                 <span className="font-bold text-gray-900 text-sm">
@@ -990,7 +990,7 @@ export default function CrmLeadDetailView({
               </div>
 
               <div className="p-3 bg-slate-50 rounded-2xl border border-gray-100">
-                <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block mb-0.5">
+                <span className="text-[10px] text-gray-400 font-bold uppercase block mb-0.5">
                   Time Horizon
                 </span>
                 <span className="font-semibold text-gray-900">
@@ -1000,7 +1000,7 @@ export default function CrmLeadDetailView({
 
               <div className="p-3 bg-slate-50 rounded-2xl border border-gray-100">
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">
+                  <span className="text-[10px] text-gray-400 font-bold uppercase">
                     Risk Profiler Score
                   </span>
                   <span className="font-bold text-[#032e92]">
@@ -1025,7 +1025,7 @@ export default function CrmLeadDetailView({
           {/* Card: Advisor Notes */}
           {leadData?.notes && (
             <div className="bg-amber-50/50 rounded-3xl border border-amber-200/70 p-5 sm:p-6 shadow-xs space-y-2">
-              <h4 className="text-xs font-bold text-amber-900 uppercase tracking-wider flex items-center gap-2">
+              <h4 className="text-xs font-bold text-amber-900 uppercase flex items-center gap-2">
                 <FontAwesomeIcon icon={faFileLines} className="text-amber-700" />
                 <span>Advisor Private Notes</span>
               </h4>

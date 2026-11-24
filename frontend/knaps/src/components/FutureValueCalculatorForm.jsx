@@ -122,7 +122,7 @@ export default function FutureValueCalculatorForm({
         >
           {/* Goal Selector */}
           <div className="mb-8">
-            <label className="text-xs font-extrabold text-gray-500 uppercase tracking-wider block mb-3">
+            <label className="text-xs font-extrabold text-gray-500 uppercase block mb-3">
               WHAT IS YOUR GOAL?
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5">

@@ -84,8 +84,8 @@ const SmallSavingsImportantConsiderations = () => {
                 </span>
               </div>
               <h3 className="text-lg font-bold text-slate-900">{item.title}</h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{item.description}</p>
-              <ul className="space-y-2 text-xs text-slate-600 pt-2 border-t border-slate-100">
+              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">{item.description}</p>
+              <ul className="space-y-2 text-xs text-gray-600 pt-2 border-t border-slate-100">
                 {item.details.map((detail, dIdx) => (
                   <li key={dIdx} className="flex items-start gap-2">
                     <span className="text-[#032e92] font-bold">•</span>

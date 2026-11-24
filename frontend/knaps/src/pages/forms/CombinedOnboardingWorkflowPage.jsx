@@ -458,7 +458,7 @@ export default function CombinedOnboardingWorkflowPage() {
               {q1 && (
                 <div className="pt-4 border-t border-gray-100">
                   <div className="mb-3">
-                    <span className="text-xs font-extrabold text-[#032e92] uppercase tracking-wider block">
+                    <span className="text-xs font-extrabold text-[#032e92] uppercase block">
                       Financial Profile Integration
                     </span>
                     <p className="text-[11px] text-gray-500">

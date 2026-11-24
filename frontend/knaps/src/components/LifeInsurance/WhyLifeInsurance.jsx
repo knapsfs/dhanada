@@ -72,7 +72,7 @@ export default function WhyLifeInsurance() {
                   <FontAwesomeIcon icon={pillar.icon} className="text-xl" />
                 </div> */}
 
-                {/* <span className="inline-block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">
+                {/* <span className="inline-block text-[11px] font-bold text-gray-400 uppercase mb-2">
                   {pillar.highlight}
                 </span> */}
 

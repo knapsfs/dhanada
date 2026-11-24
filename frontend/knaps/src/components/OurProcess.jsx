@@ -73,7 +73,7 @@ export default function OurProcess() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-block px-4 py-2 rounded-full border border-[#032e92]/20 text-[#032e92] bg-[#eef5ff] font-semibold text-sm mb-4 uppercase tracking-wider text-center"
+            className="inline-block px-4 py-2 rounded-full border border-[#032e92]/20 text-[#032e92] bg-[#eef5ff] font-semibold text-sm mb-4 uppercase text-center"
           >
             OUR PROCESS
           </motion.span> */}
@@ -148,7 +148,7 @@ export default function OurProcess() {
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => openLeadModal('Process: Start Your Journey')}
-            className="btn-ripple px-6 py-3 rounded-xl text-[15px] font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center justify-center gap-2.5 cursor-pointer group"
+            className="btn-ripple px-6 py-3 rounded-xl text-md font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 inline-flex items-center justify-center gap-2.5 cursor-pointer group"
           >
             <span>Start Your Journey</span>
           </motion.button>

@@ -188,8 +188,8 @@ export default function LuxuryContactSection() {
                     <FontAwesomeIcon icon={faLocationDot} />
                   </div>
                   <div>
-                    <h5 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Office</h5>
-                    <p className="text-gray-900 font-medium text-sm sm:text-[15px] leading-relaxed">
+                    <h5 className="text-xs font-bold text-gray-500 uppercase mb-1">Office</h5>
+                    <p className="text-gray-900 font-medium text-sm sm:text-md leading-relaxed">
                       DG-206A, DLF Galleria, Plot No 1B, Mayur Vihar Phase - 1, East Delhi, Delhi - 110091
                     </p>
                   </div>
@@ -200,8 +200,8 @@ export default function LuxuryContactSection() {
                     <FontAwesomeIcon icon={faPhone} />
                   </div>
                   <div>
-                    <h5 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Phone</h5>
-                    <a href="tel:+919990243143" className="text-gray-900 hover:text-[#032e92] font-medium text-sm sm:text-[15px] leading-relaxed transition-colors">
+                    <h5 className="text-xs font-bold text-gray-500 uppercase mb-1">Phone</h5>
+                    <a href="tel:+919990243143" className="text-gray-900 hover:text-[#032e92] font-medium text-sm sm:text-md leading-relaxed transition-colors">
                       +91-9990243143
                     </a>
                   </div>
@@ -212,8 +212,8 @@ export default function LuxuryContactSection() {
                     <FontAwesomeIcon icon={faEnvelope} />
                   </div>
                   <div>
-                    <h5 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Email</h5>
-                    <a href="mailto:contact@knaps.com" className="text-gray-900 hover:text-[#032e92] font-medium text-sm sm:text-[15px] leading-relaxed transition-colors">
+                    <h5 className="text-xs font-bold text-gray-500 uppercase mb-1">Email</h5>
+                    <a href="mailto:contact@knaps.com" className="text-gray-900 hover:text-[#032e92] font-medium text-sm sm:text-md leading-relaxed transition-colors">
                       contact@knaps.com
                     </a>
                   </div>
@@ -224,8 +224,8 @@ export default function LuxuryContactSection() {
                     <FontAwesomeIcon icon={faClock} />
                   </div>
                   <div>
-                    <h5 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Working Hours</h5>
-                    <p className="text-gray-900 font-medium text-sm sm:text-[15px] leading-relaxed">
+                    <h5 className="text-xs font-bold text-gray-500 uppercase mb-1">Working Hours</h5>
+                    <p className="text-gray-900 font-medium text-sm sm:text-md leading-relaxed">
                       Mon - Fri, 9:00 AM - 6:00 PM
                     </p>
                   </div>
@@ -262,7 +262,7 @@ export default function LuxuryContactSection() {
                       setCountrySearch('');
                       setFormData({ fullName: '', phone: '', email: '', message: '', consent: false });
                     }}
-                    className="btn-ripple px-6 py-3 rounded-xl text-sm sm:text-[15px] font-semibold bg-[#032e92] hover:bg-[#022169] text-white shadow-md hover:shadow-lg transition-all cursor-pointer"
+                    className="btn-ripple px-6 py-3 rounded-xl text-sm sm:text-md font-semibold bg-[#032e92] hover:bg-[#022169] text-white shadow-md hover:shadow-lg transition-all cursor-pointer"
                   >
                     Submit Another Request
                   </button>
@@ -570,7 +570,7 @@ export default function LuxuryContactSection() {
                       <button
                         type="submit"
                         disabled={status === 'submitting'}
-                        className="btn-ripple w-full py-3.5 sm:py-4 px-8 rounded-xl text-sm sm:text-[15px] font-semibold bg-[#032e92] hover:bg-[#022169] text-white shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer disabled:opacity-75 flex items-center justify-center gap-2.5"
+                        className="btn-ripple w-full py-3.5 sm:py-4 px-8 rounded-xl text-sm sm:text-md font-semibold bg-[#032e92] hover:bg-[#022169] text-white shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer disabled:opacity-75 flex items-center justify-center gap-2.5"
                       >
                         {status === 'submitting' ? (
                           <>

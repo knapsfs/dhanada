@@ -49,7 +49,7 @@ export default function FormSuccessState({
         {isProfilerIncluded && result.risk_profile && (
           <div className="bg-slate-50 border border-gray-200/90 rounded-2xl p-5 text-left space-y-3">
             <div className="flex items-center justify-between flex-wrap gap-2">
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#032e92] flex items-center gap-1.5">
+              <span className="text-[10px] font-extrabold uppercase text-[#032e92] flex items-center gap-1.5">
                 <FontAwesomeIcon icon={faShieldHalved} />
                 <span>Calculated Risk Assessment Result</span>
               </span>
@@ -77,7 +77,7 @@ export default function FormSuccessState({
 
         {/* NEXT STEPS */}
         <div className="bg-blue-50/50 border border-blue-100 rounded-2xl p-5 text-left space-y-3">
-          <h3 className="text-xs font-extrabold uppercase tracking-wider text-[#032e92]">
+          <h3 className="text-xs font-extrabold uppercase text-[#032e92]">
             What Happens Next?
           </h3>
           <ul className="text-xs text-gray-700 space-y-2">

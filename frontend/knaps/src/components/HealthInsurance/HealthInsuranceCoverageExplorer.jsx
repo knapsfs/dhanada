@@ -147,7 +147,7 @@ export default function HealthInsuranceCoverageExplorer() {
 
         {/* Step 1: Life Stage Selector */}
         <div className="mb-8">
-          <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">
+          <label className="block text-xs font-bold uppercase text-gray-500 mb-3">
             1. Select Your Current Life Stage
           </label>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3">
@@ -176,7 +176,7 @@ export default function HealthInsuranceCoverageExplorer() {
 
         {/* Step 2: Family Configuration */}
         <div className="mb-8">
-          <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">
+          <label className="block text-xs font-bold uppercase text-gray-500 mb-3">
             2. Select Family Members to Cover
           </label>
           <div className="flex flex-wrap gap-2.5 sm:gap-3">
@@ -203,7 +203,7 @@ export default function HealthInsuranceCoverageExplorer() {
 
         {/* Step 3: Priority Need */}
         <div className="mb-10">
-          <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">
+          <label className="block text-xs font-bold uppercase text-gray-500 mb-3">
             3. Select Your Primary Health Priority
           </label>
           <div className="flex flex-wrap gap-2.5 sm:gap-3">
@@ -253,7 +253,7 @@ export default function HealthInsuranceCoverageExplorer() {
               </div>
 
               <div>
-                <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3 flex items-center gap-1.5">
+                <h4 className="text-xs font-bold uppercase text-gray-500 mb-3 flex items-center gap-1.5">
                   <FontAwesomeIcon icon={faCheckCircle} className="text-[#032e92]" />
                   Core Coverage Highlights Under This Strategy
                 </h4>
@@ -271,7 +271,7 @@ export default function HealthInsuranceCoverageExplorer() {
             {/* Right Col: Addons & Quick Consultation (5 cols) */}
             <div className="lg:col-span-5 bg-white rounded-2xl p-6 sm:p-7 border border-blue-100 shadow-md space-y-6 flex flex-col justify-between h-full">
               <div>
-                <div className="flex items-center gap-2 text-[#032e92] text-xs font-bold uppercase tracking-wider mb-2">
+                <div className="flex items-center gap-2 text-[#032e92] text-xs font-bold uppercase mb-2">
                   <FontAwesomeIcon icon={faStar} className="text-amber-500" />
                   <span>Essential Recommended Riders</span>
                 </div>

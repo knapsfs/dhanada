@@ -71,14 +71,14 @@ const TestimonialCard = ({ testimonial }) => (
       <div className="text-4xl sm:text-5xl text-[#032e92] mb-5 sm:mb-6">
         <FontAwesomeIcon icon={faQuoteLeft} />
       </div>
-      <p className="text-[#1a1a1a] text-[15px] sm:text-[16px] leading-relaxed mb-6 sm:mb-8 font-normal">
+      <p className="text-[#1a1a1a] text-md sm:text-[16px] leading-relaxed mb-6 sm:mb-8 font-normal">
         {testimonial.text}
       </p>
     </div>
 
     <div className="pt-4 border-t border-gray-200/60 flex items-center justify-between">
       <div>
-        <h4 className="font-bold text-gray-900 text-sm sm:text-[15px] tracking-tight">{testimonial.name}</h4>
+        <h4 className="font-bold text-gray-900 text-sm sm:text-md tracking-tight">{testimonial.name}</h4>
         {testimonial.location && (
           <p className="text-xs text-gray-500 font-medium flex items-center gap-1.5 mt-1">
             <FontAwesomeIcon icon={faLocationDot} className="text-[#032e92] text-[11px]" />
@@ -122,7 +122,7 @@ export default function Testimonials() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-block px-4 py-2 rounded-full border border-[#032e92]/20 text-[#032e92] bg-[#eef5ff] font-semibold text-sm mb-4 uppercase tracking-wider"
+            className="inline-block px-4 py-2 rounded-full border border-[#032e92]/20 text-[#032e92] bg-[#eef5ff] font-semibold text-sm mb-4 uppercase"
           >
             Client Testimonials
           </motion.div> */}
