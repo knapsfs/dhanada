@@ -35,13 +35,34 @@ jobs:
           ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: Resolve the base image
+<<<<<<< HEAD
         run: |
           set -euo pipefail
           BASE="${{ vars.ERPNEXT_IMAGE }}"
+=======
+        env:
+          # A repository variable is admin-set, but pass it through the
+          # environment so the shell never parses its value as code.
+          BASE_INPUT: ${{ vars.ERPNEXT_IMAGE }}
+        run: |
+          set -euo pipefail
+          BASE="$BASE_INPUT"
+>>>>>>> 5897fd8 (ci: build one image per commit and promote it by digest)
           if [ -z "$BASE" ]; then
             BASE="frappe/erpnext:develop"
             echo "::warning::ERPNEXT_IMAGE is not set; using $BASE. Pin a version or digest in repository variables."
           fi
+<<<<<<< HEAD
+=======
+
+          # A bare `latest` or a floating `develop` defeats "build once": the
+          # base can change between the development build and any later build
+          # of the same commit. Require a version tag or, better, a digest.
+          if [[ "$BASE" == *":latest" ]]; then
+            echo "::error::ERPNEXT_IMAGE must not be :latest. Pin a version or digest."
+            exit 1
+          fi
+>>>>>>> 5897fd8 (ci: build one image per commit and promote it by digest)
           echo "ERPNEXT_IMAGE=$BASE" >> "$GITHUB_ENV"
 
       - name: Set up Buildx
