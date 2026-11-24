@@ -80,7 +80,7 @@ export default function FixedDepositKeyFeatures() {
                   <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100/70 border border-blue-200/60 flex items-center justify-center text-[#032e92] group-hover:bg-[#032e92] group-hover:text-white group-hover:scale-105 transition-all duration-300 shadow-xs">
                     <FontAwesomeIcon icon={feature.icon} className="text-lg" />
                   </div>
-                  <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-blue-50 text-[#032e92] border border-blue-100">
+                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-50 text-[#032e92] border border-blue-100">
                     {feature.badge}
                   </span>
                 </div>

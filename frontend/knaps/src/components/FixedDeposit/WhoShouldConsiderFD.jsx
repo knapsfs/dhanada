@@ -65,7 +65,7 @@ export default function WhoShouldConsiderFD() {
                   <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200/60 flex items-center justify-center text-[#032e92] group-hover:bg-[#032e92] group-hover:text-white group-hover:scale-105 transition-all duration-300 shadow-xs">
                     <FontAwesomeIcon icon={profile.icon} className="text-lg" />
                   </div>
-                  <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-blue-50 text-[#032e92] border border-blue-100">
+                  <span className="text-xs font-bold px-3 py-1 rounded-full bg-blue-50 text-[#032e92] border border-blue-100">
                     {profile.tag}
                   </span>
                 </div>

@@ -105,7 +105,7 @@ export default function Hero() {
                 </svg>
               </div>
               <div>
-                <p className="text-[11px] font-bold uppercase text-cyan-300">SEBI Regulated Framework</p>
+                <p className="text-xs font-bold uppercase text-cyan-300">SEBI Regulated Framework</p>
               </div>
             </motion.div>
 
@@ -122,7 +122,7 @@ export default function Hero() {
                 </svg>
               </div>
               <div>
-                <p className="text-[11px] font-bold uppercase text-blue-300">Bridges gap between Mutual Funds and PMS</p>
+                <p className="text-xs font-bold uppercase text-blue-300">Bridges gap between Mutual Funds and PMS</p>
               </div>
             </motion.div>
 

@@ -503,7 +503,7 @@ export default function CrmClientDetailView({
 
             {/* Linked Opportunities / Multi-Lead Badges */}
             <div className="flex items-center gap-2 flex-wrap pt-1">
-              <span className="text-[11px] font-bold text-gray-500 uppercase">
+              <span className="text-xs font-bold text-gray-500 uppercase">
                 Linked Opportunities ({linkedLeads.length || (clientData?.lead ? 1 : 0)}):
               </span>
               {linkedLeads.length > 0 ? (
@@ -678,7 +678,7 @@ export default function CrmClientDetailView({
                 <FontAwesomeIcon icon={faPenToSquare} className="text-[#032e92] text-sm" />
                 <div>
                   <h4 className="text-xs font-bold text-gray-900">Editing Client Onboarding Submission</h4>
-                  <p className="text-[11px] text-gray-600">Modify any personal, contact, nominee, or bank details below. Changes sync automatically to both the submission record and client profile.</p>
+                  <p className="text-xs text-gray-600">Modify any personal, contact, nominee, or bank details below. Changes sync automatically to both the submission record and client profile.</p>
                 </div>
               </div>
               <div className="flex items-center gap-2 shrink-0">
@@ -710,7 +710,7 @@ export default function CrmClientDetailView({
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-gray-900">Personal & KYC Information</h3>
-                  <p className="text-[11px] text-gray-400">Identity details recorded during onboarding</p>
+                  <p className="text-xs text-gray-400">Identity details recorded during onboarding</p>
                 </div>
               </div>
 
@@ -720,7 +720,7 @@ export default function CrmClientDetailView({
                   onClick={handleStartEdit}
                   className="text-xs font-bold text-[#032e92] hover:underline flex items-center gap-1 cursor-pointer"
                 >
-                  <FontAwesomeIcon icon={faPenToSquare} className="text-[11px]" />
+                  <FontAwesomeIcon icon={faPenToSquare} className="text-xs" />
                   <span>Edit</span>
                 </button>
               )}
@@ -895,7 +895,7 @@ export default function CrmClientDetailView({
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-gray-900">Contact Details</h3>
-                  <p className="text-[11px] text-gray-400">Communication coordinates verified during onboarding</p>
+                  <p className="text-xs text-gray-400">Communication coordinates verified during onboarding</p>
                 </div>
               </div>
             </div>
@@ -984,7 +984,7 @@ export default function CrmClientDetailView({
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-gray-900">Residential / Permanent Address</h3>
-                  <p className="text-[11px] text-gray-400">Postal and residential address registered during onboarding</p>
+                  <p className="text-xs text-gray-400">Postal and residential address registered during onboarding</p>
                 </div>
               </div>
             </div>
@@ -1098,7 +1098,7 @@ export default function CrmClientDetailView({
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-gray-900">Nominee & Guardian Details</h3>
-                  <p className="text-[11px] text-gray-400">Beneficiary nomination submitted during client onboarding</p>
+                  <p className="text-xs text-gray-400">Beneficiary nomination submitted during client onboarding</p>
                 </div>
               </div>
             </div>
@@ -1167,7 +1167,7 @@ export default function CrmClientDetailView({
                   </label>
                 ) : (
                   <div className="py-1">
-                    <span className={`px-2 py-0.5 rounded text-[11px] font-bold ${submissionData?.is_nominee_minor ? "bg-amber-50 text-amber-800 border border-amber-200" : "bg-gray-100 text-gray-600"}`}>
+                    <span className={`px-2 py-0.5 rounded text-xs font-bold ${submissionData?.is_nominee_minor ? "bg-amber-50 text-amber-800 border border-amber-200" : "bg-gray-100 text-gray-600"}`}>
                       {submissionData?.is_nominee_minor ? "Yes (Minor)" : "No (Major)"}
                     </span>
                   </div>
@@ -1258,7 +1258,7 @@ export default function CrmClientDetailView({
             {(isEditing || editFormData.is_nominee_minor || submissionData?.guardian_name) && (
               <div className="mt-4 pt-4 border-t border-gray-100 space-y-3">
                 <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-bold uppercase text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-lg border border-amber-200">
+                  <span className="text-xs font-bold uppercase text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-lg border border-amber-200">
                     Guardian Details (Required if Nominee is Minor)
                   </span>
                 </div>
@@ -1323,7 +1323,7 @@ export default function CrmClientDetailView({
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-gray-900">Bank Account Information</h3>
-                  <p className="text-[11px] text-gray-400">Bank mandate provided for payouts & verification</p>
+                  <p className="text-xs text-gray-400">Bank mandate provided for payouts & verification</p>
                 </div>
               </div>
             </div>
@@ -1423,7 +1423,7 @@ export default function CrmClientDetailView({
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-gray-900">Investment & Risk Preferences</h3>
-                  <p className="text-[11px] text-gray-400">Risk profiling and portfolio preferences</p>
+                  <p className="text-xs text-gray-400">Risk profiling and portfolio preferences</p>
                 </div>
               </div>
             </div>
@@ -1524,7 +1524,7 @@ export default function CrmClientDetailView({
           {/* Section 7: Submission Metadata & Audit */}
           {submissionData && (
             <div className="bg-slate-50 rounded-3xl border border-gray-200/70 p-5 sm:p-6 text-xs text-gray-500">
-              <h4 className="font-bold text-gray-700 uppercase text-[11px] mb-3 flex items-center gap-1.5">
+              <h4 className="font-bold text-gray-700 uppercase text-xs mb-3 flex items-center gap-1.5">
                 <FontAwesomeIcon icon={faFileLines} className="text-gray-400" />
                 <span>Onboarding Submission System Audit</span>
               </h4>
@@ -1565,7 +1565,7 @@ export default function CrmClientDetailView({
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-gray-900">Contact Health & Latest Remark</h3>
-                  <p className="text-[11px] text-gray-400">Track client touchpoints and maintain advisor compliance</p>
+                  <p className="text-xs text-gray-400">Track client touchpoints and maintain advisor compliance</p>
                 </div>
               </div>
 
@@ -1596,7 +1596,7 @@ export default function CrmClientDetailView({
                   <p className="text-gray-900 font-medium leading-relaxed whitespace-pre-wrap">
                     "{clientData.latest_remark}"
                   </p>
-                  <div className="mt-3 pt-2.5 border-t border-gray-200/80 flex items-center justify-between gap-3 text-[11px] text-gray-500 flex-wrap">
+                  <div className="mt-3 pt-2.5 border-t border-gray-200/80 flex items-center justify-between gap-3 text-xs text-gray-500 flex-wrap">
                     <span className="flex items-center gap-1.5">
                       <FontAwesomeIcon icon={faUser} className="text-gray-400 text-[10px]" />
                       <span>Contacted by: <strong className="text-gray-700">{clientData.last_contacted_by || "Unknown"}</strong></span>
@@ -1614,7 +1614,7 @@ export default function CrmClientDetailView({
 
             {/* Record New Remark Form */}
             <form onSubmit={handleSaveRemark} className="space-y-3 pt-2">
-              <label className="block text-[11px] font-bold text-gray-700 uppercase">
+              <label className="block text-xs font-bold text-gray-700 uppercase">
                 Record New Contact Remark
               </label>
               <textarea

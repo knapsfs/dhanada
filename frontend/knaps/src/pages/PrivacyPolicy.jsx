@@ -323,17 +323,17 @@ export default function PrivacyPolicy() {
                     <div className="p-4 rounded-2xl bg-gray-50 border border-gray-100">
                       <FontAwesomeIcon icon={faLock} className="text-[#032e92] text-xl mb-2" />
                       <h4 className="font-bold text-xs text-gray-900">TLS 1.3 Encryption</h4>
-                      <p className="text-[11px] text-gray-500 mt-1">End-to-end encryption for all in-transit communications.</p>
+                      <p className="text-xs text-gray-500 mt-1">End-to-end encryption for all in-transit communications.</p>
                     </div>
                     <div className="p-4 rounded-2xl bg-gray-50 border border-gray-100">
                       <FontAwesomeIcon icon={faDatabase} className="text-[#032e92] text-xl mb-2" />
                       <h4 className="font-bold text-xs text-gray-900">Encrypted Storage</h4>
-                      <p className="text-[11px] text-gray-500 mt-1">AES-256 standard encryption for all database repositories.</p>
+                      <p className="text-xs text-gray-500 mt-1">AES-256 standard encryption for all database repositories.</p>
                     </div>
                     <div className="p-4 rounded-2xl bg-gray-50 border border-gray-100">
                       <FontAwesomeIcon icon={faUserShield} className="text-[#032e92] text-xl mb-2" />
                       <h4 className="font-bold text-xs text-gray-900">Role-Based Access</h4>
-                      <p className="text-[11px] text-gray-500 mt-1">Strict least-privilege protocols for company personnel.</p>
+                      <p className="text-xs text-gray-500 mt-1">Strict least-privilege protocols for company personnel.</p>
                     </div>
                   </div>
                 </div>

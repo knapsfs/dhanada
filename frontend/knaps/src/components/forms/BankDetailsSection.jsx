@@ -115,7 +115,7 @@ export default function BankDetailsSection({
               <span className="text-xs font-extrabold text-gray-900 block">
                 Method 1 — Enter Bank Details Manually
               </span>
-              <span className="text-[11px] text-gray-500 mt-0.5 block leading-relaxed">
+              <span className="text-xs text-gray-500 mt-0.5 block leading-relaxed">
                 Provide your bank name, account number, and verified IFSC code.
               </span>
             </div>
@@ -141,7 +141,7 @@ export default function BankDetailsSection({
               <span className="text-xs font-extrabold text-gray-900 block">
                 Method 2 — Upload Bank Proof Document
               </span>
-              <span className="text-[11px] text-gray-500 mt-0.5 block leading-relaxed">
+              <span className="text-xs text-gray-500 mt-0.5 block leading-relaxed">
                 Upload a scanned copy or photo of your cancelled cheque or bank passbook.
               </span>
             </div>
@@ -179,7 +179,7 @@ export default function BankDetailsSection({
                 }`}
               />
               {lookupResult && lookupResult.bank && (
-                <div className="mt-2 text-[11px] font-semibold text-emerald-800 bg-emerald-50 p-2 rounded-lg border border-emerald-200 flex items-center gap-1.5">
+                <div className="mt-2 text-xs font-semibold text-emerald-800 bg-emerald-50 p-2 rounded-lg border border-emerald-200 flex items-center gap-1.5">
                   <FontAwesomeIcon icon={faCircleCheck} className="text-emerald-600" />
                   <span>
                     Verified: <strong>{lookupResult.bank}</strong> ({lookupResult.branch || "Branch"})
@@ -187,7 +187,7 @@ export default function BankDetailsSection({
                 </div>
               )}
               {errors.bank_ifsc && (
-                <p className="text-[11px] text-red-600 font-semibold mt-1">{errors.bank_ifsc}</p>
+                <p className="text-xs text-red-600 font-semibold mt-1">{errors.bank_ifsc}</p>
               )}
             </div>
 
@@ -208,7 +208,7 @@ export default function BankDetailsSection({
                 }`}
               />
               {errors.bank_name && (
-                <p className="text-[11px] text-red-600 font-semibold mt-1">{errors.bank_name}</p>
+                <p className="text-xs text-red-600 font-semibold mt-1">{errors.bank_name}</p>
               )}
             </div>
 
@@ -231,7 +231,7 @@ export default function BankDetailsSection({
                 }`}
               />
               {errors.bank_account_no && (
-                <p className="text-[11px] text-red-600 font-semibold mt-1">
+                <p className="text-xs text-red-600 font-semibold mt-1">
                   {errors.bank_account_no}
                 </p>
               )}
@@ -256,7 +256,7 @@ export default function BankDetailsSection({
                 }`}
               />
               {errors.confirm_bank_account_no && (
-                <p className="text-[11px] text-red-600 font-semibold mt-1">
+                <p className="text-xs text-red-600 font-semibold mt-1">
                   {errors.confirm_bank_account_no}
                 </p>
               )}
@@ -296,7 +296,7 @@ export default function BankDetailsSection({
                   <span className="text-xs font-bold text-gray-900 mt-1">
                     Click to browse or drop document here
                   </span>
-                  <span className="text-[11px] text-gray-400">
+                  <span className="text-xs text-gray-400">
                     Supported formats: PDF, PNG, JPG, JPEG (Max 5MB)
                   </span>
                 </div>
@@ -312,7 +312,7 @@ export default function BankDetailsSection({
                   <span className="text-xs font-bold text-gray-900 block truncate max-w-xs">
                     {data.bank_proof_filename || "Uploaded Bank Proof Document"}
                   </span>
-                  <span className="text-[11px] font-semibold text-emerald-700 flex items-center gap-1 mt-0.5">
+                  <span className="text-xs font-semibold text-emerald-700 flex items-center gap-1 mt-0.5">
                     <FontAwesomeIcon icon={faCircleCheck} className="text-[10px]" />
                     Uploaded successfully
                   </span>
@@ -330,16 +330,16 @@ export default function BankDetailsSection({
           )}
 
           {uploadError && (
-            <p className="text-[11px] text-red-600 font-semibold">{uploadError}</p>
+            <p className="text-xs text-red-600 font-semibold">{uploadError}</p>
           )}
           {errors.bank_proof_file && (
-            <p className="text-[11px] text-red-600 font-semibold">{errors.bank_proof_file}</p>
+            <p className="text-xs text-red-600 font-semibold">{errors.bank_proof_file}</p>
           )}
         </div>
       )}
 
       {/* Compliance Notice */}
-      <div className="flex items-start gap-2.5 p-3.5 bg-amber-50/60 rounded-xl border border-amber-200/70 text-[11px] text-amber-900 leading-relaxed">
+      <div className="flex items-start gap-2.5 p-3.5 bg-amber-50/60 rounded-xl border border-amber-200/70 text-xs text-amber-900 leading-relaxed">
         <FontAwesomeIcon icon={faInfoCircle} className="text-amber-700 mt-0.5" />
         <span>
           <strong>Verification Notice:</strong> Bank account details and uploaded documents will be

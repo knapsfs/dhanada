@@ -420,7 +420,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                       <p className="text-xs text-gray-900 font-bold">
                         Date: {bookedAppointment.appointment_date} ({bookedAppointment.appointment_time})
                       </p>
-                      <p className="text-[11px] text-gray-600">
+                      <p className="text-xs text-gray-600">
                         Type: <span className="font-semibold text-[#032e92]">{bookedAppointment.meeting_type}</span>
                       </p>
                     </div>
@@ -734,7 +734,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                           <p className="text-xs font-bold text-gray-900 tracking-tight">
                             Do you want to schedule a meeting?
                           </p>
-                          <p className="text-[11px] text-gray-500 font-medium">
+                          <p className="text-xs text-gray-500 font-medium">
                             {scheduleMeeting === 'Yes'
                               ? 'Meeting enabled • Pick date & slot below'
                               : 'Toggle on to book a free 1-on-1 advisor consultation'}
@@ -785,7 +785,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                       >
                         {/* Meeting Type Selection */}
                         <div>
-                          <label className="block text-[11px] font-bold text-gray-700 mb-1.5 uppercase tracking-wide">
+                          <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wide">
                             Meeting Type <span className="text-red-500">*</span>
                           </label>
                           <div className="grid grid-cols-3 gap-2">
@@ -807,7 +807,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                                   }`}
                                 >
                                   <FontAwesomeIcon icon={type.icon} className={`text-xs ${isSel ? 'text-[#032e92]' : 'text-gray-400'}`} />
-                                  <span className="text-[11px] truncate">{type.label}</span>
+                                  <span className="text-xs truncate">{type.label}</span>
                                 </button>
                               );
                             })}
@@ -816,7 +816,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
 
                         {/* Appointment Date */}
                         <div>
-                          <label className="block text-[11px] font-bold text-gray-700 mb-1.5 uppercase tracking-wide">
+                          <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wide">
                             Select Appointment Date <span className="text-red-500">*</span>
                           </label>
                           <input
@@ -835,14 +835,14 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                             className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 bg-white text-xs font-medium text-gray-800 outline-none focus:border-[#032e92] focus:ring-2 focus:ring-[#032e92]/10 transition-all cursor-pointer"
                           />
                           {errors.appointmentDate && (
-                            <p className="text-red-500 text-[11px] mt-1 font-medium">{errors.appointmentDate}</p>
+                            <p className="text-red-500 text-xs mt-1 font-medium">{errors.appointmentDate}</p>
                           )}
                         </div>
 
                         {/* Time Slots */}
                         <div>
                           <div className="flex items-center justify-between mb-1.5">
-                            <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wide">
+                            <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide">
                               Select Available Time Slot <span className="text-red-500">*</span>
                             </label>
                             {loadingSlots && (
@@ -854,7 +854,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                           </div>
 
                           {slotsError && (
-                            <p className="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-[11px] font-medium leading-relaxed">
+                            <p className="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-medium leading-relaxed">
                               {slotsError}
                             </p>
                           )}
@@ -894,7 +894,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                           )}
 
                           {errors.selectedSlot && (
-                            <p className="text-red-500 text-[11px] mt-1 font-medium">{errors.selectedSlot}</p>
+                            <p className="text-red-500 text-xs mt-1 font-medium">{errors.selectedSlot}</p>
                           )}
                         </div>
                       </motion.div>
@@ -916,7 +916,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                         }}
                         className="mt-0.5 w-4 h-4 text-[#032e92] rounded border-gray-300 focus:ring-[#032e92] cursor-pointer"
                       />
-                      <label htmlFor="modal-terms" className="text-xs sm:text-[13px] text-gray-500 leading-relaxed cursor-pointer select-none">
+                      <label htmlFor="modal-terms" className="text-xs sm:text-sm text-gray-500 leading-relaxed cursor-pointer select-none">
                         I agree to be contacted by a KNAPS representative and accept the
                         {' '}
                         <a href="/terms-and-conditions" className="text-[#0665d0] hover:underline" target="_blank" rel="noopener noreferrer">

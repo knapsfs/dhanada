@@ -163,7 +163,7 @@ export default function CrmSendFormModal({
               <h3 className="text-sm font-extrabold text-gray-900 leading-tight">
                 Send Form Workflow
               </h3>
-              <p className="text-[11px] text-gray-500">
+              <p className="text-xs text-gray-500">
                 To: <strong className="text-gray-800">{recipientName}</strong> ({referenceDoctype})
               </p>
             </div>
@@ -237,7 +237,7 @@ export default function CrmSendFormModal({
                           {wf.badge}
                         </span>
                       </div>
-                      <p className="text-[11px] text-gray-500 mt-0.5 leading-snug">
+                      <p className="text-xs text-gray-500 mt-0.5 leading-snug">
                         {wf.subtitle}
                       </p>
                     </div>

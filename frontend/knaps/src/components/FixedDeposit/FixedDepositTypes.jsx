@@ -230,7 +230,7 @@ export default function FixedDepositTypes() {
                 <div className="space-y-2 mb-6">
                   {prod.highlights.map((h, i) => (
                     <div key={i} className="flex items-start gap-2 text-xs text-gray-600">
-                      <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 text-[11px] mt-0.5 flex-shrink-0" />
+                      <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 text-xs mt-0.5 flex-shrink-0" />
                       <span>{h}</span>
                     </div>
                   ))}

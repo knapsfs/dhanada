@@ -138,7 +138,7 @@ export default function Footer() {
 
         {/* Regulatory Disclaimer */}
         <div id="disclaimer" className="pt-6 mt-6 border-t border-white/5  max-w-7xl">
-          <p className="text-[11px] sm:text-xs text-gray-400 leading-relaxed">
+          <p className="text-xs sm:text-xs text-gray-400 leading-relaxed">
             <span className="font-semibold text-gray-400">Disclaimer:</span> The information, data, tools, and analytics provided on this website are for informational and educational purposes only and do not constitute investment advice or recommendations. Investments in mutual funds and capital market instruments are subject to market risks. Please read all scheme-related documents carefully before investing.
           </p>
         </div>

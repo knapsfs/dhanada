@@ -57,7 +57,7 @@ export default function CrmRenewalsView({ renewals = [], loading = false }) {
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-[#f8fafc] text-[11px] font-bold text-gray-500 uppercase border-b border-gray-200/80">
+            <tr className="bg-[#f8fafc] text-xs font-bold text-gray-500 uppercase border-b border-gray-200/80">
               <th className="py-3 px-4 sm:px-6">Client</th>
               <th className="py-3 px-4">Product / Mandate</th>
               <th className="py-3 px-4">Renewal Date</th>
@@ -122,7 +122,7 @@ export default function CrmRenewalsView({ renewals = [], loading = false }) {
                     </td>
 
                     <td className="py-3.5 px-4 sm:px-6">
-                      <span className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${STATUS_BADGES[item.status] || 'bg-gray-100 text-gray-700'}`}>
+                      <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-bold border ${STATUS_BADGES[item.status] || 'bg-gray-100 text-gray-700'}`}>
                         {item.status}
                       </span>
                     </td>

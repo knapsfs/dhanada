@@ -96,7 +96,7 @@ export default function HealthInsuranceBenefits() {
                     <div className="w-12 h-12 rounded-xl sm:rounded-2xl bg-white border border-gray-200/80 flex items-center justify-center text-[#032e92] group-hover:bg-[#032e92] group-hover:text-white group-hover:scale-105 transition-all duration-300 shadow-xs">
                       <FontAwesomeIcon icon={benefit.icon} className="text-lg" />
                     </div>
-                    <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-[#032e92] border border-blue-100">
+                    <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-[#032e92] border border-blue-100">
                       {benefit.badge}
                     </span>
                   </div> */}
