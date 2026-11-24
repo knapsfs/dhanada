@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 import json
+import os
 from datetime import timedelta
 
 import frappe
@@ -22,9 +23,14 @@ from dhanada.whatsapp_adapter import (
 	get_whatsapp_session_status,
 )
 
+# Skip WhatsApp-dependent tests in CI unless credentials are configured.
+WHATSAPP_ENABLED = bool(os.environ.get("WHATSAPP_ACCESS_TOKEN"))
+
 
 class TestLeadClientMapping(FrappeTestCase):
 	def setUp(self):
+		if not WHATSAPP_ENABLED:
+			self.skipTest("WhatsApp credentials not configured")
 		frappe.set_user("Administrator")
 		self.cleanup_leads = []
 		self.cleanup_clients = []

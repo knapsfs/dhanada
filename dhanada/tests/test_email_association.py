@@ -1,6 +1,7 @@
 # Copyright (c) 2026, KNAPS Private Limited and contributors
 # For license information, please see license.txt
 
+import os
 import unittest
 
 import frappe
@@ -22,6 +23,9 @@ from dhanada.email_association import (
 	normalize_email,
 )
 from dhanada.overrides.custom_email_account import CustomEmailAccount
+
+# Skip WhatsApp-dependent tests in CI unless credentials are configured.
+WHATSAPP_ENABLED = bool(os.environ.get("WHATSAPP_ACCESS_TOKEN"))
 
 
 class TestEmailAssociation(FrappeTestCase):
@@ -427,6 +431,7 @@ class TestEmailAssociation(FrappeTestCase):
 		lead.reload()
 		self.assertIsNotNone(lead.last_contacted_on)
 
+	@unittest.skipIf(not WHATSAPP_ENABLED, "WhatsApp credentials not configured")
 	def test_14_whatsapp_message_sending_and_session(self):
 		"""Verify WhatsApp message queuing, database persistence, and session calculation."""
 		lead = frappe.get_doc(
@@ -463,6 +468,7 @@ class TestEmailAssociation(FrappeTestCase):
 		self.assertEqual(conv_res["messages"][0]["name"], msg_doc.name)
 		self.assertEqual(conv_res["recipient_phone"], "919876543220")
 
+	@unittest.skipIf(not WHATSAPP_ENABLED, "WhatsApp credentials not configured")
 	def test_15_whatsapp_template_sending(self):
 		"""Verify WhatsApp template parameter interpolation and persistence."""
 		lead = frappe.get_doc(
@@ -489,6 +495,7 @@ class TestEmailAssociation(FrappeTestCase):
 		self.assertEqual(msg_doc.message_type, "template")
 		self.assertEqual(msg_doc.template_name, "knaps_welcome")
 
+	@unittest.skipIf(not WHATSAPP_ENABLED, "WhatsApp credentials not configured")
 	def test_16_whatsapp_conversations_isolation(self):
 		"""Verify WhatsApp conversations between different leads are isolated."""
 		lead_x = frappe.get_doc(

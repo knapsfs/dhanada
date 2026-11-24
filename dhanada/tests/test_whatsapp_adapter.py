@@ -29,7 +29,6 @@ from dhanada.whatsapp_api import (
 	send_crm_whatsapp_message as api_send_message,
 )
 
-
 # Skip WhatsApp adapter tests in CI unless credentials are configured.
 # These tests require WhatsApp Business API access and should run in an
 # integration environment with real credentials.
