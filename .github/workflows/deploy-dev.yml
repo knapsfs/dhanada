@@ -40,7 +40,13 @@ jobs:
           set -euo pipefail
           SHA="$INPUT_SHA"
           if [ -z "$SHA" ]; then
-            SHA="$(git rev-parse origin/develop)"
+            SHA="origin/develop"
+          fi
+          # Accept a short SHA or a ref, but always emit the full commit id:
+          # the image tag is sha-<full sha>.
+          if ! SHA="$(git rev-parse --verify --quiet "${SHA}^{commit}")"; then
+            echo "::error::'${INPUT_SHA}' is not a commit in this repository."
+            exit 1
           fi
           if ! git merge-base --is-ancestor "$SHA" origin/develop; then
             echo "::error::$SHA is not on develop. Only develop commits are deployable."

@@ -58,7 +58,7 @@ flowchart TD
 
 | Workflow | Trigger | What it does |
 |---|---|---|
-| `ci.yml` | PR, push to `develop` | Tests and lint. The `tests` check is required. |
+| `ci.yml` | PR, push to `develop` | Installs the app and runs unit tests. The `tests` check is required. |
 | `build.yml` | `CI` completes on `develop` | Builds and pushes `sha-<full-sha>` and `develop`. Never builds on failure. |
 | `deploy-dev.yml` | Manual | Resolves the digest for a `develop` commit and dispatches it to the deployment repository. |
 | `release.yml` | Manual | Tags the built commit `vX.Y.Z` and adds the version alias to the same digest. No rebuild. |
@@ -157,7 +157,7 @@ See `docs/RUNBOOK.md` section 13 in `knapsfs/deployment`: environments
 | No **Build image** run after merging | CI must pass first; the build is triggered by CI completion on `develop` |
 | "No image for sha-…" in **Deploy development** | The build for that commit has not finished or failed |
 | Production rejected before approval | The digest has no successful development deploy (`deployed-dev-sha256-…` tag missing) |
-| Production waits forever | The `production` environment has required reviewers and self-review is disabled; approve it, or allow self-review for a single maintainer |
+| Production waits for approval | Open the run in `knapsfs/deployment` and approve it as the designated reviewer. With one maintainer the reviewer approves their own run |
 | `docker compose pull` fails on the host | The private registry credential is missing or expired (`vault_registry_read_token`) |
 | Deploy rolls back | The new image failed its health check; read the `erp-deploy` output and the deploy log on the host |
 | Migration failed in production | Roll back the image, then restore the pre-deploy backup per the deployment runbook |

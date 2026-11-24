@@ -43,11 +43,13 @@ jobs:
             echo "::error::digest must be sha256: followed by 64 lowercase hex characters."
             exit 1
           fi
+          # Pass the normalised value on, so the dispatched digest is exactly
+          # the one that was validated.
+          echo "DIGEST=$DIGEST" >> "$GITHUB_ENV"
 
       - name: Start the approved production deploy
         env:
           GH_TOKEN: ${{ secrets.DEPLOYMENT_REPO_DISPATCH_TOKEN }}
-          DIGEST: ${{ inputs.digest }}
           NOTE: ${{ inputs.note }}
         run: |
           set -euo pipefail
