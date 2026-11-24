@@ -1,0 +1,108 @@
+name: Deploy development
+
+# Manual promotion of an already-built image to the shared development host.
+# The image was built once by the Build image workflow; this job only resolves
+# its digest and asks the deployment repository to deploy it.
+
+on:
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: 'Commit on develop (leave empty for the current develop head)'
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  packages: read
+
+concurrency:
+  group: deploy-development
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: deploy-development
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout develop
+        uses: actions/checkout@v6
+        with:
+          ref: develop
+          fetch-depth: 0
+
+      - name: Resolve the commit
+        id: ref
+        env:
+          INPUT_SHA: ${{ inputs.sha }}
+        run: |
+          set -euo pipefail
+          SHA="$INPUT_SHA"
+          if [ -z "$SHA" ]; then
+            SHA="$(git rev-parse origin/develop)"
+          fi
+          if ! git merge-base --is-ancestor "$SHA" origin/develop; then
+            echo "::error::$SHA is not on develop. Only develop commits are deployable."
+            exit 1
+          fi
+          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+          echo "Deploying commit $SHA"
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Resolve the image digest
+        id: image
+        env:
+          SHA: ${{ steps.ref.outputs.sha }}
+        run: |
+          set -euo pipefail
+          TAG="ghcr.io/knapsfs/dhanada:sha-$SHA"
+          if ! docker buildx imagetools inspect "$TAG" >/dev/null 2>&1; then
+            echo "::error::No image for $TAG."
+            echo "::error::Wait for the Build image workflow, or choose a commit that has one."
+            exit 1
+          fi
+          DIGEST="$(docker buildx imagetools inspect "$TAG" --format '{{json .Manifest}}' | jq -r .digest)"
+          if [[ ! "$DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]; then
+            echo "::error::Could not resolve a digest for $TAG (got '$DIGEST')"
+            exit 1
+          fi
+          echo "digest=$DIGEST" >> "$GITHUB_OUTPUT"
+          echo "Resolved $TAG -> $DIGEST"
+
+      - name: Dispatch the digest to the deployment repository
+        env:
+          GH_TOKEN: ${{ secrets.DEPLOYMENT_REPO_DISPATCH_TOKEN }}
+          DIGEST: ${{ steps.image.outputs.digest }}
+        run: |
+          set -euo pipefail
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error::DEPLOYMENT_REPO_DISPATCH_TOKEN is not set."
+            exit 1
+          fi
+          gh api --method POST repos/knapsfs/deployment/dispatches \
+            -f event_type=deploy \
+            -F "client_payload[digest]=$DIGEST" \
+            -F "client_payload[environment]=development" \
+            -F "client_payload[actor]=$GITHUB_ACTOR"
+
+      - name: Summary
+        run: |
+          {
+            echo "### Development deploy requested"
+            echo ""
+            echo "| Field | Value |"
+            echo "|---|---|"
+            echo "| Commit | \`${{ steps.ref.outputs.sha }}\` |"
+            echo "| Digest | \`${{ steps.image.outputs.digest }}\` |"
+            echo "| Deployment | [deploy-app.yml](https://github.com/knapsfs/deployment/actions/workflows/deploy-app.yml) |"
+          } >> "$GITHUB_STEP_SUMMARY"

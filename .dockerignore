@@ -1,0 +1,9 @@
+# Keep the build context small. The image clones the repository itself at
+# APP_COMMIT, so the context only needs the Dockerfile.
+.git
+.github
+node_modules
+**/node_modules
+docs
+*.md
+license.txt
