@@ -131,3 +131,4 @@ jobs:
           bench --site test_site run-tests --app dhanada
         env:
           TYPE: server
+          WHATSAPP_ACCESS_TOKEN: ${{ secrets.WHATSAPP_ACCESS_TOKEN || '' }}

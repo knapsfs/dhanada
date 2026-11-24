@@ -1,6 +1,7 @@
 # Copyright (c) 2026, KNAPS Private Limited and contributors
 # For license information, please see license.txt
 
+import os
 import unittest
 from datetime import timedelta
 from unittest.mock import MagicMock, patch
@@ -29,8 +30,16 @@ from dhanada.whatsapp_api import (
 )
 
 
+# Skip WhatsApp adapter tests in CI unless credentials are configured.
+# These tests require WhatsApp Business API access and should run in an
+# integration environment with real credentials.
+WHATSAPP_ENABLED = bool(os.environ.get("WHATSAPP_ACCESS_TOKEN"))
+
+
 class TestWhatsAppAdapter(FrappeTestCase):
 	def setUp(self):
+		if not WHATSAPP_ENABLED:
+			self.skipTest("WhatsApp credentials not configured")
 		super().setUp()
 		self.cleanup_test_records()
 

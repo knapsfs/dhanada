@@ -11,31 +11,20 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: amannn/action-semantic-pull-request@v5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          types: |
-            feat
-            fix
-            docs
-            style
-            refactor
-            perf
-            test
-            chore
-            ci
-          requireScope: false
-
-      - name: Check issue reference in title
+      - name: Check PR title format
         uses: actions/github-script@v7
         with:
           script: |
             const title = context.payload.pull_request.title
-            if (!/ #\d+$/.test(title)) {
+            // Enforce: type(scope): description #issue
+            // Example: feat(auth): add user profile #42
+            if (!/^(feat|fix|docs|style|refactor|perf|test|chore|ci)\(.+\): .+ #\d+$/.test(title)) {
               core.setFailed(
-                'PR title must end with the issue number.\n' +
+                'Invalid PR title format.\n' +
+                'Expected: type(scope): description #issue\n' +
                 'Correct:   feat(auth): add user profile #42\n' +
-                'Incorrect: feat(auth): add user profile'
+                'Incorrect: feat(auth): add user profile\n' +
+                'Incorrect: feat(auth): add user profile #abc\n' +
+                'Got:       ' + title
               )
             }
