@@ -7,4 +7,5 @@ node_modules
 **/node_modules
 docs
 *.md
+!README.md
 license.txt

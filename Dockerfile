@@ -9,7 +9,7 @@ WORKDIR /app
 COPY . .
 
 # Build KNAPS (Unified Frontend)
-RUN cd frontend/knaps && npm ci && npm run build
+RUN cd frontend && npm ci && npm run build
 
 # ==========================================
 # Stage 2: Final Dhanada Image
@@ -117,7 +117,6 @@ PY
 
 
 # Retain existing entrypoint logic
-COPY docker/frappe/nginx-template.conf /templates/nginx/frappe.conf.template
 COPY docker/frappe/entrypoint.sh /usr/local/bin/entrypoint.sh
 
 USER root

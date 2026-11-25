@@ -1,98 +1,113 @@
 name: Build image
 
-# Build once, on merge to develop. The image is the artifact that moves
-# between environments; it is never rebuilt for production.
-#
-# This runs after CI completes successfully on develop, so a red merge never
-# produces an image.
-#
-# Uses frappe_docker's layered Containerfile (frappe/build + frappe/base,
-# version-16). The dhanada app is installed at build time via a secret-mounted
-# apps.json, following the same pattern as frappe/crm.
+# Build once on merge to develop and push an immutable commit-tagged image to
+# Docker Hub (knapsdocker/dhanada:sha-<full_sha>). Never automatically deploys
+# and never uses :latest.
 
 on:
   workflow_run:
     workflows: [CI]
     types: [completed]
     branches: [develop]
+  workflow_dispatch:
 
 permissions:
   contents: read
-  packages: write
-  id-token: write
-  attestations: write
 
 concurrency:
-  group: build-${{ github.event.workflow_run.head_sha }}
+  group: build-${{ github.event.workflow_run.head_sha || github.sha }}
   cancel-in-progress: true
 
 jobs:
   build:
     name: build
-    if: github.event.workflow_run.conclusion == 'success'
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:
-      - name: Set branch
+      - name: Determine target commit
+        id: meta
+        env:
+          WORKFLOW_RUN_SHA: ${{ github.event.workflow_run.head_sha }}
+          EVENT_SHA: ${{ github.sha }}
         run: |
-          echo "FRAPPE_BRANCH=version-16" >> $GITHUB_ENV
+          set -euo pipefail
+          TARGET_SHA="${WORKFLOW_RUN_SHA:-$EVENT_SHA}"
+          if [ -z "$TARGET_SHA" ]; then
+            echo "::error::Could not determine target commit SHA."
+            exit 1
+          fi
+          echo "sha=$TARGET_SHA" >> "$GITHUB_OUTPUT"
+          echo "Building image for commit $TARGET_SHA"
 
-      - name: Checkout frappe_docker
-        uses: actions/checkout@v4
+      - name: Checkout Dhanada at target commit
+        uses: actions/checkout@v6
         with:
-          repository: frappe/frappe_docker
-          path: builds
-
-      - name: Write apps.json into build context
-        run: |
-          cat > builds/apps.json << 'EOF'
-[{"url": "https://github.com/knapsfs/dhanada", "branch": "develop"}]
-EOF
+          ref: ${{ steps.meta.outputs.sha }}
 
       - name: Set up Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Log in to GHCR
+      - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push
+      - name: Build and push to Docker Hub
         id: push
         uses: docker/build-push-action@v6
         with:
-          context: builds
-          file: builds/images/layered/Containerfile
+          context: .
+          file: Dockerfile
+          platforms: linux/amd64
           push: true
-          build-args: |
-            FRAPPE_BRANCH=${{ env.FRAPPE_BRANCH }}
-          secrets: |
-            "apps_json=apps.json"
-          tags: |
-            ghcr.io/knapsfs/dhanada:sha-${{ github.event.workflow_run.head_sha }}
-            ghcr.io/knapsfs/dhanada:develop
+          tags: docker.io/knapsdocker/dhanada:sha-${{ steps.meta.outputs.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Attest build provenance
-        uses: actions/attest-build-provenance@v2
-        with:
-          subject-name: ghcr.io/knapsfs/dhanada
-          subject-digest: ${{ steps.push.outputs.digest }}
-          push-to-registry: true
+      - name: Verify image and resolve digest
+        id: verify
+        env:
+          TARGET_SHA: ${{ steps.meta.outputs.sha }}
+        run: |
+          set -euo pipefail
+          TAG="docker.io/knapsdocker/dhanada:sha-${TARGET_SHA}"
+          DIGEST="$(docker buildx imagetools inspect "$TAG" --format '{{json .Manifest}}' | jq -r '.digest // empty' | tr '[:upper:]' '[:lower:]')"
+          if [[ ! "$DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]; then
+            echo "::error::Could not resolve sha256 digest for $TAG (got '$DIGEST')"
+            exit 1
+          fi
+          IMAGE_BY_DIGEST="docker.io/knapsdocker/dhanada@${DIGEST}"
+          docker pull "$IMAGE_BY_DIGEST"
+          docker run --rm --entrypoint "" "$IMAGE_BY_DIGEST" python3 - <<'PY'
+          import json, os, sys
+          knaps_index = "/home/frappe/frappe-bench/apps/dhanada/public/knaps/index.html"
+          assets_manifest = "/home/frappe/frappe-bench/sites/assets/assets.json"
+          for p in (knaps_index, assets_manifest):
+              if not (os.path.isfile(p) and os.path.getsize(p) > 0):
+                  print(f"::error::Missing or empty required file in image: {p}")
+                  sys.exit(1)
+          with open(assets_manifest) as f:
+              data = json.load(f)
+          if not data:
+              print("::error::assets.json is empty")
+              sys.exit(1)
+          print(f"Verified {knaps_index} and {assets_manifest} ({len(data)} entries).")
+          PY
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "digest=$DIGEST" >> "$GITHUB_OUTPUT"
 
       - name: Summary
         run: |
           {
-            echo "### Image built"
+            echo "### Docker Hub image built"
             echo ""
             echo "| Field | Value |"
             echo "|---|---|"
-            echo "| Commit | \`${{ github.event.workflow_run.head_sha }}\` |"
-            echo "| Digest | \`${{ steps.push.outputs.digest }}\` |"
-            echo "| Base image | frappe/build:version-16 + frappe/base:version-16 |"
-            echo ""
-            echo "Deploy this digest to development, then promote the same digest."
+            echo "| Commit | \`${{ steps.meta.outputs.sha }}\` |"
+            echo "| Image | \`${{ steps.verify.outputs.tag }}\` |"
+            echo "| Digest | \`${{ steps.verify.outputs.digest }}\` |"
           } >> "$GITHUB_STEP_SUMMARY"
