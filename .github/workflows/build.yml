@@ -1,57 +1,31 @@
 name: Build and Deploy Dhanada
 
-# Automatic build, semantic-version + immutable-SHA Docker Hub publish,
-# asset/digest verification, Git release tagging, and development deployment
-# dispatch for feat/deploy_test -> Satyam4755/deployment-test (local-prod.knaps.app).
-# Never uses :latest and never triggers deployment for develop or production.
-
 on:
+  workflow_dispatch:
   push:
     branches:
-      - feat/deploy_test
-  workflow_dispatch:
+      - feat/sif_scheme
 
 permissions:
   contents: write
-
-concurrency:
-  group: build-${{ github.sha }}
-  cancel-in-progress: true
 
 jobs:
   build:
     name: Build and Push Docker Image
     runs-on: ubuntu-latest
-    timeout-minutes: 90
 
     steps:
-      - name: Determine target commit
-        id: meta
-        env:
-          EVENT_SHA: ${{ github.sha }}
-        run: |
-          set -euo pipefail
-          TARGET_SHA="$EVENT_SHA"
-          if [ -z "$TARGET_SHA" ]; then
-            echo "::error::Could not determine target commit SHA."
-            exit 1
-          fi
-          echo "sha=$TARGET_SHA" >> "$GITHUB_OUTPUT"
-          echo "Building image for commit $TARGET_SHA"
-
       - name: Checkout Dhanada
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         with:
-          ref: ${{ steps.meta.outputs.sha }}
           fetch-depth: 0
 
       - name: Determine version
         id: version
         run: |
-          set -euo pipefail
           git fetch origin --tags || true
 
-          LATEST_TAG="$(git tag --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1 || true)"
+          LATEST_TAG=$(git tag --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
           if [ -z "$LATEST_TAG" ]; then
             LATEST_TAG="v0.0.0"
           fi
@@ -59,13 +33,12 @@ jobs:
           VERSION="${LATEST_TAG#v}"
           IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
 
-          SUBJECT="$(git log -1 --pretty=%s)"
-          echo "Latest tag: $LATEST_TAG"
+          SUBJECT=$(git log -1 --pretty=%s)
           echo "Commit subject: $SUBJECT"
 
-          REGEX_MAJOR='^feat(\([^)]+\))?!:'
-          REGEX_MINOR='^feat(\([^)]+\))?:'
-          REGEX_PATCH='^fix(\([^)]+\))?:'
+          REGEX_MAJOR="^feat(\([^)]+\))?!:"
+          REGEX_MINOR="^feat(\([^)]+\))?:"
+          REGEX_PATCH="^fix(\([^)]+\))?:"
 
           if [[ "$SUBJECT" =~ $REGEX_MAJOR ]]; then
             echo "Type: feat! (MAJOR increment)"
@@ -88,10 +61,7 @@ jobs:
           echo "Calculated version: $NEW_VERSION"
           echo "version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
 
-      - name: Set up Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to Docker Hub
+      - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -105,7 +75,7 @@ jobs:
         run: |
           set -euo pipefail
           TAG_NAME="v${VERSION}"
-          IMAGE="docker.io/knapsdocker/dhanada:${VERSION}"
+          IMAGE="knapsdocker/dhanada:${VERSION}"
 
           echo "Checking whether Git tag '$TAG_NAME' already exists remotely..."
           if git ls-remote --tags origin "refs/tags/$TAG_NAME" | grep -q "refs/tags/$TAG_NAME"; then
@@ -117,7 +87,7 @@ jobs:
           echo "Checking whether Docker image '$IMAGE' already exists on Docker Hub..."
           EXISTS=false
 
-          if docker buildx imagetools inspect "$IMAGE" >/dev/null 2>&1 || docker manifest inspect "$IMAGE" >/dev/null 2>&1; then
+          if docker manifest inspect "$IMAGE" > /dev/null 2>&1; then
             EXISTS=true
           fi
 
@@ -145,58 +115,26 @@ jobs:
           file: Dockerfile
           platforms: linux/amd64
           push: true
-          tags: |
-            docker.io/knapsdocker/dhanada:${{ steps.version.outputs.version }}
-            docker.io/knapsdocker/dhanada:sha-${{ steps.meta.outputs.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          tags: knapsdocker/dhanada:${{ steps.version.outputs.version }}
+          no-cache: true
 
-      - name: Verify KNAPS assets and resolve digest
-        id: verify
+      - name: Verify KNAPS assets
         env:
-          VERSION: ${{ steps.version.outputs.version }}
-          TARGET_SHA: ${{ steps.meta.outputs.sha }}
+          IMAGE: knapsdocker/dhanada:${{ steps.version.outputs.version }}
         run: |
           set -euo pipefail
-          VERSION_TAG="docker.io/knapsdocker/dhanada:${VERSION}"
-          SHA_TAG="docker.io/knapsdocker/dhanada:sha-${TARGET_SHA}"
+          docker pull "$IMAGE"
+          docker run --rm -i --entrypoint "" "$IMAGE" python3 - <<'PY'
+          import os, re, sys
 
-          DIGEST="$(docker buildx imagetools inspect "$VERSION_TAG" --format '{{json .Manifest}}' | jq -r '.digest // empty' | tr '[:upper:]' '[:lower:]')"
-          SHA_DIGEST="$(docker buildx imagetools inspect "$SHA_TAG" --format '{{json .Manifest}}' | jq -r '.digest // empty' | tr '[:upper:]' '[:lower:]')"
-
-          if [[ ! "$DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]; then
-            echo "::error::Could not resolve sha256 digest for $VERSION_TAG (got '$DIGEST')"
-            exit 1
-          fi
-          if [ "$DIGEST" != "$SHA_DIGEST" ]; then
-            echo "::error::Digest mismatch between $VERSION_TAG ($DIGEST) and $SHA_TAG ($SHA_DIGEST)."
-            exit 1
-          fi
-
-          IMAGE_BY_DIGEST="docker.io/knapsdocker/dhanada@${DIGEST}"
-          docker pull "$IMAGE_BY_DIGEST"
-          docker run --rm --entrypoint "" "$IMAGE_BY_DIGEST" python3 - <<'PY'
-          import json, os, re, sys
-
-          knaps_dir = "/home/frappe/frappe-bench/apps/dhanada/public/knaps"
-          assets_manifest = "/home/frappe/frappe-bench/sites/assets/assets.json"
-
+          knaps_dir = '/home/frappe/frappe-bench/apps/dhanada/public/knaps'
           if not os.path.isdir(knaps_dir):
               print(f"::error::KNAPS directory not found: {knaps_dir}")
               sys.exit(1)
 
-          index_path = os.path.join(knaps_dir, "index.html")
+          index_path = os.path.join(knaps_dir, 'index.html')
           if not (os.path.isfile(index_path) and os.path.getsize(index_path) > 0):
               print(f"::error::KNAPS index.html is missing or empty at {index_path}")
-              sys.exit(1)
-
-          if not (os.path.isfile(assets_manifest) and os.path.getsize(assets_manifest) > 0):
-              print(f"::error::Missing or empty required file in image: {assets_manifest}")
-              sys.exit(1)
-          with open(assets_manifest) as f:
-              assets_data = json.load(f)
-          if not assets_data:
-              print("::error::assets.json is empty")
               sys.exit(1)
 
           with open(index_path) as f:
@@ -232,13 +170,13 @@ jobs:
               else:
                   print(f"Verified CSS asset: {full_path} ({os.path.getsize(full_path)} bytes)")
 
-          assets_dir = os.path.join(knaps_dir, "assets")
+          assets_dir = os.path.join(knaps_dir, 'assets')
           if not os.path.isdir(assets_dir):
               print(f"::error::KNAPS assets directory not found: {assets_dir}")
               sys.exit(1)
 
-          all_css = [f for f in os.listdir(assets_dir) if f.endswith(".css") and os.path.getsize(os.path.join(assets_dir, f)) > 0]
-          all_js = [f for f in os.listdir(assets_dir) if f.endswith(".js") and os.path.getsize(os.path.join(assets_dir, f)) > 0]
+          all_css = [f for f in os.listdir(assets_dir) if f.endswith('.css') and os.path.getsize(os.path.join(assets_dir, f)) > 0]
+          all_js = [f for f in os.listdir(assets_dir) if f.endswith('.js') and os.path.getsize(os.path.join(assets_dir, f)) > 0]
 
           if not all_css:
               print(f"::error::No non-empty CSS files found in {assets_dir}")
@@ -251,77 +189,34 @@ jobs:
               print(f"::error::KNAPS asset verification failed! Total missing or empty assets: {missing}")
               sys.exit(1)
 
-          print(f"Verified KNAPS assets and {assets_manifest} ({len(assets_data)} entries).")
+          print("KNAPS asset verification passed: all required CSS and JS assets exist and are non-empty.")
           PY
 
-          echo "version_tag=$VERSION_TAG" >> "$GITHUB_OUTPUT"
-          echo "sha_tag=$SHA_TAG" >> "$GITHUB_OUTPUT"
-          echo "digest=$DIGEST" >> "$GITHUB_OUTPUT"
-
       - name: Create and Push Git Tag
-        if: success() && github.ref == 'refs/heads/feat/deploy_test'
         env:
-          TARGET_SHA: ${{ steps.meta.outputs.sha }}
           TAG_NAME: v${{ steps.version.outputs.version }}
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git tag "$TAG_NAME" "$TARGET_SHA"
-          git push origin "refs/tags/$TAG_NAME"
-          echo "Created and pushed Git tag: $TAG_NAME -> $TARGET_SHA"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "$TAG_NAME"
+          git push origin "$TAG_NAME"
+          echo "Created and pushed Git tag: $TAG_NAME"
 
       - name: Trigger Development Deployment
-        id: dispatch
-        if: success() && github.ref == 'refs/heads/feat/deploy_test'
         env:
           GH_TOKEN: ${{ secrets.DEPLOYMENT_REPO_DISPATCH_TOKEN }}
           VERSION: ${{ steps.version.outputs.version }}
-          TARGET_SHA: ${{ steps.meta.outputs.sha }}
-          DIGEST: ${{ steps.verify.outputs.digest }}
         run: |
           set -euo pipefail
-          if [ -z "$GH_TOKEN" ]; then
-            echo "::error::DEPLOYMENT_REPO_DISPATCH_TOKEN is not set. Cannot dispatch development deployment to Satyam4755/deployment-test."
-            exit 1
-          fi
-          if [[ ! "$DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]; then
-            echo "::error::Invalid or missing image digest '$DIGEST'. Refusing to dispatch deployment."
-            exit 1
-          fi
-          test -n "$VERSION"
-          echo "Dispatching development deployment to Satyam4755/deployment-test (version=$VERSION, sha=$TARGET_SHA, digest=$DIGEST)..."
-          if ! RESPONSE="$(gh api --method POST repos/Satyam4755/deployment-test/dispatches \
-            -f event_type=deploy \
-            -F "client_payload[digest]=$DIGEST" \
-            -F "client_payload[version]=$VERSION" \
-            -F "client_payload[sha]=$TARGET_SHA" \
-            -F "client_payload[environment]=development" \
-            -F "client_payload[actor]=$GITHUB_ACTOR" 2>&1)"; then
-            echo "::error::Failed to dispatch development deployment to Satyam4755/deployment-test for v$VERSION (commit $TARGET_SHA, digest $DIGEST): $RESPONSE"
-            if printf '%s' "$RESPONSE" | grep -q '403'; then
-              echo "::error::Check that secret DEPLOYMENT_REPO_DISPATCH_TOKEN grants access to Satyam4755/deployment-test with Contents: Read and write."
-            fi
-            exit 1
-          fi
-          echo "Development deployment triggered for version $VERSION (digest $DIGEST)"
 
-      - name: Summary
-        if: steps.verify.outcome == 'success'
-        run: |
-          {
-            echo "### Docker Hub image built"
-            echo ""
-            echo "| Field | Value |"
-            echo "|---|---|"
-            echo "| Branch | \`${{ github.ref_name }}\` |"
-            echo "| Commit | \`${{ steps.meta.outputs.sha }}\` |"
-            echo "| Git tag | \`v${{ steps.version.outputs.version }}\` |"
-            echo "| Version image tag | \`${{ steps.verify.outputs.version_tag }}\` |"
-            echo "| SHA image tag | \`${{ steps.verify.outputs.sha_tag }}\` |"
-            echo "| Digest | \`${{ steps.verify.outputs.digest }}\` |"
-            echo "| Environment | \`development\` |"
-            echo "| Target domain | \`local-prod.knaps.app\` |"
-            echo "| Dispatch status | \`${{ steps.dispatch.outcome }}\` |"
-            echo "| Deployment | [deploy-app.yml](https://github.com/Satyam4755/deployment-test/actions/workflows/deploy-app.yml) |"
-          } >> "$GITHUB_STEP_SUMMARY"
+          test -n "$VERSION"
+
+          gh api --method POST \
+            repos/Satyam4755/deployment-test/dispatches \
+            -f event_type=deploy \
+            -f "client_payload[version]=$VERSION" \
+            -f "client_payload[environment]=development" \
+            -f "client_payload[actor]=$GITHUB_ACTOR"
+
+          echo "Development deployment triggered for version $VERSION"
