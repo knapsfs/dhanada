@@ -102,6 +102,7 @@ jobs:
             echo ""
             echo "| Field | Value |"
             echo "|---|---|"
+            echo "| Branch | \`${{ github.ref_name }}\` |"
             echo "| Commit | \`${{ steps.meta.outputs.sha }}\` |"
             echo "| Image | \`${{ steps.verify.outputs.tag }}\` |"
             echo "| Digest | \`${{ steps.verify.outputs.digest }}\` |"

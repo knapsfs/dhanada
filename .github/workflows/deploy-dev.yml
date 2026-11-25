@@ -1,9 +1,9 @@
 name: Deploy development
 
 # Manual deployment of a feat/deploy_test commit to local-prod.knaps.app via
-# Satyam4755/deployment-test. Builds and pushes knapsdocker/dhanada:sha-<sha>
-# from the exact commit if not already present on Docker Hub (or if rebuild is
-# requested), resolves its immutable sha256 digest, and dispatches the digest.
+# Satyam4755/deployment-test. Requires knapsdocker/dhanada:sha-<sha> to already
+# be built and pushed by the Build image workflow, resolves its immutable sha256
+# digest from Docker Hub, and dispatches the digest.
 
 on:
   workflow_dispatch:
@@ -12,11 +12,6 @@ on:
         description: 'Commit on feat/deploy_test (leave empty for current feat/deploy_test head)'
         required: false
         type: string
-      rebuild:
-        description: 'Force rebuild even if knapsdocker/dhanada:sha-<sha> already exists'
-        required: false
-        default: false
-        type: boolean
 
 permissions:
   contents: read
@@ -29,7 +24,7 @@ jobs:
   deploy:
     name: deploy-development
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 15
     steps:
       - name: Checkout feat/deploy_test
         uses: actions/checkout@v6
@@ -37,7 +32,7 @@ jobs:
           ref: feat/deploy_test
           fetch-depth: 0
 
-      - name: Resolve and checkout exact commit
+      - name: Resolve and validate feat/deploy_test commit
         id: ref
         env:
           INPUT_SHA: ${{ inputs.sha }}
@@ -55,7 +50,6 @@ jobs:
             echo "::error::$SHA is not on feat/deploy_test. Only feat/deploy_test commits are deployable."
             exit 1
           fi
-          git checkout --detach "$SHA"
           echo "sha=$SHA" >> "$GITHUB_OUTPUT"
           echo "Selected commit $SHA"
 
@@ -68,47 +62,20 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Check for existing Docker Hub image
-        id: check
-        env:
-          SHA: ${{ steps.ref.outputs.sha }}
-          FORCE_REBUILD: ${{ inputs.rebuild }}
-        run: |
-          set -euo pipefail
-          TAG="docker.io/knapsdocker/dhanada:sha-${SHA}"
-          if [ "$FORCE_REBUILD" = "true" ]; then
-            echo "exists=false" >> "$GITHUB_OUTPUT"
-            echo "Force rebuild requested for $TAG"
-          elif docker buildx imagetools inspect "$TAG" >/dev/null 2>&1; then
-            echo "exists=true" >> "$GITHUB_OUTPUT"
-            echo "Found existing image $TAG"
-          else
-            echo "exists=false" >> "$GITHUB_OUTPUT"
-            echo "No existing image for $TAG; will build and push from $SHA"
-          fi
-
-      - name: Build and push Docker Hub image
-        if: steps.check.outputs.exists != 'true'
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: Dockerfile
-          platforms: linux/amd64
-          push: true
-          tags: docker.io/knapsdocker/dhanada:sha-${{ steps.ref.outputs.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: Resolve the Docker Hub image digest
+      - name: Locate Docker Hub image and resolve digest
         id: image
         env:
           SHA: ${{ steps.ref.outputs.sha }}
         run: |
           set -euo pipefail
           TAG="docker.io/knapsdocker/dhanada:sha-${SHA}"
-          DIGEST="$(docker buildx imagetools inspect "$TAG" --format '{{json .Manifest}}' | jq -r '.digest // empty' | tr '[:upper:]' '[:lower:]')"
+          if ! MANIFEST="$(docker buildx imagetools inspect "$TAG" --format '{{json .Manifest}}' 2>/dev/null)"; then
+            echo "::error::Image $TAG is not available on Docker Hub. Wait for the 'Build image' workflow to finish for commit $SHA before running Deploy development."
+            exit 1
+          fi
+          DIGEST="$(printf '%s\n' "$MANIFEST" | jq -r '.digest // empty' | tr '[:upper:]' '[:lower:]')"
           if [[ ! "$DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]; then
-            echo "::error::Could not resolve a digest for $TAG (got '$DIGEST')"
+            echo "::error::Could not resolve an immutable sha256 digest for $TAG (got '$DIGEST'). Wait for the 'Build image' workflow to finish."
             exit 1
           fi
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
@@ -140,9 +107,9 @@ jobs:
             echo "|---|---|"
             echo "| Branch | \`feat/deploy_test\` |"
             echo "| Commit | \`${{ steps.ref.outputs.sha }}\` |"
-            echo "| Target environment | \`development\` |"
-            echo "| Target domain | \`local-prod.knaps.app\` |"
             echo "| Image | \`${{ steps.image.outputs.tag }}\` |"
             echo "| Digest | \`${{ steps.image.outputs.digest }}\` |"
+            echo "| Environment | \`development\` |"
+            echo "| Target domain | \`local-prod.knaps.app\` |"
             echo "| Deployment | [deploy-app.yml](https://github.com/Satyam4755/deployment-test/actions/workflows/deploy-app.yml) |"
           } >> "$GITHUB_STEP_SUMMARY"
