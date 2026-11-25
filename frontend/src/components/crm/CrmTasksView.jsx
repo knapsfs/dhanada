@@ -115,7 +115,7 @@ export default function CrmTasksView({ tasks = [], onToggleComplete, onNewTask, 
                       </p>
                     )}
 
-                    <div className="flex items-center gap-3 text-[11px] text-gray-400 flex-wrap">
+                    <div className="flex items-center gap-3 text-xs text-gray-400 flex-wrap">
                       <span className="flex items-center gap-1 font-medium text-gray-600">
                         <FontAwesomeIcon icon={faClock} className="text-[10px]" />
                         <span>Due: {task.due_date} {task.due_time || ''}</span>

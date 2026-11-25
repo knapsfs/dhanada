@@ -115,7 +115,7 @@ export default function NpsCalculator() {
                     }}
                     className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#032e92]"
                   />
-                  <div className="flex justify-between text-[11px] text-slate-400">
+                  <div className="flex justify-between text-xs text-slate-400">
                     <span>18 Yrs</span>
 
                     <span>65 Yrs</span>
@@ -141,7 +141,7 @@ export default function NpsCalculator() {
                     onChange={(e) => setRetirementAge(Number(e.target.value))}
                     className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#032e92]"
                   />
-                  <div className="flex justify-between text-[11px] text-slate-400">
+                  <div className="flex justify-between text-xs text-slate-400">
                     <span>55 Yrs</span>
 
                     <span>75 Yrs</span>
@@ -180,7 +180,7 @@ export default function NpsCalculator() {
                   onChange={(e) => setMonthlyContribution(Number(e.target.value))}
                   className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#032e92]"
                 />
-                <div className="flex justify-between text-[11px] text-slate-400">
+                <div className="flex justify-between text-xs text-slate-400">
                   <span>₹1,000</span>
 
                   <span>₹1,50,000</span>
@@ -218,7 +218,7 @@ export default function NpsCalculator() {
                   onChange={(e) => setExpectedReturn(Number(e.target.value))}
                   className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#032e92]"
                 />
-                <div className="flex justify-between text-[11px] text-slate-400">
+                <div className="flex justify-between text-xs text-slate-400">
                   <span>6.0% (Conservative)</span>
 
                   <span>15.0% (Aggressive)</span>
@@ -342,7 +342,7 @@ export default function NpsCalculator() {
                   <div className="text-2xl sm:text-3xl font-black text-emerald-400">
                     ₹{formatINR(results.monthlyPension)} / month*
                   </div>
-                  <span className="text-[11px] text-blue-200/70 block mt-1">
+                  <span className="text-xs text-blue-200/70 block mt-1">
                     Based on {expectedAnnuityRate}% indicative annuity purchase yield
                   </span>
                 </div>

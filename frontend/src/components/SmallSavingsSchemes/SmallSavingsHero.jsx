@@ -111,25 +111,25 @@ export default function SmallSavingsHero() {
                   <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10">
                     <div className="text-xs text-blue-200 mb-1">Peak Yield (NSC)</div>
                     <div className="text-lg sm:text-xl font-extrabold text-emerald-300">7.7% p.a.</div>
-                    <div className="text-[11px] text-blue-300/80 mt-0.5">5-Year compounding</div>
+                    <div className="text-xs text-blue-300/80 mt-0.5">5-Year compounding</div>
                   </div>
 
                   <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10">
                     <div className="text-xs text-blue-200 mb-1">Tax Saving (80C)</div>
                     <div className="text-lg sm:text-xl font-extrabold text-white">NSC & 5Y POTD</div>
-                    <div className="text-[11px] text-blue-300/80 mt-0.5">Up to ₹1.5L deduction</div>
+                    <div className="text-xs text-blue-300/80 mt-0.5">Up to ₹1.5L deduction</div>
                   </div>
 
                   <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10">
                     <div className="text-xs text-blue-200 mb-1">Capital Doubling</div>
                     <div className="text-lg sm:text-xl font-extrabold text-white">115 Months</div>
-                    <div className="text-[11px] text-blue-300/80 mt-0.5">KVP (7.5% p.a.)</div>
+                    <div className="text-xs text-blue-300/80 mt-0.5">KVP (7.5% p.a.)</div>
                   </div>
 
                   <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10">
                     <div className="text-xs text-blue-200 mb-1">Monthly Habit</div>
                     <div className="text-lg sm:text-xl font-extrabold text-teal-300">₹100 / mo</div>
-                    <div className="text-[11px] text-blue-300/80 mt-0.5">PORD 5-Year RD</div>
+                    <div className="text-xs text-blue-300/80 mt-0.5">PORD 5-Year RD</div>
                   </div>
                 </div>
 
@@ -143,13 +143,13 @@ export default function SmallSavingsHero() {
                     <div className="bg-blue-400 h-full w-[69%]" title="Principal Deposited (₹5,00,000)" />
                     <div className="bg-emerald-400 h-full w-[31%]" title="Compounded Interest (₹2,24,517)" />
                   </div>
-                  <div className="flex justify-between text-[11px] text-blue-300/80 mt-2">
+                  <div className="flex justify-between text-xs text-blue-300/80 mt-2">
                     <span>Invested: ₹5,00,000</span>
                     <span className="text-white font-semibold">Maturity Value: ₹7,24,517*</span>
                   </div>
                 </div>
 
-                <p className="text-[11px] text-blue-200/70 text-center leading-relaxed">
+                <p className="text-xs text-blue-200/70 text-center leading-relaxed">
                   * Interest rates, tenures, and tax treatments are notified quarterly by the Ministry of Finance, Government of India.
                 </p>
               </div>

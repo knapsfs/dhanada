@@ -27,7 +27,7 @@ export default function RiskQuestionCard({
           <span>{badge} (Q{question.id})</span>
         </span>
         {note && (
-          <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded border border-emerald-200">
+          <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded border border-emerald-200">
             {note}
           </span>
         )}
@@ -81,7 +81,7 @@ export default function RiskQuestionCard({
         })}
       </div>
 
-      {error && <p className="text-[11px] text-red-600 font-semibold mt-2">{error}</p>}
+      {error && <p className="text-xs text-red-600 font-semibold mt-2">{error}</p>}
     </div>
   );
 }

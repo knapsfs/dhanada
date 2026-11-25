@@ -166,7 +166,7 @@ export default function CrmMapToClientModal({
                     <span className="font-semibold text-gray-800">{successResult.client_name}</span> (
                     {successResult.client_id}).
                   </p>
-                  <p className="text-[11px] text-gray-400 mt-2">
+                  <p className="text-xs text-gray-400 mt-2">
                     Lead conversations remain isolated to this lead while being aggregated on the client’s profile.
                   </p>
                 </div>
@@ -206,7 +206,7 @@ export default function CrmMapToClientModal({
                       <strong>{leadData?.product_interest || "Opportunity"}</strong>) to{" "}
                       <strong>{selectedClient.client_name}</strong> ({selectedClient.name}).
                     </p>
-                    <p className="text-amber-700 text-[11px] leading-relaxed">
+                    <p className="text-amber-700 text-xs leading-relaxed">
                       • The lead's opportunity details and interaction timeline will remain independent.
                       <br />
                       • The client's existing identity, KYC, and portfolio data will NOT be overwritten.
@@ -226,7 +226,7 @@ export default function CrmMapToClientModal({
                       </span>
                       <div>
                         <h4 className="text-sm font-bold text-gray-900">{selectedClient.client_name}</h4>
-                        <p className="text-[11px] text-gray-500 font-mono">{selectedClient.name}</p>
+                        <p className="text-xs text-gray-500 font-mono">{selectedClient.name}</p>
                       </div>
                     </div>
                     <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
@@ -335,7 +335,7 @@ export default function CrmMapToClientModal({
                         <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
                         <span>Suggested Matches ({suggestedClients.length})</span>
                       </h4>
-                      <span className="text-[11px] text-gray-400">
+                      <span className="text-xs text-gray-400">
                         Based on Lead phone, email, or name
                       </span>
                     </div>
@@ -391,7 +391,7 @@ export default function CrmMapToClientModal({
           </div>
 
           {/* Footer Notice */}
-          <div className="px-6 py-3 bg-gray-50 border-t border-gray-100 flex items-center justify-between text-[11px] text-gray-500">
+          <div className="px-6 py-3 bg-gray-50 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
             <span>
               Linking maintains a single client identity while preserving distinct lead pipelines.
             </span>
@@ -440,7 +440,7 @@ function ClientCandidateCard({ client, onSelect }) {
           )}
         </div>
 
-        <div className="flex items-center gap-x-4 gap-y-1 flex-wrap text-[11px] text-gray-600">
+        <div className="flex items-center gap-x-4 gap-y-1 flex-wrap text-xs text-gray-600">
           {client.mobile_no && (
             <span className="inline-flex items-center gap-1">
               <FontAwesomeIcon icon={faPhone} className="text-gray-400 text-[10px]" />
@@ -478,7 +478,7 @@ function ClientCandidateCard({ client, onSelect }) {
 
       <div className="shrink-0 self-end sm:self-center">
         {isCurrent ? (
-          <span className="text-[11px] text-gray-400 font-semibold px-3 py-1.5">Already Mapped</span>
+          <span className="text-xs text-gray-400 font-semibold px-3 py-1.5">Already Mapped</span>
         ) : (
           <button
             type="button"

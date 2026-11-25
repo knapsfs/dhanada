@@ -66,7 +66,7 @@ export default function WhyChooseServices() {
                   </div>
                 </div>
 
-                <span className="hidden sm:inline-block text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+                <span className="hidden sm:inline-block text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
                   Verified
                 </span>
               </motion.div>
@@ -81,7 +81,7 @@ export default function WhyChooseServices() {
             transition={{ duration: 0.7 }}
             className="order-1 lg:order-2"
           >
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#eef4ff] text-[#032e92] text-[11px] font-extrabold tracking-widest uppercase mb-5">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#eef4ff] text-[#032e92] text-xs font-extrabold tracking-widest uppercase mb-5">
               Why Partner With Us
             </div>
             

@@ -165,7 +165,7 @@ export default function AuthorPage() {
                       </h1>
                       {author.designation && (
                         <span className="inline-flex items-center gap-1.5 bg-[#eef5ff] text-[#032e92] text-xs font-bold px-3 py-1 rounded-full border border-blue-100">
-                          <FontAwesomeIcon icon={faUserTie} className="text-[11px]" />
+                          <FontAwesomeIcon icon={faUserTie} className="text-xs" />
                           {author.designation}
                         </span>
                       )}

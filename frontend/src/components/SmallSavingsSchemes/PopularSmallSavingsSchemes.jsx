@@ -36,7 +36,7 @@ export default function PopularSmallSavingsSchemes() {
               <div className="space-y-4">
                 {/* <div className="flex items-center justify-between">
                   <span
-                    className={`text-[11px] font-bold px-3 py-1 rounded-full ${scheme.badgeColor}`}
+                    className={`text-xs font-bold px-3 py-1 rounded-full ${scheme.badgeColor}`}
                   >
                     {scheme.badge}
                   </span>
@@ -128,15 +128,15 @@ export default function PopularSmallSavingsSchemes() {
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                    <div className="text-[11px] text-slate-500">Notified Rate</div>
+                    <div className="text-xs text-slate-500">Notified Rate</div>
                     <div className="text-base font-bold text-[#032e92]">{selectedScheme.interestRate}% p.a.</div>
                   </div>
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                    <div className="text-[11px] text-slate-500">Tenure</div>
+                    <div className="text-xs text-slate-500">Tenure</div>
                     <div className="text-base font-bold text-slate-800">{selectedScheme.tenure}</div>
                   </div>
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                    <div className="text-[11px] text-slate-500">Tax Treatment</div>
+                    <div className="text-xs text-slate-500">Tax Treatment</div>
                     <div className="text-base font-bold text-slate-800">{selectedScheme.taxSection}</div>
                   </div>
                 </div>

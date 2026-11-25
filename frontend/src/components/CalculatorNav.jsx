@@ -33,7 +33,7 @@ export default function CalculatorNav() {
             <Link
               key={i}
               to={calc.path}
-              className={`text-xs sm:text-[13px] transition-colors duration-150 py-0.5 flex items-center gap-2 ${isActive
+              className={`text-xs sm:text-sm transition-colors duration-150 py-0.5 flex items-center gap-2 ${isActive
                 ? 'text-white font-bold lg:-ml-[21px] lg:pl-5 lg:border-l-2 lg:border-amber-400'
                 : 'text-blue-200/70 hover:text-white font-medium'
                 }`}

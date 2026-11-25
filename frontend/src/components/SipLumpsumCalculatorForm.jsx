@@ -134,7 +134,7 @@ export default function SipLumpsumCalculatorForm({ inputs, setInputs }) {
             />
           </div>
 
-          <p className="text-[11px] text-gray-400 italic mt-4">
+          <p className="text-xs text-gray-400 italic mt-4">
             * Illustrative assumption only. Actual investment returns may vary and are not guaranteed.
           </p>
         </motion.div>

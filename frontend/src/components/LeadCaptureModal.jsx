@@ -579,7 +579,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                         }}
                         className="mt-0.5 w-4 h-4 text-[#032e92] rounded border-gray-300 focus:ring-[#032e92] cursor-pointer"
                       />
-                      <label htmlFor="modal-terms" className="text-xs sm:text-[13px] text-gray-500 leading-relaxed cursor-pointer select-none">
+                      <label htmlFor="modal-terms" className="text-xs sm:text-sm text-gray-500 leading-relaxed cursor-pointer select-none">
                         I agree to be contacted by a KNAPS representative and accept the
                         {' '}
                         <a href="/terms-and-conditions" className="text-[#0665d0] hover:underline" target="_blank" rel="noopener noreferrer">

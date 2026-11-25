@@ -13,7 +13,7 @@ export default function ServicesIntro() {
         >
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#e8edf7] shadow-sm mb-4">
             <span className="w-1.5 h-1.5 rounded-full bg-[#c10000]" />
-            <span className="text-[#c10000] text-[11px] font-bold tracking-widest uppercase">Full Service Portfolio</span>
+            <span className="text-[#c10000] text-xs font-bold tracking-widest uppercase">Full Service Portfolio</span>
           </div>
           
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0a192f] leading-tight tracking-tight mb-4">
