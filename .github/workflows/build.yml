@@ -1,40 +1,35 @@
 name: Build image
 
-# Build once on merge to develop and push an immutable commit-tagged image to
-# Docker Hub (knapsdocker/dhanada:sha-<full_sha>). Never automatically deploys
-# and never uses :latest.
+# Build on push to feat/deploy_test (or manual dispatch) and push an immutable
+# commit-tagged image to Docker Hub (knapsdocker/dhanada:sha-<full_sha>).
+# Never automatically deploys and never uses :latest.
 
 on:
-  workflow_run:
-    workflows: [CI]
-    types: [completed]
-    branches: [develop]
+  push:
+    branches:
+      - feat/deploy_test
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: build-${{ github.event.workflow_run.head_sha || github.sha }}
+  group: build-${{ github.sha }}
   cancel-in-progress: true
 
 jobs:
   build:
     name: build
-    if: >-
-      github.event_name == 'workflow_dispatch' ||
-      (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:
       - name: Determine target commit
         id: meta
         env:
-          WORKFLOW_RUN_SHA: ${{ github.event.workflow_run.head_sha }}
           EVENT_SHA: ${{ github.sha }}
         run: |
           set -euo pipefail
-          TARGET_SHA="${WORKFLOW_RUN_SHA:-$EVENT_SHA}"
+          TARGET_SHA="$EVENT_SHA"
           if [ -z "$TARGET_SHA" ]; then
             echo "::error::Could not determine target commit SHA."
             exit 1

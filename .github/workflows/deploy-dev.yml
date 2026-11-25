@@ -1,6 +1,6 @@
 name: Deploy development
 
-# Manual deployment of a develop commit to the test/development host via
+# Manual deployment of a feat/deploy_test commit to local-prod.knaps.app via
 # Satyam4755/deployment-test. Builds and pushes knapsdocker/dhanada:sha-<sha>
 # from the exact commit if not already present on Docker Hub (or if rebuild is
 # requested), resolves its immutable sha256 digest, and dispatches the digest.
@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       sha:
-        description: 'Commit on develop (leave empty for the current develop head)'
+        description: 'Commit on feat/deploy_test (leave empty for current feat/deploy_test head)'
         required: false
         type: string
       rebuild:
@@ -31,10 +31,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:
-      - name: Checkout develop
+      - name: Checkout feat/deploy_test
         uses: actions/checkout@v6
         with:
-          ref: develop
+          ref: feat/deploy_test
           fetch-depth: 0
 
       - name: Resolve and checkout exact commit
@@ -45,14 +45,14 @@ jobs:
           set -euo pipefail
           SHA="$INPUT_SHA"
           if [ -z "$SHA" ]; then
-            SHA="origin/develop"
+            SHA="origin/feat/deploy_test"
           fi
           if ! SHA="$(git rev-parse --verify --quiet "${SHA}^{commit}")"; then
             echo "::error::'${INPUT_SHA}' is not a commit in this repository."
             exit 1
           fi
-          if ! git merge-base --is-ancestor "$SHA" origin/develop; then
-            echo "::error::$SHA is not on develop. Only develop commits are deployable."
+          if ! git merge-base --is-ancestor "$SHA" origin/feat/deploy_test; then
+            echo "::error::$SHA is not on feat/deploy_test. Only feat/deploy_test commits are deployable."
             exit 1
           fi
           git checkout --detach "$SHA"
@@ -138,7 +138,10 @@ jobs:
             echo ""
             echo "| Field | Value |"
             echo "|---|---|"
+            echo "| Branch | \`feat/deploy_test\` |"
             echo "| Commit | \`${{ steps.ref.outputs.sha }}\` |"
+            echo "| Target environment | \`development\` |"
+            echo "| Target domain | \`local-prod.knaps.app\` |"
             echo "| Image | \`${{ steps.image.outputs.tag }}\` |"
             echo "| Digest | \`${{ steps.image.outputs.digest }}\` |"
             echo "| Deployment | [deploy-app.yml](https://github.com/Satyam4755/deployment-test/actions/workflows/deploy-app.yml) |"
