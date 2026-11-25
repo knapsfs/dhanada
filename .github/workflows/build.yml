@@ -1,8 +1,10 @@
 name: Build image
 
-# Build on push to feat/deploy_test (or manual dispatch) and push an immutable
-# commit-tagged image to Docker Hub (knapsdocker/dhanada:sha-<full_sha>).
-# Never automatically deploys and never uses :latest.
+# Build on push to feat/deploy_test (or manual dispatch), push an immutable
+# commit-tagged image to Docker Hub (docker.io/knapsdocker/dhanada:sha-<full_sha>),
+# verify built assets by digest, and automatically dispatch development deployment
+# for feat/deploy_test to Satyam4755/deployment-test. Never uses :latest and
+# never triggers deployment for develop, production, or unrelated branches.
 
 on:
   push:
@@ -95,7 +97,37 @@ jobs:
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
           echo "digest=$DIGEST" >> "$GITHUB_OUTPUT"
 
+      - name: Dispatch development deploy to Satyam4755/deployment-test
+        id: dispatch
+        if: success() && github.ref == 'refs/heads/feat/deploy_test'
+        env:
+          GH_TOKEN: ${{ secrets.DEPLOYMENT_REPO_DISPATCH_TOKEN }}
+          TARGET_SHA: ${{ steps.meta.outputs.sha }}
+          DIGEST: ${{ steps.verify.outputs.digest }}
+        run: |
+          set -euo pipefail
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error::DEPLOYMENT_REPO_DISPATCH_TOKEN is not set. Cannot dispatch development deployment to Satyam4755/deployment-test."
+            exit 1
+          fi
+          if [[ ! "$DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]; then
+            echo "::error::Invalid or missing image digest '$DIGEST'. Refusing to dispatch deployment."
+            exit 1
+          fi
+          echo "Dispatching development deployment to Satyam4755/deployment-test (sha=$TARGET_SHA, digest=$DIGEST)..."
+          if ! RESPONSE="$(gh api --method POST repos/Satyam4755/deployment-test/dispatches \
+            -f event_type=deploy \
+            -F "client_payload[digest]=$DIGEST" \
+            -F "client_payload[sha]=$TARGET_SHA" \
+            -F "client_payload[environment]=development" \
+            -F "client_payload[actor]=$GITHUB_ACTOR" 2>&1)"; then
+            echo "::error::Failed to dispatch development deployment to Satyam4755/deployment-test for commit $TARGET_SHA (digest $DIGEST): $RESPONSE"
+            exit 1
+          fi
+          echo "Dispatched event_type=deploy (environment=development, sha=$TARGET_SHA, digest=$DIGEST) to Satyam4755/deployment-test."
+
       - name: Summary
+        if: steps.verify.outcome == 'success'
         run: |
           {
             echo "### Docker Hub image built"
@@ -106,4 +138,8 @@ jobs:
             echo "| Commit | \`${{ steps.meta.outputs.sha }}\` |"
             echo "| Image | \`${{ steps.verify.outputs.tag }}\` |"
             echo "| Digest | \`${{ steps.verify.outputs.digest }}\` |"
+            echo "| Environment | \`development\` |"
+            echo "| Target domain | \`local-prod.knaps.app\` |"
+            echo "| Dispatch status | \`${{ steps.dispatch.outcome }}\` |"
+            echo "| Deployment | [deploy-app.yml](https://github.com/Satyam4755/deployment-test/actions/workflows/deploy-app.yml) |"
           } >> "$GITHUB_STEP_SUMMARY"

@@ -85,6 +85,7 @@ jobs:
       - name: Dispatch the digest to Satyam4755/deployment-test
         env:
           GH_TOKEN: ${{ secrets.DEPLOYMENT_REPO_DISPATCH_TOKEN }}
+          SHA: ${{ steps.ref.outputs.sha }}
           DIGEST: ${{ steps.image.outputs.digest }}
         run: |
           set -euo pipefail
@@ -95,6 +96,7 @@ jobs:
           gh api --method POST repos/Satyam4755/deployment-test/dispatches \
             -f event_type=deploy \
             -F "client_payload[digest]=$DIGEST" \
+            -F "client_payload[sha]=$SHA" \
             -F "client_payload[environment]=development" \
             -F "client_payload[actor]=$GITHUB_ACTOR"
 
