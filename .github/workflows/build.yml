@@ -2,15 +2,22 @@ name: Build image
 
 # Build on push to feat/deploy_test (or manual dispatch), push an immutable
 # commit-tagged image to Docker Hub (docker.io/knapsdocker/dhanada:sha-<full_sha>),
-# verify built assets by digest, and automatically dispatch development deployment
-# for feat/deploy_test to Satyam4755/deployment-test. Never uses :latest and
-# never triggers deployment for develop, production, or unrelated branches.
+# optionally alias a validated Git release version (knapsdocker/dhanada:<version>)
+# to the exact same digest without overwriting existing releases, verify built
+# assets by digest, and automatically dispatch development deployment for
+# feat/deploy_test to Satyam4755/deployment-test. Never uses :latest and never
+# triggers deployment for develop, production, or unrelated branches.
 
 on:
   push:
     branches:
       - feat/deploy_test
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Optional semantic version tag (e.g. 1.17.0; defaults to vX.Y.Z Git tag on commit if present)'
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -43,6 +50,44 @@ jobs:
         uses: actions/checkout@v6
         with:
           ref: ${{ steps.meta.outputs.sha }}
+          fetch-depth: 0
+
+      - name: Resolve semantic version from repository tags
+        id: semver
+        env:
+          TARGET_SHA: ${{ steps.meta.outputs.sha }}
+          INPUT_VERSION: ${{ github.event.inputs.version }}
+        run: |
+          set -euo pipefail
+          git fetch --tags --force origin || true
+
+          VERSION=""
+          if [ -n "$INPUT_VERSION" ]; then
+            VERSION="${INPUT_VERSION#v}"
+            if [ "$VERSION" = "latest" ] || [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+              echo "::error::Invalid semantic version '$INPUT_VERSION'. Must be X.Y.Z (never 'latest')."
+              exit 1
+            fi
+            if TAG_SHA="$(git rev-parse --verify --quiet "refs/tags/v${VERSION}^{commit}")"; then
+              if [ "$TAG_SHA" != "$TARGET_SHA" ]; then
+                echo "::error::Version conflict: Git tag v${VERSION} points to $TAG_SHA, not $TARGET_SHA."
+                exit 1
+              fi
+            fi
+          else
+            GIT_TAG="$(git tag --points-at "$TARGET_SHA" --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$' | head -1 || true)"
+            if [ -n "$GIT_TAG" ]; then
+              VERSION="${GIT_TAG#v}"
+            fi
+          fi
+
+          if [ -n "$VERSION" ]; then
+            echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+            echo "Resolved semantic version tag: docker.io/knapsdocker/dhanada:${VERSION}"
+          else
+            echo "version=" >> "$GITHUB_OUTPUT"
+            echo "No vX.Y.Z Git tag points at $TARGET_SHA; skipping semantic version tag and publishing sha-$TARGET_SHA only."
+          fi
 
       - name: Set up Buildx
         uses: docker/setup-buildx-action@v3
@@ -52,6 +97,29 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Check for existing Docker Hub version conflict
+        if: steps.semver.outputs.version != ''
+        env:
+          TARGET_SHA: ${{ steps.meta.outputs.sha }}
+          VERSION: ${{ steps.semver.outputs.version }}
+        run: |
+          set -euo pipefail
+          VERSION_TAG="docker.io/knapsdocker/dhanada:${VERSION}"
+          SHA_TAG="docker.io/knapsdocker/dhanada:sha-${TARGET_SHA}"
+          if V_MANIFEST="$(docker buildx imagetools inspect "$VERSION_TAG" --format '{{json .Manifest}}' 2>/dev/null)"; then
+            V_DIGEST="$(printf '%s\n' "$V_MANIFEST" | jq -r '.digest // empty' | tr '[:upper:]' '[:lower:]')"
+            if S_MANIFEST="$(docker buildx imagetools inspect "$SHA_TAG" --format '{{json .Manifest}}' 2>/dev/null)"; then
+              S_DIGEST="$(printf '%s\n' "$S_MANIFEST" | jq -r '.digest // empty' | tr '[:upper:]' '[:lower:]')"
+              if [ "$V_DIGEST" = "$S_DIGEST" ] && [ -n "$V_DIGEST" ]; then
+                echo "$VERSION_TAG already points to the same digest as $SHA_TAG ($V_DIGEST)."
+                exit 0
+              fi
+            fi
+            echo "::error::Version conflict: $VERSION_TAG already exists on Docker Hub (digest $V_DIGEST) and does not belong to $SHA_TAG. Refusing to overwrite an existing release tag."
+            exit 1
+          fi
+          echo "No existing Docker Hub image at $VERSION_TAG; safe to publish after build."
 
       - name: Build and push to Docker Hub
         id: push
@@ -97,6 +165,33 @@ jobs:
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
           echo "digest=$DIGEST" >> "$GITHUB_OUTPUT"
 
+      - name: Publish semantic version tag to same digest
+        id: publish_version
+        if: steps.semver.outputs.version != ''
+        env:
+          VERSION: ${{ steps.semver.outputs.version }}
+          DIGEST: ${{ steps.verify.outputs.digest }}
+        run: |
+          set -euo pipefail
+          VERSION_TAG="docker.io/knapsdocker/dhanada:${VERSION}"
+          if V_MANIFEST="$(docker buildx imagetools inspect "$VERSION_TAG" --format '{{json .Manifest}}' 2>/dev/null)"; then
+            V_DIGEST="$(printf '%s\n' "$V_MANIFEST" | jq -r '.digest // empty' | tr '[:upper:]' '[:lower:]')"
+            if [ "$V_DIGEST" != "$DIGEST" ]; then
+              echo "::error::Version conflict: $VERSION_TAG already exists on Docker Hub with digest $V_DIGEST (expected $DIGEST). Refusing to overwrite."
+              exit 1
+            fi
+            echo "Verified $VERSION_TAG already points to $DIGEST."
+          else
+            docker buildx imagetools create -t "$VERSION_TAG" "docker.io/knapsdocker/dhanada@${DIGEST}"
+            CREATED_DIGEST="$(docker buildx imagetools inspect "$VERSION_TAG" --format '{{json .Manifest}}' | jq -r '.digest // empty' | tr '[:upper:]' '[:lower:]')"
+            if [ "$CREATED_DIGEST" != "$DIGEST" ]; then
+              echo "::error::Digest mismatch after aliasing $VERSION_TAG: got '$CREATED_DIGEST', expected '$DIGEST'."
+              exit 1
+            fi
+            echo "Published $VERSION_TAG -> $CREATED_DIGEST."
+          fi
+          echo "version_tag=$VERSION_TAG" >> "$GITHUB_OUTPUT"
+
       - name: Dispatch development deploy to Satyam4755/deployment-test
         id: dispatch
         if: success() && github.ref == 'refs/heads/feat/deploy_test'
@@ -122,6 +217,9 @@ jobs:
             -F "client_payload[environment]=development" \
             -F "client_payload[actor]=$GITHUB_ACTOR" 2>&1)"; then
             echo "::error::Failed to dispatch development deployment to Satyam4755/deployment-test for commit $TARGET_SHA (digest $DIGEST): $RESPONSE"
+            if printf '%s' "$RESPONSE" | grep -q '403'; then
+              echo "::error::Check that secret DEPLOYMENT_REPO_DISPATCH_TOKEN grants access to Satyam4755/deployment-test with Contents: Read and write."
+            fi
             exit 1
           fi
           echo "Dispatched event_type=deploy (environment=development, sha=$TARGET_SHA, digest=$DIGEST) to Satyam4755/deployment-test."
@@ -136,7 +234,8 @@ jobs:
             echo "|---|---|"
             echo "| Branch | \`${{ github.ref_name }}\` |"
             echo "| Commit | \`${{ steps.meta.outputs.sha }}\` |"
-            echo "| Image | \`${{ steps.verify.outputs.tag }}\` |"
+            echo "| SHA image tag | \`${{ steps.verify.outputs.tag }}\` |"
+            echo "| Version image tag | \`${{ steps.publish_version.outputs.version_tag || 'none (no release tag on commit)' }}\` |"
             echo "| Digest | \`${{ steps.verify.outputs.digest }}\` |"
             echo "| Environment | \`development\` |"
             echo "| Target domain | \`local-prod.knaps.app\` |"
