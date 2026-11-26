@@ -36,7 +36,7 @@ export default function NomineeDetailsSection({
             Nomination is mandatory for all investment folios and depository accounts.
           </p>
         </div>
-        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-blue-800 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-100">
+        <div className="flex items-center gap-1.5 text-xs font-semibold text-blue-800 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-100">
           <FontAwesomeIcon icon={faInfoCircle} />
           <span>Nominee details ensure seamless estate transfer</span>
         </div>
@@ -65,7 +65,7 @@ export default function NomineeDetailsSection({
             }`}
           />
           {errors.nominee_name && (
-            <p className="text-[11px] text-red-600 font-semibold mt-1">{errors.nominee_name}</p>
+            <p className="text-xs text-red-600 font-semibold mt-1">{errors.nominee_name}</p>
           )}
         </div>
 
@@ -91,7 +91,7 @@ export default function NomineeDetailsSection({
             <option value="Other">Other</option>
           </select>
           {errors.nominee_relationship && (
-            <p className="text-[11px] text-red-600 font-semibold mt-1">
+            <p className="text-xs text-red-600 font-semibold mt-1">
               {errors.nominee_relationship}
             </p>
           )}
@@ -126,7 +126,7 @@ export default function NomineeDetailsSection({
             }`}
           />
           {errors.nominee_dob && (
-            <p className="text-[11px] text-red-600 font-semibold mt-1">{errors.nominee_dob}</p>
+            <p className="text-xs text-red-600 font-semibold mt-1">{errors.nominee_dob}</p>
           )}
         </div>
 
@@ -311,7 +311,7 @@ export default function NomineeDetailsSection({
             }`}
           />
           {errors.nominee_address && (
-            <p className="text-[11px] text-red-600 font-semibold mt-1">{errors.nominee_address}</p>
+            <p className="text-xs text-red-600 font-semibold mt-1">{errors.nominee_address}</p>
           )}
         </div>
 

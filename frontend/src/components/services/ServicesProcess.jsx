@@ -36,7 +36,7 @@ export default function ServicesProcess() {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#eef4ff] text-[#032e92] text-[11px] font-extrabold tracking-widest uppercase mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#eef4ff] text-[#032e92] text-xs font-extrabold tracking-widest uppercase mb-4">
             How It Works
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0a192f] tracking-tight leading-tight mb-4">
@@ -77,7 +77,7 @@ export default function ServicesProcess() {
                 </p>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-gray-200/60 flex items-center gap-1.5 text-[11px] font-bold text-[#032e92]">
+              <div className="mt-6 pt-4 border-t border-gray-200/60 flex items-center gap-1.5 text-xs font-bold text-[#032e92]">
                 <span>Stage {idx + 1}</span>
                 <span className="text-gray-300">•</span>
                 <span className="text-gray-500 font-semibold">Structured Advisory</span>

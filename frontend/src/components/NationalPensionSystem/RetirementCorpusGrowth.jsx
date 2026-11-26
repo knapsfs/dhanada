@@ -144,7 +144,7 @@ export default function RetirementCorpusGrowth() {
                   </div>
                 </div>
 
-                <p className="text-[11px] text-slate-400 text-center leading-relaxed">
+                <p className="text-xs text-slate-400 text-center leading-relaxed">
                   * Note: Figures assume ₹10,000 monthly contributions compounding at an illustrative 10% annual rate. Market returns will fluctuate over real market cycles.
                 </p>
               </div>

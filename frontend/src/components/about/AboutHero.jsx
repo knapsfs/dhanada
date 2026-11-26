@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useLeadModal } from '../../context/LeadModalContext';
+import aboutUsImg from '../../assets/about-us.webp';
 
 export default function AboutHero() {
   const { openLeadModal } = useLeadModal();
@@ -75,7 +76,7 @@ export default function AboutHero() {
           >
             <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-blue-900/10 border border-gray-100 h-full min-h-[300px] sm:min-h-[350px]">
               <img
-                src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1200&auto=format&fit=crop"
+                src={aboutUsImg}
                 alt="KNAPS Financial Services Office"
                 className="w-full h-full object-cover"
               />

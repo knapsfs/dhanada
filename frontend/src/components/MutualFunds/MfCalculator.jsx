@@ -255,7 +255,7 @@ export default function MfCalculator() {
                   className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#032e92]"
                 />
 
-                <div className="flex justify-between text-[11px] text-slate-400 font-semibold">
+                <div className="flex justify-between text-xs text-slate-400 font-semibold">
                   <span>{calcMode === 'sip' ? '₹500' : '₹5,000'}</span>
                   <span>{calcMode === 'sip' ? '₹75,000' : '₹15 Lakhs'}</span>
                   <span>{calcMode === 'sip' ? '₹1.5 Lakhs' : '₹30 Lakhs'}</span>
@@ -291,7 +291,7 @@ export default function MfCalculator() {
                   className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#032e92]"
                 />
 
-                <div className="flex justify-between text-[11px] text-slate-400 font-semibold">
+                <div className="flex justify-between text-xs text-slate-400 font-semibold">
                   <span>1 Year</span>
                   <span>10 Years</span>
                   <span>20 Years</span>
@@ -352,7 +352,7 @@ export default function MfCalculator() {
                   <div className="text-lg sm:text-xl font-extrabold text-slate-800">
                     {formatINR(totalInvested)}
                   </div>
-                  <div className="text-[11px] text-slate-400 mt-0.5">
+                  <div className="text-xs text-slate-400 mt-0.5">
                     {calcMode === 'sip' ? `${years * 12} monthly installments` : 'One-time investment'}
                   </div>
                 </div>
@@ -362,7 +362,7 @@ export default function MfCalculator() {
                   <div className="text-lg sm:text-xl font-extrabold text-emerald-600">
                     {formatINR(estimatedReturns)}
                   </div>
-                  <div className="text-[11px] text-slate-400 mt-0.5">Compounded earnings</div>
+                  <div className="text-xs text-slate-400 mt-0.5">Compounded earnings</div>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-50 to-white border-2 border-[#032e92]/20 shadow-xs">
@@ -370,7 +370,7 @@ export default function MfCalculator() {
                   <div className="text-lg sm:text-xl font-extrabold text-[#032e92]">
                     {formatINR(totalValue)}
                   </div>
-                  <div className="text-[11px] text-blue-500 mt-0.5 font-medium">At end of {years} Years</div>
+                  <div className="text-xs text-blue-500 mt-0.5 font-medium">At end of {years} Years</div>
                 </div>
               </div>
 

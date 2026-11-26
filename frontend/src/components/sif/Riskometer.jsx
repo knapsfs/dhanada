@@ -136,7 +136,7 @@ export default function Riskometer({ fund }) {
 
         {/* Bottom Disclaimer */}
         <div className="mt-6 pt-5 border-t border-dashed border-[#e8edf7] text-center w-full">
-          <p className="text-[11px] text-gray-400 font-medium leading-relaxed max-w-2xl mx-auto">
+          <p className="text-xs text-gray-400 font-medium leading-relaxed max-w-2xl mx-auto">
             Investors understand that their principal will be at <span className="font-bold text-gray-600">{risk.label}</span> risk. The Risk-o-meter is based on the scheme portfolio and is subject to periodic review and change according to SEBI regulations.
           </p>
         </div>

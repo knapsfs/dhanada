@@ -102,20 +102,20 @@ export default function WhatIsNps() {
                       <FontAwesomeIcon icon={item.icon} />
                     </div>
                     {item.badge && (
-                      <span className="text-[11px] font-semibold text-[#032e92] bg-[#eef5ff] px-2.5 py-1 rounded-full uppercase">
+                      <span className="text-xs font-semibold text-[#032e92] bg-[#eef5ff] px-2.5 py-1 rounded-full uppercase">
                         {item.badge}
                       </span>
                     )}
                   </div>
 
-                  <h3 className="text-[16px] sm:text-lg font-bold text-black mb-3 leading-snug">
+                  <h3 className="text-md sm:text-lg font-bold text-black mb-3 leading-snug">
                     {item.title}
                   </h3>
                   {/* <p className="text-xs font-semibold text-[#032e92] mb-3">
                     {item.subtitle}
                   </p> */}
 
-                  <p className="text-xs sm:text-[16px] text-gray-600 leading-relaxed font-normal mb-3">
+                  <p className="text-xs sm:text-md text-gray-600 leading-relaxed font-normal mb-3">
                     {item.description}
                   </p>
                 </div>

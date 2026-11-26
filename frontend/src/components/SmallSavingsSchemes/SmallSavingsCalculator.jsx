@@ -175,7 +175,7 @@ export default function SmallSavingsCalculator() {
                     ))}
                   </div>
                   {potdTenure === 5 && (
-                    <p className="text-[11px] text-emerald-700 font-medium pt-1">
+                    <p className="text-xs text-emerald-700 font-medium pt-1">
                       ✓ 5-Year Time Deposit qualifies for Section 80C tax deduction up to ₹1.5 Lakh.
                     </p>
                   )}
@@ -315,7 +315,7 @@ export default function SmallSavingsCalculator() {
               </div>
 
               {/* Statutory Note */}
-              <p className="text-[11px] text-slate-400 text-center leading-relaxed">
+              <p className="text-xs text-slate-400 text-center leading-relaxed">
                 Calculations are based on currently notified Ministry of Finance interest rates. Post office rules, compounding conventions, and tax laws apply as notified by the Government of India.
               </p>
             </div>

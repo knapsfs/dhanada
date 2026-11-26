@@ -239,7 +239,7 @@ export default function Hero() {
                 </span>
               </h1>
 
-              <p className="text-base sm:text-lg text-[#6b7280] font-medium leading-relaxed mt-3 sm:mt-4">
+              <p className="text-base sm:text-lg text-gray-600 font-medium leading-relaxed mt-3 sm:mt-4">
                 Your goals, your priorities, our expertise.
               </p>
             </motion.div>
@@ -315,7 +315,7 @@ export default function Hero() {
 
                   {/* Product Dropdown - Consistent Underline Style */}
                   <div className="relative" ref={dropdownRef}>
-                    <label className="block text-[11px] font-bold text-gray-600 uppercase mb-1">
+                    <label className="block text-xs font-bold text-gray-600 uppercase mb-1">
                       What’s your goal? <span className="text-red-500">*</span>
                     </label>
 
@@ -352,7 +352,7 @@ export default function Hero() {
                     </div>
 
                     {errors.product && (
-                      <p className="text-red-500 text-[11px] mt-1 font-medium">{errors.product}</p>
+                      <p className="text-red-500 text-xs mt-1 font-medium">{errors.product}</p>
                     )}
 
                     {/* Hidden Input for Native Form Handling */}
@@ -401,7 +401,7 @@ export default function Hero() {
 
                   {/* Name */}
                   <div>
-                    <label className="block text-[11px] font-bold text-gray-600 uppercase mb-1">
+                    <label className="block text-xs font-bold text-gray-600 uppercase mb-1">
                       Full Name <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -417,13 +417,13 @@ export default function Hero() {
                         }`}
                     />
                     {errors.name && (
-                      <p className="text-red-500 text-[11px] mt-1 font-medium">{errors.name}</p>
+                      <p className="text-red-500 text-xs mt-1 font-medium">{errors.name}</p>
                     )}
                   </div>
 
                   {/* Email */}
                   <div>
-                    <label className="block text-[11px] font-bold text-gray-600 uppercase mb-1">
+                    <label className="block text-xs font-bold text-gray-600 uppercase mb-1">
                       Email Address <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -439,14 +439,14 @@ export default function Hero() {
                         }`}
                     />
                     {errors.email && (
-                      <p className="text-red-500 text-[11px] mt-1 font-medium">{errors.email}</p>
+                      <p className="text-red-500 text-xs mt-1 font-medium">{errors.email}</p>
                     )}
                   </div>
 
                   {/* Mobile */}
                   <div className="relative" ref={countryDropdownRef}>
                     <div className="flex items-center justify-between mb-1">
-                      <label className="block text-[11px] font-bold text-gray-600 uppercase">
+                      <label className="block text-xs font-bold text-gray-600 uppercase">
                         Mobile Number <span className="text-red-500">*</span>
                       </label>
                       {/* <span className={`text-[10px] font-medium transition-colors ${formData.mobile.length === selectedCountry.maxDigits
@@ -503,7 +503,7 @@ export default function Hero() {
                       />
                     </div>
                     {errors.mobile && (
-                      <p className="text-red-500 text-[11px] mt-1 font-medium">{errors.mobile}</p>
+                      <p className="text-red-500 text-xs mt-1 font-medium">{errors.mobile}</p>
                     )}
 
                     {/* Country Code Dropdown Menu */}
@@ -592,7 +592,7 @@ export default function Hero() {
                         }}
                         className="mt-1 w-4 h-4 text-[#0665d0] rounded border-gray-300 focus:ring-[#0665d0] cursor-pointer"
                       />
-                      <label htmlFor="terms" className="text-[12px] sm:text-[13px] text-gray-500 leading-relaxed cursor-pointer select-none">
+                      <label htmlFor="terms" className="text-[12px] sm:text-sm text-gray-500 leading-relaxed cursor-pointer select-none">
                         I agree to be contacted by a KNAPS representative and accept the
                         {' '}
                         <a href="/terms-and-conditions" className="text-[#0665d0] hover:underline">
@@ -602,7 +602,7 @@ export default function Hero() {
                       </label>
                     </div>
                     {errors.terms && (
-                      <p className="text-red-500 text-[11px] mt-1 font-medium pl-7">{errors.terms}</p>
+                      <p className="text-red-500 text-xs mt-1 font-medium pl-7">{errors.terms}</p>
                     )}
                   </div>
 

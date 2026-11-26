@@ -41,7 +41,7 @@ export default function CrmDashboardView({
             className={`p-3.5 sm:p-4 rounded-2xl bg-white border ${kpi.border} shadow-2xs hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer group`}
           >
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px] font-bold text-gray-500 uppercase truncate">
+              <span className="text-xs font-bold text-gray-500 uppercase truncate">
                 {kpi.label}
               </span>
               <div className={`w-7 h-7 rounded-lg ${kpi.bg} ${kpi.color} flex items-center justify-center text-xs group-hover:scale-110 transition-transform`}>

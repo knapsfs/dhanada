@@ -61,7 +61,7 @@ export default function FormReviewSection({
             <FontAwesomeIcon icon={faTriangleExclamation} />
             <span>Please complete the following mandatory fields before submitting:</span>
           </div>
-          <ul className="list-disc list-inside text-[11px] space-y-0.5 pt-1 text-red-700">
+          <ul className="list-disc list-inside text-xs space-y-0.5 pt-1 text-red-700">
             {missingErrors.map((err, idx) => (
               <li key={idx}>{err}</li>
             ))}
@@ -173,10 +173,10 @@ export default function FormReviewSection({
                   : riskAnswers[q.id]?.selectedOptionText || "Not answered";
               return (
                 <div key={q.id} className="p-2.5 rounded-xl bg-slate-50 flex items-start justify-between gap-3">
-                  <span className="text-gray-600 font-medium text-[11px] leading-snug">
+                  <span className="text-gray-600 font-medium text-xs leading-snug">
                     Q{q.id}. {q.title}
                   </span>
-                  <span className="font-bold text-gray-900 text-right text-[11px] shrink-0">
+                  <span className="font-bold text-gray-900 text-right text-xs shrink-0">
                     {ansText}
                   </span>
                 </div>
@@ -346,7 +346,7 @@ export default function FormReviewSection({
           </div>
         </label>
         {consentError && (
-          <p className="text-[11px] text-red-600 font-semibold">{consentError}</p>
+          <p className="text-xs text-red-600 font-semibold">{consentError}</p>
         )}
       </div>
 

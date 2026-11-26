@@ -51,7 +51,7 @@ export default function WhatAreMutualFunds() {
                   <th className="py-3.5 sm:py-4 px-4 sm:px-6 text-xs sm:text-sm font-bold text-[#032e92] bg-gradient-to-r from-blue-50/90 to-blue-100/70 w-[40%] sm:w-[40%] border-l-2 border-blue-400">
                     <div className="flex items-center justify-between gap-2">
                       <span className="font-bold text-sm sm:text-base text-[#032e92]">Regular Plan</span>
-                      {/* <span className="text-[10px] sm:text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#032e92] text-white shadow-xs whitespace-nowrap">
+                      {/* <span className="text-[10px] sm:text-xs font-bold px-2.5 py-0.5 rounded-full bg-[#032e92] text-white shadow-xs whitespace-nowrap">
                         Recommended
                       </span> */}
                     </div>
@@ -73,7 +73,7 @@ export default function WhatAreMutualFunds() {
                     <td className="py-3.5 sm:py-4 px-4 sm:px-6 text-slate-900 font-medium bg-blue-50/70 hover:bg-blue-100/60 border-l-2 border-blue-400 align-top leading-relaxed transition-colors">
                       <div className="flex items-start gap-2.5">
                         {/* <span className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <FontAwesomeIcon icon={faCheck} className="text-[9px] sm:text-[11px]" />
+                          <FontAwesomeIcon icon={faCheck} className="text-[9px] sm:text-xs" />
                         </span> */}
                         <span className="leading-relaxed">{row.regular}</span>
                       </div>

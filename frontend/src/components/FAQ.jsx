@@ -50,7 +50,7 @@ export default function FAQ() {
               className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 focus:outline-none"
               onClick={() => toggleAccordion(index)}
             >
-              <span className={`text-md md:text-[16px] font-bold transition-colors duration-300 ${openIndex === index ? 'text-[#032e92]' : 'text-gray-800'}`}>
+              <span className={`text-md font-bold transition-colors duration-300 ${openIndex === index ? 'text-[#032e92]' : 'text-gray-800'}`}>
                 {faq.question}
               </span>
               <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-300 ${openIndex === index ? 'bg-[#032e92] text-white' : 'bg-white text-gray-400 border border-gray-200'}`}>

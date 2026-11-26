@@ -165,7 +165,7 @@ export default function HealthInsuranceCoverageExplorer() {
                   <div className={`text-xs sm:text-sm font-bold ${isActive ? 'text-white' : 'text-[#0a192f]'}`}>
                     {stage.label}
                   </div>
-                  <div className={`text-[11px] mt-0.5 ${isActive ? 'text-blue-100' : 'text-gray-500'}`}>
+                  <div className={`text-xs mt-0.5 ${isActive ? 'text-blue-100' : 'text-gray-500'}`}>
                     {stage.sub}
                   </div>
                 </button>
@@ -315,7 +315,7 @@ export default function HealthInsuranceCoverageExplorer() {
                   <FontAwesomeIcon icon={faArrowRight} className="text-xs group-hover:translate-x-1 transition-transform" />
                 </button>
 
-                <p className="text-[11px] text-gray-500 text-center">
+                <p className="text-xs text-gray-500 text-center">
                   Instant comparison across Star Health, HDFC ERGO, Care, Niva Bupa, ICICI Lombard & more.
                 </p>
               </div>

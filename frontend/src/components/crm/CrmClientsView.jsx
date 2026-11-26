@@ -84,7 +84,7 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-[#f8fafc] text-[11px] font-bold text-gray-500 uppercase border-b border-gray-200/80">
+            <tr className="bg-[#f8fafc] text-xs font-bold text-gray-500 uppercase border-b border-gray-200/80">
               <th className="py-3 px-4 sm:px-6">Client</th>
               <th className="py-3 px-4">Contact</th>
               <th className="py-3 px-4">PAN & KYC</th>
@@ -138,7 +138,7 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
                         })()}
                       </div>
                       {client.latest_remark && (
-                        <p className="text-[11px] text-gray-600 italic mt-1 line-clamp-1 max-w-xs">
+                        <p className="text-xs text-gray-600 italic mt-1 line-clamp-1 max-w-xs">
                           <span className="font-semibold not-italic text-gray-700">Remark: </span>{client.latest_remark}
                         </p>
                       )}
@@ -146,7 +146,7 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
 
                     <td className="py-3.5 px-4">
                       <div className="font-semibold text-gray-800">{client.mobile_no || '—'}</div>
-                      <div className="text-[11px] text-gray-400">{client.email || ''}</div>
+                      <div className="text-xs text-gray-400">{client.email || ''}</div>
                     </td>
 
                     <td className="py-3.5 px-4">
@@ -168,13 +168,13 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
                     </td>
 
                     <td className="py-3.5 px-4">
-                      <span className="inline-block px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-gray-100 text-gray-700">
+                      <span className="inline-block px-2.5 py-0.5 rounded-md text-xs font-semibold bg-gray-100 text-gray-700">
                         {client.investor_category || 'Retail'}
                       </span>
                     </td>
 
                     <td className="py-3.5 px-4">
-                      <span className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${client.client_status === 'Active' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-gray-100 text-gray-700 border-gray-200'}`}>
+                      <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-bold border ${client.client_status === 'Active' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-gray-100 text-gray-700 border-gray-200'}`}>
                         {client.client_status || 'Active'}
                       </span>
                     </td>
@@ -308,7 +308,7 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
                   <p className="text-gray-900 font-medium leading-relaxed whitespace-pre-wrap">
                     "{selectedClientForRemark.latest_remark}"
                   </p>
-                  <div className="mt-3 pt-2 border-t border-gray-200 flex items-center justify-between gap-3 text-[11px] text-gray-500 flex-wrap">
+                  <div className="mt-3 pt-2 border-t border-gray-200 flex items-center justify-between gap-3 text-xs text-gray-500 flex-wrap">
                     <span className="flex items-center gap-1">
                       <FontAwesomeIcon icon={faUser} className="text-gray-400 text-[10px]" />
                       <span>Contacted by: <strong className="text-gray-700">{selectedClientForRemark.last_contacted_by || 'Unknown'}</strong></span>
@@ -334,7 +334,7 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
 
             {/* Record New Remark Form */}
             <form onSubmit={handleSaveClientRemark} className="space-y-3 pt-1">
-              <label className="block text-[11px] font-bold text-gray-700 uppercase">
+              <label className="block text-xs font-bold text-gray-700 uppercase">
                 Record New Contact Remark
               </label>
               <textarea

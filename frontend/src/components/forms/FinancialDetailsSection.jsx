@@ -62,7 +62,7 @@ export default function FinancialDetailsSection({
           );
         })}
       </div>
-      {error && <p className="text-[11px] text-red-600 font-semibold">{error}</p>}
+      {error && <p className="text-xs text-red-600 font-semibold">{error}</p>}
     </div>
   );
 }
