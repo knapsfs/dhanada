@@ -32,7 +32,7 @@ export default function NomineeDetailsSection({
             <FontAwesomeIcon icon={faUsers} className="text-[#032e92] text-sm" />
             <span>Section B: Nominee Details</span>
           </h2>
-          <p className="text-xs text-gray-500 mt-0.5">
+          <p className="text-xs text-gray-600 mt-0.5">
             Nomination is mandatory for all investment folios and depository accounts.
           </p>
         </div>
@@ -45,7 +45,7 @@ export default function NomineeDetailsSection({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Nominee Name */}
         <div>
-          <label className="text-xs font-bold text-gray-800 block mb-1.5">
+          <label className="text-xs font-bold text-gray-900 block mb-1.5">
             Nominee Name <span className="text-red-500">*</span>
           </label>
           <input
@@ -71,7 +71,7 @@ export default function NomineeDetailsSection({
 
         {/* Nominee Relationship */}
         <div>
-          <label className="text-xs font-bold text-gray-800 block mb-1.5">
+          <label className="text-xs font-bold text-gray-900 block mb-1.5">
             Relationship with Investor <span className="text-red-500">*</span>
           </label>
           <select
@@ -99,7 +99,7 @@ export default function NomineeDetailsSection({
 
         {/* Nominee DOB */}
         <div>
-          <label className="text-xs font-bold text-gray-800 block mb-1.5">
+          <label className="text-xs font-bold text-gray-900 block mb-1.5">
             Nominee Date of Birth <span className="text-red-500">*</span>
           </label>
           <input
@@ -132,11 +132,11 @@ export default function NomineeDetailsSection({
 
         {/* Is Nominee Minor Toggle */}
         <div className="flex flex-col justify-center">
-          <label className="text-xs font-bold text-gray-800 block mb-1.5">
+          <label className="text-xs font-bold text-gray-900 block mb-1.5">
             Is the Nominee a Minor (under 18)?
           </label>
           <div className="flex items-center gap-4 mt-1">
-            <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-gray-700">
+            <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-gray-900">
               <input
                 type="radio"
                 name="is_nominee_minor"
@@ -146,7 +146,7 @@ export default function NomineeDetailsSection({
               />
               <span>No (Major)</span>
             </label>
-            <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-gray-700">
+            <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-gray-900">
               <input
                 type="radio"
                 name="is_nominee_minor"
@@ -171,7 +171,7 @@ export default function NomineeDetailsSection({
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
-                <label className="text-xs font-bold text-gray-800 block mb-1">
+                <label className="text-xs font-bold text-gray-900 block mb-1">
                   Guardian Full Name <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -189,7 +189,7 @@ export default function NomineeDetailsSection({
               </div>
 
               <div>
-                <label className="text-xs font-bold text-gray-800 block mb-1">
+                <label className="text-xs font-bold text-gray-900 block mb-1">
                   Guardian Relationship <span className="text-red-500">*</span>
                 </label>
                 <select
@@ -205,7 +205,7 @@ export default function NomineeDetailsSection({
               </div>
 
               <div>
-                <label className="text-xs font-bold text-gray-800 block mb-1">
+                <label className="text-xs font-bold text-gray-900 block mb-1">
                   Guardian PAN / ID
                 </label>
                 <input
@@ -223,7 +223,7 @@ export default function NomineeDetailsSection({
 
         {/* Nominee ID Type & Number */}
         <div>
-          <label className="text-xs font-bold text-gray-800 block mb-1.5">
+          <label className="text-xs font-bold text-gray-900 block mb-1.5">
             Nominee ID Proof Type
           </label>
           <select
@@ -241,7 +241,7 @@ export default function NomineeDetailsSection({
         </div>
 
         <div>
-          <label className="text-xs font-bold text-gray-800 block mb-1.5">
+          <label className="text-xs font-bold text-gray-900 block mb-1.5">
             Nominee ID Number
           </label>
           <input
@@ -255,7 +255,7 @@ export default function NomineeDetailsSection({
 
         {/* Nominee Contact */}
         <div>
-          <label className="text-xs font-bold text-gray-800 block mb-1.5">
+          <label className="text-xs font-bold text-gray-900 block mb-1.5">
             Nominee Mobile Number
           </label>
           <input
@@ -269,7 +269,7 @@ export default function NomineeDetailsSection({
         </div>
 
         <div>
-          <label className="text-xs font-bold text-gray-800 block mb-1.5">
+          <label className="text-xs font-bold text-gray-900 block mb-1.5">
             Nominee Email Address
           </label>
           <input
@@ -284,7 +284,7 @@ export default function NomineeDetailsSection({
         {/* Nominee Address with "Same as Investor" helper */}
         <div className="sm:col-span-2">
           <div className="flex items-center justify-between mb-1.5 flex-wrap gap-2">
-            <label className="text-xs font-bold text-gray-800">
+            <label className="text-xs font-bold text-gray-900">
               Nominee Address <span className="text-red-500">*</span>
             </label>
             {clientAddress && (
@@ -317,7 +317,7 @@ export default function NomineeDetailsSection({
 
         {/* Name to Be Printed on Statement */}
         <div className="sm:col-span-2">
-          <label className="text-xs font-bold text-gray-800 block mb-1.5">
+          <label className="text-xs font-bold text-gray-900 block mb-1.5">
             Name to Be Printed on Statement / Records
           </label>
           <input

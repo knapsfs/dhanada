@@ -26,7 +26,7 @@ export default function Footer() {
               At KNAPS, we believe investing should be simple, transparent, and focused on helping investors achieve their financial goals. With a wide range of investment products across Mutual Funds, SIF, PMS, AIF, NPS, Post Office Deposits, and more, we help investors find products that align with their goals, risk profile, and investment horizon.
             </p>
 
-            <div className="space-y-3 mb-8 text-xs">
+            <div className="space-y-3 mb-8 text-sm">
               <div>
                 <p className="text-gray-300 font-semibold">AMFI registered Mutual Fund Distributor</p>
                 <p className="text-gray-400 mt-0.5">ARN - 367144 Validity: 04-AUG-2026 To 03-AUG-2029</p>
@@ -126,10 +126,10 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-gray-400 text-xs text-center md:text-left">
+          <p className="text-gray-400 text-sm text-center md:text-left">
             &copy; {currentYear} Knaps Private Limited. All rights reserved. AMFI Registered : ARN-367144.
           </p>
-          <div className="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-2 text-xs text-gray-400">
+          <div className="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-2 text-sm text-gray-400">
             {/* <Link to="/regulatory-disclosures" className="hover:text-white transition-colors">Regulatory Disclosures</Link> */}
             <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
             <Link to="/terms-and-conditions" className="hover:text-white transition-colors">Terms &amp; Conditions</Link>
@@ -138,8 +138,8 @@ export default function Footer() {
 
         {/* Regulatory Disclaimer */}
         <div id="disclaimer" className="pt-6 mt-6 border-t border-white/5  max-w-7xl">
-          <p className="text-xs sm:text-xs text-gray-400 leading-relaxed">
-            <span className="font-semibold text-gray-400">Disclaimer:</span> The information, data, tools, and analytics provided on this website are for informational and educational purposes only and do not constitute investment advice or recommendations. Investments in mutual funds and capital market instruments are subject to market risks. Please read all scheme-related documents carefully before investing.
+          <p className="text-sm text-gray-400 leading-relaxed">
+            <span className="font-semibold text-gray-400">Disclaimer:</span> The information, data, tools, and analytics provided on this website are for informational and educational purposes only and do not constitute investment advice or recommendations. Investments in mutual funds are subject to market risks. Please read all scheme-related documents carefully before investing.
           </p>
         </div>
 

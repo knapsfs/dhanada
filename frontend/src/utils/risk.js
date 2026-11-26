@@ -49,7 +49,7 @@ export function getRiskLevelConfig(level) {
 			label: "N/A",
 			color: "bg-gray-300",
 			bg: "bg-gray-100",
-			text: "text-gray-500",
+			text: "text-gray-600",
 			border: "border-gray-200",
 		};
 	}

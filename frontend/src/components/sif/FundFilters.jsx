@@ -89,18 +89,18 @@ export default function FundFilters({ filters, setFilters, onClear, amcList = []
               <div className="relative w-full lg:w-64">
                 <FontAwesomeIcon
                   icon={faMagnifyingGlass}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 text-sm" />
                 <input
                   type="text"
                   value={filters.search || ''}
                   onChange={e => setFilters(prev => ({ ...prev, search: e.target.value }))}
                   placeholder="Search Fund..."
-                  className="w-full pl-9 pr-4 py-2 rounded-full border border-[#e8edf7] text-sm font-medium text-gray-700 placeholder-gray-400 focus:outline-none focus:border-[#032e92] focus:ring-2 focus:ring-[#032e92]/10 transition-all bg-gray-50/50" />
+                  className="w-full pl-9 pr-4 py-2 rounded-full border border-[#e8edf7] text-sm font-medium text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#032e92] focus:ring-2 focus:ring-[#032e92]/10 transition-all bg-gray-50/50" />
               </div>
 
               {/* Sort */}
               <div className="flex items-center gap-3">
-                <span className="text-sm font-semibold text-gray-500">Sort by:</span>
+                <span className="text-sm font-semibold text-gray-600">Sort by:</span>
                 <div className="flex items-center gap-1.5">
                   {sortOptions.map(opt => (
                     <button
@@ -108,8 +108,8 @@ export default function FundFilters({ filters, setFilters, onClear, amcList = []
                       onClick={() => setFilters(prev => ({ ...prev, sort: opt.value }))}
                       className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 border ${
                         filters.sort === opt.value
-                          ? 'bg-white text-gray-800 border-gray-300 shadow-sm'
-                          : 'bg-transparent text-gray-500 border-[#e8edf7] hover:border-gray-300 hover:text-gray-700'
+                          ? 'bg-white text-gray-900 border-gray-300 shadow-sm'
+                          : 'bg-transparent text-gray-600 border-[#e8edf7] hover:border-gray-300 hover:text-gray-900'
                       }`}>
                       {opt.label}
                     </button>
@@ -132,12 +132,12 @@ export default function FundFilters({ filters, setFilters, onClear, amcList = []
               >
                 <div className="p-6 lg:p-8">
                   <div className="flex justify-between items-center mb-6">
-                    <h3 className="text-xs font-bold text-gray-500 uppercase">
+                    <h3 className="text-xs font-bold text-gray-600 uppercase">
                       {activeTabData.label}
                     </h3>
                     <button
                       onClick={() => handleChange(activeTabData.id, 'All')}
-                      className="text-xs font-medium text-gray-400 hover:text-gray-600 transition-colors"
+                      className="text-xs font-medium text-gray-600 hover:text-gray-600 transition-colors"
                     >
                       All selected
                     </button>
@@ -158,7 +158,7 @@ export default function FundFilters({ filters, setFilters, onClear, amcList = []
                               : 'border-gray-200 bg-white group-hover:border-gray-300'
                           }`} />
                           <span className={`text-sm font-medium leading-tight ${
-                            isChecked ? 'text-gray-900 font-bold' : 'text-gray-600 group-hover:text-gray-800'
+                            isChecked ? 'text-gray-900 font-bold' : 'text-gray-600 group-hover:text-gray-900'
                           }`}>
                             {opt}
                           </span>

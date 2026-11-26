@@ -49,7 +49,7 @@ export default function FormReviewSection({
           <FontAwesomeIcon icon={faCheckCircle} className="text-[#032e92] text-sm" />
           <span>Section D: Review Your Information & Submit</span>
         </h2>
-        <p className="text-xs text-gray-500 mt-0.5">
+        <p className="text-xs text-gray-600 mt-0.5">
           Please verify all details carefully before final submission. Click "Edit" on any section
           if you need to make changes.
         </p>
@@ -73,7 +73,7 @@ export default function FormReviewSection({
       {hasPersonal && (
         <div className="bg-white rounded-2xl border border-gray-200 p-4 sm:p-5 space-y-3">
           <div className="flex items-center justify-between pb-2 border-b border-gray-100">
-            <h3 className="text-xs font-extrabold text-gray-800 flex items-center gap-2 uppercase tracking-wide">
+            <h3 className="text-xs font-extrabold text-gray-900 flex items-center gap-2 uppercase tracking-wide">
               <FontAwesomeIcon icon={faUser} className="text-[#032e92]" />
               <span>Personal & KYC Details</span>
             </h3>
@@ -91,49 +91,49 @@ export default function FormReviewSection({
 
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
             <div>
-              <span className="text-gray-400 block text-[10px] uppercase font-bold">Full Name</span>
+              <span className="text-gray-600 block text-[10px] uppercase font-bold">Full Name</span>
               <span className="font-bold text-gray-900">{personalData.full_name || "—"}</span>
             </div>
             <div>
-              <span className="text-gray-400 block text-[10px] uppercase font-bold">PAN</span>
+              <span className="text-gray-600 block text-[10px] uppercase font-bold">PAN</span>
               <span className="font-bold text-gray-900 uppercase">
                 {personalData.pan || "—"}
               </span>
             </div>
             <div>
-              <span className="text-gray-400 block text-[10px] uppercase font-bold">Date of Birth</span>
+              <span className="text-gray-600 block text-[10px] uppercase font-bold">Date of Birth</span>
               <span className="font-bold text-gray-900">{personalData.dob || "—"}</span>
             </div>
             <div>
-              <span className="text-gray-400 block text-[10px] uppercase font-bold">Mobile Number</span>
+              <span className="text-gray-600 block text-[10px] uppercase font-bold">Mobile Number</span>
               <span className="font-bold text-gray-900">{personalData.mobile_no || "—"}</span>
             </div>
             <div>
-              <span className="text-gray-400 block text-[10px] uppercase font-bold">Email Address</span>
+              <span className="text-gray-600 block text-[10px] uppercase font-bold">Email Address</span>
               <span className="font-bold text-gray-900 truncate block">
                 {personalData.email || "—"}
               </span>
             </div>
             <div>
-              <span className="text-gray-400 block text-[10px] uppercase font-bold">Gender</span>
+              <span className="text-gray-600 block text-[10px] uppercase font-bold">Gender</span>
               <span className="font-bold text-gray-900">{personalData.gender || "—"}</span>
             </div>
             <div>
-              <span className="text-gray-400 block text-[10px] uppercase font-bold">Place of Birth</span>
+              <span className="text-gray-600 block text-[10px] uppercase font-bold">Place of Birth</span>
               <span className="font-bold text-gray-900">
                 {personalData.place_of_birth || personalData.city || "—"}
               </span>
             </div>
             <div>
-              <span className="text-gray-400 block text-[10px] uppercase font-bold">Occupation</span>
+              <span className="text-gray-600 block text-[10px] uppercase font-bold">Occupation</span>
               <span className="font-bold text-gray-900">{personalData.occupation || "—"}</span>
             </div>
             <div>
-              <span className="text-gray-400 block text-[10px] uppercase font-bold">Income Slab</span>
+              <span className="text-gray-600 block text-[10px] uppercase font-bold">Income Slab</span>
               <span className="font-bold text-gray-900">{personalData.income_slab || "—"}</span>
             </div>
             <div className="col-span-2 sm:col-span-3">
-              <span className="text-gray-400 block text-[10px] uppercase font-bold">Address</span>
+              <span className="text-gray-600 block text-[10px] uppercase font-bold">Address</span>
               <span className="font-bold text-gray-900">
                 {personalData.address || personalData.address_line1 || "—"}
                 {personalData.city ? `, ${personalData.city}` : ""}
@@ -149,7 +149,7 @@ export default function FormReviewSection({
       {hasRisk && (
         <div className="bg-white rounded-2xl border border-gray-200 p-4 sm:p-5 space-y-3">
           <div className="flex items-center justify-between pb-2 border-b border-gray-100">
-            <h3 className="text-xs font-extrabold text-gray-800 flex items-center gap-2 uppercase tracking-wide">
+            <h3 className="text-xs font-extrabold text-gray-900 flex items-center gap-2 uppercase tracking-wide">
               <FontAwesomeIcon icon={faShieldHalved} className="text-[#032e92]" />
               <span>Financial Risk Assessment Answers</span>
             </h3>
@@ -190,7 +190,7 @@ export default function FormReviewSection({
       {hasNominee && (
         <div className="bg-white rounded-2xl border border-gray-200 p-4 sm:p-5 space-y-3">
           <div className="flex items-center justify-between pb-2 border-b border-gray-100">
-            <h3 className="text-xs font-extrabold text-gray-800 flex items-center gap-2 uppercase tracking-wide">
+            <h3 className="text-xs font-extrabold text-gray-900 flex items-center gap-2 uppercase tracking-wide">
               <FontAwesomeIcon icon={faUsers} className="text-[#032e92]" />
               <span>Nominee Details</span>
             </h3>
@@ -208,21 +208,21 @@ export default function FormReviewSection({
 
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
             <div>
-              <span className="text-gray-400 block text-[10px] uppercase font-bold">Nominee Name</span>
+              <span className="text-gray-600 block text-[10px] uppercase font-bold">Nominee Name</span>
               <span className="font-bold text-gray-900">{nomineeData.nominee_name || "—"}</span>
             </div>
             <div>
-              <span className="text-gray-400 block text-[10px] uppercase font-bold">Relationship</span>
+              <span className="text-gray-600 block text-[10px] uppercase font-bold">Relationship</span>
               <span className="font-bold text-gray-900">
                 {nomineeData.nominee_relationship || "—"}
               </span>
             </div>
             <div>
-              <span className="text-gray-400 block text-[10px] uppercase font-bold">Date of Birth</span>
+              <span className="text-gray-600 block text-[10px] uppercase font-bold">Date of Birth</span>
               <span className="font-bold text-gray-900">{nomineeData.nominee_dob || "—"}</span>
             </div>
             <div>
-              <span className="text-gray-400 block text-[10px] uppercase font-bold">Is Minor</span>
+              <span className="text-gray-600 block text-[10px] uppercase font-bold">Is Minor</span>
               <span className="font-bold text-gray-900">
                 {nomineeData.is_nominee_minor ? "Yes (Minor)" : "No (Major)"}
               </span>
@@ -230,7 +230,7 @@ export default function FormReviewSection({
             {nomineeData.is_nominee_minor && (
               <>
                 <div>
-                  <span className="text-gray-400 block text-[10px] uppercase font-bold">
+                  <span className="text-gray-600 block text-[10px] uppercase font-bold">
                     Guardian Name
                   </span>
                   <span className="font-bold text-gray-900">
@@ -238,7 +238,7 @@ export default function FormReviewSection({
                   </span>
                 </div>
                 <div>
-                  <span className="text-gray-400 block text-[10px] uppercase font-bold">
+                  <span className="text-gray-600 block text-[10px] uppercase font-bold">
                     Guardian Relation
                   </span>
                   <span className="font-bold text-gray-900">
@@ -248,7 +248,7 @@ export default function FormReviewSection({
               </>
             )}
             <div className="col-span-2 sm:col-span-3">
-              <span className="text-gray-400 block text-[10px] uppercase font-bold">
+              <span className="text-gray-600 block text-[10px] uppercase font-bold">
                 Nominee Address
               </span>
               <span className="font-bold text-gray-900">
@@ -263,7 +263,7 @@ export default function FormReviewSection({
       {hasBank && (
         <div className="bg-white rounded-2xl border border-gray-200 p-4 sm:p-5 space-y-3">
           <div className="flex items-center justify-between pb-2 border-b border-gray-100">
-            <h3 className="text-xs font-extrabold text-gray-800 flex items-center gap-2 uppercase tracking-wide">
+            <h3 className="text-xs font-extrabold text-gray-900 flex items-center gap-2 uppercase tracking-wide">
               <FontAwesomeIcon icon={faBuildingColumns} className="text-[#032e92]" />
               <span>Bank Details</span>
             </h3>
@@ -281,14 +281,14 @@ export default function FormReviewSection({
 
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
             <div>
-              <span className="text-gray-400 block text-[10px] uppercase font-bold">Entry Method</span>
+              <span className="text-gray-600 block text-[10px] uppercase font-bold">Entry Method</span>
               <span className="font-bold text-gray-900">
                 {bankData.bank_entry_method === "Upload" ? "Upload Bank Proof" : "Manual Entry"}
               </span>
             </div>
             {bankData.bank_entry_method === "Upload" ? (
               <div className="col-span-2">
-                <span className="text-gray-400 block text-[10px] uppercase font-bold">
+                <span className="text-gray-600 block text-[10px] uppercase font-bold">
                   Uploaded Document
                 </span>
                 <span className="font-bold text-emerald-700">
@@ -298,17 +298,17 @@ export default function FormReviewSection({
             ) : (
               <>
                 <div>
-                  <span className="text-gray-400 block text-[10px] uppercase font-bold">Bank Name</span>
+                  <span className="text-gray-600 block text-[10px] uppercase font-bold">Bank Name</span>
                   <span className="font-bold text-gray-900">{bankData.bank_name || "—"}</span>
                 </div>
                 <div>
-                  <span className="text-gray-400 block text-[10px] uppercase font-bold">IFSC Code</span>
+                  <span className="text-gray-600 block text-[10px] uppercase font-bold">IFSC Code</span>
                   <span className="font-bold text-gray-900 uppercase">
                     {bankData.bank_ifsc || "—"}
                   </span>
                 </div>
                 <div>
-                  <span className="text-gray-400 block text-[10px] uppercase font-bold">
+                  <span className="text-gray-600 block text-[10px] uppercase font-bold">
                     Account Number
                   </span>
                   <span className="font-bold text-gray-900">
@@ -335,7 +335,7 @@ export default function FormReviewSection({
             }}
             className="w-4 h-4 text-[#032e92] rounded mt-0.5"
           />
-          <div className="text-xs text-gray-800 leading-relaxed">
+          <div className="text-xs text-gray-900 leading-relaxed">
             <strong className="block text-gray-950 font-bold mb-0.5">
               Investor Declaration & Electronic Consent
             </strong>

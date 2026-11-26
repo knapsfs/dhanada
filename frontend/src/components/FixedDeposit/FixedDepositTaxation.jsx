@@ -38,7 +38,7 @@ export default function FixedDepositTaxation() {
             <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
               Interest earned on Bank & Corporate FDs is added to your total income and taxed at your applicable slab rate. Banks deduct 10% TDS if interest exceeds <strong>₹40,000</strong>/year (or <strong>₹50,000</strong> for senior citizens). If total taxable income is below the threshold, submit <strong>Form 15G / 15H</strong> for zero TDS deduction.
             </p>
-            <div className="pt-2 border-t border-gray-200/60 text-xs text-gray-500">
+            <div className="pt-2 border-t border-gray-200/60 text-xs text-gray-600">
               *Senior citizens can claim deduction up to ₹50,000 on bank interest under Section 80TTB.
             </div>
           </div>
@@ -56,7 +56,7 @@ export default function FixedDepositTaxation() {
             <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
               When you sell land or residential/commercial property, you can invest your Long Term Capital Gains (LTCG) into 54EC Bonds (REC, PFC, IRFC, NHAI) within 6 months of sale. The invested capital (up to ₹50 Lakhs) is <strong>100% exempt from capital gains tax</strong>, while yielding 5.25% annual interest over a 5-year tenure.
             </p>
-            <div className="pt-2 border-t border-gray-200/60 text-xs text-gray-500">
+            <div className="pt-2 border-t border-gray-200/60 text-xs text-gray-600">
               *Annual interest is taxable at slab, but entire real estate capital gain is protected.
             </div>
           </div>
@@ -74,7 +74,7 @@ export default function FixedDepositTaxation() {
             <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
               Interest on RBI Floating Rate Savings Bonds (currently 8.05% p.a.) is fully taxable under other sources at your marginal income tax slab. TDS is deducted at the time of semi-annual interest payment unless eligible exemption certificates (Form 15G/15H) are registered.
             </p>
-            <div className="pt-2 border-t border-gray-200/60 text-xs text-gray-500">
+            <div className="pt-2 border-t border-gray-200/60 text-xs text-gray-600">
               *Ideal for conservative investors prioritizing sovereign security over tax arbitrage.
             </div>
           </div>
@@ -92,7 +92,7 @@ export default function FixedDepositTaxation() {
             <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
               While the 2.50% p.a. semi-annual interest is taxable at your slab rate, the capital gains arising on redemption upon the 8-year maturity are <strong>completely exempt from income tax</strong> under Section 47 of the Income Tax Act, making SGBs the most tax-efficient fixed income vehicle for gold.
             </p>
-            <div className="pt-2 border-t border-gray-200/60 text-xs text-gray-500">
+            <div className="pt-2 border-t border-gray-200/60 text-xs text-gray-600">
               *Secondary market sales before maturity attract LTCG with indexation benefits.
             </div>
           </div>

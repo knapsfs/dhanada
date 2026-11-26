@@ -21,7 +21,7 @@ const schemeTypeColors = {
 
 export default function FundCard({ fund, index, isGrid }) {
   const risk = getRiskLevelConfig(fund.riskLevel)
-  const schemeTypeCls = schemeTypeColors[fund.schemeType] || 'bg-gray-100 text-gray-700'
+  const schemeTypeCls = schemeTypeColors[fund.schemeType] || 'bg-gray-100 text-gray-900'
   const { openLeadModal } = useLeadModal()
 
   if (isGrid) {
@@ -43,7 +43,7 @@ export default function FundCard({ fund, index, isGrid }) {
               <h3 className="font-bold text-gray-900 text-sm leading-snug line-clamp-2 group-hover:text-[#032e92] transition-colors">{fund.name}</h3>
               <div className="flex items-center gap-1 mt-1">
                 <FontAwesomeIcon icon={faBuildingColumns} className="text-gray-300 text-[10px]" />
-                <p className="text-xs text-gray-400 font-medium truncate">{fund.amc}</p>
+                <p className="text-xs text-gray-600 font-medium truncate">{fund.amc}</p>
               </div>
             </div>
           </div>
@@ -59,7 +59,7 @@ export default function FundCard({ fund, index, isGrid }) {
           <div className="bg-gradient-to-br from-[#eef4ff] to-[#dbeafe] rounded-2xl p-3.5 mb-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wide">1Y Returns</p>
+                <p className="text-[10px] text-gray-600 font-semibold uppercase tracking-wide">1Y Returns</p>
                 <div className="flex items-center gap-1 mt-0.5">
                   <FontAwesomeIcon icon={faArrowTrendUp} className="text-green-500 text-xs" />
                   <span className="text-xl font-bold text-green-600">{fund.returns1Y != null ? `${fund.returns1Y}%` : 'N/A'}</span>
@@ -67,7 +67,7 @@ export default function FundCard({ fund, index, isGrid }) {
               </div>
 
               <div className="text-right">
-                <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wide">NAV</p>
+                <p className="text-[10px] text-gray-600 font-semibold uppercase tracking-wide">NAV</p>
                 <span className="text-xs font-bold text-[#032e92]">{fund.nav != null ? formatNav(fund.nav) : 'N/A'}</span>
               </div>
             </div>
@@ -77,17 +77,17 @@ export default function FundCard({ fund, index, isGrid }) {
           <div className="grid grid-cols-3 gap-2 mb-4">
             <div className="bg-[#f7f9fc] rounded-xl p-2.5 text-center">
               <FontAwesomeIcon icon={faChartPie} className="text-[#032e92] text-xs mb-1" />
-              <p className="text-[10px] text-gray-400 font-medium">AUM</p>
-              <p className="text-xs font-bold text-gray-800">{fund.aum ? formatAum(fund.aum) : 'N/A'}</p>
+              <p className="text-[10px] text-gray-600 font-medium">AUM</p>
+              <p className="text-xs font-bold text-gray-900">{fund.aum ? formatAum(fund.aum) : 'N/A'}</p>
             </div>
             <div className="bg-[#f7f9fc] rounded-xl p-2.5 text-center">
               <FontAwesomeIcon icon={faCalendarDays} className="text-amber-500 text-xs mb-1" />
-              <p className="text-[10px] text-gray-400 font-medium">Inception Date</p>
-              <p className="text-xs font-bold text-gray-800">{fund.launchDate || fund.inceptionDate || 'N/A'}</p>
+              <p className="text-[10px] text-gray-600 font-medium">Inception Date</p>
+              <p className="text-xs font-bold text-gray-900">{fund.launchDate || fund.inceptionDate || 'N/A'}</p>
             </div>
             <div className="bg-[#f7f9fc] rounded-xl p-2.5 text-center">
-              <FontAwesomeIcon icon={faShieldHalved} className="text-gray-400 text-xs mb-1" />
-              <p className="text-[10px] text-gray-400 font-medium">Risk</p>
+              <FontAwesomeIcon icon={faShieldHalved} className="text-gray-600 text-xs mb-1" />
+              <p className="text-[10px] text-gray-600 font-medium">Risk</p>
               <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full border ${risk.bg} ${risk.text} ${risk.border}`}>{risk.level !== 'N/A' ? `Level ${risk.level}` : 'N/A'}</span>
             </div>
           </div>
@@ -98,7 +98,7 @@ export default function FundCard({ fund, index, isGrid }) {
               <FontAwesomeIcon key={i} icon={i < (fund.rating || 0) ? faStar : faStarRegular}
                 className={`text-xs ${i < (fund.rating || 0) ? 'text-amber-400' : 'text-gray-200'}`} />
             ))}
-            <span className="text-xs text-gray-400 ml-1 font-medium">{fund.rating != null ? `${fund.rating}.0` : 'N/A'}</span>
+            <span className="text-xs text-gray-600 ml-1 font-medium">{fund.rating != null ? `${fund.rating}.0` : 'N/A'}</span>
           </div>
         </div>
 
@@ -107,7 +107,7 @@ export default function FundCard({ fund, index, isGrid }) {
           <button onClick={openLeadModal} className="flex-1 btn-ripple py-2.5 px-3 rounded-xl bg-gradient-to-r from-[#032e92] to-[#021d63] text-white text-xs font-semibold hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-1.5 cursor-pointer">
             Invest Now <FontAwesomeIcon icon={faArrowRight} className="text-[10px]" />
           </button>
-          <Link to={`/sif/${encodeURIComponent(fund.id)}`} className="px-4 py-2.5 rounded-xl border-2 border-[#e8edf7] text-gray-500 text-xs font-bold hover:border-[#032e92] hover:text-[#032e92] transition-all duration-200 flex items-center justify-center">
+          <Link to={`/sif/${encodeURIComponent(fund.id)}`} className="px-4 py-2.5 rounded-xl border-2 border-[#e8edf7] text-gray-600 text-xs font-bold hover:border-[#032e92] hover:text-[#032e92] transition-all duration-200 flex items-center justify-center">
             Details
           </Link>
         </div>
@@ -138,7 +138,7 @@ export default function FundCard({ fund, index, isGrid }) {
                 <h3 className="font-bold text-gray-900 text-base leading-snug group-hover:text-[#032e92] transition-colors">{fund.name}</h3>
                 <div className="flex items-center gap-1.5 mt-1">
                   <FontAwesomeIcon icon={faBuildingColumns} className="text-gray-300 text-xs" />
-                  <span className="text-xs text-gray-400 font-medium">{fund.amc}</span>
+                  <span className="text-xs text-gray-600 font-medium">{fund.amc}</span>
                   <span className="text-gray-200">•</span>
                   <div className="flex">
                     {Array.from({ length: 5 }).map((_, i) => (
@@ -181,8 +181,8 @@ export default function FundCard({ fund, index, isGrid }) {
                 <FontAwesomeIcon icon={faChartPie} className="text-[#032e92] text-xs" />
               </div>
               <div>
-                <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wide">AUM</p>
-                <p className="text-sm font-bold text-gray-800">{fund.aum ? formatAum(fund.aum) : 'N/A'}</p>
+                <p className="text-[10px] text-gray-600 font-semibold uppercase tracking-wide">AUM</p>
+                <p className="text-sm font-bold text-gray-900">{fund.aum ? formatAum(fund.aum) : 'N/A'}</p>
               </div>
             </div>
 
@@ -192,18 +192,18 @@ export default function FundCard({ fund, index, isGrid }) {
                 <FontAwesomeIcon icon={faCalendarDays} className="text-amber-500 text-xs" />
               </div>
               <div>
-                <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wide">Inception Date</p>
-                <p className="text-sm font-bold text-gray-800">{fund.launchDate || fund.inceptionDate || 'N/A'}</p>
+                <p className="text-[10px] text-gray-600 font-semibold uppercase tracking-wide">Inception Date</p>
+                <p className="text-sm font-bold text-gray-900">{fund.launchDate || fund.inceptionDate || 'N/A'}</p>
               </div>
             </div>
 
             {/* Risk */}
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-white border border-[#e8edf7] flex items-center justify-center flex-shrink-0">
-                <FontAwesomeIcon icon={faShieldHalved} className="text-gray-400 text-xs" />
+                <FontAwesomeIcon icon={faShieldHalved} className="text-gray-600 text-xs" />
               </div>
               <div>
-                <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wide">Risk</p>
+                <p className="text-[10px] text-gray-600 font-semibold uppercase tracking-wide">Risk</p>
                 <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${risk.bg} ${risk.text} ${risk.border}`}>{risk.level !== 'N/A' ? `Level ${risk.level}` : 'N/A'}</span>
               </div>
             </div>
@@ -214,8 +214,8 @@ export default function FundCard({ fund, index, isGrid }) {
                 <FontAwesomeIcon icon={faChartPie} className="text-purple-500 text-xs" />
               </div>
               <div>
-                <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wide">Exp. Ratio</p>
-                <p className="text-sm font-bold text-gray-800">{fund.expenseRatio || 'N/A'}</p>
+                <p className="text-[10px] text-gray-600 font-semibold uppercase tracking-wide">Exp. Ratio</p>
+                <p className="text-sm font-bold text-gray-900">{fund.expenseRatio || 'N/A'}</p>
               </div>
             </div>
 
@@ -225,7 +225,7 @@ export default function FundCard({ fund, index, isGrid }) {
                 <FontAwesomeIcon icon={faCoins} className="text-[#032e92] text-xs" />
               </div>
               <div>
-                <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wide">NAV</p>
+                <p className="text-[10px] text-gray-600 font-semibold uppercase tracking-wide">NAV</p>
                 <p className="text-sm font-bold text-[#032e92]">{fund.nav != null ? formatNav(fund.nav) : 'N/A'}</p>
               </div>
             </div>

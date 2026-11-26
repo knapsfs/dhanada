@@ -83,7 +83,7 @@ export default function BankDetailsSection({
             <FontAwesomeIcon icon={faBuildingColumns} className="text-[#032e92] text-sm" />
             <span>Section C: Bank Details</span>
           </h2>
-          <p className="text-xs text-gray-500 mt-0.5">
+          <p className="text-xs text-gray-600 mt-0.5">
             Registered bank account will be used for all investment settlements and redemptions.
           </p>
         </div>
@@ -91,7 +91,7 @@ export default function BankDetailsSection({
 
       {/* Method Selection Radio Cards */}
       <div>
-        <label className="text-xs font-bold text-gray-800 block mb-2">
+        <label className="text-xs font-bold text-gray-900 block mb-2">
           How would you like to provide your bank details? <span className="text-red-500">*</span>
         </label>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -115,7 +115,7 @@ export default function BankDetailsSection({
               <span className="text-xs font-extrabold text-gray-900 block">
                 Method 1 — Enter Bank Details Manually
               </span>
-              <span className="text-xs text-gray-500 mt-0.5 block leading-relaxed">
+              <span className="text-xs text-gray-600 mt-0.5 block leading-relaxed">
                 Provide your bank name, account number, and verified IFSC code.
               </span>
             </div>
@@ -141,7 +141,7 @@ export default function BankDetailsSection({
               <span className="text-xs font-extrabold text-gray-900 block">
                 Method 2 — Upload Bank Proof Document
               </span>
-              <span className="text-xs text-gray-500 mt-0.5 block leading-relaxed">
+              <span className="text-xs text-gray-600 mt-0.5 block leading-relaxed">
                 Upload a scanned copy or photo of your cancelled cheque or bank passbook.
               </span>
             </div>
@@ -156,7 +156,7 @@ export default function BankDetailsSection({
             {/* IFSC Code */}
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="text-xs font-bold text-gray-800">
+                <label className="text-xs font-bold text-gray-900">
                   Bank IFSC Code <span className="text-red-500">*</span>
                 </label>
                 {lookupLoading && (
@@ -193,7 +193,7 @@ export default function BankDetailsSection({
 
             {/* Bank Name */}
             <div>
-              <label className="text-xs font-bold text-gray-800 block mb-1.5">
+              <label className="text-xs font-bold text-gray-900 block mb-1.5">
                 Bank Name <span className="text-red-500">*</span>
               </label>
               <input
@@ -214,7 +214,7 @@ export default function BankDetailsSection({
 
             {/* Account Number */}
             <div>
-              <label className="text-xs font-bold text-gray-800 block mb-1.5">
+              <label className="text-xs font-bold text-gray-900 block mb-1.5">
                 Bank Account Number <span className="text-red-500">*</span>
               </label>
               <input
@@ -239,7 +239,7 @@ export default function BankDetailsSection({
 
             {/* Confirm Account Number */}
             <div>
-              <label className="text-xs font-bold text-gray-800 block mb-1.5">
+              <label className="text-xs font-bold text-gray-900 block mb-1.5">
                 Confirm Bank Account Number <span className="text-red-500">*</span>
               </label>
               <input
@@ -286,7 +286,7 @@ export default function BankDetailsSection({
               {uploading ? (
                 <div className="flex flex-col items-center gap-2">
                   <FontAwesomeIcon icon={faSpinner} className="animate-spin text-2xl text-[#032e92]" />
-                  <span className="text-xs font-bold text-gray-700">Uploading Bank Document...</span>
+                  <span className="text-xs font-bold text-gray-900">Uploading Bank Document...</span>
                 </div>
               ) : (
                 <div className="flex flex-col items-center gap-2">
@@ -296,7 +296,7 @@ export default function BankDetailsSection({
                   <span className="text-xs font-bold text-gray-900 mt-1">
                     Click to browse or drop document here
                   </span>
-                  <span className="text-xs text-gray-400">
+                  <span className="text-xs text-gray-600">
                     Supported formats: PDF, PNG, JPG, JPEG (Max 5MB)
                   </span>
                 </div>

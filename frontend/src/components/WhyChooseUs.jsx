@@ -46,12 +46,12 @@ export default function WhyChooseUs() {
                 transition={{ duration: 0.5 }}
                 className="bg-[#f8f9fc] rounded-3xl p-8 flex flex-col h-full border border-gray-100"
               >
-                <div className="w-12 h-12 rounded-full border border-gray-300 flex items-center justify-center text-gray-700 mb-8">
+                <div className="w-12 h-12 rounded-full border border-gray-300 flex items-center justify-center text-gray-900 mb-8">
                   <FontAwesomeIcon icon={faUserCheck} className="text-lg" />
                 </div>
                 <h3 className="text-2xl font-semibold text-gray-900 mb-2 tracking-tight">Client Centric</h3>
                 {/* <p className="text-sm font-semibold text-[#032e92] mb-3">Your requirements are the top most priority</p> */}
-                <p className="text-gray-500 text-md leading-relaxed">
+                <p className="text-gray-600 text-md leading-relaxed">
                   We put your needs first, delivering personalized financial solutions tailored to your goals, challenges, and long-term success.
                 </p>
               </motion.div>
@@ -64,12 +64,12 @@ export default function WhyChooseUs() {
                 transition={{ duration: 0.5, delay: 0.1 }}
                 className="bg-[#f8f9fc] rounded-3xl p-8 flex flex-col h-full border border-gray-100"
               >
-                <div className="w-12 h-12 rounded-full border border-gray-300 flex items-center justify-center text-gray-700 mb-8">
+                <div className="w-12 h-12 rounded-full border border-gray-300 flex items-center justify-center text-gray-900 mb-8">
                   <FontAwesomeIcon icon={faChartLine} className="text-lg" />
                 </div>
                 <h3 className="text-2xl font-semibold text-gray-900 mb-2 tracking-tight">Business Continuity</h3>
                 {/* <p className="text-sm font-semibold text-[#032e92] mb-3">27+ years of continuous servicing</p> */}
-                <p className="text-gray-500 text-md leading-relaxed">
+                <p className="text-gray-600 text-md leading-relaxed">
                   Since 1997, we've been delivering trusted financial solutions, helping clients navigate changing markets with confidence.
                 </p>
               </motion.div>
@@ -84,12 +84,12 @@ export default function WhyChooseUs() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="bg-[#f8f9fc] rounded-3xl p-8 flex flex-col h-full border border-gray-100"
             >
-              <div className="w-12 h-12 rounded-full border border-gray-300 flex items-center justify-center text-gray-700 mb-8">
+              <div className="w-12 h-12 rounded-full border border-gray-300 flex items-center justify-center text-gray-900 mb-8">
                 <FontAwesomeIcon icon={faShieldHalved} className="text-lg" />
               </div>
               <h3 className="text-2xl font-semibold text-gray-900 mb-2 tracking-tight">Trust</h3>
               {/* <p className="text-sm font-semibold text-[#032e92] mb-3">Clients spanning 2 decades, serving 3 generation of clients</p> */}
-              <p className="text-gray-500 text-md leading-relaxed">
+              <p className="text-gray-600 text-md leading-relaxed">
                 We build lasting relationships by helping families protect and grow their wealth across generations.
               </p>
             </motion.div>

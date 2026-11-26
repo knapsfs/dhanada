@@ -45,7 +45,7 @@ export default function RecommendedFunds({ inputs }) {
 
   if (loading) {
     return (
-      <section className="bg-[#f7f9fc] pb-8 py-8 text-center text-gray-500">
+      <section className="bg-[#f7f9fc] pb-8 py-8 text-center text-gray-600">
         Loading recommendations...
       </section>
     );
@@ -64,7 +64,7 @@ export default function RecommendedFunds({ inputs }) {
             <div>
               <p className="text-xs font-bold text-[#032e92] uppercase tracking-widest mb-1">Curated For You</p>
               <h2 className="text-2xl font-bold text-gray-900">Recommended Funds For Your SIP</h2>
-              <p className="text-sm text-gray-400 font-medium mt-1">
+              <p className="text-sm text-gray-600 font-medium mt-1">
                 Based on your target return of <span className="text-[#032e92] font-bold">{annualReturn}%</span> over{' '}
                 <span className="text-[#032e92] font-bold">{duration} years</span>
               </p>

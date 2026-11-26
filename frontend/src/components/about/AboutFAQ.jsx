@@ -70,7 +70,7 @@ export default function AboutFAQ() {
                 <span className={`font-semibold text-lg transition-colors duration-300 ${openIndex === idx ? 'text-[#032e92]' : 'text-gray-900'}`}>
                   {faq.question}
                 </span>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-300 flex-shrink-0 ml-4 ${openIndex === idx ? 'bg-[#c10000] text-white' : 'bg-gray-100 text-gray-500'}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-300 flex-shrink-0 ml-4 ${openIndex === idx ? 'bg-[#c10000] text-white' : 'bg-gray-100 text-gray-600'}`}>
                   <FontAwesomeIcon icon={openIndex === idx ? faMinus : faPlus} className="text-sm" />
                 </div>
               </button>

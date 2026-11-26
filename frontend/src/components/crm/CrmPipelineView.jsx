@@ -12,7 +12,7 @@ const STAGES = [
   { id: 'Interested', label: 'Interested / Qualified', color: 'bg-amber-500', headerBg: 'bg-amber-50/80 text-amber-900 border-amber-200' },
   { id: 'Nurturing', label: 'Nurturing / In Follow-up', color: 'bg-purple-500', headerBg: 'bg-purple-50/80 text-purple-900 border-purple-200' },
   { id: 'Converted', label: 'Converted to Client', color: 'bg-emerald-500', headerBg: 'bg-emerald-50/80 text-emerald-900 border-emerald-200' },
-  { id: 'Not Interested', label: 'Not Interested / Lost', color: 'bg-gray-400', headerBg: 'bg-gray-100 text-gray-800 border-gray-200' },
+  { id: 'Not Interested', label: 'Not Interested / Lost', color: 'bg-gray-400', headerBg: 'bg-gray-100 text-gray-900 border-gray-200' },
 ];
 
 export default function CrmPipelineView({
@@ -38,7 +38,7 @@ export default function CrmPipelineView({
           </div>
           <div>
             <h3 className="text-xs font-bold text-gray-900 leading-tight">Lead Pipeline (Kanban)</h3>
-            <p className="text-xs text-gray-400 font-medium">Stage-by-stage visual lead management</p>
+            <p className="text-xs text-gray-600 font-medium">Stage-by-stage visual lead management</p>
           </div>
         </div>
 
@@ -47,10 +47,10 @@ export default function CrmPipelineView({
             <button
               type="button"
               onClick={() => onToggleView("list")}
-              className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 shadow-2xs flex items-center gap-1.5 cursor-pointer whitespace-nowrap transition-colors"
+              className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white border border-gray-200 hover:bg-gray-50 text-gray-900 shadow-2xs flex items-center gap-1.5 cursor-pointer whitespace-nowrap transition-colors"
               title="Switch to Table / List View"
             >
-              <FontAwesomeIcon icon={faList} className="text-gray-500 text-xs" />
+              <FontAwesomeIcon icon={faList} className="text-gray-600 text-xs" />
               <span>Table View</span>
             </button>
           )}
@@ -89,7 +89,7 @@ export default function CrmPipelineView({
 
                   <button
                     onClick={() => onNewLead && onNewLead(stage.id)}
-                    className="w-6 h-6 rounded-lg bg-white/80 hover:bg-white text-gray-700 flex items-center justify-center text-xs transition-colors shadow-2xs cursor-pointer"
+                    className="w-6 h-6 rounded-lg bg-white/80 hover:bg-white text-gray-900 flex items-center justify-center text-xs transition-colors shadow-2xs cursor-pointer"
                     title={`Add new lead to ${stage.label}`}
                   >
                     <FontAwesomeIcon icon={faPlus} className="text-[10px]" />
@@ -99,7 +99,7 @@ export default function CrmPipelineView({
                 {/* Cards List */}
                 <div className="flex-1 overflow-y-auto p-3 space-y-3">
                   {stageLeads.length === 0 ? (
-                    <div className="py-8 text-center text-gray-400 text-xs">
+                    <div className="py-8 text-center text-gray-600 text-xs">
                       No leads in this stage
                     </div>
                   ) : (
@@ -125,7 +125,7 @@ export default function CrmPipelineView({
                               <h4 className="text-sm font-bold text-gray-900 group-hover:text-[#032e92] transition-colors truncate">
                                 {lead.lead_name}
                               </h4>
-                              <p className="text-[10px] text-gray-400 font-mono mt-0.5">{lead.name}</p>
+                              <p className="text-[10px] text-gray-600 font-mono mt-0.5">{lead.name}</p>
                             </div>
 
                             {/* Stage Switch Dropdown Menu */}
@@ -133,14 +133,14 @@ export default function CrmPipelineView({
                               <button
                                 type="button"
                                 onClick={() => setActiveMenuLead(activeMenuLead === lead.name ? null : lead.name)}
-                                className="w-7 h-7 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 flex items-center justify-center text-xs transition-colors cursor-pointer"
+                                className="w-7 h-7 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 flex items-center justify-center text-xs transition-colors cursor-pointer"
                               >
                                 <FontAwesomeIcon icon={faEllipsisVertical} />
                               </button>
 
                               {activeMenuLead === lead.name && (
                                 <div className="absolute right-0 top-full mt-1 w-44 bg-white rounded-xl shadow-xl border border-gray-100 p-1.5 z-30">
-                                  <div className="text-[10px] uppercase font-bold text-gray-400 px-2 py-1">Move to:</div>
+                                  <div className="text-[10px] uppercase font-bold text-gray-600 px-2 py-1">Move to:</div>
                                   {STAGES.map((s) => (
                                     <button
                                       key={s.id}
@@ -149,7 +149,7 @@ export default function CrmPipelineView({
                                         onStatusChange && onStatusChange(lead.name, s.id);
                                         setActiveMenuLead(null);
                                       }}
-                                      className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 hover:bg-blue-50 transition-colors ${lead.status === s.id ? 'text-[#032e92] font-bold' : 'text-gray-700'}`}
+                                      className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 hover:bg-blue-50 transition-colors ${lead.status === s.id ? 'text-[#032e92] font-bold' : 'text-gray-900'}`}
                                     >
                                       <span className={`w-2 h-2 rounded-full ${s.color}`} />
                                       <span className="truncate">{s.label}</span>
@@ -182,7 +182,7 @@ export default function CrmPipelineView({
                                     <span>{contactInfo.label}</span>
                                   </span>
                                 ) : contactInfo.status === 'never_contacted' ? (
-                                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-gray-100 text-gray-500">
+                                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-gray-100 text-gray-600">
                                     <span>{contactInfo.label}</span>
                                   </span>
                                 ) : (
@@ -196,28 +196,28 @@ export default function CrmPipelineView({
 
                           {/* Latest Remark Preview if any */}
                           {lead.latest_remark && (
-                            <div className="mb-2 bg-slate-50 border border-slate-200/80 rounded-lg p-2 text-xs text-gray-700 leading-snug">
-                              <span className="font-bold text-gray-500 block text-[9px] uppercase mb-0.5">Latest Remark</span>
-                              <p className="line-clamp-2 italic text-gray-800 font-medium">"{lead.latest_remark}"</p>
+                            <div className="mb-2 bg-slate-50 border border-slate-200/80 rounded-lg p-2 text-xs text-gray-900 leading-snug">
+                              <span className="font-bold text-gray-600 block text-[9px] uppercase mb-0.5">Latest Remark</span>
+                              <p className="line-clamp-2 italic text-gray-900 font-medium">"{lead.latest_remark}"</p>
                             </div>
                           )}
 
                           {/* Notes Preview if any */}
                           {lead.notes && (
-                            <p className="text-xs text-gray-500 line-clamp-2 mb-2 leading-relaxed bg-gray-50/80 p-2 rounded-lg">
+                            <p className="text-xs text-gray-600 line-clamp-2 mb-2 leading-relaxed bg-gray-50/80 p-2 rounded-lg">
                               {lead.notes}
                             </p>
                           )}
 
                           {/* Card Footer: Quick Actions & Date */}
-                          <div className="pt-2 border-t border-gray-100 flex items-center justify-between gap-2 text-xs text-gray-400">
+                          <div className="pt-2 border-t border-gray-100 flex items-center justify-between gap-2 text-xs text-gray-600">
                             <span>
                               {lead.creation ? new Date(lead.creation).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : ''}
                             </span>
 
                             <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
                               {lead.interaction_count > 0 && (
-                                <span className="flex items-center gap-1 text-xs font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full mr-1">
+                                <span className="flex items-center gap-1 text-xs font-semibold text-gray-600 bg-gray-100 px-2 py-0.5 rounded-full mr-1">
                                   <FontAwesomeIcon icon={faCommentDots} className="text-[10px] text-blue-600" />
                                   <span>{lead.interaction_count}</span>
                                 </span>
@@ -227,7 +227,7 @@ export default function CrmPipelineView({
                                 <>
                                   <a
                                     href={`tel:${cleanPhone}`}
-                                    className="w-6 h-6 rounded-md bg-gray-50 hover:bg-blue-50 text-gray-500 hover:text-[#032e92] flex items-center justify-center transition-colors"
+                                    className="w-6 h-6 rounded-md bg-gray-50 hover:bg-blue-50 text-gray-600 hover:text-[#032e92] flex items-center justify-center transition-colors"
                                     title="Call Lead"
                                   >
                                     <FontAwesomeIcon icon={faPhone} className="text-[10px]" />

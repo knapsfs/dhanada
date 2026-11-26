@@ -150,10 +150,10 @@ function Disclaimer() {
     <section className="bg-[#f7f9fc] pb-8">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 flex gap-3">
-          <FontAwesomeIcon icon={faCircleInfo} className="text-gray-400 text-base flex-shrink-0 mt-0.5" />
+          <FontAwesomeIcon icon={faCircleInfo} className="text-gray-600 text-base flex-shrink-0 mt-0.5" />
           <div>
             <p className="text-xs font-bold text-gray-600 mb-1.5 uppercase tracking-wide">Disclaimer</p>
-            <p className="text-xs text-gray-500 font-medium leading-relaxed">
+            <p className="text-xs text-gray-600 font-medium leading-relaxed">
               The calculations provided are illustrative in nature and based on mathematical compounding and your inputs. Actual investment returns are subject to market risks and will depend on fund performance, asset allocation, and market conditions. Please consult a qualified financial advisor before making investment decisions.
             </p>
           </div>

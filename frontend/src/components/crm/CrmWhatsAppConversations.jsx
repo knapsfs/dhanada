@@ -108,7 +108,7 @@ function MessageBubble({ msg }) {
         {/* Bottom Metadata: Timestamp & Status */}
         <div
           className={`flex items-center justify-end gap-1.5 mt-1 text-[10px] ${
-            isOutbound ? "text-blue-200/90" : "text-gray-400"
+            isOutbound ? "text-blue-200/90" : "text-gray-600"
           }`}
         >
           <span>{msg.sent_at_formatted || msg.creation || ""}</span>
@@ -368,10 +368,10 @@ export default function CrmWhatsAppConversations({
       <div className="flex items-center justify-between gap-3 pb-2 border-b border-gray-100 flex-wrap">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-          <h3 className="text-xs font-bold text-gray-800 uppercase">
+          <h3 className="text-xs font-bold text-gray-900 uppercase">
             WhatsApp Communications
           </h3>
-          <span className="text-xs font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
+          <span className="text-xs font-semibold text-gray-600 bg-gray-100 px-2 py-0.5 rounded-full">
             {totalCount} {totalCount === 1 ? "message" : "messages"}
           </span>
 
@@ -407,7 +407,7 @@ export default function CrmWhatsAppConversations({
             type="button"
             onClick={() => fetchConversations(1, false)}
             disabled={loading}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-[#032e92] px-2.5 py-1.5 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-600 hover:text-[#032e92] px-2.5 py-1.5 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer disabled:opacity-50"
             title="Refresh WhatsApp messages"
           >
             <FontAwesomeIcon icon={faArrowsRotate} className={loading ? "animate-spin" : ""} />
@@ -428,14 +428,14 @@ export default function CrmWhatsAppConversations({
       {/* Source Filter if multiple sources present */}
       {!loading && messages.length > 0 && availableSources.length > 1 && (
         <div className="flex items-center gap-1.5 flex-wrap pt-1 pb-1">
-          <span className="text-xs font-semibold text-gray-400 mr-1">Filter Source:</span>
+          <span className="text-xs font-semibold text-gray-600 mr-1">Filter Source:</span>
           <button
             type="button"
             onClick={() => setSourceFilter("all")}
             className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
               sourceFilter === "all"
                 ? "bg-emerald-700 text-white"
-                : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                : "bg-gray-100 hover:bg-gray-200 text-gray-900"
             }`}
           >
             All Sources ({messages.length})
@@ -450,7 +450,7 @@ export default function CrmWhatsAppConversations({
                 className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
                   sourceFilter === src
                     ? "bg-emerald-700 text-white"
-                    : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                    : "bg-gray-100 hover:bg-gray-200 text-gray-900"
                 }`}
               >
                 {src} ({count})
@@ -528,7 +528,7 @@ export default function CrmWhatsAppConversations({
         <div className="flex-1 p-4 sm:p-5 overflow-y-auto space-y-1">
           {/* Loading Initial */}
           {loading && (
-            <div className="h-full flex flex-col items-center justify-center py-16 gap-2 text-gray-500">
+            <div className="h-full flex flex-col items-center justify-center py-16 gap-2 text-gray-600">
               <FontAwesomeIcon icon={faSpinner} className="animate-spin text-2xl text-emerald-600" />
               <p className="text-xs font-semibold">Loading WhatsApp conversations...</p>
             </div>
@@ -542,7 +542,7 @@ export default function CrmWhatsAppConversations({
               </div>
               <div>
                 <h4 className="text-xs font-bold text-gray-900">No WhatsApp messages yet</h4>
-                <p className="text-xs text-gray-500 max-w-sm mx-auto mt-1">
+                <p className="text-xs text-gray-600 max-w-sm mx-auto mt-1">
                   Start communicating with {contactName || "this contact"} via integrated WhatsApp. Messages sent here are stored directly in KNAPS CRM.
                 </p>
               </div>
@@ -567,7 +567,7 @@ export default function CrmWhatsAppConversations({
                     type="button"
                     onClick={() => fetchConversations(page + 1, true)}
                     disabled={loadingMore}
-                    className="text-xs font-semibold text-gray-500 hover:text-emerald-700 px-3 py-1 bg-white rounded-full border border-gray-200 shadow-2xs hover:shadow-xs transition-all cursor-pointer disabled:opacity-50"
+                    className="text-xs font-semibold text-gray-600 hover:text-emerald-700 px-3 py-1 bg-white rounded-full border border-gray-200 shadow-2xs hover:shadow-xs transition-all cursor-pointer disabled:opacity-50"
                   >
                     {loadingMore ? (
                       <span className="inline-flex items-center gap-1.5">
@@ -625,7 +625,7 @@ export default function CrmWhatsAppConversations({
                     : "No mobile number available for this contact..."
                 }
                 disabled={sending || !phoneToUse}
-                className="w-full text-xs p-3 rounded-2xl border border-gray-200 focus:outline-hidden focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-colors resize-none disabled:bg-gray-50 disabled:text-gray-400"
+                className="w-full text-xs p-3 rounded-2xl border border-gray-200 focus:outline-hidden focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-colors resize-none disabled:bg-gray-50 disabled:text-gray-600"
               />
             </div>
 
@@ -633,7 +633,7 @@ export default function CrmWhatsAppConversations({
               <button
                 type="button"
                 onClick={() => handleOpenTemplatePicker()}
-                className="p-2.5 rounded-xl border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700 text-xs font-semibold transition-colors cursor-pointer"
+                className="p-2.5 rounded-xl border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-900 text-xs font-semibold transition-colors cursor-pointer"
                 title="Send WhatsApp Template"
               >
                 <FontAwesomeIcon icon={faFileLines} />
@@ -672,13 +672,13 @@ export default function CrmWhatsAppConversations({
                 </span>
                 <div>
                   <h3 className="text-sm font-bold text-gray-900">Approved WhatsApp Templates</h3>
-                  <p className="text-xs text-gray-400">Compliant with Meta WhatsApp Business policies</p>
+                  <p className="text-xs text-gray-600">Compliant with Meta WhatsApp Business policies</p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setIsTemplateModalOpen(false)}
-                className="w-7 h-7 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 flex items-center justify-center cursor-pointer"
+                className="w-7 h-7 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 flex items-center justify-center cursor-pointer"
               >
                 <FontAwesomeIcon icon={faXmark} />
               </button>
@@ -686,7 +686,7 @@ export default function CrmWhatsAppConversations({
 
             <div className="space-y-3">
               <div>
-                <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                <label className="block text-xs font-bold text-gray-900 uppercase mb-1">
                   Select Template
                 </label>
                 <select
@@ -721,12 +721,12 @@ export default function CrmWhatsAppConversations({
                   {/* Parameter Inputs */}
                   {Array.isArray(currentTemplateObj.params) && currentTemplateObj.params.length > 0 && (
                     <div className="space-y-2 pt-1">
-                      <label className="block text-xs font-bold text-gray-700 uppercase">
+                      <label className="block text-xs font-bold text-gray-900 uppercase">
                         Template Parameters
                       </label>
                       {currentTemplateObj.params.map((param) => (
                         <div key={param}>
-                          <span className="text-[10px] text-gray-500 font-semibold">{param}</span>
+                          <span className="text-[10px] text-gray-600 font-semibold">{param}</span>
                           <input
                             type="text"
                             value={templateParamValues[param] || ""}
@@ -746,10 +746,10 @@ export default function CrmWhatsAppConversations({
 
                   {/* Live Template Preview */}
                   <div className="pt-2">
-                    <span className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                    <span className="block text-xs font-bold text-gray-900 uppercase mb-1">
                       Preview
                     </span>
-                    <div className="bg-emerald-50/70 border border-emerald-200/80 rounded-2xl p-3.5 text-xs text-gray-800 leading-relaxed font-sans">
+                    <div className="bg-emerald-50/70 border border-emerald-200/80 rounded-2xl p-3.5 text-xs text-gray-900 leading-relaxed font-sans">
                       {(() => {
                         let text = currentTemplateObj.body_template || "";
                         (currentTemplateObj.params || []).forEach((p, idx) => {

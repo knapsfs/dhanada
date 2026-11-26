@@ -19,7 +19,7 @@ function MetricCard({ icon, label, value, color, delay, iconBg }) {
       <div className={`w-10 h-10 rounded-xl ${iconBg} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
         <FontAwesomeIcon icon={icon} className={`${color} text-sm`} />
       </div>
-      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1">{label}</p>
+      <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1">{label}</p>
       <p className={`text-xl font-bold ${color}`}>{value}</p>
     </motion.div>
   )
@@ -71,8 +71,8 @@ export default function OverviewSection({ fund }) {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-4">
           {details.map((item) => (
             <div key={item.label} className="border-b border-dashed border-[#e8edf7] pb-3">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-0.5">{item.label}</p>
-              <p className="text-sm font-bold text-gray-800">{item.value}</p>
+              <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-0.5">{item.label}</p>
+              <p className="text-sm font-bold text-gray-900">{item.value}</p>
             </div>
           ))}
         </div>

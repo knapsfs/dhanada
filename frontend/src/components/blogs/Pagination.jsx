@@ -46,7 +46,7 @@ export default function Pagination({ currentPage = 1, totalPages = 1, onPageChan
           {/* Page Numbers */}
           {getPages().map((page, idx) =>
             page === "..." ? (
-              <span key={`dots-${idx}`} className="text-gray-400 font-bold px-2">
+              <span key={`dots-${idx}`} className="text-gray-600 font-bold px-2">
                 ...
               </span>
             ) : (
@@ -57,7 +57,7 @@ export default function Pagination({ currentPage = 1, totalPages = 1, onPageChan
                 className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold transition-all cursor-pointer ${
                   currentPage === page
                     ? "bg-[#032e92] text-white shadow-md shadow-blue-900/20"
-                    : "text-gray-700 hover:bg-gray-100"
+                    : "text-gray-900 hover:bg-gray-100"
                 }`}
               >
                 {page}
@@ -73,7 +73,7 @@ export default function Pagination({ currentPage = 1, totalPages = 1, onPageChan
             className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors flex items-center gap-2 ml-2 cursor-pointer ${
               currentPage === totalPages
                 ? "text-gray-300 cursor-not-allowed pointer-events-none"
-                : "text-gray-700 hover:text-[#032e92] hover:bg-blue-50"
+                : "text-gray-900 hover:text-[#032e92] hover:bg-blue-50"
             }`}
           >
             Next

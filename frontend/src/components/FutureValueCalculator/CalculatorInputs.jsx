@@ -23,7 +23,7 @@ const parseRawNumber = (rawStr) => {
 function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onChange, hint, placeholder = '' }) {
   return (
     <div className="flex flex-col gap-1.5 mb-6">
-      <label htmlFor={id} className="text-xs font-bold text-gray-500 uppercase tracking-wide flex items-center gap-1.5">
+      <label htmlFor={id} className="text-xs font-bold text-gray-600 uppercase tracking-wide flex items-center gap-1.5">
         {label}
         {hint && (
           <span title={hint} className="cursor-help">
@@ -33,7 +33,7 @@ function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onCh
       </label>
       <div className="relative flex items-center">
         {prefix && (
-          <span className="absolute left-3.5 text-sm font-bold text-gray-500 pointer-events-none z-10">{prefix}</span>
+          <span className="absolute left-3.5 text-sm font-bold text-gray-600 pointer-events-none z-10">{prefix}</span>
         )}
         <input
           id={id}
@@ -49,12 +49,12 @@ function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onCh
               onChange(isNaN(num) ? raw : num);
             }
           }}
-          className={`w-full py-3.5 rounded-xl border-2 border-[#e8edf7] bg-[#f7f9fc] text-gray-800 font-bold text-base focus:outline-none focus:border-[#032e92] focus:ring-4 focus:ring-[#032e92]/8 transition-all placeholder-gray-400 ${prefix ? 'pl-8 pr-4' : suffix ? 'pl-4 pr-12' : 'px-4'
+          className={`w-full py-3.5 rounded-xl border-2 border-[#e8edf7] bg-[#f7f9fc] text-gray-900 font-bold text-base focus:outline-none focus:border-[#032e92] focus:ring-4 focus:ring-[#032e92]/8 transition-all placeholder-gray-400 ${prefix ? 'pl-8 pr-4' : suffix ? 'pl-4 pr-12' : 'px-4'
             }`}
           placeholder={placeholder}
         />
         {suffix && (
-          <span className="absolute right-3.5 text-sm font-bold text-gray-500 pointer-events-none">{suffix}</span>
+          <span className="absolute right-3.5 text-sm font-bold text-gray-600 pointer-events-none">{suffix}</span>
         )}
       </div>
       <input
@@ -66,7 +66,7 @@ function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onCh
         onChange={e => onChange(Number(e.target.value))}
         className="w-full h-1.5 rounded-full accent-[#032e92] cursor-pointer mt-1"
       />
-      <div className="flex justify-between text-[10px] text-gray-400 font-medium">
+      <div className="flex justify-between text-[10px] text-gray-600 font-medium">
         <span>{prefix}{min?.toLocaleString('en-IN')}{suffix}</span>
         <span>{prefix}{max?.toLocaleString('en-IN')}{suffix}</span>
       </div>
@@ -87,7 +87,7 @@ export default function CalculatorInputs({
   return (
     <div className="flex flex-col">
       <div className="flex justify-between items-center mb-6">
-        <h3 className="font-bold text-gray-800 text-lg">Your Investment Details</h3>
+        <h3 className="font-bold text-gray-900 text-lg">Your Investment Details</h3>
         <button
           type="button"
           onClick={resetDefaults}
@@ -163,7 +163,7 @@ export default function CalculatorInputs({
         onChange={setAnnualReturn}
         hint="Illustrative assumption only. Actual investment returns may vary."
       />
-      <p className="text-[10px] text-gray-400 italic -mt-4 mb-6 leading-tight">
+      <p className="text-[10px] text-gray-600 italic -mt-4 mb-6 leading-tight">
         * Illustrative assumption only. Actual investment returns may vary and are not guaranteed.
       </p>
     </div>

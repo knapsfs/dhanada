@@ -147,7 +147,7 @@ export default function HealthInsuranceCoverageExplorer() {
 
         {/* Step 1: Life Stage Selector */}
         <div className="mb-8">
-          <label className="block text-xs font-bold uppercase text-gray-500 mb-3">
+          <label className="block text-xs font-bold uppercase text-gray-600 mb-3">
             1. Select Your Current Life Stage
           </label>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3">
@@ -159,13 +159,13 @@ export default function HealthInsuranceCoverageExplorer() {
                   onClick={() => setSelectedStage(stage.id)}
                   className={`p-3.5 sm:p-4 rounded-2xl text-left transition-all duration-300 border cursor-pointer ${isActive
                     ? 'bg-[#032e92] text-white border-[#032e92] shadow-md scale-[1.02]'
-                    : 'bg-[#f7f9fc] hover:bg-white text-gray-800 border-gray-200/80 hover:border-blue-200'
+                    : 'bg-[#f7f9fc] hover:bg-white text-gray-900 border-gray-200/80 hover:border-blue-200'
                     }`}
                 >
                   <div className={`text-xs sm:text-sm font-bold ${isActive ? 'text-white' : 'text-[#0a192f]'}`}>
                     {stage.label}
                   </div>
-                  <div className={`text-xs mt-0.5 ${isActive ? 'text-blue-100' : 'text-gray-500'}`}>
+                  <div className={`text-xs mt-0.5 ${isActive ? 'text-blue-100' : 'text-gray-600'}`}>
                     {stage.sub}
                   </div>
                 </button>
@@ -176,7 +176,7 @@ export default function HealthInsuranceCoverageExplorer() {
 
         {/* Step 2: Family Configuration */}
         <div className="mb-8">
-          <label className="block text-xs font-bold uppercase text-gray-500 mb-3">
+          <label className="block text-xs font-bold uppercase text-gray-600 mb-3">
             2. Select Family Members to Cover
           </label>
           <div className="flex flex-wrap gap-2.5 sm:gap-3">
@@ -188,11 +188,11 @@ export default function HealthInsuranceCoverageExplorer() {
                   onClick={() => setSelectedFamily(fam.id)}
                   className={`px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all border cursor-pointer ${isActive
                     ? 'bg-gradient-to-r from-[#032e92] to-[#021d63] text-white border-transparent shadow-md'
-                    : 'bg-white text-gray-700 border-gray-200 hover:border-blue-200 hover:bg-gray-50'
+                    : 'bg-white text-gray-900 border-gray-200 hover:border-blue-200 hover:bg-gray-50'
                     }`}
                 >
                   <span>{fam.label}</span>
-                  <span className={`text-[10px] ml-1.5 opacity-80 ${isActive ? 'text-blue-200' : 'text-gray-400'}`}>
+                  <span className={`text-[10px] ml-1.5 opacity-80 ${isActive ? 'text-blue-200' : 'text-gray-600'}`}>
                     ({fam.members})
                   </span>
                 </button>
@@ -203,7 +203,7 @@ export default function HealthInsuranceCoverageExplorer() {
 
         {/* Step 3: Priority Need */}
         <div className="mb-10">
-          <label className="block text-xs font-bold uppercase text-gray-500 mb-3">
+          <label className="block text-xs font-bold uppercase text-gray-600 mb-3">
             3. Select Your Primary Health Priority
           </label>
           <div className="flex flex-wrap gap-2.5 sm:gap-3">
@@ -215,7 +215,7 @@ export default function HealthInsuranceCoverageExplorer() {
                   onClick={() => setSelectedPriority(pri.id)}
                   className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all border cursor-pointer flex items-center gap-1.5 ${isActive
                     ? 'bg-emerald-700 text-white border-emerald-700 shadow-sm'
-                    : 'bg-white text-gray-700 border-gray-200 hover:border-emerald-300 hover:bg-emerald-50/40'
+                    : 'bg-white text-gray-900 border-gray-200 hover:border-emerald-300 hover:bg-emerald-50/40'
                     }`}
                 >
                   <span>{pri.label}</span>
@@ -245,7 +245,7 @@ export default function HealthInsuranceCoverageExplorer() {
                   <span className="text-gray-600">
                     Recommended Cover: <strong className="text-[#032e92] text-base">{recommendation.recommendedSum}</strong>
                   </span>
-                  <span className="text-gray-400">•</span>
+                  <span className="text-gray-600">•</span>
                   <span className="text-emerald-700 font-semibold bg-emerald-50 px-2.5 py-0.5 rounded-lg border border-emerald-200/60">
                     {recommendation.indicativePremium}
                   </span>
@@ -253,7 +253,7 @@ export default function HealthInsuranceCoverageExplorer() {
               </div>
 
               <div>
-                <h4 className="text-xs font-bold uppercase text-gray-500 mb-3 flex items-center gap-1.5">
+                <h4 className="text-xs font-bold uppercase text-gray-600 mb-3 flex items-center gap-1.5">
                   <FontAwesomeIcon icon={faCheckCircle} className="text-[#032e92]" />
                   Core Coverage Highlights Under This Strategy
                 </h4>
@@ -261,7 +261,7 @@ export default function HealthInsuranceCoverageExplorer() {
                   {recommendation.features.map((feat, idx) => (
                     <div key={idx} className="flex items-start gap-2.5 p-2.5 rounded-xl bg-white border border-gray-200/60 shadow-xs">
                       <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 text-xs flex-shrink-0 mt-0.5" />
-                      <span className="text-xs sm:text-sm text-gray-700 leading-snug">{feat}</span>
+                      <span className="text-xs sm:text-sm text-gray-900 leading-snug">{feat}</span>
                     </div>
                   ))}
                 </div>
@@ -315,7 +315,7 @@ export default function HealthInsuranceCoverageExplorer() {
                   <FontAwesomeIcon icon={faArrowRight} className="text-xs group-hover:translate-x-1 transition-transform" />
                 </button>
 
-                <p className="text-xs text-gray-500 text-center">
+                <p className="text-xs text-gray-600 text-center">
                   Instant comparison across Star Health, HDFC ERGO, Care, Niva Bupa, ICICI Lombard & more.
                 </p>
               </div>
@@ -325,8 +325,8 @@ export default function HealthInsuranceCoverageExplorer() {
 
         {/* Explanatory Footer */}
         <div className="mt-8 text-center">
-          <p className="inline-flex items-center gap-2 text-xs sm:text-sm text-gray-500">
-            <FontAwesomeIcon icon={faCircleQuestion} className="text-gray-400" />
+          <p className="inline-flex items-center gap-2 text-xs sm:text-sm text-gray-600">
+            <FontAwesomeIcon icon={faCircleQuestion} className="text-gray-600" />
             <span>Have existing pre-existing conditions like diabetes or high blood pressure? Our insurance specialists guide you to policies with Day-1 or 1-year waiting periods.</span>
           </p>
         </div>

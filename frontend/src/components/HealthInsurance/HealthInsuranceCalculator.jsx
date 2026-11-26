@@ -120,7 +120,7 @@ export default function HealthInsuranceCalculator() {
           <div className="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 lg:p-10 border border-gray-200/90 shadow-lg space-y-6">
             {/* Input 1: Family Composition */}
             <div>
-              <label className="block text-xs font-bold uppercase text-gray-500 mb-3 flex items-center justify-between">
+              <label className="block text-xs font-bold uppercase text-gray-600 mb-3 flex items-center justify-between">
                 <span>Who Do You Want to Cover?</span>
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
@@ -136,7 +136,7 @@ export default function HealthInsuranceCalculator() {
                     onClick={() => setFamilyType(item.id)}
                     className={`py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer ${familyType === item.id
                         ? 'bg-[#032e92] text-white border-[#032e92] shadow-sm'
-                        : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-white'
+                        : 'bg-gray-50 text-gray-900 border-gray-200 hover:bg-white'
                       }`}
                   >
                     {item.label}
@@ -148,7 +148,7 @@ export default function HealthInsuranceCalculator() {
             {/* Input 2: Age of Eldest Member */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-bold uppercase text-gray-500">
+                <label className="text-xs font-bold uppercase text-gray-600">
                   Age of Eldest Covered Member
                 </label>
                 <span className="text-base font-bold text-[#032e92] bg-blue-50 px-3 py-0.5 rounded-lg border border-blue-100">
@@ -164,7 +164,7 @@ export default function HealthInsuranceCalculator() {
                 onChange={(e) => setAge(Number(e.target.value))}
                 className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#032e92]"
               />
-              <div className="flex justify-between text-xs text-gray-400 mt-1">
+              <div className="flex justify-between text-xs text-gray-600 mt-1">
                 <span>18 Years</span>
                 <span>45 Years</span>
                 <span>75 Years</span>
@@ -173,7 +173,7 @@ export default function HealthInsuranceCalculator() {
 
             {/* Input 3: City Tier */}
             <div>
-              <label className="block text-xs font-bold uppercase text-gray-500 mb-2.5">
+              <label className="block text-xs font-bold uppercase text-gray-600 mb-2.5">
                 City of Residence (Hospital Cost Tier)
               </label>
               <div className="grid grid-cols-2 gap-3">
@@ -181,29 +181,29 @@ export default function HealthInsuranceCalculator() {
                   onClick={() => setCityTier('metro')}
                   className={`p-3 rounded-xl text-left border transition-all cursor-pointer ${cityTier === 'metro'
                       ? 'bg-blue-50 text-[#032e92] border-blue-300 shadow-xs'
-                      : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-white'
+                      : 'bg-gray-50 text-gray-900 border-gray-200 hover:bg-white'
                     }`}
                 >
                   <div className="font-bold text-xs sm:text-sm">Tier 1 / Metro City</div>
-                  <div className="text-xs text-gray-500">Mumbai, Delhi NCR, Bengaluru, Hyderabad, etc.</div>
+                  <div className="text-xs text-gray-600">Mumbai, Delhi NCR, Bengaluru, Hyderabad, etc.</div>
                 </button>
 
                 <button
                   onClick={() => setCityTier('tier2')}
                   className={`p-3 rounded-xl text-left border transition-all cursor-pointer ${cityTier === 'tier2'
                       ? 'bg-blue-50 text-[#032e92] border-blue-300 shadow-xs'
-                      : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-white'
+                      : 'bg-gray-50 text-gray-900 border-gray-200 hover:bg-white'
                     }`}
                 >
                   <div className="font-bold text-xs sm:text-sm">Tier 2 / Tier 3 City</div>
-                  <div className="text-xs text-gray-500">Jaipur, Lucknow, Indore, Coimbatore, etc.</div>
+                  <div className="text-xs text-gray-600">Jaipur, Lucknow, Indore, Coimbatore, etc.</div>
                 </button>
               </div>
             </div>
 
             {/* Input 4: Existing Employer / Corporate Cover */}
             <div>
-              <label className="block text-xs font-bold uppercase text-gray-500 mb-2.5">
+              <label className="block text-xs font-bold uppercase text-gray-600 mb-2.5">
                 Existing Employer / Corporate Health Cover
               </label>
               <div className="grid grid-cols-4 gap-2">
@@ -218,14 +218,14 @@ export default function HealthInsuranceCalculator() {
                     onClick={() => setCorporateCover(item.val)}
                     className={`py-2 px-2 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${corporateCover === item.val
                         ? 'bg-[#032e92] text-white border-[#032e92]'
-                        : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-white'
+                        : 'bg-gray-50 text-gray-900 border-gray-200 hover:bg-white'
                       }`}
                   >
                     {item.label}
                   </button>
                 ))}
               </div>
-              <p className="text-xs text-gray-500 mt-1.5">
+              <p className="text-xs text-gray-600 mt-1.5">
                 {corporateCover > 0
                   ? `With ₹${corporateCover / 100000}L employer cover, a Super Top-Up is the most affordable way to boost your protection to ₹1 Crore.`
                   : 'Without corporate cover, a full comprehensive base floater of ₹25L–₹50L is strongly recommended.'}

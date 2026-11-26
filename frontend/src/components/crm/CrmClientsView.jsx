@@ -65,17 +65,17 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
       {/* Top Search Bar */}
       <div className="p-4 sm:p-5 border-b border-gray-100 flex items-center justify-between gap-4">
         <div className="relative flex-1 max-w-md">
-          <FontAwesomeIcon icon={faSearch} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
+          <FontAwesomeIcon icon={faSearch} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-600 text-xs" />
           <input
             type="text"
             placeholder="Search by client name, mobile, PAN, or email..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-9 pr-4 py-2 text-xs text-gray-800 placeholder:text-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#032e92]/20 focus:border-[#032e92] transition-all"
+            className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-9 pr-4 py-2 text-xs text-gray-900 placeholder:text-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#032e92]/20 focus:border-[#032e92] transition-all"
           />
         </div>
 
-        <div className="text-xs font-semibold text-gray-500">
+        <div className="text-xs font-semibold text-gray-600">
           Showing <span className="font-bold text-gray-900">{filtered.length}</span> Clients
         </div>
       </div>
@@ -84,7 +84,7 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-[#f8fafc] text-xs font-bold text-gray-500 uppercase border-b border-gray-200/80">
+            <tr className="bg-[#f8fafc] text-xs font-bold text-gray-600 uppercase border-b border-gray-200/80">
               <th className="py-3 px-4 sm:px-6">Client</th>
               <th className="py-3 px-4">Contact</th>
               <th className="py-3 px-4">PAN & KYC</th>
@@ -97,7 +97,7 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
           <tbody className="divide-y divide-gray-100 text-xs">
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan="7" className="py-12 text-center text-gray-400 font-medium">
+                <td colSpan="7" className="py-12 text-center text-gray-600 font-medium">
                   {loading ? 'Loading clients...' : 'No clients found in records.'}
                 </td>
               </tr>
@@ -115,7 +115,7 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
                     <td className="py-3.5 px-4 sm:px-6">
                       <div className="font-bold text-gray-900 group-hover:text-[#032e92] transition-colors">{client.client_name}</div>
                       <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
-                        <span className="text-[10px] text-gray-400 font-mono">{client.name}</span>
+                        <span className="text-[10px] text-gray-600 font-mono">{client.name}</span>
                         {(() => {
                           const contactInfo = getContactStatus(
                             client.last_contacted_on,
@@ -131,7 +131,7 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
                             );
                           }
                           return (
-                            <span className="text-[10px] text-gray-400">
+                            <span className="text-[10px] text-gray-600">
                               · {contactInfo.label}
                             </span>
                           );
@@ -139,18 +139,18 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
                       </div>
                       {client.latest_remark && (
                         <p className="text-xs text-gray-600 italic mt-1 line-clamp-1 max-w-xs">
-                          <span className="font-semibold not-italic text-gray-700">Remark: </span>{client.latest_remark}
+                          <span className="font-semibold not-italic text-gray-900">Remark: </span>{client.latest_remark}
                         </p>
                       )}
                     </td>
 
                     <td className="py-3.5 px-4">
-                      <div className="font-semibold text-gray-800">{client.mobile_no || '—'}</div>
-                      <div className="text-xs text-gray-400">{client.email || ''}</div>
+                      <div className="font-semibold text-gray-900">{client.mobile_no || '—'}</div>
+                      <div className="text-xs text-gray-600">{client.email || ''}</div>
                     </td>
 
                     <td className="py-3.5 px-4">
-                      <div className="font-mono text-xs font-bold text-gray-700">{client.pan || 'PAN Pending'}</div>
+                      <div className="font-mono text-xs font-bold text-gray-900">{client.pan || 'PAN Pending'}</div>
                       <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold mt-0.5 ${client.kyc_status === 'Verified' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>
                         KYC: {client.kyc_status || 'Pending'}
                       </span>
@@ -160,21 +160,21 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
                       {client.family ? (
                         <div className="flex items-center gap-1.5">
                           <FontAwesomeIcon icon={faUsers} className="text-[#032e92] text-[10px]" />
-                          <span className="font-semibold text-gray-700">{client.family_role || 'Member'}</span>
+                          <span className="font-semibold text-gray-900">{client.family_role || 'Member'}</span>
                         </div>
                       ) : (
-                        <span className="text-gray-400">Individual</span>
+                        <span className="text-gray-600">Individual</span>
                       )}
                     </td>
 
                     <td className="py-3.5 px-4">
-                      <span className="inline-block px-2.5 py-0.5 rounded-md text-xs font-semibold bg-gray-100 text-gray-700">
+                      <span className="inline-block px-2.5 py-0.5 rounded-md text-xs font-semibold bg-gray-100 text-gray-900">
                         {client.investor_category || 'Retail'}
                       </span>
                     </td>
 
                     <td className="py-3.5 px-4">
-                      <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-bold border ${client.client_status === 'Active' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-gray-100 text-gray-700 border-gray-200'}`}>
+                      <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-bold border ${client.client_status === 'Active' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-gray-100 text-gray-900 border-gray-200'}`}>
                         {client.client_status || 'Active'}
                       </span>
                     </td>
@@ -257,13 +257,13 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
           <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-gray-200 space-y-4">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <span className="font-mono text-[10px] text-gray-400 block">{selectedClientForRemark.name}</span>
+                <span className="font-mono text-[10px] text-gray-600 block">{selectedClientForRemark.name}</span>
                 <h3 className="text-lg font-bold text-gray-900">{selectedClientForRemark.client_name}</h3>
               </div>
               <button
                 type="button"
                 onClick={() => setSelectedClientForRemark(null)}
-                className="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-700 hover:bg-gray-100 cursor-pointer"
+                className="w-8 h-8 rounded-full flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 cursor-pointer"
               >
                 <FontAwesomeIcon icon={faXmark} />
               </button>
@@ -302,25 +302,25 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
 
             {/* Current Latest Remark Box */}
             <div className="bg-slate-50 rounded-xl p-3.5 border border-gray-200 text-xs">
-              <span className="text-[10px] font-bold text-gray-500 uppercase block mb-1">Current Latest Remark</span>
+              <span className="text-[10px] font-bold text-gray-600 uppercase block mb-1">Current Latest Remark</span>
               {selectedClientForRemark.latest_remark ? (
                 <div>
                   <p className="text-gray-900 font-medium leading-relaxed whitespace-pre-wrap">
                     "{selectedClientForRemark.latest_remark}"
                   </p>
-                  <div className="mt-3 pt-2 border-t border-gray-200 flex items-center justify-between gap-3 text-xs text-gray-500 flex-wrap">
+                  <div className="mt-3 pt-2 border-t border-gray-200 flex items-center justify-between gap-3 text-xs text-gray-600 flex-wrap">
                     <span className="flex items-center gap-1">
-                      <FontAwesomeIcon icon={faUser} className="text-gray-400 text-[10px]" />
-                      <span>Contacted by: <strong className="text-gray-700">{selectedClientForRemark.last_contacted_by || 'Unknown'}</strong></span>
+                      <FontAwesomeIcon icon={faUser} className="text-gray-600 text-[10px]" />
+                      <span>Contacted by: <strong className="text-gray-900">{selectedClientForRemark.last_contacted_by || 'Unknown'}</strong></span>
                     </span>
                     <span className="flex items-center gap-1">
-                      <FontAwesomeIcon icon={faClock} className="text-gray-400 text-[10px]" />
+                      <FontAwesomeIcon icon={faClock} className="text-gray-600 text-[10px]" />
                       <span>{formatContactDate(selectedClientForRemark.last_contacted_on)}</span>
                     </span>
                   </div>
                 </div>
               ) : (
-                <p className="text-gray-400 italic">No contact remark recorded yet.</p>
+                <p className="text-gray-600 italic">No contact remark recorded yet.</p>
               )}
             </div>
 
@@ -334,7 +334,7 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
 
             {/* Record New Remark Form */}
             <form onSubmit={handleSaveClientRemark} className="space-y-3 pt-1">
-              <label className="block text-xs font-bold text-gray-700 uppercase">
+              <label className="block text-xs font-bold text-gray-900 uppercase">
                 Record New Contact Remark
               </label>
               <textarea
@@ -399,7 +399,7 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
                   <h3 className="text-sm font-bold text-gray-900">
                     Email Conversations · {selectedClientForConversations.client_name}
                   </h3>
-                  <div className="flex items-center gap-2 text-xs text-gray-500 mt-0.5">
+                  <div className="flex items-center gap-2 text-xs text-gray-600 mt-0.5">
                     <span className="font-mono text-[10px] bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">
                       {selectedClientForConversations.name}
                     </span>
@@ -412,7 +412,7 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
               <button
                 type="button"
                 onClick={() => setSelectedClientForConversations(null)}
-                className="w-8 h-8 rounded-xl text-gray-400 hover:text-gray-700 hover:bg-gray-100 flex items-center justify-center transition-colors cursor-pointer"
+                className="w-8 h-8 rounded-xl text-gray-600 hover:text-gray-900 hover:bg-gray-100 flex items-center justify-center transition-colors cursor-pointer"
               >
                 <FontAwesomeIcon icon={faXmark} />
               </button>
@@ -459,7 +459,7 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
                   <h3 className="text-sm font-bold text-gray-900">
                     WhatsApp Conversations · {selectedClientForWhatsApp.client_name}
                   </h3>
-                  <div className="flex items-center gap-2 text-xs text-gray-500 mt-0.5">
+                  <div className="flex items-center gap-2 text-xs text-gray-600 mt-0.5">
                     <span className="font-mono text-[10px] bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">
                       {selectedClientForWhatsApp.name}
                     </span>
@@ -472,7 +472,7 @@ export default function CrmClientsView({ clients = [], loading = false, onClient
               <button
                 type="button"
                 onClick={() => setSelectedClientForWhatsApp(null)}
-                className="w-8 h-8 rounded-xl text-gray-400 hover:text-gray-700 hover:bg-gray-100 flex items-center justify-center transition-colors cursor-pointer"
+                className="w-8 h-8 rounded-xl text-gray-600 hover:text-gray-900 hover:bg-gray-100 flex items-center justify-center transition-colors cursor-pointer"
               >
                 <FontAwesomeIcon icon={faXmark} />
               </button>

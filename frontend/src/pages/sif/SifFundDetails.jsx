@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faArrowRight, faCircleExclamation, faSpinner,
+  faChevronRight, faCircleExclamation, faSpinner,
   faExpand, faCompress, faChartSimple, faFileLines,
   faCoins, faPlus, faWallet, faChartPie, faPercent, faUsers,
   faDoorOpen, faCircleCheck, faChevronDown
@@ -406,7 +406,7 @@ export default function SifFundDetails() {
         <Navbar />
         <div className="flex-1 flex flex-col items-center justify-center gap-4 pt-28">
           <FontAwesomeIcon icon={faSpinner} className="text-4xl text-[#032e92] animate-spin" />
-          <p className="text-gray-500 font-semibold text-sm">Loading scheme details...</p>
+          <p className="text-gray-600 font-semibold text-sm">Loading scheme details...</p>
         </div>
         <Footer />
       </div>
@@ -467,12 +467,12 @@ export default function SifFundDetails() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16">
         {/* Breadcrumbs */}
-        <div className="flex items-center gap-2 text-sm font-medium text-gray-500 mb-6">
-          <Link to="/" className="hover:text-gray-700 transition-colors">Home</Link>
-          <FontAwesomeIcon icon={faArrowRight} className="text-[9px]" />
-          <Link to="/sif" className="hover:text-gray-700 transition-colors">SIF</Link>
-          <FontAwesomeIcon icon={faArrowRight} className="text-[9px]" />
-          <span className="text-gray-700 font-semibold">{fund.name}</span>
+        <div className="flex flex-wrap items-center gap-3 text-sm font-medium text-gray-600 mb-6">
+          <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-600" />
+          <Link to="/sif" className="hover:text-[#032e92] transition-colors">SIF</Link>
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-600" />
+          <span className="text-[#032e92]">{fund.name}</span>
         </div>
 
         {/* Top Header Row (Logo + Fund Name + AMC + Plan Selector) */}
@@ -501,10 +501,10 @@ export default function SifFundDetails() {
             )}
 
             <div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0f172a] tracking-tight leading-tight">
+              <h1 className="text-2xl sm:text-3xl font-bold text-[#0f172a] tracking-tight leading-tight">
                 {fund.name}
               </h1>
-              <p className="text-sm sm:text-base font-medium text-gray-500 mt-0.5">
+              <p className="text-sm sm:text-base font-medium text-gray-600 mt-0.5">
                 {fund.amc}
               </p>
             </div>
@@ -516,11 +516,11 @@ export default function SifFundDetails() {
               <button
                 type="button"
                 onClick={() => setIsPlanDropdownOpen(!isPlanDropdownOpen)}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-200 bg-gray-50 hover:bg-gray-100 text-xs font-semibold text-gray-700 transition-all shadow-2xs"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-200 bg-gray-50 hover:bg-gray-100 text-xs font-semibold text-gray-900 transition-all shadow-2xs"
               >
                 <span className="w-2 h-2 rounded-full bg-emerald-500" />
                 <span>{selectedType || 'Regular'} • {selectedOption || 'Growth'}</span>
-                <FontAwesomeIcon icon={faChevronDown} className="text-[10px] text-gray-400" />
+                <FontAwesomeIcon icon={faChevronDown} className="text-[10px] text-gray-600" />
               </button>
 
               <AnimatePresence>
@@ -531,7 +531,7 @@ export default function SifFundDetails() {
                     exit={{ opacity: 0, y: 5 }}
                     className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 p-2 z-30 space-y-1"
                   >
-                    <p className="text-[10px] font-bold uppercase text-gray-400 px-3 py-1">Select Plan</p>
+                    <p className="text-[10px] font-bold uppercase text-gray-600 px-3 py-1">Select Plan</p>
                     {availablePlans.map((p, idx) => (
                       <button
                         key={idx}
@@ -543,7 +543,7 @@ export default function SifFundDetails() {
                           setSelectedPeriod(p.period || '');
                           setIsPlanDropdownOpen(false);
                         }}
-                        className={`w-full text-left px-3 py-2 rounded-xl text-xs flex items-center justify-between transition-colors ${selectedPlan.name === p.name ? 'bg-blue-50 text-[#032e92] font-bold' : 'text-gray-700 hover:bg-gray-50 font-medium'
+                        className={`w-full text-left px-3 py-2 rounded-xl text-xs flex items-center justify-between transition-colors ${selectedPlan.name === p.name ? 'bg-blue-50 text-[#032e92] font-bold' : 'text-gray-900 hover:bg-gray-50 font-medium'
                           }`}
                       >
                         <span>{p.type || 'Plan'} - {p.option || 'Growth'}</span>
@@ -564,7 +564,7 @@ export default function SifFundDetails() {
             <div className="lg:col-span-7 xl:col-span-8 space-y-6">
               {/* Performance Header with Range Selector */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <h2 className="text-xl font-extrabold text-[#0f172a] tracking-tight">
+                <h2 className="text-xl font-bold text-[#0f172a] tracking-tight">
                   Performance
                 </h2>
 
@@ -592,7 +592,7 @@ export default function SifFundDetails() {
                   type="button"
                   onClick={() => setIsChartExpanded(true)}
                   title="Expand Chart"
-                  className="absolute top-3 right-3 text-gray-400 hover:text-[#032e92] p-1.5 rounded-lg hover:bg-gray-50 transition-colors z-10 cursor-pointer"
+                  className="absolute top-3 right-3 text-gray-600 hover:text-[#032e92] p-1.5 rounded-lg hover:bg-gray-50 transition-colors z-10 cursor-pointer"
                 >
                   <FontAwesomeIcon icon={faExpand} className="text-sm" />
                 </button>
@@ -604,10 +604,10 @@ export default function SifFundDetails() {
 
               {/* Investment Objective */}
               <div className="pt-2">
-                <h3 className="text-xl font-extrabold text-[#0f172a] tracking-tight mb-2">
+                <h3 className="text-xl font-bold text-[#0f172a] tracking-tight mb-2">
                   Investment Objective
                 </h3>
-                <p className="text-sm sm:text-base text-gray-700 leading-relaxed font-normal">
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed font-normal">
                   {fund.objective}
                 </p>
 
@@ -630,37 +630,37 @@ export default function SifFundDetails() {
                 {/* Card 1: NAV */}
                 <div className="bg-[#f0f4f9] rounded-2xl p-4 border border-[#e2e8f0]/60">
                   <p className="text-xs font-bold text-gray-900">NAV</p>
-                  <p className="text-sm font-semibold text-gray-700 mt-1">{fund.nav}</p>
+                  <p className="text-sm font-semibold text-gray-900 mt-1">{fund.nav}</p>
                 </div>
 
                 {/* Card 2: Min Investment */}
                 <div className="bg-[#f0f4f9] rounded-2xl p-4 border border-[#e2e8f0]/60">
                   <p className="text-xs font-bold text-gray-900">Min Investment</p>
-                  <p className="text-sm font-semibold text-gray-700 mt-1">{fund.minimumLumpsum}</p>
+                  <p className="text-sm font-semibold text-gray-900 mt-1">{fund.minimumLumpsum}</p>
                 </div>
 
                 {/* Card 3: AUM */}
                 <div className="bg-[#f0f4f9] rounded-2xl p-4 border border-[#e2e8f0]/60">
                   <p className="text-xs font-bold text-gray-900">AUM</p>
-                  <p className="text-sm font-semibold text-gray-700 mt-1">{fund.fundSize}</p>
+                  <p className="text-sm font-semibold text-gray-900 mt-1">{fund.fundSize}</p>
                 </div>
 
                 {/* Card 4: Inception Date */}
                 <div className="bg-[#f0f4f9] rounded-2xl p-4 border border-[#e2e8f0]/60">
                   <p className="text-xs font-bold text-gray-900">Inception Date</p>
-                  <p className="text-sm font-semibold text-gray-700 mt-1">{fund.launchDate}</p>
+                  <p className="text-sm font-semibold text-gray-900 mt-1">{fund.launchDate}</p>
                 </div>
 
                 {/* Card 5: Investment Strategy */}
                 <div className="bg-[#f0f4f9] rounded-2xl p-4 border border-[#e2e8f0]/60">
                   <p className="text-xs font-bold text-gray-900">Investment Strategy</p>
-                  <p className="text-sm font-semibold text-gray-700 mt-1">{fund.investmentStrategy || 'N/A'}</p>
+                  <p className="text-sm font-semibold text-gray-900 mt-1">{fund.investmentStrategy || 'N/A'}</p>
                 </div>
 
                 {/* Card 6: Subcategory */}
                 <div className="bg-[#f0f4f9] rounded-2xl p-4 border border-[#e2e8f0]/60">
                   <p className="text-xs font-bold text-gray-900">Subcategory</p>
-                  <p className="text-sm font-semibold text-gray-700 mt-1" title={fund.subcategory}>
+                  <p className="text-sm font-semibold text-gray-900 mt-1" title={fund.subcategory}>
                     {fund.subcategory || 'N/A'}
                   </p>
                 </div>
@@ -701,10 +701,10 @@ export default function SifFundDetails() {
         {/* Section 2: Fund Details & Specifications */}
         <section id="fund-details" className="pt-12 mt-12 border-t border-gray-200/80">
           <div className="mb-6">
-            <h2 className="text-xl font-extrabold text-[#0f172a] tracking-tight">
+            <h2 className="text-xl font-bold text-[#0f172a] tracking-tight">
               Fund Details & Specifications
             </h2>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-md text-gray-600 mt-1">
               Key operational parameters, benchmark comparison, and stated asset allocation
             </p>
           </div>
@@ -717,10 +717,10 @@ export default function SifFundDetails() {
                   <div className="w-9 h-9 rounded-full bg-[#e3ecfc] text-[#032e92] flex items-center justify-center text-sm flex-shrink-0">
                     <FontAwesomeIcon icon={faChartSimple} />
                   </div>
-                  <div className="w-5/12 text-sm font-semibold text-gray-800">
+                  <div className="w-5/12 text-sm font-semibold text-gray-900">
                     Benchmark (Tier 1)
                   </div>
-                  <div className="w-7/12 text-sm text-gray-700 font-medium">
+                  <div className="w-7/12 text-sm text-gray-600 font-medium">
                     {fund.benchmark}
                   </div>
                 </div>
@@ -730,10 +730,10 @@ export default function SifFundDetails() {
                   <div className="w-9 h-9 rounded-full bg-[#e3ecfc] text-[#032e92] flex items-center justify-center text-sm flex-shrink-0">
                     <FontAwesomeIcon icon={faFileLines} />
                   </div>
-                  <div className="w-5/12 text-sm font-semibold text-gray-800">
+                  <div className="w-5/12 text-sm font-semibold text-gray-900">
                     Fund Type
                   </div>
-                  <div className="w-7/12 text-sm text-gray-700 font-medium">
+                  <div className="w-7/12 text-sm text-gray-600 font-medium">
                     {fund.schemeType}
                   </div>
                 </div>
@@ -743,10 +743,10 @@ export default function SifFundDetails() {
                   <div className="w-9 h-9 rounded-full bg-[#e3ecfc] text-[#032e92] flex items-center justify-center text-sm flex-shrink-0">
                     <FontAwesomeIcon icon={faCoins} />
                   </div>
-                  <div className="w-5/12 text-sm font-semibold text-gray-800">
+                  <div className="w-5/12 text-sm font-semibold text-gray-900">
                     Minimum Application Amount
                   </div>
-                  <div className="w-7/12 text-sm text-gray-700 font-medium">
+                  <div className="w-7/12 text-sm text-gray-600 font-medium">
                     {fund.minimumLumpsum} (thereafter, in multiples of Rs. 1/-)
                   </div>
                 </div>
@@ -756,10 +756,10 @@ export default function SifFundDetails() {
                   <div className="w-9 h-9 rounded-full bg-[#e3ecfc] text-[#032e92] flex items-center justify-center text-sm flex-shrink-0">
                     <FontAwesomeIcon icon={faPlus} />
                   </div>
-                  <div className="w-5/12 text-sm font-semibold text-gray-800">
+                  <div className="w-5/12 text-sm font-semibold text-gray-900">
                     Minimum Additional Amount
                   </div>
-                  <div className="w-7/12 text-sm text-gray-700 font-medium">
+                  <div className="w-7/12 text-sm text-gray-600 font-medium">
                     {fund.minAdditionalAmount}
                   </div>
                 </div>
@@ -769,10 +769,10 @@ export default function SifFundDetails() {
                   <div className="w-9 h-9 rounded-full bg-[#e3ecfc] text-[#032e92] flex items-center justify-center text-sm flex-shrink-0">
                     <FontAwesomeIcon icon={faWallet} />
                   </div>
-                  <div className="w-5/12 text-sm font-semibold text-gray-800">
+                  <div className="w-5/12 text-sm font-semibold text-gray-900">
                     Minimum Redemption Amount
                   </div>
-                  <div className="w-7/12 text-sm text-gray-700 font-medium">
+                  <div className="w-7/12 text-sm text-gray-600 font-medium">
                     {fund.minRedemptionAmount}
                   </div>
                 </div>
@@ -782,10 +782,10 @@ export default function SifFundDetails() {
                   <div className="w-9 h-9 rounded-full bg-[#e3ecfc] text-[#032e92] flex items-center justify-center text-sm flex-shrink-0">
                     <FontAwesomeIcon icon={faChartPie} />
                   </div>
-                  <div className="w-5/12 text-sm font-semibold text-gray-800">
+                  <div className="w-5/12 text-sm font-semibold text-gray-900">
                     Options available
                   </div>
-                  <div className="w-7/12 text-sm text-gray-700 font-medium">
+                  <div className="w-7/12 text-sm text-gray-600 font-medium">
                     {fund.optionsAvailable}
                   </div>
                 </div>
@@ -795,10 +795,10 @@ export default function SifFundDetails() {
                   <div className="w-9 h-9 rounded-full bg-[#e3ecfc] text-[#032e92] flex items-center justify-center text-sm flex-shrink-0">
                     <FontAwesomeIcon icon={faPercent} />
                   </div>
-                  <div className="w-5/12 text-sm font-semibold text-gray-800">
+                  <div className="w-5/12 text-sm font-semibold text-gray-900">
                     Total Expense Ratio (TER)
                   </div>
-                  <div className="w-7/12 text-sm text-gray-700 font-medium">
+                  <div className="w-7/12 text-sm text-gray-600 font-medium">
                     {fund.expenseRatio}
                   </div>
                 </div>
@@ -808,10 +808,10 @@ export default function SifFundDetails() {
                   <div className="w-9 h-9 rounded-full bg-[#e3ecfc] text-[#032e92] flex items-center justify-center text-sm flex-shrink-0 mt-0.5">
                     <FontAwesomeIcon icon={faUsers} />
                   </div>
-                  <div className="w-5/12 text-sm font-semibold text-gray-800 pt-1">
+                  <div className="w-5/12 text-sm font-semibold text-gray-900 pt-1">
                     Fund managers
                   </div>
-                  <div className="w-7/12 text-sm text-gray-700 font-medium leading-relaxed">
+                  <div className="w-7/12 text-sm text-gray-600 font-medium leading-relaxed">
                     {fund.managers}
                   </div>
                 </div>
@@ -826,7 +826,7 @@ export default function SifFundDetails() {
                   <div className="w-8 h-8 rounded-full bg-[#e3ecfc] text-[#032e92] flex items-center justify-center text-sm">
                     <FontAwesomeIcon icon={faChartPie} />
                   </div>
-                  <h3 className="text-base font-extrabold text-[#0f172a]">
+                  <h3 className="text-base font-bold text-[#0f172a]">
                     Stated Asset Allocation
                   </h3>
                 </div>
@@ -834,11 +834,11 @@ export default function SifFundDetails() {
                 <div className="space-y-4">
                   {fund.allocations.map((item, i) => (
                     <div key={i} className="space-y-1.5">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="font-bold text-gray-800 truncate pr-2">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="font-bold text-gray-900 truncate pr-2">
                           {item.type || 'Asset Allocation Type'}
                         </span>
-                        <span className="text-gray-500 font-semibold flex-shrink-0">
+                        <span className="text-gray-600 font-semibold flex-shrink-0">
                           Min {item.min != null ? `${item.min}%` : '0%'} – Max {item.max != null ? `${item.max}%` : '100%'}
                         </span>
                       </div>
@@ -859,12 +859,12 @@ export default function SifFundDetails() {
                   <div className="w-8 h-8 rounded-full bg-[#fdeed6] text-[#c27803] flex items-center justify-center text-sm">
                     <FontAwesomeIcon icon={faDoorOpen} />
                   </div>
-                  <h3 className="text-base font-extrabold text-gray-900">
+                  <h3 className="text-base font-bold text-gray-900">
                     Exit Load (if applicable)
                   </h3>
                 </div>
 
-                <p className="text-xs text-gray-700 leading-relaxed font-normal">
+                <p className="text-sm text-gray-600 leading-relaxed font-medium">
                   {fund.exitLoad}
                 </p>
               </div>
@@ -875,10 +875,10 @@ export default function SifFundDetails() {
         {/* Section 3: Documents */}
         <section id="documents" className="pt-12 mt-12 pb-16 border-t border-gray-200/80">
           <div className="mb-6">
-            <h2 className="text-xl font-extrabold text-[#0f172a] tracking-tight">
+            <h2 className="text-xl font-bold text-[#0f172a] tracking-tight">
               All Scheme Related Documents
             </h2>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-md text-gray-600 mt-1">
               Official regulatory disclosures, portfolio factsheets, and legal documents
             </p>
           </div>
@@ -889,11 +889,11 @@ export default function SifFundDetails() {
               <div>
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-gray-100 border border-gray-200 flex items-center justify-center font-bold text-xs text-gray-700 uppercase flex-shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-gray-100 border border-gray-200 flex items-center justify-center font-bold text-xs text-gray-900 uppercase flex-shrink-0">
                       SID
                     </div>
                     <div>
-                      <h3 className="text-sm font-bold text-gray-900 leading-snug">
+                      <h3 className="text-md font-bold text-gray-900 leading-snug">
                         Scheme Information Document
                       </h3>
                     </div>
@@ -907,7 +907,7 @@ export default function SifFundDetails() {
                     View
                   </a>
                 </div>
-                <p className="text-xs text-gray-500 mt-3 leading-relaxed">
+                <p className="text-sm text-gray-600 mt-3 font-medium leading-relaxed">
                   Mandate, portfolio bands, risk factors, and application terms
                 </p>
               </div>
@@ -918,11 +918,11 @@ export default function SifFundDetails() {
               <div>
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-gray-100 border border-gray-200 flex items-center justify-center font-bold text-xs text-gray-700 uppercase flex-shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-gray-100 border border-gray-200 flex items-center justify-center font-bold text-xs text-gray-900 uppercase flex-shrink-0">
                       KIM
                     </div>
                     <div>
-                      <h3 className="text-sm font-bold text-gray-900 leading-snug">
+                      <h3 className="text-md font-bold text-gray-900 leading-snug">
                         Key Information Memorandum
                       </h3>
                     </div>
@@ -936,7 +936,7 @@ export default function SifFundDetails() {
                     View
                   </a>
                 </div>
-                <p className="text-xs text-gray-500 mt-3 leading-relaxed">
+                <p className="text-sm text-gray-600 mt-3 font-medium leading-relaxed">
                   Quick-reference investor disclosure
                 </p>
               </div>
@@ -947,11 +947,11 @@ export default function SifFundDetails() {
               <div>
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-gray-100 border border-gray-200 flex items-center justify-center font-bold text-xs text-gray-700 uppercase flex-shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-gray-100 border border-gray-200 flex items-center justify-center font-bold text-xs text-gray-900 uppercase flex-shrink-0">
                       FS
                     </div>
                     <div>
-                      <h3 className="text-sm font-bold text-gray-900 leading-snug">
+                      <h3 className="text-md font-bold text-gray-900 leading-snug">
                         Monthly Factsheet
                       </h3>
                     </div>
@@ -965,7 +965,7 @@ export default function SifFundDetails() {
                     View
                   </a>
                 </div>
-                <p className="text-xs text-gray-500 mt-3 leading-relaxed">
+                <p className="text-sm text-gray-600 mt-3 font-medium leading-relaxed">
                   NAV, TER, allocation, and portfolio updates
                 </p>
               </div>
@@ -976,11 +976,11 @@ export default function SifFundDetails() {
               <div>
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-gray-100 border border-gray-200 flex items-center justify-center font-bold text-xs text-gray-700 uppercase flex-shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-gray-100 border border-gray-200 flex items-center justify-center font-bold text-xs text-gray-900 uppercase flex-shrink-0">
                       SAI
                     </div>
                     <div>
-                      <h3 className="text-sm font-bold text-gray-900 leading-snug">
+                      <h3 className="text-md font-bold text-gray-900 leading-snug">
                         Statement of Additional Information (SAI)
                       </h3>
                     </div>
@@ -994,7 +994,7 @@ export default function SifFundDetails() {
                     View
                   </a>
                 </div>
-                <p className="text-xs text-gray-500 mt-3 leading-relaxed">
+                <p className="text-sm text-gray-600 mt-3 font-medium leading-relaxed">
                   Legal terms, tax and risk factors
                 </p>
               </div>
@@ -1016,7 +1016,7 @@ export default function SifFundDetails() {
               <div className="flex items-center justify-between pb-4 border-b border-gray-100">
                 <div>
                   <h3 className="text-lg font-bold text-gray-900">{fund.name} — Historical Performance</h3>
-                  <p className="text-xs text-gray-500">Range: {activeTimeframe}</p>
+                  <p className="text-xs text-gray-600">Range: {activeTimeframe}</p>
                 </div>
                 <button
                   type="button"

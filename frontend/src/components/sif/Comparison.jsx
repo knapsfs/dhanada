@@ -30,7 +30,7 @@ export default function Comparison() {
         </motion.div>
 
         {/* Mobile Horizontal Scroll Hint */}
-        <div className="flex sm:hidden items-center justify-end gap-1.5 text-xs text-gray-400 font-medium mb-2.5 px-1">
+        <div className="flex sm:hidden items-center justify-end gap-1.5 text-xs text-gray-600 font-medium mb-2.5 px-1">
           <svg className="w-3.5 h-3.5 animate-pulse text-[#032e92]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
           </svg>
@@ -49,7 +49,7 @@ export default function Comparison() {
             <thead>
               <tr>
                 {/* Fixed "Feature" Column */}
-                <th className="sticky left-0 z-20 bg-gray-50/95 backdrop-blur-sm px-4 sm:px-6 py-4 sm:py-5 text-left text-xs sm:text-sm font-semibold text-gray-500 w-36 sm:w-48 min-w-[130px] sm:min-w-[170px] border-b border-r border-[#e8edf7] shadow-[4px_0_10px_-2px_rgba(0,0,0,0.06)]">
+                <th className="sticky left-0 z-20 bg-gray-50/95 backdrop-blur-sm px-4 sm:px-6 py-4 sm:py-5 text-left text-xs sm:text-sm font-semibold text-gray-600 w-36 sm:w-48 min-w-[130px] sm:min-w-[170px] border-b border-r border-[#e8edf7] shadow-[4px_0_10px_-2px_rgba(0,0,0,0.06)]">
                   Feature
                 </th>
                 {comparisonData.headers.slice(1).map((header) => {
@@ -59,7 +59,7 @@ export default function Comparison() {
                       key={header}
                       className={`px-4 sm:px-5 py-4 sm:py-5 text-center text-xs sm:text-sm font-bold border-b border-[#e8edf7] ${isSIF
                         ? 'bg-[#032e92] text-white rounded-t-2xl shadow-lg min-w-[140px] sm:min-w-[180px]'
-                        : 'bg-gray-50 text-gray-700 min-w-[100px] sm:min-w-[130px]'
+                        : 'bg-gray-50 text-gray-900 min-w-[100px] sm:min-w-[130px]'
                         }`}
                     >
                       {header}
@@ -82,7 +82,7 @@ export default function Comparison() {
                       }`}
                   >
                     <div className="flex items-center gap-2">
-                      <span className="text-xs sm:text-sm font-semibold text-gray-700 leading-snug">
+                      <span className="text-xs sm:text-sm font-semibold text-gray-900 leading-snug">
                         {row.feature}
                       </span>
                     </div>

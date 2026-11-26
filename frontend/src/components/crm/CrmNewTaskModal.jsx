@@ -73,14 +73,14 @@ export default function CrmNewTaskModal({ isOpen, onClose, onCreated, relatedLea
               </div>
               <div>
                 <h3 className="text-base font-bold text-gray-900 leading-tight">Create Task</h3>
-                <p className="text-xs text-gray-500 font-medium">
+                <p className="text-xs text-gray-600 font-medium">
                   {relatedLead ? `Assigned to Lead: ${relatedLead.lead_name}` : relatedClient ? `Assigned to Client: ${relatedClient.client_name}` : 'Set an advisor reminder'}
                 </p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-700 hover:bg-gray-200/60 transition-colors cursor-pointer"
+              className="w-8 h-8 rounded-full flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-200/60 transition-colors cursor-pointer"
             >
               <FontAwesomeIcon icon={faXmark} className="text-sm" />
             </button>
@@ -95,7 +95,7 @@ export default function CrmNewTaskModal({ isOpen, onClose, onCreated, relatedLea
             )}
 
             <div>
-              <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+              <label className="block text-xs font-semibold text-gray-900 mb-1.5">
                 Task Title <span className="text-red-500">*</span>
               </label>
               <input
@@ -111,7 +111,7 @@ export default function CrmNewTaskModal({ isOpen, onClose, onCreated, relatedLea
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                <label className="block text-xs font-semibold text-gray-900 mb-1.5">
                   Activity Type
                 </label>
                 <CrmSelect
@@ -130,7 +130,7 @@ export default function CrmNewTaskModal({ isOpen, onClose, onCreated, relatedLea
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                <label className="block text-xs font-semibold text-gray-900 mb-1.5">
                   Priority
                 </label>
                 <CrmSelect
@@ -143,7 +143,7 @@ export default function CrmNewTaskModal({ isOpen, onClose, onCreated, relatedLea
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                <label className="block text-xs font-semibold text-gray-900 mb-1.5">
                   Due Date
                 </label>
                 <input
@@ -156,7 +156,7 @@ export default function CrmNewTaskModal({ isOpen, onClose, onCreated, relatedLea
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                <label className="block text-xs font-semibold text-gray-900 mb-1.5">
                   Due Time
                 </label>
                 <input
@@ -169,7 +169,7 @@ export default function CrmNewTaskModal({ isOpen, onClose, onCreated, relatedLea
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+              <label className="block text-xs font-semibold text-gray-900 mb-1.5">
                 Task Description / Checklist
               </label>
               <textarea

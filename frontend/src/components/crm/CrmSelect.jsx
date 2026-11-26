@@ -58,16 +58,16 @@ export default function CrmSelect({
         onClick={() => !disabled && setIsOpen(!isOpen)}
         className={`w-full bg-[#f8fafc] border border-gray-200/90 rounded-xl text-left transition-all flex items-center justify-between gap-2 cursor-pointer focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#032e92]/20 focus:border-[#032e92] ${
           isOpen ? "bg-white border-[#032e92] ring-2 ring-[#032e92]/20 shadow-xs" : "hover:border-gray-300"
-        } ${isSmall ? "px-3 py-1.5 text-xs font-semibold text-gray-700" : "px-3.5 py-2.5 text-xs text-gray-900"} ${
+        } ${isSmall ? "px-3 py-1.5 text-xs font-semibold text-gray-900" : "px-3.5 py-2.5 text-xs text-gray-900"} ${
           disabled ? "opacity-50 cursor-not-allowed" : ""
         }`}
       >
-        <span className={`truncate font-medium ${selectedOption ? "text-gray-900" : "text-gray-400"}`}>
+        <span className={`truncate font-medium ${selectedOption ? "text-gray-900" : "text-gray-600"}`}>
           {selectedOption ? selectedOption.label : placeholder}
         </span>
         <FontAwesomeIcon
           icon={faChevronDown}
-          className={`text-[10px] text-gray-400 transition-transform duration-200 shrink-0 ${
+          className={`text-[10px] text-gray-600 transition-transform duration-200 shrink-0 ${
             isOpen ? "rotate-180 text-[#032e92]" : ""
           }`}
         />
@@ -85,7 +85,7 @@ export default function CrmSelect({
             style={{ minWidth: "100%" }}
           >
             {normalizedOptions.length === 0 ? (
-              <div className="px-3 py-2 text-xs text-gray-400 text-center">No options available</div>
+              <div className="px-3 py-2 text-xs text-gray-600 text-center">No options available</div>
             ) : (
               normalizedOptions.map((opt) => {
                 const isSelected = String(opt.value) === String(value);
@@ -97,7 +97,7 @@ export default function CrmSelect({
                     className={`w-full px-3 py-2 rounded-xl text-xs font-medium text-left flex items-center justify-between gap-2 transition-colors cursor-pointer ${
                       isSelected
                         ? "bg-[#032e92]/10 text-[#032e92] font-bold"
-                        : "text-gray-700 hover:bg-blue-50/80 hover:text-[#032e92]"
+                        : "text-gray-900 hover:bg-blue-50/80 hover:text-[#032e92]"
                     }`}
                   >
                     <span className="truncate">{opt.label}</span>

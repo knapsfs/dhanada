@@ -37,7 +37,7 @@ export default function Riskometer({ fund }) {
         <div className="w-full flex items-center justify-between mb-6 pb-4 border-b border-[#e8edf7]">
           <div>
             <h2 className="text-xl font-bold text-gray-900">Risk-o-Meter</h2>
-            <p className="text-xs text-gray-400 font-medium">SEBI standardized scheme risk evaluation</p>
+            <p className="text-xs text-gray-600 font-medium">SEBI standardized scheme risk evaluation</p>
           </div>
           <span className={`px-3 py-1 rounded-full text-xs font-bold ${risk.bg || 'bg-red-100'} ${risk.text || 'text-red-700'} border ${risk.border || 'border-red-200'}`}>
             Level {risk.level} of 5
@@ -129,14 +129,14 @@ export default function Riskometer({ fund }) {
           >
             {risk.label}
           </motion.p>
-          <p className="text-xs font-bold text-gray-400 mt-1 uppercase tracking-widest">
+          <p className="text-xs font-bold text-gray-600 mt-1 uppercase tracking-widest">
             Risk Level {risk.level} of 5
           </p>
         </div>
 
         {/* Bottom Disclaimer */}
         <div className="mt-6 pt-5 border-t border-dashed border-[#e8edf7] text-center w-full">
-          <p className="text-xs text-gray-400 font-medium leading-relaxed max-w-2xl mx-auto">
+          <p className="text-xs text-gray-600 font-medium leading-relaxed max-w-2xl mx-auto">
             Investors understand that their principal will be at <span className="font-bold text-gray-600">{risk.label}</span> risk. The Risk-o-meter is based on the scheme portfolio and is subject to periodic review and change according to SEBI regulations.
           </p>
         </div>

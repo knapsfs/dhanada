@@ -64,7 +64,7 @@ export default function Awards() {
                 <FontAwesomeIcon icon={award.icon} className="text-2xl" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">{award.title}</h3>
-              <p className="text-gray-500 text-sm leading-relaxed">
+              <p className="text-gray-600 text-sm leading-relaxed">
                 {award.desc}
               </p>
             </motion.div>

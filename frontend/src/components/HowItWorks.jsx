@@ -78,7 +78,7 @@ export default function HowItWorks() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-lg text-gray-500 max-w-2xl mx-auto"
+            className="text-lg text-gray-600 max-w-2xl mx-auto"
           >
             Our wealth management process is simple, fast, and produces amazing results in just a few easy steps.
           </motion.p>
@@ -118,7 +118,7 @@ export default function HowItWorks() {
                   <h3 className="text-xl font-bold text-gray-900 mb-3 leading-snug">
                     {step.title}
                   </h3>
-                  <p className="text-gray-500 text-md leading-relaxed">
+                  <p className="text-gray-600 text-md leading-relaxed">
                     {step.description}
                   </p>
                 </div>

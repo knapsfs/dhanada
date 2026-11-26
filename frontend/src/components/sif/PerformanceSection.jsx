@@ -264,7 +264,7 @@ export default function PerformanceSection({ fund, planSelectorProps }) {
 
           {activeReturnInfo && activeReturnInfo.hasValue && (
             <div className="flex items-center gap-2.5 bg-[#f7f9fc] border border-[#e8edf7] px-4 py-2 rounded-2xl self-start sm:self-auto shadow-sm">
-              <span className="text-xs font-bold text-gray-500 uppercase">
+              <span className="text-xs font-bold text-gray-600 uppercase">
                 {activeReturnInfo.periodLabel}
               </span>
               <span className={`text-base font-bold font-mono ${
@@ -290,7 +290,7 @@ export default function PerformanceSection({ fund, planSelectorProps }) {
                 className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-200 ${
                   activePeriod === p
                     ? 'bg-[#032e92] text-white shadow-md shadow-blue-900/20'
-                    : 'bg-[#f7f9fc] text-gray-500 border border-[#e8edf7] hover:border-[#032e92]/40 hover:text-[#032e92]'
+                    : 'bg-[#f7f9fc] text-gray-600 border border-[#e8edf7] hover:border-[#032e92]/40 hover:text-[#032e92]'
                 }`}>
                 {p}
               </button>
@@ -305,7 +305,7 @@ export default function PerformanceSection({ fund, planSelectorProps }) {
           </div>
         ) : (
           <div className="h-64 md:h-80 mb-8 flex items-center justify-center bg-gray-50 rounded-xl border border-gray-100">
-            <p className="text-gray-400 font-medium text-sm">Time-series chart data is currently unavailable.</p>
+            <p className="text-gray-600 font-medium text-sm">Time-series chart data is currently unavailable.</p>
           </div>
         )}
 
@@ -315,14 +315,14 @@ export default function PerformanceSection({ fund, planSelectorProps }) {
             <thead>
               <tr className="bg-[#f7f9fc]">
                 {['Period', 'Fund Return', 'Benchmark', 'Category Avg.', 'Difference'].map(h => (
-                  <th key={h} className="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wide whitespace-nowrap">{h}</th>
+                  <th key={h} className="px-4 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wide whitespace-nowrap">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-[#e8edf7]">
               {(fund?.performanceTable || []).map((row, i) => (
                 <tr key={i} className="hover:bg-[#f7f9fc] transition-colors">
-                  <td className="px-4 py-3 font-semibold text-gray-800 whitespace-nowrap">{row.period}</td>
+                  <td className="px-4 py-3 font-semibold text-gray-900 whitespace-nowrap">{row.period}</td>
                   <td className="px-4 py-3 font-bold text-green-600 whitespace-nowrap">{row.fund}</td>
                   <td className="px-4 py-3 font-medium text-gray-600 whitespace-nowrap">{row.benchmark}</td>
                   <td className="px-4 py-3 font-medium text-gray-600 whitespace-nowrap">{row.category}</td>

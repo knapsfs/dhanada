@@ -43,7 +43,7 @@ export default function WhatIsFixedDeposit() {
             <p className="text-sm text-gray-600 leading-relaxed mb-6">
               A contract with scheduled commercial banks or credit-rated corporate NBFCs where your money earns a contracted interest rate over tenures from 7 days to 10 years.
             </p>
-            <ul className="space-y-3 text-xs sm:text-sm text-gray-700">
+            <ul className="space-y-3 text-xs sm:text-sm text-gray-900">
               <li className="flex items-start gap-2.5">
                 <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 mt-1 flex-shrink-0" />
                 <span><strong>Bank FDs:</strong> Backed by DICGC insurance up to ₹5 Lakh per depositor per bank with flexible compounding frequencies.</span>
@@ -73,7 +73,7 @@ export default function WhatIsFixedDeposit() {
             <p className="text-sm text-gray-600 leading-relaxed mb-6">
               Sovereign debt securities issued directly by the Reserve Bank of India on behalf of the Government of India. They offer 100% sovereign guarantee with zero credit and default risk.
             </p>
-            <ul className="space-y-3 text-xs sm:text-sm text-gray-700">
+            <ul className="space-y-3 text-xs sm:text-sm text-gray-900">
               <li className="flex items-start gap-2.5">
                 <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 mt-1 flex-shrink-0" />
                 <span><strong>RBI Floating Rate Savings Bonds (FRSB):</strong> Currently 8.05% p.a., reset semi-annually linked at 35 bps above NSC with zero default risk.</span>

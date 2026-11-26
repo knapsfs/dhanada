@@ -111,7 +111,7 @@ export default function LifeInsuranceCalculator() {
               {/* Input 1: Age */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-bold text-gray-500 uppercase tracking-wide">
+                  <label className="text-xs font-bold text-gray-600 uppercase tracking-wide">
                     Your Current Age
                   </label>
                   <span className="text-sm font-black text-[#032e92] bg-white px-3 py-1 rounded-lg border border-[#e8edf7]">
@@ -127,7 +127,7 @@ export default function LifeInsuranceCalculator() {
                   onChange={e => setAge(Number(e.target.value))}
                   className="w-full h-1.5 rounded-full accent-[#032e92] cursor-pointer"
                 />
-                <div className="flex justify-between text-[10px] text-gray-400 font-medium mt-1">
+                <div className="flex justify-between text-[10px] text-gray-600 font-medium mt-1">
                   <span>18 Yrs</span>
                   <span>60 Yrs</span>
                 </div>
@@ -136,7 +136,7 @@ export default function LifeInsuranceCalculator() {
               {/* Input 2: Annual Income */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-bold text-gray-500 uppercase tracking-wide">
+                  <label className="text-xs font-bold text-gray-600 uppercase tracking-wide">
                     Annual Take-Home Income
                   </label>
                   <span className="text-sm font-black text-[#032e92] bg-white px-3 py-1 rounded-lg border border-[#e8edf7]">
@@ -152,7 +152,7 @@ export default function LifeInsuranceCalculator() {
                   onChange={e => setAnnualIncome(Number(e.target.value))}
                   className="w-full h-1.5 rounded-full accent-[#032e92] cursor-pointer"
                 />
-                <div className="flex justify-between text-[10px] text-gray-400 font-medium mt-1">
+                <div className="flex justify-between text-[10px] text-gray-600 font-medium mt-1">
                   <span>₹ 3 Lakh</span>
                   <span>₹ 1 Crore</span>
                 </div>
@@ -161,7 +161,7 @@ export default function LifeInsuranceCalculator() {
               {/* Input 3: Outstanding Liabilities */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-bold text-gray-500 uppercase tracking-wide">
+                  <label className="text-xs font-bold text-gray-600 uppercase tracking-wide">
                     Total Loans & Liabilities (Home, Car, EMIs)
                   </label>
                   <span className="text-sm font-black text-[#032e92] bg-white px-3 py-1 rounded-lg border border-[#e8edf7]">
@@ -177,7 +177,7 @@ export default function LifeInsuranceCalculator() {
                   onChange={e => setLiabilities(Number(e.target.value))}
                   className="w-full h-1.5 rounded-full accent-[#032e92] cursor-pointer"
                 />
-                <div className="flex justify-between text-[10px] text-gray-400 font-medium mt-1">
+                <div className="flex justify-between text-[10px] text-gray-600 font-medium mt-1">
                   <span>₹ 0</span>
                   <span>₹ 2 Crore</span>
                 </div>
@@ -185,7 +185,7 @@ export default function LifeInsuranceCalculator() {
 
               {/* Input 4: Number of Dependents */}
               <div>
-                <label className="text-xs font-bold text-gray-500 uppercase tracking-wide block mb-2.5">
+                <label className="text-xs font-bold text-gray-600 uppercase tracking-wide block mb-2.5">
                   Number of Financial Dependents
                 </label>
                 <div className="grid grid-cols-5 gap-2.5">
@@ -198,7 +198,7 @@ export default function LifeInsuranceCalculator() {
                         onClick={() => setDependents(d)}
                         className={`py-2.5 rounded-xl font-bold text-xs sm:text-sm border-2 transition-all cursor-pointer ${isSelected
                           ? 'border-[#032e92] bg-[#eef4ff] text-[#032e92] shadow-sm'
-                          : 'border-[#e8edf7] bg-white text-gray-700 hover:border-gray-300'
+                          : 'border-[#e8edf7] bg-white text-gray-900 hover:border-gray-300'
                           }`}
                       >
                         {d === 5 ? '5+' : d}
@@ -211,7 +211,7 @@ export default function LifeInsuranceCalculator() {
               {/* Input 5: Current Savings / Assets */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-bold text-gray-500 uppercase tracking-wide">
+                  <label className="text-xs font-bold text-gray-600 uppercase tracking-wide">
                     Existing Liquid Savings (FD, Mutual Funds, PF)
                   </label>
                   <span className="text-sm font-black text-[#032e92] bg-white px-3 py-1 rounded-lg border border-[#e8edf7]">
@@ -227,7 +227,7 @@ export default function LifeInsuranceCalculator() {
                   onChange={e => setCurrentSavings(Number(e.target.value))}
                   className="w-full h-1.5 rounded-full accent-[#032e92] cursor-pointer"
                 />
-                <div className="flex justify-between text-[10px] text-gray-400 font-medium mt-1">
+                <div className="flex justify-between text-[10px] text-gray-600 font-medium mt-1">
                   <span>₹ 0</span>
                   <span>₹ 1 Crore</span>
                 </div>
@@ -245,7 +245,7 @@ export default function LifeInsuranceCalculator() {
                     </div>
                     <div>
                       <h4 className="font-extrabold text-[#0a192f] text-sm leading-tight">Your Coverage Assessment</h4>
-                      <p className="text-xs text-gray-400">Scientific HLV Formulation</p>
+                      <p className="text-xs text-gray-600">Scientific HLV Formulation</p>
                     </div>
                   </div>
                   <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
@@ -271,12 +271,12 @@ export default function LifeInsuranceCalculator() {
                 {/* Estimated Monthly Premium Box */}
                 <div className="bg-[#f7f9fc] rounded-2xl p-4 border border-[#e8edf7] mb-6 flex items-center justify-between">
                   <div>
-                    <p className="text-xs font-bold text-gray-400 uppercase">
+                    <p className="text-xs font-bold text-gray-600 uppercase">
                       Est. Monthly Starting Premium
                     </p>
                     <p className="text-2xl font-black text-emerald-600">
                       ₹ {calculation.monthlyPremium.toLocaleString('en-IN')}
-                      <span className="text-xs font-normal text-gray-500"> / mo*</span>
+                      <span className="text-xs font-normal text-gray-600"> / mo*</span>
                     </p>
                   </div>
                   <div className="text-right">
@@ -300,7 +300,7 @@ export default function LifeInsuranceCalculator() {
                     <span>Child / Milestone Protection:</span>
                     <span className="font-bold text-gray-900">{formatCroreLakh(calculation.milestoneBuffer)}</span>
                   </div>
-                  <div className="flex justify-between text-gray-500 py-1">
+                  <div className="flex justify-between text-gray-600 py-1">
                     <span>Less Existing Savings:</span>
                     <span className="font-semibold text-rose-600">- {formatCroreLakh(calculation.currentSavings)}</span>
                   </div>
@@ -318,7 +318,7 @@ export default function LifeInsuranceCalculator() {
                   {/* <FontAwesomeIcon icon={faArrowRight} className="text-xs group-hover:translate-x-1 transition-transform" /> */}
                 </button>
 
-                {/* <p className="text-[10px] text-gray-400 text-center italic mt-2.5 leading-tight">
+                {/* <p className="text-[10px] text-gray-600 text-center italic mt-2.5 leading-tight">
                   *Illustrative estimation for healthy non-smokers. Final premiums subject to insurer underwriting.
                 </p> */}
               </div>

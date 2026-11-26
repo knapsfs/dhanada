@@ -36,7 +36,7 @@ export default function SipLumpsumProjectionTable({ yearlyData }) {
               <thead className="sticky top-0 z-10">
                 <tr className="bg-[#f7f9fc] border-b border-[#e8edf7]">
                   {['Year', 'Total Invested', 'Gain', 'Future Value', 'Return %'].map(h => (
-                    <th key={h} className="px-5 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wide whitespace-nowrap">{h}</th>
+                    <th key={h} className="px-5 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wide whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -55,7 +55,7 @@ export default function SipLumpsumProjectionTable({ yearlyData }) {
                         </span>
                       </div>
                     </td>
-                    <td className="px-5 py-3.5 font-semibold text-gray-700">{fmt(row.invested)}</td>
+                    <td className="px-5 py-3.5 font-semibold text-gray-900">{fmt(row.invested)}</td>
                     <td className="px-5 py-3.5">
                       <span className="font-bold text-green-600">{fmt(row.gain)}</span>
                     </td>

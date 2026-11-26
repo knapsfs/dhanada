@@ -72,7 +72,7 @@ export default function WhyGeneralInsurance() {
                   <FontAwesomeIcon icon={pillar.icon} className="text-xl" />
                 </div>
 
-                {/* <span className="inline-block text-xs font-bold text-gray-400 uppercase mb-2">
+                {/* <span className="inline-block text-xs font-bold text-gray-600 uppercase mb-2">
                   {pillar.highlight}
                 </span> */}
 
@@ -88,7 +88,7 @@ export default function WhyGeneralInsurance() {
               {/* <div className="mt-6 pt-4 border-t border-gray-200/70 flex items-center gap-1.5 text-xs font-bold text-[#032e92]">
                 <span>Pillar 0{idx + 1}</span>
                 <span className="text-gray-300">•</span>
-                <span className="text-gray-500 font-semibold">Asset Security</span>
+                <span className="text-gray-600 font-semibold">Asset Security</span>
               </div> */}
             </motion.div>
           ))}

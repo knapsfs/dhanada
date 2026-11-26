@@ -103,7 +103,7 @@ export default function LifeInsuranceWhoShouldBuy() {
                     : 'bg-white text-gray-600 hover:text-gray-900 border border-[#e8edf7] hover:border-gray-300'
                   }`}
               >
-                <FontAwesomeIcon icon={p.icon} className={isSelected ? 'text-blue-200' : 'text-gray-400'} />
+                <FontAwesomeIcon icon={p.icon} className={isSelected ? 'text-blue-200' : 'text-gray-600'} />
                 <span>{p.tab}</span>
               </button>
             );
@@ -126,7 +126,7 @@ export default function LifeInsuranceWhoShouldBuy() {
                 <span className="text-xs font-extrabold text-[#032e92] bg-blue-50 px-3 py-1 rounded-full border border-blue-200/60">
                   {current.age}
                 </span>
-                <span className="text-xs text-gray-400 font-semibold">• Tailored Recommendation</span>
+                <span className="text-xs text-gray-600 font-semibold">• Tailored Recommendation</span>
               </div>
 
               <h3 className="text-2xl sm:text-3xl font-extrabold text-[#0a192f] mb-3 leading-tight">
@@ -140,7 +140,7 @@ export default function LifeInsuranceWhoShouldBuy() {
               {/* Needs Checklist */}
               <div className="space-y-3.5 mb-8">
                 {current.needs.map((item, nIdx) => (
-                  <div key={nIdx} className="flex items-start gap-3 text-xs sm:text-sm text-gray-700 font-medium">
+                  <div key={nIdx} className="flex items-start gap-3 text-xs sm:text-sm text-gray-900 font-medium">
                     <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 mt-0.5 text-base flex-shrink-0" />
                     <span>{item}</span>
                   </div>

@@ -122,7 +122,7 @@ export default function WhatIsNps() {
 
                 <ul className="space-y-2.5 pt-4 border-t border-gray-200/60">
                   {item.highlights.map((point, pIdx) => (
-                    <li key={pIdx} className="flex items-center gap-2 text-[14px] font-medium text-gray-700">
+                    <li key={pIdx} className="flex items-center gap-2 text-[14px] font-medium text-gray-900">
                       <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-500 text-[12px] shrink-0" />
                       <span>{point}</span>
                     </li>

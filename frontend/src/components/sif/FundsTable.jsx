@@ -64,12 +64,12 @@ function TableDropdown({ value, onChange, options, minWidth = 'min-w-[140px]' })
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between pl-3.5 pr-3 py-1.5 rounded-full border border-gray-200/90 text-xs font-medium text-gray-700 bg-white hover:border-gray-300 focus:outline-none focus:border-[#032e92] focus:ring-2 focus:ring-[#032e92]/10 cursor-pointer shadow-2xs transition-all text-left"
+        className="w-full flex items-center justify-between pl-3.5 pr-3 py-1.5 rounded-full border border-gray-200/90 text-xs font-medium text-gray-900 bg-white hover:border-gray-300 focus:outline-none focus:border-[#032e92] focus:ring-2 focus:ring-[#032e92]/10 cursor-pointer shadow-2xs transition-all text-left"
       >
         <span className="truncate pr-1">{selectedOpt.label}</span>
         <FontAwesomeIcon
           icon={faChevronDown}
-          className={`text-gray-400 text-[10px] flex-shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180 text-[#032e92]' : ''}`}
+          className={`text-gray-600 text-[10px] flex-shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180 text-[#032e92]' : ''}`}
         />
       </button>
 
@@ -94,7 +94,7 @@ function TableDropdown({ value, onChange, options, minWidth = 'min-w-[140px]' })
                   }}
                   className={`w-full text-left px-3 py-2 rounded-xl text-xs flex items-center justify-between transition-colors cursor-pointer ${isSelected
                     ? 'bg-blue-50 text-[#032e92] font-bold'
-                    : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 font-medium'
+                    : 'text-gray-900 hover:bg-gray-50 hover:text-gray-900 font-medium'
                     }`}
                 >
                   <span className="truncate">{opt.label}</span>
@@ -361,7 +361,7 @@ export default function FundsTable({
     if (amcLower.includes('quant')) {
       return (
         <div className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center p-1 shadow-xs flex-shrink-0">
-          <span className="text-xs font-bold text-gray-800 tracking-tighter">quant</span>
+          <span className="text-xs font-bold text-gray-900 tracking-tighter">quant</span>
         </div>
       )
     }
@@ -403,17 +403,17 @@ export default function FundsTable({
                 {/* 1. FUND / AMC + Search */}
                 <th className="py-4 px-4 sm:px-6 align-top min-w-[260px] max-w-[340px]">
                   <div className="flex flex-col gap-2">
-                    <span className="text-[12px] font-extrabold text-[#032e92] uppercase">
+                    <span className="text-[12px] font-bold text-[#032e92] uppercase">
                       FUND/AMC
                     </span>
                     <div className="relative">
-                      <FontAwesomeIcon icon={faSearch} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none" />
+                      <FontAwesomeIcon icon={faSearch} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-600 text-xs pointer-events-none" />
                       <input
                         type="text"
                         placeholder="Search Fund / AMC"
                         value={filters.search || ''}
                         onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-                        className="w-full pl-9 pr-3.5 py-1.5 rounded-full border border-gray-200/90 text-xs font-medium text-gray-800 placeholder-gray-400 bg-white hover:border-gray-300 focus:outline-none focus:border-[#032e92] focus:ring-2 focus:ring-[#032e92]/10 transition-all shadow-2xs"
+                        className="w-full pl-9 pr-3.5 py-1.5 rounded-full border border-gray-200/90 text-xs font-medium text-gray-900 placeholder-gray-400 bg-white hover:border-gray-300 focus:outline-none focus:border-[#032e92] focus:ring-2 focus:ring-[#032e92]/10 transition-all shadow-2xs"
                       />
                     </div>
                   </div>
@@ -425,9 +425,9 @@ export default function FundsTable({
                     <button
                       type="button"
                       onClick={() => handleSort('investmentStrategy')}
-                      className="flex items-center gap-1 text-[12px] font-extrabold text-[#032e92] uppercase group cursor-pointer"
+                      className="flex items-center gap-1 text-[12px] font-bold text-[#032e92] uppercase group cursor-pointer"
                     >
-                      <span>Investment Strategy</span>
+                      <span>Inv. Strategy</span>
                       {renderSortIcon('investmentStrategy')}
                     </button>
                     <TableDropdown
@@ -447,7 +447,7 @@ export default function FundsTable({
                     <button
                       type="button"
                       onClick={() => handleSort('schemeSubcategory')}
-                      className="flex items-center gap-1 text-[12px] font-extrabold text-[#032e92] uppercase group cursor-pointer"
+                      className="flex items-center gap-1 text-[12px] font-bold text-[#032e92] uppercase group cursor-pointer"
                     >
                       <span>Subcategory</span>
                       {renderSortIcon('schemeSubcategory')}
@@ -470,7 +470,7 @@ export default function FundsTable({
                     <button
                       type="button"
                       onClick={() => handleSort('riskLevel')}
-                      className="flex items-center gap-1 text-[12px] font-extrabold text-[#032e92] uppercase group cursor-pointer"
+                      className="flex items-center gap-1 text-[12px] font-bold text-[#032e92] uppercase group cursor-pointer"
                     >
                       <span>Risk Band</span>
                       {renderSortIcon('riskLevel')}
@@ -496,12 +496,12 @@ export default function FundsTable({
                     <button
                       type="button"
                       onClick={() => handleSort('nav')}
-                      className="flex items-center gap-1 text-[12px] font-extrabold text-[#032e92] uppercase group cursor-pointer"
+                      className="flex items-center gap-1 text-[12px] font-bold text-[#032e92] uppercase group cursor-pointer"
                     >
                       <span>NAV</span>
                       {renderSortIcon('nav')}
                     </button>
-                    <span className="text-xs font-semibold text-gray-400 py-1.5 block">
+                    <span className="text-xs font-semibold text-gray-600 py-1.5 block">
                       Daily Value
                     </span>
                   </div>
@@ -513,12 +513,12 @@ export default function FundsTable({
                     <button
                       type="button"
                       onClick={() => handleSort('returns1M')}
-                      className="flex items-center gap-1 text-[12px] font-extrabold text-[#032e92] uppercase group cursor-pointer"
+                      className="flex items-center gap-1 text-[12px] font-bold text-[#032e92] uppercase group cursor-pointer"
                     >
                       <span>1M Return</span>
                       {renderSortIcon('returns1M')}
                     </button>
-                    <span className="text-xs font-semibold text-gray-400 py-1.5 block">
+                    <span className="text-xs font-semibold text-gray-600 py-1.5 block">
                       Past 30 Days
                     </span>
                   </div>
@@ -526,7 +526,7 @@ export default function FundsTable({
 
                 {/* 7. Action */}
                 <th className="py-4 px-4 sm:px-6 align-top text-center min-w-[170px]">
-                  <span className="text-[12px] font-extrabold text-[#032e92] uppercase block">
+                  <span className="text-[12px] font-bold text-[#032e92] uppercase block">
                     Action
                   </span>
                 </th>
@@ -576,7 +576,7 @@ export default function FundsTable({
                             >
                               {fund.name}
                             </Link>
-                            <p className="text-xs text-gray-400 font-medium truncate mt-0.5">
+                            <p className="text-xs text-gray-600 font-medium truncate mt-0.5">
                               {fund.amc || 'SIF Fund'}
                             </p>
                           </div>
@@ -593,7 +593,7 @@ export default function FundsTable({
 
                       {/* 3. Scheme Subcategory */}
                       <td className="py-4 px-3">
-                        <span className="text-xs sm:text-sm font-medium text-gray-700 leading-snug">
+                        <span className="text-xs sm:text-sm font-medium text-gray-900 leading-snug">
                           {subcategoryVal}
                         </span>
                       </td>
@@ -613,7 +613,7 @@ export default function FundsTable({
                             {fund.nav != null ? formatNav(fund.nav) : 'N/A'}
                           </span>
                           {(fund.navDate || fund.nav_date) && (
-                            <span className="text-xs font-medium text-gray-400 mt-0.5 whitespace-nowrap">
+                            <span className="text-xs font-medium text-gray-600 mt-0.5 whitespace-nowrap">
                               {formatNavDate(fund.navDate || fund.nav_date)}
                             </span>
                           )}
@@ -627,7 +627,7 @@ export default function FundsTable({
                             {returnVal1M > 0 ? '+' : ''}{returnVal1M}%
                           </span>
                         ) : (
-                          <span className="text-xs sm:text-sm font-medium text-gray-400">
+                          <span className="text-xs sm:text-sm font-medium text-gray-600">
                             {returnVal1M || 'N/A'}
                           </span>
                         )}
@@ -644,7 +644,7 @@ export default function FundsTable({
                           </button>
                           <Link
                             to={`/sif/${encodeURIComponent(fundCode)}`}
-                            className="px-4 py-2 rounded-xl bg-[#cbd5e1] hover:bg-gray-300 text-gray-700 text-xs font-bold transition-colors cursor-pointer"
+                            className="px-4 py-2 rounded-xl bg-[#cbd5e1] hover:bg-gray-300 text-gray-900 text-xs font-bold transition-colors cursor-pointer"
                           >
                             Details
                           </Link>
@@ -656,7 +656,7 @@ export default function FundsTable({
                 })
               ) : (
                 <tr>
-                  <td colSpan={7} className="py-16 text-center text-gray-500 font-medium">
+                  <td colSpan={7} className="py-16 text-center text-gray-600 font-medium">
                     No funds found matching your criteria.
                   </td>
                 </tr>

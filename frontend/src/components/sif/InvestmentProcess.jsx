@@ -63,7 +63,7 @@ export default function InvestmentProcess() {
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
             Start Investing in <span className="gradient-text">4 Simple Steps</span>
           </h2>
-          <p className="text-gray-500 font-medium max-w-xl mx-auto">
+          <p className="text-gray-600 font-medium max-w-xl mx-auto">
             From registration to your first investment — we make the process seamless, fast, and completely digital.
           </p>
         </motion.div>
@@ -105,7 +105,7 @@ export default function InvestmentProcess() {
                 </div>
 
                 <h3 className="text-lg font-bold text-gray-900 mb-3">{step.title}</h3>
-                <p className="text-gray-500 text-sm font-medium leading-relaxed">{step.description}</p>
+                <p className="text-gray-600 text-sm font-medium leading-relaxed">{step.description}</p>
               </motion.div>
             ))}
           </div>

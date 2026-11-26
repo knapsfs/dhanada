@@ -102,8 +102,8 @@ export default function FundInformation({ fund }) {
               <div className="divide-y divide-[#e8edf7]">
                 {group.items.map((item) => (
                   <div key={item.label} className="flex items-start justify-between px-5 py-3 hover:bg-[#f7f9fc] transition-colors">
-                    <p className="text-xs font-medium text-gray-400 flex-shrink-0 w-36">{item.label}</p>
-                    <p className="text-xs font-bold text-gray-800 text-right">{item.value}</p>
+                    <p className="text-xs font-medium text-gray-600 flex-shrink-0 w-36">{item.label}</p>
+                    <p className="text-xs font-bold text-gray-900 text-right">{item.value}</p>
                   </div>
                 ))}
               </div>

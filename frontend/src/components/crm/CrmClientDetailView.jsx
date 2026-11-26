@@ -26,7 +26,7 @@ const KYC_COLORS = {
 const STATUS_COLORS = {
   Active: "bg-emerald-50 text-emerald-700 border-emerald-200",
   Dormant: "bg-amber-50 text-amber-700 border-amber-200",
-  Closed: "bg-gray-100 text-gray-700 border-gray-300",
+  Closed: "bg-gray-100 text-gray-900 border-gray-300",
 };
 
 export default function CrmClientDetailView({
@@ -283,7 +283,7 @@ export default function CrmClientDetailView({
     return (
       <div className="bg-white rounded-3xl border border-gray-200/90 p-12 text-center shadow-xs flex flex-col items-center justify-center min-h-[400px]">
         <FontAwesomeIcon icon={faSpinner} className="animate-spin text-3xl text-[#032e92] mb-3" />
-        <p className="text-xs font-semibold text-gray-500">Loading Client Onboarding Details...</p>
+        <p className="text-xs font-semibold text-gray-600">Loading Client Onboarding Details...</p>
       </div>
     );
   }
@@ -309,7 +309,7 @@ export default function CrmClientDetailView({
         <button
           type="button"
           onClick={onBack}
-          className="px-3.5 py-2 rounded-xl bg-white border border-gray-200 text-gray-700 hover:text-[#032e92] hover:border-[#032e92] text-xs font-semibold flex items-center gap-2 shadow-2xs transition-colors cursor-pointer"
+          className="px-3.5 py-2 rounded-xl bg-white border border-gray-200 text-gray-900 hover:text-[#032e92] hover:border-[#032e92] text-xs font-semibold flex items-center gap-2 shadow-2xs transition-colors cursor-pointer"
         >
           <FontAwesomeIcon icon={faArrowLeft} />
           <span>Back to Clients</span>
@@ -321,7 +321,7 @@ export default function CrmClientDetailView({
             <>
               <a
                 href={`tel:${cleanPhone}`}
-                className="px-3 py-2 rounded-xl bg-white border border-gray-200 text-gray-700 hover:text-[#032e92] hover:border-[#032e92] text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-colors"
+                className="px-3 py-2 rounded-xl bg-white border border-gray-200 text-gray-900 hover:text-[#032e92] hover:border-[#032e92] text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-colors"
                 title="Call Client"
               >
                 <FontAwesomeIcon icon={faPhone} className="text-xs text-blue-600" />
@@ -349,7 +349,7 @@ export default function CrmClientDetailView({
                 setActiveTab("emails");
                 setFocusEmailComposer(true);
               }}
-              className="px-3 py-2 rounded-xl bg-white border border-gray-200 text-gray-700 hover:text-[#032e92] hover:border-[#032e92] text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer"
+              className="px-3 py-2 rounded-xl bg-white border border-gray-200 text-gray-900 hover:text-[#032e92] hover:border-[#032e92] text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer"
               title="Open Integrated Email Conversations & Compose"
             >
               <FontAwesomeIcon icon={faEnvelope} className="text-xs text-amber-600" />
@@ -372,7 +372,7 @@ export default function CrmClientDetailView({
           <button
             type="button"
             onClick={() => onLogInteraction && onLogInteraction({ ...clientData, client_name: displayName })}
-            className="px-3 py-2 rounded-xl text-xs font-semibold bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 flex items-center gap-1.5 shadow-2xs cursor-pointer transition-colors"
+            className="px-3 py-2 rounded-xl text-xs font-semibold bg-white border border-gray-200 text-gray-900 hover:bg-gray-50 flex items-center gap-1.5 shadow-2xs cursor-pointer transition-colors"
             title="Log Interaction"
           >
             <FontAwesomeIcon icon={faCommentDots} className="text-[#032e92] text-xs" />
@@ -382,7 +382,7 @@ export default function CrmClientDetailView({
           <button
             type="button"
             onClick={() => onNewTask && onNewTask({ ...clientData, client_name: displayName })}
-            className="px-3 py-2 rounded-xl text-xs font-semibold bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 flex items-center gap-1.5 shadow-2xs cursor-pointer transition-colors"
+            className="px-3 py-2 rounded-xl text-xs font-semibold bg-white border border-gray-200 text-gray-900 hover:bg-gray-50 flex items-center gap-1.5 shadow-2xs cursor-pointer transition-colors"
             title="Create Task"
           >
             <FontAwesomeIcon icon={faPlus} className="text-[#032e92] text-xs" />
@@ -396,7 +396,7 @@ export default function CrmClientDetailView({
                 type="button"
                 onClick={handleCancelEdit}
                 disabled={saving}
-                className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors cursor-pointer"
+                className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-gray-100 hover:bg-gray-200 text-gray-900 transition-colors cursor-pointer"
               >
                 Cancel
               </button>
@@ -452,7 +452,7 @@ export default function CrmClientDetailView({
           <button
             type="button"
             onClick={() => setFeedback({ type: "", message: "" })}
-            className="text-gray-400 hover:text-gray-700 cursor-pointer text-xs"
+            className="text-gray-600 hover:text-gray-900 cursor-pointer text-xs"
           >
             <FontAwesomeIcon icon={faXmark} />
           </button>
@@ -475,7 +475,7 @@ export default function CrmClientDetailView({
                 {submissionData?.investor_category || clientData?.investor_category || "Retail"}
               </span>
               {submissionData?.workflow_type && (
-                <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">
+                <span className="text-xs font-medium text-gray-600 bg-gray-100 px-2.5 py-1 rounded-full">
                   Workflow: {submissionData.workflow_type.replace(/_/g, " ")}
                 </span>
               )}
@@ -495,15 +495,15 @@ export default function CrmClientDetailView({
               )}
             </div>
 
-            <p className="text-xs text-gray-500 font-medium flex items-center gap-4 flex-wrap">
+            <p className="text-xs text-gray-600 font-medium flex items-center gap-4 flex-wrap">
               <span>Client since {clientData?.onboarding_date ? formatContactDate(clientData.onboarding_date) : (clientData?.creation ? new Date(clientData.creation).toLocaleDateString("en-IN") : "—")}</span>
               <span>•</span>
-              <span>Location: <strong className="text-gray-700">{submissionData?.city || clientData?.city || "Not Specified"}, {submissionData?.state || clientData?.state || "India"}</strong></span>
+              <span>Location: <strong className="text-gray-900">{submissionData?.city || clientData?.city || "Not Specified"}, {submissionData?.state || clientData?.state || "India"}</strong></span>
             </p>
 
             {/* Linked Opportunities / Multi-Lead Badges */}
             <div className="flex items-center gap-2 flex-wrap pt-1">
-              <span className="text-xs font-bold text-gray-500 uppercase">
+              <span className="text-xs font-bold text-gray-600 uppercase">
                 Linked Opportunities ({linkedLeads.length || (clientData?.lead ? 1 : 0)}):
               </span>
               {linkedLeads.length > 0 ? (
@@ -544,7 +544,7 @@ export default function CrmClientDetailView({
                   <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[9px]" />
                 </button>
               ) : (
-                <span className="text-xs text-gray-400 italic">No linked leads</span>
+                <span className="text-xs text-gray-600 italic">No linked leads</span>
               )}
             </div>
           </div>
@@ -553,7 +553,7 @@ export default function CrmClientDetailView({
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 shrink-0">
             {/* Contact Health */}
             <div className="bg-slate-50 p-3.5 rounded-2xl border border-gray-100">
-              <span className="text-[10px] uppercase font-bold text-gray-400 block">Contact Health</span>
+              <span className="text-[10px] uppercase font-bold text-gray-600 block">Contact Health</span>
               <div className="mt-1">
                 {contactInfo.isOverdue ? (
                   <span className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-700">
@@ -561,7 +561,7 @@ export default function CrmClientDetailView({
                     <span>Overdue ({contactInfo.days}d)</span>
                   </span>
                 ) : contactInfo.status === "never_contacted" ? (
-                  <span className="text-xs font-medium text-gray-500">No contact yet</span>
+                  <span className="text-xs font-medium text-gray-600">No contact yet</span>
                 ) : (
                   <span className="text-xs font-bold text-emerald-700">{contactInfo.label}</span>
                 )}
@@ -570,7 +570,7 @@ export default function CrmClientDetailView({
 
             {/* Risk Profile */}
             <div className="bg-slate-50 p-3.5 rounded-2xl border border-gray-100">
-              <span className="text-[10px] uppercase font-bold text-gray-400 block">Risk Profile</span>
+              <span className="text-[10px] uppercase font-bold text-gray-600 block">Risk Profile</span>
               <p className="text-xs font-bold text-gray-900 mt-1 truncate">
                 {clientData?.risk_profile || "Moderate"}
               </p>
@@ -578,7 +578,7 @@ export default function CrmClientDetailView({
 
             {/* Submission Status */}
             <div className="bg-slate-50 p-3.5 rounded-2xl border border-gray-100 col-span-2 sm:col-span-1">
-              <span className="text-[10px] uppercase font-bold text-gray-400 block">Onboarding Form</span>
+              <span className="text-[10px] uppercase font-bold text-gray-600 block">Onboarding Form</span>
               <p className="text-xs font-bold text-[#032e92] mt-1 flex items-center gap-1 truncate">
                 <FontAwesomeIcon icon={submissionData ? faCheckCircle : faClock} className={submissionData ? "text-emerald-600" : "text-amber-500"} />
                 <span>{submissionData ? submissionData.status || "Submitted" : "No Submission"}</span>
@@ -596,7 +596,7 @@ export default function CrmClientDetailView({
           className={`pb-3 px-4 text-xs font-bold border-b-2 transition-colors cursor-pointer flex items-center gap-2 ${
             activeTab === "onboarding"
               ? "border-[#032e92] text-[#032e92]"
-              : "border-transparent text-gray-500 hover:text-gray-900"
+              : "border-transparent text-gray-600 hover:text-gray-900"
           }`}
         >
           <FontAwesomeIcon icon={faIdCard} />
@@ -609,7 +609,7 @@ export default function CrmClientDetailView({
           className={`pb-3 px-4 text-xs font-bold border-b-2 transition-colors cursor-pointer flex items-center gap-2 ${
             activeTab === "emails"
               ? "border-[#032e92] text-[#032e92]"
-              : "border-transparent text-gray-500 hover:text-gray-900"
+              : "border-transparent text-gray-600 hover:text-gray-900"
           }`}
         >
           <FontAwesomeIcon icon={faEnvelope} />
@@ -625,7 +625,7 @@ export default function CrmClientDetailView({
           className={`pb-3 px-4 text-xs font-bold border-b-2 transition-colors cursor-pointer flex items-center gap-2 ${
             activeTab === "whatsapp"
               ? "border-emerald-600 text-emerald-700"
-              : "border-transparent text-gray-500 hover:text-gray-900"
+              : "border-transparent text-gray-600 hover:text-gray-900"
           }`}
         >
           <FontAwesomeIcon icon={faComments} className="text-emerald-600" />
@@ -641,7 +641,7 @@ export default function CrmClientDetailView({
           className={`pb-3 px-4 text-xs font-bold border-b-2 transition-colors cursor-pointer flex items-center gap-2 ${
             activeTab === "remarks"
               ? "border-[#032e92] text-[#032e92]"
-              : "border-transparent text-gray-500 hover:text-gray-900"
+              : "border-transparent text-gray-600 hover:text-gray-900"
           }`}
         >
           <FontAwesomeIcon icon={faCommentDots} />
@@ -657,12 +657,12 @@ export default function CrmClientDetailView({
           className={`pb-3 px-4 text-xs font-bold border-b-2 transition-colors cursor-pointer flex items-center gap-2 ${
             activeTab === "tasks"
               ? "border-[#032e92] text-[#032e92]"
-              : "border-transparent text-gray-500 hover:text-gray-900"
+              : "border-transparent text-gray-600 hover:text-gray-900"
           }`}
         >
           <FontAwesomeIcon icon={faListCheck} />
           <span>Client Tasks</span>
-          <span className="w-5 h-5 rounded-full bg-gray-100 text-gray-700 text-[10px] flex items-center justify-center font-bold">
+          <span className="w-5 h-5 rounded-full bg-gray-100 text-gray-900 text-[10px] flex items-center justify-center font-bold">
             {tasks.length}
           </span>
         </button>
@@ -685,7 +685,7 @@ export default function CrmClientDetailView({
                 <button
                   type="button"
                   onClick={handleCancelEdit}
-                  className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 cursor-pointer"
+                  className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white border border-gray-300 text-gray-900 hover:bg-gray-50 cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -710,7 +710,7 @@ export default function CrmClientDetailView({
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-gray-900">Personal & KYC Information</h3>
-                  <p className="text-xs text-gray-400">Identity details recorded during onboarding</p>
+                  <p className="text-xs text-gray-600">Identity details recorded during onboarding</p>
                 </div>
               </div>
 
@@ -729,7 +729,7 @@ export default function CrmClientDetailView({
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 text-xs">
               {/* Full Name */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Full Name</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Full Name</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -745,7 +745,7 @@ export default function CrmClientDetailView({
 
               {/* PAN */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">PAN Number</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">PAN Number</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -762,7 +762,7 @@ export default function CrmClientDetailView({
                       <button
                         type="button"
                         onClick={() => copyToClipboard(panValue, "pan")}
-                        className="text-gray-400 hover:text-[#032e92] cursor-pointer"
+                        className="text-gray-600 hover:text-[#032e92] cursor-pointer"
                         title="Copy PAN"
                       >
                         <FontAwesomeIcon icon={copiedField === "pan" ? faCheck : faCopy} className="text-xs" />
@@ -774,7 +774,7 @@ export default function CrmClientDetailView({
 
               {/* KYC Status */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">KYC Status</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">KYC Status</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.kyc_status}
@@ -793,7 +793,7 @@ export default function CrmClientDetailView({
 
               {/* Date of Birth */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Date of Birth</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Date of Birth</label>
                 {isEditing ? (
                   <input
                     type="date"
@@ -810,7 +810,7 @@ export default function CrmClientDetailView({
 
               {/* Gender */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Gender</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Gender</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.gender}
@@ -825,7 +825,7 @@ export default function CrmClientDetailView({
 
               {/* Client Type */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Client Type</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Client Type</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.client_type}
@@ -840,7 +840,7 @@ export default function CrmClientDetailView({
 
               {/* Income Slab */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Income Slab</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Income Slab</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.income_slab}
@@ -855,7 +855,7 @@ export default function CrmClientDetailView({
 
               {/* Occupation */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Occupation</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Occupation</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.occupation}
@@ -870,7 +870,7 @@ export default function CrmClientDetailView({
 
               {/* Place of Birth */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Place of Birth</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Place of Birth</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -895,7 +895,7 @@ export default function CrmClientDetailView({
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-gray-900">Contact Details</h3>
-                  <p className="text-xs text-gray-400">Communication coordinates verified during onboarding</p>
+                  <p className="text-xs text-gray-600">Communication coordinates verified during onboarding</p>
                 </div>
               </div>
             </div>
@@ -903,7 +903,7 @@ export default function CrmClientDetailView({
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
               {/* Primary Mobile */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Primary Mobile</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Primary Mobile</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -919,7 +919,7 @@ export default function CrmClientDetailView({
                       <button
                         type="button"
                         onClick={() => copyToClipboard(primaryPhone, "phone")}
-                        className="text-gray-400 hover:text-[#032e92] cursor-pointer"
+                        className="text-gray-600 hover:text-[#032e92] cursor-pointer"
                         title="Copy Phone"
                       >
                         <FontAwesomeIcon icon={copiedField === "phone" ? faCheck : faCopy} className="text-xs" />
@@ -931,7 +931,7 @@ export default function CrmClientDetailView({
 
               {/* Alternate Mobile */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Alternate Mobile</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Alternate Mobile</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -947,7 +947,7 @@ export default function CrmClientDetailView({
 
               {/* Email Address */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Email Address</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Email Address</label>
                 {isEditing ? (
                   <input
                     type="email"
@@ -963,7 +963,7 @@ export default function CrmClientDetailView({
                       <button
                         type="button"
                         onClick={() => copyToClipboard(primaryEmail, "email")}
-                        className="text-gray-400 hover:text-[#032e92] cursor-pointer"
+                        className="text-gray-600 hover:text-[#032e92] cursor-pointer"
                         title="Copy Email"
                       >
                         <FontAwesomeIcon icon={copiedField === "email" ? faCheck : faCopy} className="text-xs" />
@@ -984,7 +984,7 @@ export default function CrmClientDetailView({
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-gray-900">Residential / Permanent Address</h3>
-                  <p className="text-xs text-gray-400">Postal and residential address registered during onboarding</p>
+                  <p className="text-xs text-gray-600">Postal and residential address registered during onboarding</p>
                 </div>
               </div>
             </div>
@@ -992,7 +992,7 @@ export default function CrmClientDetailView({
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
               {/* Address Line 1 */}
               <div className="sm:col-span-2 space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Address Line 1</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Address Line 1</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1008,7 +1008,7 @@ export default function CrmClientDetailView({
 
               {/* Address Line 2 */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Address Line 2</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Address Line 2</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1024,7 +1024,7 @@ export default function CrmClientDetailView({
 
               {/* City */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">City</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">City</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1040,7 +1040,7 @@ export default function CrmClientDetailView({
 
               {/* State */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">State</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">State</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1056,7 +1056,7 @@ export default function CrmClientDetailView({
 
               {/* Pincode */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Pincode</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Pincode</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1073,7 +1073,7 @@ export default function CrmClientDetailView({
 
               {/* Country */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Country</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Country</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1098,7 +1098,7 @@ export default function CrmClientDetailView({
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-gray-900">Nominee & Guardian Details</h3>
-                  <p className="text-xs text-gray-400">Beneficiary nomination submitted during client onboarding</p>
+                  <p className="text-xs text-gray-600">Beneficiary nomination submitted during client onboarding</p>
                 </div>
               </div>
             </div>
@@ -1106,7 +1106,7 @@ export default function CrmClientDetailView({
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 text-xs">
               {/* Nominee Name */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Nominee Name</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Nominee Name</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1122,7 +1122,7 @@ export default function CrmClientDetailView({
 
               {/* Relationship */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Relationship</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Relationship</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.nominee_relationship}
@@ -1137,7 +1137,7 @@ export default function CrmClientDetailView({
 
               {/* Nominee DOB */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Nominee Date of Birth</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Nominee Date of Birth</label>
                 {isEditing ? (
                   <input
                     type="date"
@@ -1154,7 +1154,7 @@ export default function CrmClientDetailView({
 
               {/* Is Minor Toggle */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Is Nominee Minor?</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Is Nominee Minor?</label>
                 {isEditing ? (
                   <label className="inline-flex items-center gap-2 py-2 cursor-pointer">
                     <input
@@ -1163,7 +1163,7 @@ export default function CrmClientDetailView({
                       onChange={(e) => handleFieldChange("is_nominee_minor", e.target.checked)}
                       className="w-4 h-4 rounded text-[#032e92] border-gray-300 focus:ring-[#032e92]"
                     />
-                    <span className="font-semibold text-gray-700">Yes, Nominee is Minor</span>
+                    <span className="font-semibold text-gray-900">Yes, Nominee is Minor</span>
                   </label>
                 ) : (
                   <div className="py-1">
@@ -1176,7 +1176,7 @@ export default function CrmClientDetailView({
 
               {/* Statement / Allocation Name */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Statement / Allocation</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Statement / Allocation</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1192,7 +1192,7 @@ export default function CrmClientDetailView({
 
               {/* ID Type */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Nominee ID Type</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Nominee ID Type</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.nominee_id_type}
@@ -1207,7 +1207,7 @@ export default function CrmClientDetailView({
 
               {/* Nominee ID Number */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Nominee ID Number</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Nominee ID Number</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1223,7 +1223,7 @@ export default function CrmClientDetailView({
 
               {/* Nominee Contact Mobile */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Nominee Mobile</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Nominee Mobile</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1239,7 +1239,7 @@ export default function CrmClientDetailView({
 
               {/* Nominee Address */}
               <div className="sm:col-span-2 space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Nominee Address</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Nominee Address</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1265,7 +1265,7 @@ export default function CrmClientDetailView({
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
                   <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-gray-400 uppercase block">Guardian Name</label>
+                    <label className="text-[10px] font-bold text-gray-600 uppercase block">Guardian Name</label>
                     {isEditing ? (
                       <input
                         type="text"
@@ -1280,7 +1280,7 @@ export default function CrmClientDetailView({
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-gray-400 uppercase block">Guardian Relationship</label>
+                    <label className="text-[10px] font-bold text-gray-600 uppercase block">Guardian Relationship</label>
                     {isEditing ? (
                       <input
                         type="text"
@@ -1295,7 +1295,7 @@ export default function CrmClientDetailView({
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-gray-400 uppercase block">Guardian PAN</label>
+                    <label className="text-[10px] font-bold text-gray-600 uppercase block">Guardian PAN</label>
                     {isEditing ? (
                       <input
                         type="text"
@@ -1323,7 +1323,7 @@ export default function CrmClientDetailView({
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-gray-900">Bank Account Information</h3>
-                  <p className="text-xs text-gray-400">Bank mandate provided for payouts & verification</p>
+                  <p className="text-xs text-gray-600">Bank mandate provided for payouts & verification</p>
                 </div>
               </div>
             </div>
@@ -1331,7 +1331,7 @@ export default function CrmClientDetailView({
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-xs">
               {/* Bank Name */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Bank Name</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Bank Name</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1347,7 +1347,7 @@ export default function CrmClientDetailView({
 
               {/* Bank Account Number */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Account Number</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Account Number</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1363,7 +1363,7 @@ export default function CrmClientDetailView({
 
               {/* IFSC Code */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">IFSC Code</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">IFSC Code</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -1379,7 +1379,7 @@ export default function CrmClientDetailView({
 
               {/* Entry Method */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Verification Method</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Verification Method</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.bank_entry_method}
@@ -1394,7 +1394,7 @@ export default function CrmClientDetailView({
 
               {/* Bank Proof File */}
               <div className="sm:col-span-2 space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Bank Proof Attachment</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Bank Proof Attachment</label>
                 {submissionData?.bank_proof_file ? (
                   <div className="py-1 flex items-center gap-2">
                     <a
@@ -1408,7 +1408,7 @@ export default function CrmClientDetailView({
                     </a>
                   </div>
                 ) : (
-                  <p className="text-gray-400 italic py-1">No proof file attached</p>
+                  <p className="text-gray-600 italic py-1">No proof file attached</p>
                 )}
               </div>
             </div>
@@ -1423,7 +1423,7 @@ export default function CrmClientDetailView({
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-gray-900">Investment & Risk Preferences</h3>
-                  <p className="text-xs text-gray-400">Risk profiling and portfolio preferences</p>
+                  <p className="text-xs text-gray-600">Risk profiling and portfolio preferences</p>
                 </div>
               </div>
             </div>
@@ -1431,7 +1431,7 @@ export default function CrmClientDetailView({
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
               {/* Risk Profile */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Risk Profile</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Risk Profile</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.risk_profile}
@@ -1446,7 +1446,7 @@ export default function CrmClientDetailView({
 
               {/* Investor Category */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Investor Category</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Investor Category</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.investor_category}
@@ -1461,7 +1461,7 @@ export default function CrmClientDetailView({
 
               {/* Investment Horizon */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Investment Horizon</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Investment Horizon</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.investment_horizon}
@@ -1476,7 +1476,7 @@ export default function CrmClientDetailView({
 
               {/* Investment Experience */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Investment Experience</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Investment Experience</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.investment_experience}
@@ -1491,7 +1491,7 @@ export default function CrmClientDetailView({
 
               {/* Investment Capacity */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Investment Capacity</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Investment Capacity</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.investment_capacity}
@@ -1506,7 +1506,7 @@ export default function CrmClientDetailView({
 
               {/* Objectives */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase block">Investment Objectives</label>
+                <label className="text-[10px] font-bold text-gray-600 uppercase block">Investment Objectives</label>
                 {isEditing ? (
                   <CrmSelect
                     value={editFormData.investment_objectives}
@@ -1523,28 +1523,28 @@ export default function CrmClientDetailView({
 
           {/* Section 7: Submission Metadata & Audit */}
           {submissionData && (
-            <div className="bg-slate-50 rounded-3xl border border-gray-200/70 p-5 sm:p-6 text-xs text-gray-500">
-              <h4 className="font-bold text-gray-700 uppercase text-xs mb-3 flex items-center gap-1.5">
-                <FontAwesomeIcon icon={faFileLines} className="text-gray-400" />
+            <div className="bg-slate-50 rounded-3xl border border-gray-200/70 p-5 sm:p-6 text-xs text-gray-600">
+              <h4 className="font-bold text-gray-900 uppercase text-xs mb-3 flex items-center gap-1.5">
+                <FontAwesomeIcon icon={faFileLines} className="text-gray-600" />
                 <span>Onboarding Submission System Audit</span>
               </h4>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 <div>
-                  <span className="text-[10px] text-gray-400 block font-semibold uppercase">Submission Record</span>
-                  <span className="font-mono font-bold text-gray-800">{submissionData.name}</span>
+                  <span className="text-[10px] text-gray-600 block font-semibold uppercase">Submission Record</span>
+                  <span className="font-mono font-bold text-gray-900">{submissionData.name}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] text-gray-400 block font-semibold uppercase">Submitted On</span>
-                  <span className="font-medium text-gray-800">
+                  <span className="text-[10px] text-gray-600 block font-semibold uppercase">Submitted On</span>
+                  <span className="font-medium text-gray-900">
                     {submissionData.submitted_on ? new Date(submissionData.submitted_on).toLocaleString("en-IN") : "—"}
                   </span>
                 </div>
                 <div>
-                  <span className="text-[10px] text-gray-400 block font-semibold uppercase">Client Link</span>
-                  <span className="font-mono font-medium text-gray-800">{clientName}</span>
+                  <span className="text-[10px] text-gray-600 block font-semibold uppercase">Client Link</span>
+                  <span className="font-mono font-medium text-gray-900">{clientName}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] text-gray-400 block font-semibold uppercase">Submission IP</span>
+                  <span className="text-[10px] text-gray-600 block font-semibold uppercase">Submission IP</span>
                   <span className="font-mono text-gray-600">{submissionData.ip_address || "127.0.0.1"}</span>
                 </div>
               </div>
@@ -1565,7 +1565,7 @@ export default function CrmClientDetailView({
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-gray-900">Contact Health & Latest Remark</h3>
-                  <p className="text-xs text-gray-400">Track client touchpoints and maintain advisor compliance</p>
+                  <p className="text-xs text-gray-600">Track client touchpoints and maintain advisor compliance</p>
                 </div>
               </div>
 
@@ -1588,7 +1588,7 @@ export default function CrmClientDetailView({
 
             {/* Current Latest Remark Box */}
             <div className="bg-slate-50 rounded-2xl p-4 border border-gray-200/80 text-xs">
-              <span className="text-[10px] font-bold text-gray-400 uppercase block mb-1.5">
+              <span className="text-[10px] font-bold text-gray-600 uppercase block mb-1.5">
                 Current Latest Remark
               </span>
               {clientData?.latest_remark ? (
@@ -1596,25 +1596,25 @@ export default function CrmClientDetailView({
                   <p className="text-gray-900 font-medium leading-relaxed whitespace-pre-wrap">
                     "{clientData.latest_remark}"
                   </p>
-                  <div className="mt-3 pt-2.5 border-t border-gray-200/80 flex items-center justify-between gap-3 text-xs text-gray-500 flex-wrap">
+                  <div className="mt-3 pt-2.5 border-t border-gray-200/80 flex items-center justify-between gap-3 text-xs text-gray-600 flex-wrap">
                     <span className="flex items-center gap-1.5">
-                      <FontAwesomeIcon icon={faUser} className="text-gray-400 text-[10px]" />
-                      <span>Contacted by: <strong className="text-gray-700">{clientData.last_contacted_by || "Unknown"}</strong></span>
+                      <FontAwesomeIcon icon={faUser} className="text-gray-600 text-[10px]" />
+                      <span>Contacted by: <strong className="text-gray-900">{clientData.last_contacted_by || "Unknown"}</strong></span>
                     </span>
                     <span className="flex items-center gap-1.5">
-                      <FontAwesomeIcon icon={faClock} className="text-gray-400 text-[10px]" />
+                      <FontAwesomeIcon icon={faClock} className="text-gray-600 text-[10px]" />
                       <span>{formatContactDate(clientData.last_contacted_on)}</span>
                     </span>
                   </div>
                 </div>
               ) : (
-                <p className="text-gray-400 italic">No contact remark recorded yet for this client.</p>
+                <p className="text-gray-600 italic">No contact remark recorded yet for this client.</p>
               )}
             </div>
 
             {/* Record New Remark Form */}
             <form onSubmit={handleSaveRemark} className="space-y-3 pt-2">
-              <label className="block text-xs font-bold text-gray-700 uppercase">
+              <label className="block text-xs font-bold text-gray-900 uppercase">
                 Record New Contact Remark
               </label>
               <textarea
@@ -1664,7 +1664,7 @@ export default function CrmClientDetailView({
             </div>
 
             {interactions.length === 0 ? (
-              <p className="text-xs text-gray-400 italic py-6 text-center">No interactions logged yet for this client.</p>
+              <p className="text-xs text-gray-600 italic py-6 text-center">No interactions logged yet for this client.</p>
             ) : (
               <div className="relative pl-6 space-y-6 before:content-[''] before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-gray-100">
                 {interactions.map((int) => (
@@ -1677,7 +1677,7 @@ export default function CrmClientDetailView({
                           <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-[#032e92] border border-blue-100">
                             {int.interaction_type || "Note"}
                           </span>
-                          <span className="text-[10px] text-gray-400">
+                          <span className="text-[10px] text-gray-600">
                             {new Date(int.interaction_date).toLocaleString("en-IN", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
                           </span>
                         </div>
@@ -1685,7 +1685,7 @@ export default function CrmClientDetailView({
                       {int.details && (
                         <p className="text-gray-600 leading-relaxed whitespace-pre-wrap">{int.details}</p>
                       )}
-                      <div className="text-[10px] text-gray-400 pt-1 border-t border-gray-100 flex items-center justify-between">
+                      <div className="text-[10px] text-gray-600 pt-1 border-t border-gray-100 flex items-center justify-between">
                         <span>Logged by: {int.logged_by || "Advisor"}</span>
                         {int.outcome && <span>Outcome: <strong className="text-gray-600">{int.outcome}</strong></span>}
                       </div>
@@ -1717,7 +1717,7 @@ export default function CrmClientDetailView({
           </div>
 
           {tasks.length === 0 ? (
-            <p className="text-xs text-gray-400 italic py-8 text-center">No open tasks for this client.</p>
+            <p className="text-xs text-gray-600 italic py-8 text-center">No open tasks for this client.</p>
           ) : (
             <div className="space-y-3">
               {tasks.map((t) => (
@@ -1731,9 +1731,9 @@ export default function CrmClientDetailView({
                     </span>
                   </div>
                   {t.description && <p className="text-gray-600">{t.description}</p>}
-                  <div className="text-[10px] text-gray-400 flex items-center justify-between pt-1">
+                  <div className="text-[10px] text-gray-600 flex items-center justify-between pt-1">
                     <span>Due: <strong>{t.due_date || "—"}</strong> {t.due_time ? `at ${t.due_time}` : ""}</span>
-                    <span>Status: <strong className="text-gray-700">{t.status}</strong></span>
+                    <span>Status: <strong className="text-gray-900">{t.status}</strong></span>
                   </div>
                 </div>
               ))}

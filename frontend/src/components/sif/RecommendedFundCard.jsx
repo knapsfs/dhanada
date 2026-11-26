@@ -36,7 +36,7 @@ export default function RecommendedFundCard({ fund, index }) {
           </h4>
           <div className="flex items-center gap-1.5 mt-1">
             <FontAwesomeIcon icon={faBuildingColumns} className="text-gray-300 text-[10px]" />
-            <span className="text-xs text-gray-400 font-medium truncate">{fund.amc}</span>
+            <span className="text-xs text-gray-600 font-medium truncate">{fund.amc}</span>
           </div>
           <div className="flex flex-wrap gap-1.5 mt-2">
             <span className="text-[10px] font-semibold bg-[#eef4ff] text-[#032e92] px-2 py-0.5 rounded-full">{fund.category}</span>
@@ -49,25 +49,25 @@ export default function RecommendedFundCard({ fund, index }) {
         {/* Metrics */}
         <div className="hidden md:grid grid-cols-3 gap-4 flex-shrink-0">
           <div className="text-center">
-            <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wide">AUM</p>
-            <p className="text-sm font-bold text-gray-800">{fund.aum != null ? formatAum(fund.aum) : 'N/A'}</p>
+            <p className="text-[10px] text-gray-600 font-medium uppercase tracking-wide">AUM</p>
+            <p className="text-sm font-bold text-gray-900">{fund.aum != null ? formatAum(fund.aum) : 'N/A'}</p>
           </div>
           <div className="text-center">
-            <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wide">3Y Return</p>
+            <p className="text-[10px] text-gray-600 font-medium uppercase tracking-wide">3Y Return</p>
             <div className="flex items-center justify-center gap-1">
               <FontAwesomeIcon icon={faArrowTrendUp} className="text-green-500 text-[10px]" />
               <p className="text-sm font-bold text-green-600">{fund.returns3Y != null ? `${fund.returns3Y}%` : 'N/A'}</p>
             </div>
           </div>
           <div className="text-center">
-            <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wide">Exp. Ratio</p>
-            <p className="text-sm font-bold text-gray-800">{fund.expenseRatio != null ? `${fund.expenseRatio}%` : 'N/A'}</p>
+            <p className="text-[10px] text-gray-600 font-medium uppercase tracking-wide">Exp. Ratio</p>
+            <p className="text-sm font-bold text-gray-900">{fund.expenseRatio != null ? `${fund.expenseRatio}%` : 'N/A'}</p>
           </div>
         </div>
 
         {/* Actions */}
         <div className="flex items-center gap-2 flex-shrink-0">
-          <button className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl border border-[#e8edf7] text-gray-500 text-xs font-semibold hover:border-[#032e92] hover:text-[#032e92] transition-all whitespace-nowrap">
+          <button className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl border border-[#e8edf7] text-gray-600 text-xs font-semibold hover:border-[#032e92] hover:text-[#032e92] transition-all whitespace-nowrap">
             Know More
           </button>
           <button className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#032e92] text-white text-xs font-bold hover:bg-[#021d63] shadow-md shadow-blue-900/20 transition-all whitespace-nowrap">
@@ -84,8 +84,8 @@ export default function RecommendedFundCard({ fund, index }) {
           { label: 'Exp. Ratio', val: fund.expenseRatio != null ? `${fund.expenseRatio}%` : 'N/A' },
         ].map(m => (
           <div key={m.label} className="text-center bg-[#f7f9fc] rounded-xl p-2">
-            <p className="text-[10px] text-gray-400 font-medium">{m.label}</p>
-            <p className={`text-xs font-bold ${m.green && m.val !== 'N/A' ? 'text-green-600' : 'text-gray-800'}`}>{m.val}</p>
+            <p className="text-[10px] text-gray-600 font-medium">{m.label}</p>
+            <p className={`text-xs font-bold ${m.green && m.val !== 'N/A' ? 'text-green-600' : 'text-gray-900'}`}>{m.val}</p>
           </div>
         ))}
       </div>

@@ -29,7 +29,7 @@ export default function Testimonials() {
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
             What Our Investors <span className="gradient-text">Are Saying</span>
           </h2>
-          <p className="text-gray-500 font-medium max-w-xl mx-auto">
+          <p className="text-gray-600 font-medium max-w-xl mx-auto">
             Real investors. Real returns. Real stories of wealth creation with SIF.
           </p>
         </motion.div>
@@ -73,7 +73,7 @@ export default function Testimonials() {
                   {/* <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-xl px-3 py-2 w-fit mb-5">
                     <FontAwesomeIcon icon={faArrowTrendUp} className="text-green-600 text-xs" />
                     <span className="text-xs font-bold text-green-700">+{t.returns} Returns</span>
-                    <span className="text-xs text-gray-400 font-medium">on {t.invested}</span>
+                    <span className="text-xs text-gray-600 font-medium">on {t.invested}</span>
                   </div> */}
 
                   {/* Investor Info */}
@@ -83,7 +83,7 @@ export default function Testimonials() {
                     </div> */}
                     <div>
                       <p className="font-bold text-gray-900 text-sm">{t.name}</p>
-                      <p className="text-gray-400 text-xs font-medium">{t.profession}</p>
+                      <p className="text-gray-600 text-xs font-medium">{t.profession}</p>
                     </div>
                   </div>
 

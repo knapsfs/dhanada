@@ -346,7 +346,7 @@ export default function KnapsCrmPortal() {
                   <button
                     type="button"
                     onClick={() => setSelectedLeadName(null)}
-                    className="text-gray-400 hover:text-[#032e92] transition-colors cursor-pointer text-xs"
+                    className="text-gray-600 hover:text-[#032e92] transition-colors cursor-pointer text-xs"
                     title="Back to list"
                   >
                     {navItems.find((n) => n.id === activeTab)?.label || 'Leads'}
@@ -359,7 +359,7 @@ export default function KnapsCrmPortal() {
                   <button
                     type="button"
                     onClick={() => setSelectedClientName(null)}
-                    className="text-gray-400 hover:text-[#032e92] transition-colors cursor-pointer text-xs"
+                    className="text-gray-600 hover:text-[#032e92] transition-colors cursor-pointer text-xs"
                     title="Back to clients"
                   >
                     Clients
@@ -374,7 +374,7 @@ export default function KnapsCrmPortal() {
 
             {/* Global Search Bar */}
             <div className="relative flex-1 hidden sm:block">
-              <FontAwesomeIcon icon={faSearch} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs" />
+              <FontAwesomeIcon icon={faSearch} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-600 text-xs" />
               <input
                 type="text"
                 placeholder="Search leads, mobile, email, products..."
@@ -398,9 +398,9 @@ export default function KnapsCrmPortal() {
 
             <button
               onClick={() => setIsTaskModalOpen(true)}
-              className="hidden sm:flex px-3.5 py-2 rounded-xl border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 text-xs font-semibold items-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
+              className="hidden sm:flex px-3.5 py-2 rounded-xl border border-gray-200 bg-white text-gray-900 hover:bg-gray-50 text-xs font-semibold items-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
             >
-              <FontAwesomeIcon icon={faListCheck} className="text-gray-500" />
+              <FontAwesomeIcon icon={faListCheck} className="text-gray-600" />
               <span>New Task</span>
             </button>
 
@@ -608,7 +608,7 @@ export default function KnapsCrmPortal() {
               <h3 className="text-lg font-bold text-gray-900 tracking-tight">
                 Are you sure you want to log out?
               </h3>
-              <p className="text-xs text-gray-500 mt-2 mb-6 leading-relaxed">
+              <p className="text-xs text-gray-600 mt-2 mb-6 leading-relaxed">
                 You will need to enter your credentials again to access your CRM leads, client portfolios, and follow-ups.
               </p>
 
@@ -618,7 +618,7 @@ export default function KnapsCrmPortal() {
                   type="button"
                   disabled={loggingOut}
                   onClick={() => setIsLogoutModalOpen(false)}
-                  className="flex-1 py-2.5 px-4 rounded-xl border border-gray-200 text-xs font-semibold text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer disabled:opacity-50"
+                  className="flex-1 py-2.5 px-4 rounded-xl border border-gray-200 text-xs font-semibold text-gray-900 hover:bg-gray-100 transition-colors cursor-pointer disabled:opacity-50"
                 >
                   Cancel
                 </button>

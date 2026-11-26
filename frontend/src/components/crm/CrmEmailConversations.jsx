@@ -93,8 +93,8 @@ function EmailCard({ email, onReply }) {
               )}
 
               {hasAttachment && (
-                <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full border border-gray-200">
-                  <FontAwesomeIcon icon={faPaperclip} className="text-gray-400 text-[9px]" />
+                <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-gray-600 bg-gray-100 px-2 py-0.5 rounded-full border border-gray-200">
+                  <FontAwesomeIcon icon={faPaperclip} className="text-gray-600 text-[9px]" />
                   <span>
                     {attachments.length > 0
                       ? `${attachments.length} attachment${attachments.length > 1 ? "s" : ""}`
@@ -110,7 +110,7 @@ function EmailCard({ email, onReply }) {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-xs text-gray-400 self-start sm:self-center shrink-0">
+        <div className="flex items-center gap-2 text-xs text-gray-600 self-start sm:self-center shrink-0">
           <FontAwesomeIcon icon={faClock} className="text-gray-300 text-[10px]" />
           <span>{dateFormatted}</span>
         </div>
@@ -120,12 +120,12 @@ function EmailCard({ email, onReply }) {
       <div className="px-4 sm:px-5 py-2.5 bg-gray-50/60 text-xs text-gray-600 border-b border-gray-100/90 flex flex-wrap items-center justify-between gap-2">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
           <div className="truncate max-w-full">
-            <span className="font-semibold text-gray-500">From: </span>
-            <span className="text-gray-800 font-mono text-[10px] sm:text-xs">{sender}</span>
+            <span className="font-semibold text-gray-600">From: </span>
+            <span className="text-gray-900 font-mono text-[10px] sm:text-xs">{sender}</span>
           </div>
           <div className="truncate max-w-full">
-            <span className="font-semibold text-gray-500">To: </span>
-            <span className="text-gray-800 font-mono text-[10px] sm:text-xs">{recipients}</span>
+            <span className="font-semibold text-gray-600">To: </span>
+            <span className="text-gray-900 font-mono text-[10px] sm:text-xs">{recipients}</span>
           </div>
         </div>
 
@@ -150,16 +150,16 @@ function EmailCard({ email, onReply }) {
           }`}
         >
           {viewMode === "plain" || (!hasHtml && hasText) ? (
-            <p className="text-xs text-gray-700 font-sans whitespace-pre-wrap break-words leading-relaxed select-text">
-              {rawText || previewText || <span className="italic text-gray-400">(Empty message body)</span>}
+            <p className="text-xs text-gray-900 font-sans whitespace-pre-wrap break-words leading-relaxed select-text">
+              {rawText || previewText || <span className="italic text-gray-600">(Empty message body)</span>}
             </p>
           ) : hasHtml ? (
             <div
-              className="text-xs text-gray-700 leading-relaxed overflow-x-auto select-text [&_a]:text-[#032e92] [&_a]:underline [&_table]:border-collapse [&_table]:w-full [&_td]:border [&_td]:border-gray-200 [&_td]:p-1.5 [&_th]:border [&_th]:border-gray-200 [&_th]:p-1.5 [&_th]:bg-gray-50 [&_blockquote]:border-l-2 [&_blockquote]:border-gray-300 [&_blockquote]:pl-3 [&_blockquote]:italic [&_blockquote]:text-gray-500"
+              className="text-xs text-gray-900 leading-relaxed overflow-x-auto select-text [&_a]:text-[#032e92] [&_a]:underline [&_table]:border-collapse [&_table]:w-full [&_td]:border [&_td]:border-gray-200 [&_td]:p-1.5 [&_th]:border [&_th]:border-gray-200 [&_th]:p-1.5 [&_th]:bg-gray-50 [&_blockquote]:border-l-2 [&_blockquote]:border-gray-300 [&_blockquote]:pl-3 [&_blockquote]:italic [&_blockquote]:text-gray-600"
               dangerouslySetInnerHTML={{ __html: sanitized }}
             />
           ) : (
-            <p className="text-xs italic text-gray-400 select-none">(No message content provided)</p>
+            <p className="text-xs italic text-gray-600 select-none">(No message content provided)</p>
           )}
 
           {isLong && !isExpanded && (
@@ -185,7 +185,7 @@ function EmailCard({ email, onReply }) {
               <button
                 type="button"
                 onClick={() => setViewMode((m) => (m === "plain" ? "auto" : "plain"))}
-                className="inline-flex items-center gap-1 text-xs font-semibold text-gray-500 hover:text-gray-800 py-1 px-2 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1 text-xs font-semibold text-gray-600 hover:text-gray-900 py-1 px-2 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
                 title="Toggle Plain Text / HTML View"
               >
                 <FontAwesomeIcon icon={faFileLines} className="text-[10px]" />
@@ -206,7 +206,7 @@ function EmailCard({ email, onReply }) {
                   className="inline-flex items-center gap-1 text-xs font-medium text-gray-600 hover:text-[#032e92] bg-gray-50 hover:bg-blue-50 px-2 py-1 rounded-md border border-gray-200 transition-colors"
                   title={att.file_name}
                 >
-                  <FontAwesomeIcon icon={faPaperclip} className="text-gray-400 text-[10px]" />
+                  <FontAwesomeIcon icon={faPaperclip} className="text-gray-600 text-[10px]" />
                   <span className="truncate max-w-[140px]">{att.file_name || "Attachment"}</span>
                 </a>
               ))}
@@ -415,10 +415,10 @@ export default function CrmEmailConversations({
       <div className="flex items-center justify-between gap-3 pb-2 border-b border-gray-100 flex-wrap">
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-[#032e92]" />
-          <h3 className="text-xs font-bold text-gray-800 uppercase">
+          <h3 className="text-xs font-bold text-gray-900 uppercase">
             Email Communications
           </h3>
-          <span className="text-xs font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
+          <span className="text-xs font-semibold text-gray-600 bg-gray-100 px-2 py-0.5 rounded-full">
             {totalCount} {totalCount === 1 ? "email" : "emails"}
           </span>
         </div>
@@ -428,7 +428,7 @@ export default function CrmEmailConversations({
             type="button"
             onClick={handleRefresh}
             disabled={loading}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-[#032e92] px-2.5 py-1.5 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-600 hover:text-[#032e92] px-2.5 py-1.5 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer disabled:opacity-50"
             title="Check mailbox for new replies and refresh conversation"
           >
             <FontAwesomeIcon icon={faArrowsRotate} className={loading ? "animate-spin" : ""} />
@@ -463,7 +463,7 @@ export default function CrmEmailConversations({
                 <h4 className="text-xs font-bold text-gray-900">
                   {inReplyTo ? "Reply to Email Thread" : "Compose New Email"}
                 </h4>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-gray-600">
                   Dispatches via official company mailbox and automatically links to this {doctype}.
                 </p>
               </div>
@@ -476,7 +476,7 @@ export default function CrmEmailConversations({
                 setInReplyTo(null);
                 setSendFeedback({ type: "", message: "" });
               }}
-              className="w-7 h-7 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 flex items-center justify-center transition-colors cursor-pointer"
+              className="w-7 h-7 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 flex items-center justify-center transition-colors cursor-pointer"
               title="Close Composer"
             >
               <FontAwesomeIcon icon={faXmark} />
@@ -486,8 +486,8 @@ export default function CrmEmailConversations({
           <form onSubmit={handleSendEmail} className="space-y-3.5 text-xs">
             {/* Recipient Field */}
             <div className="flex items-center gap-2">
-              <span className="w-14 text-gray-500 font-semibold text-right shrink-0">To:</span>
-              <div className="flex-1 bg-white border border-gray-200 rounded-xl px-3 py-2 text-gray-800 font-mono text-xs flex items-center justify-between">
+              <span className="w-14 text-gray-600 font-semibold text-right shrink-0">To:</span>
+              <div className="flex-1 bg-white border border-gray-200 rounded-xl px-3 py-2 text-gray-900 font-mono text-xs flex items-center justify-between">
                 <span>{contactEmail || <span className="text-red-500 italic">No email address on record</span>}</span>
                 {!showCc && (
                   <button
@@ -504,20 +504,20 @@ export default function CrmEmailConversations({
             {/* Optional Cc Field */}
             {showCc && (
               <div className="flex items-center gap-2">
-                <span className="w-14 text-gray-500 font-semibold text-right shrink-0">Cc:</span>
+                <span className="w-14 text-gray-600 font-semibold text-right shrink-0">Cc:</span>
                 <input
                   type="text"
                   placeholder="Optional comma-separated email addresses..."
                   value={cc}
                   onChange={(e) => setCc(e.target.value)}
-                  className="flex-1 bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#032e92]/20 focus:border-[#032e92]"
+                  className="flex-1 bg-white border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#032e92]/20 focus:border-[#032e92]"
                 />
               </div>
             )}
 
             {/* Subject Field */}
             <div className="flex items-center gap-2">
-              <span className="w-14 text-gray-500 font-semibold text-right shrink-0">Subject:</span>
+              <span className="w-14 text-gray-600 font-semibold text-right shrink-0">Subject:</span>
               <input
                 ref={subjectInputRef}
                 type="text"
@@ -538,7 +538,7 @@ export default function CrmEmailConversations({
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 required
-                className="w-full bg-white border border-gray-200 rounded-2xl p-3.5 text-xs text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#032e92]/20 focus:border-[#032e92] leading-relaxed resize-y"
+                className="w-full bg-white border border-gray-200 rounded-2xl p-3.5 text-xs text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#032e92]/20 focus:border-[#032e92] leading-relaxed resize-y"
               />
             </div>
 
@@ -644,9 +644,9 @@ export default function CrmEmailConversations({
           <div className="w-12 h-12 mx-auto rounded-full bg-blue-50 text-[#032e92] flex items-center justify-center text-lg mb-3">
             <FontAwesomeIcon icon={faEnvelope} />
           </div>
-          <h4 className="text-xs font-bold text-gray-800">No email conversations yet</h4>
-          <p className="text-xs text-gray-500 max-w-sm mx-auto mt-1 mb-4">
-            Incoming emails from {contactEmail ? <span className="font-semibold text-gray-700">{contactEmail}</span> : "this contact"} and
+          <h4 className="text-xs font-bold text-gray-900">No email conversations yet</h4>
+          <p className="text-xs text-gray-600 max-w-sm mx-auto mt-1 mb-4">
+            Incoming emails from {contactEmail ? <span className="font-semibold text-gray-900">{contactEmail}</span> : "this contact"} and
             outgoing transactional emails sent via KNAPS CRM will automatically be linked and shown here.
           </p>
 
@@ -666,14 +666,14 @@ export default function CrmEmailConversations({
       {/* Source Filter if multiple sources present */}
       {!loading && conversations.length > 0 && availableSources.length > 1 && (
         <div className="flex items-center gap-1.5 flex-wrap pt-1 pb-1">
-          <span className="text-xs font-semibold text-gray-400 mr-1">Filter Source:</span>
+          <span className="text-xs font-semibold text-gray-600 mr-1">Filter Source:</span>
           <button
             type="button"
             onClick={() => setSourceFilter("all")}
             className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
               sourceFilter === "all"
                 ? "bg-[#032e92] text-white"
-                : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                : "bg-gray-100 hover:bg-gray-200 text-gray-900"
             }`}
           >
             All Sources ({conversations.length})
@@ -688,7 +688,7 @@ export default function CrmEmailConversations({
                 className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
                   sourceFilter === src
                     ? "bg-[#032e92] text-white"
-                    : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                    : "bg-gray-100 hover:bg-gray-200 text-gray-900"
                 }`}
               >
                 {src} ({count})
@@ -718,7 +718,7 @@ export default function CrmEmailConversations({
             type="button"
             onClick={handleLoadMore}
             disabled={loadingMore}
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 text-xs font-bold text-gray-700 shadow-2xs hover:shadow-xs transition-all cursor-pointer disabled:opacity-50"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 text-xs font-bold text-gray-900 shadow-2xs hover:shadow-xs transition-all cursor-pointer disabled:opacity-50"
           >
             {loadingMore ? (
               <>
@@ -728,7 +728,7 @@ export default function CrmEmailConversations({
             ) : (
               <>
                 <span>Load More Conversations</span>
-                <span className="text-xs font-normal text-gray-400">
+                <span className="text-xs font-normal text-gray-600">
                   ({conversations.length} of {totalCount})
                 </span>
               </>

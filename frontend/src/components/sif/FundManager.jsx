@@ -22,7 +22,7 @@ export default function FundManager({ fund }) {
           className="bg-white rounded-3xl border border-[#e8edf7] shadow-lg shadow-blue-900/5 p-8 text-center">
           <FontAwesomeIcon icon={faCircleInfo} className="text-gray-300 text-3xl mb-3" />
           <h3 className="font-bold text-gray-900 mb-1">Fund Manager Details Unavailable</h3>
-          <p className="text-sm text-gray-500">Manager details are not available for this scheme.</p>
+          <p className="text-sm text-gray-600">Manager details are not available for this scheme.</p>
         </motion.div>
       </section>
     )
@@ -60,7 +60,7 @@ export default function FundManager({ fund }) {
                 {/* Stats */}
                 <div className="bg-white rounded-xl p-3 mb-4 border border-blue-100">
                   <p className="text-2xl font-bold text-[#032e92]">{manager.experience}</p>
-                  <p className="text-xs text-gray-500 font-medium">Industry Experience</p>
+                  <p className="text-xs text-gray-600 font-medium">Industry Experience</p>
                 </div>
 
                 {/* Social Links */}
@@ -87,8 +87,8 @@ export default function FundManager({ fund }) {
                   <FontAwesomeIcon icon={faGraduationCap} className="text-amber-600 text-sm" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-0.5">Education</p>
-                  <p className="text-sm font-semibold text-gray-800">{manager.education}</p>
+                  <p className="text-xs font-bold text-gray-600 uppercase tracking-wide mb-0.5">Education</p>
+                  <p className="text-sm font-semibold text-gray-900">{manager.education}</p>
                 </div>
               </div>
 
@@ -98,8 +98,8 @@ export default function FundManager({ fund }) {
                   <FontAwesomeIcon icon={faBriefcase} className="text-green-600 text-sm" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-0.5">Specialization</p>
-                  <p className="text-sm font-semibold text-gray-800">{manager.specialization}</p>
+                  <p className="text-xs font-bold text-gray-600 uppercase tracking-wide mb-0.5">Specialization</p>
+                  <p className="text-sm font-semibold text-gray-900">{manager.specialization}</p>
                 </div>
               </div>
 
@@ -111,7 +111,7 @@ export default function FundManager({ fund }) {
               {/* Other Funds */}
               {manager.fundsManaged?.length > 0 && (
                 <div>
-                  <p className="text-sm font-bold text-gray-700 mb-3">Other Funds Managed</p>
+                  <p className="text-sm font-bold text-gray-900 mb-3">Other Funds Managed</p>
                   <div className="grid sm:grid-cols-2 gap-3">
                     {manager.fundsManaged.map((f, i) => (
                       <motion.div
@@ -119,8 +119,8 @@ export default function FundManager({ fund }) {
                         whileHover={{ scale: 1.02 }}
                         className="flex items-center justify-between bg-white border border-[#e8edf7] rounded-2xl px-4 py-3 hover:shadow-md hover:border-[#032e92]/30 transition-all cursor-pointer">
                         <div>
-                          <p className="text-xs font-bold text-gray-800 line-clamp-1">{f.name}</p>
-                          <p className="text-[10px] text-gray-400 font-medium">{f.risk} Risk</p>
+                          <p className="text-xs font-bold text-gray-900 line-clamp-1">{f.name}</p>
+                          <p className="text-[10px] text-gray-600 font-medium">{f.risk} Risk</p>
                         </div>
                         <div className="flex items-center gap-1.5">
                           <span className="text-sm font-bold text-green-600">{f.returns}</span>

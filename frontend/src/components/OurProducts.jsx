@@ -150,14 +150,14 @@ export default function OurProducts() {
                     <h3 className="text-sm sm:text-base font-bold text-gray-900 leading-snug group-hover:text-[#032e92] transition-colors">
                       {item.title}
                     </h3>
-                    <p className="text-xs sm:text-sm text-gray-500 font-normal leading-relaxed mt-1 line-clamp-2">
+                    <p className="text-xs sm:text-sm text-gray-600 font-normal leading-relaxed mt-1 line-clamp-2">
                       {item.description}
                     </p>
                   </div>
                 </div>
 
                 {/* Arrow Pill */}
-                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-50 group-hover:bg-[#032e92] text-gray-400 group-hover:text-white flex items-center justify-center text-xs sm:text-sm transition-all flex-shrink-0 ml-1 shadow-2xs">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-50 group-hover:bg-[#032e92] text-gray-600 group-hover:text-white flex items-center justify-center text-xs sm:text-sm transition-all flex-shrink-0 ml-1 shadow-2xs">
                   <FontAwesomeIcon icon={faArrowRight} />
                 </div>
               </motion.div>

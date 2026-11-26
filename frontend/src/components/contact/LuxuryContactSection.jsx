@@ -188,7 +188,7 @@ export default function LuxuryContactSection() {
                     <FontAwesomeIcon icon={faLocationDot} />
                   </div>
                   <div>
-                    <h5 className="text-xs font-bold text-gray-500 uppercase mb-1">Office</h5>
+                    <h5 className="text-xs font-bold text-gray-600 uppercase mb-1">Office</h5>
                     <p className="text-gray-900 font-medium text-sm sm:text-md leading-relaxed">
                       DG-206A, DLF Galleria, Plot No 1B, Mayur Vihar Phase - 1, East Delhi, Delhi - 110091
                     </p>
@@ -200,7 +200,7 @@ export default function LuxuryContactSection() {
                     <FontAwesomeIcon icon={faPhone} />
                   </div>
                   <div>
-                    <h5 className="text-xs font-bold text-gray-500 uppercase mb-1">Phone</h5>
+                    <h5 className="text-xs font-bold text-gray-600 uppercase mb-1">Phone</h5>
                     <a href="tel:+919990243143" className="text-gray-900 hover:text-[#032e92] font-medium text-sm sm:text-md leading-relaxed transition-colors">
                       +91-9990243143
                     </a>
@@ -212,7 +212,7 @@ export default function LuxuryContactSection() {
                     <FontAwesomeIcon icon={faEnvelope} />
                   </div>
                   <div>
-                    <h5 className="text-xs font-bold text-gray-500 uppercase mb-1">Email</h5>
+                    <h5 className="text-xs font-bold text-gray-600 uppercase mb-1">Email</h5>
                     <a href="mailto:contact@knaps.com" className="text-gray-900 hover:text-[#032e92] font-medium text-sm sm:text-md leading-relaxed transition-colors">
                       contact@knaps.com
                     </a>
@@ -224,7 +224,7 @@ export default function LuxuryContactSection() {
                     <FontAwesomeIcon icon={faClock} />
                   </div>
                   <div>
-                    <h5 className="text-xs font-bold text-gray-500 uppercase mb-1">Working Hours</h5>
+                    <h5 className="text-xs font-bold text-gray-600 uppercase mb-1">Working Hours</h5>
                     <p className="text-gray-900 font-medium text-sm sm:text-md leading-relaxed">
                       Mon - Fri, 9:00 AM - 6:00 PM
                     </p>
@@ -273,7 +273,7 @@ export default function LuxuryContactSection() {
                     <h3 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
                       Send Us a Message
                     </h3>
-                    <p className="text-xs sm:text-sm text-gray-500 font-normal mt-1 leading-relaxed">
+                    <p className="text-xs sm:text-sm text-gray-600 font-normal mt-1 leading-relaxed">
                       Fill out the form below and one of our dedicated wealth advisors will get back to you shortly.
                     </p>
                   </div>
@@ -287,7 +287,7 @@ export default function LuxuryContactSection() {
 
                     {/* Product Field */}
                     <div className="relative" ref={dropdownRef}>
-                      <label className="block text-xs font-bold text-gray-700 mb-2">
+                      <label className="block text-xs font-bold text-gray-900 mb-2">
                         What’s your goal? <span className="text-red-500">*</span>
                       </label>
                       <div
@@ -311,12 +311,12 @@ export default function LuxuryContactSection() {
                             : 'border-gray-200 hover:border-gray-300'
                           }`}
                       >
-                        <span className={selectedProduct ? 'text-gray-900 font-medium text-sm' : 'text-gray-400 font-normal text-sm'}>
+                        <span className={selectedProduct ? 'text-gray-900 font-medium text-sm' : 'text-gray-600 font-normal text-sm'}>
                           {selectedProductObj ? selectedProductObj.label : 'Select your goal'}
                         </span>
                         <FontAwesomeIcon
                           icon={faChevronDown}
-                          className={`text-gray-400 text-xs transition-transform duration-200 ${productOpen ? 'rotate-180 text-[#032e92]' : ''
+                          className={`text-gray-600 text-xs transition-transform duration-200 ${productOpen ? 'rotate-180 text-[#032e92]' : ''
                             }`}
                         />
                       </div>
@@ -345,7 +345,7 @@ export default function LuxuryContactSection() {
                                   }}
                                   className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg cursor-pointer text-sm transition-colors ${isSelected
                                     ? 'bg-[#eef4ff] text-[#032e92] font-semibold'
-                                    : 'text-gray-700 hover:bg-gray-50 hover:text-[#032e92]'
+                                    : 'text-gray-900 hover:bg-gray-50 hover:text-[#032e92]'
                                     }`}
                                 >
                                   <span>{option.label}</span>
@@ -365,7 +365,7 @@ export default function LuxuryContactSection() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
                       {/* Full Name */}
                       <div>
-                        <label className="block text-xs font-bold text-gray-700 mb-2">
+                        <label className="block text-xs font-bold text-gray-900 mb-2">
                           Full Name <span className="text-red-500">*</span>
                         </label>
                         <input
@@ -385,10 +385,10 @@ export default function LuxuryContactSection() {
                       {/* Phone Number with Country Code */}
                       <div className="relative" ref={countryDropdownRef}>
                         <div className="flex items-center justify-between mb-2">
-                          <label className="block text-xs font-bold text-gray-700">
+                          <label className="block text-xs font-bold text-gray-900">
                             Phone Number <span className="text-red-500">*</span>
                           </label>
-                          <span className="text-xs text-gray-400 font-medium">
+                          <span className="text-xs text-gray-600 font-medium">
                             {selectedCountry.name}
                           </span>
                         </div>
@@ -409,12 +409,12 @@ export default function LuxuryContactSection() {
                             aria-label="Select Country Code"
                             className="flex items-center gap-1.5 px-3.5 py-3.5 border-r border-gray-200 bg-gray-100/70 hover:bg-blue-50/60 rounded-l-xl transition-all cursor-pointer select-none group/btn shrink-0 disabled:cursor-not-allowed focus:outline-none"
                           >
-                            <span className="text-xs font-bold text-gray-800 font-mono tracking-tight">
+                            <span className="text-xs font-bold text-gray-900 font-mono tracking-tight">
                               {selectedCountry.code}
                             </span>
                             <FontAwesomeIcon
                               icon={faChevronDown}
-                              className={`text-[9px] text-gray-400 group-hover/btn:text-[#032e92] transition-transform duration-200 ${isCountryOpen ? 'rotate-180 text-[#032e92]' : ''
+                              className={`text-[9px] text-gray-600 group-hover/btn:text-[#032e92] transition-transform duration-200 ${isCountryOpen ? 'rotate-180 text-[#032e92]' : ''
                                 }`}
                             />
                           </button>
@@ -455,7 +455,7 @@ export default function LuxuryContactSection() {
                                   placeholder="Search country or code..."
                                   value={countrySearch}
                                   onChange={(e) => setCountrySearch(e.target.value)}
-                                  className="w-full px-3 py-1.5 text-xs bg-white border border-gray-200 rounded-lg outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/20 text-gray-800 placeholder:text-gray-400"
+                                  className="w-full px-3 py-1.5 text-xs bg-white border border-gray-200 rounded-lg outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/20 text-gray-900 placeholder:text-gray-400"
                                   autoFocus
                                 />
                               </div>
@@ -463,7 +463,7 @@ export default function LuxuryContactSection() {
                               {/* Country List */}
                               <div className="max-h-52 overflow-y-auto divide-y divide-gray-50 py-1">
                                 {filteredCountries.length === 0 ? (
-                                  <div className="p-4 text-center text-xs text-gray-400 font-medium">
+                                  <div className="p-4 text-center text-xs text-gray-600 font-medium">
                                     No countries found
                                   </div>
                                 ) : (
@@ -480,7 +480,7 @@ export default function LuxuryContactSection() {
                                         }}
                                         className={`w-full flex items-center justify-between px-3.5 py-2.5 text-left text-xs transition-colors hover:bg-blue-50/80 cursor-pointer ${isSelected
                                           ? 'bg-blue-50/70 font-semibold text-[#032e92]'
-                                          : 'text-gray-700'
+                                          : 'text-gray-900'
                                           }`}
                                       >
                                         <div className="flex items-center gap-2.5 truncate pr-2">
@@ -489,7 +489,7 @@ export default function LuxuryContactSection() {
                                         </div>
                                         <div className="flex items-center gap-2 shrink-0">
                                           <span
-                                            className={`font-mono text-xs ${isSelected ? 'text-[#032e92] font-bold' : 'text-gray-400'
+                                            className={`font-mono text-xs ${isSelected ? 'text-[#032e92] font-bold' : 'text-gray-600'
                                               }`}
                                           >
                                             {c.code}
@@ -511,7 +511,7 @@ export default function LuxuryContactSection() {
 
                     {/* Email */}
                     <div>
-                      <label className="block text-xs font-bold text-gray-700 mb-2">
+                      <label className="block text-xs font-bold text-gray-900 mb-2">
                         Email Address <span className="text-red-500">*</span>
                       </label>
                       <input
@@ -530,7 +530,7 @@ export default function LuxuryContactSection() {
 
                     {/* Message */}
                     <div>
-                      <label className="block text-xs font-bold text-gray-700 mb-2">
+                      <label className="block text-xs font-bold text-gray-900 mb-2">
                         Message (Optional)
                       </label>
                       <textarea

@@ -29,12 +29,12 @@ export default function ObjectiveSection({ fund }) {
 
         {/* Objective paragraph */}
         <div className="bg-gradient-to-br from-[#eef4ff] to-[#dbeafe] rounded-2xl p-6 mb-6 border border-blue-100">
-          <p className="text-gray-700 font-medium leading-relaxed text-sm">{fund.objective}</p>
+          <p className="text-gray-900 font-medium leading-relaxed text-sm">{fund.objective}</p>
         </div>
 
         {/* Investment Strategy */}
         <div className="mb-6">
-          <h3 className="font-bold text-gray-800 mb-3 text-base flex items-center gap-2">
+          <h3 className="font-bold text-gray-900 mb-3 text-base flex items-center gap-2">
             <FontAwesomeIcon icon={faArrowTrendUp} className="text-[#032e92] text-sm" />
             Investment Strategy
           </h3>
@@ -57,7 +57,7 @@ export default function ObjectiveSection({ fund }) {
 
         {/* Suitable For */}
         <div className="mb-6">
-          <h3 className="font-bold text-gray-800 mb-3 text-base flex items-center gap-2">
+          <h3 className="font-bold text-gray-900 mb-3 text-base flex items-center gap-2">
             <FontAwesomeIcon icon={faArrowRight} className="text-green-600 text-sm" />
             Suitable For
           </h3>
@@ -65,7 +65,7 @@ export default function ObjectiveSection({ fund }) {
             {fund.suitableFor.map((item, i) => (
               <div key={i} className="flex items-start gap-2.5 bg-green-50 border border-green-100 rounded-xl px-4 py-3">
                 <FontAwesomeIcon icon={faCircleCheck} className="text-green-600 text-sm flex-shrink-0 mt-0.5" />
-                <p className="text-sm text-gray-700 font-medium">{item}</p>
+                <p className="text-sm text-gray-900 font-medium">{item}</p>
               </div>
             ))}
           </div>
@@ -73,7 +73,7 @@ export default function ObjectiveSection({ fund }) {
 
         {/* Key Features */}
         <div>
-          <h3 className="font-bold text-gray-800 mb-3 text-base">Key Features</h3>
+          <h3 className="font-bold text-gray-900 mb-3 text-base">Key Features</h3>
           <div className="grid sm:grid-cols-2 gap-3">
             {fund.keyFeatures.map((feat, i) => (
               <motion.div
@@ -86,8 +86,8 @@ export default function ObjectiveSection({ fund }) {
                   <FontAwesomeIcon icon={iconMap[feat.icon] || faChartPie} className="text-[#032e92] text-sm" />
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-gray-800">{feat.label}</p>
-                  <p className="text-xs text-gray-500 font-medium mt-0.5">{feat.desc}</p>
+                  <p className="text-sm font-bold text-gray-900">{feat.label}</p>
+                  <p className="text-xs text-gray-600 font-medium mt-0.5">{feat.desc}</p>
                 </div>
               </motion.div>
             ))}

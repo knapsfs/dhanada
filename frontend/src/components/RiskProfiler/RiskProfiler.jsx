@@ -108,12 +108,12 @@ export default function RiskProfiler({ isModal = false, onClose }) {
 
           <div className={`bg-white rounded-2xl shadow-md shadow-blue-900/5 border border-gray-100 ${isModal ? 'p-5 mb-4' : 'p-8 rounded-3xl shadow-xl mb-10'}`}>
             <div className={`flex justify-center items-center gap-6 ${isModal ? 'mb-4' : 'mb-8'}`}>
-              <div className="flex items-center gap-2 text-gray-500 font-bold uppercase text-xs">
+              <div className="flex items-center gap-2 text-gray-600 font-bold uppercase text-xs">
                 <span className="w-2 h-2 rounded-full bg-[#032e92]"></span>
                 5 Questions
               </div>
               <div className="w-1 h-1 rounded-full bg-gray-300"></div>
-              <div className="flex items-center gap-2 text-gray-500 font-bold uppercase text-xs">
+              <div className="flex items-center gap-2 text-gray-600 font-bold uppercase text-xs">
                 <span className="w-2 h-2 rounded-full bg-[#c10000]"></span>
                 Takes ~1 Minute
               </div>

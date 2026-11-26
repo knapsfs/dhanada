@@ -107,7 +107,7 @@ const GeneralInsuranceHowItWorks = () => {
 
                 <div className="pt-4 border-t border-gray-100 space-y-2">
                   {step.highlights.map((h, hIdx) => (
-                    <div key={hIdx} className="flex items-center gap-2 text-xs text-gray-700">
+                    <div key={hIdx} className="flex items-center gap-2 text-xs text-gray-900">
                       <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 flex-shrink-0 text-xs" />
                       <span>{h}</span>
                     </div>

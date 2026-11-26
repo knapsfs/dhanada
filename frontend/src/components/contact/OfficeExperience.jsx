@@ -88,7 +88,7 @@ export default function OfficeExperience() {
                     <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[10px]" />
                   </a>
                   <span className="text-gray-300">|</span>
-                  <span className="text-xs text-gray-500 font-medium">Mon - Fri: 9 AM - 6 PM</span>
+                  <span className="text-xs text-gray-600 font-medium">Mon - Fri: 9 AM - 6 PM</span>
                 </div>
               </div>
             </div>

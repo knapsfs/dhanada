@@ -39,7 +39,7 @@ export default function FormSuccessState({
           <h2 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">
             Submission Completed Successfully!
           </h2>
-          <p className="text-xs sm:text-sm text-gray-500 mt-1 max-w-md mx-auto">
+          <p className="text-xs sm:text-sm text-gray-600 mt-1 max-w-md mx-auto">
             Thank you for completing your information with KNAPS. Your records have been encrypted
             and securely stored in our CRM.
           </p>
@@ -64,7 +64,7 @@ export default function FormSuccessState({
 
             <div className="flex items-baseline gap-2">
               <span className="text-2xl font-black text-gray-900">{result.score || 0}</span>
-              <span className="text-xs font-bold text-gray-400">/ 50 Score Points</span>
+              <span className="text-xs font-bold text-gray-600">/ 50 Score Points</span>
             </div>
 
             {result.description && (
@@ -80,7 +80,7 @@ export default function FormSuccessState({
           <h3 className="text-xs font-extrabold uppercase text-[#032e92]">
             What Happens Next?
           </h3>
-          <ul className="text-xs text-gray-700 space-y-2">
+          <ul className="text-xs text-gray-900 space-y-2">
             <li className="flex items-start gap-2">
               <FontAwesomeIcon icon={faCheck} className="text-[#032e92] mt-0.5 text-xs" />
               <span>
@@ -108,7 +108,7 @@ export default function FormSuccessState({
           <button
             type="button"
             onClick={() => window.print()}
-            className="px-5 py-2.5 rounded-xl text-xs font-bold bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-2 cursor-pointer shadow-2xs"
+            className="px-5 py-2.5 rounded-xl text-xs font-bold bg-white border border-gray-200 text-gray-900 hover:bg-gray-50 transition-colors flex items-center gap-2 cursor-pointer shadow-2xs"
           >
             <FontAwesomeIcon icon={faPrint} />
             <span>Print or Save as PDF</span>

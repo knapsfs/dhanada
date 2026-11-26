@@ -163,15 +163,15 @@ export default function CrmSendFormModal({
               <h3 className="text-sm font-extrabold text-gray-900 leading-tight">
                 Send Form Workflow
               </h3>
-              <p className="text-xs text-gray-500">
-                To: <strong className="text-gray-800">{recipientName}</strong> ({referenceDoctype})
+              <p className="text-xs text-gray-600">
+                To: <strong className="text-gray-900">{recipientName}</strong> ({referenceDoctype})
               </p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="w-8 h-8 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 flex items-center justify-center cursor-pointer transition-colors"
+            className="w-8 h-8 rounded-full text-gray-600 hover:text-gray-900 hover:bg-gray-100 flex items-center justify-center cursor-pointer transition-colors"
           >
             <FontAwesomeIcon icon={faXmark} />
           </button>
@@ -195,7 +195,7 @@ export default function CrmSendFormModal({
 
           {/* Workflow Selection */}
           <div className="space-y-2.5">
-            <label className="text-xs font-extrabold text-gray-800 uppercase tracking-wide block">
+            <label className="text-xs font-extrabold text-gray-900 uppercase tracking-wide block">
               1. Select Form Workflow
             </label>
             <div className="space-y-2">
@@ -237,7 +237,7 @@ export default function CrmSendFormModal({
                           {wf.badge}
                         </span>
                       </div>
-                      <p className="text-xs text-gray-500 mt-0.5 leading-snug">
+                      <p className="text-xs text-gray-600 mt-0.5 leading-snug">
                         {wf.subtitle}
                       </p>
                     </div>
@@ -249,7 +249,7 @@ export default function CrmSendFormModal({
 
           {/* Expiration setting */}
           <div className="flex items-center justify-between bg-slate-50 p-3 rounded-xl border border-gray-100 text-xs">
-            <span className="font-semibold text-gray-700">Link Validity Duration:</span>
+            <span className="font-semibold text-gray-900">Link Validity Duration:</span>
             <select
               value={expiresInDays}
               onChange={(e) => setExpiresInDays(Number(e.target.value))}
@@ -268,7 +268,7 @@ export default function CrmSendFormModal({
             <div className="space-y-3">
               {recipientEmail ? (
                 <div className="bg-blue-50/60 border border-blue-200/80 rounded-2xl p-3.5 space-y-2.5">
-                  <label className="flex items-center gap-2.5 cursor-pointer text-xs font-bold text-gray-800">
+                  <label className="flex items-center gap-2.5 cursor-pointer text-xs font-bold text-gray-900">
                     <input
                       type="checkbox"
                       checked={sendEmailDirectly}
@@ -337,7 +337,7 @@ export default function CrmSendFormModal({
             <div className="space-y-4 pt-2 border-t border-gray-100">
               {/* Form URL Box */}
               <div>
-                <label className="text-[10px] font-extrabold uppercase text-gray-500 block mb-1">
+                <label className="text-[10px] font-extrabold uppercase text-gray-600 block mb-1">
                   Secure Customer Link (Expiring Token)
                 </label>
                 <div className="flex items-center gap-2">
@@ -345,7 +345,7 @@ export default function CrmSendFormModal({
                     type="text"
                     readOnly
                     value={generatedResult.form_url}
-                    className="flex-1 text-xs font-mono px-3 py-2.5 rounded-xl border border-gray-300 bg-gray-50 text-gray-800 select-all"
+                    className="flex-1 text-xs font-mono px-3 py-2.5 rounded-xl border border-gray-300 bg-gray-50 text-gray-900 select-all"
                   />
                   <button
                     type="button"
@@ -378,7 +378,7 @@ export default function CrmSendFormModal({
                   href={generatedResult.form_url}
                   target="_blank"
                   rel="noreferrer"
-                  className="p-2.5 rounded-xl text-xs font-bold bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 border border-gray-200 cursor-pointer"
+                  className="p-2.5 rounded-xl text-xs font-bold bg-gray-100 text-gray-900 hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 border border-gray-200 cursor-pointer"
                 >
                   <FontAwesomeIcon icon={faExternalLinkAlt} />
                   <span>Open Form Preview</span>
@@ -389,7 +389,7 @@ export default function CrmSendFormModal({
               {recipientEmail && (
                 <div className="bg-slate-50 p-3.5 rounded-2xl border border-gray-200 space-y-2">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="font-bold text-gray-800 flex items-center gap-1.5">
+                    <span className="font-bold text-gray-900 flex items-center gap-1.5">
                       <FontAwesomeIcon icon={faEnvelope} className="text-[#032e92]" />
                       <span>Email: {recipientEmail}</span>
                     </span>

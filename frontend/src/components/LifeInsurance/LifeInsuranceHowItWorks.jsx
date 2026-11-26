@@ -74,7 +74,7 @@ export default function LifeInsuranceHowItWorks() {
                   {item.title}
                 </h3>
 
-                <p className="text-xs sm:text-sm text-gray-500 leading-relaxed font-medium">
+                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-medium">
                   {item.desc}
                 </p>
               </div>
@@ -82,7 +82,7 @@ export default function LifeInsuranceHowItWorks() {
               <div className="mt-6 pt-4 border-t border-gray-100 flex items-center gap-1.5 text-xs font-bold text-[#032e92]">
                 <span>Stage {item.step}</span>
                 <span className="text-gray-300">•</span>
-                <span className="text-gray-400 font-medium">Clear & Verified</span>
+                <span className="text-gray-600 font-medium">Clear & Verified</span>
               </div>
             </motion.div>
           ))}

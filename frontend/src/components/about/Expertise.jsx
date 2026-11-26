@@ -64,7 +64,7 @@ export default function Expertise() {
               transition={{ delay: 0.4 }}
               className="absolute -bottom-8 -right-8 md:-bottom-12 md:-right-12 bg-white/80 backdrop-blur-xl border border-white p-6 rounded-2xl shadow-xl z-20 hidden sm:block"
             >
-              <p className="text-gray-500 font-medium text-sm mb-1">Total Assets</p>
+              <p className="text-gray-600 font-medium text-sm mb-1">Total Assets</p>
               <p className="text-3xl font-bold text-[#032e92]">₹500Cr+</p>
             </motion.div>
           </motion.div>

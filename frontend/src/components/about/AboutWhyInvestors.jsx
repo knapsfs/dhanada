@@ -65,7 +65,7 @@ export default function AboutWhyInvestors() {
               
               <div className="flex justify-between items-start mb-8">
                 <div>
-                  <p className="text-gray-500 font-medium text-sm uppercase tracking-wide mb-1">Total Portfolio Value</p>
+                  <p className="text-gray-600 font-medium text-sm uppercase tracking-wide mb-1">Total Portfolio Value</p>
                   <p className="text-[#0a192f] font-bold text-4xl">₹1,24,50,000</p>
                 </div>
                 <div className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-bold flex items-center gap-1">
@@ -112,11 +112,11 @@ export default function AboutWhyInvestors() {
               {/* Bottom Info Blocks */}
               <div className="grid grid-cols-2 gap-4 mt-8 relative z-20">
                 <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-                  <p className="text-gray-400 text-xs font-semibold mb-1">Mutual Funds</p>
+                  <p className="text-gray-600 text-xs font-semibold mb-1">Mutual Funds</p>
                   <p className="text-[#0a192f] font-bold text-xl">₹85.2L</p>
                 </div>
                 <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-                  <p className="text-gray-400 text-xs font-semibold mb-1">AIFs</p>
+                  <p className="text-gray-600 text-xs font-semibold mb-1">AIFs</p>
                   <p className="text-[#0a192f] font-bold text-xl">₹39.3L</p>
                 </div>
               </div>

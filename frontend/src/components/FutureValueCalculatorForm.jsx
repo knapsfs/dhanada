@@ -43,7 +43,7 @@ const parseRawNumber = (rawStr) => {
 function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onChange, hint, placeholder = '' }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-xs font-bold text-gray-500 uppercase tracking-wide flex items-center gap-1.5">
+      <label htmlFor={id} className="text-xs font-bold text-gray-600 uppercase tracking-wide flex items-center gap-1.5">
         {label}
         {hint && (
           <span title={hint} className="cursor-help">
@@ -53,7 +53,7 @@ function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onCh
       </label>
       <div className="relative flex items-center">
         {prefix && (
-          <span className="absolute left-3.5 text-sm font-bold text-gray-500 pointer-events-none z-10">{prefix}</span>
+          <span className="absolute left-3.5 text-sm font-bold text-gray-600 pointer-events-none z-10">{prefix}</span>
         )}
         <input
           id={id}
@@ -69,12 +69,12 @@ function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onCh
               onChange(isNaN(num) ? raw : num)
             }
           }}
-          className={`w-full py-3.5 rounded-xl border-2 border-[#e8edf7] bg-[#f7f9fc] text-gray-800 font-bold text-base focus:outline-none focus:border-[#032e92] focus:ring-4 focus:ring-[#032e92]/8 transition-all placeholder-gray-400 ${prefix ? 'pl-8 pr-4' : suffix ? 'pl-4 pr-12' : 'px-4'
+          className={`w-full py-3.5 rounded-xl border-2 border-[#e8edf7] bg-[#f7f9fc] text-gray-900 font-bold text-base focus:outline-none focus:border-[#032e92] focus:ring-4 focus:ring-[#032e92]/8 transition-all placeholder-gray-400 ${prefix ? 'pl-8 pr-4' : suffix ? 'pl-4 pr-12' : 'px-4'
             }`}
           placeholder={placeholder}
         />
         {suffix && (
-          <span className="absolute right-3.5 text-sm font-bold text-gray-500 pointer-events-none">{suffix}</span>
+          <span className="absolute right-3.5 text-sm font-bold text-gray-600 pointer-events-none">{suffix}</span>
         )}
       </div>
       <input
@@ -86,7 +86,7 @@ function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onCh
         onChange={e => onChange(Number(e.target.value))}
         className="w-full h-1.5 rounded-full accent-[#032e92] cursor-pointer mt-1"
       />
-      <div className="flex justify-between text-[10px] text-gray-400 font-medium">
+      <div className="flex justify-between text-[10px] text-gray-600 font-medium">
         <span>{prefix}{min?.toLocaleString('en-IN')}{suffix}</span>
         <span>{prefix}{max?.toLocaleString('en-IN')}{suffix}</span>
       </div>
@@ -122,7 +122,7 @@ export default function FutureValueCalculatorForm({
         >
           {/* Goal Selector */}
           <div className="mb-8">
-            <label className="text-xs font-extrabold text-gray-500 uppercase block mb-3">
+            <label className="text-xs font-extrabold text-gray-600 uppercase block mb-3">
               WHAT IS YOUR GOAL?
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5">
@@ -135,7 +135,7 @@ export default function FutureValueCalculatorForm({
                     onClick={() => handleSelectGoal(g)}
                     className={`flex flex-col items-center justify-center p-3 rounded-2xl border-2 transition-all duration-200 cursor-pointer text-center group ${isSelected
                       ? 'bg-[#032e92] border-[#032e92] text-white shadow-lg shadow-blue-900/20 scale-[1.02]'
-                      : 'bg-[#f7f9fc] border-transparent hover:border-blue-200 text-gray-700 hover:bg-blue-50/50'
+                      : 'bg-[#f7f9fc] border-transparent hover:border-blue-200 text-gray-900 hover:bg-blue-50/50'
                       }`}
                   >
 
@@ -182,7 +182,7 @@ export default function FutureValueCalculatorForm({
             />
           </div>
 
-          <p className="text-[10px] text-gray-400 italic mt-6 mb-0 leading-tight">
+          <p className="text-[10px] text-gray-600 italic mt-6 mb-0 leading-tight">
             * Illustrative calculation only. Actual mutual fund returns are subject to market conditions and not guaranteed.
           </p>
         </motion.div>

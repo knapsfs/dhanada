@@ -294,7 +294,7 @@ export default function LeadCapture({ result, answers = [], onRetake, onClose, o
             <form onSubmit={handleSubmit} className={isModal ? 'space-y-3' : 'space-y-4'}>
               {/* Product Dropdown Field */}
               <div className="relative" ref={dropdownRef}>
-                <label className="block text-xs font-bold text-gray-700 mb-1">Product *</label>
+                <label className="block text-xs font-bold text-gray-900 mb-1">Product *</label>
                 <div
                   onClick={() => !isSubmitting && setProductOpen(!productOpen)}
                   role="button"
@@ -317,13 +317,13 @@ export default function LeadCapture({ result, answers = [], onRetake, onClose, o
                         : 'border-gray-200 bg-gray-50 hover:border-gray-300'
                     }`}
                 >
-                  <span className={selectedProduct ? 'text-gray-800 font-medium' : 'text-gray-400 font-normal'}>
+                  <span className={selectedProduct ? 'text-gray-900 font-medium' : 'text-gray-600 font-normal'}>
                     {selectedProductObj ? selectedProductObj.label : 'Select a product'}
                   </span>
 
                   <FontAwesomeIcon
                     icon={faChevronDown}
-                    className={`text-gray-400 text-xs transition-transform duration-200 ${productOpen ? 'rotate-180 text-[#032e92]' : ''
+                    className={`text-gray-600 text-xs transition-transform duration-200 ${productOpen ? 'rotate-180 text-[#032e92]' : ''
                       }`}
                   />
                 </div>
@@ -354,7 +354,7 @@ export default function LeadCapture({ result, answers = [], onRetake, onClose, o
                             }}
                             className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg cursor-pointer text-xs sm:text-sm transition-colors ${isSelected
                               ? 'bg-[#eef4ff] text-[#032e92] font-semibold'
-                              : 'text-gray-700 hover:bg-gray-50 hover:text-[#032e92]'
+                              : 'text-gray-900 hover:bg-gray-50 hover:text-[#032e92]'
                               }`}
                           >
                             <span>{option.label}</span>
@@ -372,7 +372,7 @@ export default function LeadCapture({ result, answers = [], onRetake, onClose, o
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">Full Name *</label>
+                <label className="block text-xs font-bold text-gray-900 mb-1">Full Name *</label>
                 <input
                   type="text"
                   value={formData.name}
@@ -388,7 +388,7 @@ export default function LeadCapture({ result, answers = [], onRetake, onClose, o
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">Email Address *</label>
+                <label className="block text-xs font-bold text-gray-900 mb-1">Email Address *</label>
                 <input
                   type="email"
                   value={formData.email}
@@ -404,7 +404,7 @@ export default function LeadCapture({ result, answers = [], onRetake, onClose, o
               </div>
 
               <div className="relative" ref={countryDropdownRef}>
-                <label className="block text-xs font-bold text-gray-700 mb-1">Mobile Number *</label>
+                <label className="block text-xs font-bold text-gray-900 mb-1">Mobile Number *</label>
                 <div className={`flex rounded-xl border border-gray-200 bg-gray-50 focus-within:bg-white focus-within:border-[#032e92] focus-within:ring-2 focus-within:ring-blue-50 transition-all ${errors.phone ? 'border-red-400' : ''}`}>
                   {/* Country Code Dropdown Trigger */}
                   <button
@@ -419,12 +419,12 @@ export default function LeadCapture({ result, answers = [], onRetake, onClose, o
                     aria-label="Select Country Code"
                     className="flex items-center gap-1.5 px-3 border-r border-gray-200 bg-gray-100/70 hover:bg-blue-50/60 rounded-l-xl transition-all cursor-pointer select-none group flex-shrink-0 disabled:cursor-not-allowed focus:outline-none"
                   >
-                    <span className="text-xs font-bold text-gray-800 font-mono tracking-tight">
+                    <span className="text-xs font-bold text-gray-900 font-mono tracking-tight">
                       {selectedCountry.code}
                     </span>
                     <FontAwesomeIcon
                       icon={faChevronDown}
-                      className={`text-[9px] text-gray-400 group-hover:text-[#032e92] transition-transform duration-200 ${
+                      className={`text-[9px] text-gray-600 group-hover:text-[#032e92] transition-transform duration-200 ${
                         isCountryOpen ? 'rotate-180 text-[#032e92]' : ''
                       }`}
                     />
@@ -469,7 +469,7 @@ export default function LeadCapture({ result, answers = [], onRetake, onClose, o
                           placeholder="Search country or code..."
                           value={countrySearch}
                           onChange={(e) => setCountrySearch(e.target.value)}
-                          className="w-full px-2.5 py-1 text-xs bg-white border border-gray-200 rounded-lg outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/20 text-gray-800 placeholder:text-gray-400"
+                          className="w-full px-2.5 py-1 text-xs bg-white border border-gray-200 rounded-lg outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/20 text-gray-900 placeholder:text-gray-400"
                           autoFocus
                         />
                       </div>
@@ -477,7 +477,7 @@ export default function LeadCapture({ result, answers = [], onRetake, onClose, o
                       {/* Country List */}
                       <div className="max-h-48 overflow-y-auto divide-y divide-gray-50 py-1">
                         {filteredCountries.length === 0 ? (
-                          <div className="p-3 text-center text-xs text-gray-400 font-medium">
+                          <div className="p-3 text-center text-xs text-gray-600 font-medium">
                             No countries found
                           </div>
                         ) : (
@@ -493,14 +493,14 @@ export default function LeadCapture({ result, answers = [], onRetake, onClose, o
                                   setCountrySearch('');
                                 }}
                                 className={`w-full flex items-center justify-between px-3 py-2 text-left text-xs transition-colors hover:bg-blue-50/80 cursor-pointer ${
-                                  isSelected ? 'bg-blue-50/70 font-semibold text-[#032e92]' : 'text-gray-700'
+                                  isSelected ? 'bg-blue-50/70 font-semibold text-[#032e92]' : 'text-gray-900'
                                 }`}
                               >
                                 <div className="flex items-center gap-2 truncate pr-2">
                                   <span className="text-sm flex-shrink-0 leading-none">{c.flag}</span>
                                   <span className="truncate">{c.name}</span>
                                 </div>
-                                <span className={`font-mono text-xs flex-shrink-0 ${isSelected ? 'text-[#032e92] font-bold' : 'text-gray-400'}`}>
+                                <span className={`font-mono text-xs flex-shrink-0 ${isSelected ? 'text-[#032e92] font-bold' : 'text-gray-600'}`}>
                                   {c.code}
                                 </span>
                               </button>

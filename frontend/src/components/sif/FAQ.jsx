@@ -69,11 +69,11 @@ export default function FAQ() {
                 <button
                   onClick={() => toggle(faq.id)}
                   className="w-full flex items-center justify-between px-6 py-5 text-left gap-4">
-                  <span className={`font-semibold text-sm flex-1 ${openId === faq.id ? 'text-[#032e92]' : 'text-gray-800'
+                  <span className={`font-bold text-md flex-1 ${openId === faq.id ? 'text-[#032e92]' : 'text-gray-900'
                     }`}>
                     {faq.question}
                   </span>
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 ${openId === faq.id ? 'bg-[#032e92] text-white' : 'bg-[#f7f9fc] text-gray-400'
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 ${openId === faq.id ? 'bg-[#032e92] text-white' : 'bg-[#f7f9fc] text-gray-600'
                     }`}>
                     <FontAwesomeIcon
                       icon={faChevronDown}
@@ -90,7 +90,7 @@ export default function FAQ() {
                       transition={{ duration: 0.3 }}>
                       <div className="px-6 pb-5">
                         <div className="h-px bg-[#e8edf7] mb-4" />
-                        <p className="text-gray-500 font-medium text-sm leading-relaxed">{faq.answer}</p>
+                        <p className="text-[14px] md:text-md text-gray-600 leading-relaxed">{faq.answer}</p>
                       </div>
                     </motion.div>
                   )}

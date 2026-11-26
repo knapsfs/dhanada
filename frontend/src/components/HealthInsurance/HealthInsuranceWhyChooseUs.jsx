@@ -65,15 +65,15 @@ export default function HealthInsuranceWhyChooseUs() {
             <div className="pt-2 space-y-3">
               <div className="flex items-center gap-3">
                 <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 flex-shrink-0 text-base" />
-                <span className="text-sm font-medium text-gray-800">45-minute average cashless pre-authorization support</span>
+                <span className="text-sm font-medium text-gray-900">45-minute average cashless pre-authorization support</span>
               </div>
               <div className="flex items-center gap-3">
                 <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 flex-shrink-0 text-base" />
-                <span className="text-sm font-medium text-gray-800">Assistance in transferring and retaining No Claim Bonus</span>
+                <span className="text-sm font-medium text-gray-900">Assistance in transferring and retaining No Claim Bonus</span>
               </div>
               <div className="flex items-center gap-3">
                 <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 flex-shrink-0 text-base" />
-                <span className="text-sm font-medium text-gray-800">Certified health insurance specialists available on call & WhatsApp</span>
+                <span className="text-sm font-medium text-gray-900">Certified health insurance specialists available on call & WhatsApp</span>
               </div>
             </div>
 

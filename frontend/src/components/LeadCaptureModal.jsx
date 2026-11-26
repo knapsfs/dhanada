@@ -271,13 +271,13 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
             <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between bg-white rounded-t-3xl">
               <div>
                 <h3 className="text-xl sm:text-2xl font-bold text-[#032e92] tracking-tight">Start Investing</h3>
-                <p className="text-xs sm:text-sm text-gray-500 font-normal mt-1">Leave your details and we'll help you get started.</p>
+                <p className="text-xs sm:text-sm text-gray-600 font-normal mt-1">Leave your details and we'll help you get started.</p>
               </div>
               <button
                 type="button"
                 onClick={onClose}
                 disabled={status === 'submitting'}
-                className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors disabled:opacity-50 cursor-pointer"
+                className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors disabled:opacity-50 cursor-pointer"
                 aria-label="Close"
               >
                 <FontAwesomeIcon icon={faXmark} className="text-sm" />
@@ -292,7 +292,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                     <FontAwesomeIcon icon={faCircleCheck} />
                   </div>
                   <h4 className="text-xl font-bold text-gray-900 mb-2">Thank you!</h4>
-                  <p className="text-gray-500 text-sm font-medium">We've received your details. Our team will contact you shortly to complete your setup.</p>
+                  <p className="text-gray-600 text-sm font-medium">We've received your details. Our team will contact you shortly to complete your setup.</p>
                   <button
                     type="button"
                     onClick={onClose}
@@ -312,7 +312,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
 
                   {/* Goal or Product Dropdown Field */}
                   <div className="relative" ref={optionDropdownRef}>
-                    <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wide">
+                    <label className="block text-xs font-bold text-gray-900 mb-1.5 uppercase tracking-wide">
                       {isProductPage ? 'Product' : 'What’s your goal?'} <span className="text-red-500">*</span>
                     </label>
 
@@ -329,7 +329,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                             : 'border-gray-200 bg-white hover:border-gray-300'
                       }`}
                     >
-                      <span className={selectedOption ? 'text-gray-800 font-medium' : 'text-gray-400 font-normal'}>
+                      <span className={selectedOption ? 'text-gray-900 font-medium' : 'text-gray-600 font-normal'}>
                         {selectedOptionObj
                           ? selectedOptionObj.label
                           : (isProductPage ? 'Select a product' : 'Select your goal')}
@@ -337,7 +337,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
 
                       <FontAwesomeIcon
                         icon={faChevronDown}
-                        className={`text-gray-400 text-xs transition-transform duration-200 ${
+                        className={`text-gray-600 text-xs transition-transform duration-200 ${
                           optionOpen ? 'rotate-180 text-[#032e92]' : ''
                         }`}
                       />
@@ -372,7 +372,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                                 className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg cursor-pointer text-sm transition-colors ${
                                   isSelected
                                     ? 'bg-[#eef4ff] text-[#032e92] font-semibold'
-                                    : 'text-gray-700 hover:bg-gray-50 hover:text-[#032e92]'
+                                    : 'text-gray-900 hover:bg-gray-50 hover:text-[#032e92]'
                                 }`}
                               >
                                 <span>{option.label}</span>
@@ -391,7 +391,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
 
                   {/* Full Name */}
                   <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wide">
+                    <label className="block text-xs font-bold text-gray-900 mb-1.5 uppercase tracking-wide">
                       Full Name <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -401,7 +401,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                       onChange={handleChange}
                       disabled={status === 'submitting'}
                       placeholder="e.g. Rahul Sharma"
-                      className={`w-full px-4 py-3 rounded-xl border transition-all outline-none text-sm disabled:bg-gray-50 text-gray-800 placeholder:text-gray-400 ${errors.full_name
+                      className={`w-full px-4 py-3 rounded-xl border transition-all outline-none text-sm disabled:bg-gray-50 text-gray-900 placeholder:text-gray-400 ${errors.full_name
                         ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-500/10'
                         : 'border-gray-200 focus:border-[#032e92] focus:ring-2 focus:ring-blue-900/10 hover:border-gray-300'
                         }`}
@@ -413,7 +413,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
 
                   {/* Email Address */}
                   <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1.5 uppercase tracking-wide">
+                    <label className="block text-xs font-bold text-gray-900 mb-1.5 uppercase tracking-wide">
                       Email Address <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -423,7 +423,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                       onChange={handleChange}
                       disabled={status === 'submitting'}
                       placeholder="e.g. rahul@example.com"
-                      className={`w-full px-4 py-3 rounded-xl border transition-all outline-none text-sm disabled:bg-gray-50 text-gray-800 placeholder:text-gray-400 ${errors.email
+                      className={`w-full px-4 py-3 rounded-xl border transition-all outline-none text-sm disabled:bg-gray-50 text-gray-900 placeholder:text-gray-400 ${errors.email
                         ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-500/10'
                         : 'border-gray-200 focus:border-[#032e92] focus:ring-2 focus:ring-blue-900/10 hover:border-gray-300'
                         }`}
@@ -436,10 +436,10 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                   {/* Phone Number */}
                   <div className="relative" ref={dropdownRef}>
                     <div className="flex items-center justify-between mb-1.5">
-                      <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide">
+                      <label className="block text-xs font-bold text-gray-900 uppercase tracking-wide">
                         Phone Number <span className="text-red-500">*</span>
                       </label>
-                      <span className="text-xs text-gray-400 font-medium">
+                      <span className="text-xs text-gray-600 font-medium">
                         {selectedCountry.name}
                       </span>
                     </div>
@@ -465,12 +465,12 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                         aria-label="Select Country Code"
                         className="flex items-center gap-1.5 px-3.5 py-3 border-r border-gray-200 bg-white hover:bg-gray-50 rounded-l-xl transition-all cursor-pointer select-none group flex-shrink-0 disabled:cursor-not-allowed focus:outline-none"
                       >
-                        <span className="text-sm font-bold text-gray-800 tracking-tight">
+                        <span className="text-sm font-bold text-gray-900 tracking-tight">
                           {selectedCountry.code}
                         </span>
                         <FontAwesomeIcon
                           icon={faChevronDown}
-                          className={`text-[9px] text-gray-400 group-hover:text-[#032e92] transition-transform duration-200 ${isDropdownOpen ? 'rotate-180 text-[#032e92]' : ''
+                          className={`text-[9px] text-gray-600 group-hover:text-[#032e92] transition-transform duration-200 ${isDropdownOpen ? 'rotate-180 text-[#032e92]' : ''
                             }`}
                         />
                       </button>
@@ -485,7 +485,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                         onChange={handleChange}
                         disabled={status === 'submitting'}
                         placeholder={selectedCountry.placeholder || "98765 43210"}
-                        className="w-full px-3.5 py-3 outline-none text-sm bg-transparent disabled:bg-gray-50 text-gray-800 placeholder:text-gray-400 rounded-r-xl"
+                        className="w-full px-3.5 py-3 outline-none text-sm bg-transparent disabled:bg-gray-50 text-gray-900 placeholder:text-gray-400 rounded-r-xl"
                       />
                     </div>
 
@@ -511,7 +511,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                               placeholder="Search country or code..."
                               value={searchQuery}
                               onChange={(e) => setSearchQuery(e.target.value)}
-                              className="w-full px-3 py-1.5 text-xs bg-white border border-gray-200 rounded-lg outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/20 text-gray-800 placeholder:text-gray-400"
+                              className="w-full px-3 py-1.5 text-xs bg-white border border-gray-200 rounded-lg outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/20 text-gray-900 placeholder:text-gray-400"
                               autoFocus
                             />
                           </div>
@@ -519,7 +519,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                           {/* Country List */}
                           <div className="max-h-52 overflow-y-auto divide-y divide-gray-50 py-1">
                             {filteredCountries.length === 0 ? (
-                              <div className="p-4 text-center text-xs text-gray-400 font-medium">
+                              <div className="p-4 text-center text-xs text-gray-600 font-medium">
                                 No countries found
                               </div>
                             ) : (
@@ -536,7 +536,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                                     }}
                                     className={`w-full flex items-center justify-between px-3.5 py-2.5 text-left text-xs transition-colors hover:bg-blue-50/80 cursor-pointer ${isSelected
                                       ? 'bg-blue-50/70 font-semibold text-[#032e92]'
-                                      : 'text-gray-700'
+                                      : 'text-gray-900'
                                       }`}
                                   >
                                     <div className="flex items-center gap-2.5 truncate pr-2">
@@ -545,7 +545,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                                     </div>
                                     <div className="flex items-center gap-2 flex-shrink-0">
                                       <span
-                                        className={`font-mono text-xs ${isSelected ? 'text-[#032e92] font-bold' : 'text-gray-400'
+                                        className={`font-mono text-xs ${isSelected ? 'text-[#032e92] font-bold' : 'text-gray-600'
                                           }`}
                                       >
                                         {c.code}
@@ -579,7 +579,7 @@ export default function LeadCaptureModal({ isOpen, onClose, defaultSource = '' }
                         }}
                         className="mt-0.5 w-4 h-4 text-[#032e92] rounded border-gray-300 focus:ring-[#032e92] cursor-pointer"
                       />
-                      <label htmlFor="modal-terms" className="text-xs sm:text-sm text-gray-500 leading-relaxed cursor-pointer select-none">
+                      <label htmlFor="modal-terms" className="text-xs sm:text-sm text-gray-600 leading-relaxed cursor-pointer select-none">
                         I agree to be contacted by a KNAPS representative and accept the
                         {' '}
                         <a href="/terms-and-conditions" className="text-[#0665d0] hover:underline" target="_blank" rel="noopener noreferrer">

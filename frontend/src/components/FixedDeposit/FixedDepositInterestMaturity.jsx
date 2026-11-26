@@ -105,12 +105,12 @@ export default function FixedDepositInterestMaturity() {
               {tenureBreakdowns.map((item, idx) => (
                 <tr key={idx} className="hover:bg-blue-50/40 transition-colors">
                   <td className="py-3.5 px-5 font-bold text-[#0a192f]">{item.product}</td>
-                  <td className="py-3.5 px-5 text-gray-500">{item.type}</td>
-                  <td className="py-3.5 px-5 text-gray-700">{item.tenure}</td>
-                  <td className="py-3.5 px-5 text-gray-700">{item.principal}</td>
+                  <td className="py-3.5 px-5 text-gray-600">{item.type}</td>
+                  <td className="py-3.5 px-5 text-gray-900">{item.tenure}</td>
+                  <td className="py-3.5 px-5 text-gray-900">{item.principal}</td>
                   <td className="py-3.5 px-5 font-semibold text-emerald-600">+{item.interest}</td>
                   <td className="py-3.5 px-5 font-bold text-[#032e92]">{item.maturity}</td>
-                  <td className="py-3.5 px-5 font-semibold text-gray-800">{item.effectiveYield}</td>
+                  <td className="py-3.5 px-5 font-semibold text-gray-900">{item.effectiveYield}</td>
                 </tr>
               ))}
             </tbody>

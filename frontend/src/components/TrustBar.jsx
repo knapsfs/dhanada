@@ -33,7 +33,7 @@ export default function TrustBar() {
   return (
     <section className="py-12 sm:py-16 bg-white border-b border-gray-100 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 mb-6 text-center">
-        <p className="text-sm font-semibold text-gray-400 uppercase tracking-widest">
+        <p className="text-sm font-semibold text-gray-600 uppercase tracking-widest">
           Our Partners
         </p>
       </div>
@@ -67,8 +67,8 @@ export default function TrustBar() {
                 />
               </div>
               <div>
-                <h4 className="text-lg font-bold text-gray-700 group-hover:text-[#032e92] transition-colors">{partner.name}</h4>
-                <p className="text-[10px] uppercase font-bold text-gray-400">{partner.type}</p>
+                <h4 className="text-lg font-bold text-gray-900 group-hover:text-[#032e92] transition-colors">{partner.name}</h4>
+                <p className="text-[10px] uppercase font-bold text-gray-600">{partner.type}</p>
               </div>
             </div>
           ))}

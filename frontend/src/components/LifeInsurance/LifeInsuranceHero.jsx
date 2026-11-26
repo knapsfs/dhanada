@@ -31,11 +31,11 @@ export default function LifeInsuranceHero() {
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         {/* Breadcrumb Navigation */}
-        <div className="flex items-center pb-4 sm:pb-5 gap-3 text-sm font-medium text-gray-500">
+        <div className="flex items-center pb-4 sm:pb-5 gap-3 text-sm font-medium text-gray-600">
           <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
-          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-600" />
           <Link to="/products" className="hover:text-[#032e92] transition-colors">Products</Link>
-          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-600" />
           <span className="text-[#032e92]">Life Insurance</span>
         </div>
 
@@ -102,7 +102,7 @@ export default function LifeInsuranceHero() {
                   </div>
                   <div>
                     <h3 className="font-extrabold text-[#0a192f] text-base leading-tight">Sample Protection Plan</h3>
-                    <p className="text-xs text-gray-400 font-medium mt-0.5">Pure Term Shield</p>
+                    <p className="text-xs text-gray-600 font-medium mt-0.5">Pure Term Shield</p>
                   </div>
                 </div>
                 <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
@@ -128,23 +128,23 @@ export default function LifeInsuranceHero() {
               {/* Key Plan Metrics */}
               <div className="space-y-3.5 mb-6">
                 <div className="flex items-center justify-between text-xs py-1.5 border-b border-gray-100">
-                  <span className="text-gray-500 font-medium">Starting Premium</span>
+                  <span className="text-gray-600 font-medium">Starting Premium</span>
                   <span className="font-extrabold text-gray-900 text-sm text-emerald-600">₹ 540 / month*</span>
                 </div>
                 <div className="flex items-center justify-between text-xs py-1.5 border-b border-gray-100">
-                  <span className="text-gray-500 font-medium">Coverage Age</span>
-                  <span className="font-bold text-gray-800">Up to 75 - 85 Years</span>
+                  <span className="text-gray-600 font-medium">Coverage Age</span>
+                  <span className="font-bold text-gray-900">Up to 75 - 85 Years</span>
                 </div>
                 <div className="flex items-center justify-between text-xs py-1.5 border-b border-gray-100">
-                  <span className="text-gray-500 font-medium">Critical Illness Rider</span>
+                  <span className="text-gray-600 font-medium">Critical Illness Rider</span>
                   <span className="font-bold text-[#032e92] flex items-center gap-1">
                     <FontAwesomeIcon icon={faHeartPulse} className="text-[10px]" />
                     34+ Illnesses Covered
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-xs py-1.5">
-                  <span className="text-gray-500 font-medium">Tax Deductions</span>
-                  <span className="font-bold text-gray-800">Up to ₹46,800/yr u/s 80C</span>
+                  <span className="text-gray-600 font-medium">Tax Deductions</span>
+                  <span className="font-bold text-gray-900">Up to ₹46,800/yr u/s 80C</span>
                 </div>
               </div>
 

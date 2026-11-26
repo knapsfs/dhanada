@@ -48,7 +48,7 @@ export default function MfFAQ() {
           <div
             className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-300 ${isOpen
                 ? 'bg-[#032e92] text-white'
-                : 'border border-slate-200 bg-white text-slate-400'
+                : 'border border-slate-200 bg-white text-gray-600'
               }`}
           >
             <FontAwesomeIcon icon={isOpen ? faMinus : faPlus} className="text-xs" />

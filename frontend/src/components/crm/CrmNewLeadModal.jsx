@@ -73,12 +73,12 @@ export default function CrmNewLeadModal({ isOpen, onClose, onCreated, sources = 
               </div>
               <div>
                 <h3 className="text-base font-bold text-gray-900 leading-tight">Create New Lead</h3>
-                <p className="text-xs text-gray-500 font-medium">Add prospect directly to the KNAPS pipeline</p>
+                <p className="text-xs text-gray-600 font-medium">Add prospect directly to the KNAPS pipeline</p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-700 hover:bg-gray-200/60 transition-colors cursor-pointer"
+              className="w-8 h-8 rounded-full flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-200/60 transition-colors cursor-pointer"
             >
               <FontAwesomeIcon icon={faXmark} className="text-sm" />
             </button>
@@ -93,7 +93,7 @@ export default function CrmNewLeadModal({ isOpen, onClose, onCreated, sources = 
             )}
 
             <div>
-              <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+              <label className="block text-xs font-semibold text-gray-900 mb-1.5">
                 Full Name <span className="text-red-500">*</span>
               </label>
               <input
@@ -109,7 +109,7 @@ export default function CrmNewLeadModal({ isOpen, onClose, onCreated, sources = 
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                <label className="block text-xs font-semibold text-gray-900 mb-1.5">
                   Mobile Number <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -123,7 +123,7 @@ export default function CrmNewLeadModal({ isOpen, onClose, onCreated, sources = 
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                <label className="block text-xs font-semibold text-gray-900 mb-1.5">
                   Email Address
                 </label>
                 <input
@@ -138,7 +138,7 @@ export default function CrmNewLeadModal({ isOpen, onClose, onCreated, sources = 
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                <label className="block text-xs font-semibold text-gray-900 mb-1.5">
                   Goal / Product of Interest
                 </label>
                 <CrmSelect
@@ -150,7 +150,7 @@ export default function CrmNewLeadModal({ isOpen, onClose, onCreated, sources = 
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                <label className="block text-xs font-semibold text-gray-900 mb-1.5">
                   Acquisition Source
                 </label>
                 <CrmSelect
@@ -163,7 +163,7 @@ export default function CrmNewLeadModal({ isOpen, onClose, onCreated, sources = 
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+              <label className="block text-xs font-semibold text-gray-900 mb-1.5">
                 Initial Notes / Goal Requirements
               </label>
               <textarea

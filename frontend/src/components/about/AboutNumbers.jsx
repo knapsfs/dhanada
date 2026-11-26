@@ -51,7 +51,7 @@ export default function AboutNumbers() {
                 ) : "0"}
                 {stat.suffix}
               </h3>
-              <p className="text-gray-500 font-medium text-sm uppercase tracking-wide">
+              <p className="text-gray-600 font-medium text-sm uppercase tracking-wide">
                 {stat.title}
               </p>
             </motion.div>

@@ -41,7 +41,7 @@ export default function About() {
                   <div className="text-4xl font-bold text-[#c10000]">15+</div>
                   <div>
                     <h4 className="text-lg font-bold text-gray-900">Years Experience</h4>
-                    <p className="text-sm text-gray-500">In Wealth Management</p>
+                    <p className="text-sm text-gray-600">In Wealth Management</p>
                   </div>
                 </div>
               </motion.div>
@@ -78,7 +78,7 @@ export default function About() {
                   </div>
                   <div>
                     <h4 className="text-lg font-bold text-gray-900 mb-1">{feature.title}</h4>
-                    <p className="text-sm text-gray-500 leading-relaxed">{feature.description}</p>
+                    <p className="text-sm text-gray-600 leading-relaxed">{feature.description}</p>
                   </div>
                 </div>
               ))}

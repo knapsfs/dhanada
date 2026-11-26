@@ -8,7 +8,7 @@ export default function BlogContent({ blog }) {
       <div className="max-w-5xl mx-auto px-6 lg:px-8">
         {/* Exact HTML Content from Frappe Desk Text Editor */}
         <div
-          className="dynamic-blog-html text-gray-800 text-[18px] leading-[1.9]"
+          className="dynamic-blog-html text-gray-900 text-[18px] leading-[1.9]"
           dangerouslySetInnerHTML={{ __html: blog.content }}
         />
       </div>

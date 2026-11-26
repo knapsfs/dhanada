@@ -63,15 +63,15 @@ const GeneralInsuranceWhyChooseUs = () => {
             <div className="pt-2 space-y-3">
               <div className="flex items-center gap-3">
                 <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 flex-shrink-0 text-base" />
-                <span className="text-sm font-medium text-gray-800">End-to-end claim documentation assistance</span>
+                <span className="text-sm font-medium text-gray-900">End-to-end claim documentation assistance</span>
               </div>
               <div className="flex items-center gap-3">
                 <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 flex-shrink-0 text-base" />
-                <span className="text-sm font-medium text-gray-800">Assistance in cashless authorization within 2 hours</span>
+                <span className="text-sm font-medium text-gray-900">Assistance in cashless authorization within 2 hours</span>
               </div>
               <div className="flex items-center gap-3">
                 <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 flex-shrink-0 text-base" />
-                <span className="text-sm font-medium text-gray-800">Certified IRDAI insurance planners with 10+ years experience</span>
+                <span className="text-sm font-medium text-gray-900">Certified IRDAI insurance planners with 10+ years experience</span>
               </div>
             </div>
 

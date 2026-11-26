@@ -21,11 +21,11 @@ const monthsConfig = [
 
 const getCellColor = (val) => {
   if (val === undefined || val === null || val === 'N/A' || val === 'N/L' || val === 'NL') {
-    return 'bg-gray-50 text-gray-400 font-medium border border-gray-100';
+    return 'bg-gray-50 text-gray-600 font-medium border border-gray-100';
   }
   const num = typeof val === 'number' ? val : parseFloat(val);
   if (isNaN(num)) {
-    return 'bg-gray-50 text-gray-400 font-medium border border-gray-100';
+    return 'bg-gray-50 text-gray-600 font-medium border border-gray-100';
   }
 
   // Deep green
@@ -35,7 +35,7 @@ const getCellColor = (val) => {
   // Soft pastel green
   if (num > 0) return 'bg-[#bbf7d0] text-emerald-950 font-semibold';
   // Flat zero
-  if (num === 0) return 'bg-[#f3f4f6] text-gray-700 font-semibold';
+  if (num === 0) return 'bg-[#f3f4f6] text-gray-900 font-semibold';
   // Soft pastel pink / light red
   if (num > -1.5) return 'bg-[#ffe4e6] text-rose-900 font-semibold';
   // Medium pink-red
@@ -116,13 +116,13 @@ export default function HeatmapTable({ funds = [], timeFilter = '12M', activeSub
               </tr>
             )}
             <tr className="border-b border-[#e8edf7] bg-white">
-              <th className="sticky left-0 bg-white z-30 py-4 px-3 sm:px-4 text-left text-xs font-bold text-gray-500 uppercase min-w-[150px] sm:min-w-[220px] lg:min-w-[280px]">
+              <th className="sticky left-0 bg-white z-30 py-4 px-3 sm:px-4 text-left text-xs font-bold text-gray-600 uppercase min-w-[150px] sm:min-w-[220px] lg:min-w-[280px]">
                 FUND
               </th>
               {displayMonths.map((m) => (
                 <th
                   key={m.key}
-                  className="py-4 px-2 text-center text-xs sm:text-xs font-bold text-gray-500 uppercase min-w-[75px] sm:min-w-[90px] bg-white"
+                  className="py-4 px-2 text-center text-xs sm:text-xs font-bold text-gray-600 uppercase min-w-[75px] sm:min-w-[90px] bg-white"
                 >
                   {m.label}
                 </th>
@@ -144,7 +144,7 @@ export default function HeatmapTable({ funds = [], timeFilter = '12M', activeSub
                     <p className="font-bold text-xs sm:text-sm text-gray-900 truncate leading-tight" title={fund.name}>
                       {fund.name}
                     </p>
-                    <p className="text-[10px] sm:text-xs text-gray-500 font-normal truncate mt-0.5 leading-tight">
+                    <p className="text-[10px] sm:text-xs text-gray-600 font-normal truncate mt-0.5 leading-tight">
                       {fund.category || fund.amc}
                     </p>
                   </div>
@@ -166,7 +166,7 @@ export default function HeatmapTable({ funds = [], timeFilter = '12M', activeSub
                         )}`}
                       >
                         {isNA ? (
-                          <span className="text-gray-400 font-medium text-[10px] sm:text-xs">N/A</span>
+                          <span className="text-gray-600 font-medium text-[10px] sm:text-xs">N/A</span>
                         ) : (
                           <span>{typeof val === 'number' ? `${val > 0 ? '+' : ''}${val.toFixed(2)}%` : val}</span>
                         )}
@@ -181,7 +181,7 @@ export default function HeatmapTable({ funds = [], timeFilter = '12M', activeSub
               <tr>
                 <td
                   colSpan={displayMonths.length + 1}
-                  className="py-12 text-center text-gray-500 font-medium text-xs sm:text-sm"
+                  className="py-12 text-center text-gray-600 font-medium text-xs sm:text-sm"
                 >
                   No funds available in this category.
                 </td>

@@ -52,7 +52,7 @@ export default function AboutJourney() {
                 </div>
                 
                 <h3 className="text-xl font-bold text-[#0a192f] mb-2">{item.title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed max-w-xs px-2">
+                <p className="text-sm text-gray-600 leading-relaxed max-w-xs px-2">
                   {item.desc}
                 </p>
               </motion.div>

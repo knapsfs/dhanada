@@ -24,7 +24,7 @@ export default function FundsHero({ totalFunds = 33 }) {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 }}
-                className="inline-flex items-center gap-2 bg-white/70 border border-blue-200 rounded-full px-3 py-1 text-[10px] lg:text-xs text-[#032e92] font-bold uppercase tracking-wide mb-4 shadow-xs"
+                className="inline-flex items-center gap-2 bg-white/70 border border-blue-200 rounded-full px-3 py-1 text-[10px] lg:text-xs text-[#032e92] font-bold uppercase mb-4 shadow-xs"
               >
                 <span className="w-1.5 h-1.5 rounded-full bg-[#032e92] animate-pulse" />
                 Live SIF Schemes

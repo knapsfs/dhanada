@@ -99,16 +99,16 @@ export default function AuthorPage() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="flex items-center gap-3 text-sm font-medium text-gray-500 mb-8 flex-wrap"
+              className="flex items-center gap-3 text-sm font-medium text-gray-600 mb-8 flex-wrap"
             >
               <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
-              <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+              <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-600" />
               <Link to="/blogs" className="hover:text-[#032e92] transition-colors">Blogs</Link>
-              <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
-              <span className="text-gray-400">Authors</span>
+              <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-600" />
+              <span className="text-gray-600">Authors</span>
               {author?.author_name && (
                 <>
-                  <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+                  <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-600" />
                   <span className="text-[#032e92] font-semibold">{author.author_name}</span>
                 </>
               )}
@@ -117,12 +117,12 @@ export default function AuthorPage() {
             {loading ? (
               <div className="py-20 flex flex-col items-center justify-center">
                 <div className="w-12 h-12 border-4 border-[#032e92] border-t-transparent rounded-full animate-spin mb-4"></div>
-                <p className="text-gray-500 text-sm font-medium">Loading author profile...</p>
+                <p className="text-gray-600 text-sm font-medium">Loading author profile...</p>
               </div>
             ) : error || !author ? (
               <div className="py-16 text-center max-w-lg mx-auto bg-white rounded-3xl p-8 border border-gray-100 shadow-sm">
                 <p className="text-red-600 font-semibold mb-3">{error || "Author not found"}</p>
-                <p className="text-gray-500 text-sm mb-6">
+                <p className="text-gray-600 text-sm mb-6">
                   The author profile you are looking for may have been moved or is currently unavailable.
                 </p>
                 <Link
@@ -172,8 +172,8 @@ export default function AuthorPage() {
                     </div>
 
                     {/* Stats & Social */}
-                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs font-medium text-gray-500 mb-6">
-                      <span className="inline-flex items-center gap-1.5 bg-gray-100 text-gray-700 px-3 py-1 rounded-lg">
+                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs font-medium text-gray-600 mb-6">
+                      <span className="inline-flex items-center gap-1.5 bg-gray-100 text-gray-900 px-3 py-1 rounded-lg">
                         <FontAwesomeIcon icon={faNewspaper} className="text-[#032e92]" />
                         <span>{author.articles_count || posts.length} Published {author.articles_count === 1 ? "Article" : "Articles"}</span>
                       </span>
@@ -205,7 +205,7 @@ export default function AuthorPage() {
 
                     {/* Biography */}
                     {author.biography && (
-                      <div className="text-gray-700 text-base leading-relaxed max-w-2xl bg-gray-50/70 p-5 rounded-2xl border border-gray-100">
+                      <div className="text-gray-900 text-base leading-relaxed max-w-2xl bg-gray-50/70 p-5 rounded-2xl border border-gray-100">
                         <div
                           className="prose prose-sm max-w-none prose-p:my-1"
                           dangerouslySetInnerHTML={{ __html: author.biography }}
@@ -229,11 +229,11 @@ export default function AuthorPage() {
                   <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0a192f]">
                     Articles by {author.author_name}
                   </h2>
-                  <p className="text-gray-500 text-sm mt-1">
+                  <p className="text-gray-600 text-sm mt-1">
                     Explore market insights, research analysis, and wealth creation strategies.
                   </p>
                 </div>
-                <span className="text-xs font-semibold text-gray-400 uppercase">
+                <span className="text-xs font-semibold text-gray-600 uppercase">
                   Showing {posts.length} {posts.length === 1 ? "article" : "articles"}
                 </span>
               </div>
@@ -242,7 +242,7 @@ export default function AuthorPage() {
                 <div className="text-center py-16 bg-gray-50 rounded-3xl p-8 border border-gray-100">
                   <FontAwesomeIcon icon={faNewspaper} className="text-4xl text-gray-300 mb-3" />
                   <p className="text-gray-600 font-semibold mb-1">No articles published yet</p>
-                  <p className="text-gray-400 text-sm">Check back soon for upcoming insights by this author.</p>
+                  <p className="text-gray-600 text-sm">Check back soon for upcoming insights by this author.</p>
                 </div>
               ) : (
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

@@ -45,7 +45,7 @@ export default function WealthTimeline({ yearlyData, results }) {
             </div>
             <h2 className="text-lg font-bold text-gray-900">Wealth Milestones</h2>
           </div>
-          <p className="text-xs text-gray-400 font-medium mb-7 ml-10">
+          <p className="text-xs text-gray-600 font-medium mb-7 ml-10">
             {achievedCount} of {MILESTONES.length} milestones achieved with your current plan
           </p>
 
@@ -88,8 +88,8 @@ export default function WealthTimeline({ yearlyData, results }) {
                       : 'bg-[#f7f9fc] border-[#e8edf7]'
                   }`}>
                     <div>
-                      <p className={`text-base font-bold ${m.achieved ? 'text-[#032e92]' : 'text-gray-400'}`}>{m.label}</p>
-                      <p className="text-xs font-medium text-gray-400">
+                      <p className={`text-base font-bold ${m.achieved ? 'text-[#032e92]' : 'text-gray-600'}`}>{m.label}</p>
+                      <p className="text-xs font-medium text-gray-600">
                         {m.achieved
                           ? m.year ? `Reached by Year ${m.year}` : 'Achieved'
                           : 'Not reached with current plan'

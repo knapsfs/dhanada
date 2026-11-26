@@ -419,7 +419,7 @@ const InlineComparison = forwardRef(function InlineComparison(
             </div>
           ) : (
             <div className="h-64 md:h-72 flex flex-col items-center justify-center bg-gray-50 rounded-2xl border border-gray-100 p-6 text-center">
-              <p className="text-gray-400 font-semibold text-sm">
+              <p className="text-gray-600 font-semibold text-sm">
                 Historical NAV chart data is currently loading or unavailable for the selected range.
               </p>
             </div>
@@ -464,7 +464,7 @@ const InlineComparison = forwardRef(function InlineComparison(
                           Risk Band: {item.riskLevel}
                         </span>
                       ) : (
-                        <span className="font-semibold text-gray-800">
+                        <span className="font-semibold text-gray-900">
                           {(!item[param.key] || item[param.key] === '₹0 Cr' || item[param.key] === '₹0.00 Cr' || item[param.key] === '0') ? 'N/A' : item[param.key]}
                         </span>
                       )}

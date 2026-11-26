@@ -50,21 +50,21 @@ export default function RelatedFunds({ funds = [] }) {
                 </div>
                 <div className="flex-1 min-w-0">
                   <h4 className="font-bold text-gray-900 text-xs leading-snug line-clamp-2 group-hover:text-[#032e92] transition-colors">{fund.name}</h4>
-                  <p className="text-[10px] text-gray-400 font-medium mt-0.5">{fund.category}</p>
+                  <p className="text-[10px] text-gray-600 font-medium mt-0.5">{fund.category}</p>
                 </div>
               </div>
 
               <div className="bg-[#f7f9fc] rounded-2xl p-3 mb-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-[10px] text-gray-400 font-medium">1Y Return</p>
+                    <p className="text-[10px] text-gray-600 font-medium">1Y Return</p>
                     <div className="flex items-center gap-1">
                       <FontAwesomeIcon icon={faArrowTrendUp} className="text-green-500 text-xs" />
                       <span className="text-lg font-bold text-green-600">{fund.returns1Y}</span>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-[10px] text-gray-400 font-medium">NAV</p>
+                    <p className="text-[10px] text-gray-600 font-medium">NAV</p>
                     <span className="text-sm font-bold text-[#032e92]">{fund.nav}</span>
                   </div>
                 </div>
@@ -74,7 +74,7 @@ export default function RelatedFunds({ funds = [] }) {
                 <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${getRiskLevelConfig(fund.riskLevel).bg} ${getRiskLevelConfig(fund.riskLevel).text} ${getRiskLevelConfig(fund.riskLevel).border}`}>
                   {getRiskLevelConfig(fund.riskLevel).level !== 'N/A' ? `Level ${getRiskLevelConfig(fund.riskLevel).level}` : 'N/A'}
                 </span>
-                <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${schemeTypeColors[fund.schemeType] || 'bg-gray-100 text-gray-700 border-gray-200'}`}>
+                <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${schemeTypeColors[fund.schemeType] || 'bg-gray-100 text-gray-900 border-gray-200'}`}>
                   {fund.schemeType || 'Unknown'}
                 </span>
               </div>

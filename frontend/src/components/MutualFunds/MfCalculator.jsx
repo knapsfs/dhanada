@@ -230,11 +230,11 @@ export default function MfCalculator() {
               {/* Input 1: Amount */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs sm:text-sm font-bold text-slate-700">
+                  <label className="text-xs sm:text-sm font-bold text-gray-900">
                     {calcMode === 'sip' ? 'Monthly SIP Amount' : 'Lumpsum Investment Amount'}
                   </label>
                   <div className="flex items-center px-3 py-1.5 rounded-xl bg-white border border-slate-300 text-sm font-bold text-[#032e92] shadow-xs">
-                    <span className="text-slate-400 mr-1">₹</span>
+                    <span className="text-gray-600 mr-1">₹</span>
                     <input
                       type="number"
                       value={amount}
@@ -255,7 +255,7 @@ export default function MfCalculator() {
                   className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#032e92]"
                 />
 
-                <div className="flex justify-between text-xs text-slate-400 font-semibold">
+                <div className="flex justify-between text-xs text-gray-600 font-semibold">
                   <span>{calcMode === 'sip' ? '₹500' : '₹5,000'}</span>
                   <span>{calcMode === 'sip' ? '₹75,000' : '₹15 Lakhs'}</span>
                   <span>{calcMode === 'sip' ? '₹1.5 Lakhs' : '₹30 Lakhs'}</span>
@@ -265,7 +265,7 @@ export default function MfCalculator() {
               {/* Input 2: Investment Duration */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs sm:text-sm font-bold text-slate-700">
+                  <label className="text-xs sm:text-sm font-bold text-gray-900">
                     Investment Duration
                   </label>
                   <div className="flex items-center px-3 py-1.5 rounded-xl bg-white border border-slate-300 text-sm font-bold text-[#032e92] shadow-xs">
@@ -277,7 +277,7 @@ export default function MfCalculator() {
                       onChange={(e) => setYears(Math.min(30, Math.max(1, Number(e.target.value) || 1)))}
                       className="w-12 text-right font-extrabold focus:outline-none"
                     />
-                    <span className="text-slate-500 ml-1 text-xs">Years</span>
+                    <span className="text-gray-600 ml-1 text-xs">Years</span>
                   </div>
                 </div>
 
@@ -291,7 +291,7 @@ export default function MfCalculator() {
                   className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#032e92]"
                 />
 
-                <div className="flex justify-between text-xs text-slate-400 font-semibold">
+                <div className="flex justify-between text-xs text-gray-600 font-semibold">
                   <span>1 Year</span>
                   <span>10 Years</span>
                   <span>20 Years</span>
@@ -302,7 +302,7 @@ export default function MfCalculator() {
               {/* Input 3: Expected Annual Return Rate */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs sm:text-sm font-bold text-slate-700">
+                  <label className="text-xs sm:text-sm font-bold text-gray-900">
                     Expected Return Rate (p.a.)
                   </label>
                   <div className="flex items-center px-3 py-1.5 rounded-xl bg-white border border-slate-300 text-sm font-bold text-[#032e92] shadow-xs">
@@ -315,7 +315,7 @@ export default function MfCalculator() {
                       onChange={(e) => setReturnRate(Number(e.target.value) || 0)}
                       className="w-12 text-right font-extrabold focus:outline-none"
                     />
-                    <span className="text-slate-500 ml-1 text-xs">%</span>
+                    <span className="text-gray-600 ml-1 text-xs">%</span>
                   </div>
                 </div>
 
@@ -348,21 +348,21 @@ export default function MfCalculator() {
               {/* 3 Summary Metric Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                 <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs">
-                  <div className="text-xs text-slate-500 font-semibold mb-1">Total Amount Invested</div>
-                  <div className="text-lg sm:text-xl font-extrabold text-slate-800">
+                  <div className="text-xs text-gray-600 font-semibold mb-1">Total Amount Invested</div>
+                  <div className="text-lg sm:text-xl font-extrabold text-gray-900">
                     {formatINR(totalInvested)}
                   </div>
-                  <div className="text-xs text-slate-400 mt-0.5">
+                  <div className="text-xs text-gray-600 mt-0.5">
                     {calcMode === 'sip' ? `${years * 12} monthly installments` : 'One-time investment'}
                   </div>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs">
-                  <div className="text-xs text-slate-500 font-semibold mb-1">Estimated Wealth Gained</div>
+                  <div className="text-xs text-gray-600 font-semibold mb-1">Estimated Wealth Gained</div>
                   <div className="text-lg sm:text-xl font-extrabold text-emerald-600">
                     {formatINR(estimatedReturns)}
                   </div>
-                  <div className="text-xs text-slate-400 mt-0.5">Compounded earnings</div>
+                  <div className="text-xs text-gray-600 mt-0.5">Compounded earnings</div>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-50 to-white border-2 border-[#032e92]/20 shadow-xs">
@@ -379,11 +379,11 @@ export default function MfCalculator() {
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 mb-4 border-b border-slate-100">
                   <div className="flex items-center gap-2">
                     <FontAwesomeIcon icon={faChartLine} className="text-[#032e92]" />
-                    <span className="text-sm font-bold text-slate-800">Year-on-Year Wealth Trajectory</span>
+                    <span className="text-sm font-bold text-gray-900">Year-on-Year Wealth Trajectory</span>
                   </div>
                   {/* Legend */}
                   <div className="flex items-center gap-4 text-xs font-semibold">
-                    <span className="flex items-center gap-1.5 text-slate-500">
+                    <span className="flex items-center gap-1.5 text-gray-600">
                       <span className="w-2.5 h-2.5 rounded-full bg-slate-400 inline-block"></span>
                       Invested
                     </span>

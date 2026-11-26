@@ -82,12 +82,12 @@ export default function BlogSection() {
         {loading ? (
           <div className="py-16 flex flex-col items-center justify-center">
             <div className="w-10 h-10 border-4 border-[#032e92] border-t-transparent rounded-full animate-spin mb-3"></div>
-            <p className="text-gray-500 text-sm font-medium">Loading latest articles...</p>
+            <p className="text-gray-600 text-sm font-medium">Loading latest articles...</p>
           </div>
         ) : blogs.length === 0 ? (
           <div className="py-12 text-center bg-white rounded-3xl p-8 border border-gray-100 shadow-sm max-w-md mx-auto">
-            <p className="text-gray-700 font-semibold mb-1">No articles available</p>
-            <p className="text-gray-400 text-xs">Stay tuned for new insights and research articles.</p>
+            <p className="text-gray-900 font-semibold mb-1">No articles available</p>
+            <p className="text-gray-600 text-xs">Stay tuned for new insights and research articles.</p>
           </div>
         ) : (
           <motion.div

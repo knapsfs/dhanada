@@ -64,7 +64,7 @@ export default function OurProcess() {
                 
                 <div className="flex justify-between items-start mb-8">
                   <div className="w-14 h-14 rounded-full bg-[#f8f9fc] flex items-center justify-center border border-gray-100 group-hover:bg-[#032e92] transition-colors duration-300">
-                    <span className="text-xl font-black text-gray-400 group-hover:text-white transition-colors duration-300">
+                    <span className="text-xl font-black text-gray-600 group-hover:text-white transition-colors duration-300">
                       {step.step}
                     </span>
                   </div>
@@ -78,7 +78,7 @@ export default function OurProcess() {
                 </div>
                 
                 <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-[#032e92] transition-colors">{step.title}</h3>
-                <p className="text-gray-500 leading-relaxed text-sm flex-grow">
+                <p className="text-gray-600 leading-relaxed text-sm flex-grow">
                   {step.desc}
                 </p>
 

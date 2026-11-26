@@ -42,10 +42,10 @@ export default function WhatAreMutualFunds() {
             <table className="w-full border-collapse">
               <thead>
                 <tr className="border-b border-slate-200 bg-slate-50/80">
-                  <th className="py-3.5 sm:py-4 px-4 sm:px-6 text-xs font-bold text-slate-500 uppercase w-[22%] sm:w-[20%] border-r border-slate-200">
+                  <th className="py-3.5 sm:py-4 px-4 sm:px-6 text-xs font-bold text-gray-600 uppercase w-[22%] sm:w-[20%] border-r border-slate-200">
                     Features
                   </th>
-                  <th className="py-3.5 sm:py-4 px-4 sm:px-6 text-xs sm:text-sm font-bold text-slate-700 w-[38%] sm:w-[40%] border-r border-slate-200">
+                  <th className="py-3.5 sm:py-4 px-4 sm:px-6 text-xs sm:text-sm font-bold text-gray-900 w-[38%] sm:w-[40%] border-r border-slate-200">
                     Direct Plan
                   </th>
                   <th className="py-3.5 sm:py-4 px-4 sm:px-6 text-xs sm:text-sm font-bold text-[#032e92] bg-gradient-to-r from-blue-50/90 to-blue-100/70 w-[40%] sm:w-[40%] border-l-2 border-blue-400">
@@ -64,10 +64,10 @@ export default function WhatAreMutualFunds() {
                     key={row.feature}
                     className={`transition-colors hover:bg-slate-50/50 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/20'}`}
                   >
-                    <td className="py-3.5 sm:py-4 px-4 sm:px-6 font-semibold text-slate-800 align-top border-r border-slate-200">
+                    <td className="py-3.5 sm:py-4 px-4 sm:px-6 font-semibold text-gray-900 align-top border-r border-slate-200">
                       {row.feature}
                     </td>
-                    <td className="py-3.5 sm:py-4 px-4 sm:px-6 text-gray-600 align-top leading-relaxed border-r border-slate-200">
+                    <td className="py-3.5 sm:py-4 px-4 sm:px-6 font-medium text-gray-600 align-top leading-relaxed border-r border-slate-200">
                       {row.direct}
                     </td>
                     <td className="py-3.5 sm:py-4 px-4 sm:px-6 text-slate-900 font-medium bg-blue-50/70 hover:bg-blue-100/60 border-l-2 border-blue-400 align-top leading-relaxed transition-colors">

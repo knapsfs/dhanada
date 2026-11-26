@@ -42,7 +42,7 @@ export default function ServicesProcess() {
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0a192f] tracking-tight leading-tight mb-4">
             Our 4-Step Advisory Framework
           </h2>
-          <p className="text-gray-500 text-sm sm:text-base font-normal">
+          <p className="text-gray-600 text-sm sm:text-base font-normal">
             A disciplined, goal-oriented process designed to turn your financial dreams into predictable reality.
           </p>
         </div>
@@ -72,7 +72,7 @@ export default function ServicesProcess() {
                   {item.title}
                 </h3>
 
-                <p className="text-xs text-gray-500 leading-relaxed font-medium">
+                <p className="text-xs text-gray-600 leading-relaxed font-medium">
                   {item.desc}
                 </p>
               </div>
@@ -80,7 +80,7 @@ export default function ServicesProcess() {
               <div className="mt-6 pt-4 border-t border-gray-200/60 flex items-center gap-1.5 text-xs font-bold text-[#032e92]">
                 <span>Stage {idx + 1}</span>
                 <span className="text-gray-300">•</span>
-                <span className="text-gray-500 font-semibold">Structured Advisory</span>
+                <span className="text-gray-600 font-semibold">Structured Advisory</span>
               </div>
             </motion.div>
           ))}

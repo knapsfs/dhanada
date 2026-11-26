@@ -64,12 +64,12 @@ export default function FundSummaryCard({ fund }) {
       <div className="px-5 py-4 border-b border-[#e8edf7] bg-[#f7f9fc]">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs text-gray-400 font-medium">Current NAV</p>
+            <p className="text-xs text-gray-600 font-medium">Current NAV</p>
             <p className="text-2xl font-bold text-gray-900">{fund.nav}</p>
-            <p className="text-xs text-gray-400">{fund.navDate}</p>
+            <p className="text-xs text-gray-600">{fund.navDate}</p>
           </div>
           <div className="text-right">
-            <p className="text-xs text-gray-400 font-medium">Today's Change</p>
+            <p className="text-xs text-gray-600 font-medium">Today's Change</p>
             <p className="text-lg font-bold text-green-600">{fund.navChange}</p>
             <span className="text-xs font-semibold text-green-600 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full">{fund.navChangePct}</span>
           </div>
@@ -87,7 +87,7 @@ export default function FundSummaryCard({ fund }) {
           <div key={item.label} className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <FontAwesomeIcon icon={item.icon} className={`${item.color} text-sm w-4`} />
-              <span className="text-xs font-medium text-gray-500">{item.label}</span>
+              <span className="text-xs font-medium text-gray-600">{item.label}</span>
             </div>
             <span className={`text-sm font-bold ${item.color}`}>{item.val}</span>
           </div>
@@ -102,11 +102,11 @@ export default function FundSummaryCard({ fund }) {
 
       {/* Returns pills */}
       <div className="px-5 pb-4">
-        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Returns</p>
+        <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2">Returns</p>
         <div className="grid grid-cols-3 gap-1.5">
           {[['1Y', fund.returns?.['1Y']], ['3Y', fund.returns?.['3Y']], ['5Y', fund.returns?.['5Y']]].map(([period, val]) => (
             <div key={period} className="bg-[#eef4ff] rounded-xl p-2 text-center">
-              <p className="text-[10px] text-gray-400 font-medium">{period}</p>
+              <p className="text-[10px] text-gray-600 font-medium">{period}</p>
               <p className="text-sm font-bold text-green-600">{formatPct(val)}</p>
             </div>
           ))}
@@ -136,18 +136,18 @@ export default function FundSummaryCard({ fund }) {
         <button
           onClick={() => setBookmarked(!bookmarked)}
           className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl border text-xs font-semibold transition-all ${
-            bookmarked ? 'bg-[#eef4ff] border-[#032e92] text-[#032e92]' : 'border-[#e8edf7] text-gray-500 hover:border-[#032e92]/40'
+            bookmarked ? 'bg-[#eef4ff] border-[#032e92] text-[#032e92]' : 'border-[#e8edf7] text-gray-600 hover:border-[#032e92]/40'
           }`}>
           <FontAwesomeIcon icon={faBookmark} className="text-xs" />
           {bookmarked ? 'Saved' : 'Save'}
         </button>
-        <button className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl border border-[#e8edf7] text-xs font-semibold text-gray-500 hover:border-[#032e92]/40 transition-all">
+        <button className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl border border-[#e8edf7] text-xs font-semibold text-gray-600 hover:border-[#032e92]/40 transition-all">
           <FontAwesomeIcon icon={faShareNodes} className="text-xs" />
           Share
         </button>
         <button 
           onClick={handleDownloadFactsheet}
-          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl border border-[#e8edf7] text-xs font-semibold text-gray-500 hover:border-[#032e92]/40 transition-all">
+          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl border border-[#e8edf7] text-xs font-semibold text-gray-600 hover:border-[#032e92]/40 transition-all">
           <FontAwesomeIcon icon={faFileArrowDown} className="text-xs" />
           Factsheet
         </button>

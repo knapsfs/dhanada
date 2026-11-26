@@ -80,7 +80,7 @@ const TestimonialCard = ({ testimonial }) => (
       <div>
         <h4 className="font-bold text-gray-900 text-sm sm:text-md tracking-tight">{testimonial.name}</h4>
         {testimonial.location && (
-          <p className="text-xs text-gray-500 font-medium flex items-center gap-1.5 mt-1">
+          <p className="text-xs text-gray-600 font-medium flex items-center gap-1.5 mt-1">
             <FontAwesomeIcon icon={faLocationDot} className="text-[#032e92] text-xs" />
             <span>{testimonial.location}</span>
           </p>

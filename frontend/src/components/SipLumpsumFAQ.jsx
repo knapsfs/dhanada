@@ -54,13 +54,13 @@ export default function SipLumpsumFAQ() {
                     onClick={() => toggle(i)}
                     className="w-full flex items-center justify-between text-left gap-4 group cursor-pointer"
                   >
-                    <span className="text-sm font-bold text-gray-800 group-hover:text-[#032e92] transition-colors">
+                    <span className="text-sm font-bold text-gray-900 group-hover:text-[#032e92] transition-colors">
                       {faq.q}
                     </span>
                     <motion.span
                       animate={{ rotate: isOpen ? 180 : 0 }}
                       transition={{ duration: 0.2 }}
-                      className="w-6 h-6 rounded-full bg-[#f7f9fc] flex items-center justify-center text-gray-400 group-hover:text-[#032e92] flex-shrink-0 text-xs"
+                      className="w-6 h-6 rounded-full bg-[#f7f9fc] flex items-center justify-center text-gray-600 group-hover:text-[#032e92] flex-shrink-0 text-xs"
                     >
                       <FontAwesomeIcon icon={faChevronDown} />
                     </motion.span>
@@ -75,7 +75,7 @@ export default function SipLumpsumFAQ() {
                         transition={{ duration: 0.25 }}
                         className="overflow-hidden"
                       >
-                        <p className="mt-2.5 text-xs text-gray-500 leading-relaxed font-medium pr-8">
+                        <p className="mt-2.5 text-xs text-gray-600 leading-relaxed font-medium pr-8">
                           {faq.a}
                         </p>
                       </motion.div>

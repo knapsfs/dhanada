@@ -41,7 +41,7 @@ export default function CrmDashboardView({
             className={`p-3.5 sm:p-4 rounded-2xl bg-white border ${kpi.border} shadow-2xs hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer group`}
           >
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-gray-500 uppercase truncate">
+              <span className="text-xs font-bold text-gray-600 uppercase truncate">
                 {kpi.label}
               </span>
               <div className={`w-7 h-7 rounded-lg ${kpi.bg} ${kpi.color} flex items-center justify-center text-xs group-hover:scale-110 transition-transform`}>
@@ -58,7 +58,7 @@ export default function CrmDashboardView({
       {/* Quick Action Shortcuts */}
       <div className="bg-[#f8fafc] rounded-2xl p-4 border border-gray-200/80 flex items-center justify-between gap-3 flex-wrap">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-bold text-gray-700">Quick Actions:</span>
+          <span className="text-xs font-bold text-gray-900">Quick Actions:</span>
           <button
             onClick={() => onNewLead && onNewLead('New')}
             className="px-3.5 py-1.5 rounded-xl bg-white border border-gray-200 text-xs font-bold text-[#032e92] hover:bg-blue-50 transition-colors shadow-2xs flex items-center gap-1.5 cursor-pointer"
@@ -68,7 +68,7 @@ export default function CrmDashboardView({
           </button>
           <button
             onClick={() => onNewTask && onNewTask()}
-            className="px-3.5 py-1.5 rounded-xl bg-white border border-gray-200 text-xs font-bold text-gray-700 hover:bg-gray-50 transition-colors shadow-2xs flex items-center gap-1.5 cursor-pointer"
+            className="px-3.5 py-1.5 rounded-xl bg-white border border-gray-200 text-xs font-bold text-gray-900 hover:bg-gray-50 transition-colors shadow-2xs flex items-center gap-1.5 cursor-pointer"
           >
             <FontAwesomeIcon icon={faPlus} className="text-[10px]" />
             <span>Create Task</span>
@@ -91,7 +91,7 @@ export default function CrmDashboardView({
           <div className="p-4 sm:p-5 border-b border-gray-100 flex items-center justify-between">
             <div>
               <h3 className="text-sm font-bold text-gray-900 leading-tight">Recent Inquiries & Leads</h3>
-              <p className="text-xs text-gray-400 font-medium">Newest prospects entering the CRM</p>
+              <p className="text-xs text-gray-600 font-medium">Newest prospects entering the CRM</p>
             </div>
             <button
               onClick={() => onNavigateTab && onNavigateTab('leads')}
@@ -103,7 +103,7 @@ export default function CrmDashboardView({
 
           <div className="divide-y divide-gray-100">
             {recentLeads.length === 0 ? (
-              <div className="py-12 text-center text-xs text-gray-400">
+              <div className="py-12 text-center text-xs text-gray-600">
                 No recent leads available.
               </div>
             ) : (
@@ -126,7 +126,7 @@ export default function CrmDashboardView({
                           {lead.status}
                         </span>
                       </div>
-                      <div className="flex items-center gap-3 text-xs text-gray-500 truncate">
+                      <div className="flex items-center gap-3 text-xs text-gray-600 truncate">
                         <span>{lead.product_interest || 'General'}</span>
                         <span>•</span>
                         <span>{lead.mobile_no || 'No Phone'}</span>
@@ -168,7 +168,7 @@ export default function CrmDashboardView({
 
             <div className="p-3 divide-y divide-gray-100">
               {openTasks.length === 0 ? (
-                <div className="py-6 text-center text-xs text-gray-400">
+                <div className="py-6 text-center text-xs text-gray-600">
                   No pending follow-ups. Great job!
                 </div>
               ) : (
@@ -176,7 +176,7 @@ export default function CrmDashboardView({
                   <div key={t.name} className="py-2.5 first:pt-0 last:pb-0 flex items-start justify-between gap-2">
                     <div className="min-w-0">
                       <h5 className="text-xs font-bold text-gray-900 truncate">{t.title}</h5>
-                      <span className="text-[10px] text-gray-400 font-medium">Due: {t.due_date} ({t.activity_type})</span>
+                      <span className="text-[10px] text-gray-600 font-medium">Due: {t.due_date} ({t.activity_type})</span>
                     </div>
                     <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 shrink-0">
                       {t.priority}

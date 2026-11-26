@@ -650,7 +650,7 @@ export default function NpsModelExplorer() {
           {/* LEFT SIDEBAR: The 4 NPS Models */}
           <div className="lg:col-span-3 bg-gray-50/70 border-b lg:border-b-0 lg:border-r border-gray-200/80 p-4 sm:p-5 lg:p-6 flex flex-col">
             <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-gray-200/60">
-              <span className="text-xs font-bold uppercase text-gray-500">
+              <span className="text-xs font-bold uppercase text-gray-600">
                 Compare different NPS Schemes
               </span>
             </div>
@@ -666,7 +666,7 @@ export default function NpsModelExplorer() {
                     onClick={() => handleModelSelect(model.id)}
                     className={`w-full text-left p-4 sm:p-5 rounded-2xl transition-all duration-200 flex items-center justify-between cursor-pointer border ${isActive
                       ? 'bg-[#032e92] text-white shadow-md border-[#032e92]'
-                      : 'bg-white hover:bg-blue-50/50 text-gray-800 border-gray-200/70 hover:border-blue-200'
+                      : 'bg-white hover:bg-blue-50/50 text-gray-900 border-gray-200/70 hover:border-blue-200'
                       }`}
                   >
                     <div className="flex items-center gap-3.5 min-w-0">
@@ -683,7 +683,7 @@ export default function NpsModelExplorer() {
                           {model.name}
                         </div>
                         <div
-                          className={`text-xs mt-1 leading-relaxed ${isActive ? 'text-blue-100' : 'text-gray-500'
+                          className={`text-xs mt-1 leading-relaxed ${isActive ? 'text-blue-100' : 'text-gray-600'
                             }`}
                         >
                           {model.subtitle}
@@ -710,7 +710,7 @@ export default function NpsModelExplorer() {
                       onClick={() => setActiveTabKey(tab.key)}
                       className={`px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap flex items-center gap-2 cursor-pointer ${isTabActive
                         ? 'bg-[#032e92] text-white shadow-sm'
-                        : 'bg-gray-100 hover:bg-gray-200/70 text-gray-700'
+                        : 'bg-gray-100 hover:bg-gray-200/70 text-gray-900'
                         }`}
                     >
                       <FontAwesomeIcon icon={tab.icon} className="text-xs" />
@@ -751,7 +751,7 @@ export default function NpsModelExplorer() {
                 >
                   {/* Top Section Description */}
                   {currentSection.description && (
-                    <div className="mb-5 p-1 text-gray-700 text-xs sm:text-sm md:text-md leading-relaxed">
+                    <div className="mb-5 p-1 text-gray-900 text-xs sm:text-sm md:text-md leading-relaxed">
                       <p>{currentSection.description}</p>
                     </div>
                   )}
@@ -765,7 +765,7 @@ export default function NpsModelExplorer() {
                           {currentSection.aashirwad.title}
                         </h4>
                       </div>
-                      <p className="text-xs sm:text-sm text-gray-700 leading-relaxed font-normal">
+                      <p className="text-xs sm:text-sm text-gray-900 leading-relaxed font-normal">
                         {currentSection.aashirwad.description}
                       </p>
                     </div>
@@ -795,7 +795,7 @@ export default function NpsModelExplorer() {
                           </p>
                         </div>
 
-                        {/* <div className="pt-3.5 border-t border-gray-100 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-gray-700 font-medium">
+                        {/* <div className="pt-3.5 border-t border-gray-100 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-gray-900 font-medium">
                           <div className="flex items-center gap-1.5 p-2 rounded-lg bg-gray-50/80">
                             <FontAwesomeIcon icon={faCircleCheck} className="text-emerald-500 text-xs shrink-0" />
                             <span>Age 18 to 85 Years</span>
@@ -828,7 +828,7 @@ export default function NpsModelExplorer() {
                           </p>
                         </div>
 
-                        {/* <div className="pt-3.5 border-t border-gray-100 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-gray-700 font-medium">
+                        {/* <div className="pt-3.5 border-t border-gray-100 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-gray-900 font-medium">
                           <div className="flex items-center gap-1.5 p-2 rounded-lg bg-gray-50/80">
                             <FontAwesomeIcon icon={faCircleCheck} className="text-emerald-500 text-xs shrink-0" />
                             <span>Structured Retirement Benefit</span>
@@ -915,7 +915,7 @@ export default function NpsModelExplorer() {
                                 className="p-1"
                               >
                                 {/* <FontAwesomeIcon icon={faCircleCheck} className="text-emerald-500 text-xs mt-0.5 shrink-0" /> */}
-                                <span className="text-xs text-gray-700 font-medium leading-snug">
+                                <span className="text-xs text-gray-900 font-medium leading-snug">
                                   {ent}
                                 </span>
                               </div>
@@ -1025,7 +1025,7 @@ export default function NpsModelExplorer() {
                             {currentSection.corporateTax.employers.badge}
                           </span> */}
                         </div>
-                        <p className="text-xs sm:text-sm text-gray-700 leading-relaxed font-medium">
+                        <p className="text-xs sm:text-sm text-gray-900 leading-relaxed font-medium">
                           {currentSection.corporateTax.employers.description}
                         </p>
                       </div>
@@ -1058,7 +1058,7 @@ export default function NpsModelExplorer() {
                             <div className="overflow-x-auto">
                               <table className="w-full text-left border-collapse">
                                 <thead>
-                                  <tr className="bg-gray-50/90 border-b border-gray-200 text-xs sm:text-sm text-gray-700">
+                                  <tr className="bg-gray-50/90 border-b border-gray-200 text-xs sm:text-sm text-gray-900">
                                     <th className="py-3.5 px-4 sm:px-5 font-bold text-gray-900 w-2/5 sm:w-1/3">
                                       {currentSection.corporateTax.employees.tableHeaders?.col1 || 'Particulars'}
                                     </th>
@@ -1077,7 +1077,7 @@ export default function NpsModelExplorer() {
                                       <td className="py-3 px-4 sm:px-5 font-semibold text-gray-900 align-top">
                                         {item.title}
                                       </td>
-                                      <td className="py-3 px-4 sm:px-5 text-gray-700 border-l border-gray-100 align-top leading-relaxed font-normal">
+                                      <td className="py-3 px-4 sm:px-5 text-gray-900 border-l border-gray-100 align-top leading-relaxed font-normal">
                                         {item.desc}
                                       </td>
                                     </tr>
@@ -1116,7 +1116,7 @@ export default function NpsModelExplorer() {
                           >
                             <div>
                               <div className="flex items-center justify-between mb-2">
-                                <span className="text-xs font-bold text-gray-400 uppercase">
+                                <span className="text-xs font-bold text-gray-600 uppercase">
                                   Stage 0{idx + 1}
                                 </span>
                                 {/* <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
@@ -1128,7 +1128,7 @@ export default function NpsModelExplorer() {
                               </div>
                             </div>
                             {item.desc && (
-                              <p className="text-xs text-gray-500 leading-relaxed font-normal">
+                              <p className="text-xs text-gray-600 leading-relaxed font-normal">
                                 {item.desc}
                               </p>
                             )}
@@ -1151,17 +1151,17 @@ export default function NpsModelExplorer() {
                               {/* Pill Badge Header */}
                               <div className="mb-4">
                                 <span
-                                  className={`inline-block px-3.5 py-1 rounded-full text-xs font-bold border tracking-wide ${card.badgeStyle || 'bg-gray-100 text-gray-800 border-gray-200'}`}
+                                  className={`inline-block px-3.5 py-1 rounded-full text-xs font-bold border tracking-wide ${card.badgeStyle || 'bg-gray-100 text-gray-900 border-gray-200'}`}
                                 >
                                   {card.badge}
                                 </span>
                               </div>
 
                               {/* Conditions Bullets */}
-                              <ul className="space-y-2 mb-4 text-xs sm:text-sm text-gray-700">
+                              <ul className="space-y-2 mb-4 text-xs sm:text-sm text-gray-900">
                                 {card.conditions.map((cond, cIdx) => (
                                   <li key={cIdx} className="flex items-start gap-2">
-                                    <span className="text-gray-400 font-bold leading-none mt-1">•</span>
+                                    <span className="text-gray-600 font-bold leading-none mt-1">•</span>
                                     <span className="leading-snug">{cond}</span>
                                   </li>
                                 ))}
@@ -1173,7 +1173,7 @@ export default function NpsModelExplorer() {
                                 {card.description}
                               </p>
                               {card.footnote && (
-                                <p className="mt-2 text-xs text-gray-500 leading-snug italic">
+                                <p className="mt-2 text-xs text-gray-600 leading-snug italic">
                                   {card.footnote}
                                 </p>
                               )}
@@ -1185,14 +1185,14 @@ export default function NpsModelExplorer() {
                       {/* Specified Purposes Footer */}
                       {/* {currentSection.specifiedPurposes && (
                         <div className="mt-5 p-4 sm:p-5 rounded-2xl bg-gray-50/90 border border-gray-200/80">
-                          <div className="text-xs sm:text-sm font-semibold text-gray-700 mb-2.5">
+                          <div className="text-xs sm:text-sm font-semibold text-gray-900 mb-2.5">
                             {currentSection.specifiedPurposes.label}
                           </div>
                           <div className="flex flex-wrap gap-2">
                             {currentSection.specifiedPurposes.items.map((purpose, pIdx) => (
                               <span
                                 key={pIdx}
-                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-gray-200 text-xs font-medium text-gray-800 shadow-xs"
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-gray-200 text-xs font-medium text-gray-900 shadow-xs"
                               >
                                 <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-500 text-[10px]" />
                                 <span>{purpose}</span>
@@ -1227,7 +1227,7 @@ export default function NpsModelExplorer() {
                                     <span>{st.id}</span>
                                     <span>{st.name}</span>
                                   </span>
-                                  <p className="text-xs sm:text-sm text-gray-800 font-medium leading-relaxed">
+                                  <p className="text-xs sm:text-sm text-gray-900 font-medium leading-relaxed">
                                     {st.desc}
                                   </p>
                                 </div>
@@ -1249,7 +1249,7 @@ export default function NpsModelExplorer() {
                         <div className="pt-3.5 border-t border-gray-100 space-y-1.5">
                           {currentSection.vatsalyaWithdrawals.whenTurns18.footerNotes.map((note, nIdx) => (
                             <div key={nIdx} className="flex items-start gap-2 text-xs sm:text-sm text-gray-600">
-                              <span className="text-gray-400 font-bold leading-none mt-1">•</span>
+                              <span className="text-gray-600 font-bold leading-none mt-1">•</span>
                               <span>{note}</span>
                             </div>
                           ))}
@@ -1296,7 +1296,7 @@ export default function NpsModelExplorer() {
                             >
                               <FontAwesomeIcon icon={hl.icon} />
                             </div>
-                            <p className="text-xs sm:text-sm font-semibold text-gray-800 leading-snug">
+                            <p className="text-xs sm:text-sm font-semibold text-gray-900 leading-snug">
                               {hl.text}
                             </p>
                           </div>
@@ -1311,7 +1311,7 @@ export default function NpsModelExplorer() {
                       <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                           <thead>
-                            <tr className="bg-gray-50/90 border-b border-gray-200 text-xs sm:text-sm text-gray-700">
+                            <tr className="bg-gray-50/90 border-b border-gray-200 text-xs sm:text-sm text-gray-900">
                               <th className="py-3.5 px-4 sm:px-5 font-bold text-gray-600 w-1/4">
                                 {currentSection.table.col1Header || ''}
                               </th>
@@ -1332,10 +1332,10 @@ export default function NpsModelExplorer() {
                                 <td className="py-3 px-4 sm:px-5 font-semibold text-gray-900 align-top">
                                   {row.feature}
                                 </td>
-                                <td className="py-3 px-4 sm:px-5 text-gray-700 border-l border-gray-100 align-top leading-relaxed font-normal">
+                                <td className="py-3 px-4 sm:px-5 text-gray-900 border-l border-gray-100 align-top leading-relaxed font-normal">
                                   {row.tier1}
                                 </td>
-                                <td className="py-3 px-4 sm:px-5 text-gray-700 border-l border-gray-100 align-top leading-relaxed font-normal">
+                                <td className="py-3 px-4 sm:px-5 text-gray-900 border-l border-gray-100 align-top leading-relaxed font-normal">
                                   {row.tier2}
                                 </td>
                               </tr>
@@ -1431,7 +1431,7 @@ export default function NpsModelExplorer() {
 
                                 {/* Auto Choice Life Cycle Options */}
                                 <div className="pt-3 border-t border-gray-100">
-                                  <div className="text-xs font-bold text-gray-800 uppercase mb-2.5 flex items-center gap-1.5">
+                                  <div className="text-xs font-bold text-gray-900 uppercase mb-2.5 flex items-center gap-1.5">
 
                                     <button
                                       type="button"
@@ -1542,7 +1542,7 @@ export default function NpsModelExplorer() {
                               icon={faCheckCircle}
                               className="text-emerald-500 text-xs mt-1 shrink-0"
                             /> */}
-                            <span className="text-xs sm:text-sm text-gray-700 font-medium leading-relaxed">
+                            <span className="text-xs sm:text-sm text-gray-900 font-medium leading-relaxed">
                               {target}
                             </span>
                           </div>
@@ -1556,7 +1556,7 @@ export default function NpsModelExplorer() {
 
             {/* Bottom Panel Action Footer */}
             <div className="mt-8 pt-5 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="text-sm text-gray-500">
+              <div className="text-sm text-gray-600">
                 <span>Want to invest in </span>
                 <strong className="text-gray-900">{currentModel.name}</strong>?
               </div>
@@ -1629,7 +1629,7 @@ export default function NpsModelExplorer() {
               <div className="bg-[#f8fafc] px-4 sm:px-6 py-2.5 border-b border-gray-200 flex flex-wrap items-center justify-between gap-3 text-xs">
                 {/* Strategy Filters */}
                 <div className="flex flex-wrap items-center gap-1.5">
-                  <span className="text-gray-500 font-semibold mr-1 hidden sm:inline">Risk Levels:</span>
+                  <span className="text-gray-600 font-semibold mr-1 hidden sm:inline">Risk Levels:</span>
                   {STRATEGY_TABS.map((tab) => {
                     const isActive = modalActiveStrategy === tab.id;
                     return (
@@ -1639,7 +1639,7 @@ export default function NpsModelExplorer() {
                         onClick={() => setModalActiveStrategy(tab.id)}
                         className={`px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer ${isActive
                           ? 'bg-[#032e92] text-white shadow-2xs'
-                          : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
+                          : 'bg-white text-gray-900 hover:bg-gray-100 border border-gray-200'
                           }`}
                       >
                         {tab.label}
@@ -1670,7 +1670,7 @@ export default function NpsModelExplorer() {
                             <span className="px-2.5 py-1 rounded-lg bg-blue-600 text-white font-bold">
                               Initial Equity: {curTab.startEq}
                             </span>
-                            <span className="text-gray-400">➔</span>
+                            <span className="text-gray-600">➔</span>
                             <span className="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold">
                               At Age 55: {curTab.endEq}
                             </span>
@@ -1688,7 +1688,7 @@ export default function NpsModelExplorer() {
                     return (
                       <div className="space-y-3">
                         {modalActiveStrategy === 'all' && (
-                          <div className="text-xs text-gray-500 font-medium italic mb-2">
+                          <div className="text-xs text-gray-600 font-medium italic mb-2">
                             Displaying representative chart for <strong>{strategyLabel}</strong> (Use top filter buttons to view Low*, Moderate, or Aggressive charts).
                           </div>
                         )}
@@ -1746,7 +1746,7 @@ export default function NpsModelExplorer() {
               </div>
 
               {/* Bottom Asset Classes Legend & Close Bar */}
-              <div className="p-3.5 sm:p-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-gray-700">
+              <div className="p-3.5 sm:p-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-gray-900">
                 <div className="flex flex-wrap items-center gap-3 sm:gap-5 font-semibold">
                   <span className="inline-flex items-center gap-1.5">
                     <span className="w-2.5 h-2.5 rounded-full bg-blue-600 shrink-0"></span>

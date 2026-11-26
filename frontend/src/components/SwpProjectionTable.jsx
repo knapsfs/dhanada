@@ -29,7 +29,7 @@ export default function SwpProjectionTable({ yearlyData }) {
             </div>
             <div>
               <h2 className="text-lg font-bold text-gray-900">Yearly Withdrawal Breakdown</h2>
-              <p className="text-xs text-gray-400 font-medium">Year-on-year schedule of balance, payouts, and interest</p>
+              <p className="text-xs text-gray-600 font-medium">Year-on-year schedule of balance, payouts, and interest</p>
             </div>
           </div>
 
@@ -39,7 +39,7 @@ export default function SwpProjectionTable({ yearlyData }) {
               <thead className="sticky top-0 z-10">
                 <tr className="bg-[#f7f9fc] border-b border-[#e8edf7]">
                   {['Year', 'Opening Balance', 'Annual Withdrawn', 'Cumulative Withdrawn', 'Interest Earned', 'Closing Balance'].map(h => (
-                    <th key={h} className="px-5 py-3.5 text-left text-xs font-bold text-gray-500 uppercase tracking-wide whitespace-nowrap">{h}</th>
+                    <th key={h} className="px-5 py-3.5 text-left text-xs font-bold text-gray-600 uppercase tracking-wide whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -56,7 +56,7 @@ export default function SwpProjectionTable({ yearlyData }) {
                         {row.year}
                       </span>
                     </td>
-                    <td className="px-5 py-3.5 font-semibold text-gray-700">{fmt(row.openingBalance)}</td>
+                    <td className="px-5 py-3.5 font-semibold text-gray-900">{fmt(row.openingBalance)}</td>
                     <td className="px-5 py-3.5 font-bold text-purple-600">{fmt(row.totalWithdrawals)}</td>
                     <td className="px-5 py-3.5 font-semibold text-gray-600">{fmt(row.cumulativeWithdrawals ?? (row.totalWithdrawals * row.year))}</td>
                     <td className="px-5 py-3.5 font-semibold text-green-600">+{fmt(row.interestEarned)}</td>

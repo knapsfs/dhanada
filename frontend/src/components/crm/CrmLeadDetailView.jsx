@@ -18,7 +18,7 @@ const STATUS_COLORS = {
   Interested: "bg-amber-50 text-amber-700 border-amber-200",
   Nurturing: "bg-purple-50 text-purple-700 border-purple-200",
   Converted: "bg-emerald-50 text-emerald-700 border-emerald-200",
-  "Not Interested": "bg-gray-100 text-gray-700 border-gray-300",
+  "Not Interested": "bg-gray-100 text-gray-900 border-gray-300",
   Junk: "bg-red-50 text-red-700 border-red-200",
 };
 
@@ -278,7 +278,7 @@ export default function CrmLeadDetailView({
       <div className="flex h-96 items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <FontAwesomeIcon icon={faSpinner} className="animate-spin text-3xl text-[#032e92]" />
-          <p className="text-sm font-medium text-gray-500">Loading lead details...</p>
+          <p className="text-sm font-medium text-gray-600">Loading lead details...</p>
         </div>
       </div>
     );
@@ -292,7 +292,7 @@ export default function CrmLeadDetailView({
           <button
             type="button"
             onClick={onBack}
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-gray-200 text-gray-700 hover:text-[#032e92] hover:border-[#032e92]/40 hover:bg-blue-50/50 text-xs font-bold transition-all shadow-2xs cursor-pointer"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-gray-200 text-gray-900 hover:text-[#032e92] hover:border-[#032e92]/40 hover:bg-blue-50/50 text-xs font-bold transition-all shadow-2xs cursor-pointer"
           >
             <FontAwesomeIcon icon={faArrowLeft} className="text-xs" />
             <span>Back to Leads</span>
@@ -301,12 +301,12 @@ export default function CrmLeadDetailView({
           <div className="h-5 w-px bg-gray-200 hidden sm:block" />
 
           {/* Monospace Lead ID badge */}
-          <span className="font-mono text-xs font-bold text-gray-500 bg-white px-2.5 py-1.5 rounded-xl border border-gray-200 shadow-2xs flex items-center gap-1.5">
+          <span className="font-mono text-xs font-bold text-gray-600 bg-white px-2.5 py-1.5 rounded-xl border border-gray-200 shadow-2xs flex items-center gap-1.5">
             <span>{leadData?.name || leadName}</span>
             <button
               type="button"
               onClick={() => handleCopyText(leadData?.name || leadName, "leadId")}
-              className="text-gray-400 hover:text-[#032e92] transition-colors cursor-pointer"
+              className="text-gray-600 hover:text-[#032e92] transition-colors cursor-pointer"
               title="Copy ID"
             >
               <FontAwesomeIcon icon={copiedField === "leadId" ? faCheck : faCopy} className="text-[10px]" />
@@ -315,7 +315,7 @@ export default function CrmLeadDetailView({
 
           {/* Stage Selector */}
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-gray-500 hidden sm:inline">Stage:</span>
+            <span className="text-xs font-semibold text-gray-600 hidden sm:inline">Stage:</span>
             <CrmSelect
               value={leadData?.status || "New"}
               disabled={actionLoading === "status"}
@@ -333,7 +333,7 @@ export default function CrmLeadDetailView({
           {cleanPhone && (
             <a
               href={`tel:${cleanPhone}`}
-              className="px-3 py-2 rounded-xl bg-white border border-gray-200 text-gray-700 hover:text-[#032e92] hover:border-[#032e92] text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-colors"
+              className="px-3 py-2 rounded-xl bg-white border border-gray-200 text-gray-900 hover:text-[#032e92] hover:border-[#032e92] text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-colors"
               title="Call Lead"
             >
               <FontAwesomeIcon icon={faPhone} className="text-xs text-blue-600" />
@@ -380,7 +380,7 @@ export default function CrmLeadDetailView({
           <button
             type="button"
             onClick={() => setFeedback({ type: "", message: "" })}
-            className="text-gray-400 hover:text-gray-700 cursor-pointer text-xs"
+            className="text-gray-600 hover:text-gray-900 cursor-pointer text-xs"
           >
             <FontAwesomeIcon icon={faXmark} />
           </button>
@@ -393,11 +393,11 @@ export default function CrmLeadDetailView({
           {/* Name & Identity */}
           <div className="space-y-2">
             <div className="flex items-center gap-2.5 flex-wrap">
-              <span className={`px-3 py-1 rounded-full text-xs font-bold border ${STATUS_COLORS[leadData?.status] || "bg-gray-100 text-gray-700"}`}>
+              <span className={`px-3 py-1 rounded-full text-xs font-bold border ${STATUS_COLORS[leadData?.status] || "bg-gray-100 text-gray-900"}`}>
                 {leadData?.status || "New"}
               </span>
               {leadData?.source && (
-                <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">
+                <span className="text-xs font-medium text-gray-600 bg-gray-100 px-2.5 py-1 rounded-full">
                   Source: {leadData.source}
                 </span>
               )}
@@ -412,10 +412,10 @@ export default function CrmLeadDetailView({
               {leadData?.lead_name || "Lead Details"}
             </h1>
 
-            <p className="text-xs text-gray-500 font-medium flex items-center gap-4 flex-wrap">
+            <p className="text-xs text-gray-600 font-medium flex items-center gap-4 flex-wrap">
               <span>Created on {leadData?.creation ? new Date(leadData.creation).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : "—"}</span>
               <span>•</span>
-              <span>City: <strong className="text-gray-700">{leadData?.city || "Not Specified"}</strong></span>
+              <span>City: <strong className="text-gray-900">{leadData?.city || "Not Specified"}</strong></span>
             </p>
           </div>
 
@@ -423,7 +423,7 @@ export default function CrmLeadDetailView({
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 shrink-0">
             {/* Contact Status */}
             <div className="bg-slate-50 p-3.5 rounded-2xl border border-gray-100">
-              <span className="text-[10px] uppercase font-bold text-gray-400 block">Contact Health</span>
+              <span className="text-[10px] uppercase font-bold text-gray-600 block">Contact Health</span>
               <div className="mt-1">
                 {contactInfo.isOverdue ? (
                   <span className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-700">
@@ -431,7 +431,7 @@ export default function CrmLeadDetailView({
                     <span>Overdue ({contactInfo.days}d)</span>
                   </span>
                 ) : contactInfo.status === "never_contacted" ? (
-                  <span className="text-xs font-medium text-gray-500">No contact yet</span>
+                  <span className="text-xs font-medium text-gray-600">No contact yet</span>
                 ) : (
                   <span className="text-xs font-bold text-emerald-700">{contactInfo.label}</span>
                 )}
@@ -440,7 +440,7 @@ export default function CrmLeadDetailView({
 
             {/* Risk Profile */}
             <div className="bg-slate-50 p-3.5 rounded-2xl border border-gray-100">
-              <span className="text-[10px] uppercase font-bold text-gray-400 block">Risk Profile</span>
+              <span className="text-[10px] uppercase font-bold text-gray-600 block">Risk Profile</span>
               <p className="text-xs font-bold text-gray-900 mt-1 truncate">
                 {leadData?.risk_profile || "Pending Profiler"}
               </p>
@@ -448,7 +448,7 @@ export default function CrmLeadDetailView({
 
             {/* Total Touchpoints */}
             <div className="bg-slate-50 p-3.5 rounded-2xl border border-gray-100 col-span-2 sm:col-span-1">
-              <span className="text-[10px] uppercase font-bold text-gray-400 block">Touchpoints</span>
+              <span className="text-[10px] uppercase font-bold text-gray-600 block">Touchpoints</span>
               <p className="text-xs font-bold text-gray-900 mt-1">
                 {interactions.length} {interactions.length === 1 ? "interaction" : "interactions"}
               </p>
@@ -470,7 +470,7 @@ export default function CrmLeadDetailView({
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-gray-900">Contact Health & Latest Remark</h3>
-                  <p className="text-xs text-gray-400">Track all communication and maintain advisor compliance</p>
+                  <p className="text-xs text-gray-600">Track all communication and maintain advisor compliance</p>
                 </div>
               </div>
 
@@ -509,22 +509,22 @@ export default function CrmLeadDetailView({
             <div className="bg-slate-50/90 rounded-2xl p-4 border border-gray-200/80 text-xs">
               {leadData?.latest_remark ? (
                 <div className="space-y-3">
-                  <p className="text-gray-800 font-medium leading-relaxed whitespace-pre-wrap text-sm italic">
+                  <p className="text-gray-900 font-medium leading-relaxed whitespace-pre-wrap text-sm italic">
                     "{leadData.latest_remark}"
                   </p>
-                  <div className="pt-3 border-t border-gray-200 flex items-center justify-between gap-3 text-xs text-gray-500 flex-wrap">
+                  <div className="pt-3 border-t border-gray-200 flex items-center justify-between gap-3 text-xs text-gray-600 flex-wrap">
                     <span className="flex items-center gap-1.5">
-                      <FontAwesomeIcon icon={faUser} className="text-gray-400 text-[10px]" />
-                      <span>Contacted by: <strong className="text-gray-800">{leadData.last_contacted_by || "Advisor"}</strong></span>
+                      <FontAwesomeIcon icon={faUser} className="text-gray-600 text-[10px]" />
+                      <span>Contacted by: <strong className="text-gray-900">{leadData.last_contacted_by || "Advisor"}</strong></span>
                     </span>
                     <span className="flex items-center gap-1.5">
-                      <FontAwesomeIcon icon={faClock} className="text-gray-400 text-[10px]" />
+                      <FontAwesomeIcon icon={faClock} className="text-gray-600 text-[10px]" />
                       <span>{formatContactDate(leadData.last_contacted_on)}</span>
                     </span>
                   </div>
                 </div>
               ) : (
-                <p className="text-gray-400 italic py-2">
+                <p className="text-gray-600 italic py-2">
                   No contact remark recorded yet. Enter a remark below to record contact and reset the compliance timer.
                 </p>
               )}
@@ -587,7 +587,7 @@ export default function CrmLeadDetailView({
                 onClick={() => setActiveTab("overview")}
                 className={`py-3.5 px-4 text-xs font-bold border-b-2 transition-colors cursor-pointer shrink-0 ${activeTab === "overview"
                     ? "border-[#032e92] text-[#032e92]"
-                    : "border-transparent text-gray-500 hover:text-gray-900"
+                    : "border-transparent text-gray-600 hover:text-gray-900"
                   }`}
               >
                 Overview & Activity
@@ -599,7 +599,7 @@ export default function CrmLeadDetailView({
                 onClick={() => setActiveTab("timeline")}
                 className={`py-3.5 px-4 text-xs font-bold border-b-2 transition-colors cursor-pointer flex items-center gap-2 ${activeTab === "timeline"
                     ? "border-[#032e92] text-[#032e92]"
-                    : "border-transparent text-gray-500 hover:text-gray-900"
+                    : "border-transparent text-gray-600 hover:text-gray-900"
                   }`}
               >
                 <span>Interactions Timeline</span>
@@ -613,11 +613,11 @@ export default function CrmLeadDetailView({
                 onClick={() => setActiveTab("tasks")}
                 className={`py-3.5 px-4 text-xs font-bold border-b-2 transition-colors cursor-pointer flex items-center gap-2 ${activeTab === "tasks"
                     ? "border-[#032e92] text-[#032e92]"
-                    : "border-transparent text-gray-500 hover:text-gray-900"
+                    : "border-transparent text-gray-600 hover:text-gray-900"
                   }`}
               >
                 <span>Tasks & Follow-ups</span>
-                <span className="w-5 h-5 rounded-full bg-gray-100 text-gray-700 text-[10px] flex items-center justify-center font-bold">
+                <span className="w-5 h-5 rounded-full bg-gray-100 text-gray-900 text-[10px] flex items-center justify-center font-bold">
                   {tasks.length}
                 </span>
               </button>
@@ -633,7 +633,7 @@ export default function CrmLeadDetailView({
                     {/* Next Steps / Pending Tasks */}
                     <div className="bg-slate-50/80 rounded-2xl p-4 border border-gray-200/80 space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-gray-800 flex items-center gap-1.5">
+                        <span className="text-xs font-bold text-gray-900 flex items-center gap-1.5">
                           <FontAwesomeIcon icon={faListCheck} className="text-[#032e92]" />
                           <span>Pending Tasks</span>
                         </span>
@@ -648,7 +648,7 @@ export default function CrmLeadDetailView({
                       </div>
 
                       {tasks.length === 0 ? (
-                        <p className="text-xs text-gray-400 italic py-4 text-center">No open tasks for this lead.</p>
+                        <p className="text-xs text-gray-600 italic py-4 text-center">No open tasks for this lead.</p>
                       ) : (
                         <div className="space-y-2">
                           {tasks.slice(0, 3).map((t) => (
@@ -659,7 +659,7 @@ export default function CrmLeadDetailView({
                                   {t.priority}
                                 </span>
                               </div>
-                              <div className="text-[10px] text-gray-400 flex items-center justify-between">
+                              <div className="text-[10px] text-gray-600 flex items-center justify-between">
                                 <span>Due: {t.due_date}</span>
                                 <span>{t.status}</span>
                               </div>
@@ -672,7 +672,7 @@ export default function CrmLeadDetailView({
                     {/* Recent Touchpoints Preview */}
                     <div className="bg-slate-50/80 rounded-2xl p-4 border border-gray-200/80 space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-gray-800 flex items-center gap-1.5">
+                        <span className="text-xs font-bold text-gray-900 flex items-center gap-1.5">
                           <FontAwesomeIcon icon={faCommentDots} className="text-[#032e92]" />
                           <span>Recent Touchpoints</span>
                         </span>
@@ -687,7 +687,7 @@ export default function CrmLeadDetailView({
                       </div>
 
                       {interactions.length === 0 ? (
-                        <p className="text-xs text-gray-400 italic py-4 text-center">No touchpoints recorded yet.</p>
+                        <p className="text-xs text-gray-600 italic py-4 text-center">No touchpoints recorded yet.</p>
                       ) : (
                         <div className="space-y-2">
                           {interactions.slice(0, 3).map((int) => (
@@ -698,7 +698,7 @@ export default function CrmLeadDetailView({
                                   {int.interaction_type}
                                 </span>
                               </div>
-                              <p className="text-[10px] text-gray-400">
+                              <p className="text-[10px] text-gray-600">
                                 {new Date(int.interaction_date).toLocaleString("en-IN", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
                               </p>
                             </div>
@@ -715,19 +715,19 @@ export default function CrmLeadDetailView({
                     </h4>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                       <div className="bg-slate-50 p-3.5 rounded-2xl border border-gray-200/70">
-                        <span className="text-gray-400 block text-[10px] uppercase font-bold">Welcome Email</span>
+                        <span className="text-gray-600 block text-[10px] uppercase font-bold">Welcome Email</span>
                         <span className="font-bold text-gray-900 text-xs mt-1 block">
                           {leadData?.welcome_email_status || "Not Sent"}
                         </span>
                       </div>
                       <div className="bg-slate-50 p-3.5 rounded-2xl border border-gray-200/70">
-                        <span className="text-gray-400 block text-[10px] uppercase font-bold">Risk Profiler</span>
+                        <span className="text-gray-600 block text-[10px] uppercase font-bold">Risk Profiler</span>
                         <span className="font-bold text-gray-900 text-xs mt-1 block">
                           {leadData?.risk_profiler_status || "Not Initiated"}
                         </span>
                       </div>
                       <div className="bg-slate-50 p-3.5 rounded-2xl border border-gray-200/70">
-                        <span className="text-gray-400 block text-[10px] uppercase font-bold">KYC & Onboarding</span>
+                        <span className="text-gray-600 block text-[10px] uppercase font-bold">KYC & Onboarding</span>
                         <span className="font-bold text-gray-900 text-xs mt-1 block">
                           {leadData?.onboarding_status || "Not Initiated"}
                         </span>
@@ -742,8 +742,8 @@ export default function CrmLeadDetailView({
                 <div className="space-y-5">
                   <div className="flex items-center justify-between pb-3 border-b border-gray-100">
                     <div>
-                      <h4 className="text-xs font-bold text-gray-800">Complete Touchpoint History</h4>
-                      <p className="text-xs text-gray-400">Chronological history of calls, meetings, emails, and client discussions</p>
+                      <h4 className="text-xs font-bold text-gray-900">Complete Touchpoint History</h4>
+                      <p className="text-xs text-gray-600">Chronological history of calls, meetings, emails, and client discussions</p>
                     </div>
                     <button
                       type="button"
@@ -758,8 +758,8 @@ export default function CrmLeadDetailView({
                   {interactions.length === 0 ? (
                     <div className="py-16 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-200 space-y-2">
                       <FontAwesomeIcon icon={faCommentDots} className="text-3xl text-gray-300" />
-                      <p className="text-xs font-bold text-gray-700">No interactions recorded yet</p>
-                      <p className="text-xs text-gray-400 max-w-sm mx-auto">
+                      <p className="text-xs font-bold text-gray-900">No interactions recorded yet</p>
+                      <p className="text-xs text-gray-600 max-w-sm mx-auto">
                         Click "Log New Touchpoint" to record your calls, discussions, or meeting notes with this lead.
                       </p>
                     </div>
@@ -773,7 +773,7 @@ export default function CrmLeadDetailView({
                           <div className="bg-white p-4 rounded-2xl border border-gray-200 shadow-2xs space-y-2 hover:border-[#032e92]/30 transition-colors">
                             <div className="flex items-start justify-between gap-3 flex-wrap">
                               <span className="text-xs font-bold text-gray-900">{int.summary}</span>
-                              <span className="text-xs font-semibold text-gray-400">
+                              <span className="text-xs font-semibold text-gray-600">
                                 {new Date(int.interaction_date).toLocaleString("en-IN", {
                                   month: "short",
                                   day: "numeric",
@@ -788,11 +788,11 @@ export default function CrmLeadDetailView({
                               <span className="px-2.5 py-0.5 rounded-md bg-blue-50 text-[#032e92] font-bold">
                                 {int.interaction_type}
                               </span>
-                              <span className="text-gray-400 font-medium">Logged by {int.logged_by || "Advisor"}</span>
+                              <span className="text-gray-600 font-medium">Logged by {int.logged_by || "Advisor"}</span>
                             </div>
 
                             {int.details && (
-                              <p className="text-xs text-gray-700 leading-relaxed bg-slate-50/70 p-3 rounded-xl border border-gray-100 whitespace-pre-wrap">
+                              <p className="text-xs text-gray-900 leading-relaxed bg-slate-50/70 p-3 rounded-xl border border-gray-100 whitespace-pre-wrap">
                                 {int.details}
                               </p>
                             )}
@@ -815,8 +815,8 @@ export default function CrmLeadDetailView({
                 <div className="space-y-5">
                   <div className="flex items-center justify-between pb-3 border-b border-gray-100">
                     <div>
-                      <h4 className="text-xs font-bold text-gray-800">Associated Follow-up Tasks</h4>
-                      <p className="text-xs text-gray-400">Scheduled reminders, document collections, and client action items</p>
+                      <h4 className="text-xs font-bold text-gray-900">Associated Follow-up Tasks</h4>
+                      <p className="text-xs text-gray-600">Scheduled reminders, document collections, and client action items</p>
                     </div>
                     <button
                       type="button"
@@ -831,8 +831,8 @@ export default function CrmLeadDetailView({
                   {tasks.length === 0 ? (
                     <div className="py-16 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-200 space-y-2">
                       <FontAwesomeIcon icon={faListCheck} className="text-3xl text-gray-300" />
-                      <p className="text-xs font-bold text-gray-700">No open tasks for this lead</p>
-                      <p className="text-xs text-gray-400 max-w-sm mx-auto">
+                      <p className="text-xs font-bold text-gray-900">No open tasks for this lead</p>
+                      <p className="text-xs text-gray-600 max-w-sm mx-auto">
                         Add reminders for callbacks, document collection, KYC submission, or portfolio reviews.
                       </p>
                     </div>
@@ -862,15 +862,15 @@ export default function CrmLeadDetailView({
                                   <FontAwesomeIcon icon={faCheck} className="text-[10px]" />
                                 </button>
                                 <div>
-                                  <h5 className={`text-xs font-bold ${isCompleted ? "line-through text-gray-400" : "text-gray-900"}`}>
+                                  <h5 className={`text-xs font-bold ${isCompleted ? "line-through text-gray-600" : "text-gray-900"}`}>
                                     {t.title}
                                   </h5>
-                                  <div className="flex items-center gap-3 mt-1 text-xs text-gray-500 flex-wrap">
+                                  <div className="flex items-center gap-3 mt-1 text-xs text-gray-600 flex-wrap">
                                     <span className="font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded text-[10px]">
                                       {t.priority}
                                     </span>
-                                    <span>Due: <strong className="text-gray-700">{t.due_date}</strong></span>
-                                    <span>Status: <strong className="text-gray-700">{t.status}</strong></span>
+                                    <span>Due: <strong className="text-gray-900">{t.due_date}</strong></span>
+                                    <span>Status: <strong className="text-gray-900">{t.status}</strong></span>
                                   </div>
                                   {t.description && (
                                     <p className="text-xs text-gray-600 mt-2 bg-slate-50 p-2.5 rounded-xl border border-gray-100">
@@ -897,7 +897,7 @@ export default function CrmLeadDetailView({
         <div className="lg:col-span-4 space-y-6">
           {/* Card: Contact Profile */}
           <div className="bg-white rounded-3xl border border-gray-200/90 p-5 sm:p-6 shadow-xs space-y-4">
-            <h4 className="text-xs font-bold text-gray-400 uppercase flex items-center gap-2">
+            <h4 className="text-xs font-bold text-gray-600 uppercase flex items-center gap-2">
               <FontAwesomeIcon icon={faUser} className="text-[#032e92]" />
               <span>Contact Profile</span>
             </h4>
@@ -905,7 +905,7 @@ export default function CrmLeadDetailView({
             <div className="space-y-3.5 text-xs">
               {/* Mobile */}
               <div className="p-3 bg-slate-50 rounded-2xl border border-gray-100">
-                <span className="text-[10px] text-gray-400 font-bold uppercase block mb-1">
+                <span className="text-[10px] text-gray-600 font-bold uppercase block mb-1">
                   Mobile Number
                 </span>
                 <div className="flex items-center justify-between">
@@ -916,7 +916,7 @@ export default function CrmLeadDetailView({
                     <button
                       type="button"
                       onClick={() => handleCopyText(leadData.mobile_no, "mobile")}
-                      className="text-gray-400 hover:text-[#032e92] transition-colors cursor-pointer text-xs p-1"
+                      className="text-gray-600 hover:text-[#032e92] transition-colors cursor-pointer text-xs p-1"
                       title="Copy Mobile"
                     >
                       <FontAwesomeIcon icon={copiedField === "mobile" ? faCheck : faCopy} />
@@ -927,7 +927,7 @@ export default function CrmLeadDetailView({
 
               {/* Email */}
               <div className="p-3 bg-slate-50 rounded-2xl border border-gray-100">
-                <span className="text-[10px] text-gray-400 font-bold uppercase block mb-1">
+                <span className="text-[10px] text-gray-600 font-bold uppercase block mb-1">
                   Email Address
                 </span>
                 <div className="flex items-center justify-between">
@@ -938,7 +938,7 @@ export default function CrmLeadDetailView({
                     <button
                       type="button"
                       onClick={() => handleCopyText(leadData.email, "email")}
-                      className="text-gray-400 hover:text-[#032e92] transition-colors cursor-pointer text-xs p-1 shrink-0"
+                      className="text-gray-600 hover:text-[#032e92] transition-colors cursor-pointer text-xs p-1 shrink-0"
                       title="Copy Email"
                     >
                       <FontAwesomeIcon icon={copiedField === "email" ? faCheck : faCopy} />
@@ -950,19 +950,19 @@ export default function CrmLeadDetailView({
               {/* City / Location */}
               <div className="p-3 bg-slate-50 rounded-2xl border border-gray-100 flex items-center justify-between">
                 <div>
-                  <span className="text-[10px] text-gray-400 font-bold uppercase block mb-0.5">
+                  <span className="text-[10px] text-gray-600 font-bold uppercase block mb-0.5">
                     City / Location
                   </span>
                   <span className="font-semibold text-gray-900">
                     {leadData?.city || "Not Specified"}
                   </span>
                 </div>
-                <FontAwesomeIcon icon={faLocationDot} className="text-gray-400 text-sm" />
+                <FontAwesomeIcon icon={faLocationDot} className="text-gray-600 text-sm" />
               </div>
 
               {/* Lead Source */}
               <div className="p-3 bg-slate-50 rounded-2xl border border-gray-100">
-                <span className="text-[10px] text-gray-400 font-bold uppercase block mb-0.5">
+                <span className="text-[10px] text-gray-600 font-bold uppercase block mb-0.5">
                   Lead Acquisition Source
                 </span>
                 <span className="font-semibold text-gray-900">
@@ -974,14 +974,14 @@ export default function CrmLeadDetailView({
 
           {/* Card: Investment Goals & Profiler */}
           <div className="bg-white rounded-3xl border border-gray-200/90 p-5 sm:p-6 shadow-xs space-y-4">
-            <h4 className="text-xs font-bold text-gray-400 uppercase flex items-center gap-2">
+            <h4 className="text-xs font-bold text-gray-600 uppercase flex items-center gap-2">
               <FontAwesomeIcon icon={faCoins} className="text-amber-500" />
               <span>Investment Goals & Profiler</span>
             </h4>
 
             <div className="space-y-3.5 text-xs">
               <div className="p-3 bg-slate-50 rounded-2xl border border-gray-100">
-                <span className="text-[10px] text-gray-400 font-bold uppercase block mb-0.5">
+                <span className="text-[10px] text-gray-600 font-bold uppercase block mb-0.5">
                   Investment Range
                 </span>
                 <span className="font-bold text-gray-900 text-sm">
@@ -990,7 +990,7 @@ export default function CrmLeadDetailView({
               </div>
 
               <div className="p-3 bg-slate-50 rounded-2xl border border-gray-100">
-                <span className="text-[10px] text-gray-400 font-bold uppercase block mb-0.5">
+                <span className="text-[10px] text-gray-600 font-bold uppercase block mb-0.5">
                   Time Horizon
                 </span>
                 <span className="font-semibold text-gray-900">
@@ -1000,7 +1000,7 @@ export default function CrmLeadDetailView({
 
               <div className="p-3 bg-slate-50 rounded-2xl border border-gray-100">
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[10px] text-gray-400 font-bold uppercase">
+                  <span className="text-[10px] text-gray-600 font-bold uppercase">
                     Risk Profiler Score
                   </span>
                   <span className="font-bold text-[#032e92]">
@@ -1015,8 +1015,8 @@ export default function CrmLeadDetailView({
                     />
                   </div>
                 ) : null}
-                <span className="text-xs text-gray-500 font-medium block mt-1.5">
-                  Category: <strong className="text-gray-800">{leadData?.risk_profile || "Pending Profiler"}</strong>
+                <span className="text-xs text-gray-600 font-medium block mt-1.5">
+                  Category: <strong className="text-gray-900">{leadData?.risk_profile || "Pending Profiler"}</strong>
                 </span>
               </div>
             </div>
@@ -1060,7 +1060,7 @@ export default function CrmLeadDetailView({
                 </div>
                 <div>
                   <h3 className="text-base font-bold text-gray-900">Delete Lead</h3>
-                  <p className="text-xs text-gray-500">This action cannot be undone</p>
+                  <p className="text-xs text-gray-600">This action cannot be undone</p>
                 </div>
               </div>
 
@@ -1073,7 +1073,7 @@ export default function CrmLeadDetailView({
                   type="button"
                   disabled={isDeleting}
                   onClick={() => setIsDeleteModalOpen(false)}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer"
+                  className="px-4 py-2 rounded-xl text-xs font-semibold bg-gray-100 text-gray-900 hover:bg-gray-200 transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>

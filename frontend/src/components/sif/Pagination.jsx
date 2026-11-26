@@ -41,7 +41,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
       {/* Page Numbers */}
       {getPages().map((page, i) => (
         page === '...'
-          ? <span key={`ellipsis-${i}`} className="px-2 text-gray-400 font-medium">...</span>
+          ? <span key={`ellipsis-${i}`} className="px-2 text-gray-600 font-medium">...</span>
           : (
             <motion.button
               key={page}

@@ -7,7 +7,7 @@ const STATUS_BADGES = {
   'In Progress': 'bg-blue-50 text-[#032e92] border-blue-200',
   Renewed: 'bg-emerald-50 text-emerald-700 border-emerald-200',
   Lapsed: 'bg-red-50 text-red-700 border-red-200',
-  Cancelled: 'bg-gray-100 text-gray-700 border-gray-200',
+  Cancelled: 'bg-gray-100 text-gray-900 border-gray-200',
 };
 
 export default function CrmRenewalsView({ renewals = [], loading = false }) {
@@ -48,7 +48,7 @@ export default function CrmRenewalsView({ renewals = [], loading = false }) {
           ))}
         </div>
 
-        <div className="text-xs font-semibold text-gray-500">
+        <div className="text-xs font-semibold text-gray-600">
           Showing <span className="font-bold text-gray-900">{filtered.length}</span> Renewals
         </div>
       </div>
@@ -57,7 +57,7 @@ export default function CrmRenewalsView({ renewals = [], loading = false }) {
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-[#f8fafc] text-xs font-bold text-gray-500 uppercase border-b border-gray-200/80">
+            <tr className="bg-[#f8fafc] text-xs font-bold text-gray-600 uppercase border-b border-gray-200/80">
               <th className="py-3 px-4 sm:px-6">Client</th>
               <th className="py-3 px-4">Product / Mandate</th>
               <th className="py-3 px-4">Renewal Date</th>
@@ -69,7 +69,7 @@ export default function CrmRenewalsView({ renewals = [], loading = false }) {
           <tbody className="divide-y divide-gray-100 text-xs">
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan="6" className="py-12 text-center text-gray-400 font-medium">
+                <td colSpan="6" className="py-12 text-center text-gray-600 font-medium">
                   {loading ? 'Loading renewals...' : 'No renewal records found.'}
                 </td>
               </tr>
@@ -81,15 +81,15 @@ export default function CrmRenewalsView({ renewals = [], loading = false }) {
                   <tr key={item.name} className="hover:bg-blue-50/40 transition-colors">
                     <td className="py-3.5 px-4 sm:px-6">
                       <div className="font-bold text-gray-900">{item.client_name || item.client}</div>
-                      <div className="text-[10px] text-gray-400 font-mono">{item.name}</div>
+                      <div className="text-[10px] text-gray-600 font-mono">{item.name}</div>
                     </td>
 
                     <td className="py-3.5 px-4">
-                      <span className="font-semibold text-gray-800">{item.product_name}</span>
+                      <span className="font-semibold text-gray-900">{item.product_name}</span>
                     </td>
 
                     <td className="py-3.5 px-4">
-                      <div className="font-semibold text-gray-700">
+                      <div className="font-semibold text-gray-900">
                         {item.renewal_date ? new Date(item.renewal_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}
                       </div>
                     </td>
@@ -116,13 +116,13 @@ export default function CrmRenewalsView({ renewals = [], loading = false }) {
 
                     <td className="py-3.5 px-4 text-gray-600 font-medium">
                       <div className="flex items-center gap-1.5">
-                        <FontAwesomeIcon icon={faUserTie} className="text-gray-400 text-[10px]" />
+                        <FontAwesomeIcon icon={faUserTie} className="text-gray-600 text-[10px]" />
                         <span>{item.relationship_manager || 'Administrator'}</span>
                       </div>
                     </td>
 
                     <td className="py-3.5 px-4 sm:px-6">
-                      <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-bold border ${STATUS_BADGES[item.status] || 'bg-gray-100 text-gray-700'}`}>
+                      <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-bold border ${STATUS_BADGES[item.status] || 'bg-gray-100 text-gray-900'}`}>
                         {item.status}
                       </span>
                     </td>

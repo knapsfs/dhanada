@@ -14,7 +14,7 @@ export default function ModeToggle({ calcMode, setCalcMode }) {
       />
       <button
         onClick={() => handleToggle('fv')}
-        className={`flex-1 py-2.5 text-sm font-bold text-center z-10 transition-colors rounded-full ${calcMode === 'fv' ? 'text-[#032e92]' : 'text-gray-500 hover:text-gray-700'
+        className={`flex-1 py-2.5 text-sm font-bold text-center z-10 transition-colors rounded-full ${calcMode === 'fv' ? 'text-[#032e92]' : 'text-gray-600 hover:text-gray-900'
           }`}
       >
         {/* Calculate Future Value */}
@@ -22,7 +22,7 @@ export default function ModeToggle({ calcMode, setCalcMode }) {
       </button>
       <button
         onClick={() => handleToggle('pmt')}
-        className={`flex-1 py-2.5 text-sm font-bold text-center z-10 transition-colors rounded-full ${calcMode === 'pmt' ? 'text-[#032e92]' : 'text-gray-500 hover:text-gray-700'
+        className={`flex-1 py-2.5 text-sm font-bold text-center z-10 transition-colors rounded-full ${calcMode === 'pmt' ? 'text-[#032e92]' : 'text-gray-600 hover:text-gray-900'
           }`}
       >
         {/* Calculate Monthly Investment */}

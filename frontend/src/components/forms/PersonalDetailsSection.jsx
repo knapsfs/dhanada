@@ -22,7 +22,7 @@ export default function PersonalDetailsSection({
             <FontAwesomeIcon icon={faUser} className="text-[#032e92] text-sm" />
             <span>Section A: Personal & KYC Details</span>
           </h2>
-          <p className="text-xs text-gray-500 mt-0.5">
+          <p className="text-xs text-gray-600 mt-0.5">
             Please review and verify your identity and contact information.
           </p>
         </div>
@@ -36,7 +36,7 @@ export default function PersonalDetailsSection({
         {/* Full Name */}
         <div className="sm:col-span-2">
           <div className="flex items-center justify-between mb-1.5">
-            <label className="text-xs font-bold text-gray-800">
+            <label className="text-xs font-bold text-gray-900">
               Full Name (as per PAN Card) <span className="text-red-500">*</span>
             </label>
             {isPrefilled("full_name") && (
@@ -66,7 +66,7 @@ export default function PersonalDetailsSection({
         {/* PAN Number */}
         <div>
           <div className="flex items-center justify-between mb-1.5">
-            <label className="text-xs font-bold text-gray-800">
+            <label className="text-xs font-bold text-gray-900">
               Permanent Account Number (PAN) <span className="text-red-500">*</span>
             </label>
             {isPrefilled("pan") && (
@@ -89,7 +89,7 @@ export default function PersonalDetailsSection({
               }`}
             />
           </div>
-          <p className="text-[10px] text-gray-400 mt-1">10-character alphanumeric PAN</p>
+          <p className="text-[10px] text-gray-600 mt-1">10-character alphanumeric PAN</p>
           {errors.pan && (
             <p className="text-xs text-red-600 font-semibold mt-1">{errors.pan}</p>
           )}
@@ -98,7 +98,7 @@ export default function PersonalDetailsSection({
         {/* Date of Birth */}
         <div>
           <div className="flex items-center justify-between mb-1.5">
-            <label className="text-xs font-bold text-gray-800">
+            <label className="text-xs font-bold text-gray-900">
               Date of Birth <span className="text-red-500">*</span>
             </label>
             {isPrefilled("dob") && (
@@ -126,7 +126,7 @@ export default function PersonalDetailsSection({
         {/* Email Address */}
         <div>
           <div className="flex items-center justify-between mb-1.5">
-            <label className="text-xs font-bold text-gray-800">
+            <label className="text-xs font-bold text-gray-900">
               Email Address <span className="text-red-500">*</span>
             </label>
             {isPrefilled("email") && (
@@ -154,7 +154,7 @@ export default function PersonalDetailsSection({
         {/* Mobile Number */}
         <div>
           <div className="flex items-center justify-between mb-1.5">
-            <label className="text-xs font-bold text-gray-800">
+            <label className="text-xs font-bold text-gray-900">
               Mobile Number <span className="text-red-500">*</span>
             </label>
             {isPrefilled("mobile_no") && (
@@ -187,7 +187,7 @@ export default function PersonalDetailsSection({
 
         {/* Gender */}
         <div>
-          <label className="text-xs font-bold text-gray-800 block mb-1.5">
+          <label className="text-xs font-bold text-gray-900 block mb-1.5">
             Gender <span className="text-red-500">*</span>
           </label>
           <select
@@ -207,7 +207,7 @@ export default function PersonalDetailsSection({
 
         {/* Place of Birth (City) */}
         <div>
-          <label className="text-xs font-bold text-gray-800 block mb-1.5">
+          <label className="text-xs font-bold text-gray-900 block mb-1.5">
             Place of Birth (City) <span className="text-red-500">*</span>
           </label>
           <input
@@ -224,7 +224,7 @@ export default function PersonalDetailsSection({
 
         {/* Occupation */}
         <div>
-          <label className="text-xs font-bold text-gray-800 block mb-1.5">
+          <label className="text-xs font-bold text-gray-900 block mb-1.5">
             Occupation <span className="text-red-500">*</span>
           </label>
           <select
@@ -248,7 +248,7 @@ export default function PersonalDetailsSection({
 
         {/* Address Details */}
         <div className="sm:col-span-2 pt-2 border-t border-gray-100">
-          <label className="text-xs font-bold text-gray-800 block mb-1.5">
+          <label className="text-xs font-bold text-gray-900 block mb-1.5">
             Residential Address <span className="text-red-500">*</span>
           </label>
           <textarea
@@ -268,7 +268,7 @@ export default function PersonalDetailsSection({
 
         {/* City */}
         <div>
-          <label className="text-xs font-bold text-gray-800 block mb-1.5">
+          <label className="text-xs font-bold text-gray-900 block mb-1.5">
             City <span className="text-red-500">*</span>
           </label>
           <input
@@ -282,7 +282,7 @@ export default function PersonalDetailsSection({
 
         {/* State */}
         <div>
-          <label className="text-xs font-bold text-gray-800 block mb-1.5">
+          <label className="text-xs font-bold text-gray-900 block mb-1.5">
             State <span className="text-red-500">*</span>
           </label>
           <input
@@ -296,7 +296,7 @@ export default function PersonalDetailsSection({
 
         {/* Pincode */}
         <div>
-          <label className="text-xs font-bold text-gray-800 block mb-1.5">
+          <label className="text-xs font-bold text-gray-900 block mb-1.5">
             Pincode <span className="text-red-500">*</span>
           </label>
           <input
@@ -311,12 +311,12 @@ export default function PersonalDetailsSection({
 
         {/* Country */}
         <div>
-          <label className="text-xs font-bold text-gray-800 block mb-1.5">Country</label>
+          <label className="text-xs font-bold text-gray-900 block mb-1.5">Country</label>
           <input
             type="text"
             value={data.country || "India"}
             onChange={(e) => handleChange("country", e.target.value)}
-            className="w-full text-xs font-semibold px-3.5 py-2.5 rounded-xl border border-gray-300 bg-gray-50 text-gray-700"
+            className="w-full text-xs font-semibold px-3.5 py-2.5 rounded-xl border border-gray-300 bg-gray-50 text-gray-900"
             readOnly
           />
         </div>

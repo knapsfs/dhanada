@@ -62,7 +62,7 @@ export default function WhyChooseServices() {
                   </div>
                   <div>
                     <p className="text-[#0a192f] font-black text-2xl leading-none mb-1">99.8%</p>
-                    <p className="text-gray-500 text-xs font-bold uppercase">Client Retention & Trust</p>
+                    <p className="text-gray-600 text-xs font-bold uppercase">Client Retention & Trust</p>
                   </div>
                 </div>
 
@@ -99,7 +99,7 @@ export default function WhyChooseServices() {
                     <FontAwesomeIcon icon={item.icon} className="text-sm" />
                   </div>
                   <h4 className="font-bold text-[#0a192f] text-sm mb-1.5">{item.title}</h4>
-                  <p className="text-gray-500 text-xs leading-relaxed font-medium">{item.desc}</p>
+                  <p className="text-gray-600 text-xs leading-relaxed font-medium">{item.desc}</p>
                 </div>
               ))}
             </div>

@@ -25,7 +25,7 @@ const parseRawNumber = (rawStr) => {
 function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onChange, hint, placeholder = '' }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-xs font-bold text-gray-500 uppercase tracking-wide flex items-center gap-1.5">
+      <label htmlFor={id} className="text-xs font-bold text-gray-600 uppercase tracking-wide flex items-center gap-1.5">
         {label}
         {hint && (
           <span title={hint} className="cursor-help">
@@ -35,7 +35,7 @@ function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onCh
       </label>
       <div className="relative flex items-center">
         {prefix && (
-          <span className="absolute left-3.5 text-sm font-bold text-gray-500 pointer-events-none z-10">{prefix}</span>
+          <span className="absolute left-3.5 text-sm font-bold text-gray-600 pointer-events-none z-10">{prefix}</span>
         )}
         <input
           id={id}
@@ -51,12 +51,12 @@ function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onCh
               onChange(isNaN(num) ? raw : num)
             }
           }}
-          className={`w-full py-3.5 rounded-xl border-2 border-[#e8edf7] bg-[#f7f9fc] text-gray-800 font-bold text-base focus:outline-none focus:border-[#032e92] focus:ring-4 focus:ring-[#032e92]/8 transition-all placeholder-gray-400 ${prefix ? 'pl-8 pr-4' : suffix ? 'pl-4 pr-12' : 'px-4'
+          className={`w-full py-3.5 rounded-xl border-2 border-[#e8edf7] bg-[#f7f9fc] text-gray-900 font-bold text-base focus:outline-none focus:border-[#032e92] focus:ring-4 focus:ring-[#032e92]/8 transition-all placeholder-gray-400 ${prefix ? 'pl-8 pr-4' : suffix ? 'pl-4 pr-12' : 'px-4'
             }`}
           placeholder={placeholder}
         />
         {suffix && (
-          <span className="absolute right-3.5 text-sm font-bold text-gray-500 pointer-events-none">{suffix}</span>
+          <span className="absolute right-3.5 text-sm font-bold text-gray-600 pointer-events-none">{suffix}</span>
         )}
       </div>
       <input
@@ -68,7 +68,7 @@ function InputField({ id, label, prefix, suffix, value, min, max, step = 1, onCh
         onChange={e => onChange(Number(e.target.value))}
         className="w-full h-1.5 rounded-full accent-[#032e92] cursor-pointer mt-1"
       />
-      <div className="flex justify-between text-[10px] text-gray-400 font-medium">
+      <div className="flex justify-between text-[10px] text-gray-600 font-medium">
         <span>{prefix}{min?.toLocaleString('en-IN')}{suffix}</span>
         <span>{prefix}{max?.toLocaleString('en-IN')}{suffix}</span>
       </div>
@@ -125,8 +125,8 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs }) {
               <FontAwesomeIcon icon={faCalculator} className="text-[#032e92] text-sm" />
             </div>
             <div>
-              <h2 className="font-bold text-gray-800 text-lg">Step Up SIP Calculator</h2>
-              <p className="text-xs text-gray-400 font-medium">Results update instantly as you type</p>
+              <h2 className="font-bold text-gray-900 text-lg">Step Up SIP Calculator</h2>
+              <p className="text-xs text-gray-600 font-medium">Results update instantly as you type</p>
             </div>
           </div> */}
 
@@ -146,7 +146,7 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs }) {
 
             {/* Annual Step Up - Split Two-Part Input (Percentage & Amount) */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-gray-500 uppercase tracking-wide flex items-center gap-1.5">
+              <label className="text-xs font-bold text-gray-600 uppercase tracking-wide flex items-center gap-1.5">
                 Annual Step Up
                 {/* <span title="Increase your SIP every year by percentage or fixed amount" className="cursor-help">
                   <FontAwesomeIcon icon={faCircleInfo} className="text-gray-300 text-xs" />
@@ -178,10 +178,10 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs }) {
                       }))
                     }}
                     onFocus={handleSelectPct}
-                    className="w-full bg-transparent text-gray-800 font-bold text-sm sm:text-base focus:outline-none pr-4 cursor-pointer"
+                    className="w-full bg-transparent text-gray-900 font-bold text-sm sm:text-base focus:outline-none pr-4 cursor-pointer"
                     placeholder="10"
                   />
-                  <span className="absolute right-2 text-lg font-bold text-gray-500 pointer-events-none">%</span>
+                  <span className="absolute right-2 text-lg font-bold text-gray-600 pointer-events-none">%</span>
                 </div>
 
                 {/* 2. Amount Half */}
@@ -192,7 +192,7 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs }) {
                     : 'bg-transparent opacity-40 hover:opacity-75'
                     }`}
                 >
-                  <span className="absolute left-2 text-lg font-bold text-gray-500 pointer-events-none">₹</span>
+                  <span className="absolute left-2 text-lg font-bold text-gray-600 pointer-events-none">₹</span>
                   <input
                     id="step-up-amt"
                     type="text"
@@ -207,7 +207,7 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs }) {
                       }))
                     }}
                     onFocus={handleSelectAmt}
-                    className="w-full bg-transparent text-gray-800 font-bold text-sm sm:text-base focus:outline-none pl-3.5 cursor-pointer"
+                    className="w-full bg-transparent text-gray-900 font-bold text-sm sm:text-base focus:outline-none pl-3.5 cursor-pointer"
                     placeholder="2,000"
                   />
                 </div>
@@ -234,7 +234,7 @@ export default function StepUpSipCalculatorForm({ inputs, setInputs }) {
                 }}
                 className="w-full h-1.5 rounded-full accent-[#032e92] cursor-pointer mt-1"
               />
-              <div className="flex justify-between text-[10px] text-gray-400 font-medium">
+              <div className="flex justify-between text-[10px] text-gray-600 font-medium">
                 <span>{isPct ? '1%' : '₹500'}</span>
                 <span>{isPct ? '50%' : '₹1,00,000'}</span>
               </div>

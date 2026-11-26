@@ -22,7 +22,7 @@ export default function WhyChoose() {
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
             Is SIF the <span className="gradient-text">right investment for you?</span>
           </h2>
-          <p className="text-gray-500 font-medium max-w-xl mx-auto">
+          <p className="text-gray-600 font-medium max-w-xl mx-auto">
             Thinking about SIF? Before making a decision, see if SIF matches your investment goals.
           </p>
         </motion.div>

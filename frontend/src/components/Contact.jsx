@@ -149,7 +149,7 @@ export default function Contact() {
                   <FontAwesomeIcon icon={faCircleCheck} />
                 </div>
                 <h4 className="text-xl font-bold text-gray-900 mb-2">Thank you!</h4>
-                <p className="text-gray-500 text-sm">We've received your request. Our team will get back to you shortly.</p>
+                <p className="text-gray-600 text-sm">We've received your request. Our team will get back to you shortly.</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -161,7 +161,7 @@ export default function Contact() {
 
                 {/* Standardized Product Field */}
                 <div className="relative" ref={dropdownRef}>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-900 mb-2">
                     Product <span className="text-red-500">*</span>
                   </label>
                   <div
@@ -178,12 +178,12 @@ export default function Contact() {
                           : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
-                    <span className={selectedProduct ? 'text-gray-900 font-medium' : 'text-gray-400 font-normal'}>
+                    <span className={selectedProduct ? 'text-gray-900 font-medium' : 'text-gray-600 font-normal'}>
                       {selectedProductObj ? selectedProductObj.label : 'Select a product'}
                     </span>
                     <FontAwesomeIcon
                       icon={faChevronDown}
-                      className={`text-gray-400 text-xs transition-transform duration-200 ${
+                      className={`text-gray-600 text-xs transition-transform duration-200 ${
                         productOpen ? 'rotate-180 text-[#032e92]' : ''
                       }`}
                     />
@@ -214,7 +214,7 @@ export default function Contact() {
                               className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg cursor-pointer text-sm transition-colors ${
                                 isSelected
                                   ? 'bg-[#eef4ff] text-[#032e92] font-semibold'
-                                  : 'text-gray-700 hover:bg-gray-50 hover:text-[#032e92]'
+                                  : 'text-gray-900 hover:bg-gray-50 hover:text-[#032e92]'
                               }`}
                             >
                               <span>{option.label}</span>
@@ -233,7 +233,7 @@ export default function Contact() {
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">
                       Full Name <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -251,7 +251,7 @@ export default function Contact() {
                     {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">
                       Email Address <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -271,11 +271,11 @@ export default function Contact() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-900 mb-2">
                     Phone Number <span className="text-red-500">*</span>
                   </label>
                   <div className="flex items-center">
-                    <span className="text-sm font-semibold text-gray-400 mr-2 select-none">+91</span>
+                    <span className="text-sm font-semibold text-gray-600 mr-2 select-none">+91</span>
                     <input
                       type="tel"
                       maxLength={10}
@@ -295,7 +295,7 @@ export default function Contact() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Message</label>
+                  <label className="block text-sm font-semibold text-gray-900 mb-2">Message</label>
                   <textarea
                     rows="4"
                     placeholder="How can we help you?"
@@ -388,7 +388,7 @@ export default function Contact() {
             {/* Map Placeholder */}
             <div className="bg-gray-200 rounded-3xl h-64 overflow-hidden border border-gray-300 relative group">
               <div className="absolute inset-0 bg-black/5 flex items-center justify-center">
-                <p className="text-gray-500 font-medium">Interactive Map Integration</p>
+                <p className="text-gray-600 font-medium">Interactive Map Integration</p>
               </div>
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15082.979148443319!2d72.8559074!3d19.0743606!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c8e317c37617%3A0xc31920cd704953c8!2sBandra%20Kurla%20Complex%2C%20Bandra%20East%2C%20Mumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"

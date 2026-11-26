@@ -80,7 +80,7 @@ export default function SipSummaryCards({
               <FontAwesomeIcon icon={faWallet} className="text-[#032e92] text-base" />
             </div>
             <div>
-              <p className="text-xs font-bold text-gray-400 uppercase mb-1">Total Invested Amount</p>
+              <p className="text-xs font-bold text-gray-600 uppercase mb-1">Total Invested Amount</p>
               <p className="text-2xl lg:text-3xl xl:text-4xl font-extrabold text-[#032e92] leading-tight">
                 <CountUpNumber
                   target={results.totalInvested || 0}
@@ -102,7 +102,7 @@ export default function SipSummaryCards({
               <FontAwesomeIcon icon={faArrowTrendUp} className="text-green-600 text-base" />
             </div>
             <div>
-              <p className="text-xs font-bold text-gray-400 uppercase mb-1">Gain</p>
+              <p className="text-xs font-bold text-gray-600 uppercase mb-1">Gain</p>
               <p className="text-2xl lg:text-3xl xl:text-4xl font-extrabold text-green-600 leading-tight">
                 <CountUpNumber
                   target={results.wealthGained || 0}

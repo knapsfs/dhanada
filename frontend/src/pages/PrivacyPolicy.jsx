@@ -100,9 +100,9 @@ export default function PrivacyPolicy() {
             </h1>
 
             {/* Breadcrumb & Metadata */}
-            <div className="flex flex-wrap items-center gap-3 pt-6 text-sm text-gray-500 font-medium">
+            <div className="flex flex-wrap items-center gap-3 pt-6 text-sm text-gray-600 font-medium">
               <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
-              <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+              <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-600" />
               <span className="text-[#032e92]">Privacy Policy</span>
               <span className="hidden sm:inline text-gray-300">•</span>
               <span className="text-xs bg-blue-50 text-[#032e92] px-3 py-1 rounded-full font-semibold border border-blue-100">
@@ -120,7 +120,7 @@ export default function PrivacyPolicy() {
 
             {/* Sticky Table of Contents Sidebar */}
             <aside className="hidden lg:block lg:col-span-4 sticky top-28 bg-white rounded-3xl p-6 border border-gray-100 shadow-sm">
-              <h3 className="text-xs font-bold uppercase text-gray-400 mb-4 px-3">
+              <h3 className="text-xs font-bold uppercase text-gray-600 mb-4 px-3">
                 Contents
               </h3>
               <nav className="space-y-1">
@@ -138,7 +138,7 @@ export default function PrivacyPolicy() {
                     >
                       <FontAwesomeIcon
                         icon={sec.icon}
-                        className={`text-xs ${isActive ? 'text-[#032e92]' : 'text-gray-400'}`}
+                        className={`text-xs ${isActive ? 'text-[#032e92]' : 'text-gray-600'}`}
                       />
                       <span className="truncate">{sec.label}</span>
                     </button>
@@ -249,19 +249,19 @@ export default function PrivacyPolicy() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
                     <div className="p-4 rounded-2xl bg-gray-50 border border-gray-100">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">Execution of Investments</h4>
-                      <p className="text-xs text-gray-500">Processing onboarding, KYC validation, and routing of investment instructions to asset management companies.</p>
+                      <p className="text-xs text-gray-600">Processing onboarding, KYC validation, and routing of investment instructions to asset management companies.</p>
                     </div>
                     <div className="p-4 rounded-2xl bg-gray-50 border border-gray-100">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">Risk Suitability</h4>
-                      <p className="text-xs text-gray-500">Evaluating your investment horizon and risk profile to suggest appropriate products and asset allocations.</p>
+                      <p className="text-xs text-gray-600">Evaluating your investment horizon and risk profile to suggest appropriate products and asset allocations.</p>
                     </div>
                     <div className="p-4 rounded-2xl bg-gray-50 border border-gray-100">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">Regulatory Reporting</h4>
-                      <p className="text-xs text-gray-500">Meeting mandatory record-keeping, anti-money laundering (AML), and SEBI/AMFI compliance requirements.</p>
+                      <p className="text-xs text-gray-600">Meeting mandatory record-keeping, anti-money laundering (AML), and SEBI/AMFI compliance requirements.</p>
                     </div>
                     <div className="p-4 rounded-2xl bg-gray-50 border border-gray-100">
                       <h4 className="font-bold text-gray-900 text-sm mb-1">Customer Communication</h4>
-                      <p className="text-xs text-gray-500">Delivering portfolio statements, transaction confirmations, market insights, and answering your service requests.</p>
+                      <p className="text-xs text-gray-600">Delivering portfolio statements, transaction confirmations, market insights, and answering your service requests.</p>
                     </div>
                   </div>
                 </div>
@@ -284,7 +284,7 @@ export default function PrivacyPolicy() {
                   <p>
                     Information may be shared exclusively with authorized entities involved directly in the investment lifecycle:
                   </p>
-                  <ul className="space-y-2.5 text-xs sm:text-sm text-gray-700">
+                  <ul className="space-y-2.5 text-xs sm:text-sm text-gray-900">
                     <li className="flex items-start gap-2.5">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#032e92] mt-2 shrink-0"></span>
                       <span><strong>Asset Management Companies (AMCs) &amp; Issuers:</strong> To register folios, SIPs, and process fund subscriptions or redemptions.</span>
@@ -323,17 +323,17 @@ export default function PrivacyPolicy() {
                     <div className="p-4 rounded-2xl bg-gray-50 border border-gray-100">
                       <FontAwesomeIcon icon={faLock} className="text-[#032e92] text-xl mb-2" />
                       <h4 className="font-bold text-xs text-gray-900">TLS 1.3 Encryption</h4>
-                      <p className="text-xs text-gray-500 mt-1">End-to-end encryption for all in-transit communications.</p>
+                      <p className="text-xs text-gray-600 mt-1">End-to-end encryption for all in-transit communications.</p>
                     </div>
                     <div className="p-4 rounded-2xl bg-gray-50 border border-gray-100">
                       <FontAwesomeIcon icon={faDatabase} className="text-[#032e92] text-xl mb-2" />
                       <h4 className="font-bold text-xs text-gray-900">Encrypted Storage</h4>
-                      <p className="text-xs text-gray-500 mt-1">AES-256 standard encryption for all database repositories.</p>
+                      <p className="text-xs text-gray-600 mt-1">AES-256 standard encryption for all database repositories.</p>
                     </div>
                     <div className="p-4 rounded-2xl bg-gray-50 border border-gray-100">
                       <FontAwesomeIcon icon={faUserShield} className="text-[#032e92] text-xl mb-2" />
                       <h4 className="font-bold text-xs text-gray-900">Role-Based Access</h4>
-                      <p className="text-xs text-gray-500 mt-1">Strict least-privilege protocols for company personnel.</p>
+                      <p className="text-xs text-gray-600 mt-1">Strict least-privilege protocols for company personnel.</p>
                     </div>
                   </div>
                 </div>
@@ -370,7 +370,7 @@ export default function PrivacyPolicy() {
                   <p>
                     Under applicable Indian data protection frameworks, you are entitled to:
                   </p>
-                  <ul className="space-y-2.5 text-xs sm:text-sm text-gray-700">
+                  <ul className="space-y-2.5 text-xs sm:text-sm text-gray-900">
                     <li className="flex items-start gap-2.5">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#032e92] mt-2 shrink-0"></span>
                       <span><strong>Access &amp; Review:</strong> Request a summary of your personal information stored in our records.</span>
@@ -423,7 +423,7 @@ export default function PrivacyPolicy() {
                   </p>
                   <div className="p-6 rounded-2xl bg-gray-50 border border-gray-100 space-y-3 mt-4 text-xs sm:text-sm">
                     <p className="font-bold text-gray-900 text-base">Grievance Officer &mdash; Compliance &amp; Legal</p>
-                    <p className="text-gray-700"><strong>Entity:</strong> KNAPS Private Limited (AMFI Registered Distributor)</p>
+                    <p className="text-gray-900"><strong>Entity:</strong> KNAPS Private Limited (AMFI Registered Distributor)</p>
                     <div className="flex items-start gap-2.5 text-gray-600">
                       <FontAwesomeIcon icon={faLocationDot} className="text-[#032e92] mt-1 shrink-0" />
                       <span>DG-206A, DLF Galleria, Plot No 1B, Mayur Vihar Phase - 1, East Delhi, Delhi - 110091</span>

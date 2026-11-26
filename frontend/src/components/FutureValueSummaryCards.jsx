@@ -63,7 +63,7 @@ export default function FutureValueSummaryCards({
             <FontAwesomeIcon icon={faBullseye} />
             <span>Target Goal: {selectedGoal} ({fmtCurrency(targetFutureValue)}) in {years} Years @ {annualReturn}% p.a.</span>
           </div>
-          <span className="text-xs text-gray-400 font-medium hidden sm:inline">
+          <span className="text-xs text-gray-600 font-medium hidden sm:inline">
             Choose either investment approach below
           </span>
         </div>

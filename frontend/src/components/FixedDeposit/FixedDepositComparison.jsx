@@ -137,17 +137,17 @@ export default function FixedDepositComparison() {
                       )}
                       <div>
                         <div>{row.name}</div>
-                        {/* <span className="text-[10px] text-gray-500 font-normal uppercase">
+                        {/* <span className="text-[10px] text-gray-600 font-normal uppercase">
                           {row.category}
                         </span> */}
                       </div>
                     </div>
                   </td>
-                  <td className="py-4 px-5 text-gray-700">{row.safetyMechanism}</td>
+                  <td className="py-4 px-5 text-gray-900">{row.safetyMechanism}</td>
                   <td className="py-4 px-5 font-bold text-[#032e92]">{row.indicativeYield}</td>
-                  <td className="py-4 px-5 text-gray-700">{row.creditRisk}</td>
-                  <td className="py-4 px-5 text-gray-700">{row.tenureRange}</td>
-                  <td className="py-4 px-5 text-gray-700">{row.payoutFrequency}</td>
+                  <td className="py-4 px-5 text-gray-900">{row.creditRisk}</td>
+                  <td className="py-4 px-5 text-gray-900">{row.tenureRange}</td>
+                  <td className="py-4 px-5 text-gray-900">{row.payoutFrequency}</td>
                   <td className="py-4 px-5 text-gray-600 text-xs">{row.taxTreatment}</td>
                 </tr>
               ))}

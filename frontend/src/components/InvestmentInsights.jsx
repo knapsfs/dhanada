@@ -137,8 +137,8 @@ export default function InvestmentInsights({ inputs = {}, results = {} }) {
                   <FontAwesomeIcon icon={item.icon} className={`${item.color} text-sm`} />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-gray-700 mb-0.5">{item.title}</p>
-                  <p className="text-xs text-gray-500 font-medium leading-relaxed">{item.text}</p>
+                  <p className="text-xs font-bold text-gray-900 mb-0.5">{item.title}</p>
+                  <p className="text-xs text-gray-600 font-medium leading-relaxed">{item.text}</p>
                 </div>
               </motion.div>
             ))}

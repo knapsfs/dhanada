@@ -19,13 +19,13 @@ export default function BlogsHero({ selectedCategory = 'All' }) {
             className="lg:col-span-8"
           >
             {/* Breadcrumb Navigation */}
-            <div className="flex items-center pb-5 gap-3 text-sm font-medium text-gray-500">
+            <div className="flex items-center pb-5 gap-3 text-sm font-medium text-gray-600">
               <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
-              <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+              <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-600" />
               {isFiltered ? (
                 <>
                   <Link to="/blogs" className="hover:text-[#032e92] transition-colors">Blogs</Link>
-                  <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+                  <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-600" />
                   <span className="text-[#032e92] capitalize font-semibold">{displayCategory}</span>
                 </>
               ) : (

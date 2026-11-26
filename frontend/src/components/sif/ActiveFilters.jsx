@@ -28,7 +28,7 @@ export default function ActiveFilters({ filters, setFilters }) {
   return (
     <div className="max-w-7xl mx-auto px-6 lg:px-8 pb-3">
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Active:</span>
+        <span className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Active:</span>
         <AnimatePresence>
           {activeItems.map(item => (
             <motion.button

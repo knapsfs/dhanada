@@ -67,7 +67,7 @@ export default function ExploreFunds() {
       case 'Moderately High': return 'bg-amber-50 text-amber-700 border-amber-200';
       case 'High':
       case 'Very High': return 'bg-rose-50 text-rose-700 border-rose-200';
-      default: return 'bg-slate-50 text-slate-700 border-slate-200';
+      default: return 'bg-slate-50 text-gray-900 border-slate-200';
     }
   };
 
@@ -91,19 +91,19 @@ export default function ExploreFunds() {
             <div className="relative w-full sm:w-80">
               <FontAwesomeIcon
                 icon={faMagnifyingGlass}
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600 text-sm"
               />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search strategies (e.g. Large Cap, Nifty)..."
-                className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#032e92] focus:bg-white transition-colors"
+                className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-sm text-gray-900 placeholder-slate-400 focus:outline-none focus:border-[#032e92] focus:bg-white transition-colors"
               />
             </div>
 
             <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
-              <span className="text-xs sm:text-sm font-semibold text-slate-500">
+              <span className="text-xs sm:text-sm font-semibold text-gray-600">
                 Showing <strong className="text-[#032e92]">{filteredFunds.length}</strong> of {EXPLORE_FUNDS_DATA.length} Strategies
               </span>
               {(selectedType !== 'All' || selectedRisk !== 'All' || selectedHorizon !== 'All' || searchQuery !== '') && (
@@ -121,7 +121,7 @@ export default function ExploreFunds() {
 
           {/* Filter 1: Fund Type */}
           <div>
-            <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase mb-2.5">
+            <div className="flex items-center gap-2 text-xs font-bold text-gray-600 uppercase mb-2.5">
               <span>Fund Type:</span>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -143,7 +143,7 @@ export default function ExploreFunds() {
 
           {/* Filter 2: Risk Profile */}
           <div>
-            <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase mb-2.5">
+            <div className="flex items-center gap-2 text-xs font-bold text-gray-600 uppercase mb-2.5">
               <span>Risk Tolerance:</span>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -165,7 +165,7 @@ export default function ExploreFunds() {
 
           {/* Filter 3: Horizon */}
           <div>
-            <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase mb-2.5">
+            <div className="flex items-center gap-2 text-xs font-bold text-gray-600 uppercase mb-2.5">
               <span>Time Horizon:</span>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -231,8 +231,8 @@ export default function ExploreFunds() {
                         <FontAwesomeIcon icon={faShieldHalved} className="text-[10px]" />
                         <span>{fund.risk} Risk</span>
                       </span>
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
-                        <FontAwesomeIcon icon={faClock} className="text-[10px] text-slate-500" />
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-gray-900 border border-slate-200">
+                        <FontAwesomeIcon icon={faClock} className="text-[10px] text-gray-600" />
                         <span>{fund.horizon}</span>
                       </span>
                     </div>
@@ -244,16 +244,16 @@ export default function ExploreFunds() {
                     {/* Metrics Box */}
                     <div className="p-3.5 rounded-2xl bg-[#f8fbff] border border-blue-100/70 space-y-2 mb-4 text-xs">
                       <div className="flex justify-between items-center">
-                        <span className="text-slate-500 font-medium">Asset Allocation:</span>
-                        <span className="font-semibold text-slate-800">{fund.assetMix}</span>
+                        <span className="text-gray-600 font-medium">Asset Allocation:</span>
+                        <span className="font-semibold text-gray-900">{fund.assetMix}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-slate-500 font-medium">Min. SIP:</span>
+                        <span className="text-gray-600 font-medium">Min. SIP:</span>
                         <span className="font-bold text-[#032e92]">₹{fund.minSip.toLocaleString('en-IN')} / mo</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-slate-500 font-medium">Min. Lumpsum:</span>
-                        <span className="font-bold text-slate-800">₹{fund.minLumpsum.toLocaleString('en-IN')}</span>
+                        <span className="text-gray-600 font-medium">Min. Lumpsum:</span>
+                        <span className="font-bold text-gray-900">₹{fund.minLumpsum.toLocaleString('en-IN')}</span>
                       </div>
                     </div>
 
@@ -281,7 +281,7 @@ export default function ExploreFunds() {
                     <button
                       type="button"
                       onClick={scrollToCalculator}
-                      className="p-2.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-blue-50 hover:text-[#032e92] text-xs font-semibold transition-colors cursor-pointer"
+                      className="p-2.5 rounded-xl bg-slate-100 text-gray-900 hover:bg-blue-50 hover:text-[#032e92] text-xs font-semibold transition-colors cursor-pointer"
                       title="Calculate SIP"
                     >
                       <FontAwesomeIcon icon={faCalculator} />

@@ -60,9 +60,9 @@ export default function RiskResult({ result, onRetake, isModal = false }) {
           
           {/* 3 Risk Band Labels */}
           <div className="flex justify-between mt-6 px-1">
-            <span className="text-[10px] sm:text-xs font-bold text-gray-500 text-left w-1/3">Conservative (10–16)</span>
-            <span className="text-[10px] sm:text-xs font-bold text-gray-500 text-center w-1/3">Moderate (18–30)</span>
-            <span className="text-[10px] sm:text-xs font-bold text-gray-500 text-right w-1/3">Aggressive (32–40)</span>
+            <span className="text-[10px] sm:text-xs font-bold text-gray-600 text-left w-1/3">Conservative (10–16)</span>
+            <span className="text-[10px] sm:text-xs font-bold text-gray-600 text-center w-1/3">Moderate (18–30)</span>
+            <span className="text-[10px] sm:text-xs font-bold text-gray-600 text-right w-1/3">Aggressive (32–40)</span>
           </div>
         </div>
       </div>
@@ -71,19 +71,19 @@ export default function RiskResult({ result, onRetake, isModal = false }) {
       {result?.metrics && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-8 sm:mb-10">
           <div className="bg-gray-50 rounded-2xl p-4 sm:p-5 border border-gray-100 text-center">
-            <p className="text-gray-400 text-[10px] sm:text-xs font-bold uppercase mb-1">Risk Comfort</p>
+            <p className="text-gray-600 text-[10px] sm:text-xs font-bold uppercase mb-1">Risk Comfort</p>
             <p className="text-[#0a192f] text-sm sm:text-base font-black">{result.metrics.riskComfort}</p>
           </div>
           <div className="bg-gray-50 rounded-2xl p-4 sm:p-5 border border-gray-100 text-center">
-            <p className="text-gray-400 text-[10px] sm:text-xs font-bold uppercase mb-1">Flexibility</p>
+            <p className="text-gray-600 text-[10px] sm:text-xs font-bold uppercase mb-1">Flexibility</p>
             <p className="text-[#0a192f] text-sm sm:text-base font-black">{result.metrics.financialFlexibility}</p>
           </div>
           <div className="bg-gray-50 rounded-2xl p-4 sm:p-5 border border-gray-100 text-center">
-            <p className="text-gray-400 text-[10px] sm:text-xs font-bold uppercase mb-1">Experience</p>
+            <p className="text-gray-600 text-[10px] sm:text-xs font-bold uppercase mb-1">Experience</p>
             <p className="text-[#0a192f] text-sm sm:text-base font-black">{result.metrics.experience}</p>
           </div>
           <div className="bg-gray-50 rounded-2xl p-4 sm:p-5 border border-gray-100 text-center">
-            <p className="text-gray-400 text-[10px] sm:text-xs font-bold uppercase mb-1">Horizon</p>
+            <p className="text-gray-600 text-[10px] sm:text-xs font-bold uppercase mb-1">Horizon</p>
             <p className="text-[#0a192f] text-sm sm:text-base font-black">{result.metrics.horizon}</p>
           </div>
         </div>
@@ -164,12 +164,12 @@ export default function RiskResult({ result, onRetake, isModal = false }) {
       </div>
       
       <div className="text-center mb-6">
-        <button onClick={onRetake} className="text-gray-500 text-xs sm:text-sm font-bold hover:text-[#032e92] transition-colors cursor-pointer">
+        <button onClick={onRetake} className="text-gray-600 text-xs sm:text-sm font-bold hover:text-[#032e92] transition-colors cursor-pointer">
           &#8634; Retake Assessment
         </button>
       </div>
       
-      <p className="text-[10px] text-gray-400 text-center leading-relaxed max-w-3xl mx-auto border-t border-gray-100 pt-6">
+      <p className="text-[10px] text-gray-600 text-center leading-relaxed max-w-3xl mx-auto border-t border-gray-100 pt-6">
         This assessment provides an indicative risk profile based on the information provided by you. It is intended strictly for educational purposes and does not constitute investment, financial, tax or legal advice, or a recommendation of suitability for any financial product. Investment products are subject to market risks.
       </p>
     </motion.div>

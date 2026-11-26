@@ -217,12 +217,12 @@ export default function FixedDepositTypes() {
                 {/* Yield & Tenure Badges */}
                 <div className="p-3 rounded-2xl bg-gray-50 border border-gray-100 mb-4 space-y-1.5">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-gray-500 font-medium">Indicative Yield:</span>
+                    <span className="text-gray-600 font-medium">Indicative Yield:</span>
                     <span className="font-extrabold text-[#032e92]">{prod.indicativeYield}</span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-gray-500 font-medium">Tenure:</span>
-                    <span className="font-bold text-gray-800">{prod.tenures}</span>
+                    <span className="text-gray-600 font-medium">Tenure:</span>
+                    <span className="font-bold text-gray-900">{prod.tenures}</span>
                   </div>
                 </div>
 

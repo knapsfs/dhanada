@@ -79,7 +79,7 @@ export default function OurStory() {
                   
                   <h4 className="text-xl font-bold text-[#032e92] mb-1">{item.year}</h4>
                   <h5 className="text-lg font-semibold text-gray-900 mb-2">{item.title}</h5>
-                  <p className="text-gray-500 text-sm">{item.desc}</p>
+                  <p className="text-gray-600 text-sm">{item.desc}</p>
                 </motion.div>
               ))}
             </div>

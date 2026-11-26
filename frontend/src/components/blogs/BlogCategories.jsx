@@ -39,7 +39,7 @@ export default function BlogCategories({ activeCategory = 'All', onSelectCategor
         <div className="bg-slate-50/80 md:bg-transparent border border-slate-200/80 md:border-0 rounded-2xl p-3.5 sm:p-4 md:p-0 shadow-sm md:shadow-none">
           <div className="flex flex-wrap items-center justify-start gap-2 md:gap-3">
             {/* Category Name Label */}
-            <span className="text-sm sm:text-[14px] font-bold text-gray-800 tracking-tight whitespace-nowrap flex items-center gap-1.5 mr-1 sm:mr-2">
+            <span className="text-sm sm:text-[14px] font-bold text-gray-900 tracking-tight whitespace-nowrap flex items-center gap-1.5 mr-1 sm:mr-2">
               Category :
             </span>
 

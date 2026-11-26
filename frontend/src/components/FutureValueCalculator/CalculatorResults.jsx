@@ -197,7 +197,7 @@ export default function CalculatorResults({
             <FontAwesomeIcon icon={faWallet} className="text-[#032e92] text-base" />
           </div>
           <div>
-            <p className="text-xs font-bold text-gray-400 uppercase mb-1">Your Money Put In</p>
+            <p className="text-xs font-bold text-gray-600 uppercase mb-1">Your Money Put In</p>
             <p className="text-2xl lg:text-3xl font-extrabold text-[#032e92] leading-tight">
               {formatIndianCurrency(totalInvested)}
             </p>
@@ -210,7 +210,7 @@ export default function CalculatorResults({
             <FontAwesomeIcon icon={faArrowTrendUp} className="text-green-600 text-base" />
           </div>
           <div>
-            <p className="text-xs font-bold text-gray-400 uppercase mb-1">Money You Could Earn</p>
+            <p className="text-xs font-bold text-gray-600 uppercase mb-1">Money You Could Earn</p>
             <p className="text-2xl lg:text-3xl font-extrabold text-green-600 leading-tight">
               {formatIndianCurrency(potentialGrowth)}
             </p>
@@ -219,7 +219,7 @@ export default function CalculatorResults({
       </div>
 
       {/* Chart Legend Indicator */}
-      <div className="flex items-center justify-center gap-6 text-xs font-semibold text-gray-500 pt-1">
+      <div className="flex items-center justify-center gap-6 text-xs font-semibold text-gray-600 pt-1">
         <div className="flex items-center gap-2">
           <span className="inline-block w-3 h-3 rounded-full bg-[#94a3b8]"></span>
           Your Money

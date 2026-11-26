@@ -76,11 +76,11 @@ export default function ServicesSnapshot() {
                 </div>
                 
                 <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-[#032e92] transition-colors">{service.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed mb-6">
+                <p className="text-gray-600 text-sm leading-relaxed mb-6">
                   {service.desc}
                 </p>
                 
-                <div className="absolute bottom-6 right-6 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 group-hover:bg-[#c10000] group-hover:text-white transition-all duration-300">
+                <div className="absolute bottom-6 right-6 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 group-hover:bg-[#c10000] group-hover:text-white transition-all duration-300">
                   <FontAwesomeIcon icon={faArrowRight} className="text-xs" />
                 </div>
               </Link>

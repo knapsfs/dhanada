@@ -25,7 +25,7 @@ export default function FormHeader({
             <span className="font-extrabold text-sm sm:text-base tracking-tight text-gray-950 block leading-tight">
               KNAPS <span className="text-[#032e92] font-semibold text-xs sm:text-sm">FINANCIAL</span>
             </span>
-            <span className="text-[10px] text-gray-400 font-medium block">
+            <span className="text-[10px] text-gray-600 font-medium block">
               AMFI Registered Mutual Fund Distributor
             </span>
           </div>
@@ -52,7 +52,7 @@ export default function FormHeader({
               {title}
             </h1>
             {subtitle && (
-              <p className="text-xs text-gray-500 mt-0.5">{subtitle}</p>
+              <p className="text-xs text-gray-600 mt-0.5">{subtitle}</p>
             )}
           </div>
           {steps.length > 0 && (
@@ -87,7 +87,7 @@ export default function FormHeader({
                         ? "text-[#032e92]"
                         : isCompleted
                           ? "text-emerald-700 hover:text-emerald-800 cursor-pointer"
-                          : "text-gray-400 cursor-default"
+                          : "text-gray-600 cursor-default"
                       }`}
                   >
                     <span
@@ -95,7 +95,7 @@ export default function FormHeader({
                           ? "bg-[#032e92] text-white shadow-xs"
                           : isCompleted
                             ? "bg-emerald-600 text-white"
-                            : "bg-gray-100 text-gray-400"
+                            : "bg-gray-100 text-gray-600"
                         }`}
                     >
                       {isCompleted ? <FontAwesomeIcon icon={faCheck} /> : idx + 1}

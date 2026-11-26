@@ -96,9 +96,9 @@ export default function TermsAndConditions() {
             </h1>
 
             {/* Breadcrumb & Metadata */}
-            <div className="flex flex-wrap items-center gap-3 pt-6 text-sm text-gray-500 font-medium">
+            <div className="flex flex-wrap items-center gap-3 pt-6 text-sm text-gray-600 font-medium">
               <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
-              <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+              <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-600" />
               <span className="text-[#032e92]">Terms and Conditions</span>
               <span className="hidden sm:inline text-gray-300">•</span>
               <span className="text-xs bg-blue-50 text-[#032e92] px-3 py-1 rounded-full font-semibold border border-blue-100">
@@ -116,7 +116,7 @@ export default function TermsAndConditions() {
 
             {/* Sticky Table of Contents Sidebar */}
             <aside className="hidden lg:block lg:col-span-4 sticky top-28 bg-white rounded-3xl p-6 border border-gray-100 shadow-sm">
-              <h3 className="text-xs font-bold uppercase text-gray-400 mb-4 px-3">
+              <h3 className="text-xs font-bold uppercase text-gray-600 mb-4 px-3">
                 Contents
               </h3>
               <nav className="space-y-1">
@@ -134,7 +134,7 @@ export default function TermsAndConditions() {
                     >
                       <FontAwesomeIcon
                         icon={sec.icon}
-                        className={`text-xs ${isActive ? 'text-[#032e92]' : 'text-gray-400'}`}
+                        className={`text-xs ${isActive ? 'text-[#032e92]' : 'text-gray-600'}`}
                       />
                       <span className="truncate">{sec.label}</span>
                     </button>

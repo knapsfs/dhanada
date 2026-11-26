@@ -32,11 +32,11 @@ export default function GeneralInsuranceHero() {
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         {/* Breadcrumb Navigation */}
-        <div className="flex items-center pb-4 sm:pb-5 gap-3 text-sm font-medium text-gray-500">
+        <div className="flex items-center pb-4 sm:pb-5 gap-3 text-sm font-medium text-gray-600">
           <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
-          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-600" />
           <Link to="/products" className="hover:text-[#032e92] transition-colors">Products</Link>
-          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-600" />
           <span className="text-[#032e92]">General Insurance</span>
         </div>
 
@@ -86,19 +86,19 @@ export default function GeneralInsuranceHero() {
 
             {/* Trust Highlights Strip */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 border-t border-[#e8edf7]">
-              <div className="flex items-center gap-2.5 text-xs text-gray-700 font-medium">
+              <div className="flex items-center gap-2.5 text-xs text-gray-900 font-medium">
                 <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 text-sm flex-shrink-0" />
                 <span>Instant Digital Policy</span>
               </div>
-              <div className="flex items-center gap-2.5 text-xs text-gray-700 font-medium">
+              <div className="flex items-center gap-2.5 text-xs text-gray-900 font-medium">
                 <FontAwesomeIcon icon={faWrench} className="text-[#032e92] text-sm flex-shrink-0" />
                 <span>14,000+ Cashless Garages</span>
               </div>
-              <div className="flex items-center gap-2.5 text-xs text-gray-700 font-medium">
+              <div className="flex items-center gap-2.5 text-xs text-gray-900 font-medium">
                 <FontAwesomeIcon icon={faBuildingShield} className="text-sky-600 text-sm flex-shrink-0" />
                 <span>100% Unbiased Choice</span>
               </div>
-              <div className="flex items-center gap-2.5 text-xs text-gray-700 font-medium">
+              <div className="flex items-center gap-2.5 text-xs text-gray-900 font-medium">
                 <FontAwesomeIcon icon={faShieldHalved} className="text-amber-600 text-sm flex-shrink-0" />
                 <span>24/7 Claim Concierge</span>
               </div>
@@ -121,7 +121,7 @@ export default function GeneralInsuranceHero() {
                   </div>
                   <div>
                     <h3 className="font-extrabold text-[#0a192f] text-base leading-tight">All-in-One Asset Shield</h3>
-                    <p className="text-xs text-gray-400 font-medium mt-0.5">Customized General Protection</p>
+                    <p className="text-xs text-gray-600 font-medium mt-0.5">Customized General Protection</p>
                   </div>
                 </div>
                 <span className="text-xs font-bold text-sky-700 bg-sky-50 px-3 py-1 rounded-full border border-sky-200">
@@ -153,7 +153,7 @@ export default function GeneralInsuranceHero() {
                     </div>
                     <div>
                       <p className="text-xs font-bold text-[#0a192f]">Motor (Car & Bike)</p>
-                      <p className="text-[10px] text-gray-400">Zero Dep + Roadside Assistance</p>
+                      <p className="text-[10px] text-gray-600">Zero Dep + Roadside Assistance</p>
                     </div>
                   </div>
                   <span className="text-xs font-bold text-emerald-600">From ₹2,094/yr*</span>
@@ -166,7 +166,7 @@ export default function GeneralInsuranceHero() {
                     </div>
                     <div>
                       <p className="text-xs font-bold text-[#0a192f]">Home & Property</p>
-                      <p className="text-[10px] text-gray-400">Structure + Valuables Protection</p>
+                      <p className="text-[10px] text-gray-600">Structure + Valuables Protection</p>
                     </div>
                   </div>
                   <span className="text-xs font-bold text-emerald-600">From ₹1,200/yr*</span>
@@ -179,7 +179,7 @@ export default function GeneralInsuranceHero() {
                     </div>
                     <div>
                       <p className="text-xs font-bold text-[#0a192f]">Travel Insurance</p>
-                      <p className="text-[10px] text-gray-400">Medical abroad + Baggage & Delay</p>
+                      <p className="text-[10px] text-gray-600">Medical abroad + Baggage & Delay</p>
                     </div>
                   </div>
                   <span className="text-xs font-bold text-emerald-600">From ₹450/trip*</span>
@@ -196,7 +196,7 @@ export default function GeneralInsuranceHero() {
                 <FontAwesomeIcon icon={faArrowRight} className="text-xs group-hover:translate-x-1 transition-transform" />
               </button>
 
-              <p className="text-[10px] text-gray-400 text-center italic mt-3">
+              <p className="text-[10px] text-gray-600 text-center italic mt-3">
                 *Illustrative indicative premiums. Final rate depends on vehicle make, asset value & insurer underwriting.
               </p>
             </div>

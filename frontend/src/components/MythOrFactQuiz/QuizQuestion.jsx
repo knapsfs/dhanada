@@ -38,7 +38,7 @@ export default function QuizQuestion({
     }
 
     // Other unselected button after answering
-    return base + "bg-white border-gray-100 text-gray-400 opacity-50 cursor-not-allowed";
+    return base + "bg-white border-gray-100 text-gray-600 opacity-50 cursor-not-allowed";
   };
 
   return (
@@ -53,7 +53,7 @@ export default function QuizQuestion({
       {/* Progress and Category */}
       <div className={`flex justify-between items-center ${isModal ? 'gap-3 mb-4' : 'flex-col md:flex-row gap-4 mb-10'}`}>
         <div className="flex-1 max-w-xs">
-          <div className="text-gray-400 font-bold text-xs tracking-widest uppercase mb-1.5">
+          <div className="text-gray-600 font-bold text-xs tracking-widest uppercase mb-1.5">
             Question {currentIdx + 1 > 9 ? currentIdx + 1 : `0${currentIdx + 1}`} / {total}
           </div>
           <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">

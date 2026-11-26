@@ -25,7 +25,7 @@ export function AllocationChart({ fund }) {
         className="bg-white rounded-3xl border border-[#e8edf7] shadow-lg shadow-blue-900/5 p-6 flex flex-col h-full items-center justify-center text-center">
         <FontAwesomeIcon icon={faCircleInfo} className="text-gray-300 text-3xl mb-3" />
         <h3 className="font-bold text-gray-900 mb-1">Asset Allocation Unavailable</h3>
-        <p className="text-sm text-gray-500">Asset allocation data is not available for this scheme.</p>
+        <p className="text-sm text-gray-600">Asset allocation data is not available for this scheme.</p>
       </motion.div>
     )
   }
@@ -88,9 +88,9 @@ export function AllocationChart({ fund }) {
       <div className="mt-4 space-y-3">
         {allocations.map((item, idx) => (
           <div key={idx} className="flex flex-col gap-1 text-xs">
-             <div className="flex justify-between font-medium text-gray-700">
+             <div className="flex justify-between font-medium text-gray-900">
                <span className="truncate mr-2" title={item.name}>{item.name}</span>
-               <span className="flex-shrink-0 text-gray-500">Min {item.min}% - Max {item.max}%</span>
+               <span className="flex-shrink-0 text-gray-600">Min {item.min}% - Max {item.max}%</span>
              </div>
              <div className="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
                <motion.div
@@ -123,7 +123,7 @@ export function SectorChart({ fund }) {
         className="bg-white rounded-3xl border border-[#e8edf7] shadow-lg shadow-blue-900/5 p-6 flex flex-col h-full items-center justify-center text-center">
         <FontAwesomeIcon icon={faCircleInfo} className="text-gray-300 text-3xl mb-3" />
         <h3 className="font-bold text-gray-900 mb-1">Sector Allocation Unavailable</h3>
-        <p className="text-sm text-gray-500">Sector allocation data is not available for this scheme.</p>
+        <p className="text-sm text-gray-600">Sector allocation data is not available for this scheme.</p>
       </motion.div>
     )
   }

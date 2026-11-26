@@ -59,7 +59,7 @@ export default function MfTypes() {
                 onClick={() => setActiveCategoryId(cat.id)}
                 className={`flex-shrink-0 flex items-center gap-2 px-4 sm:px-5 py-3 rounded-2xl text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${isSelected
                   ? 'bg-[#032e92] text-white shadow-md shadow-[#032e92]/20 scale-[1.02]'
-                  : 'bg-white text-slate-700 border border-slate-200 hover:border-blue-300 hover:bg-blue-50/50'
+                  : 'bg-white text-gray-900 border border-slate-200 hover:border-blue-300 hover:bg-blue-50/50'
                   }`}
               >
                 {/* <FontAwesomeIcon icon={getCategoryIcon(cat.id)} className={isSelected ? 'text-blue-300' : 'text-[#032e92]'} /> */}
@@ -90,10 +90,10 @@ export default function MfTypes() {
                     <h3 className="text-xl sm:text-2xl font-extrabold text-[#032e92]">
                       {activeCategory.name}
                     </h3>
-                    <p className="text-xs sm:text-sm text-slate-500 font-medium">SEBI Regulated Asset Category</p>
+                    <p className="text-xs sm:text-sm text-gray-600 font-medium">SEBI Regulated Asset Category</p>
                   </div>
                 </div>
-                {/* <p className="text-sm sm:text-base text-slate-700 leading-relaxed pt-1">
+                {/* <p className="text-sm sm:text-base text-gray-900 leading-relaxed pt-1">
                   {activeCategory.shortDesc}
                 </p> */}
               </div>
@@ -101,27 +101,27 @@ export default function MfTypes() {
               {/* 3 Metric Pills */}
               <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="p-3.5 rounded-2xl bg-[#f8fbff] border border-blue-100/80">
-                  <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium mb-1">
+                  <div className="flex items-center gap-1.5 text-xs text-gray-600 font-medium mb-1">
                     <FontAwesomeIcon icon={faTriangleExclamation} className="text-amber-500 text-xs" />
                     <span>Risk Level</span>
                   </div>
-                  <div className="text-sm font-bold text-slate-800">{activeCategory.riskLevel}</div>
+                  <div className="text-sm font-bold text-gray-900">{activeCategory.riskLevel}</div>
                 </div>
 
                 <div className="p-3.5 rounded-2xl bg-[#f8fbff] border border-blue-100/80">
-                  <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium mb-1">
+                  <div className="flex items-center gap-1.5 text-xs text-gray-600 font-medium mb-1">
                     <FontAwesomeIcon icon={faClock} className="text-blue-500 text-xs" />
                     <span>Ideal Horizon</span>
                   </div>
-                  <div className="text-sm font-bold text-[#032e92]">{activeCategory.idealHorizon}</div>
+                  <div className="text-sm font-bold text-gray-900">{activeCategory.idealHorizon}</div>
                 </div>
 
                 <div className="p-3.5 rounded-2xl bg-[#f8fbff] border border-blue-100/80">
-                  <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium mb-1">
-                    <FontAwesomeIcon icon={faPercent} className="text-emerald-500 text-xs" />
+                  <div className="flex items-center gap-1.5 text-xs text-gray-600 font-medium mb-1">
+                    <FontAwesomeIcon icon={faPercent} className="text-emerald-500 text-sm" />
                     <span>Taxation</span>
                   </div>
-                  <div className="text-xs font-bold text-slate-800 leading-tight">{activeCategory.taxTreatment}</div>
+                  <div className="text-xs font-bold text-gray-900 leading-tight">{activeCategory.taxTreatment}</div>
                 </div>
               </div>
             </div>
@@ -137,8 +137,8 @@ export default function MfTypes() {
                     key={idx}
                     className="p-5 rounded-2xl bg-gradient-to-br from-[#fafcff] to-[#f4f7fb] border border-blue-100/70 hover:border-blue-300 transition-all duration-200"
                   >
-                    <div className="text-sm font-bold text-[#032e92] mb-1.5">{sub.name}</div>
-                    <p className="text-xs text-gray-600 leading-relaxed font-normal">{sub.desc}</p>
+                    <div className="text-md font-bold text-[#032e92] mb-1.5">{sub.name}</div>
+                    <p className="text-sm text-gray-600 leading-relaxed font-normal">{sub.desc}</p>
                   </div>
                 ))}
               </div>
@@ -148,9 +148,9 @@ export default function MfTypes() {
                 <button
                   type="button"
                   onClick={() => openLeadModal(`Mutual Funds: Explore All ${activeCategory.name} Subcategories`)}
-                  className="inline-flex items-center gap-2.5 px-4 sm:px-5 py-2 sm:py-2.5 rounded-2xl bg-gradient-to-r from-[#f8fbff] to-blue-50/90 border border-blue-200/80 text-[#032e92] text-xs sm:text-sm font-bold shadow-xs hover:shadow-md hover:shadow-blue-900/10 hover:border-blue-400 hover:bg-blue-100/50 transition-all duration-200 cursor-pointer group"
+                  className="inline-flex items-center gap-2.5 px-4 sm:px-5 py-2 sm:py-2.5 rounded-2xl bg-gradient-to-r from-[#f8fbff] to-blue-50/90 border border-blue-200/80 text-[#032e92] text-sm lg:text-md font-bold shadow-xs hover:shadow-md hover:shadow-blue-900/10 hover:border-blue-400 hover:bg-blue-100/50 transition-all duration-200 cursor-pointer group"
                 >
-                  <span className="tracking-wide">and more... </span>
+                  <span className="tracking-tight">and more... </span>
                 </button>
               </div>
             </div>

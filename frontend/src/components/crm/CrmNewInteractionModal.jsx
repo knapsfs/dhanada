@@ -73,14 +73,14 @@ export default function CrmNewInteractionModal({ isOpen, onClose, onLogged, rela
               </div>
               <div>
                 <h3 className="text-base font-bold text-gray-900 leading-tight">Log Interaction</h3>
-                <p className="text-xs text-gray-500 font-medium">
+                <p className="text-xs text-gray-600 font-medium">
                   {relatedLead ? `For Lead: ${relatedLead.lead_name}` : relatedClient ? `For Client: ${relatedClient.client_name}` : 'Record a touchpoint'}
                 </p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-700 hover:bg-gray-200/60 transition-colors cursor-pointer"
+              className="w-8 h-8 rounded-full flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-200/60 transition-colors cursor-pointer"
             >
               <FontAwesomeIcon icon={faXmark} className="text-sm" />
             </button>
@@ -96,7 +96,7 @@ export default function CrmNewInteractionModal({ isOpen, onClose, onLogged, rela
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                <label className="block text-xs font-semibold text-gray-900 mb-1.5">
                   Touchpoint Type
                 </label>
                 <CrmSelect
@@ -114,7 +114,7 @@ export default function CrmNewInteractionModal({ isOpen, onClose, onLogged, rela
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                <label className="block text-xs font-semibold text-gray-900 mb-1.5">
                   Direction
                 </label>
                 <CrmSelect
@@ -129,7 +129,7 @@ export default function CrmNewInteractionModal({ isOpen, onClose, onLogged, rela
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+              <label className="block text-xs font-semibold text-gray-900 mb-1.5">
                 Summary / Headline <span className="text-red-500">*</span>
               </label>
               <input
@@ -144,7 +144,7 @@ export default function CrmNewInteractionModal({ isOpen, onClose, onLogged, rela
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+              <label className="block text-xs font-semibold text-gray-900 mb-1.5">
                 Detailed Discussion & Notes
               </label>
               <textarea
@@ -158,7 +158,7 @@ export default function CrmNewInteractionModal({ isOpen, onClose, onLogged, rela
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                <label className="block text-xs font-semibold text-gray-900 mb-1.5">
                   Call / Meeting Outcome
                 </label>
                 <input
@@ -171,7 +171,7 @@ export default function CrmNewInteractionModal({ isOpen, onClose, onLogged, rela
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                <label className="block text-xs font-semibold text-gray-900 mb-1.5">
                   Next Step
                 </label>
                 <input

@@ -123,12 +123,12 @@ export default function SifSuitabilityQuiz({ isModal = false, onClose }) {
               </p>
 
               <div className={`flex items-center justify-center gap-4 ${isModal ? 'mb-4 text-xs' : 'mb-8'}`}>
-                <div className="flex items-center gap-1.5 text-gray-700 font-semibold text-xs">
+                <div className="flex items-center gap-1.5 text-gray-900 font-semibold text-xs">
                   <FontAwesomeIcon icon={faCircleCheck} className="text-[#032e92]" />
                   <span>5 Quick Questions</span>
                 </div>
                 <span className="w-1 h-1 rounded-full bg-gray-300" />
-                <div className="flex items-center gap-1.5 text-gray-700 font-semibold text-xs">
+                <div className="flex items-center gap-1.5 text-gray-900 font-semibold text-xs">
                   <FontAwesomeIcon icon={faClock} className="text-[#c10000]" />
                   <span>1 Minute</span>
                 </div>
@@ -160,7 +160,7 @@ export default function SifSuitabilityQuiz({ isModal = false, onClose }) {
                 <span className="font-bold text-[#032e92]">
                   Question {currentIdx + 1} of {quizQuestions.length}
                 </span>
-                <span className="text-xs font-semibold text-gray-400">
+                <span className="text-xs font-semibold text-gray-600">
                   {Math.round(progressPct)}% Completed
                 </span>
               </div>
@@ -189,7 +189,7 @@ export default function SifSuitabilityQuiz({ isModal = false, onClose }) {
                       className={`rounded-xl border text-left transition-all duration-200 flex items-center justify-between gap-2.5 group cursor-pointer ${isModal ? 'p-3' : 'p-4 sm:p-5 rounded-2xl'
                         } ${isSelected
                           ? 'bg-[#032e92] border-[#032e92] text-white shadow-md shadow-blue-900/15 ring-2 ring-[#032e92]/30 scale-[1.01]'
-                          : 'bg-white border-gray-200 hover:border-[#032e92]/50 hover:bg-blue-50/40 text-gray-800 shadow-sm'
+                          : 'bg-white border-gray-200 hover:border-[#032e92]/50 hover:bg-blue-50/40 text-gray-900 shadow-sm'
                         }`}
                     >
                       <div className="flex items-center gap-2.5">
@@ -201,7 +201,7 @@ export default function SifSuitabilityQuiz({ isModal = false, onClose }) {
                         >
                           {opt.key}
                         </span>
-                        <span className={`text-xs sm:text-sm font-semibold ${isSelected ? 'text-white' : 'text-gray-800'}`}>
+                        <span className={`text-xs sm:text-sm font-semibold ${isSelected ? 'text-white' : 'text-gray-900'}`}>
                           {opt.text}
                         </span>
                       </div>
@@ -218,7 +218,7 @@ export default function SifSuitabilityQuiz({ isModal = false, onClose }) {
                 <button
                   type="button"
                   onClick={handleBack}
-                  className="px-4 py-1.5 rounded-xl border border-gray-300 text-gray-700 font-semibold text-xs hover:bg-gray-100 flex items-center gap-1.5 transition-colors cursor-pointer"
+                  className="px-4 py-1.5 rounded-xl border border-gray-300 text-gray-900 font-semibold text-xs hover:bg-gray-100 flex items-center gap-1.5 transition-colors cursor-pointer"
                 >
                   <FontAwesomeIcon icon={faArrowLeft} />
                   <span>Back</span>
@@ -291,7 +291,7 @@ export default function SifSuitabilityQuiz({ isModal = false, onClose }) {
         </AnimatePresence>
 
         <div className={`border-t border-gray-200 text-center ${isModal ? 'mt-3 pt-2' : 'mt-6 pt-4'}`}>
-          <p className="text-[10px] text-gray-500 font-medium leading-relaxed max-w-xl mx-auto">
+          <p className="text-[10px] text-gray-600 font-medium leading-relaxed max-w-xl mx-auto">
             <strong>Disclaimer:</strong> This quiz is for educational purposes only and does not constitute investment advice.
           </p>
         </div>

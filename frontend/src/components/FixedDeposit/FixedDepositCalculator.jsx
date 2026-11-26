@@ -118,7 +118,7 @@ export default function FixedDepositCalculator() {
               onClick={() => setCalcMode("fd")}
               className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-2 ${calcMode === "fd"
                   ? "bg-[#032e92] text-white shadow-md shadow-[#032e92]/20"
-                  : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+                  : "bg-white text-gray-900 hover:bg-gray-100 border border-gray-200"
                 }`}
             >
               <FontAwesomeIcon icon={faBuildingColumns} className="text-xs" />
@@ -128,7 +128,7 @@ export default function FixedDepositCalculator() {
               onClick={() => setCalcMode("bond")}
               className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center gap-2 ${calcMode === "bond"
                   ? "bg-[#032e92] text-white shadow-md shadow-[#032e92]/20"
-                  : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+                  : "bg-white text-gray-900 hover:bg-gray-100 border border-gray-200"
                 }`}
             >
               <FontAwesomeIcon icon={faLandmark} className="text-xs" />
@@ -145,7 +145,7 @@ export default function FixedDepositCalculator() {
               {/* Input 1: Principal Amount */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-bold uppercase text-gray-500">
+                  <label className="text-xs font-bold uppercase text-gray-600">
                     Total Deposit Amount
                   </label>
                   <span className="text-base font-bold text-[#032e92] bg-blue-50 px-3 py-0.5 rounded-lg border border-blue-100">
@@ -161,7 +161,7 @@ export default function FixedDepositCalculator() {
                   onChange={(e) => setPrincipal(Number(e.target.value))}
                   className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#032e92]"
                 />
-                <div className="flex justify-between text-xs text-gray-400 mt-1">
+                <div className="flex justify-between text-xs text-gray-600 mt-1">
                   <span>₹ 10,000</span>
                   <span>₹ 10,00,000</span>
                   <span>₹ 25,00,000</span>
@@ -171,7 +171,7 @@ export default function FixedDepositCalculator() {
               {/* Input 2: Base Interest Rate & Senior Citizen Toggle */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-bold uppercase text-gray-500">
+                  <label className="text-xs font-bold uppercase text-gray-600">
                     Annual Interest Rate (% p.a.)
                   </label>
                   <span className="text-base font-bold text-[#032e92] bg-blue-50 px-3 py-0.5 rounded-lg border border-blue-100">
@@ -187,7 +187,7 @@ export default function FixedDepositCalculator() {
                   onChange={(e) => setBaseRate(Number(e.target.value))}
                   className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#032e92]"
                 />
-                <div className="flex justify-between text-xs text-gray-400 mt-1">
+                <div className="flex justify-between text-xs text-gray-600 mt-1">
                   <span>5.0%</span>
                   <span>7.25% (Typical Bank Rate)</span>
                   <span>9.5%</span>
@@ -221,7 +221,7 @@ export default function FixedDepositCalculator() {
               {/* Input 3: Tenure (Years) */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-bold uppercase text-gray-500">
+                  <label className="text-xs font-bold uppercase text-gray-600">
                     Deposit Tenure (Years)
                   </label>
                   <span className="text-base font-bold text-[#032e92] bg-blue-50 px-3 py-0.5 rounded-lg border border-blue-100">
@@ -237,7 +237,7 @@ export default function FixedDepositCalculator() {
                   onChange={(e) => setTenureYears(Number(e.target.value))}
                   className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#032e92]"
                 />
-                <div className="flex justify-between text-xs text-gray-400 mt-1">
+                <div className="flex justify-between text-xs text-gray-600 mt-1">
                   <span>1 Year</span>
                   <span>5 Years (Tax Saving)</span>
                   <span>10 Years</span>
@@ -246,7 +246,7 @@ export default function FixedDepositCalculator() {
 
               {/* Input 4: Compounding Frequency */}
               <div>
-                <label className="text-xs font-bold uppercase text-gray-500 block mb-2">
+                <label className="text-xs font-bold uppercase text-gray-600 block mb-2">
                   Compounding Frequency
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -262,14 +262,14 @@ export default function FixedDepositCalculator() {
                       onClick={() => setCompoundingFreq(freq.val)}
                       className={`py-2 px-3 rounded-xl text-xs font-semibold border transition-all cursor-pointer text-center ${compoundingFreq === freq.val
                           ? "bg-[#032e92] text-white border-[#032e92] shadow-xs"
-                          : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
+                          : "bg-gray-50 text-gray-900 border-gray-200 hover:bg-gray-100"
                         }`}
                     >
                       {freq.label}
                     </button>
                   ))}
                 </div>
-                <p className="text-xs text-gray-400 mt-1.5">
+                <p className="text-xs text-gray-600 mt-1.5">
                   Default set to standard Annual compounding. Commercial banks typically compound quarterly.
                 </p>
               </div>
@@ -350,7 +350,7 @@ export default function FixedDepositCalculator() {
             <div className="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 lg:p-10 border border-gray-200/90 shadow-lg space-y-6">
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-bold uppercase text-gray-500">
+                  <label className="text-xs font-bold uppercase text-gray-600">
                     Investment Amount in GoI Bonds
                   </label>
                   <span className="text-base font-bold text-[#032e92] bg-blue-50 px-3 py-0.5 rounded-lg border border-blue-100">
@@ -366,7 +366,7 @@ export default function FixedDepositCalculator() {
                   onChange={(e) => setBondPrincipal(Number(e.target.value))}
                   className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#032e92]"
                 />
-                <div className="flex justify-between text-xs text-gray-400 mt-1">
+                <div className="flex justify-between text-xs text-gray-600 mt-1">
                   <span>₹ 10,000</span>
                   <span>₹ 25,00,000</span>
                   <span>₹ 50,00,000</span>
@@ -376,7 +376,7 @@ export default function FixedDepositCalculator() {
               {/* Coupon Rate */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-bold uppercase text-gray-500">
+                  <label className="text-xs font-bold uppercase text-gray-600">
                     RBI FRSB Coupon Rate (% p.a.)
                   </label>
                   <span className="text-base font-bold text-emerald-700 bg-emerald-50 px-3 py-0.5 rounded-lg border border-emerald-200">
@@ -392,7 +392,7 @@ export default function FixedDepositCalculator() {
                   onChange={(e) => setBondRate(Number(e.target.value))}
                   className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-emerald-600"
                 />
-                <div className="flex justify-between text-xs text-gray-400 mt-1">
+                <div className="flex justify-between text-xs text-gray-600 mt-1">
                   <span>6.5%</span>
                   <span>8.05% (Current Prevailing Coupon)</span>
                   <span>9.0%</span>

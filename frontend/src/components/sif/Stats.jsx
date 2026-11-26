@@ -49,7 +49,7 @@ export default function Stats() {
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
             Your trusted partner in <span className="gradient-text">SIF investments</span>
           </h2>
-          <p className="text-gray-500 font-medium max-w-xl mx-auto">
+          <p className="text-gray-600 font-medium max-w-xl mx-auto">
             We help you understand SIF investments and choose the right opportunities with simple and transparent guidance.
           </p>
         </motion.div>
@@ -72,7 +72,7 @@ export default function Stats() {
                 <AnimatedNumber value={stat.value} inView={inView} />
                 {stat.suffix}
               </div>
-              <p className="text-gray-500 text-sm font-medium">{stat.label}</p>
+              <p className="text-gray-600 text-sm font-medium">{stat.label}</p>
             </motion.div>
           ))}
         </div>

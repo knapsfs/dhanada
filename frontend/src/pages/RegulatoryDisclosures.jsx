@@ -144,9 +144,9 @@ export default function RegulatoryDisclosures() {
             </p>
 
             {/* Breadcrumb & Metadata Badges */}
-            <div className="flex flex-wrap items-center gap-3 pt-5 text-sm text-gray-500 font-medium">
+            <div className="flex flex-wrap items-center gap-3 pt-5 text-sm text-gray-600 font-medium">
               <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
-              <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+              <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-600" />
               <span className="text-[#032e92] font-semibold">Regulatory Disclosures</span>
               <span className="hidden sm:inline text-gray-300">•</span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200">
@@ -201,7 +201,7 @@ export default function RegulatoryDisclosures() {
               <h2 className="text-xl sm:text-2xl font-bold text-[#0a192f] tracking-tight">
                 Company Information
               </h2>
-              <p className="text-xs sm:text-sm text-gray-500">
+              <p className="text-xs sm:text-sm text-gray-600">
                 Corporate identity, registered office address, and statutory communication coordinates.
               </p>
             </div>
@@ -227,31 +227,31 @@ export default function RegulatoryDisclosures() {
               {/* Column 1: Office & Corporate Coordinates */}
               <div className="space-y-5">
                 <div>
-                  <span className="text-xs font-bold uppercase text-gray-400 block mb-1">
+                  <span className="text-xs font-bold uppercase text-gray-600 block mb-1">
                     Registered &amp; Corporate Office
                   </span>
                   <div className="flex items-start gap-3 mt-1.5">
                     <FontAwesomeIcon icon={faLocationDot} className="text-[#032e92] mt-1 shrink-0 text-sm" />
-                    <p className="text-sm sm:text-base text-gray-800 leading-relaxed font-medium">
+                    <p className="text-sm sm:text-base text-gray-900 leading-relaxed font-medium">
                       {COMPANY_INFO.registeredOffice}
                     </p>
                   </div>
                 </div>
 
                 <div className="pt-2">
-                  <span className="text-xs font-bold uppercase text-gray-400 block mb-1">
+                  <span className="text-xs font-bold uppercase text-gray-600 block mb-1">
                     Corporate Identity (CIN)
                   </span>
-                  <p className="text-sm text-gray-800 font-mono font-medium">
+                  <p className="text-sm text-gray-900 font-mono font-medium">
                     {COMPANY_INFO.cin}
                   </p>
                 </div>
 
                 <div className="pt-2">
-                  <span className="text-xs font-bold uppercase text-gray-400 block mb-1">
+                  <span className="text-xs font-bold uppercase text-gray-600 block mb-1">
                     GSTIN Number
                   </span>
-                  <p className="text-sm text-gray-800 font-mono font-medium">
+                  <p className="text-sm text-gray-900 font-mono font-medium">
                     {COMPANY_INFO.gstin}
                   </p>
                 </div>
@@ -262,14 +262,14 @@ export default function RegulatoryDisclosures() {
               {/* Column 2: Communications & Official Touchpoints */}
               <div className="space-y-5 md:pl-8 pt-5 md:pt-0">
                 <div>
-                  <span className="text-xs font-bold uppercase text-gray-400 block mb-1">
+                  <span className="text-xs font-bold uppercase text-gray-600 block mb-1">
                     Telephone Contact
                   </span>
                   <div className="flex items-center gap-3 mt-1.5">
                     <FontAwesomeIcon icon={faPhone} className="text-[#032e92] shrink-0 text-sm" />
                     <a
                       href="tel:+919990243143"
-                      className="text-sm sm:text-base text-gray-800 hover:text-[#032e92] font-semibold transition-colors"
+                      className="text-sm sm:text-base text-gray-900 hover:text-[#032e92] font-semibold transition-colors"
                     >
                       {COMPANY_INFO.phone}
                     </a>
@@ -277,20 +277,20 @@ export default function RegulatoryDisclosures() {
                 </div>
 
                 <div>
-                  <span className="text-xs font-bold uppercase text-gray-400 block mb-1">
+                  <span className="text-xs font-bold uppercase text-gray-600 block mb-1">
                     Official Email Addresses
                   </span>
                   <div className="space-y-2 mt-1.5">
                     <div className="flex items-center justify-between bg-blue-50/50 p-2.5 rounded-xl border border-blue-100/60">
                       <div className="flex items-center gap-2.5 text-xs sm:text-sm">
                         <FontAwesomeIcon icon={faEnvelope} className="text-[#032e92]" />
-                        <span className="font-semibold text-gray-800">{COMPANY_INFO.email}</span>
+                        <span className="font-semibold text-gray-900">{COMPANY_INFO.email}</span>
                         <span className="text-[10px] text-blue-700 bg-blue-100/80 px-2 py-0.5 rounded-md font-semibold">General / Advisory</span>
                       </div>
                       <button
                         type="button"
                         onClick={() => handleCopy(COMPANY_INFO.email, 'email')}
-                        className="text-xs text-gray-500 hover:text-[#032e92] p-1 cursor-pointer"
+                        className="text-xs text-gray-600 hover:text-[#032e92] p-1 cursor-pointer"
                         title="Copy email"
                       >
                         <FontAwesomeIcon icon={copiedKey === 'email' ? faCheck : faCopy} className={copiedKey === 'email' ? 'text-emerald-600' : ''} />
@@ -299,14 +299,14 @@ export default function RegulatoryDisclosures() {
 
                     <div className="flex items-center justify-between bg-gray-50 p-2.5 rounded-xl border border-gray-100">
                       <div className="flex items-center gap-2.5 text-xs sm:text-sm">
-                        <FontAwesomeIcon icon={faEnvelope} className="text-gray-500" />
-                        <span className="font-semibold text-gray-800">{COMPANY_INFO.complianceEmail}</span>
+                        <FontAwesomeIcon icon={faEnvelope} className="text-gray-600" />
+                        <span className="font-semibold text-gray-900">{COMPANY_INFO.complianceEmail}</span>
                         <span className="text-[10px] text-gray-600 bg-gray-200/80 px-2 py-0.5 rounded-md font-semibold">Compliance</span>
                       </div>
                       <button
                         type="button"
                         onClick={() => handleCopy(COMPANY_INFO.complianceEmail, 'compEmail')}
-                        className="text-xs text-gray-500 hover:text-[#032e92] p-1 cursor-pointer"
+                        className="text-xs text-gray-600 hover:text-[#032e92] p-1 cursor-pointer"
                         title="Copy email"
                       >
                         <FontAwesomeIcon icon={copiedKey === 'compEmail' ? faCheck : faCopy} className={copiedKey === 'compEmail' ? 'text-emerald-600' : ''} />
@@ -316,7 +316,7 @@ export default function RegulatoryDisclosures() {
                 </div>
 
                 <div>
-                  <span className="text-xs font-bold uppercase text-gray-400 block mb-1">
+                  <span className="text-xs font-bold uppercase text-gray-600 block mb-1">
                     Official Web Portal
                   </span>
                   <a
@@ -347,7 +347,7 @@ export default function RegulatoryDisclosures() {
               <h2 className="text-xl sm:text-2xl font-bold text-[#0a192f] tracking-tight">
                 Our Regulatory Registrations
               </h2>
-              <p className="text-xs sm:text-sm text-gray-500">
+              <p className="text-xs sm:text-sm text-gray-600">
                 Official regulatory standing, registration numbers, and validity periods.
               </p>
             </div>
@@ -362,7 +362,7 @@ export default function RegulatoryDisclosures() {
                 <div>
                   {/* Card Header & Status */}
                   {/* <div className="flex items-start justify-between gap-3 mb-4">
-                    <span className="text-xs font-bold text-gray-400 uppercase">
+                    <span className="text-xs font-bold text-gray-600 uppercase">
                       {reg.category}
                     </span>
                     <span className="text-xs font-bold px-2.5 py-1 rounded-full border bg-emerald-50 text-emerald-700 border-emerald-200">
@@ -373,14 +373,14 @@ export default function RegulatoryDisclosures() {
                   <h3 className="text-lg sm:text-xl font-bold text-[#0a192f] mb-1">
                     {reg.title}
                   </h3>
-                  <p className="text-xs text-gray-500 mb-4 font-medium">
-                    Regulated / Monitored by: <span className="text-gray-700 font-semibold">{reg.regBody}</span>
+                  <p className="text-xs text-gray-600 mb-4 font-medium">
+                    Regulated / Monitored by: <span className="text-gray-900 font-semibold">{reg.regBody}</span>
                   </p>
 
                   {/* Main Identifier Box */}
                   <div className="bg-[#f8fafd] border border-blue-100/80 rounded-2xl p-4 mb-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold text-gray-500 uppercase">
+                      <span className="text-xs font-semibold text-gray-600 uppercase">
                         {reg.regNumberLabel}
                       </span>
                       <button
@@ -399,12 +399,12 @@ export default function RegulatoryDisclosures() {
                     {/* Validity Dates */}
                     <div className="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-gray-200/60 text-xs">
                       <div>
-                        <span className="text-gray-400 font-medium block">Validity From</span>
-                        <span className="font-bold text-gray-800">{reg.validityFrom}</span>
+                        <span className="text-gray-600 font-medium block">Validity From</span>
+                        <span className="font-bold text-gray-900">{reg.validityFrom}</span>
                       </div>
                       <div>
-                        <span className="text-gray-400 font-medium block">Validity To</span>
-                        <span className="font-bold text-gray-800">{reg.validityTo}</span>
+                        <span className="text-gray-600 font-medium block">Validity To</span>
+                        <span className="font-bold text-gray-900">{reg.validityTo}</span>
                       </div>
                     </div>
                   </div>
@@ -456,7 +456,7 @@ export default function RegulatoryDisclosures() {
                   Our Empanelled Mutual Fund AMCs
                 </h2>
               </div>
-              <p className="text-xs sm:text-sm text-gray-500 max-w-2xl mt-1 leading-relaxed">
+              <p className="text-xs sm:text-sm text-gray-600 max-w-2xl mt-1 leading-relaxed">
                 We are associated with leading SEBI-registered Asset Management Companies (AMCs), providing access to a wide range of mutual fund investment opportunities.
               </p>
             </div>
@@ -473,7 +473,7 @@ export default function RegulatoryDisclosures() {
             <div className="relative flex-1">
               <FontAwesomeIcon
                 icon={faMagnifyingGlass}
-                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-600 text-sm"
               />
               <input
                 type="text"
@@ -486,7 +486,7 @@ export default function RegulatoryDisclosures() {
                 <button
                   type="button"
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1 cursor-pointer"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-600 p-1 cursor-pointer"
                   title="Clear search"
                 >
                   <FontAwesomeIcon icon={faXmark} className="text-xs" />
@@ -496,11 +496,11 @@ export default function RegulatoryDisclosures() {
 
             {/* Sort Toggle */}
             <div className="flex items-center gap-2 self-end sm:self-auto">
-              <span className="text-xs font-medium text-gray-500 hidden sm:inline">Sort:</span>
+              <span className="text-xs font-medium text-gray-600 hidden sm:inline">Sort:</span>
               <button
                 type="button"
                 onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : sortOrder === 'desc' ? 'default' : 'asc')}
-                className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl border border-gray-200 bg-[#f8fafd] hover:bg-gray-100 text-xs font-semibold text-gray-700 transition-colors cursor-pointer"
+                className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl border border-gray-200 bg-[#f8fafd] hover:bg-gray-100 text-xs font-semibold text-gray-900 transition-colors cursor-pointer"
               >
                 <FontAwesomeIcon
                   icon={sortOrder === 'desc' ? faArrowUpZA : faArrowDownAZ}
@@ -515,9 +515,9 @@ export default function RegulatoryDisclosures() {
 
           {/* Results Summary if Filtering */}
           {searchQuery && (
-            <div className="text-xs text-gray-500 mb-3 px-1 flex items-center justify-between">
+            <div className="text-xs text-gray-600 mb-3 px-1 flex items-center justify-between">
               <span>
-                Showing <strong className="text-gray-800">{filteredAmcs.length}</strong> matching AMC(s) for &ldquo;{searchQuery}&rdquo;
+                Showing <strong className="text-gray-900">{filteredAmcs.length}</strong> matching AMC(s) for &ldquo;{searchQuery}&rdquo;
               </span>
               <button
                 type="button"
@@ -557,7 +557,7 @@ export default function RegulatoryDisclosures() {
                         className="hover:bg-blue-50/40 transition-colors"
                       >
                         {/* Serial Number */}
-                        <td className="py-3.5 px-4 sm:px-6 text-center font-bold text-gray-400">
+                        <td className="py-3.5 px-4 sm:px-6 text-center font-bold text-gray-600">
                           {index + 1}
                         </td>
 
@@ -567,11 +567,11 @@ export default function RegulatoryDisclosures() {
                             {amc.name}
                           </div>
                           {amc.formerName && (
-                            <div className="text-xs text-gray-500 mt-0.5">
+                            <div className="text-xs text-gray-600 mt-0.5">
                               {amc.formerName}
                             </div>
                           )}
-                          <div className="text-xs text-gray-400 mt-0.5">
+                          <div className="text-xs text-gray-600 mt-0.5">
                             {amc.amcEntity}
                           </div>
                         </td>
@@ -583,7 +583,7 @@ export default function RegulatoryDisclosures() {
                             <button
                               type="button"
                               onClick={() => handleCopy(amc.sebiReg, `sebi-${amc.sno}`)}
-                              className="text-gray-400 hover:text-[#032e92] cursor-pointer"
+                              className="text-gray-600 hover:text-[#032e92] cursor-pointer"
                               title="Copy SEBI registration number"
                             >
                               <FontAwesomeIcon
@@ -605,10 +605,10 @@ export default function RegulatoryDisclosures() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={4} className="py-12 text-center text-gray-500">
+                      <td colSpan={4} className="py-12 text-center text-gray-600">
                         <FontAwesomeIcon icon={faCircleInfo} className="text-2xl text-gray-300 mb-2 block mx-auto" />
-                        <p className="text-sm font-semibold text-gray-700">No matching Asset Management Company found</p>
-                        <p className="text-xs text-gray-400 mt-1">Please try modifying your search query.</p>
+                        <p className="text-sm font-semibold text-gray-900">No matching Asset Management Company found</p>
+                        <p className="text-xs text-gray-600 mt-1">Please try modifying your search query.</p>
                       </td>
                     </tr>
                   )}
@@ -617,7 +617,7 @@ export default function RegulatoryDisclosures() {
             </div>
 
             {/* Table Footer Verification Note */}
-            <div className="bg-[#f8fafd] p-4 sm:p-5 border-t border-gray-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-gray-500">
+            <div className="bg-[#f8fafd] p-4 sm:p-5 border-t border-gray-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-gray-600">
               <div className="flex items-center gap-2">
                 <FontAwesomeIcon icon={faShieldHalved} className="text-[#032e92]" />
                 <span>
@@ -650,7 +650,7 @@ export default function RegulatoryDisclosures() {
               <h2 className="text-xl sm:text-2xl font-bold text-[#0a192f] tracking-tight">
                 Grievance Redressal Mechanism
               </h2>
-              <p className="text-xs sm:text-sm text-gray-500">
+              <p className="text-xs sm:text-sm text-gray-600">
                 Transparent multi-tier escalation pathway and official regulatory complaint portals.
               </p>
             </div>
@@ -726,7 +726,7 @@ export default function RegulatoryDisclosures() {
 
             {/* Regulatory Portals (SCORES & SMART ODR) */}
             <div className="p-6 sm:p-8 bg-gray-50/70">
-              <h4 className="text-xs font-bold uppercase text-gray-400 mb-4">
+              <h4 className="text-xs font-bold uppercase text-gray-600 mb-4">
                 Official Regulatory Investor Grievance Portals
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -743,9 +743,9 @@ export default function RegulatoryDisclosures() {
                         <span className="text-xs font-bold text-gray-900 group-hover:text-[#032e92] transition-colors">
                           {portal.name}
                         </span>
-                        <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[10px] text-gray-400 group-hover:text-[#032e92]" />
+                        <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[10px] text-gray-600 group-hover:text-[#032e92]" />
                       </div>
-                      <p className="text-xs text-gray-500 leading-relaxed">{portal.desc}</p>
+                      <p className="text-xs text-gray-600 leading-relaxed">{portal.desc}</p>
                     </div>
                   </a>
                 ))}
@@ -774,7 +774,7 @@ export default function RegulatoryDisclosures() {
               </div>
             </div>
 
-            <div className="space-y-4 text-xs sm:text-sm text-gray-700 leading-relaxed divide-y divide-amber-200/60 pt-2">
+            <div className="space-y-4 text-xs sm:text-sm text-gray-900 leading-relaxed divide-y divide-amber-200/60 pt-2">
               <p className="pt-2">
                 <strong>1. Mutual Fund &amp; SIF Distribution Status:</strong> {STATUTORY_DISCLAIMER.mfdDisclaimer}
               </p>

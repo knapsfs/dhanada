@@ -36,7 +36,7 @@ export default function BlogCard({ blog }) {
         </Link>
 
         <div className="p-7 sm:p-8 flex flex-col flex-1">
-          <div className="flex items-center gap-4 text-xs font-medium text-gray-500 mb-4 flex-wrap">
+          <div className="flex items-center gap-4 text-xs font-medium text-gray-600 mb-4 flex-wrap">
             <span className="flex items-center gap-1.5">
               <FontAwesomeIcon icon={faCalendarAlt} className="text-[#032e92]" />
               {blog.date}

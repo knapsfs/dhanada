@@ -51,7 +51,7 @@ export default function DocumentsSection({ fund }) {
           className="bg-white rounded-3xl border border-[#e8edf7] shadow-lg shadow-blue-900/5 p-8 text-center">
           <FontAwesomeIcon icon={faCircleInfo} className="text-gray-300 text-3xl mb-3" />
           <h3 className="font-bold text-gray-900 mb-1">Documents Unavailable</h3>
-          <p className="text-sm text-gray-500">No regulatory documents are currently available for this scheme.</p>
+          <p className="text-sm text-gray-600">No regulatory documents are currently available for this scheme.</p>
         </motion.div>
       </section>
     )
@@ -75,7 +75,7 @@ export default function DocumentsSection({ fund }) {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {availableDocs.map((doc, i) => {
-            const style = docTypeColors[doc.type] || 'bg-gray-50 border-gray-100 text-gray-700'
+            const style = docTypeColors[doc.type] || 'bg-gray-50 border-gray-100 text-gray-900'
             return (
               <motion.div
                 key={i}
@@ -95,10 +95,10 @@ export default function DocumentsSection({ fund }) {
                 </span>
 
                 {/* Name */}
-                <p className="text-sm font-bold text-gray-800 leading-snug mb-1 group-hover:text-[#032e92] transition-colors line-clamp-2">
+                <p className="text-sm font-bold text-gray-900 leading-snug mb-1 group-hover:text-[#032e92] transition-colors line-clamp-2">
                   {doc.name}
                 </p>
-                <p className="text-[10px] text-gray-400 font-medium mb-4">{doc.date} • {doc.size}</p>
+                <p className="text-[10px] text-gray-600 font-medium mb-4">{doc.date} • {doc.size}</p>
 
                 {/* Actions */}
                 <div className="flex gap-2">
@@ -106,7 +106,7 @@ export default function DocumentsSection({ fund }) {
                     <FontAwesomeIcon icon={faDownload} className="text-[10px]" />
                     Download
                   </a>
-                  <a href={doc.url} target="_blank" rel="noreferrer" className="w-9 h-8 flex items-center justify-center rounded-xl border border-[#e8edf7] text-gray-500 hover:border-[#032e92] hover:text-[#032e92] transition-all">
+                  <a href={doc.url} target="_blank" rel="noreferrer" className="w-9 h-8 flex items-center justify-center rounded-xl border border-[#e8edf7] text-gray-600 hover:border-[#032e92] hover:text-[#032e92] transition-all">
                     <FontAwesomeIcon icon={faEye} className="text-xs" />
                   </a>
                 </div>

@@ -23,7 +23,7 @@ export default function RiskQuestion({
           <p className="text-[#032e92] font-bold tracking-widest uppercase text-xs">
             Risk Profiler
           </p>
-          <p className="text-gray-400 font-bold tracking-widest uppercase text-xs">
+          <p className="text-gray-600 font-bold tracking-widest uppercase text-xs">
             Question {currentIdx + 1} of {total}
           </p>
         </div>
@@ -63,7 +63,7 @@ export default function RiskQuestion({
               }`}>
                 {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-white"></div>}
               </div>
-              <span className={`${isModal ? 'text-xs sm:text-sm' : 'text-base'} ${isSelected ? 'font-bold text-[#032e92]' : 'text-gray-700 font-medium'}`}>
+              <span className={`${isModal ? 'text-xs sm:text-sm' : 'text-base'} ${isSelected ? 'font-bold text-[#032e92]' : 'text-gray-900 font-medium'}`}>
                 {option.text}
               </span>
             </button>
@@ -75,7 +75,7 @@ export default function RiskQuestion({
         <button
           onClick={onBack}
           disabled={currentIdx === 0}
-          className={`font-bold transition-colors text-xs sm:text-sm ${currentIdx === 0 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500 hover:text-[#032e92] cursor-pointer'}`}
+          className={`font-bold transition-colors text-xs sm:text-sm ${currentIdx === 0 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-600 hover:text-[#032e92] cursor-pointer'}`}
         >
           &larr; Back
         </button>

@@ -93,7 +93,7 @@ export default function LifeInsuranceBenefits() {
                 <h3 className="text-lg font-bold text-[#0a192f] group-hover:text-[#032e92] transition-colors mb-1">
                   {item.title}
                 </h3>
-                <p className="text-xs font-bold text-gray-400 mb-3 uppercase">
+                <p className="text-xs font-bold text-gray-600 mb-3 uppercase">
                   {item.subtitle}
                 </p>
 
@@ -102,7 +102,7 @@ export default function LifeInsuranceBenefits() {
                 </p>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-gray-200/70 flex items-center justify-between text-xs font-semibold text-gray-500">
+              <div className="mt-6 pt-4 border-t border-gray-200/70 flex items-center justify-between text-xs font-semibold text-gray-600">
                 <span>Feature {idx + 1}</span>
                 <span className="text-[#032e92] font-bold">100% Tax Efficient</span>
               </div>

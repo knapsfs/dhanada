@@ -64,8 +64,8 @@ export default function FundGrid({ funds, isGrid, loading }) {
         animate={{ opacity: 1 }}
         className="text-center py-20">
         <div className="text-6xl mb-4">🔍</div>
-        <h3 className="text-xl font-bold text-gray-700 mb-2">No funds found</h3>
-        <p className="text-gray-400 font-medium">Try adjusting your filters or search terms.</p>
+        <h3 className="text-xl font-bold text-gray-900 mb-2">No funds found</h3>
+        <p className="text-gray-600 font-medium">Try adjusting your filters or search terms.</p>
       </motion.div>
     )
   }

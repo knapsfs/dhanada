@@ -16,9 +16,9 @@ export default function ContactHero() {
             className="lg:col-span-8"
           >
             {/* Breadcrumb Navigation */}
-            <div className="flex items-center pb-4 sm:pb-5 gap-3 text-sm font-medium text-gray-500">
+            <div className="flex items-center pb-4 sm:pb-5 gap-3 text-sm font-medium text-gray-600">
               <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
-              <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+              <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-600" />
               <span className="text-[#032e92]">Contact Us</span>
             </div>
 

@@ -23,7 +23,7 @@ export default function FinancialDetailsSection({
           <FontAwesomeIcon icon={faWallet} className="text-[#032e92]" />
           <span>Annual Income Slab <span className="text-red-500">*</span></span>
         </h3>
-        <p className="text-xs text-gray-500 mt-0.5">
+        <p className="text-xs text-gray-600 mt-0.5">
           Select the gross annual income range that applies to you (as per Indian regulatory KYC guidelines).
         </p>
       </div>
@@ -45,9 +45,9 @@ export default function FinancialDetailsSection({
               <div className="flex items-center gap-2.5">
                 <FontAwesomeIcon
                   icon={faCoins}
-                  className={isSelected ? "text-[#032e92]" : "text-gray-400"}
+                  className={isSelected ? "text-[#032e92]" : "text-gray-600"}
                 />
-                <span className={`text-xs font-bold ${isSelected ? "text-[#032e92]" : "text-gray-800"}`}>
+                <span className={`text-xs font-bold ${isSelected ? "text-[#032e92]" : "text-gray-900"}`}>
                   {slab}
                 </span>
               </div>

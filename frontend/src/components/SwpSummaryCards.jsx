@@ -51,7 +51,7 @@ export default function SwpSummaryCards({ results }) {
               <FontAwesomeIcon icon={faWallet} className="text-[#032e92] text-lg" />
             </div>
             <div>
-              <p className="text-xs font-bold text-gray-400 uppercase mb-1.5">Total Investment</p>
+              <p className="text-xs font-bold text-gray-600 uppercase mb-1.5">Total Investment</p>
               <p className="text-2xl lg:text-3xl font-bold text-[#032e92] leading-tight">
                 <CountUpNumber
                   target={results.totalInvestment || 0}
@@ -73,7 +73,7 @@ export default function SwpSummaryCards({ results }) {
               <FontAwesomeIcon icon={faArrowRightFromBracket} className="text-purple-600 text-lg" />
             </div>
             <div>
-              <p className="text-xs font-bold text-gray-400 uppercase mb-1.5">Total Withdrawal</p>
+              <p className="text-xs font-bold text-gray-600 uppercase mb-1.5">Total Withdrawal</p>
               <p className="text-2xl lg:text-3xl font-bold text-purple-600 leading-tight">
                 <CountUpNumber
                   target={results.totalWithdrawal || 0}

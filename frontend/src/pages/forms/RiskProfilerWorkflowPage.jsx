@@ -128,7 +128,7 @@ export default function RiskProfilerWorkflowPage() {
           <FontAwesomeIcon icon={faSpinner} className="animate-spin text-3xl text-[#032e92]" />
           <div>
             <h3 className="text-sm font-bold text-gray-900">Loading Risk Profiler</h3>
-            <p className="text-xs text-gray-400 mt-1">Verifying secure token...</p>
+            <p className="text-xs text-gray-600 mt-1">Verifying secure token...</p>
           </div>
         </div>
       </div>
@@ -179,7 +179,7 @@ export default function RiskProfilerWorkflowPage() {
           <div className="space-y-5">
             <div className="bg-blue-50/70 border border-blue-200/80 rounded-2xl p-4 flex items-start gap-3">
               <FontAwesomeIcon icon={faShieldHalved} className="text-[#032e92] mt-0.5 text-base" />
-              <div className="text-xs text-gray-700 leading-relaxed">
+              <div className="text-xs text-gray-900 leading-relaxed">
                 <span className="font-extrabold text-[#032e92] block mb-0.5">
                   Transparent Risk Assessment
                 </span>
@@ -231,7 +231,7 @@ export default function RiskProfilerWorkflowPage() {
                 type="button"
                 onClick={() => setCurrentStep(0)}
                 disabled={submitting}
-                className="px-4 py-2.5 rounded-xl text-xs font-bold bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-2 cursor-pointer shadow-2xs"
+                className="px-4 py-2.5 rounded-xl text-xs font-bold bg-white border border-gray-200 text-gray-900 hover:bg-gray-50 transition-colors flex items-center gap-2 cursor-pointer shadow-2xs"
               >
                 <FontAwesomeIcon icon={faArrowLeft} />
                 <span>Back to Questions</span>

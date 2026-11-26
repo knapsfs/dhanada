@@ -145,7 +145,7 @@ export default function GeneralInsuranceCategories() {
                   <div className={`w-12 h-12 rounded-2xl ${item.accent} flex items-center justify-center text-xl shadow-sm group-hover:scale-110 transition-transform duration-300`}>
                     <FontAwesomeIcon icon={item.icon} />
                   </div>
-                  {/* <span className="text-xs font-bold text-gray-500 bg-gray-50 px-3 py-1 rounded-full border border-gray-200/80">
+                  {/* <span className="text-xs font-bold text-gray-600 bg-gray-50 px-3 py-1 rounded-full border border-gray-200/80">
                     {item.badge}
                   </span> */}
                 </div>

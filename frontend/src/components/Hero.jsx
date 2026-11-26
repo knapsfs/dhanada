@@ -267,7 +267,7 @@ export default function Hero() {
             className="lg:col-span-5 flex items-center justify-center lg:justify-end w-full"
           >
             <div className="bg-white/95 rounded-2xl shadow-[0_16px_45px_rgba(0,0,0,0.15)] border border-gray-100 p-7 sm:p-8 w-full max-w-md backdrop-blur-md">
-              <h3 className="text-xl sm:text-[22px] font-bold text-gray-800 mb-6 sm:mb-8 leading-tight">
+              <h3 className="text-xl sm:text-[22px] font-bold text-gray-900 mb-6 sm:mb-8 leading-tight">
                 Start your Investment Journey with KNAPS
               </h3>
 
@@ -340,11 +340,11 @@ export default function Hero() {
                           : 'border-gray-300 hover:border-gray-400'
                         }`}
                     >
-                      <span className={selectedProduct ? 'text-gray-800 font-medium' : 'text-gray-400 font-normal'}>
+                      <span className={selectedProduct ? 'text-gray-900 font-medium' : 'text-gray-600 font-normal'}>
                         {selectedProductObj ? selectedProductObj.label : 'Select your goal'}
                       </span>
 
-                      <div className={`text-gray-400 transition-transform duration-200 ${productOpen ? 'rotate-180 text-[#032e92]' : ''}`}>
+                      <div className={`text-gray-600 transition-transform duration-200 ${productOpen ? 'rotate-180 text-[#032e92]' : ''}`}>
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                         </svg>
@@ -382,7 +382,7 @@ export default function Hero() {
                                 }}
                                 className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg cursor-pointer text-sm transition-colors ${isSelected
                                   ? 'bg-[#eef4ff] text-[#032e92] font-semibold'
-                                  : 'text-gray-700 hover:bg-gray-50 hover:text-[#032e92]'
+                                  : 'text-gray-900 hover:bg-gray-50 hover:text-[#032e92]'
                                   }`}
                               >
                                 <span>{option.label}</span>
@@ -411,7 +411,7 @@ export default function Hero() {
                       onChange={handleChange}
                       disabled={status === 'submitting'}
                       placeholder="Please enter your full name"
-                      className={`w-full bg-transparent border-b-2 pb-2 text-sm text-gray-800 placeholder-gray-400 focus:outline-none transition-colors disabled:opacity-60 ${errors.name
+                      className={`w-full bg-transparent border-b-2 pb-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none transition-colors disabled:opacity-60 ${errors.name
                         ? 'border-red-400 focus:border-red-500'
                         : 'border-gray-300 focus:border-[#032e92]'
                         }`}
@@ -433,7 +433,7 @@ export default function Hero() {
                       onChange={handleChange}
                       disabled={status === 'submitting'}
                       placeholder="e.g. yourname@example.com"
-                      className={`w-full bg-transparent border-b-2 pb-2 text-sm text-gray-800 placeholder-gray-400 focus:outline-none transition-colors disabled:opacity-60 ${errors.email
+                      className={`w-full bg-transparent border-b-2 pb-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none transition-colors disabled:opacity-60 ${errors.email
                         ? 'border-red-400 focus:border-red-500'
                         : 'border-gray-300 focus:border-[#032e92]'
                         }`}
@@ -453,7 +453,7 @@ export default function Hero() {
                         ? 'text-emerald-600 font-semibold'
                         : formData.mobile.length > 0
                           ? 'text-blue-600'
-                          : 'text-gray-400'
+                          : 'text-gray-600'
                         }`}>
                         {formData.mobile.length}/{selectedCountry.maxDigits} digits
                       </span> */}
@@ -479,12 +479,12 @@ export default function Hero() {
                         aria-label="Select Country Code"
                         className="flex items-center gap-1.5 pr-2 mr-2 border-r border-gray-300 hover:text-[#032e92] transition-colors cursor-pointer select-none group flex-shrink-0 disabled:cursor-not-allowed focus:outline-none"
                       >
-                        <span className="text-sm font-semibold text-gray-700 font-mono tracking-tight group-hover:text-[#032e92]">
+                        <span className="text-sm font-semibold text-gray-900 font-mono tracking-tight group-hover:text-[#032e92]">
                           {selectedCountry.code}
                         </span>
                         <FontAwesomeIcon
                           icon={faChevronDown}
-                          className={`text-[9px] text-gray-400 group-hover:text-[#032e92] transition-transform duration-200 ${isCountryOpen ? 'rotate-180 text-[#032e92]' : ''
+                          className={`text-[9px] text-gray-600 group-hover:text-[#032e92] transition-transform duration-200 ${isCountryOpen ? 'rotate-180 text-[#032e92]' : ''
                             }`}
                         />
                       </button>
@@ -499,7 +499,7 @@ export default function Hero() {
                         onChange={handleChange}
                         disabled={status === 'submitting'}
                         placeholder={selectedCountry.placeholder || 'Enter mobile number'}
-                        className="w-full bg-transparent text-sm text-gray-800 placeholder-gray-400 focus:outline-none disabled:opacity-60"
+                        className="w-full bg-transparent text-sm text-gray-900 placeholder-gray-400 focus:outline-none disabled:opacity-60"
                       />
                     </div>
                     {errors.mobile && (
@@ -524,7 +524,7 @@ export default function Hero() {
                               placeholder="Search country or code..."
                               value={countrySearch}
                               onChange={(e) => setCountrySearch(e.target.value)}
-                              className="w-full px-3 py-1.5 text-xs bg-white border border-gray-200 rounded-lg outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/20 text-gray-800 placeholder:text-gray-400"
+                              className="w-full px-3 py-1.5 text-xs bg-white border border-gray-200 rounded-lg outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/20 text-gray-900 placeholder:text-gray-400"
                               autoFocus
                             />
                           </div>
@@ -532,7 +532,7 @@ export default function Hero() {
                           {/* Country List */}
                           <div className="max-h-52 overflow-y-auto divide-y divide-gray-50 py-1">
                             {filteredCountries.length === 0 ? (
-                              <div className="p-4 text-center text-xs text-gray-400 font-medium">
+                              <div className="p-4 text-center text-xs text-gray-600 font-medium">
                                 No countries found
                               </div>
                             ) : (
@@ -549,7 +549,7 @@ export default function Hero() {
                                     }}
                                     className={`w-full flex items-center justify-between px-3.5 py-2.5 text-left text-xs transition-colors hover:bg-blue-50/80 cursor-pointer ${isSelected
                                       ? 'bg-blue-50/70 font-semibold text-[#032e92]'
-                                      : 'text-gray-700'
+                                      : 'text-gray-900'
                                       }`}
                                   >
                                     <div className="flex items-center gap-2.5 truncate pr-2">
@@ -558,7 +558,7 @@ export default function Hero() {
                                     </div>
                                     <div className="flex items-center gap-2 flex-shrink-0">
                                       <span
-                                        className={`font-mono text-xs ${isSelected ? 'text-[#032e92] font-bold' : 'text-gray-400'
+                                        className={`font-mono text-xs ${isSelected ? 'text-[#032e92] font-bold' : 'text-gray-600'
                                           }`}
                                       >
                                         {c.code}
@@ -592,7 +592,7 @@ export default function Hero() {
                         }}
                         className="mt-1 w-4 h-4 text-[#0665d0] rounded border-gray-300 focus:ring-[#0665d0] cursor-pointer"
                       />
-                      <label htmlFor="terms" className="text-[12px] sm:text-sm text-gray-500 leading-relaxed cursor-pointer select-none">
+                      <label htmlFor="terms" className="text-[12px] sm:text-sm text-gray-600 leading-relaxed cursor-pointer select-none">
                         I agree to be contacted by a KNAPS representative and accept the
                         {' '}
                         <a href="/terms-and-conditions" className="text-[#0665d0] hover:underline">

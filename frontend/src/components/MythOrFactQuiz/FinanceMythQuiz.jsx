@@ -100,7 +100,7 @@ export default function FinanceMythQuiz({ isModal = false, onClose }) {
   if (error || quizQuestions.length === 0) {
     return (
       <div className={`flex justify-center items-center text-center ${isModal ? 'py-8' : 'py-24 bg-[#f8fafc] min-h-[400px]'}`}>
-        <p className="text-gray-500 font-medium text-sm">Please add questions to the Myth Fact DocType in the backend to start the quiz.</p>
+        <p className="text-gray-600 font-medium text-sm">Please add questions to the Myth Fact DocType in the backend to start the quiz.</p>
       </div>
     );
   }

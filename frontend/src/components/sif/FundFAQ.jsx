@@ -18,7 +18,7 @@ function FAQItem({ item, index, isOpen, onToggle }) {
           }`}>
             {index + 1}
           </div>
-          <span className={`text-sm font-semibold transition-colors ${isOpen ? 'text-[#032e92]' : 'text-gray-800'}`}>
+          <span className={`text-sm font-semibold transition-colors ${isOpen ? 'text-[#032e92]' : 'text-gray-900'}`}>
             {item.q}
           </span>
         </div>
@@ -27,7 +27,7 @@ function FAQItem({ item, index, isOpen, onToggle }) {
           transition={{ duration: 0.2 }}>
           <FontAwesomeIcon
             icon={faChevronDown}
-            className={`text-xs flex-shrink-0 ml-3 transition-colors ${isOpen ? 'text-[#032e92]' : 'text-gray-400'}`} />
+            className={`text-xs flex-shrink-0 ml-3 transition-colors ${isOpen ? 'text-[#032e92]' : 'text-gray-600'}`} />
         </motion.div>
       </button>
       <AnimatePresence initial={false}>
@@ -68,7 +68,7 @@ export default function FundFAQ({ fund }) {
             </div>
             <div>
               <h2 className="text-xl font-bold text-gray-900">Frequently Asked Questions</h2>
-              <p className="text-xs text-gray-400 font-medium">Common questions about this fund</p>
+              <p className="text-xs text-gray-600 font-medium">Common questions about this fund</p>
             </div>
           </div>
 

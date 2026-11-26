@@ -249,7 +249,7 @@ export default function HeatmapSection() {
             <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6 lg:gap-10 pb-2 w-full">
               {/* 1. INVESTMENT STRATEGY */}
               <div className="flex flex-col gap-2.5 flex-shrink-0">
-                <span className="text-xs font-bold text-gray-400 uppercase">
+                <span className="text-xs font-bold text-gray-600 uppercase">
                   Investment Strategy
                 </span>
                 <div className="flex flex-wrap items-center gap-2">
@@ -260,7 +260,7 @@ export default function HeatmapSection() {
                       className={`px-5 py-2 rounded-full text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
                         activeStrategy === cat.id
                           ? "bg-[#032e92] text-white shadow-md shadow-blue-900/20"
-                          : "text-gray-500 hover:text-[#032e92] font-semibold"
+                          : "text-gray-600 hover:text-[#032e92] font-semibold"
                       }`}
                     >
                       {cat.label}
@@ -272,7 +272,7 @@ export default function HeatmapSection() {
               {/* 2. SUBCATEGORY (Scheme Subcategories) */}
               {currentStrategyData && currentStrategyData.subCategories.length > 0 && (
                 <div className="flex flex-col gap-2.5 lg:border-l lg:border-gray-100 lg:pl-10 flex-1">
-                  <span className="text-xs font-bold text-gray-400 uppercase">
+                  <span className="text-xs font-bold text-gray-600 uppercase">
                     Subcategory
                   </span>
                   <div className="flex flex-wrap items-center gap-2">
@@ -283,7 +283,7 @@ export default function HeatmapSection() {
                         className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer ${
                           activeSubCategory === sub.id
                             ? "bg-[#032e92] text-white shadow-md shadow-blue-900/20"
-                            : "bg-white border border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50"
+                            : "bg-white border border-gray-200 text-gray-900 hover:border-gray-300 hover:bg-gray-50"
                         }`}
                       >
                         {sub.name}

@@ -125,7 +125,7 @@ export default function TrustSection() {
               <p className={`text-xs font-semibold mb-3 bg-gradient-to-r ${card.color} bg-clip-text text-transparent`}>
                 {card.subtitle}
               </p>
-              <p className="text-gray-500 text-sm font-medium leading-relaxed">{card.description}</p>
+              <p className="text-gray-600 text-sm font-medium leading-relaxed">{card.description}</p>
             </motion.div>
           ))}
         </div>

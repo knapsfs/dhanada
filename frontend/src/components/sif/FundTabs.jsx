@@ -78,7 +78,7 @@ export default function FundTabs() {
               className={`relative flex-shrink-0 px-4 py-4 text-sm font-semibold transition-all duration-200 whitespace-nowrap ${
                 activeTab === tab.id
                   ? 'text-[#032e92]'
-                  : 'text-gray-500 hover:text-[#032e92]'
+                  : 'text-gray-600 hover:text-[#032e92]'
               }`}>
               {tab.label}
               {activeTab === tab.id && (

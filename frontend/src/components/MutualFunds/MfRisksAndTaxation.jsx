@@ -42,7 +42,7 @@ export default function MfRisksAndTaxation() {
               </div>
               <div>
                 <h3 className="text-lg font-bold text-slate-900">Market Fluctuations & Volatility</h3>
-                {/* <span className="text-xs font-semibold text-slate-500">Capital Value Moves With Markets</span> */}
+                {/* <span className="text-xs font-semibold text-gray-600">Capital Value Moves With Markets</span> */}
               </div>
             </div>
             <p className="text-sm text-gray-600 leading-relaxed">
@@ -58,7 +58,7 @@ export default function MfRisksAndTaxation() {
               </div>
               <div>
                 <h3 className="text-lg font-bold text-slate-900">Total Expense Ratio (TER)</h3>
-                {/* <span className="text-xs font-semibold text-slate-500">Fund Management & Operating Expenses</span> */}
+                {/* <span className="text-xs font-semibold text-gray-600">Fund Management & Operating Expenses</span> */}
               </div>
             </div>
             <p className="text-sm text-gray-600 leading-relaxed">
@@ -74,7 +74,7 @@ export default function MfRisksAndTaxation() {
               </div>
               <div>
                 <h3 className="text-lg font-bold text-slate-900">Exit Loads & Redemption Horizons</h3>
-                {/* <span className="text-xs font-semibold text-slate-500">Premature Withdrawal Considerations</span> */}
+                {/* <span className="text-xs font-semibold text-gray-600">Premature Withdrawal Considerations</span> */}
               </div>
             </div>
             <p className="text-sm text-gray-600 leading-relaxed">
@@ -90,7 +90,7 @@ export default function MfRisksAndTaxation() {
               </div>
               <div>
                 <h3 className="text-lg font-bold text-slate-900">Standardized SEBI Risk-o-meter</h3>
-                {/* <span className="text-xs font-semibold text-slate-500">Mandated 6-Tier Risk Gauge</span> */}
+                {/* <span className="text-xs font-semibold text-gray-600">Mandated 6-Tier Risk Gauge</span> */}
               </div>
             </div>
             <p className="text-sm text-gray-600 leading-relaxed mb-4">
@@ -101,7 +101,7 @@ export default function MfRisksAndTaxation() {
               {riskLevels.map((lvl) => (
                 <div key={lvl.name} className="p-2 rounded-xl bg-slate-50 border border-slate-200 flex items-center gap-2 text-xs">
                   <span className={`w-2.5 h-2.5 rounded-full ${lvl.color} flex-shrink-0`} />
-                  <span className="font-semibold text-slate-800">{lvl.name}</span>
+                  <span className="font-semibold text-gray-900">{lvl.name}</span>
                 </div>
               ))}
             </div>
@@ -120,7 +120,7 @@ export default function MfRisksAndTaxation() {
                 Mutual Fund Capital Gains Taxation Framework
               </h3>
             </div>
-            <span className="text-xs font-medium text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl self-start sm:self-auto">
+            <span className="text-xs font-medium text-gray-600 bg-slate-100 px-3 py-1.5 rounded-xl self-start sm:self-auto">
               Effective from July 23, 2024
             </span>
           </div>
@@ -128,18 +128,18 @@ export default function MfRisksAndTaxation() {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm border-collapse">
               <thead>
-                <tr className="border-b border-slate-200 text-xs font-bold text-slate-500 uppercase bg-slate-50/70">
+                <tr className="border-b border-slate-200 text-xs font-bold text-gray-600 uppercase bg-slate-50/70">
                   <th className="py-3.5 px-4 rounded-l-xl">Fund Category</th>
                   <th className="py-3.5 px-4">Holding Period for LTCG</th>
                   <th className="py-3.5 px-4">LTCG Tax Rate</th>
                   <th className="py-3.5 px-4 rounded-r-xl">STCG Tax Rate</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 text-slate-700 font-medium">
+              <tbody className="divide-y divide-slate-100 text-gray-900 font-medium">
                 <tr className="hover:bg-blue-50/30 transition-colors">
                   <td className="py-4 px-4 font-bold text-[#032e92]">
                     Equity Mutual Funds <br />
-                    <span className="text-xs font-normal text-slate-500">(&ge; 65% Equity exposure)</span>
+                    <span className="text-xs font-normal text-gray-600">(&ge; 65% Equity exposure)</span>
                   </td>
                   <td className="py-4 px-4">&gt; 12 Months</td>
                   <td className="py-4 px-4">
@@ -152,23 +152,23 @@ export default function MfRisksAndTaxation() {
                 </tr>
 
                 <tr className="hover:bg-blue-50/30 transition-colors">
-                  <td className="py-4 px-4 font-bold text-slate-800">
+                  <td className="py-4 px-4 font-bold text-gray-900">
                     ELSS (Tax Saving Funds) <br />
-                    <span className="text-xs font-normal text-slate-500">(Section 80C compliant)</span>
+                    <span className="text-xs font-normal text-gray-600">(Section 80C compliant)</span>
                   </td>
                   <td className="py-4 px-4">3 Years Statutory Lock-in</td>
                   <td className="py-4 px-4">
                     <span className="font-bold text-slate-900">12.5%</span> on gains above ₹1.25 Lakh/year
                   </td>
-                  <td className="py-4 px-4 text-slate-400">
+                  <td className="py-4 px-4 text-gray-600">
                     N/A (3-Year mandatory lock-in)
                   </td>
                 </tr>
 
                 <tr className="hover:bg-blue-50/30 transition-colors">
-                  <td className="py-4 px-4 font-bold text-slate-800">
+                  <td className="py-4 px-4 font-bold text-gray-900">
                     Debt Mutual Funds <br />
-                    <span className="text-xs font-normal text-slate-500">(&le; 35% Equity, post-Apr 2023)</span>
+                    <span className="text-xs font-normal text-gray-600">(&le; 35% Equity, post-Apr 2023)</span>
                   </td>
                   <td className="py-4 px-4">No LTCG benefit</td>
                   <td className="py-4 px-4 text-gray-600">
@@ -180,9 +180,9 @@ export default function MfRisksAndTaxation() {
                 </tr>
 
                 <tr className="hover:bg-blue-50/30 transition-colors">
-                  <td className="py-4 px-4 font-bold text-slate-800">
+                  <td className="py-4 px-4 font-bold text-gray-900">
                     Hybrid Funds (35% to 65% Equity) <br />
-                    <span className="text-xs font-normal text-slate-500">(Multi-Asset, Conservative Hybrid)</span>
+                    <span className="text-xs font-normal text-gray-600">(Multi-Asset, Conservative Hybrid)</span>
                   </td>
                   <td className="py-4 px-4">&gt; 24 Months</td>
                   <td className="py-4 px-4 font-bold text-slate-900">
@@ -196,7 +196,7 @@ export default function MfRisksAndTaxation() {
             </table>
           </div>
 
-          <p className="mt-4 text-xs text-slate-500 italic">
+          <p className="mt-4 text-xs text-gray-600 italic">
             *Tax rates exclude applicable surcharge and 4% Health & Education cess. Consult your chartered accountant for specific tax calculations.
           </p>
         </div>

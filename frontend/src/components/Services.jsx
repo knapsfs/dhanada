@@ -91,7 +91,7 @@ export default function Services() {
                     {service.title}
                   </h3>
                   
-                  <p className="text-gray-500 group-hover:text-gray-100 text-sm leading-relaxed mb-6 flex-1 transition-colors duration-300">
+                  <p className="text-gray-600 group-hover:text-gray-100 text-sm leading-relaxed mb-6 flex-1 transition-colors duration-300">
                     {service.description}
                   </p>
                   

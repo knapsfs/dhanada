@@ -273,7 +273,7 @@ export default function ClientOnboardingWorkflowPage() {
           <FontAwesomeIcon icon={faSpinner} className="animate-spin text-3xl text-[#032e92]" />
           <div>
             <h3 className="text-sm font-bold text-gray-900">Loading Client Onboarding</h3>
-            <p className="text-xs text-gray-400 mt-1">Verifying secure token...</p>
+            <p className="text-xs text-gray-600 mt-1">Verifying secure token...</p>
           </div>
         </div>
       </div>
@@ -363,7 +363,7 @@ export default function ClientOnboardingWorkflowPage() {
                 <button
                   type="button"
                   onClick={handlePrev}
-                  className="px-4 py-2.5 rounded-xl text-xs font-bold bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-2 cursor-pointer"
+                  className="px-4 py-2.5 rounded-xl text-xs font-bold bg-white border border-gray-200 text-gray-900 hover:bg-gray-50 transition-colors flex items-center gap-2 cursor-pointer"
                 >
                   <FontAwesomeIcon icon={faArrowLeft} />
                   <span>Back</span>
@@ -394,7 +394,7 @@ export default function ClientOnboardingWorkflowPage() {
                 <button
                   type="button"
                   onClick={handlePrev}
-                  className="px-4 py-2.5 rounded-xl text-xs font-bold bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-2 cursor-pointer"
+                  className="px-4 py-2.5 rounded-xl text-xs font-bold bg-white border border-gray-200 text-gray-900 hover:bg-gray-50 transition-colors flex items-center gap-2 cursor-pointer"
                 >
                   <FontAwesomeIcon icon={faArrowLeft} />
                   <span>Back</span>
@@ -429,7 +429,7 @@ export default function ClientOnboardingWorkflowPage() {
                   type="button"
                   onClick={handlePrev}
                   disabled={submitting}
-                  className="px-4 py-2.5 rounded-xl text-xs font-bold bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-2 cursor-pointer shadow-2xs"
+                  className="px-4 py-2.5 rounded-xl text-xs font-bold bg-white border border-gray-200 text-gray-900 hover:bg-gray-50 transition-colors flex items-center gap-2 cursor-pointer shadow-2xs"
                 >
                   <FontAwesomeIcon icon={faArrowLeft} />
                   <span>Back to Bank Details</span>

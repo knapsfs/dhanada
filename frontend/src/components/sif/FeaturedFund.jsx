@@ -35,7 +35,7 @@ export default function FeaturedFund({ fund }) {
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
             Featured <span className="gradient-text"> SIF Scheme</span>
           </h2>
-          {/* <p className="text-gray-500 font-medium max-w-xl mx-auto">
+          {/* <p className="text-gray-600 font-medium max-w-xl mx-auto">
             We help you understand SIF investments and choose the right opportunities with simple and transparent guidance.
           </p> */}
           <p>Explore our featured SIF scheme and learn more about its key features, investment approach, and potential benefits.

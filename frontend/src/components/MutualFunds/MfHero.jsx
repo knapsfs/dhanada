@@ -28,11 +28,11 @@ export default function MfHero() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb Navigation */}
-        <div className="flex items-center pb-4 sm:pb-5 gap-3 text-sm font-medium text-gray-500">
+        <div className="flex items-center pb-4 sm:pb-5 gap-3 text-sm font-medium text-gray-600">
           <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
-          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-600" />
           <Link to="/products" className="hover:text-[#032e92] transition-colors">Products</Link>
-          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-600" />
           <span className="text-[#032e92]">Mutual Funds</span>
         </div>
 
@@ -41,7 +41,7 @@ export default function MfHero() {
           <div className="lg:col-span-7 space-y-6">
 
             {/* Main Headline */}
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900 leading-tight">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-gray-900 leading-tight">
               Invest in Mutual Funds with <span className="text-[#032e92]">Confidence</span>
             </h1>
 
@@ -52,19 +52,19 @@ export default function MfHero() {
 
             {/* Trust Points Checklist */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-              <div className="flex items-center gap-2.5 text-slate-700 text-sm font-medium">
+              <div className="flex items-center gap-2.5 text-gray-900 text-sm font-medium">
                 {/* <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 text-base flex-shrink-0" /> */}
                 <span>Power of Compounding</span>
               </div>
-              <div className="flex items-center gap-2.5 text-slate-700 text-sm font-medium">
+              <div className="flex items-center gap-2.5 text-gray-900 text-sm font-medium">
                 {/* <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 text-base flex-shrink-0" /> */}
                 <span>SEBI-Regulated</span>
               </div>
-              <div className="flex items-center gap-2.5 text-slate-700 text-sm font-medium">
+              <div className="flex items-center gap-2.5 text-gray-900 text-sm font-medium">
                 {/* <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 text-base flex-shrink-0" /> */}
                 <span>Highly Liquid & Flexible</span>
               </div>
-              <div className="flex items-center gap-2.5 text-slate-700 text-sm font-medium">
+              <div className="flex items-center gap-2.5 text-gray-900 text-sm font-medium">
                 {/* <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 text-base flex-shrink-0" /> */}
                 <span>Start Small, Build Long term Wealth</span>
               </div>
@@ -86,9 +86,9 @@ export default function MfHero() {
           <div className="lg:col-span-5">
             <div className="relative bg-white rounded-3xl p-6 sm:p-8 border border-blue-100 shadow-xl shadow-blue-950/5">
               {/* Floating Top Badge */}
-              <div className="flex items-center justify-between border-b border-slate-100 pb-5">
+              <div className="flex items-center justify-between border-b border-gray-100 pb-5">
                 <div>
-                  {/* <div className="text-xs font-semibold text-slate-400 uppercase">KNAPS Smart Wealth</div> */}
+                  {/* <div className="text-xs font-semibold text-gray-600 uppercase">KNAPS Smart Wealth</div> */}
                   <div className="text-lg font-bold text-[#032e92]">Power Of Compounding</div>
                 </div>
                 <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-[#032e92]">
@@ -105,22 +105,22 @@ export default function MfHero() {
                   </div>
                   <div className="mt-3 flex items-baseline justify-between">
                     <div>
-                      <div className="text-xs text-slate-500 font-medium">Invested Amount</div>
-                      <div className="text-base font-bold text-slate-800">₹18,00,000</div>
+                      <div className="text-xs text-gray-600 font-medium">Invested Amount</div>
+                      <div className="text-base font-bold text-gray-900">₹18,00,000</div>
                     </div>
                     <div className="text-right">
-                      <div className="text-xs text-slate-500 font-medium">Est. Wealth Value</div>
+                      <div className="text-xs text-gray-600 font-medium">Est. Wealth Value</div>
                       <div className="text-xl font-extrabold text-[#032e92]">₹50,45,760</div>
                     </div>
                   </div>
                   {/* Progress Bar Visual */}
-                  <div className="mt-3 w-full bg-slate-200 h-2.5 rounded-full overflow-hidden flex">
-                    <div className="bg-slate-400 h-full w-[36%]" title="Invested" />
+                  <div className="mt-3 w-full bg-gray-200 h-2.5 rounded-full overflow-hidden flex">
+                    <div className="bg-gray-400 h-full w-[36%]" title="Invested" />
                     <div className="bg-gradient-to-r from-[#2490ef] to-[#032e92] h-full w-[64%]" title="Potential Gains" />
                   </div>
-                  <div className="flex justify-between items-center text-xs text-slate-500 mt-1.5 font-medium">
+                  <div className="flex justify-between items-center text-xs text-gray-600 mt-1.5 font-medium">
                     <span className="flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-slate-400 inline-block"></span>
+                      <span className="w-2 h-2 rounded-full bg-gray-400 inline-block"></span>
                       Invested (36%)
                     </span>
                     <span className="flex items-center gap-1.5">

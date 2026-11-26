@@ -45,7 +45,7 @@ export default function BlogHeader({ blog }) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="flex items-center gap-2.5 text-sm font-medium text-gray-500 mb-8 flex-wrap"
+          className="flex items-center gap-2.5 text-sm font-medium text-gray-600 mb-8 flex-wrap"
         >
           <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
           <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-300" />
@@ -55,7 +55,7 @@ export default function BlogHeader({ blog }) {
               <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-300" />
               <Link
                 to={`/blogs/${encodeURIComponent(blog.category_slug || blog.category)}`}
-                className="text-gray-500 hover:text-[#032e92] transition-colors"
+                className="text-gray-600 hover:text-[#032e92] transition-colors"
               >
                 {blog.category}
               </Link>
@@ -90,7 +90,7 @@ export default function BlogHeader({ blog }) {
           </h1>
 
           {/* Published Date & Reading Time */}
-          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-sm font-medium text-gray-500 mb-8">
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-sm font-medium text-gray-600 mb-8">
             <span className="flex items-center gap-2">
               <FontAwesomeIcon icon={faCalendarDays} className="text-[#032e92]" />
               <span>{blog?.date || 'Recent'}</span>
@@ -127,7 +127,7 @@ export default function BlogHeader({ blog }) {
                 <p className="text-[#0a192f] font-bold text-base group-hover:text-[#032e92] transition-colors flex items-center gap-1.5">
                   <span>{authorName}</span>
                 </p>
-                <p className="text-gray-500 text-xs flex items-center gap-1.5">
+                <p className="text-gray-600 text-xs flex items-center gap-1.5">
                   <FontAwesomeIcon icon={faUserTie} className="text-[#032e92]" />
                   <span>{authorRole}</span>
                 </p>
@@ -136,7 +136,7 @@ export default function BlogHeader({ blog }) {
 
             {/* Social Share Buttons */}
             <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold text-gray-400 uppercase mr-1 flex items-center gap-1">
+              <span className="text-xs font-semibold text-gray-600 uppercase mr-1 flex items-center gap-1">
                 <FontAwesomeIcon icon={faShareNodes} /> Share:
               </span>
               <a

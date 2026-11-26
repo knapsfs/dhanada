@@ -157,11 +157,11 @@ export default function HealthInsurancePlans() {
                   {/* Ideal For & Sum Insured Badges */}
                   <div className="space-y-2 py-3 border-y border-gray-100 mb-5 text-xs">
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-500 font-medium">Ideal For:</span>
-                      <span className="font-semibold text-gray-800 text-right max-w-[65%]">{plan.idealFor}</span>
+                      <span className="text-gray-600 font-medium">Ideal For:</span>
+                      <span className="font-semibold text-gray-900 text-right max-w-[65%]">{plan.idealFor}</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-500 font-medium">Cover Range:</span>
+                      <span className="text-gray-600 font-medium">Cover Range:</span>
                       <span className="font-bold text-[#032e92]">{plan.sumInsured}</span>
                     </div>
                   </div>
@@ -169,7 +169,7 @@ export default function HealthInsurancePlans() {
                   {/* Feature Highlights */}
                   <ul className="space-y-2.5 mb-6">
                     {plan.highlights.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-2.5 text-xs text-gray-700">
+                      <li key={idx} className="flex items-start gap-2.5 text-xs text-gray-900">
                         <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 text-xs flex-shrink-0 mt-0.5" />
                         <span className="leading-snug">{item}</span>
                       </li>

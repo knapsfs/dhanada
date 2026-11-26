@@ -69,7 +69,7 @@ export default function BlogDetails() {
         <Navbar />
         <div className="py-40 flex flex-col items-center justify-center flex-1">
           <div className="w-12 h-12 border-4 border-[#032e92] border-t-transparent rounded-full animate-spin mb-4"></div>
-          <p className="text-gray-500 text-sm font-medium">Loading article from Frappe...</p>
+          <p className="text-gray-600 text-sm font-medium">Loading article from Frappe...</p>
         </div>
         <Footer />
       </div>
@@ -83,7 +83,7 @@ export default function BlogDetails() {
         <div className="py-32 px-6 text-center max-w-lg mx-auto flex-1 flex flex-col justify-center items-center">
           <div className="bg-white rounded-3xl p-10 border border-gray-100 shadow-sm w-full">
             <h2 className="text-2xl font-bold text-[#0a192f] mb-3">Article Not Found</h2>
-            <p className="text-gray-500 text-sm mb-6 leading-relaxed">
+            <p className="text-gray-600 text-sm mb-6 leading-relaxed">
               The article you are trying to access does not exist or may have been unpublished in Frappe Desk.
             </p>
             <Link
@@ -141,7 +141,7 @@ export default function BlogDetails() {
               <div className="flex items-center justify-between mb-8">
                 <div>
                   <h3 className="text-2xl font-extrabold text-[#0a192f]">Related Articles</h3>
-                  <p className="text-gray-500 text-sm mt-1">More insights in {blog.category}</p>
+                  <p className="text-gray-600 text-sm mt-1">More insights in {blog.category}</p>
                 </div>
                 <Link
                   to="/blogs"

@@ -95,7 +95,7 @@ export default function HowFixedDepositWorks() {
 
                 <div className="space-y-1.5 pt-2 border-t border-gray-200/60">
                   {st.highlights.map((h, i) => (
-                    <div key={i} className="flex items-center gap-2 text-xs text-gray-700">
+                    <div key={i} className="flex items-center gap-2 text-xs text-gray-900">
                       <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 text-[10px]" />
                       <span>{h}</span>
                     </div>

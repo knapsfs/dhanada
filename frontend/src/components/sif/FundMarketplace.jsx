@@ -71,7 +71,7 @@ export default function FundMarketplace({ fundsData = [] }) {
                     </div>
                     <div>
                       <h3 className="font-bold text-gray-900 text-sm leading-tight group-hover:text-[#032e92] transition-colors line-clamp-2" title={fund.name}>{fund.name}</h3>
-                      <p className="text-xs text-gray-400 font-medium mt-0.5">{fund.category}</p>
+                      <p className="text-xs text-gray-600 font-medium mt-0.5">{fund.category}</p>
                     </div>
                   </div>
                   <button
@@ -79,7 +79,7 @@ export default function FundMarketplace({ fundsData = [] }) {
                     className="w-9 h-9 rounded-xl flex items-center justify-center border border-[#e8edf7] hover:border-[#032e92] hover:bg-[#eef4ff] transition-all flex-shrink-0">
                     <FontAwesomeIcon
                       icon={bookmarked.includes(fund.id) ? faBookmark : faBookmarkRegular}
-                      className={`text-sm ${bookmarked.includes(fund.id) ? 'text-[#032e92]' : 'text-gray-400'}`} />
+                      className={`text-sm ${bookmarked.includes(fund.id) ? 'text-[#032e92]' : 'text-gray-600'}`} />
                   </button>
                 </div>
 
@@ -87,18 +87,18 @@ export default function FundMarketplace({ fundsData = [] }) {
                 <div className="bg-gradient-to-br from-[#eef4ff] to-[#dbeafe] rounded-2xl p-4 mb-4">
                   <div className="flex justify-between items-center">
                     <div>
-                      <p className="text-xs text-gray-400 font-medium">1Y Returns</p>
+                      <p className="text-xs text-gray-600 font-medium">1Y Returns</p>
                       <div className="flex items-center gap-1">
                         <FontAwesomeIcon icon={faArrowTrendUp} className="text-green-500 text-sm" />
                         <span className="text-2xl font-bold text-green-600">{fund.returns1Y != null ? `${fund.returns1Y}%` : 'N/A'}</span>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-xs text-gray-400 font-medium">3Y Returns</p>
-                      <span className="text-lg font-bold text-gray-700">{fund.returns3Y != null ? `${fund.returns3Y}%` : 'N/A'}</span>
+                      <p className="text-xs text-gray-600 font-medium">3Y Returns</p>
+                      <span className="text-lg font-bold text-gray-900">{fund.returns3Y != null ? `${fund.returns3Y}%` : 'N/A'}</span>
                     </div>
                     <div className="text-right">
-                      <p className="text-xs text-gray-400 font-medium">NAV</p>
+                      <p className="text-xs text-gray-600 font-medium">NAV</p>
                       <span className="text-sm font-bold text-[#032e92]">{fund.nav != null ? `₹${fund.nav}` : 'N/A'}</span>
                     </div>
                   </div>
@@ -107,12 +107,12 @@ export default function FundMarketplace({ fundsData = [] }) {
                 {/* Details Row */}
                 <div className="flex items-center justify-between text-xs mb-4">
                   <div>
-                    <p className="text-gray-400 font-medium">Min. Investment</p>
-                    <p className="font-bold text-gray-800">{fund.minInvestment != null ? `₹${fund.minInvestment.toLocaleString('en-IN')}` : 'N/A'}</p>
+                    <p className="text-gray-600 font-medium">Min. Investment</p>
+                    <p className="font-bold text-gray-900">{fund.minInvestment != null ? `₹${fund.minInvestment.toLocaleString('en-IN')}` : 'N/A'}</p>
                   </div>
                   <div>
-                    <p className="text-gray-400 font-medium">AUM</p>
-                    <p className="font-bold text-gray-800">{fund.aum != null ? fund.aum : 'N/A'}</p>
+                    <p className="text-gray-600 font-medium">AUM</p>
+                    <p className="font-bold text-gray-900">{fund.aum != null ? fund.aum : 'N/A'}</p>
                   </div>
                   <div>
                     <span className={`px-2.5 py-1 rounded-full text-xs font-semibold border ${getRiskLevelConfig(fund.riskLevel).bg} ${getRiskLevelConfig(fund.riskLevel).text} ${getRiskLevelConfig(fund.riskLevel).border}`}>
@@ -126,8 +126,8 @@ export default function FundMarketplace({ fundsData = [] }) {
                   {fund.rating != null ? Array.from({ length: 5 }).map((_, i) => (
                     <FontAwesomeIcon key={i} icon={faStar}
                       className={`text-xs ${i < fund.rating ? 'text-amber-400' : 'text-gray-200'}`} />
-                  )) : <span className="text-xs text-gray-400 font-medium">Unrated</span>}
-                  {fund.rating != null && <span className="text-xs text-gray-400 ml-1 font-medium">{fund.rating}.0/5</span>}
+                  )) : <span className="text-xs text-gray-600 font-medium">Unrated</span>}
+                  {fund.rating != null && <span className="text-xs text-gray-600 ml-1 font-medium">{fund.rating}.0/5</span>}
                 </div>
               </div>
 
@@ -140,7 +140,7 @@ export default function FundMarketplace({ fundsData = [] }) {
                 </button>
                 <button 
                   onClick={() => handleFundClick(fund.id)}
-                  className="px-4 py-3 rounded-xl border border-gray-200 text-gray-700 text-sm font-semibold hover:border-[#032e92] hover:text-[#032e92] hover:bg-blue-50 transition-all duration-200 cursor-pointer">
+                  className="px-4 py-3 rounded-xl border border-gray-200 text-gray-900 text-sm font-semibold hover:border-[#032e92] hover:text-[#032e92] hover:bg-blue-50 transition-all duration-200 cursor-pointer">
                   Details
                 </button>
               </div>

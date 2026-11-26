@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 export default function SubCategoryTabs({ subCategories, activeSubCategoryId, setActiveSubCategoryId, parentCategoryLabel }) {
   return (
     <div className="flex flex-col gap-2 w-full">
-      <h3 className="text-xs font-bold text-gray-800 tracking-wide px-1">
+      <h3 className="text-xs font-bold text-gray-900 tracking-wide px-1">
         {parentCategoryLabel} Sub-Categories
       </h3>
       <div className="flex flex-row flex-wrap gap-2">

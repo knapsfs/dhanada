@@ -66,7 +66,7 @@ export default function LifeInsuranceWhyChooseUs() {
                 >
 
                   <h4 className="font-bold text-[#0a192f] text-base mb-2">{r.title}</h4>
-                  <p className="text-gray-500 text-xs leading-relaxed font-medium">{r.desc}</p>
+                  <p className="text-gray-600 text-xs leading-relaxed font-medium">{r.desc}</p>
                 </div>
               ))}
             </div>

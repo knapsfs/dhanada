@@ -6,7 +6,7 @@ const PRIORITY_BADGES = {
   Urgent: 'bg-red-50 text-red-700 border-red-200',
   High: 'bg-amber-50 text-amber-700 border-amber-200',
   Medium: 'bg-blue-50 text-blue-700 border-blue-200',
-  Low: 'bg-gray-100 text-gray-700 border-gray-200',
+  Low: 'bg-gray-100 text-gray-900 border-gray-200',
 };
 
 export default function CrmTasksView({ tasks = [], onToggleComplete, onNewTask, loading = false }) {
@@ -63,7 +63,7 @@ export default function CrmTasksView({ tasks = [], onToggleComplete, onNewTask, 
       {/* Task List */}
       <div className="p-4 sm:p-6 divide-y divide-gray-100 space-y-3">
         {filtered.length === 0 ? (
-          <div className="py-12 text-center text-gray-400 font-medium text-xs">
+          <div className="py-12 text-center text-gray-600 font-medium text-xs">
             {loading ? 'Loading tasks...' : 'No tasks found for this view.'}
           </div>
         ) : (
@@ -96,10 +96,10 @@ export default function CrmTasksView({ tasks = [], onToggleComplete, onNewTask, 
 
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 flex-wrap mb-1">
-                      <h4 className={`text-xs font-bold truncate ${isCompleted ? 'line-through text-gray-400' : 'text-gray-900'}`}>
+                      <h4 className={`text-xs font-bold truncate ${isCompleted ? 'line-through text-gray-600' : 'text-gray-900'}`}>
                         {task.title}
                       </h4>
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${PRIORITY_BADGES[task.priority] || 'bg-gray-100 text-gray-700'}`}>
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${PRIORITY_BADGES[task.priority] || 'bg-gray-100 text-gray-900'}`}>
                         {task.priority}
                       </span>
                       {isOverdue && (
@@ -110,12 +110,12 @@ export default function CrmTasksView({ tasks = [], onToggleComplete, onNewTask, 
                     </div>
 
                     {task.description && (
-                      <p className="text-xs text-gray-500 mb-2 leading-relaxed">
+                      <p className="text-xs text-gray-600 mb-2 leading-relaxed">
                         {task.description}
                       </p>
                     )}
 
-                    <div className="flex items-center gap-3 text-xs text-gray-400 flex-wrap">
+                    <div className="flex items-center gap-3 text-xs text-gray-600 flex-wrap">
                       <span className="flex items-center gap-1 font-medium text-gray-600">
                         <FontAwesomeIcon icon={faClock} className="text-[10px]" />
                         <span>Due: {task.due_date} {task.due_time || ''}</span>

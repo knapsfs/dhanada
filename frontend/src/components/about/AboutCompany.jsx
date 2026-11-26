@@ -41,7 +41,7 @@ export default function AboutCompany() {
               className="absolute -bottom-6 -right-6 lg:-right-12 bg-white rounded-2xl p-6 shadow-xl border border-gray-50 flex items-center gap-5"
             >
               <div className="text-[#032e92] font-black text-5xl tracking-tighter">15+</div>
-              <div className="text-gray-500 font-medium text-sm leading-tight uppercase">
+              <div className="text-gray-600 font-medium text-sm leading-tight uppercase">
                 Years<br/>Experience
               </div>
             </motion.div>
@@ -74,7 +74,7 @@ export default function AboutCompany() {
                   <div className="w-6 h-6 rounded-full bg-[#eef4ff] flex items-center justify-center text-[#032e92] shrink-0">
                     <FontAwesomeIcon icon={faCheck} className="text-[10px]" />
                   </div>
-                  <span className="text-gray-800 font-medium text-sm">{item}</span>
+                  <span className="text-gray-900 font-medium text-sm">{item}</span>
                 </div>
               ))}
             </div>

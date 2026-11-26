@@ -68,7 +68,7 @@ export default function CrmLoginForm({ onLoginSuccess }) {
           <h2 className="text-2xl font-extrabold tracking-tight text-gray-900 text-left">
             Sign In
           </h2>
-          <p className="text-sm text-gray-500 mt-1 mb-6 text-left">
+          <p className="text-sm text-gray-600 mt-1 mb-6 text-left">
             Welcome! Please sign in to continue.
           </p>
 
@@ -84,13 +84,13 @@ export default function CrmLoginForm({ onLoginSuccess }) {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email / Username Field */}
             <div>
-              <label className="block text-xs font-semibold text-gray-700 mb-1.5 text-left">
+              <label className="block text-xs font-semibold text-gray-900 mb-1.5 text-left">
                 Email
               </label>
               <div className="relative">
                 <FontAwesomeIcon
                   icon={faEnvelope}
-                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-600 text-xs pointer-events-none"
                 />
                 <input
                   type="text"
@@ -106,13 +106,13 @@ export default function CrmLoginForm({ onLoginSuccess }) {
 
             {/* Password Field */}
             <div>
-              <label className="block text-xs font-semibold text-gray-700 mb-1.5 text-left">
+              <label className="block text-xs font-semibold text-gray-900 mb-1.5 text-left">
                 Password
               </label>
               <div className="relative">
                 <FontAwesomeIcon
                   icon={faLock}
-                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-600 text-xs pointer-events-none"
                 />
                 <input
                   type={showPassword ? "text" : "password"}
@@ -125,7 +125,7 @@ export default function CrmLoginForm({ onLoginSuccess }) {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#032e92] cursor-pointer p-0.5 transition-colors"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-600 hover:text-[#032e92] cursor-pointer p-0.5 transition-colors"
                   tabIndex={-1}
                   title={showPassword ? "Hide password" : "Show password"}
                 >
@@ -168,7 +168,7 @@ export default function CrmLoginForm({ onLoginSuccess }) {
           </form>
 
           {/* Quick Help / Desk Link */}
-          <div className="mt-6 pt-5 border-t border-gray-100 flex items-center justify-center text-xs text-gray-500">
+          <div className="mt-6 pt-5 border-t border-gray-100 flex items-center justify-center text-xs text-gray-600">
             <a
               href="/"
               className="flex items-center gap-1.5 font-medium text-gray-600 hover:text-[#032e92] transition-colors"

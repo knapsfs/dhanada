@@ -40,11 +40,11 @@ export default function HealthInsuranceHero() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Breadcrumb Navigation */}
-        <div className="flex items-center pb-4 sm:pb-5 gap-3 text-sm font-medium text-gray-500">
+        <div className="flex items-center pb-4 sm:pb-5 gap-3 text-sm font-medium text-gray-600">
           <Link to="/" className="hover:text-[#032e92] transition-colors">Home</Link>
-          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-600" />
           <Link to="/products" className="hover:text-[#032e92] transition-colors">Products</Link>
-          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-400" />
+          <FontAwesomeIcon icon={faChevronRight} className="text-[10px] text-gray-600" />
           <span className="text-[#032e92]">Health Insurance</span>
         </div>
 
@@ -75,19 +75,19 @@ export default function HealthInsuranceHero() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
               <div className="flex items-center gap-2.5">
                 <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 flex-shrink-0 text-sm" />
-                <span className="text-xs sm:text-sm font-medium text-gray-800">14,000+ Cashless Network Hospitals</span>
+                <span className="text-xs sm:text-sm font-medium text-gray-900">14,000+ Cashless Network Hospitals</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 flex-shrink-0 text-sm" />
-                <span className="text-xs sm:text-sm font-medium text-gray-800">Zero Room Rent Capping on Select Plans</span>
+                <span className="text-xs sm:text-sm font-medium text-gray-900">Zero Room Rent Capping on Select Plans</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 flex-shrink-0 text-sm" />
-                <span className="text-xs sm:text-sm font-medium text-gray-800">Pre & Post Hospitalization Expenses Covered</span>
+                <span className="text-xs sm:text-sm font-medium text-gray-900">Pre & Post Hospitalization Expenses Covered</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 flex-shrink-0 text-sm" />
-                <span className="text-xs sm:text-sm font-medium text-gray-800">Tax Deductions up to ₹1 Lakh u/s 80D</span>
+                <span className="text-xs sm:text-sm font-medium text-gray-900">Tax Deductions up to ₹1 Lakh u/s 80D</span>
               </div>
             </div>
 
@@ -131,7 +131,7 @@ export default function HealthInsuranceHero() {
                   </div>
                   <div>
                     <h3 className="text-base font-bold text-[#0a192f]">Health Shield Snapshot</h3>
-                    <p className="text-xs text-gray-500">Essential benchmarks for Indian families</p>
+                    <p className="text-xs text-gray-600">Essential benchmarks for Indian families</p>
                   </div>
                 </div>
                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-200/60">
@@ -145,7 +145,7 @@ export default function HealthInsuranceHero() {
                 <div className="p-3.5 rounded-2xl bg-blue-50/50 border border-blue-100/60">
                   <div className="flex items-center gap-2 text-[#032e92] mb-1">
                     <FontAwesomeIcon icon={faHospital} className="text-xs" />
-                    <span className="text-xs font-semibold uppercase text-gray-500">Network</span>
+                    <span className="text-xs font-semibold uppercase text-gray-600">Network</span>
                   </div>
                   <div className="text-lg font-extrabold text-[#0a192f]">14,000+</div>
                   <p className="text-xs text-gray-600 leading-tight">Cashless hospitals nationwide</p>
@@ -154,7 +154,7 @@ export default function HealthInsuranceHero() {
                 <div className="p-3.5 rounded-2xl bg-emerald-50/50 border border-emerald-100/60">
                   <div className="flex items-center gap-2 text-emerald-700 mb-1">
                     <FontAwesomeIcon icon={faClock} className="text-xs" />
-                    <span className="text-xs font-semibold uppercase text-gray-500">Speed</span>
+                    <span className="text-xs font-semibold uppercase text-gray-600">Speed</span>
                   </div>
                   <div className="text-lg font-extrabold text-[#0a192f]">&lt; 45 Mins</div>
                   <p className="text-xs text-gray-600 leading-tight">Avg. cashless pre-authorization</p>
@@ -163,7 +163,7 @@ export default function HealthInsuranceHero() {
                 <div className="p-3.5 rounded-2xl bg-indigo-50/50 border border-indigo-100/60">
                   <div className="flex items-center gap-2 text-indigo-700 mb-1">
                     <FontAwesomeIcon icon={faPercent} className="text-xs" />
-                    <span className="text-xs font-semibold uppercase text-gray-500">Settlement</span>
+                    <span className="text-xs font-semibold uppercase text-gray-600">Settlement</span>
                   </div>
                   <div className="text-lg font-extrabold text-[#0a192f]">99.2%</div>
                   <p className="text-xs text-gray-600 leading-tight">KNAPS claim assistance rate</p>
@@ -172,7 +172,7 @@ export default function HealthInsuranceHero() {
                 <div className="p-3.5 rounded-2xl bg-amber-50/50 border border-amber-100/60">
                   <div className="flex items-center gap-2 text-amber-700 mb-1">
                     <FontAwesomeIcon icon={faShieldHeart} className="text-xs" />
-                    <span className="text-xs font-semibold uppercase text-gray-500">Tax Saving</span>
+                    <span className="text-xs font-semibold uppercase text-gray-600">Tax Saving</span>
                   </div>
                   <div className="text-lg font-extrabold text-[#0a192f]">₹1,00,000</div>
                   <p className="text-xs text-gray-600 leading-tight">Max 80D deduction benefit</p>
@@ -202,7 +202,7 @@ export default function HealthInsuranceHero() {
 
               {/* Instant Call Prompt */}
               <div className="mt-5 text-center">
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-gray-600">
                   Need personalized guidance? Call our certified health insurance specialists at{' '}
                   <a href="tel:+918080808080" className="font-semibold text-[#032e92] hover:underline">
                     +91 8080808080

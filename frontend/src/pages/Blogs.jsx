@@ -131,17 +131,17 @@ export default function Blogs() {
         {loading ? (
           <div className="py-28 flex flex-col items-center justify-center">
             <div className="w-12 h-12 border-4 border-[#032e92] border-t-transparent rounded-full animate-spin mb-4"></div>
-            <p className="text-gray-500 text-sm font-medium">Loading published articles...</p>
+            <p className="text-gray-600 text-sm font-medium">Loading published articles...</p>
           </div>
         ) : error ? (
           <div className="py-20 text-center max-w-lg mx-auto bg-white rounded-3xl p-8 border border-gray-100 shadow-sm my-10">
             <p className="text-red-600 font-semibold mb-2">{error}</p>
-            <p className="text-gray-400 text-sm">Please try again later or refresh the page.</p>
+            <p className="text-gray-600 text-sm">Please try again later or refresh the page.</p>
           </div>
         ) : blogs.length === 0 ? (
           <div className="py-20 text-center max-w-lg mx-auto bg-white rounded-3xl p-8 border border-gray-100 shadow-sm my-10">
-            <p className="text-gray-700 font-semibold mb-2">No blog posts found</p>
-            <p className="text-gray-400 text-sm">
+            <p className="text-gray-900 font-semibold mb-2">No blog posts found</p>
+            <p className="text-gray-600 text-sm">
               {selectedCategory !== "All"
                 ? `There are currently no published articles in "${selectedCategory}".`
                 : "Please check back soon for our latest financial insights."}

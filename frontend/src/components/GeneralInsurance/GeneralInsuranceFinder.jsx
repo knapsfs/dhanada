@@ -280,7 +280,7 @@ const GeneralInsuranceFinder = () => {
                 onClick={() => handleCategoryChange(cat.id)}
                 className={`flex items-center gap-2.5 px-4 sm:px-6 py-3 rounded-xl sm:rounded-2xl text-sm sm:text-base font-semibold transition-all duration-300 shadow-sm cursor-pointer ${isActive
                   ? 'bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-lg shadow-[#032e92]/25 scale-[1.02]'
-                  : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200/80 hover:border-blue-200'
+                  : 'bg-white text-gray-900 hover:bg-gray-50 border border-gray-200/80 hover:border-blue-200'
                   }`}
               >
                 <FontAwesomeIcon icon={cat.icon} className={`text-base ${isActive ? 'text-white' : 'text-[#032e92]'}`} />
@@ -335,14 +335,14 @@ const GeneralInsuranceFinder = () => {
                 <p className="mt-2 text-sm sm:text-base text-gray-600 leading-relaxed">
                   {activeOption.desc}
                 </p>
-                <div className="mt-3 inline-flex items-center gap-2 text-xs sm:text-sm text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100">
-                  <span className="font-semibold text-gray-700">Ideal For:</span>
+                <div className="mt-3 inline-flex items-center gap-2 text-xs sm:text-sm text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100">
+                  <span className="font-semibold text-gray-900">Ideal For:</span>
                   <span>{activeOption.idealFor}</span>
                 </div>
               </div>
 
               <div>
-                <h4 className="text-sm font-bold uppercase text-gray-500 mb-3 flex items-center gap-2">
+                <h4 className="text-sm font-bold uppercase text-gray-600 mb-3 flex items-center gap-2">
                   <FontAwesomeIcon icon={faCheckCircle} className="text-[#032e92]" />
                   What is Covered Under This Plan
                 </h4>
@@ -350,7 +350,7 @@ const GeneralInsuranceFinder = () => {
                   {activeOption.coverageHighlights.map((item, idx) => (
                     <div key={idx} className="flex items-start gap-2.5 p-2.5 rounded-xl bg-gray-50/70 border border-gray-100">
                       <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 flex-shrink-0 mt-0.5 text-xs" />
-                      <span className="text-xs sm:text-sm text-gray-700 leading-snug">{item}</span>
+                      <span className="text-xs sm:text-sm text-gray-900 leading-snug">{item}</span>
                     </div>
                   ))}
                 </div>
@@ -403,7 +403,7 @@ const GeneralInsuranceFinder = () => {
                   <FontAwesomeIcon icon={faArrowRight} className="text-sm group-hover:translate-x-1 transition-transform" />
                 </button>
 
-                <div className="flex items-center justify-center gap-4 text-xs text-gray-500 pt-1">
+                <div className="flex items-center justify-center gap-4 text-xs text-gray-600 pt-1">
                   <a href="tel:+918080808080" className="inline-flex items-center gap-1.5 hover:text-[#032e92] font-medium transition-colors">
                     <FontAwesomeIcon icon={faPhone} className="text-[#032e92] text-xs" />
                     <span>Or Speak with Insurance Specialist</span>

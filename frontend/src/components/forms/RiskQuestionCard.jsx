@@ -70,7 +70,7 @@ export default function RiskQuestionCard({
                 </div>
                 <span
                   className={`text-xs font-semibold leading-relaxed ${
-                    isSelected ? "text-[#032e92] font-bold" : "text-gray-700"
+                    isSelected ? "text-[#032e92] font-bold" : "text-gray-900"
                   }`}
                 >
                   {option.text}

@@ -16,13 +16,13 @@ export default function HeatmapTooltip({ data, position }) {
           top: position.y + 15,
         }}>
         <div className="font-bold text-[#032e92] mb-1">{data.fundName}</div>
-        <div className="text-xs text-gray-500 mb-2 border-b border-gray-100 pb-2">{data.category}</div>
+        <div className="text-xs text-gray-600 mb-2 border-b border-gray-100 pb-2">{data.category}</div>
         <div className="flex justify-between items-center text-xs">
           <span className="font-medium text-gray-600 uppercase">Month: <span className="text-gray-900 font-bold ml-1">{data.month}</span></span>
         </div>
         <div className="flex justify-between items-center text-xs mt-1">
           <span className="font-medium text-gray-600 uppercase">Return:</span>
-          <span className={`font-bold ${data.isPositive ? 'text-green-600' : data.isNegative ? 'text-red-500' : 'text-gray-400'}`}>
+          <span className={`font-bold ${data.isPositive ? 'text-green-600' : data.isNegative ? 'text-red-500' : 'text-gray-600'}`}>
             {typeof data.returnVal === 'number'
               ? `${data.returnVal > 0 ? '+' : ''}${data.returnVal}%`
               : (data.returnVal === 'N/L' ? 'N/A' : (data.returnVal || 'N/A'))}

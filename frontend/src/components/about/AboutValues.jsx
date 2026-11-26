@@ -30,7 +30,7 @@ export default function AboutValues() {
               <h3 className="text-xl font-bold text-[#0a192f] mb-3 group-hover:text-[#032e92] transition-colors">
                 {item.title}
               </h3>
-              <p className="text-gray-500 text-sm leading-relaxed">
+              <p className="text-gray-600 text-sm leading-relaxed">
                 {item.desc}
               </p>
             </motion.div>

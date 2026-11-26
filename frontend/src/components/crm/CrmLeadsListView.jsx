@@ -24,7 +24,7 @@ const STATUS_BADGES = {
   Interested: "bg-amber-50 text-amber-700 border-amber-200",
   Nurturing: "bg-purple-50 text-purple-700 border-purple-200",
   Converted: "bg-emerald-50 text-emerald-700 border-emerald-200",
-  "Not Interested": "bg-gray-100 text-gray-700 border-gray-300",
+  "Not Interested": "bg-gray-100 text-gray-900 border-gray-300",
   Junk: "bg-red-50 text-red-700 border-red-200",
 };
 
@@ -313,7 +313,7 @@ export default function CrmLeadsListView({
         {/* Left: Summary & Active Filters */}
         <div className="flex items-center gap-3 flex-wrap w-full sm:w-auto">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-gray-700 uppercase">All Leads</span>
+            <span className="text-xs font-bold text-gray-900 uppercase">All Leads</span>
             <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-50 text-[#032e92] border border-blue-200/60">
               {totalItems} {totalItems === 1 ? "lead" : "leads"}
             </span>
@@ -367,7 +367,7 @@ export default function CrmLeadsListView({
         <table className="w-full text-left border-collapse">
           <thead>
             {/* Column Titles */}
-            <tr className="bg-[#f8fafc] text-xs font-bold text-gray-500 uppercase border-b border-gray-200/80">
+            <tr className="bg-[#f8fafc] text-xs font-bold text-gray-600 uppercase border-b border-gray-200/80">
               <th className="py-3 px-4 sm:px-6 min-w-[200px]">Lead</th>
               <th className="py-3 px-4 min-w-[170px]">Contact</th>
               <th className="py-3 px-4 min-w-[150px]">Goal / Product</th>
@@ -388,13 +388,13 @@ export default function CrmLeadsListView({
                     value={filters.lead}
                     onChange={(e) => updateFilter("lead", e.target.value)}
                     placeholder="Search name/ID..."
-                    className="w-full text-xs bg-white border border-gray-200 rounded-lg pl-2 pr-6 py-1.5 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/30 transition-all"
+                    className="w-full text-xs bg-white border border-gray-200 rounded-lg pl-2 pr-6 py-1.5 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/30 transition-all"
                   />
                   {filters.lead && (
                     <button
                       type="button"
                       onClick={() => updateFilter("lead", "")}
-                      className="absolute right-2 text-gray-400 hover:text-gray-600 text-xs cursor-pointer"
+                      className="absolute right-2 text-gray-600 hover:text-gray-600 text-xs cursor-pointer"
                       title="Clear"
                     >
                       <FontAwesomeIcon icon={faXmark} />
@@ -411,13 +411,13 @@ export default function CrmLeadsListView({
                     value={filters.contact}
                     onChange={(e) => updateFilter("contact", e.target.value)}
                     placeholder="Mobile / email..."
-                    className="w-full text-xs bg-white border border-gray-200 rounded-lg pl-2 pr-6 py-1.5 text-gray-800 placeholder:text-gray-400 focus:outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/30 transition-all"
+                    className="w-full text-xs bg-white border border-gray-200 rounded-lg pl-2 pr-6 py-1.5 text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/30 transition-all"
                   />
                   {filters.contact && (
                     <button
                       type="button"
                       onClick={() => updateFilter("contact", "")}
-                      className="absolute right-2 text-gray-400 hover:text-gray-600 text-xs cursor-pointer"
+                      className="absolute right-2 text-gray-600 hover:text-gray-600 text-xs cursor-pointer"
                       title="Clear"
                     >
                       <FontAwesomeIcon icon={faXmark} />
@@ -431,7 +431,7 @@ export default function CrmLeadsListView({
                 <select
                   value={filters.product}
                   onChange={(e) => updateFilter("product", e.target.value)}
-                  className="w-full text-xs bg-white border border-gray-200 rounded-lg py-1.5 px-2 text-gray-700 focus:outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/30 cursor-pointer transition-all"
+                  className="w-full text-xs bg-white border border-gray-200 rounded-lg py-1.5 px-2 text-gray-900 focus:outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/30 cursor-pointer transition-all"
                 >
                   <option value="All">All Goals / Products</option>
                   {availableProducts.map((p) => (
@@ -447,7 +447,7 @@ export default function CrmLeadsListView({
                 <select
                   value={filters.source}
                   onChange={(e) => updateFilter("source", e.target.value)}
-                  className="w-full text-xs bg-white border border-gray-200 rounded-lg py-1.5 px-2 text-gray-700 focus:outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/30 cursor-pointer transition-all"
+                  className="w-full text-xs bg-white border border-gray-200 rounded-lg py-1.5 px-2 text-gray-900 focus:outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/30 cursor-pointer transition-all"
                 >
                   <option value="All">All Sources</option>
                   {availableSources.map((s) => (
@@ -463,7 +463,7 @@ export default function CrmLeadsListView({
                 <select
                   value={filters.touchpoints}
                   onChange={(e) => updateFilter("touchpoints", e.target.value)}
-                  className="w-full text-xs bg-white border border-gray-200 rounded-lg py-1.5 px-2 text-gray-700 focus:outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/30 cursor-pointer transition-all"
+                  className="w-full text-xs bg-white border border-gray-200 rounded-lg py-1.5 px-2 text-gray-900 focus:outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/30 cursor-pointer transition-all"
                 >
                   <option value="All">All</option>
                   <option value="with">With Touchpoints</option>
@@ -476,7 +476,7 @@ export default function CrmLeadsListView({
                 <select
                   value={filters.status}
                   onChange={(e) => updateFilter("status", e.target.value)}
-                  className="w-full text-xs bg-white border border-gray-200 rounded-lg py-1.5 px-2 text-gray-700 focus:outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/30 cursor-pointer transition-all"
+                  className="w-full text-xs bg-white border border-gray-200 rounded-lg py-1.5 px-2 text-gray-900 focus:outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/30 cursor-pointer transition-all"
                 >
                   <option value="All">All Statuses</option>
                   {availableStatuses.map((st) => (
@@ -493,7 +493,7 @@ export default function CrmLeadsListView({
                   <select
                     value={filters.createdPreset}
                     onChange={(e) => updateFilter("createdPreset", e.target.value)}
-                    className="w-full text-xs bg-white border border-gray-200 rounded-lg py-1.5 px-2 text-gray-700 focus:outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/30 cursor-pointer transition-all"
+                    className="w-full text-xs bg-white border border-gray-200 rounded-lg py-1.5 px-2 text-gray-900 focus:outline-none focus:border-[#032e92] focus:ring-1 focus:ring-[#032e92]/30 cursor-pointer transition-all"
                   >
                     <option value="all">All Time</option>
                     <option value="today">Today</option>
@@ -509,14 +509,14 @@ export default function CrmLeadsListView({
                         type="date"
                         value={filters.createdFrom}
                         onChange={(e) => updateFilter("createdFrom", e.target.value)}
-                        className="w-1/2 text-[10px] bg-white border border-gray-200 rounded p-1 text-gray-700 focus:outline-none focus:border-[#032e92]"
+                        className="w-1/2 text-[10px] bg-white border border-gray-200 rounded p-1 text-gray-900 focus:outline-none focus:border-[#032e92]"
                         title="From Date"
                       />
                       <input
                         type="date"
                         value={filters.createdTo}
                         onChange={(e) => updateFilter("createdTo", e.target.value)}
-                        className="w-1/2 text-[10px] bg-white border border-gray-200 rounded p-1 text-gray-700 focus:outline-none focus:border-[#032e92]"
+                        className="w-1/2 text-[10px] bg-white border border-gray-200 rounded p-1 text-gray-900 focus:outline-none focus:border-[#032e92]"
                         title="To Date"
                       />
                     </div>
@@ -547,11 +547,11 @@ export default function CrmLeadsListView({
               <tr>
                 <td colSpan="8" className="py-12 text-center">
                   <div className="flex flex-col items-center justify-center gap-2">
-                    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
+                    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600">
                       <FontAwesomeIcon icon={faFilter} className="text-sm" />
                     </div>
-                    <p className="text-sm font-semibold text-gray-700">No leads match the selected filters</p>
-                    <p className="text-xs text-gray-400">Try adjusting your search criteria or resetting filters</p>
+                    <p className="text-sm font-semibold text-gray-900">No leads match the selected filters</p>
+                    <p className="text-xs text-gray-600">Try adjusting your search criteria or resetting filters</p>
                     {activeFilterCount > 0 && (
                       <button
                         type="button"
@@ -580,7 +580,7 @@ export default function CrmLeadsListView({
                         {lead.lead_name}
                       </div>
                       <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
-                        <span className="text-[10px] text-gray-400 font-mono">{lead.name}</span>
+                        <span className="text-[10px] text-gray-600 font-mono">{lead.name}</span>
                         {(() => {
                           const contactInfo = getContactStatus(
                             lead.last_contacted_on,
@@ -596,7 +596,7 @@ export default function CrmLeadsListView({
                             );
                           }
                           return (
-                            <span className="text-[10px] text-gray-400">
+                            <span className="text-[10px] text-gray-600">
                               · {contactInfo.label}
                             </span>
                           );
@@ -604,14 +604,14 @@ export default function CrmLeadsListView({
                       </div>
                       {lead.latest_remark && (
                         <p className="text-xs text-gray-600 italic mt-1 line-clamp-1">
-                          <span className="font-semibold not-italic text-gray-700">Remark: </span>{lead.latest_remark}
+                          <span className="font-semibold not-italic text-gray-900">Remark: </span>{lead.latest_remark}
                         </p>
                       )}
                     </td>
 
                     <td className="py-3.5 px-4">
-                      <div className="font-semibold text-gray-800">{lead.mobile_no || "—"}</div>
-                      <div className="text-xs text-gray-400">{lead.email || ""}</div>
+                      <div className="font-semibold text-gray-900">{lead.mobile_no || "—"}</div>
+                      <div className="text-xs text-gray-600">{lead.email || ""}</div>
                     </td>
 
                     <td className="py-3.5 px-4">
@@ -625,19 +625,19 @@ export default function CrmLeadsListView({
                     </td>
 
                     <td className="py-3.5 px-4 text-center">
-                      <span className="inline-flex items-center gap-1 font-bold text-gray-700 bg-gray-100 px-2 py-0.5 rounded-full text-xs">
+                      <span className="inline-flex items-center gap-1 font-bold text-gray-900 bg-gray-100 px-2 py-0.5 rounded-full text-xs">
                         <FontAwesomeIcon icon={faCommentDots} className="text-blue-600 text-[10px]" />
                         <span>{lead.interaction_count}</span>
                       </span>
                     </td>
 
                     <td className="py-3.5 px-4">
-                      <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-bold border ${STATUS_BADGES[lead.status] || "bg-gray-100 text-gray-700"}`}>
+                      <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-bold border ${STATUS_BADGES[lead.status] || "bg-gray-100 text-gray-900"}`}>
                         {lead.status}
                       </span>
                     </td>
 
-                    <td className="py-3.5 px-4 text-gray-500 text-xs">
+                    <td className="py-3.5 px-4 text-gray-600 text-xs">
                       {lead.creation ? new Date(lead.creation).toLocaleDateString("en-IN", { day: "numeric", month: "short" }) : "—"}
                     </td>
 
@@ -679,22 +679,22 @@ export default function CrmLeadsListView({
       </div>
 
       {/* Pagination Footer */}
-      <div className="p-3 sm:px-6 sm:py-3.5 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500 bg-[#f8fafc]/50">
+      <div className="p-3 sm:px-6 sm:py-3.5 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-600 bg-[#f8fafc]/50">
         <div className="flex items-center gap-3 flex-wrap">
           <span>
-            Showing <strong className="text-gray-800 font-semibold">{totalItems === 0 ? 0 : startIndex + 1}</strong> to{" "}
-            <strong className="text-gray-800 font-semibold">{endIndex}</strong> of{" "}
-            <strong className="text-gray-800 font-semibold">{totalItems}</strong> leads
+            Showing <strong className="text-gray-900 font-semibold">{totalItems === 0 ? 0 : startIndex + 1}</strong> to{" "}
+            <strong className="text-gray-900 font-semibold">{endIndex}</strong> of{" "}
+            <strong className="text-gray-900 font-semibold">{totalItems}</strong> leads
           </span>
           <div className="flex items-center gap-1.5 ml-2 border-l border-gray-200 pl-3">
-            <span className="text-gray-400 text-xs">Rows per page:</span>
+            <span className="text-gray-600 text-xs">Rows per page:</span>
             <select
               value={pageSize}
               onChange={(e) => {
                 setPageSize(Number(e.target.value));
                 setCurrentPage(1);
               }}
-              className="text-xs bg-white border border-gray-200 rounded-md py-0.5 px-1.5 text-gray-700 focus:outline-none focus:border-[#032e92]"
+              className="text-xs bg-white border border-gray-200 rounded-md py-0.5 px-1.5 text-gray-900 focus:outline-none focus:border-[#032e92]"
             >
               <option value={10}>10</option>
               <option value={15}>15</option>
@@ -718,7 +718,7 @@ export default function CrmLeadsListView({
 
             {getPageNumbers().map((p, idx) =>
               p === "..." ? (
-                <span key={`dots-${idx}`} className="px-2 py-1 text-gray-400 select-none">
+                <span key={`dots-${idx}`} className="px-2 py-1 text-gray-600 select-none">
                   ...
                 </span>
               ) : (
@@ -729,7 +729,7 @@ export default function CrmLeadsListView({
                   className={`min-w-[28px] h-7 px-2 rounded-md text-xs font-semibold flex items-center justify-center transition-colors cursor-pointer border ${
                     currentPage === p
                       ? "bg-[#032e92] text-white border-[#032e92] shadow-2xs"
-                      : "bg-white text-gray-700 hover:bg-gray-50 border-gray-200"
+                      : "bg-white text-gray-900 hover:bg-gray-50 border-gray-200"
                   }`}
                 >
                   {p}
@@ -778,8 +778,8 @@ export default function CrmLeadsListView({
               <h3 className="text-base font-bold text-gray-900 tracking-tight">
                 Delete Lead?
               </h3>
-              <p className="text-xs text-gray-500 mt-1.5 mb-6 leading-relaxed">
-                Are you sure you want to delete <strong className="text-gray-800 font-semibold">{leadToDelete.lead_name}</strong> ({leadToDelete.name})? This will permanently remove the lead and all its touchpoint history.
+              <p className="text-xs text-gray-600 mt-1.5 mb-6 leading-relaxed">
+                Are you sure you want to delete <strong className="text-gray-900 font-semibold">{leadToDelete.lead_name}</strong> ({leadToDelete.name})? This will permanently remove the lead and all its touchpoint history.
               </p>
 
               <div className="flex items-center gap-3">
@@ -787,7 +787,7 @@ export default function CrmLeadsListView({
                   type="button"
                   disabled={isDeleting}
                   onClick={() => setLeadToDelete(null)}
-                  className="flex-1 py-2.5 px-4 rounded-xl border border-gray-200 text-xs font-semibold text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer disabled:opacity-50"
+                  className="flex-1 py-2.5 px-4 rounded-xl border border-gray-200 text-xs font-semibold text-gray-900 hover:bg-gray-100 transition-colors cursor-pointer disabled:opacity-50"
                 >
                   Cancel
                 </button>

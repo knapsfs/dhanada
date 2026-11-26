@@ -89,7 +89,7 @@ export default function Leadership() {
               <div className="text-center">
                 <h3 className="text-xl font-bold text-gray-900 mb-1">{leader.name}</h3>
                 <p className="text-[#c10000] font-semibold text-sm mb-4">{leader.designation}</p>
-                <p className="text-gray-500 text-sm leading-relaxed">{leader.intro}</p>
+                <p className="text-gray-600 text-sm leading-relaxed">{leader.intro}</p>
               </div>
             </motion.div>
           ))}

@@ -146,7 +146,7 @@ export default function FundSelector({ selectedFunds = [null, null, null], onFun
 
           return (
             <div key={index} className="flex flex-col justify-start">
-              <label className="block text-xs font-bold text-gray-400 uppercase tracking-wide mb-2 ml-1">
+              <label className="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-2 ml-1">
                 Fund {index + 1}
               </label>
 
@@ -188,7 +188,7 @@ export default function FundSelector({ selectedFunds = [null, null, null], onFun
 
                   {/* Subcategory Badge */}
                   {fundSubcategory && (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-semibold bg-gray-100 text-gray-700 border border-gray-200/80 shadow-sm">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-semibold bg-gray-100 text-gray-900 border border-gray-200/80 shadow-sm">
                       {fundSubcategory}
                     </span>
                   )}
@@ -221,7 +221,7 @@ export default function FundSelector({ selectedFunds = [null, null, null], onFun
           disabled={!canCompare}
           className={`px-6 py-3 rounded-xl text-md font-semibold transition-all duration-300 inline-flex items-center justify-center ${canCompare
             ? 'btn-ripple bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 cursor-pointer'
-            : 'bg-gray-200 text-gray-400 border border-gray-200 cursor-not-allowed shadow-none'
+            : 'bg-gray-200 text-gray-600 border border-gray-200 cursor-not-allowed shadow-none'
             }`}
         >
           Compare

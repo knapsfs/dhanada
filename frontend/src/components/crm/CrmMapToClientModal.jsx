@@ -134,8 +134,8 @@ export default function CrmMapToClientModal({
               </span>
               <div>
                 <h3 className="text-base font-bold text-gray-900">Map to Existing Client</h3>
-                <p className="text-xs text-gray-500">
-                  Link <span className="font-semibold text-gray-800">{leadData?.lead_name}</span>{" "}
+                <p className="text-xs text-gray-600">
+                  Link <span className="font-semibold text-gray-900">{leadData?.lead_name}</span>{" "}
                   ({leadData?.product_interest || "General Opportunity"}) to an existing client profile
                 </p>
               </div>
@@ -144,7 +144,7 @@ export default function CrmMapToClientModal({
             <button
               onClick={onClose}
               disabled={submitting}
-              className="w-8 h-8 rounded-xl text-gray-400 hover:text-gray-700 hover:bg-gray-100 flex items-center justify-center transition-colors cursor-pointer"
+              className="w-8 h-8 rounded-xl text-gray-600 hover:text-gray-900 hover:bg-gray-100 flex items-center justify-center transition-colors cursor-pointer"
             >
               <FontAwesomeIcon icon={faXmark} />
             </button>
@@ -161,12 +161,12 @@ export default function CrmMapToClientModal({
                 <div>
                   <h4 className="text-base font-bold text-gray-900">Successfully Mapped!</h4>
                   <p className="text-xs text-gray-600 mt-1 max-w-md mx-auto">
-                    Lead <span className="font-semibold text-gray-800">{leadData?.lead_name}</span> is
+                    Lead <span className="font-semibold text-gray-900">{leadData?.lead_name}</span> is
                     now linked to client{" "}
-                    <span className="font-semibold text-gray-800">{successResult.client_name}</span> (
+                    <span className="font-semibold text-gray-900">{successResult.client_name}</span> (
                     {successResult.client_id}).
                   </p>
-                  <p className="text-xs text-gray-400 mt-2">
+                  <p className="text-xs text-gray-600 mt-2">
                     Lead conversations remain isolated to this lead while being aggregated on the client’s profile.
                   </p>
                 </div>
@@ -188,7 +188,7 @@ export default function CrmMapToClientModal({
                   <button
                     type="button"
                     onClick={onClose}
-                    className="px-4 py-2.5 rounded-xl text-xs font-semibold bg-gray-100 hover:bg-gray-200 text-gray-700 cursor-pointer transition-colors"
+                    className="px-4 py-2.5 rounded-xl text-xs font-semibold bg-gray-100 hover:bg-gray-200 text-gray-900 cursor-pointer transition-colors"
                   >
                     Stay on Lead
                   </button>
@@ -226,7 +226,7 @@ export default function CrmMapToClientModal({
                       </span>
                       <div>
                         <h4 className="text-sm font-bold text-gray-900">{selectedClient.client_name}</h4>
-                        <p className="text-xs text-gray-500 font-mono">{selectedClient.name}</p>
+                        <p className="text-xs text-gray-600 font-mono">{selectedClient.name}</p>
                       </div>
                     </div>
                     <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
@@ -236,22 +236,22 @@ export default function CrmMapToClientModal({
 
                   <div className="grid grid-cols-2 gap-2 pt-2 border-t border-blue-100 text-xs text-gray-600">
                     <div>
-                      <span className="text-gray-400">Mobile: </span>
-                      <span className="font-medium text-gray-800">{selectedClient.mobile_no || "N/A"}</span>
+                      <span className="text-gray-600">Mobile: </span>
+                      <span className="font-medium text-gray-900">{selectedClient.mobile_no || "N/A"}</span>
                     </div>
                     <div>
-                      <span className="text-gray-400">Email: </span>
-                      <span className="font-medium text-gray-800">{selectedClient.email || "N/A"}</span>
+                      <span className="text-gray-600">Email: </span>
+                      <span className="font-medium text-gray-900">{selectedClient.email || "N/A"}</span>
                     </div>
                     <div>
-                      <span className="text-gray-400">PAN: </span>
-                      <span className="font-mono font-medium text-gray-800">
+                      <span className="text-gray-600">PAN: </span>
+                      <span className="font-mono font-medium text-gray-900">
                         {selectedClient.pan || "N/A"}
                       </span>
                     </div>
                     <div>
-                      <span className="text-gray-400">Risk Profile: </span>
-                      <span className="font-medium text-gray-800">
+                      <span className="text-gray-600">Risk Profile: </span>
+                      <span className="font-medium text-gray-900">
                         {selectedClient.risk_profile || "Not Assessed"}
                       </span>
                     </div>
@@ -273,7 +273,7 @@ export default function CrmMapToClientModal({
                       setSelectedClient(null);
                     }}
                     disabled={submitting}
-                    className="px-4 py-2 rounded-xl text-xs font-semibold bg-gray-100 hover:bg-gray-200 text-gray-700 cursor-pointer transition-colors"
+                    className="px-4 py-2 rounded-xl text-xs font-semibold bg-gray-100 hover:bg-gray-200 text-gray-900 cursor-pointer transition-colors"
                   >
                     Back to Search
                   </button>
@@ -304,7 +304,7 @@ export default function CrmMapToClientModal({
                 <div className="relative">
                   <FontAwesomeIcon
                     icon={faMagnifyingGlass}
-                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"
+                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-600 text-xs"
                   />
                   <input
                     type="text"
@@ -316,7 +316,7 @@ export default function CrmMapToClientModal({
                   {loading && (
                     <FontAwesomeIcon
                       icon={faSpinner}
-                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 animate-spin text-xs"
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-600 animate-spin text-xs"
                     />
                   )}
                 </div>
@@ -331,11 +331,11 @@ export default function CrmMapToClientModal({
                 {suggestedClients.length > 0 && !searchQuery.trim() && (
                   <div className="space-y-2.5">
                     <div className="flex items-center justify-between">
-                      <h4 className="text-xs font-bold text-gray-700 uppercase flex items-center gap-1.5">
+                      <h4 className="text-xs font-bold text-gray-900 uppercase flex items-center gap-1.5">
                         <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
                         <span>Suggested Matches ({suggestedClients.length})</span>
                       </h4>
-                      <span className="text-xs text-gray-400">
+                      <span className="text-xs text-gray-600">
                         Based on Lead phone, email, or name
                       </span>
                     </div>
@@ -355,12 +355,12 @@ export default function CrmMapToClientModal({
                 {/* Section B: Search Results */}
                 {searchQuery.trim() && (
                   <div className="space-y-2.5">
-                    <h4 className="text-xs font-bold text-gray-700 uppercase">
+                    <h4 className="text-xs font-bold text-gray-900 uppercase">
                       Search Results ({searchResults.length})
                     </h4>
 
                     {searchResults.length === 0 && !loading ? (
-                      <div className="py-8 text-center text-xs text-gray-500">
+                      <div className="py-8 text-center text-xs text-gray-600">
                         No matching clients found for "{searchQuery}".
                       </div>
                     ) : (
@@ -379,9 +379,9 @@ export default function CrmMapToClientModal({
 
                 {/* Empty State when no query and no suggestions */}
                 {!loading && suggestedClients.length === 0 && !searchQuery.trim() && (
-                  <div className="py-8 text-center text-xs text-gray-500 space-y-1">
-                    <p className="font-semibold text-gray-700">No automatic matches found</p>
-                    <p className="text-gray-400">
+                  <div className="py-8 text-center text-xs text-gray-600 space-y-1">
+                    <p className="font-semibold text-gray-900">No automatic matches found</p>
+                    <p className="text-gray-600">
                       Use the search bar above to look up existing clients by name, phone, email, or PAN.
                     </p>
                   </div>
@@ -391,7 +391,7 @@ export default function CrmMapToClientModal({
           </div>
 
           {/* Footer Notice */}
-          <div className="px-6 py-3 bg-gray-50 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
+          <div className="px-6 py-3 bg-gray-50 border-t border-gray-100 flex items-center justify-between text-xs text-gray-600">
             <span>
               Linking maintains a single client identity while preserving distinct lead pipelines.
             </span>
@@ -399,7 +399,7 @@ export default function CrmMapToClientModal({
               type="button"
               onClick={onClose}
               disabled={submitting}
-              className="text-gray-500 hover:text-gray-800 font-semibold cursor-pointer"
+              className="text-gray-600 hover:text-gray-900 font-semibold cursor-pointer"
             >
               Cancel
             </button>
@@ -425,7 +425,7 @@ function ClientCandidateCard({ client, onSelect }) {
       <div className="space-y-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="font-bold text-xs text-gray-900 truncate">{client.client_name}</span>
-          <span className="text-[10px] font-mono text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded">
+          <span className="text-[10px] font-mono text-gray-600 bg-gray-100 px-1.5 py-0.5 rounded">
             {client.name}
           </span>
           {client.match_reason && (
@@ -443,13 +443,13 @@ function ClientCandidateCard({ client, onSelect }) {
         <div className="flex items-center gap-x-4 gap-y-1 flex-wrap text-xs text-gray-600">
           {client.mobile_no && (
             <span className="inline-flex items-center gap-1">
-              <FontAwesomeIcon icon={faPhone} className="text-gray-400 text-[10px]" />
+              <FontAwesomeIcon icon={faPhone} className="text-gray-600 text-[10px]" />
               <span>{client.mobile_no}</span>
             </span>
           )}
           {client.email && (
             <span className="inline-flex items-center gap-1">
-              <FontAwesomeIcon icon={faEnvelope} className="text-gray-400 text-[10px]" />
+              <FontAwesomeIcon icon={faEnvelope} className="text-gray-600 text-[10px]" />
               <span className="truncate max-w-[160px]">{client.email}</span>
             </span>
           )}
@@ -461,10 +461,10 @@ function ClientCandidateCard({ client, onSelect }) {
           )}
         </div>
 
-        <div className="flex items-center gap-2 text-[10px] text-gray-400 pt-0.5">
-          <span>KYC: <strong className="text-gray-700">{client.kyc_status}</strong></span>
+        <div className="flex items-center gap-2 text-[10px] text-gray-600 pt-0.5">
+          <span>KYC: <strong className="text-gray-900">{client.kyc_status}</strong></span>
           <span>•</span>
-          <span>Risk: <strong className="text-gray-700">{client.risk_profile}</strong></span>
+          <span>Risk: <strong className="text-gray-900">{client.risk_profile}</strong></span>
           {client.linked_leads_count > 0 && (
             <>
               <span>•</span>
@@ -478,7 +478,7 @@ function ClientCandidateCard({ client, onSelect }) {
 
       <div className="shrink-0 self-end sm:self-center">
         {isCurrent ? (
-          <span className="text-xs text-gray-400 font-semibold px-3 py-1.5">Already Mapped</span>
+          <span className="text-xs text-gray-600 font-semibold px-3 py-1.5">Already Mapped</span>
         ) : (
           <button
             type="button"

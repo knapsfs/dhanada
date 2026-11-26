@@ -122,12 +122,12 @@ export default function SipLumpsumGrowthChart({ yearlyData }) {
               </div>
               <div>
                 <h2 className="text-lg font-bold text-gray-900">Projected Wealth Trajectory</h2>
-                <p className="text-xs text-gray-400">Total invested vs compounding future value over time</p>
+                <p className="text-xs text-gray-600">Total invested vs compounding future value over time</p>
               </div>
             </div>
 
             {/* Custom Legend */}
-            <div className="flex items-center gap-4 text-xs font-semibold text-gray-500">
+            <div className="flex items-center gap-4 text-xs font-semibold text-gray-600">
               <div className="flex items-center gap-1.5">
                 <span className="w-3 h-3 rounded-full bg-[#032e92] inline-block"></span>
                 Projected Value

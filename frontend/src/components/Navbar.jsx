@@ -151,7 +151,7 @@ export default function Navbar() {
                 {link.href.startsWith('http') ? (
                   <a
                     href={link.href}
-                    className="relative flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-[14px] 2xl:text-md font-medium text-gray-700 hover:text-[#032e92] hover:bg-[#eef5ff]/60 transition-all duration-300 group"
+                    className="relative flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-[14px] 2xl:text-md font-medium text-gray-900 hover:text-[#032e92] hover:bg-[#eef5ff]/60 transition-all duration-300 group"
                   >
                     {link.label}
                     {link.dropdown && (
@@ -167,7 +167,7 @@ export default function Navbar() {
                     to={link.href}
                     className={`relative flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-[14px] 2xl:text-md font-medium transition-all duration-300 group ${activeDropdown === link.label || location.pathname === link.href
                       ? 'text-[#032e92] bg-[#eef5ff]'
-                      : 'text-gray-700 hover:text-[#032e92] hover:bg-[#eef5ff]/60'
+                      : 'text-gray-900 hover:text-[#032e92] hover:bg-[#eef5ff]/60'
                       }`}
                   >
                     {link.label}
@@ -328,13 +328,13 @@ export default function Navbar() {
                         onClick={() => toggleMobileDropdown(link.label)}
                         className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-md font-semibold transition-all cursor-pointer ${openMobileDropdown === link.label
                           ? 'bg-[#eef5ff] text-[#032e92]'
-                          : 'text-gray-800 hover:bg-gray-50'
+                          : 'text-gray-900 hover:bg-gray-50'
                           }`}
                       >
                         <span>{link.label}</span>
                         <FontAwesomeIcon
                           icon={faChevronDown}
-                          className={`text-xs transition-transform duration-300 ${openMobileDropdown === link.label ? 'rotate-180 text-[#032e92]' : 'text-gray-400'
+                          className={`text-xs transition-transform duration-300 ${openMobileDropdown === link.label ? 'rotate-180 text-[#032e92]' : 'text-gray-600'
                             }`}
                         />
                       </button>
@@ -382,7 +382,7 @@ export default function Navbar() {
                       <a
                         href={link.href}
                         onClick={() => setMobileOpen(false)}
-                        className="block px-4 py-3 rounded-2xl text-md font-semibold text-gray-800 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors"
+                        className="block px-4 py-3 rounded-2xl text-md font-semibold text-gray-900 hover:bg-[#eef5ff] hover:text-[#032e92] transition-colors"
                       >
                         {link.label}
                       </a>
@@ -392,7 +392,7 @@ export default function Navbar() {
                         onClick={() => setMobileOpen(false)}
                         className={`block px-4 py-3 rounded-2xl text-md font-semibold transition-colors ${location.pathname === link.href
                           ? 'text-[#032e92] bg-[#eef5ff]'
-                          : 'text-gray-800 hover:bg-[#eef5ff] hover:text-[#032e92]'
+                          : 'text-gray-900 hover:bg-[#eef5ff] hover:text-[#032e92]'
                           }`}
                       >
                         {link.label}
@@ -445,7 +445,7 @@ export default function Navbar() {
                             setMobileOpen(false);
                             setMobileLoginOpen(false);
                           }}
-                          className="block px-4 py-2.5 rounded-xl text-[14px] font-semibold text-gray-700 hover:bg-white hover:text-[#032e92] hover:shadow-xs transition-all"
+                          className="block px-4 py-2.5 rounded-xl text-[14px] font-semibold text-gray-900 hover:bg-white hover:text-[#032e92] hover:shadow-xs transition-all"
                         >
                           Investor Login
                         </a>
@@ -455,7 +455,7 @@ export default function Navbar() {
                             setMobileOpen(false);
                             setMobileLoginOpen(false);
                           }}
-                          className="block px-4 py-2.5 rounded-xl text-[14px] font-semibold text-gray-700 hover:bg-white hover:text-[#032e92] hover:shadow-xs transition-all"
+                          className="block px-4 py-2.5 rounded-xl text-[14px] font-semibold text-gray-900 hover:bg-white hover:text-[#032e92] hover:shadow-xs transition-all"
                         >
                           Employee Login
                         </a>

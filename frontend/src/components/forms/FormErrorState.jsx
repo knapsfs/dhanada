@@ -20,18 +20,18 @@ export default function FormErrorState({
 
       <div>
         <h2 className="text-xl font-black text-gray-900 tracking-tight">{title}</h2>
-        <p className="text-xs text-gray-500 mt-2 leading-relaxed">{message}</p>
+        <p className="text-xs text-gray-600 mt-2 leading-relaxed">{message}</p>
       </div>
 
       <div className="bg-slate-50 border border-gray-200 rounded-2xl p-4 text-left text-xs space-y-2">
-        <span className="font-bold text-gray-800 block text-xs uppercase tracking-wide">
+        <span className="font-bold text-gray-900 block text-xs uppercase tracking-wide">
           Need Assistance?
         </span>
         <p className="text-gray-600 leading-relaxed text-xs">
           Please contact your dedicated KNAPS Advisor or customer desk to request a fresh, secure
           form link:
         </p>
-        <div className="pt-1 flex flex-col gap-1 text-gray-800 font-semibold text-xs">
+        <div className="pt-1 flex flex-col gap-1 text-gray-900 font-semibold text-xs">
           <span className="flex items-center gap-2">
             <FontAwesomeIcon icon={faEnvelope} className="text-[#032e92]" />
             <span>support@knaps.app</span>
