@@ -316,12 +316,12 @@ export default function FundsTable({
 
   const renderSortIcon = (key) => {
     if (sortConfig.key !== key) {
-      return <FontAwesomeIcon icon={faSort} className="text-gray-300 text-[11px] ml-1 group-hover:text-gray-600 transition-colors" />
+      return <FontAwesomeIcon icon={faSort} className="text-gray-300 text-xs ml-1 group-hover:text-gray-600 transition-colors" />
     }
     return sortConfig.direction === 'asc' ? (
-      <FontAwesomeIcon icon={faSortUp} className="text-[#032e92] text-[11px] ml-1" />
+      <FontAwesomeIcon icon={faSortUp} className="text-[#032e92] text-xs ml-1" />
     ) : (
-      <FontAwesomeIcon icon={faSortDown} className="text-[#032e92] text-[11px] ml-1" />
+      <FontAwesomeIcon icon={faSortDown} className="text-[#032e92] text-xs ml-1" />
     )
   }
 
@@ -361,7 +361,7 @@ export default function FundsTable({
     if (amcLower.includes('quant')) {
       return (
         <div className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center p-1 shadow-xs flex-shrink-0">
-          <span className="text-[11px] font-bold text-gray-800 tracking-tighter">quant</span>
+          <span className="text-xs font-bold text-gray-800 tracking-tighter">quant</span>
         </div>
       )
     }
@@ -501,7 +501,7 @@ export default function FundsTable({
                       <span>NAV</span>
                       {renderSortIcon('nav')}
                     </button>
-                    <span className="text-[11px] font-semibold text-gray-400 py-1.5 block">
+                    <span className="text-xs font-semibold text-gray-400 py-1.5 block">
                       Daily Value
                     </span>
                   </div>
@@ -518,7 +518,7 @@ export default function FundsTable({
                       <span>1M Return</span>
                       {renderSortIcon('returns1M')}
                     </button>
-                    <span className="text-[11px] font-semibold text-gray-400 py-1.5 block">
+                    <span className="text-xs font-semibold text-gray-400 py-1.5 block">
                       Past 30 Days
                     </span>
                   </div>
@@ -613,7 +613,7 @@ export default function FundsTable({
                             {fund.nav != null ? formatNav(fund.nav) : 'N/A'}
                           </span>
                           {(fund.navDate || fund.nav_date) && (
-                            <span className="text-[11px] font-medium text-gray-400 mt-0.5 whitespace-nowrap">
+                            <span className="text-xs font-medium text-gray-400 mt-0.5 whitespace-nowrap">
                               {formatNavDate(fund.navDate || fund.nav_date)}
                             </span>
                           )}

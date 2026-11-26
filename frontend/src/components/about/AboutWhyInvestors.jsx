@@ -40,7 +40,7 @@ export default function AboutWhyInvestors() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.1 }}
-                  className="flex items-center gap-4 text-[#0a192f] font-medium text-[17px]"
+                  className="flex items-center gap-4 text-[#0a192f] font-medium text-md"
                 >
                   <FontAwesomeIcon icon={faCheckCircle} className="text-[#c10000] text-xl" />
                   {item}

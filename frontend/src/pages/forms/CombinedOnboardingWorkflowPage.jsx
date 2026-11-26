@@ -461,7 +461,7 @@ export default function CombinedOnboardingWorkflowPage() {
                     <span className="text-xs font-extrabold text-[#032e92] uppercase block">
                       Financial Profile Integration
                     </span>
-                    <p className="text-[11px] text-gray-500">
+                    <p className="text-xs text-gray-500">
                       Based on your date of birth, we have pre-selected your age band for your
                       advisory risk profile. You can confirm or adjust below.
                     </p>

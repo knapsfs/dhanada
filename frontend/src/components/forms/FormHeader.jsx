@@ -37,7 +37,7 @@ export default function FormHeader({
               Investor: <strong className="text-gray-900">{customerName}</strong>
             </span>
           )}
-          <div className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200/60">
+          <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200/60">
             <FontAwesomeIcon icon={faLock} className="text-[10px]" />
             <span>256-bit Encrypted</span>
           </div>
@@ -83,7 +83,7 @@ export default function FormHeader({
                     type="button"
                     onClick={() => isCompleted && onStepClick && onStepClick(idx)}
                     disabled={!isCompleted}
-                    className={`flex items-center gap-1.5 text-[11px] font-bold transition-colors ${isCurrent
+                    className={`flex items-center gap-1.5 text-xs font-bold transition-colors ${isCurrent
                         ? "text-[#032e92]"
                         : isCompleted
                           ? "text-emerald-700 hover:text-emerald-800 cursor-pointer"

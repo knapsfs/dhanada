@@ -122,7 +122,7 @@ export default function HeatmapTable({ funds = [], timeFilter = '12M', activeSub
               {displayMonths.map((m) => (
                 <th
                   key={m.key}
-                  className="py-4 px-2 text-center text-[11px] sm:text-xs font-bold text-gray-500 uppercase min-w-[75px] sm:min-w-[90px] bg-white"
+                  className="py-4 px-2 text-center text-xs sm:text-xs font-bold text-gray-500 uppercase min-w-[75px] sm:min-w-[90px] bg-white"
                 >
                   {m.label}
                 </th>
@@ -166,7 +166,7 @@ export default function HeatmapTable({ funds = [], timeFilter = '12M', activeSub
                         )}`}
                       >
                         {isNA ? (
-                          <span className="text-gray-400 font-medium text-[10px] sm:text-[11px]">N/A</span>
+                          <span className="text-gray-400 font-medium text-[10px] sm:text-xs">N/A</span>
                         ) : (
                           <span>{typeof val === 'number' ? `${val > 0 ? '+' : ''}${val.toFixed(2)}%` : val}</span>
                         )}

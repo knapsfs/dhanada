@@ -212,14 +212,14 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2.5 mb-1.5 flex-wrap">
-                    <span className="font-mono text-[11px] font-semibold text-gray-400 bg-white px-2 py-0.5 rounded border border-gray-200">
+                    <span className="font-mono text-xs font-semibold text-gray-400 bg-white px-2 py-0.5 rounded border border-gray-200">
                       {leadData?.name || leadName}
                     </span>
                     <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${STATUS_COLORS[leadData?.status] || 'bg-gray-100 text-gray-700'}`}>
                       {leadData?.status || 'Loading...'}
                     </span>
                     {leadData?.source && (
-                      <span className="text-[11px] font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
+                      <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
                         via {leadData.source}
                       </span>
                     )}
@@ -379,7 +379,7 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
                           <p className="text-gray-900 font-medium leading-relaxed whitespace-pre-wrap">
                             "{leadData.latest_remark}"
                           </p>
-                          <div className="mt-3 pt-2.5 border-t border-gray-200 flex items-center justify-between gap-3 text-[11px] text-gray-500 flex-wrap">
+                          <div className="mt-3 pt-2.5 border-t border-gray-200 flex items-center justify-between gap-3 text-xs text-gray-500 flex-wrap">
                             <span className="flex items-center gap-1.5">
                               <FontAwesomeIcon icon={faUser} className="text-gray-400 text-[10px]" />
                               <span>Contacted by: <strong className="text-gray-700">{leadData.last_contacted_by || 'Unknown'}</strong></span>
@@ -397,7 +397,7 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
 
                     {/* New Remark Input Form */}
                     <form onSubmit={handleSaveRemark} className="space-y-2.5">
-                      <label className="block text-[11px] font-bold text-gray-600 uppercase">
+                      <label className="block text-xs font-bold text-gray-600 uppercase">
                         Record New Contact Remark
                       </label>
                       <textarea
@@ -524,7 +524,7 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
                     <div className="py-12 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-200">
                       <FontAwesomeIcon icon={faCommentDots} className="text-2xl text-gray-300 mb-2" />
                       <p className="text-xs font-semibold text-gray-600">No interactions recorded yet</p>
-                      <p className="text-[11px] text-gray-400 mt-0.5">Click above to log your first call or discussion</p>
+                      <p className="text-xs text-gray-400 mt-0.5">Click above to log your first call or discussion</p>
                     </div>
                   ) : (
                     <div className="relative border-l-2 border-blue-100 ml-3.5 space-y-5 py-2">
@@ -544,7 +544,7 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
                             </div>
                             {int.details && <p className="text-xs text-gray-600 leading-relaxed mb-2">{int.details}</p>}
                             {int.outcome && (
-                              <div className="text-[11px] text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg font-medium inline-block">
+                              <div className="text-xs text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg font-medium inline-block">
                                 Outcome: {int.outcome}
                               </div>
                             )}
@@ -572,7 +572,7 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
                     <div className="py-12 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-200">
                       <FontAwesomeIcon icon={faListCheck} className="text-2xl text-gray-300 mb-2" />
                       <p className="text-xs font-semibold text-gray-600">No open tasks for this lead</p>
-                      <p className="text-[11px] text-gray-400 mt-0.5">Add reminders for callbacks, document collection, or meetings</p>
+                      <p className="text-xs text-gray-400 mt-0.5">Add reminders for callbacks, document collection, or meetings</p>
                     </div>
                   ) : (
                     <div className="space-y-2.5">
@@ -580,7 +580,7 @@ export default function CrmLeadDrawer({ leadName, isOpen, onClose, onLeadUpdated
                         <div key={t.name} className="p-3.5 bg-white rounded-xl border border-gray-200 shadow-2xs flex items-start justify-between gap-3">
                           <div>
                             <h5 className="text-xs font-bold text-gray-900">{t.title}</h5>
-                            <div className="flex items-center gap-2 mt-1 text-[11px] text-gray-500">
+                            <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
                               <span className="font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded text-[10px]">{t.priority}</span>
                               <span>Due: {t.due_date}</span>
                               <span>Status: {t.status}</span>

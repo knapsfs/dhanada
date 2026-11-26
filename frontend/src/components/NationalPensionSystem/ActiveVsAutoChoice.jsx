@@ -170,7 +170,7 @@ export default function ActiveVsAutoChoice() {
                   <div className="bg-indigo-500 h-full w-[25%]" title="Corporate Debt" />
                   <div className="bg-emerald-500 h-full flex-1" title="Govt Securities" />
                 </div>
-                <div className="flex justify-between text-[11px] text-slate-400">
+                <div className="flex justify-between text-xs text-slate-400">
                   <span className="flex items-center gap-1.5">
                     <span className="w-2.5 h-2.5 rounded-full bg-blue-600 inline-block" /> Equity (E)
                   </span>

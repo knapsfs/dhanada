@@ -57,7 +57,7 @@ export default function CompareSmallSavingsSchemes() {
                   <tr key={item.id} className="hover:bg-blue-50/30 transition-colors">
                     <td className="py-4 px-5">
                       <strong className="text-slate-900 block">{item.name}</strong>
-                      <span className="text-[11px] text-slate-400">{item.shortName}</span>
+                      <span className="text-xs text-slate-400">{item.shortName}</span>
                     </td>
                     <td className="py-4 px-5 font-black text-[#032e92]">
                       {item.interestRate}% p.a.

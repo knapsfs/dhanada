@@ -121,37 +121,37 @@ export default function FixedDepositHero() {
                 <div className="p-3.5 rounded-2xl bg-blue-50/50 border border-blue-100/60">
                   <div className="flex items-center gap-2 text-[#032e92] mb-1">
                     <FontAwesomeIcon icon={faBuildingColumns} className="text-xs" />
-                    <span className="text-[11px] font-semibold uppercase text-gray-500">Bank & Corp FDs</span>
+                    <span className="text-xs font-semibold uppercase text-gray-500">Bank & Corp FDs</span>
                   </div>
                   <div className="text-lg font-extrabold text-[#0a192f]">Up to 8.60%</div>
-                  <p className="text-[11px] text-gray-600 leading-tight">High liquidity & senior perks</p>
+                  <p className="text-xs text-gray-600 leading-tight">High liquidity & senior perks</p>
                 </div>
 
                 <div className="p-3.5 rounded-2xl bg-emerald-50/50 border border-emerald-100/60">
                   <div className="flex items-center gap-2 text-emerald-700 mb-1">
                     <FontAwesomeIcon icon={faLandmark} className="text-xs" />
-                    <span className="text-[11px] font-semibold uppercase text-gray-500">GoI FRSB Bonds</span>
+                    <span className="text-xs font-semibold uppercase text-gray-500">GoI FRSB Bonds</span>
                   </div>
                   <div className="text-lg font-extrabold text-[#0a192f]">8.05% p.a.</div>
-                  <p className="text-[11px] text-gray-600 leading-tight">100% Sovereign backing</p>
+                  <p className="text-xs text-gray-600 leading-tight">100% Sovereign backing</p>
                 </div>
 
                 <div className="p-3.5 rounded-2xl bg-indigo-50/50 border border-indigo-100/60">
                   <div className="flex items-center gap-2 text-indigo-700 mb-1">
                     <FontAwesomeIcon icon={faShieldHalved} className="text-xs" />
-                    <span className="text-[11px] font-semibold uppercase text-gray-500">Safety Net</span>
+                    <span className="text-xs font-semibold uppercase text-gray-500">Safety Net</span>
                   </div>
                   <div className="text-lg font-extrabold text-[#0a192f]">Sovereign / DICGC</div>
-                  <p className="text-[11px] text-gray-600 leading-tight">Zero default credit rating</p>
+                  <p className="text-xs text-gray-600 leading-tight">Zero default credit rating</p>
                 </div>
 
                 <div className="p-3.5 rounded-2xl bg-amber-50/50 border border-amber-100/60">
                   <div className="flex items-center gap-2 text-amber-700 mb-1">
                     <FontAwesomeIcon icon={faHandHoldingDollar} className="text-xs" />
-                    <span className="text-[11px] font-semibold uppercase text-gray-500">Payout Modes</span>
+                    <span className="text-xs font-semibold uppercase text-gray-500">Payout Modes</span>
                   </div>
                   <div className="text-lg font-extrabold text-[#0a192f]">Flexible</div>
-                  <p className="text-[11px] text-gray-600 leading-tight">Monthly, Semi-Annual, Cumulative</p>
+                  <p className="text-xs text-gray-600 leading-tight">Monthly, Semi-Annual, Cumulative</p>
                 </div>
               </div>
 

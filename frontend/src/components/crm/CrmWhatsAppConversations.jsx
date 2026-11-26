@@ -101,7 +101,7 @@ function MessageBubble({ msg }) {
         )}
 
         {/* Message Body */}
-        <p className="text-xs sm:text-[13px] leading-relaxed whitespace-pre-wrap break-words">
+        <p className="text-xs sm:text-sm leading-relaxed whitespace-pre-wrap break-words">
           {msg.content || ""}
         </p>
 
@@ -371,12 +371,12 @@ export default function CrmWhatsAppConversations({
           <h3 className="text-xs font-bold text-gray-800 uppercase">
             WhatsApp Communications
           </h3>
-          <span className="text-[11px] font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
+          <span className="text-xs font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
             {totalCount} {totalCount === 1 ? "message" : "messages"}
           </span>
 
           {phoneToUse && (
-            <span className="inline-flex items-center gap-1 text-[11px] font-mono text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+            <span className="inline-flex items-center gap-1 text-xs font-mono text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
               <FontAwesomeIcon icon={faPhone} className="text-[9px] text-emerald-600" />
               <span>+{phoneToUse}</span>
             </span>
@@ -419,7 +419,7 @@ export default function CrmWhatsAppConversations({
             onClick={() => handleOpenTemplatePicker()}
             className="inline-flex items-center gap-1.5 text-xs font-bold bg-emerald-700 hover:bg-emerald-800 text-white px-3 py-1.5 rounded-xl transition-all shadow-2xs cursor-pointer"
           >
-            <FontAwesomeIcon icon={faFileLines} className="text-[11px]" />
+            <FontAwesomeIcon icon={faFileLines} className="text-xs" />
             <span>Templates</span>
           </button>
         </div>
@@ -428,7 +428,7 @@ export default function CrmWhatsAppConversations({
       {/* Source Filter if multiple sources present */}
       {!loading && messages.length > 0 && availableSources.length > 1 && (
         <div className="flex items-center gap-1.5 flex-wrap pt-1 pb-1">
-          <span className="text-[11px] font-semibold text-gray-400 mr-1">Filter Source:</span>
+          <span className="text-xs font-semibold text-gray-400 mr-1">Filter Source:</span>
           <button
             type="button"
             onClick={() => setSourceFilter("all")}
@@ -466,7 +466,7 @@ export default function CrmWhatsAppConversations({
           <FontAwesomeIcon icon={faTriangleExclamation} className="text-amber-600 shrink-0 mt-0.5" />
           <div className="leading-relaxed">
             <span className="font-bold">WhatsApp API Integration Ready: </span>
-            Meta WhatsApp Cloud API credentials (<code className="font-mono text-[11px] bg-amber-100/80 px-1 py-0.5 rounded">phone_number_id</code> and <code className="font-mono text-[11px] bg-amber-100/80 px-1 py-0.5 rounded">whatsapp_access_token</code>) can be registered in <strong className="font-semibold">Dhanada Settings</strong>. Outbound messages sent from KNAPS CRM are safely tracked and queued in the CRM.
+            Meta WhatsApp Cloud API credentials (<code className="font-mono text-xs bg-amber-100/80 px-1 py-0.5 rounded">phone_number_id</code> and <code className="font-mono text-xs bg-amber-100/80 px-1 py-0.5 rounded">whatsapp_access_token</code>) can be registered in <strong className="font-semibold">Dhanada Settings</strong>. Outbound messages sent from KNAPS CRM are safely tracked and queued in the CRM.
           </div>
         </div>
       )}
@@ -542,7 +542,7 @@ export default function CrmWhatsAppConversations({
               </div>
               <div>
                 <h4 className="text-xs font-bold text-gray-900">No WhatsApp messages yet</h4>
-                <p className="text-[11px] text-gray-500 max-w-sm mx-auto mt-1">
+                <p className="text-xs text-gray-500 max-w-sm mx-auto mt-1">
                   Start communicating with {contactName || "this contact"} via integrated WhatsApp. Messages sent here are stored directly in KNAPS CRM.
                 </p>
               </div>
@@ -567,7 +567,7 @@ export default function CrmWhatsAppConversations({
                     type="button"
                     onClick={() => fetchConversations(page + 1, true)}
                     disabled={loadingMore}
-                    className="text-[11px] font-semibold text-gray-500 hover:text-emerald-700 px-3 py-1 bg-white rounded-full border border-gray-200 shadow-2xs hover:shadow-xs transition-all cursor-pointer disabled:opacity-50"
+                    className="text-xs font-semibold text-gray-500 hover:text-emerald-700 px-3 py-1 bg-white rounded-full border border-gray-200 shadow-2xs hover:shadow-xs transition-all cursor-pointer disabled:opacity-50"
                   >
                     {loadingMore ? (
                       <span className="inline-flex items-center gap-1.5">
@@ -591,7 +591,7 @@ export default function CrmWhatsAppConversations({
         {/* Message Composer Area */}
         <div className="p-3 bg-white border-t border-gray-200 shrink-0">
           {!isSessionActive && (
-            <div className="mb-2 px-3 py-1.5 bg-amber-50 rounded-xl border border-amber-200 text-[11px] text-amber-800 flex items-center justify-between gap-2">
+            <div className="mb-2 px-3 py-1.5 bg-amber-50 rounded-xl border border-amber-200 text-xs text-amber-800 flex items-center justify-between gap-2">
               <span className="flex items-center gap-1.5">
                 <FontAwesomeIcon icon={faShieldHalved} className="text-amber-600" />
                 <span>24h window closed. Use an approved template for best delivery.</span>
@@ -672,7 +672,7 @@ export default function CrmWhatsAppConversations({
                 </span>
                 <div>
                   <h3 className="text-sm font-bold text-gray-900">Approved WhatsApp Templates</h3>
-                  <p className="text-[11px] text-gray-400">Compliant with Meta WhatsApp Business policies</p>
+                  <p className="text-xs text-gray-400">Compliant with Meta WhatsApp Business policies</p>
                 </div>
               </div>
               <button
@@ -686,7 +686,7 @@ export default function CrmWhatsAppConversations({
 
             <div className="space-y-3">
               <div>
-                <label className="block text-[11px] font-bold text-gray-700 uppercase mb-1">
+                <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
                   Select Template
                 </label>
                 <select
@@ -721,7 +721,7 @@ export default function CrmWhatsAppConversations({
                   {/* Parameter Inputs */}
                   {Array.isArray(currentTemplateObj.params) && currentTemplateObj.params.length > 0 && (
                     <div className="space-y-2 pt-1">
-                      <label className="block text-[11px] font-bold text-gray-700 uppercase">
+                      <label className="block text-xs font-bold text-gray-700 uppercase">
                         Template Parameters
                       </label>
                       {currentTemplateObj.params.map((param) => (
@@ -746,7 +746,7 @@ export default function CrmWhatsAppConversations({
 
                   {/* Live Template Preview */}
                   <div className="pt-2">
-                    <span className="block text-[11px] font-bold text-gray-700 uppercase mb-1">
+                    <span className="block text-xs font-bold text-gray-700 uppercase mb-1">
                       Preview
                     </span>
                     <div className="bg-emerald-50/70 border border-emerald-200/80 rounded-2xl p-3.5 text-xs text-gray-800 leading-relaxed font-sans">

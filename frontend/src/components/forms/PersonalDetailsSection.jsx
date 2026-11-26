@@ -26,7 +26,7 @@ export default function PersonalDetailsSection({
             Please review and verify your identity and contact information.
           </p>
         </div>
-        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-blue-800 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-100">
+        <div className="flex items-center gap-1.5 text-xs font-semibold text-blue-800 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-100">
           <FontAwesomeIcon icon={faInfoCircle} />
           <span>Information marked with * is mandatory</span>
         </div>
@@ -59,7 +59,7 @@ export default function PersonalDetailsSection({
             />
           </div>
           {errors.full_name && (
-            <p className="text-[11px] text-red-600 font-semibold mt-1">{errors.full_name}</p>
+            <p className="text-xs text-red-600 font-semibold mt-1">{errors.full_name}</p>
           )}
         </div>
 
@@ -91,7 +91,7 @@ export default function PersonalDetailsSection({
           </div>
           <p className="text-[10px] text-gray-400 mt-1">10-character alphanumeric PAN</p>
           {errors.pan && (
-            <p className="text-[11px] text-red-600 font-semibold mt-1">{errors.pan}</p>
+            <p className="text-xs text-red-600 font-semibold mt-1">{errors.pan}</p>
           )}
         </div>
 
@@ -119,7 +119,7 @@ export default function PersonalDetailsSection({
             }`}
           />
           {errors.dob && (
-            <p className="text-[11px] text-red-600 font-semibold mt-1">{errors.dob}</p>
+            <p className="text-xs text-red-600 font-semibold mt-1">{errors.dob}</p>
           )}
         </div>
 
@@ -147,7 +147,7 @@ export default function PersonalDetailsSection({
             }`}
           />
           {errors.email && (
-            <p className="text-[11px] text-red-600 font-semibold mt-1">{errors.email}</p>
+            <p className="text-xs text-red-600 font-semibold mt-1">{errors.email}</p>
           )}
         </div>
 
@@ -181,7 +181,7 @@ export default function PersonalDetailsSection({
             />
           </div>
           {errors.mobile_no && (
-            <p className="text-[11px] text-red-600 font-semibold mt-1">{errors.mobile_no}</p>
+            <p className="text-xs text-red-600 font-semibold mt-1">{errors.mobile_no}</p>
           )}
         </div>
 
@@ -201,7 +201,7 @@ export default function PersonalDetailsSection({
             <option value="Other">Other</option>
           </select>
           {errors.gender && (
-            <p className="text-[11px] text-red-600 font-semibold mt-1">{errors.gender}</p>
+            <p className="text-xs text-red-600 font-semibold mt-1">{errors.gender}</p>
           )}
         </div>
 
@@ -218,7 +218,7 @@ export default function PersonalDetailsSection({
             className="w-full text-xs font-semibold px-3.5 py-2.5 rounded-xl border border-gray-300 bg-white focus:outline-none focus:border-[#032e92] focus:ring-2 focus:ring-blue-100 text-gray-900"
           />
           {errors.place_of_birth && (
-            <p className="text-[11px] text-red-600 font-semibold mt-1">{errors.place_of_birth}</p>
+            <p className="text-xs text-red-600 font-semibold mt-1">{errors.place_of_birth}</p>
           )}
         </div>
 
@@ -242,7 +242,7 @@ export default function PersonalDetailsSection({
             <option value="Others">Others</option>
           </select>
           {errors.occupation && (
-            <p className="text-[11px] text-red-600 font-semibold mt-1">{errors.occupation}</p>
+            <p className="text-xs text-red-600 font-semibold mt-1">{errors.occupation}</p>
           )}
         </div>
 
@@ -262,7 +262,7 @@ export default function PersonalDetailsSection({
             className="w-full text-xs font-semibold px-3.5 py-2.5 rounded-xl border border-gray-300 bg-white focus:outline-none focus:border-[#032e92] focus:ring-2 focus:ring-blue-100 text-gray-900"
           />
           {errors.address && (
-            <p className="text-[11px] text-red-600 font-semibold mt-1">{errors.address}</p>
+            <p className="text-xs text-red-600 font-semibold mt-1">{errors.address}</p>
           )}
         </div>
 

@@ -73,7 +73,7 @@ export default function WhoShouldConsiderNps() {
                   <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 text-[#032e92] group-hover:bg-[#032e92] group-hover:text-white flex items-center justify-center text-lg transition-all duration-300 shadow-sm">
                     <FontAwesomeIcon icon={item.icon} />
                   </div>
-                  <span className="text-[11px] font-bold text-blue-700 bg-blue-100/70 px-2.5 py-1 rounded-full uppercase">
+                  <span className="text-xs font-bold text-blue-700 bg-blue-100/70 px-2.5 py-1 rounded-full uppercase">
                     {item.badge}
                   </span>
                 </div>

@@ -161,7 +161,7 @@ export default function FixedDepositCalculator() {
                   onChange={(e) => setPrincipal(Number(e.target.value))}
                   className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#032e92]"
                 />
-                <div className="flex justify-between text-[11px] text-gray-400 mt-1">
+                <div className="flex justify-between text-xs text-gray-400 mt-1">
                   <span>₹ 10,000</span>
                   <span>₹ 10,00,000</span>
                   <span>₹ 25,00,000</span>
@@ -187,7 +187,7 @@ export default function FixedDepositCalculator() {
                   onChange={(e) => setBaseRate(Number(e.target.value))}
                   className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#032e92]"
                 />
-                <div className="flex justify-between text-[11px] text-gray-400 mt-1">
+                <div className="flex justify-between text-xs text-gray-400 mt-1">
                   <span>5.0%</span>
                   <span>7.25% (Typical Bank Rate)</span>
                   <span>9.5%</span>
@@ -202,7 +202,7 @@ export default function FixedDepositCalculator() {
                   </div>
                   <div>
                     <div className="text-xs font-bold text-gray-900">Are you a Senior Citizen (Age 60+)?</div>
-                    <div className="text-[11px] text-gray-600">Adds an illustrative +0.50% preferential interest rate</div>
+                    <div className="text-xs text-gray-600">Adds an illustrative +0.50% preferential interest rate</div>
                   </div>
                 </div>
                 <button
@@ -237,7 +237,7 @@ export default function FixedDepositCalculator() {
                   onChange={(e) => setTenureYears(Number(e.target.value))}
                   className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#032e92]"
                 />
-                <div className="flex justify-between text-[11px] text-gray-400 mt-1">
+                <div className="flex justify-between text-xs text-gray-400 mt-1">
                   <span>1 Year</span>
                   <span>5 Years (Tax Saving)</span>
                   <span>10 Years</span>
@@ -269,7 +269,7 @@ export default function FixedDepositCalculator() {
                     </button>
                   ))}
                 </div>
-                <p className="text-[11px] text-gray-400 mt-1.5">
+                <p className="text-xs text-gray-400 mt-1.5">
                   Default set to standard Annual compounding. Commercial banks typically compound quarterly.
                 </p>
               </div>
@@ -278,7 +278,7 @@ export default function FixedDepositCalculator() {
             {/* Right Column: Output Summary Card (5 cols) */}
             <div className="lg:col-span-5 bg-gradient-to-br from-[#0a192f] via-[#032e92] to-[#021d63] rounded-3xl p-6 sm:p-8 text-white shadow-2xl relative overflow-hidden space-y-6">
               <div>
-                <span className="text-[11px] font-bold uppercase text-blue-200 block mb-1">
+                <span className="text-xs font-bold uppercase text-blue-200 block mb-1">
                   Maturity Value (Cumulative)
                 </span>
                 <div className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
@@ -292,7 +292,7 @@ export default function FixedDepositCalculator() {
               {/* Breakdown Grid */}
               <div className="grid grid-cols-2 gap-3 pt-2">
                 <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15">
-                  <span className="text-[11px] text-blue-200 uppercase block mb-1">
+                  <span className="text-xs text-blue-200 uppercase block mb-1">
                     Principal Invested
                   </span>
                   <div className="text-base sm:text-lg font-bold text-white">
@@ -301,7 +301,7 @@ export default function FixedDepositCalculator() {
                 </div>
 
                 <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15">
-                  <span className="text-[11px] text-emerald-300 uppercase block mb-1">
+                  <span className="text-xs text-emerald-300 uppercase block mb-1">
                     Total Interest Earned
                   </span>
                   <div className="text-base sm:text-lg font-bold text-emerald-400">
@@ -366,7 +366,7 @@ export default function FixedDepositCalculator() {
                   onChange={(e) => setBondPrincipal(Number(e.target.value))}
                   className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#032e92]"
                 />
-                <div className="flex justify-between text-[11px] text-gray-400 mt-1">
+                <div className="flex justify-between text-xs text-gray-400 mt-1">
                   <span>₹ 10,000</span>
                   <span>₹ 25,00,000</span>
                   <span>₹ 50,00,000</span>
@@ -392,7 +392,7 @@ export default function FixedDepositCalculator() {
                   onChange={(e) => setBondRate(Number(e.target.value))}
                   className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-emerald-600"
                 />
-                <div className="flex justify-between text-[11px] text-gray-400 mt-1">
+                <div className="flex justify-between text-xs text-gray-400 mt-1">
                   <span>6.5%</span>
                   <span>8.05% (Current Prevailing Coupon)</span>
                   <span>9.0%</span>
@@ -418,7 +418,7 @@ export default function FixedDepositCalculator() {
             {/* Right Column: Bond Output Summary (5 cols) */}
             <div className="lg:col-span-5 bg-gradient-to-br from-[#0a192f] via-[#054a36] to-[#022e22] rounded-3xl p-6 sm:p-8 text-white shadow-2xl relative overflow-hidden space-y-6">
               <div>
-                <span className="text-[11px] font-bold uppercase text-emerald-200 block mb-1">
+                <span className="text-xs font-bold uppercase text-emerald-200 block mb-1">
                   Total Interest Earnings (Across 7 Years)
                 </span>
                 <div className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
@@ -432,7 +432,7 @@ export default function FixedDepositCalculator() {
               {/* Breakdown Grid */}
               <div className="grid grid-cols-2 gap-3 pt-2">
                 <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15">
-                  <span className="text-[11px] text-emerald-200 uppercase block mb-1">
+                  <span className="text-xs text-emerald-200 uppercase block mb-1">
                     Principal Invested
                   </span>
                   <div className="text-base sm:text-lg font-bold text-white">
@@ -442,7 +442,7 @@ export default function FixedDepositCalculator() {
                 </div>
 
                 <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15">
-                  <span className="text-[11px] text-emerald-200 uppercase block mb-1">
+                  <span className="text-xs text-emerald-200 uppercase block mb-1">
                     Every 6 Months Payout
                   </span>
                   <div className="text-base sm:text-lg font-bold text-emerald-300">
@@ -460,7 +460,7 @@ export default function FixedDepositCalculator() {
                 <div className="text-xl font-bold text-white">
                   {formatCroreLakh(bondResults.totalMaturityProceeds)}
                 </div>
-                <p className="text-[11px] text-emerald-200/90 leading-tight">
+                <p className="text-xs text-emerald-200/90 leading-tight">
                   Principal ₹ {bondResults.P.toLocaleString("en-IN")} + Total Interest ₹ {Math.round(bondResults.totalInterest).toLocaleString("en-IN")}
                 </p>
               </div>

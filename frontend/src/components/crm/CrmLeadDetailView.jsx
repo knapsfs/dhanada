@@ -470,7 +470,7 @@ export default function CrmLeadDetailView({
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-gray-900">Contact Health & Latest Remark</h3>
-                  <p className="text-[11px] text-gray-400">Track all communication and maintain advisor compliance</p>
+                  <p className="text-xs text-gray-400">Track all communication and maintain advisor compliance</p>
                 </div>
               </div>
 
@@ -498,7 +498,7 @@ export default function CrmLeadDetailView({
                 <FontAwesomeIcon icon={faTriangleExclamation} className="text-amber-600 text-sm mt-0.5 shrink-0" />
                 <div>
                   <p className="font-bold">Follow-up Overdue Warning</p>
-                  <p className="text-[11px] text-amber-800 mt-0.5">
+                  <p className="text-xs text-amber-800 mt-0.5">
                     This lead has not been contacted in {contactInfo.days} days. Please record an interaction remark below to reset the contact timer.
                   </p>
                 </div>
@@ -512,7 +512,7 @@ export default function CrmLeadDetailView({
                   <p className="text-gray-800 font-medium leading-relaxed whitespace-pre-wrap text-sm italic">
                     "{leadData.latest_remark}"
                   </p>
-                  <div className="pt-3 border-t border-gray-200 flex items-center justify-between gap-3 text-[11px] text-gray-500 flex-wrap">
+                  <div className="pt-3 border-t border-gray-200 flex items-center justify-between gap-3 text-xs text-gray-500 flex-wrap">
                     <span className="flex items-center gap-1.5">
                       <FontAwesomeIcon icon={faUser} className="text-gray-400 text-[10px]" />
                       <span>Contacted by: <strong className="text-gray-800">{leadData.last_contacted_by || "Advisor"}</strong></span>
@@ -532,7 +532,7 @@ export default function CrmLeadDetailView({
 
             {/* New Remark Input Form */}
             <form onSubmit={handleSaveRemark} className="space-y-3 pt-1">
-              <label className="block text-[11px] font-bold text-gray-600 uppercase">
+              <label className="block text-xs font-bold text-gray-600 uppercase">
                 Record New Contact Remark
               </label>
               <textarea
@@ -640,7 +640,7 @@ export default function CrmLeadDetailView({
                         <button
                           type="button"
                           onClick={() => onNewTask && onNewTask(leadData)}
-                          className="text-[11px] font-bold text-[#032e92] hover:underline cursor-pointer flex items-center gap-1"
+                          className="text-xs font-bold text-[#032e92] hover:underline cursor-pointer flex items-center gap-1"
                         >
                           <FontAwesomeIcon icon={faPlus} className="text-[10px]" />
                           <span>Add Task</span>
@@ -679,7 +679,7 @@ export default function CrmLeadDetailView({
                         <button
                           type="button"
                           onClick={() => onLogInteraction && onLogInteraction(leadData)}
-                          className="text-[11px] font-bold text-[#032e92] hover:underline cursor-pointer flex items-center gap-1"
+                          className="text-xs font-bold text-[#032e92] hover:underline cursor-pointer flex items-center gap-1"
                         >
                           <FontAwesomeIcon icon={faPlus} className="text-[10px]" />
                           <span>Log Touchpoint</span>
@@ -743,7 +743,7 @@ export default function CrmLeadDetailView({
                   <div className="flex items-center justify-between pb-3 border-b border-gray-100">
                     <div>
                       <h4 className="text-xs font-bold text-gray-800">Complete Touchpoint History</h4>
-                      <p className="text-[11px] text-gray-400">Chronological history of calls, meetings, emails, and client discussions</p>
+                      <p className="text-xs text-gray-400">Chronological history of calls, meetings, emails, and client discussions</p>
                     </div>
                     <button
                       type="button"
@@ -759,7 +759,7 @@ export default function CrmLeadDetailView({
                     <div className="py-16 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-200 space-y-2">
                       <FontAwesomeIcon icon={faCommentDots} className="text-3xl text-gray-300" />
                       <p className="text-xs font-bold text-gray-700">No interactions recorded yet</p>
-                      <p className="text-[11px] text-gray-400 max-w-sm mx-auto">
+                      <p className="text-xs text-gray-400 max-w-sm mx-auto">
                         Click "Log New Touchpoint" to record your calls, discussions, or meeting notes with this lead.
                       </p>
                     </div>
@@ -773,7 +773,7 @@ export default function CrmLeadDetailView({
                           <div className="bg-white p-4 rounded-2xl border border-gray-200 shadow-2xs space-y-2 hover:border-[#032e92]/30 transition-colors">
                             <div className="flex items-start justify-between gap-3 flex-wrap">
                               <span className="text-xs font-bold text-gray-900">{int.summary}</span>
-                              <span className="text-[11px] font-semibold text-gray-400">
+                              <span className="text-xs font-semibold text-gray-400">
                                 {new Date(int.interaction_date).toLocaleString("en-IN", {
                                   month: "short",
                                   day: "numeric",
@@ -784,7 +784,7 @@ export default function CrmLeadDetailView({
                               </span>
                             </div>
 
-                            <div className="flex items-center gap-2 text-[11px] flex-wrap">
+                            <div className="flex items-center gap-2 text-xs flex-wrap">
                               <span className="px-2.5 py-0.5 rounded-md bg-blue-50 text-[#032e92] font-bold">
                                 {int.interaction_type}
                               </span>
@@ -798,7 +798,7 @@ export default function CrmLeadDetailView({
                             )}
 
                             {int.outcome && (
-                              <div className="text-[11px] text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-lg font-medium inline-block">
+                              <div className="text-xs text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-lg font-medium inline-block">
                                 Outcome: <strong>{int.outcome}</strong>
                               </div>
                             )}
@@ -816,7 +816,7 @@ export default function CrmLeadDetailView({
                   <div className="flex items-center justify-between pb-3 border-b border-gray-100">
                     <div>
                       <h4 className="text-xs font-bold text-gray-800">Associated Follow-up Tasks</h4>
-                      <p className="text-[11px] text-gray-400">Scheduled reminders, document collections, and client action items</p>
+                      <p className="text-xs text-gray-400">Scheduled reminders, document collections, and client action items</p>
                     </div>
                     <button
                       type="button"
@@ -832,7 +832,7 @@ export default function CrmLeadDetailView({
                     <div className="py-16 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-200 space-y-2">
                       <FontAwesomeIcon icon={faListCheck} className="text-3xl text-gray-300" />
                       <p className="text-xs font-bold text-gray-700">No open tasks for this lead</p>
-                      <p className="text-[11px] text-gray-400 max-w-sm mx-auto">
+                      <p className="text-xs text-gray-400 max-w-sm mx-auto">
                         Add reminders for callbacks, document collection, KYC submission, or portfolio reviews.
                       </p>
                     </div>
@@ -865,7 +865,7 @@ export default function CrmLeadDetailView({
                                   <h5 className={`text-xs font-bold ${isCompleted ? "line-through text-gray-400" : "text-gray-900"}`}>
                                     {t.title}
                                   </h5>
-                                  <div className="flex items-center gap-3 mt-1 text-[11px] text-gray-500 flex-wrap">
+                                  <div className="flex items-center gap-3 mt-1 text-xs text-gray-500 flex-wrap">
                                     <span className="font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded text-[10px]">
                                       {t.priority}
                                     </span>
@@ -1015,7 +1015,7 @@ export default function CrmLeadDetailView({
                     />
                   </div>
                 ) : null}
-                <span className="text-[11px] text-gray-500 font-medium block mt-1.5">
+                <span className="text-xs text-gray-500 font-medium block mt-1.5">
                   Category: <strong className="text-gray-800">{leadData?.risk_profile || "Pending Profiler"}</strong>
                 </span>
               </div>

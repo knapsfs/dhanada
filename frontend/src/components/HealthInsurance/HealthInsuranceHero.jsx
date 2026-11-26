@@ -145,37 +145,37 @@ export default function HealthInsuranceHero() {
                 <div className="p-3.5 rounded-2xl bg-blue-50/50 border border-blue-100/60">
                   <div className="flex items-center gap-2 text-[#032e92] mb-1">
                     <FontAwesomeIcon icon={faHospital} className="text-xs" />
-                    <span className="text-[11px] font-semibold uppercase text-gray-500">Network</span>
+                    <span className="text-xs font-semibold uppercase text-gray-500">Network</span>
                   </div>
                   <div className="text-lg font-extrabold text-[#0a192f]">14,000+</div>
-                  <p className="text-[11px] text-gray-600 leading-tight">Cashless hospitals nationwide</p>
+                  <p className="text-xs text-gray-600 leading-tight">Cashless hospitals nationwide</p>
                 </div>
 
                 <div className="p-3.5 rounded-2xl bg-emerald-50/50 border border-emerald-100/60">
                   <div className="flex items-center gap-2 text-emerald-700 mb-1">
                     <FontAwesomeIcon icon={faClock} className="text-xs" />
-                    <span className="text-[11px] font-semibold uppercase text-gray-500">Speed</span>
+                    <span className="text-xs font-semibold uppercase text-gray-500">Speed</span>
                   </div>
                   <div className="text-lg font-extrabold text-[#0a192f]">&lt; 45 Mins</div>
-                  <p className="text-[11px] text-gray-600 leading-tight">Avg. cashless pre-authorization</p>
+                  <p className="text-xs text-gray-600 leading-tight">Avg. cashless pre-authorization</p>
                 </div>
 
                 <div className="p-3.5 rounded-2xl bg-indigo-50/50 border border-indigo-100/60">
                   <div className="flex items-center gap-2 text-indigo-700 mb-1">
                     <FontAwesomeIcon icon={faPercent} className="text-xs" />
-                    <span className="text-[11px] font-semibold uppercase text-gray-500">Settlement</span>
+                    <span className="text-xs font-semibold uppercase text-gray-500">Settlement</span>
                   </div>
                   <div className="text-lg font-extrabold text-[#0a192f]">99.2%</div>
-                  <p className="text-[11px] text-gray-600 leading-tight">KNAPS claim assistance rate</p>
+                  <p className="text-xs text-gray-600 leading-tight">KNAPS claim assistance rate</p>
                 </div>
 
                 <div className="p-3.5 rounded-2xl bg-amber-50/50 border border-amber-100/60">
                   <div className="flex items-center gap-2 text-amber-700 mb-1">
                     <FontAwesomeIcon icon={faShieldHeart} className="text-xs" />
-                    <span className="text-[11px] font-semibold uppercase text-gray-500">Tax Saving</span>
+                    <span className="text-xs font-semibold uppercase text-gray-500">Tax Saving</span>
                   </div>
                   <div className="text-lg font-extrabold text-[#0a192f]">₹1,00,000</div>
-                  <p className="text-[11px] text-gray-600 leading-tight">Max 80D deduction benefit</p>
+                  <p className="text-xs text-gray-600 leading-tight">Max 80D deduction benefit</p>
                 </div>
               </div>
 
