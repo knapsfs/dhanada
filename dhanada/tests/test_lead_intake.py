@@ -28,7 +28,6 @@ class TestLeadIntake(FrappeTestCase):
 		test_leads = frappe.get_all("Lead", filters={"email": ["like", "%@example.com"]}, pluck="name")
 		for l_name in test_leads:
 			frappe.delete_doc("Lead", l_name, ignore_permissions=True, force=True)
-		frappe.db.commit()
 
 	def tearDown(self):
 		frappe.local.request = None
@@ -301,7 +300,6 @@ class TestLeadIntake(FrappeTestCase):
 			}
 		)
 		lead.insert(ignore_permissions=True)
-		frappe.db.commit()
 		initial_lead_name = lead.name
 
 		# Now user completes risk profiler

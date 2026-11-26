@@ -74,8 +74,6 @@ class TestWhatsAppAdapter(FrappeTestCase):
 			}
 		).insert(ignore_permissions=True)
 
-		frappe.db.commit()
-
 	def tearDown(self):
 		self.cleanup_test_records()
 		super().tearDown()
@@ -96,7 +94,6 @@ class TestWhatsAppAdapter(FrappeTestCase):
 			frappe.db.delete("WA Account", {"account_name": ["like", "_Test WA%"]})
 		if frappe.db.table_exists("WA Profile"):
 			frappe.db.delete("WA Profile", {"phone_number": ["like", "%98765%"]})
-		frappe.db.commit()
 
 	def test_01_phone_normalization(self):
 		"""Verify clean_phone_number normalizes various input formats to E.164 digits."""

@@ -50,7 +50,6 @@ class TestLeadLifecycle(FrappeTestCase):
 		for client_name in getattr(self, "test_clients", []):
 			if frappe.db.exists("Client", client_name):
 				frappe.db.delete("Client", client_name)
-		frappe.db.commit()
 		frappe.local.request = None
 		frappe.local.request_ip = None
 

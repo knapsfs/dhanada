@@ -80,8 +80,6 @@ class TestLeadClientMapping(FrappeTestCase):
 					}
 				).insert(ignore_permissions=True)
 
-		frappe.db.commit()
-
 	def tearDown(self):
 		frappe.set_user("Administrator")
 		for comm in self.cleanup_communications:
@@ -104,7 +102,6 @@ class TestLeadClientMapping(FrappeTestCase):
 			frappe.delete_doc("WA Profile", self.test_wa_profile.name, ignore_permissions=True, force=True)
 		if self.test_wa_account and frappe.db.exists("WA Account", self.test_wa_account.name):
 			frappe.delete_doc("WA Account", self.test_wa_account.name, ignore_permissions=True, force=True)
-		frappe.db.commit()
 
 	def create_test_client(
 		self, client_name="Rahul Sharma", email="rahul.sharma@example.com", mobile="9876543210", pan=None
@@ -114,7 +111,6 @@ class TestLeadClientMapping(FrappeTestCase):
 
 			pan = f"ABCDE{random.randint(1000, 9999)}F"
 		frappe.db.delete("Client", {"pan": pan})
-		frappe.db.commit()
 
 		client = frappe.get_doc(
 			{
