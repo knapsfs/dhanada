@@ -184,7 +184,7 @@ export default function GoalFocus() {
 
               {/* Header Label Row Above Chart */}
               <div className="flex items-center justify-end mb-1.5 px-1">
-                <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/95 border border-sky-200/90 shadow-2xs text-[11px] font-bold text-[#032e92]">
+                <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/95 border border-sky-200/90 shadow-2xs text-xs font-bold text-[#032e92]">
                   <FontAwesomeIcon icon={faArrowTrendUp} className="text-emerald-500 text-xs" />
                   <span>Compounding</span>
                 </div>

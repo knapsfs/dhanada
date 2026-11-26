@@ -73,7 +73,7 @@ export default function SmallSavingsRisks() {
                   <div className="w-12 h-12 rounded-xl bg-amber-100/80 text-amber-700 flex items-center justify-center text-lg transition-transform group-hover:scale-105">
                     <FontAwesomeIcon icon={item.icon} />
                   </div>
-                  <span className="text-[11px] font-bold text-amber-800 bg-amber-100/60 px-2.5 py-1 rounded-full uppercase">
+                  <span className="text-xs font-bold text-amber-800 bg-amber-100/60 px-2.5 py-1 rounded-full uppercase">
                     {item.badge}
                   </span>
                 </div>

@@ -164,7 +164,7 @@ export default function HealthInsuranceCalculator() {
                 onChange={(e) => setAge(Number(e.target.value))}
                 className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#032e92]"
               />
-              <div className="flex justify-between text-[11px] text-gray-400 mt-1">
+              <div className="flex justify-between text-xs text-gray-400 mt-1">
                 <span>18 Years</span>
                 <span>45 Years</span>
                 <span>75 Years</span>
@@ -185,7 +185,7 @@ export default function HealthInsuranceCalculator() {
                     }`}
                 >
                   <div className="font-bold text-xs sm:text-sm">Tier 1 / Metro City</div>
-                  <div className="text-[11px] text-gray-500">Mumbai, Delhi NCR, Bengaluru, Hyderabad, etc.</div>
+                  <div className="text-xs text-gray-500">Mumbai, Delhi NCR, Bengaluru, Hyderabad, etc.</div>
                 </button>
 
                 <button
@@ -196,7 +196,7 @@ export default function HealthInsuranceCalculator() {
                     }`}
                 >
                   <div className="font-bold text-xs sm:text-sm">Tier 2 / Tier 3 City</div>
-                  <div className="text-[11px] text-gray-500">Jaipur, Lucknow, Indore, Coimbatore, etc.</div>
+                  <div className="text-xs text-gray-500">Jaipur, Lucknow, Indore, Coimbatore, etc.</div>
                 </button>
               </div>
             </div>
@@ -225,7 +225,7 @@ export default function HealthInsuranceCalculator() {
                   </button>
                 ))}
               </div>
-              <p className="text-[11px] text-gray-500 mt-1.5">
+              <p className="text-xs text-gray-500 mt-1.5">
                 {corporateCover > 0
                   ? `With ₹${corporateCover / 100000}L employer cover, a Super Top-Up is the most affordable way to boost your protection to ₹1 Crore.`
                   : 'Without corporate cover, a full comprehensive base floater of ₹25L–₹50L is strongly recommended.'}
@@ -236,7 +236,7 @@ export default function HealthInsuranceCalculator() {
             <div className="p-3.5 rounded-xl bg-blue-50/60 border border-blue-100 flex items-center justify-between">
               <div>
                 <div className="text-xs font-bold text-[#0a192f]">Including Senior Citizen Parents (60+)?</div>
-                <div className="text-[11px] text-gray-600">Unlocks an additional ₹50,000 tax deduction under Section 80D</div>
+                <div className="text-xs text-gray-600">Unlocks an additional ₹50,000 tax deduction under Section 80D</div>
               </div>
               <button
                 type="button"
@@ -298,7 +298,7 @@ export default function HealthInsuranceCalculator() {
                   <span className="text-blue-200">Estimated Annual Tax Saved:</span>
                   <strong className="text-emerald-300 font-bold text-sm">₹{results.estimatedTaxSaved.toLocaleString('en-IN')}</strong>
                 </div>
-                <p className="text-[11px] text-blue-200/80 pt-1">
+                <p className="text-xs text-blue-200/80 pt-1">
                   *Calculated at 30% tax bracket + 4% cess. Health insurance premiums effectively pay for themselves in tax refunds!
                 </p>
               </div>
@@ -327,7 +327,7 @@ export default function HealthInsuranceCalculator() {
                 <FontAwesomeIcon icon={faArrowRight} className="text-xs group-hover:translate-x-1 transition-transform" />
               </button>
 
-              <p className="text-[11px] text-blue-200/70 text-center">
+              <p className="text-xs text-blue-200/70 text-center">
                 Free comparison across 15+ top IRDAI insurers. No spam guaranteed.
               </p>
             </div>

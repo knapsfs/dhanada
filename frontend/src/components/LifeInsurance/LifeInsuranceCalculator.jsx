@@ -245,7 +245,7 @@ export default function LifeInsuranceCalculator() {
                     </div>
                     <div>
                       <h4 className="font-extrabold text-[#0a192f] text-sm leading-tight">Your Coverage Assessment</h4>
-                      <p className="text-[11px] text-gray-400">Scientific HLV Formulation</p>
+                      <p className="text-xs text-gray-400">Scientific HLV Formulation</p>
                     </div>
                   </div>
                   <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
@@ -263,7 +263,7 @@ export default function LifeInsuranceCalculator() {
                   <p className="text-3xl sm:text-4xl font-black text-white tracking-tight">
                     {formatCroreLakh(calculation.sumAssured)}
                   </p>
-                  <p className="text-[11px] text-blue-100/90 mt-2 font-medium">
+                  <p className="text-xs text-blue-100/90 mt-2 font-medium">
                     Ensures complete financial independence for your family in your absence.
                   </p>
                 </div>
@@ -271,7 +271,7 @@ export default function LifeInsuranceCalculator() {
                 {/* Estimated Monthly Premium Box */}
                 <div className="bg-[#f7f9fc] rounded-2xl p-4 border border-[#e8edf7] mb-6 flex items-center justify-between">
                   <div>
-                    <p className="text-[11px] font-bold text-gray-400 uppercase">
+                    <p className="text-xs font-bold text-gray-400 uppercase">
                       Est. Monthly Starting Premium
                     </p>
                     <p className="text-2xl font-black text-emerald-600">
@@ -280,7 +280,7 @@ export default function LifeInsuranceCalculator() {
                     </p>
                   </div>
                   <div className="text-right">
-                    <span className="text-[11px] font-bold text-[#032e92] bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200/60">
+                    <span className="text-xs font-bold text-[#032e92] bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200/60">
                       Sec 80C Tax Saver
                     </span>
                   </div>

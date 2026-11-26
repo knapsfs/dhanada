@@ -874,10 +874,10 @@ export default function NpsModelExplorer() {
                               >
                                 {/* <FontAwesomeIcon icon={faCircleCheck} className="text-emerald-500 text-xs mt-1 shrink-0" /> */}
                                 <div>
-                                  <span className="font-bold text-xs sm:text-[13px] text-gray-900 mr-1.5">
+                                  <span className="font-bold text-xs sm:text-sm text-gray-900 mr-1.5">
                                     {crit.label}:
                                   </span>
-                                  <span className="text-xs sm:text-[13px] text-gray-600 leading-relaxed font-normal">
+                                  <span className="text-xs sm:text-sm text-gray-600 leading-relaxed font-normal">
                                     {crit.value}
                                   </span>
                                 </div>
@@ -957,7 +957,7 @@ export default function NpsModelExplorer() {
                                   <span className="font-bold text-xs sm:text-sm text-gray-900 block mb-0.5">
                                     {b.title}
                                   </span>
-                                  <span className="text-xs sm:text-[13px] text-gray-600 leading-relaxed font-normal">
+                                  <span className="text-xs sm:text-sm text-gray-600 leading-relaxed font-normal">
                                     {b.desc}
                                   </span>
                                 </div>
@@ -995,7 +995,7 @@ export default function NpsModelExplorer() {
                                   <span className="font-bold text-xs sm:text-sm text-gray-900 block mb-0.5">
                                     {b.title}
                                   </span>
-                                  <span className="text-xs sm:text-[13px] text-gray-600 leading-relaxed font-normal">
+                                  <span className="text-xs sm:text-sm text-gray-600 leading-relaxed font-normal">
                                     {b.desc}
                                   </span>
                                 </div>
@@ -1116,7 +1116,7 @@ export default function NpsModelExplorer() {
                           >
                             <div>
                               <div className="flex items-center justify-between mb-2">
-                                <span className="text-[11px] font-bold text-gray-400 uppercase">
+                                <span className="text-xs font-bold text-gray-400 uppercase">
                                   Stage 0{idx + 1}
                                 </span>
                                 {/* <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
@@ -1158,7 +1158,7 @@ export default function NpsModelExplorer() {
                               </div>
 
                               {/* Conditions Bullets */}
-                              <ul className="space-y-2 mb-4 text-xs sm:text-[13px] text-gray-700">
+                              <ul className="space-y-2 mb-4 text-xs sm:text-sm text-gray-700">
                                 {card.conditions.map((cond, cIdx) => (
                                   <li key={cIdx} className="flex items-start gap-2">
                                     <span className="text-gray-400 font-bold leading-none mt-1">•</span>
@@ -1173,7 +1173,7 @@ export default function NpsModelExplorer() {
                                 {card.description}
                               </p>
                               {card.footnote && (
-                                <p className="mt-2 text-[11px] text-gray-500 leading-snug italic">
+                                <p className="mt-2 text-xs text-gray-500 leading-snug italic">
                                   {card.footnote}
                                 </p>
                               )}
@@ -1227,7 +1227,7 @@ export default function NpsModelExplorer() {
                                     <span>{st.id}</span>
                                     <span>{st.name}</span>
                                   </span>
-                                  <p className="text-xs sm:text-[13px] text-gray-800 font-medium leading-relaxed">
+                                  <p className="text-xs sm:text-sm text-gray-800 font-medium leading-relaxed">
                                     {st.desc}
                                   </p>
                                 </div>
@@ -1248,7 +1248,7 @@ export default function NpsModelExplorer() {
                         {/* Footnotes */}
                         <div className="pt-3.5 border-t border-gray-100 space-y-1.5">
                           {currentSection.vatsalyaWithdrawals.whenTurns18.footerNotes.map((note, nIdx) => (
-                            <div key={nIdx} className="flex items-start gap-2 text-xs sm:text-[13px] text-gray-600">
+                            <div key={nIdx} className="flex items-start gap-2 text-xs sm:text-sm text-gray-600">
                               <span className="text-gray-400 font-bold leading-none mt-1">•</span>
                               <span>{note}</span>
                             </div>
@@ -1296,7 +1296,7 @@ export default function NpsModelExplorer() {
                             >
                               <FontAwesomeIcon icon={hl.icon} />
                             </div>
-                            <p className="text-xs sm:text-[13px] font-semibold text-gray-800 leading-snug">
+                            <p className="text-xs sm:text-sm font-semibold text-gray-800 leading-snug">
                               {hl.text}
                             </p>
                           </div>
@@ -1408,7 +1408,7 @@ export default function NpsModelExplorer() {
                                     {currentSection.commonSchemes.activeChoice.badge}
                                   </span> */}
                                 </div>
-                                <p className="text-xs sm:text-[13px] text-gray-600 leading-relaxed font-normal">
+                                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-normal">
                                   {currentSection.commonSchemes.activeChoice.summary}
                                 </p>
                               </div>
@@ -1425,13 +1425,13 @@ export default function NpsModelExplorer() {
                                     {currentSection.commonSchemes.autoChoice.badge}
                                   </span> */}
                                 </div>
-                                <p className="text-xs sm:text-[13px] text-gray-600 leading-relaxed font-normal mb-3.5">
+                                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-normal mb-3.5">
                                   {currentSection.commonSchemes.autoChoice.summary}
                                 </p>
 
                                 {/* Auto Choice Life Cycle Options */}
                                 <div className="pt-3 border-t border-gray-100">
-                                  <div className="text-[11px] font-bold text-gray-800 uppercase mb-2.5 flex items-center gap-1.5">
+                                  <div className="text-xs font-bold text-gray-800 uppercase mb-2.5 flex items-center gap-1.5">
 
                                     <button
                                       type="button"
@@ -1706,7 +1706,7 @@ export default function NpsModelExplorer() {
                                 </div>
 
                                 {/* Stacked Percentage Bar */}
-                                <div className="flex-1 flex h-6 rounded-lg overflow-hidden bg-gray-200 text-white text-[11px] font-bold shadow-2xs">
+                                <div className="flex-1 flex h-6 rounded-lg overflow-hidden bg-gray-200 text-white text-xs font-bold shadow-2xs">
                                   {alloc.e > 0 && (
                                     <div
                                       style={{ width: `${alloc.e}%` }}

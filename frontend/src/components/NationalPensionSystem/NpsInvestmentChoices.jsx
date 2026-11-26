@@ -97,7 +97,7 @@ export default function NpsInvestmentChoices() {
                       <span className="text-xs font-semibold text-slate-500">{item.riskLevel}</span>
                     </div>
                   </div>
-                  <span className={`text-[11px] font-bold px-3 py-1 rounded-full ${item.badgeColor}`}>
+                  <span className={`text-xs font-bold px-3 py-1 rounded-full ${item.badgeColor}`}>
                     {item.badge}
                   </span>
                 </div>

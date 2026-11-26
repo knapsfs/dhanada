@@ -116,7 +116,7 @@ export default function WhyConsiderNps() {
             <FontAwesomeIcon icon={item.icon} />
           </div>
           {/* <span
-            className={`text-[11px] font-bold px-3 py-1 rounded-full border uppercase ${item.theme.badgeBg}`}
+            className={`text-xs font-bold px-3 py-1 rounded-full border uppercase ${item.theme.badgeBg}`}
           >
             {item.badge}
           </span> */}

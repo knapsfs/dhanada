@@ -160,7 +160,7 @@ export default function SifSuitabilityQuiz({ isModal = false, onClose }) {
                 <span className="font-bold text-[#032e92]">
                   Question {currentIdx + 1} of {quizQuestions.length}
                 </span>
-                <span className="text-[11px] font-semibold text-gray-400">
+                <span className="text-xs font-semibold text-gray-400">
                   {Math.round(progressPct)}% Completed
                 </span>
               </div>
@@ -259,7 +259,7 @@ export default function SifSuitabilityQuiz({ isModal = false, onClose }) {
                     <p className="text-xs sm:text-sm font-bold text-[#032e92] mb-0.5">
                       SIF requires a minimum investment of ₹10 lakh.
                     </p>
-                    <p className="text-[11px] sm:text-xs text-gray-600 leading-relaxed font-medium">
+                    <p className="text-xs sm:text-xs text-gray-600 leading-relaxed font-medium">
                       Based on your answers, SIF is a strong match. SIF offers regulated schemes designed for investors seeking structured, high-conviction wealth strategies.
                     </p>
                   </div>

@@ -116,13 +116,13 @@ export default function AboutStory() {
                     <FontAwesomeIcon icon={card.icon} className="text-sm" />
                   </div>
                   <div>
-                    <span className="text-[11px] font-semibold uppercase text-[#032e92] block mb-0.5">
+                    <span className="text-xs font-semibold uppercase text-[#032e92] block mb-0.5">
                       {card.title}
                     </span>
                     <h3 className="text-sm sm:text-base font-bold text-black mb-1">
                       {card.subtitle}
                     </h3>
-                    <p className="text-xs sm:text-[13px] text-gray-600 leading-relaxed font-normal">
+                    <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-normal">
                       {card.text}
                     </p>
                   </div>

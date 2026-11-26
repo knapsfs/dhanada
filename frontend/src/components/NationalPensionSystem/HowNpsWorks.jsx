@@ -82,14 +82,14 @@ export default function HowNpsWorks() {
                   </div>
                 </div>
 
-                <div className="text-[11px] font-bold text-blue-600 uppercase mb-1">
+                <div className="text-xs font-bold text-blue-600 uppercase mb-1">
                   {step.subtitle}
                 </div>
                 <h3 className="text-lg font-bold text-slate-900 mb-3">{step.title}</h3>
                 <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">{step.description}</p>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-slate-200/60 flex items-center justify-between text-[11px] font-semibold text-slate-400">
+              <div className="mt-6 pt-4 border-t border-slate-200/60 flex items-center justify-between text-xs font-semibold text-slate-400">
                 <span>Phase {idx + 1} of 4</span>
                 <span className="w-2 h-2 rounded-full bg-[#032e92]/30 group-hover:bg-[#032e92] transition-colors" />
               </div>

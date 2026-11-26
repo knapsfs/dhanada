@@ -79,7 +79,7 @@ export default function LifeInsuranceHowItWorks() {
                 </p>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-gray-100 flex items-center gap-1.5 text-[11px] font-bold text-[#032e92]">
+              <div className="mt-6 pt-4 border-t border-gray-100 flex items-center gap-1.5 text-xs font-bold text-[#032e92]">
                 <span>Stage {item.step}</span>
                 <span className="text-gray-300">•</span>
                 <span className="text-gray-400 font-medium">Clear & Verified</span>

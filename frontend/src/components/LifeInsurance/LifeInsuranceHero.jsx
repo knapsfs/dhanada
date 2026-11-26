@@ -105,7 +105,7 @@ export default function LifeInsuranceHero() {
                     <p className="text-xs text-gray-400 font-medium mt-0.5">Pure Term Shield</p>
                   </div>
                 </div>
-                <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+                <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
                   Active Cover
                 </span>
               </div>
@@ -120,7 +120,7 @@ export default function LifeInsuranceHero() {
                   <span className="text-3xl sm:text-4xl font-black tracking-tight text-white">₹ 1,00,00,000</span>
                   <span className="text-xs font-semibold text-blue-200">(1 Crore)</span>
                 </div>
-                <p className="text-[11px] text-blue-100/90 mt-2">
+                <p className="text-xs text-blue-100/90 mt-2">
                   100% Tax-Free death benefit payout to your designated nominee
                 </p>
               </div>

@@ -38,7 +38,7 @@ export default function CrmPipelineView({
           </div>
           <div>
             <h3 className="text-xs font-bold text-gray-900 leading-tight">Lead Pipeline (Kanban)</h3>
-            <p className="text-[11px] text-gray-400 font-medium">Stage-by-stage visual lead management</p>
+            <p className="text-xs text-gray-400 font-medium">Stage-by-stage visual lead management</p>
           </div>
         </div>
 
@@ -50,7 +50,7 @@ export default function CrmPipelineView({
               className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 shadow-2xs flex items-center gap-1.5 cursor-pointer whitespace-nowrap transition-colors"
               title="Switch to Table / List View"
             >
-              <FontAwesomeIcon icon={faList} className="text-gray-500 text-[11px]" />
+              <FontAwesomeIcon icon={faList} className="text-gray-500 text-xs" />
               <span>Table View</span>
             </button>
           )}
@@ -82,7 +82,7 @@ export default function CrmPipelineView({
                   <div className="flex items-center gap-2">
                     <span className={`w-2.5 h-2.5 rounded-full ${stage.color}`} />
                     <h3 className="text-xs font-bold tracking-tight">{stage.label}</h3>
-                    <span className="ml-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-white/90 shadow-2xs">
+                    <span className="ml-1 text-xs font-bold px-2 py-0.5 rounded-full bg-white/90 shadow-2xs">
                       {stageLeads.length}
                     </span>
                   </div>
@@ -162,7 +162,7 @@ export default function CrmPipelineView({
 
                           {/* Product of Interest Pill */}
                           <div className="mb-2">
-                            <span className="inline-block px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-blue-50 text-[#032e92] border border-blue-100/80 truncate max-w-full">
+                            <span className="inline-block px-2.5 py-0.5 rounded-md text-xs font-semibold bg-blue-50 text-[#032e92] border border-blue-100/80 truncate max-w-full">
                               {lead.product_interest || 'General Advisory'}
                             </span>
                           </div>
@@ -177,7 +177,7 @@ export default function CrmPipelineView({
                             return (
                               <div className="mb-2">
                                 {contactInfo.isOverdue ? (
-                                  <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-300 shadow-2xs">
+                                  <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-bold bg-amber-50 text-amber-800 border border-amber-300 shadow-2xs">
                                     <FontAwesomeIcon icon={faTriangleExclamation} className="text-amber-600 text-[10px]" />
                                     <span>{contactInfo.label}</span>
                                   </span>
@@ -196,7 +196,7 @@ export default function CrmPipelineView({
 
                           {/* Latest Remark Preview if any */}
                           {lead.latest_remark && (
-                            <div className="mb-2 bg-slate-50 border border-slate-200/80 rounded-lg p-2 text-[11px] text-gray-700 leading-snug">
+                            <div className="mb-2 bg-slate-50 border border-slate-200/80 rounded-lg p-2 text-xs text-gray-700 leading-snug">
                               <span className="font-bold text-gray-500 block text-[9px] uppercase mb-0.5">Latest Remark</span>
                               <p className="line-clamp-2 italic text-gray-800 font-medium">"{lead.latest_remark}"</p>
                             </div>
@@ -204,20 +204,20 @@ export default function CrmPipelineView({
 
                           {/* Notes Preview if any */}
                           {lead.notes && (
-                            <p className="text-[11px] text-gray-500 line-clamp-2 mb-2 leading-relaxed bg-gray-50/80 p-2 rounded-lg">
+                            <p className="text-xs text-gray-500 line-clamp-2 mb-2 leading-relaxed bg-gray-50/80 p-2 rounded-lg">
                               {lead.notes}
                             </p>
                           )}
 
                           {/* Card Footer: Quick Actions & Date */}
-                          <div className="pt-2 border-t border-gray-100 flex items-center justify-between gap-2 text-[11px] text-gray-400">
+                          <div className="pt-2 border-t border-gray-100 flex items-center justify-between gap-2 text-xs text-gray-400">
                             <span>
                               {lead.creation ? new Date(lead.creation).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : ''}
                             </span>
 
                             <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
                               {lead.interaction_count > 0 && (
-                                <span className="flex items-center gap-1 text-[11px] font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full mr-1">
+                                <span className="flex items-center gap-1 text-xs font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full mr-1">
                                   <FontAwesomeIcon icon={faCommentDots} className="text-[10px] text-blue-600" />
                                   <span>{lead.interaction_count}</span>
                                 </span>

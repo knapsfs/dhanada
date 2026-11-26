@@ -71,7 +71,7 @@ export default function FixedDepositFAQ() {
           aria-expanded={isOpen}
         >
           <span
-            className={`text-md md:text-[16px] font-bold transition-colors duration-300 ${isOpen ? 'text-[#032e92]' : 'text-slate-900'
+            className={`text-md font-bold transition-colors duration-300 ${isOpen ? 'text-[#032e92]' : 'text-slate-900'
               }`}
           >
             {faq.question}

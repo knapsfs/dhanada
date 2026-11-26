@@ -39,7 +39,7 @@ export default function BlogCategories({ activeCategory = 'All', onSelectCategor
         <div className="bg-slate-50/80 md:bg-transparent border border-slate-200/80 md:border-0 rounded-2xl p-3.5 sm:p-4 md:p-0 shadow-sm md:shadow-none">
           <div className="flex flex-wrap items-center justify-start gap-2 md:gap-3">
             {/* Category Name Label */}
-            <span className="text-[13px] sm:text-[14px] font-bold text-gray-800 tracking-tight whitespace-nowrap flex items-center gap-1.5 mr-1 sm:mr-2">
+            <span className="text-sm sm:text-[14px] font-bold text-gray-800 tracking-tight whitespace-nowrap flex items-center gap-1.5 mr-1 sm:mr-2">
               Category :
             </span>
 
@@ -59,7 +59,7 @@ export default function BlogCategories({ activeCategory = 'All', onSelectCategor
                   key={category.name}
                   type="button"
                   onClick={() => handleSelect(category)}
-                  className={`relative px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-[13px] sm:text-[14px] font-semibold whitespace-nowrap transition-all duration-300 cursor-pointer ${isSelected
+                  className={`relative px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-sm sm:text-[14px] font-semibold whitespace-nowrap transition-all duration-300 cursor-pointer ${isSelected
                       ? 'text-white'
                       : 'text-gray-600 bg-white md:bg-transparent border border-gray-200/70 md:border-transparent hover:bg-gray-100 hover:text-[#032e92]'
                     }`}
