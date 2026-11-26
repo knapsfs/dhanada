@@ -64,6 +64,7 @@ flowchart TD
 | `release.yml` | Manual | Tags the built commit `vX.Y.Z` and adds the version alias to the same digest. No rebuild. |
 | `promote.yml` | Manual | Starts the production deploy of a digest. Also the rollback path. |
 | `guard.yml` | PR into `main` | Fails unless the source branch is `develop`, `release/*`, or `hotfix/*`. |
+| `guard-github.yml` | PR into `develop` or `main` | Fails unless a change under `.github/` is approved by the pipeline owner. |
 | `linter.yml` | PR | pre-commit, Frappe Semgrep rules, `pip-audit`. |
 | `pr-title-check.yml` | PR | Semantic title and issue reference. |
 
@@ -74,8 +75,9 @@ flowchart TD
 2. Open **Actions → Deploy development → Run workflow**. Leave `sha` empty to
    deploy the current `develop` head, or paste a commit SHA that is on
    `develop`.
-3. The workflow resolves the digest for `sha-<commit>` from GHCR and dispatches
-   it to `knapsfs/deployment`.
+3. The workflow resolves the digest for `sha-<commit>` from Docker Hub and
+   starts a deployment in `knapsfs/deployment`. It passes the requesting user
+   as `actor`, which the deployment run records.
 4. `Deploy Application` in the deployment repository deploys it, runs
    `erp-smoke`, and only then records the digest as development-validated
    (`deployed-dev-sha256-<hex>` tag).
@@ -89,7 +91,7 @@ You cannot deploy a commit that has no image, or a commit that is not on
 2. Run **Release** with a version such as `1.10.0` and, optionally, the commit
    SHA. It:
    - creates the annotated tag `v1.10.0` on the commit that was built;
-   - adds `ghcr.io/knapsfs/dhanada:1.10.0` as an alias of the same digest
+   - adds `knapsdocker/dhanada:1.10.0` as an alias of the same digest
      (`imagetools create`, no rebuild).
 3. Run **Promote to production** with the digest printed by **Build image** /
    **Release**.
@@ -126,11 +128,19 @@ Migrations are the real risk in a Frappe release, not the image.
 
 | Kind | Name | Value |
 |---|---|---|
-| Secret | `DEPLOYMENT_REPO_DISPATCH_TOKEN` | Fine-grained token for `knapsfs/deployment`: Contents read/write, Actions write |
+| Secret | `DEPLOYMENT_REPO_DISPATCH_TOKEN` | Token for `knapsfs/deployment`, with that repository in its access list |
+| Secret | `DOCKERHUB_USERNAME` | Docker Hub account that owns `knapsdocker/dhanada` |
+| Secret | `DOCKERHUB_TOKEN` | Docker Hub token with push access to `knapsdocker/dhanada` |
 | Variable | `ERPNEXT_IMAGE` | Base image matching the Frappe version, e.g. `frappe/erpnext:v16.0.0` or a digest |
 
-Enable Actions write access to packages for the repository (GHCR) and make the
-package private. A public package publishes the application source.
+For a fine-grained token, grant `Actions: write` and add `knapsfs/deployment`
+to the token's repository access. A classic token needs the `repo` scope. Both
+**Deploy development** and **Promote to production** start a workflow in the
+deployment repository this way. If the repository is not in the token's access
+list, the request fails with 404.
+
+Keep the Docker Hub repository private: a public repository publishes the
+application image.
 
 ### Deployment repository
 
@@ -142,13 +152,23 @@ See `docs/RUNBOOK.md` section 13 in `knapsfs/deployment`: environments
 `develop`:
 
 - require a PR (1 approval), linear history, no force push, no deletion;
-- required checks: `tests`, `Frappe Linter`, the PR title check;
-- remove the organization-admin bypass if "no direct push" must be literal.
+- required checks: `tests`, `Frappe Linter`, the PR title check, `guard-github`;
+- the organization-admin bypass is kept so the owner can merge their own
+  `.github/` changes directly.
 
 `main`:
 
-- the same, plus `guard-source` and CODEOWNERS review;
+- the same, plus `guard-source`;
 - squash-only merges (repository setting, not a ruleset).
+
+### Protecting `.github/`
+
+Workflow files and CODEOWNERS control the build and promotion path, so changes
+to them are gated by `guard-github` rather than a CODEOWNERS ruleset. The check
+fails on a PR that changes any path under `.github/` until `@piyush-sawhney`
+approves the current commit. It runs from the base branch, so a PR cannot edit
+the guard to make it pass. The owner's own PRs skip the check and are merged
+directly with the admin bypass.
 
 ## Troubleshooting
 
@@ -156,9 +176,10 @@ See `docs/RUNBOOK.md` section 13 in `knapsfs/deployment`: environments
 |---|---|
 | No **Build image** run after merging | CI must pass first; the build is triggered by CI completion on `develop` |
 | "No image for sha-…" in **Deploy development** | The build for that commit has not finished or failed |
+| Dispatch fails with 404 | `DEPLOYMENT_REPO_DISPATCH_TOKEN` cannot see `knapsfs/deployment`; check its repository access or scope, and that the repository exists |
 | Production rejected before approval | The digest has no successful development deploy (`deployed-dev-sha256-…` tag missing) |
 | Production waits for approval | Open the run in `knapsfs/deployment` and approve it as the designated reviewer. With one maintainer the reviewer approves their own run |
-| `docker compose pull` fails on the host | The private registry credential is missing or expired (`vault_registry_read_token`) |
+| `docker compose pull` fails on the host | The Docker Hub read credential is missing or expired on the host; see the deployment repository runbook |
 | Deploy rolls back | The new image failed its health check; read the `erp-deploy` output and the deploy log on the host |
 | Migration failed in production | Roll back the image, then restore the pre-deploy backup per the deployment runbook |
 

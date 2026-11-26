@@ -1,0 +1,69 @@
+name: Guard .github
+
+# GitHub rulesets cannot express "a change under .github/ needs the pipeline
+# owner's review". This check does. It uses pull_request_target so a PR cannot
+# edit the guard in its own branch to make itself pass.
+
+on:
+  pull_request_target:
+    branches: [develop, main]
+    types: [opened, synchronize, reopened, ready_for_review]
+  pull_request_review:
+    types: [submitted, dismissed]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  github:
+    name: guard-github
+    if: contains(fromJSON('["develop", "main"]'), github.event.pull_request.base.ref)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require owner review for .github/ changes
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const OWNER = 'piyush-sawhney';
+            const pr = context.payload.pull_request;
+            if (!pr) {
+              core.setFailed('guard-github needs a pull request event.');
+              return;
+            }
+
+            const params = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+              per_page: 100,
+            };
+
+            const files = await github.paginate(github.rest.pulls.listFiles, params);
+            const changed = files
+              .map((file) => file.filename)
+              .filter((path) => path.startsWith('.github/'));
+            if (changed.length === 0) {
+              core.notice('No .github/ changes; guard passed.');
+              return;
+            }
+
+            // The owner merges their own changes, so only other authors need review.
+            if (pr.user.login === OWNER) {
+              core.notice('Owner-authored PR; guard skipped.');
+              return;
+            }
+
+            const reviews = await github.paginate(github.rest.pulls.listReviews, params);
+            const latest = reviews
+              .filter((review) => review.user.login === OWNER)
+              .sort((a, b) => new Date(a.submitted_at) - new Date(b.submitted_at))
+              .pop();
+
+            if (!latest || latest.state !== 'APPROVED' || latest.commit_id !== pr.head.sha) {
+              core.setFailed(
+                `Changes to .github/ need an approving review from @${OWNER} ` +
+                `on the current commit.\nProtected files: ${changed.join(', ')}`
+              );
+            }
