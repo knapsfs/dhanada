@@ -347,7 +347,7 @@ export default function CrmLeadsListView({
               className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white border border-gray-200 hover:bg-gray-50 text-[#032e92] shadow-2xs flex items-center gap-1.5 cursor-pointer whitespace-nowrap transition-colors"
               title="Open Lead Pipeline (Kanban)"
             >
-              <FontAwesomeIcon icon={faTableColumns} className="text-[#032e92] text-[11px]" />
+              <FontAwesomeIcon icon={faTableColumns} className="text-[#032e92] text-xs" />
               <span>Open Lead Pipeline (Kanban)</span>
             </button>
           )}
@@ -367,7 +367,7 @@ export default function CrmLeadsListView({
         <table className="w-full text-left border-collapse">
           <thead>
             {/* Column Titles */}
-            <tr className="bg-[#f8fafc] text-[11px] font-bold text-gray-500 uppercase border-b border-gray-200/80">
+            <tr className="bg-[#f8fafc] text-xs font-bold text-gray-500 uppercase border-b border-gray-200/80">
               <th className="py-3 px-4 sm:px-6 min-w-[200px]">Lead</th>
               <th className="py-3 px-4 min-w-[170px]">Contact</th>
               <th className="py-3 px-4 min-w-[150px]">Goal / Product</th>
@@ -530,7 +530,7 @@ export default function CrmLeadsListView({
                   <button
                     type="button"
                     onClick={resetAllFilters}
-                    className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold text-rose-600 hover:text-white bg-rose-50 hover:bg-rose-600 rounded-lg border border-rose-200 transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-rose-600 hover:text-white bg-rose-50 hover:bg-rose-600 rounded-lg border border-rose-200 transition-colors cursor-pointer"
                     title="Reset all column filters"
                   >
                     <FontAwesomeIcon icon={faRotateLeft} className="text-[10px]" />
@@ -603,7 +603,7 @@ export default function CrmLeadsListView({
                         })()}
                       </div>
                       {lead.latest_remark && (
-                        <p className="text-[11px] text-gray-600 italic mt-1 line-clamp-1">
+                        <p className="text-xs text-gray-600 italic mt-1 line-clamp-1">
                           <span className="font-semibold not-italic text-gray-700">Remark: </span>{lead.latest_remark}
                         </p>
                       )}
@@ -611,11 +611,11 @@ export default function CrmLeadsListView({
 
                     <td className="py-3.5 px-4">
                       <div className="font-semibold text-gray-800">{lead.mobile_no || "—"}</div>
-                      <div className="text-[11px] text-gray-400">{lead.email || ""}</div>
+                      <div className="text-xs text-gray-400">{lead.email || ""}</div>
                     </td>
 
                     <td className="py-3.5 px-4">
-                      <span className="inline-block px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-blue-50 text-[#032e92] border border-blue-100">
+                      <span className="inline-block px-2.5 py-0.5 rounded-md text-xs font-semibold bg-blue-50 text-[#032e92] border border-blue-100">
                         {lead.product_interest || "General"}
                       </span>
                     </td>
@@ -625,19 +625,19 @@ export default function CrmLeadsListView({
                     </td>
 
                     <td className="py-3.5 px-4 text-center">
-                      <span className="inline-flex items-center gap-1 font-bold text-gray-700 bg-gray-100 px-2 py-0.5 rounded-full text-[11px]">
+                      <span className="inline-flex items-center gap-1 font-bold text-gray-700 bg-gray-100 px-2 py-0.5 rounded-full text-xs">
                         <FontAwesomeIcon icon={faCommentDots} className="text-blue-600 text-[10px]" />
                         <span>{lead.interaction_count}</span>
                       </span>
                     </td>
 
                     <td className="py-3.5 px-4">
-                      <span className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${STATUS_BADGES[lead.status] || "bg-gray-100 text-gray-700"}`}>
+                      <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-bold border ${STATUS_BADGES[lead.status] || "bg-gray-100 text-gray-700"}`}>
                         {lead.status}
                       </span>
                     </td>
 
-                    <td className="py-3.5 px-4 text-gray-500 text-[11px]">
+                    <td className="py-3.5 px-4 text-gray-500 text-xs">
                       {lead.creation ? new Date(lead.creation).toLocaleDateString("en-IN", { day: "numeric", month: "short" }) : "—"}
                     </td>
 
@@ -687,7 +687,7 @@ export default function CrmLeadsListView({
             <strong className="text-gray-800 font-semibold">{totalItems}</strong> leads
           </span>
           <div className="flex items-center gap-1.5 ml-2 border-l border-gray-200 pl-3">
-            <span className="text-gray-400 text-[11px]">Rows per page:</span>
+            <span className="text-gray-400 text-xs">Rows per page:</span>
             <select
               value={pageSize}
               onChange={(e) => {

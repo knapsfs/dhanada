@@ -59,7 +59,7 @@ export default function AboutCompany() {
               Trusted Financial Advisors for Long-Term Wealth Creation
             </h2>
             
-            <div className="space-y-6 text-gray-600 text-[17px] leading-relaxed mb-10">
+            <div className="space-y-6 text-gray-600 text-md leading-relaxed mb-10">
               <p>
                 At KNAPS Private Limited, we are dedicated to securing your financial future through strategic, disciplined, and personalized investment planning. With over 15 years of industry experience, we navigate complex market cycles to deliver consistent growth and absolute peace of mind.
               </p>

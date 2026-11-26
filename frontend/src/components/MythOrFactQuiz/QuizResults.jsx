@@ -205,20 +205,20 @@ export default function QuizResults({ score, total, onRetake, isModal = false, o
       <div className={`md:w-5/12 bg-[#032e92] text-white flex flex-col justify-between ${isModal ? 'p-5 sm:p-6' : 'p-7 sm:p-8'
         }`}>
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-blue-200 text-[11px] font-bold uppercase mb-3">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-blue-200 text-xs font-bold uppercase mb-3">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
             Quiz Completed
           </div>
 
           {/* Result Card */}
           <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-white/20 my-2 shadow-inner">
-            <div className="text-[10px] sm:text-[11px] font-bold text-blue-200 uppercase tracking-widest mb-1">
+            <div className="text-[10px] sm:text-xs font-bold text-blue-200 uppercase tracking-widest mb-1">
               Your Performance
             </div>
             <div className={`text-2xl sm:text-3xl font-black mb-2 tracking-tight ${details.colorClass}`}>
               {details.title}
             </div>
-            <p className="text-xs sm:text-[13px] text-blue-50/95 leading-relaxed font-normal">
+            <p className="text-xs sm:text-sm text-blue-50/95 leading-relaxed font-normal">
               {details.desc}
             </p>
 
@@ -232,7 +232,7 @@ export default function QuizResults({ score, total, onRetake, isModal = false, o
             {/* Explored concepts summary */}
             <div className="mt-3.5 pt-3 border-t border-white/15">
               <p className="text-[10px] font-bold text-blue-200 uppercase mb-2">Concepts Explored</p>
-              <div className="grid grid-cols-2 gap-1.5 text-[11px] text-blue-100/90 font-medium">
+              <div className="grid grid-cols-2 gap-1.5 text-xs text-blue-100/90 font-medium">
                 <span className="flex items-center gap-1">✓ Mutual Funds</span>
                 <span className="flex items-center gap-1">✓ NPS Growth</span>
                 <span className="flex items-center gap-1">✓ Risk Profiling</span>
@@ -556,7 +556,7 @@ export default function QuizResults({ score, total, onRetake, isModal = false, o
                       </svg>
                     )}
                   </div>
-                  <span className="text-[11px] sm:text-xs text-gray-600 leading-tight select-none">
+                  <span className="text-xs sm:text-xs text-gray-600 leading-tight select-none">
                     I agree to be contacted regarding my investment enquiry.
                   </span>
                 </label>

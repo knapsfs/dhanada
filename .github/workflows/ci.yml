@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - develop
+      - feat/deploy_test
   pull_request:
   # merge_group: {}   # uncomment only if you enable a GitHub merge queue
 
@@ -106,7 +106,7 @@ jobs:
       - name: Install MariaDB Client
         run: |
           sudo apt update
-          sudo apt-get install mariadb-client
+          sudo apt-get install -y mariadb-client
 
       - name: Setup
         run: |

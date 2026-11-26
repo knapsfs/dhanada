@@ -22,9 +22,9 @@ export default function BlogCard({ blog }) {
     <motion.div variants={itemVariants} className="h-full">
       <div className="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-2xl hover:shadow-[#032e92]/10 transition-all duration-300 group h-full flex flex-col">
         <Link to={targetUrl} className="relative h-60 overflow-hidden block">
-          <img 
-            src={displayImage} 
-            alt={blog.title || 'Blog post image'} 
+          <img
+            src={displayImage}
+            alt={blog.title || 'Blog post image'}
             className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700"
             onError={(e) => {
               e.currentTarget.src = 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?q=80&w=1600&auto=format&fit=crop';
@@ -34,7 +34,7 @@ export default function BlogCard({ blog }) {
             {categoryName}
           </div>
         </Link>
-        
+
         <div className="p-7 sm:p-8 flex flex-col flex-1">
           <div className="flex items-center gap-4 text-xs font-medium text-gray-500 mb-4 flex-wrap">
             <span className="flex items-center gap-1.5">
@@ -58,20 +58,20 @@ export default function BlogCard({ blog }) {
               </span>
             </Link>
           </div>
-          
+
           <Link to={targetUrl}>
-            <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-[#032e92] transition-colors duration-300 line-clamp-2">
+            <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-[#032e92] transition-colors duration-300 line-clamp-2">
               {blog.title}
             </h3>
           </Link>
-          
-          <p className="text-gray-600 mb-6 flex-1 line-clamp-3 text-sm leading-relaxed">
+
+          <p className="text-gray-600 mb-6 flex-1 line-clamp-3 text-md leading-relaxed">
             {blog.description}
           </p>
-          
+
           <Link to={targetUrl} className="inline-flex items-center gap-2 text-sm font-bold text-[#c10000] group-hover:text-[#032e92] transition-colors mt-auto pt-2">
             <span>Read Full Article</span>
-            <FontAwesomeIcon icon={faArrowRight} className="group-hover:translate-x-1.5 transition-transform" />
+            {/* <FontAwesomeIcon icon={faArrowRight} className="group-hover:translate-x-1.5 transition-transform" /> */}
           </Link>
         </div>
       </div>

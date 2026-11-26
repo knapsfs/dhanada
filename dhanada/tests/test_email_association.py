@@ -47,7 +47,6 @@ class TestEmailAssociation(FrappeTestCase):
 		frappe.db.delete("CRM WhatsApp Message", {"recipient": ["like", "%98765432%"]})
 		frappe.db.delete("Lead", {"email": ["like", "%test_email_assoc_%@example.com"]})
 		frappe.db.delete("Client", {"email": ["like", "%test_email_assoc_%@example.com"]})
-		frappe.db.commit()
 
 	def test_01_normalize_email(self):
 		"""Verify address normalization handles formatting, names, and case."""

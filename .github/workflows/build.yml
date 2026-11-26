@@ -1,98 +1,222 @@
-name: Build image
-
-# Build once, on merge to develop. The image is the artifact that moves
-# between environments; it is never rebuilt for production.
-#
-# This runs after CI completes successfully on develop, so a red merge never
-# produces an image.
-#
-# Uses frappe_docker's layered Containerfile (frappe/build + frappe/base,
-# version-16). The dhanada app is installed at build time via a secret-mounted
-# apps.json, following the same pattern as frappe/crm.
+name: Build and Deploy Dhanada
 
 on:
-  workflow_run:
-    workflows: [CI]
-    types: [completed]
-    branches: [develop]
+  workflow_dispatch:
+  push:
+    branches:
+      - feat/deploy_test
 
 permissions:
-  contents: read
-  packages: write
-  id-token: write
-  attestations: write
-
-concurrency:
-  group: build-${{ github.event.workflow_run.head_sha }}
-  cancel-in-progress: true
+  contents: write
 
 jobs:
   build:
-    name: build
-    if: github.event.workflow_run.conclusion == 'success'
+    name: Build and Push Docker Image
     runs-on: ubuntu-latest
-    timeout-minutes: 90
-    steps:
-      - name: Set branch
-        run: |
-          echo "FRAPPE_BRANCH=version-16" >> $GITHUB_ENV
 
-      - name: Checkout frappe_docker
+    steps:
+      - name: Checkout Dhanada
         uses: actions/checkout@v4
         with:
-          repository: frappe/frappe_docker
-          path: builds
+          fetch-depth: 0
 
-      - name: Write apps.json into build context
+      - name: Determine version
+        id: version
         run: |
-          cat > builds/apps.json << 'EOF'
-[{"url": "https://github.com/knapsfs/dhanada", "branch": "develop"}]
-EOF
+          git fetch origin --tags || true
 
-      - name: Set up Buildx
-        uses: docker/setup-buildx-action@v3
+          LATEST_TAG=$(git tag --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
+          if [ -z "$LATEST_TAG" ]; then
+            LATEST_TAG="v0.0.0"
+          fi
 
-      - name: Log in to GHCR
+          VERSION="${LATEST_TAG#v}"
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+
+          SUBJECT=$(git log -1 --pretty=%s)
+          echo "Commit subject: $SUBJECT"
+
+          REGEX_MAJOR="^feat(\([^)]+\))?!:"
+          REGEX_MINOR="^feat(\([^)]+\))?:"
+          REGEX_PATCH="^fix(\([^)]+\))?:"
+
+          if [[ "$SUBJECT" =~ $REGEX_MAJOR ]]; then
+            echo "Type: feat! (MAJOR increment)"
+            MAJOR=$((MAJOR + 1))
+            MINOR=0
+            PATCH=0
+          elif [[ "$SUBJECT" =~ $REGEX_MINOR ]]; then
+            echo "Type: feat (MINOR increment)"
+            MINOR=$((MINOR + 1))
+            PATCH=0
+          elif [[ "$SUBJECT" =~ $REGEX_PATCH ]]; then
+            echo "Type: fix (PATCH increment)"
+            PATCH=$((PATCH + 1))
+          else
+            echo "::error::Unrecognized commit type in subject: '$SUBJECT'. Commit message must start with feat:, fix:, or feat!: (with optional scope)."
+            exit 1
+          fi
+
+          NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
+          echo "Calculated version: $NEW_VERSION"
+          echo "version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push
-        id: push
+      - name: Check for existing release (Git tag & Docker image)
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          TAG_NAME="v${VERSION}"
+          IMAGE="knapsdocker/dhanada:${VERSION}"
+
+          echo "Checking whether Git tag '$TAG_NAME' already exists remotely..."
+          if git ls-remote --tags origin "refs/tags/$TAG_NAME" | grep -q "refs/tags/$TAG_NAME"; then
+            echo "::error::Git tag '$TAG_NAME' already exists remotely. Release tags cannot be overwritten."
+            exit 1
+          fi
+          echo "Git tag '$TAG_NAME' does not exist remotely."
+
+          echo "Checking whether Docker image '$IMAGE' already exists on Docker Hub..."
+          EXISTS=false
+
+          if docker manifest inspect "$IMAGE" > /dev/null 2>&1; then
+            EXISTS=true
+          fi
+
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            -u "${DOCKERHUB_USERNAME}:${DOCKERHUB_TOKEN}" \
+            "https://hub.docker.com/v2/repositories/knapsdocker/dhanada/tags/${VERSION}/" || true)
+
+          if [ "$HTTP_STATUS" = "200" ]; then
+            EXISTS=true
+          fi
+
+          if [ "$EXISTS" = "true" ]; then
+            echo "::error::Docker image '$IMAGE' already exists on Docker Hub. Never overwrite an existing release."
+            exit 1
+          fi
+
+          echo "Docker image '$IMAGE' does not exist on Docker Hub."
+          echo "Release pre-check passed: neither Git tag nor Docker image exists. Proceeding with build."
+
+      - name: Build and Push Dhanada
+        id: push-image
         uses: docker/build-push-action@v6
         with:
-          context: builds
-          file: builds/images/layered/Containerfile
+          context: .
+          file: Dockerfile
+          platforms: linux/amd64
           push: true
-          build-args: |
-            FRAPPE_BRANCH=${{ env.FRAPPE_BRANCH }}
-          secrets: |
-            "apps_json=apps.json"
-          tags: |
-            ghcr.io/knapsfs/dhanada:sha-${{ github.event.workflow_run.head_sha }}
-            ghcr.io/knapsfs/dhanada:develop
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          tags: knapsdocker/dhanada:${{ steps.version.outputs.version }}
+          no-cache: true
 
-      - name: Attest build provenance
-        uses: actions/attest-build-provenance@v2
-        with:
-          subject-name: ghcr.io/knapsfs/dhanada
-          subject-digest: ${{ steps.push.outputs.digest }}
-          push-to-registry: true
-
-      - name: Summary
+      - name: Verify KNAPS assets
+        env:
+          IMAGE: knapsdocker/dhanada:${{ steps.version.outputs.version }}
         run: |
-          {
-            echo "### Image built"
-            echo ""
-            echo "| Field | Value |"
-            echo "|---|---|"
-            echo "| Commit | \`${{ github.event.workflow_run.head_sha }}\` |"
-            echo "| Digest | \`${{ steps.push.outputs.digest }}\` |"
-            echo "| Base image | frappe/build:version-16 + frappe/base:version-16 |"
-            echo ""
-            echo "Deploy this digest to development, then promote the same digest."
-          } >> "$GITHUB_STEP_SUMMARY"
+          set -euo pipefail
+          docker pull "$IMAGE"
+          docker run --rm -i --entrypoint "" "$IMAGE" python3 - <<'PY'
+          import os, re, sys
+
+          knaps_dir = '/home/frappe/frappe-bench/apps/dhanada/public/knaps'
+          if not os.path.isdir(knaps_dir):
+              print(f"::error::KNAPS directory not found: {knaps_dir}")
+              sys.exit(1)
+
+          index_path = os.path.join(knaps_dir, 'index.html')
+          if not (os.path.isfile(index_path) and os.path.getsize(index_path) > 0):
+              print(f"::error::KNAPS index.html is missing or empty at {index_path}")
+              sys.exit(1)
+
+          with open(index_path) as f:
+              content = f.read()
+
+          scripts = re.findall(r'<script[^>]+src=[\"\']([^\"\']+\.js)[\"\']', content)
+          stylesheets = re.findall(r'<link[^>]+href=[\"\']([^\"\']+\.css)[\"\']', content)
+
+          if not scripts:
+              print("::error::No JS scripts referenced in KNAPS index.html")
+              sys.exit(1)
+
+          if not stylesheets:
+              print("::error::No CSS stylesheets referenced in KNAPS index.html")
+              sys.exit(1)
+
+          missing = 0
+          for s in scripts:
+              rel = re.sub(r'^/assets/dhanada/knaps/?', '', s)
+              full_path = os.path.join(knaps_dir, rel)
+              if not (os.path.isfile(full_path) and os.path.getsize(full_path) > 0):
+                  print(f"::error::Referenced JS asset missing or empty: {full_path} (from {s})")
+                  missing += 1
+              else:
+                  print(f"Verified JS asset: {full_path} ({os.path.getsize(full_path)} bytes)")
+
+          for c in stylesheets:
+              rel = re.sub(r'^/assets/dhanada/knaps/?', '', c)
+              full_path = os.path.join(knaps_dir, rel)
+              if not (os.path.isfile(full_path) and os.path.getsize(full_path) > 0):
+                  print(f"::error::Referenced CSS asset missing or empty: {full_path} (from {c})")
+                  missing += 1
+              else:
+                  print(f"Verified CSS asset: {full_path} ({os.path.getsize(full_path)} bytes)")
+
+          assets_dir = os.path.join(knaps_dir, 'assets')
+          if not os.path.isdir(assets_dir):
+              print(f"::error::KNAPS assets directory not found: {assets_dir}")
+              sys.exit(1)
+
+          all_css = [f for f in os.listdir(assets_dir) if f.endswith('.css') and os.path.getsize(os.path.join(assets_dir, f)) > 0]
+          all_js = [f for f in os.listdir(assets_dir) if f.endswith('.js') and os.path.getsize(os.path.join(assets_dir, f)) > 0]
+
+          if not all_css:
+              print(f"::error::No non-empty CSS files found in {assets_dir}")
+              missing += 1
+          if not all_js:
+              print(f"::error::No non-empty JS files found in {assets_dir}")
+              missing += 1
+
+          if missing > 0:
+              print(f"::error::KNAPS asset verification failed! Total missing or empty assets: {missing}")
+              sys.exit(1)
+
+          print("KNAPS asset verification passed: all required CSS and JS assets exist and are non-empty.")
+          PY
+
+      - name: Create and Push Git Tag
+        env:
+          TAG_NAME: v${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "$TAG_NAME"
+          git push origin "$TAG_NAME"
+          echo "Created and pushed Git tag: $TAG_NAME"
+
+      - name: Trigger Development Deployment
+        env:
+          GH_TOKEN: ${{ secrets.DEPLOYMENT_REPO_DISPATCH_TOKEN }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+
+          test -n "$VERSION"
+
+          gh api --method POST \
+            repos/Satyam4755/deployment-test/dispatches \
+            -f event_type=deploy \
+            -f "client_payload[version]=$VERSION" \
+            -f "client_payload[environment]=development" \
+            -f "client_payload[actor]=$GITHUB_ACTOR"
+
+          echo "Development deployment triggered for version $VERSION"

@@ -41,7 +41,6 @@ class TestCrmEnhancements(FrappeTestCase):
 		test_clients = frappe.get_all("Client", filters={"email": ["like", "%@example.com"]}, pluck="name")
 		for c_name in test_clients:
 			frappe.delete_doc("Client", c_name, ignore_permissions=True, force=True)
-		frappe.db.commit()
 
 	def tearDown(self):
 		frappe.set_user("Administrator")
@@ -51,7 +50,6 @@ class TestCrmEnhancements(FrappeTestCase):
 		for client_name in self.cleanup_clients:
 			if frappe.db.exists("Client", client_name):
 				frappe.delete_doc("Client", client_name, ignore_permissions=True, force=True)
-		frappe.db.commit()
 		frappe.local.request = None
 		frappe.local.request_ip = None
 

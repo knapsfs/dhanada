@@ -76,7 +76,7 @@ export default function ServicesSnapshot() {
                 </div>
                 
                 <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-[#032e92] transition-colors">{service.title}</h3>
-                <p className="text-gray-500 text-[13px] leading-relaxed mb-6">
+                <p className="text-gray-500 text-sm leading-relaxed mb-6">
                   {service.desc}
                 </p>
                 

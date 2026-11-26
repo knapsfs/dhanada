@@ -71,7 +71,7 @@ const TestimonialCard = ({ testimonial }) => (
       <div className="text-4xl sm:text-5xl text-[#032e92] mb-5 sm:mb-6">
         <FontAwesomeIcon icon={faQuoteLeft} />
       </div>
-      <p className="text-[#1a1a1a] text-md sm:text-[16px] leading-relaxed mb-6 sm:mb-8 font-normal">
+      <p className="text-[#1a1a1a] text-md leading-relaxed mb-6 sm:mb-8 font-normal">
         {testimonial.text}
       </p>
     </div>
@@ -81,7 +81,7 @@ const TestimonialCard = ({ testimonial }) => (
         <h4 className="font-bold text-gray-900 text-sm sm:text-md tracking-tight">{testimonial.name}</h4>
         {testimonial.location && (
           <p className="text-xs text-gray-500 font-medium flex items-center gap-1.5 mt-1">
-            <FontAwesomeIcon icon={faLocationDot} className="text-[#032e92] text-[11px]" />
+            <FontAwesomeIcon icon={faLocationDot} className="text-[#032e92] text-xs" />
             <span>{testimonial.location}</span>
           </p>
         )}

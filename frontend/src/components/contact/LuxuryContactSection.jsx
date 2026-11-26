@@ -176,10 +176,10 @@ export default function LuxuryContactSection() {
                   alt="Our Headquarters"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#424242]/95 via-[#a1a1a1]/40 to-transparent"></div>
+                {/* <div className="absolute inset-0 bg-gradient-to-t from-[#424242]/95 via-[#a1a1a1]/40 to-transparent"></div>
                 <div className="absolute bottom-5 left-6 sm:bottom-6 sm:left-8 text-left">
                   <h3 className="text-white text-xl sm:text-2xl font-bold tracking-tight">KNAPS Private Limited</h3>
-                </div>
+                </div> */}
               </div>
 
               <div className="p-6 sm:p-8 space-y-6">
@@ -388,7 +388,7 @@ export default function LuxuryContactSection() {
                           <label className="block text-xs font-bold text-gray-700">
                             Phone Number <span className="text-red-500">*</span>
                           </label>
-                          <span className="text-[11px] text-gray-400 font-medium">
+                          <span className="text-xs text-gray-400 font-medium">
                             {selectedCountry.name}
                           </span>
                         </div>
@@ -555,7 +555,7 @@ export default function LuxuryContactSection() {
                           }}
                           className="mt-0.5 w-4 h-4 text-[#032e92] rounded border-gray-300 focus:ring-[#032e92] cursor-pointer"
                         />
-                        <label htmlFor="contact-terms" className="text-xs sm:text-[13px] text-gray-600 leading-relaxed cursor-pointer select-none">
+                        <label htmlFor="contact-terms" className="text-xs sm:text-sm text-gray-600 leading-relaxed cursor-pointer select-none">
                           I agree to be contacted by a KNAPS representative and accept the{' '}
                           <a href="/terms-and-conditions" className="text-[#032e92] font-semibold hover:underline" target="_blank" rel="noopener noreferrer">
                             Terms & Conditions.

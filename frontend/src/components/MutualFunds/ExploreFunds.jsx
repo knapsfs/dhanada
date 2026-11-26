@@ -215,12 +215,12 @@ export default function ExploreFunds() {
                     {/* Header: Title and Badge */}
                     <div className="flex items-start justify-between gap-2 mb-3">
                       <div>
-                        <span className="text-[11px] font-bold uppercase text-blue-600">
+                        <span className="text-xs font-bold uppercase text-blue-600">
                           {fund.category} Mutual Fund
                         </span>
                         <h3 className="text-lg font-bold text-slate-900 mt-0.5">{fund.name}</h3>
                       </div>
-                      <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-blue-50 text-[#032e92] border border-blue-100 flex-shrink-0">
+                      <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-blue-50 text-[#032e92] border border-blue-100 flex-shrink-0">
                         {fund.badge}
                       </span>
                     </div>

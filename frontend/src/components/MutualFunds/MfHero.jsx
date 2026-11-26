@@ -118,7 +118,7 @@ export default function MfHero() {
                     <div className="bg-slate-400 h-full w-[36%]" title="Invested" />
                     <div className="bg-gradient-to-r from-[#2490ef] to-[#032e92] h-full w-[64%]" title="Potential Gains" />
                   </div>
-                  <div className="flex justify-between items-center text-[11px] text-slate-500 mt-1.5 font-medium">
+                  <div className="flex justify-between items-center text-xs text-slate-500 mt-1.5 font-medium">
                     <span className="flex items-center gap-1.5">
                       <span className="w-2 h-2 rounded-full bg-slate-400 inline-block"></span>
                       Invested (36%)

@@ -150,11 +150,11 @@ export default function RegulatoryDisclosures() {
               <span className="text-[#032e92] font-semibold">Regulatory Disclosures</span>
               <span className="hidden sm:inline text-gray-300">•</span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200">
-                <FontAwesomeIcon icon={faCircleCheck} className="text-emerald-600 text-[11px]" />
+                <FontAwesomeIcon icon={faCircleCheck} className="text-emerald-600 text-xs" />
                 AMFI Registered: ARN-367144
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-[#032e92] text-xs font-semibold border border-blue-100">
-                <FontAwesomeIcon icon={faBuildingColumns} className="text-[#032e92] text-[11px]" />
+                <FontAwesomeIcon icon={faBuildingColumns} className="text-[#032e92] text-xs" />
                 32 Empanelled AMCs
               </span>
             </div>
@@ -173,7 +173,7 @@ export default function RegulatoryDisclosures() {
                   key={tab.id}
                   type="button"
                   onClick={() => scrollToSection(tab.id)}
-                  className={`whitespace-nowrap px-3.5 py-1.5 rounded-xl text-xs sm:text-[13px] font-semibold transition-all cursor-pointer ${isActive
+                  className={`whitespace-nowrap px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${isActive
                     ? 'bg-[#032e92] text-white shadow-xs font-bold'
                     : 'bg-gray-100/80 text-gray-600 hover:bg-gray-200/80 hover:text-gray-900'
                     }`}
@@ -362,7 +362,7 @@ export default function RegulatoryDisclosures() {
                 <div>
                   {/* Card Header & Status */}
                   {/* <div className="flex items-start justify-between gap-3 mb-4">
-                    <span className="text-[11px] font-bold text-gray-400 uppercase">
+                    <span className="text-xs font-bold text-gray-400 uppercase">
                       {reg.category}
                     </span>
                     <span className="text-xs font-bold px-2.5 py-1 rounded-full border bg-emerald-50 text-emerald-700 border-emerald-200">
@@ -417,7 +417,7 @@ export default function RegulatoryDisclosures() {
                   <ul className="space-y-1.5 mb-6 text-xs text-gray-600">
                     {reg.keyHighlights.map((hl, idx) => (
                       <li key={idx} className="flex items-start gap-2">
-                        <FontAwesomeIcon icon={faCircleCheck} className="text-emerald-500 mt-0.5 shrink-0 text-[11px]" />
+                        <FontAwesomeIcon icon={faCircleCheck} className="text-emerald-500 mt-0.5 shrink-0 text-xs" />
                         <span>{hl}</span>
                       </li>
                     ))}
@@ -433,7 +433,7 @@ export default function RegulatoryDisclosures() {
                     className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl text-xs font-bold text-[#032e92] bg-blue-50 hover:bg-[#032e92] hover:text-white transition-all border border-blue-100"
                   >
                     <span>{reg.verificationLabel}</span>
-                    <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[11px]" />
+                    <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-xs" />
                   </a>
                 </div>
               </div>
@@ -567,11 +567,11 @@ export default function RegulatoryDisclosures() {
                             {amc.name}
                           </div>
                           {amc.formerName && (
-                            <div className="text-[11px] text-gray-500 mt-0.5">
+                            <div className="text-xs text-gray-500 mt-0.5">
                               {amc.formerName}
                             </div>
                           )}
-                          <div className="text-[11px] text-gray-400 mt-0.5">
+                          <div className="text-xs text-gray-400 mt-0.5">
                             {amc.amcEntity}
                           </div>
                         </td>
@@ -597,7 +597,7 @@ export default function RegulatoryDisclosures() {
                         {/* Verification Status */}
                         <td className="py-3.5 px-4 sm:px-6 text-center">
                           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-200">
-                            <FontAwesomeIcon icon={faCircleCheck} className="text-[11px] text-emerald-600" />
+                            <FontAwesomeIcon icon={faCircleCheck} className="text-xs text-emerald-600" />
                             <span>SEBI Registered</span>
                           </span>
                         </td>
@@ -714,7 +714,7 @@ export default function RegulatoryDisclosures() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {GRIEVANCE_REDRESSAL.escalationSteps.map((step, idx) => (
                   <div key={idx} className="bg-[#f8fafd] p-4 sm:p-5 rounded-2xl border border-gray-100 relative">
-                    <span className="text-[11px] font-bold text-[#032e92] bg-blue-100/70 px-2.5 py-0.5 rounded-full inline-block mb-2">
+                    <span className="text-xs font-bold text-[#032e92] bg-blue-100/70 px-2.5 py-0.5 rounded-full inline-block mb-2">
                       {step.level}
                     </span>
                     <h5 className="text-sm font-bold text-gray-900 mb-1.5">{step.title}</h5>
@@ -745,7 +745,7 @@ export default function RegulatoryDisclosures() {
                         </span>
                         <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[10px] text-gray-400 group-hover:text-[#032e92]" />
                       </div>
-                      <p className="text-[11px] text-gray-500 leading-relaxed">{portal.desc}</p>
+                      <p className="text-xs text-gray-500 leading-relaxed">{portal.desc}</p>
                     </div>
                   </a>
                 ))}
@@ -774,7 +774,7 @@ export default function RegulatoryDisclosures() {
               </div>
             </div>
 
-            <div className="space-y-4 text-xs sm:text-[13px] text-gray-700 leading-relaxed divide-y divide-amber-200/60 pt-2">
+            <div className="space-y-4 text-xs sm:text-sm text-gray-700 leading-relaxed divide-y divide-amber-200/60 pt-2">
               <p className="pt-2">
                 <strong>1. Mutual Fund &amp; SIF Distribution Status:</strong> {STATUTORY_DISCLAIMER.mfdDisclaimer}
               </p>

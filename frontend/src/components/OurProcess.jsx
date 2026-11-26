@@ -126,7 +126,7 @@ export default function OurProcess() {
                 </div>
 
                 {/* Step Title */}
-                <h3 className="text-[16px] sm:text-[17px] font-bold text-[#0f172a] leading-snug mt-2">
+                <h3 className="text-md font-bold text-[#0f172a] leading-snug mt-2">
                   {item.title}
                 </h3>
 
