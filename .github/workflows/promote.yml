@@ -47,6 +47,21 @@ jobs:
           # the one that was validated.
           echo "DIGEST=$DIGEST" >> "$GITHUB_ENV"
 
+      - name: Check deployment repository access
+        env:
+          GH_TOKEN: ${{ secrets.DEPLOYMENT_REPO_DISPATCH_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error::DEPLOYMENT_REPO_DISPATCH_TOKEN is not set."
+            exit 1
+          fi
+          if ! gh api repos/knapsfs/deployment >/dev/null 2>&1; then
+            echo "::error::The dispatch token cannot access the deployment repository (knapsfs/deployment)."
+            echo "::error::Fix: add knapsfs/deployment to the token's Repository access and grant Actions: write. The repository must exist in the knapsfs organization."
+            exit 1
+          fi
+
       - name: Start the approved production deploy
         env:
           GH_TOKEN: ${{ secrets.DEPLOYMENT_REPO_DISPATCH_TOKEN }}

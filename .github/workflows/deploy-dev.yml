@@ -14,7 +14,6 @@ on:
 
 permissions:
   contents: read
-  packages: read
 
 concurrency:
   group: deploy-development
@@ -58,12 +57,11 @@ jobs:
       - name: Set up Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Log in to GHCR
+      - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Resolve the image digest
         id: image
@@ -71,7 +69,7 @@ jobs:
           SHA: ${{ steps.ref.outputs.sha }}
         run: |
           set -euo pipefail
-          TAG="ghcr.io/knapsfs/dhanada:sha-$SHA"
+          TAG="knapsdocker/dhanada:sha-$SHA"
           if ! docker buildx imagetools inspect "$TAG" >/dev/null 2>&1; then
             echo "::error::No image for $TAG."
             echo "::error::Wait for the Build image workflow, or choose a commit that has one."
@@ -85,7 +83,22 @@ jobs:
           echo "digest=$DIGEST" >> "$GITHUB_OUTPUT"
           echo "Resolved $TAG -> $DIGEST"
 
-      - name: Dispatch the digest to the deployment repository
+      - name: Check deployment repository access
+        env:
+          GH_TOKEN: ${{ secrets.DEPLOYMENT_REPO_DISPATCH_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error::DEPLOYMENT_REPO_DISPATCH_TOKEN is not set."
+            exit 1
+          fi
+          if ! gh api repos/knapsfs/deployment >/dev/null 2>&1; then
+            echo "::error::The dispatch token cannot access the deployment repository (knapsfs/deployment)."
+            echo "::error::Fix: add knapsfs/deployment to the token's Repository access and grant Actions: write. The repository must exist in the knapsfs organization."
+            exit 1
+          fi
+
+      - name: Request the development deployment
         env:
           GH_TOKEN: ${{ secrets.DEPLOYMENT_REPO_DISPATCH_TOKEN }}
           DIGEST: ${{ steps.image.outputs.digest }}
@@ -95,11 +108,10 @@ jobs:
             echo "::error::DEPLOYMENT_REPO_DISPATCH_TOKEN is not set."
             exit 1
           fi
-          gh api --method POST repos/knapsfs/deployment/dispatches \
-            -f event_type=deploy \
-            -F "client_payload[digest]=$DIGEST" \
-            -F "client_payload[environment]=development" \
-            -F "client_payload[actor]=$GITHUB_ACTOR"
+          gh workflow run deploy-app.yml -R knapsfs/deployment \
+            -f digest="$DIGEST" \
+            -f environment=development \
+            -f actor="$GITHUB_ACTOR"
 
       - name: Summary
         run: |

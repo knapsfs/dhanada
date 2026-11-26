@@ -1,9 +1,8 @@
 # Code owners for the dhanada application repository.
 #
-# The sole approver must review any change to CI/CD workflows, since those
-# control image builds, digest promotion, and production deployment.
-#
-# Your two developers can open PRs, but a CODEOWNER review is required before
-# any workflow change can be merged.
+# Everything under .github/ is owned here so a review is requested for changes
+# to CODEOWNERS, workflows, and PR templates. The guard-github check, not a
+# CODEOWNERS ruleset, enforces that review: a change authored by someone other
+# than the owner cannot merge without the owner's approval.
 
-.github/workflows/    @piyush-sawhney
+.github/    @piyush-sawhney
