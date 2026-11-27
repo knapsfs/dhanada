@@ -38,7 +38,7 @@ export default function SmallSavingsTaxBenefits() {
             <p className="text-sm text-gray-600 leading-relaxed">
               Deduction on the principal deposit under Section 80C of the Income Tax Act (Old Tax Regime):
             </p>
-            <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700">
+            <ul className="space-y-2.5 text-xs sm:text-sm text-gray-900">
               <li className="flex items-start gap-2">
                 <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-500 mt-0.5" />
                 <span><strong>Principal Deposit:</strong> Deductible up to ₹1.5 Lakh per financial year.</span>
@@ -71,7 +71,7 @@ export default function SmallSavingsTaxBenefits() {
             <p className="text-sm text-gray-600 leading-relaxed">
               Unique tax advantage where interest accrued annually is deemed reinvested:
             </p>
-            <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700">
+            <ul className="space-y-2.5 text-xs sm:text-sm text-gray-900">
               <li className="flex items-start gap-2">
                 <FontAwesomeIcon icon={faCheckCircle} className="text-blue-500 mt-0.5" />
                 <span><strong>Years 1 to 4:</strong> Accrued interest is deemed reinvested and qualifies for fresh 80C deductions.</span>
@@ -90,10 +90,10 @@ export default function SmallSavingsTaxBenefits() {
           {/* Card 3: Taxable at Slab Rate (Zero TDS) */}
           <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-500 uppercase">
+              <span className="text-xs font-bold text-gray-600 uppercase">
                 Income Slab Tax
               </span>
-              <span className="text-xs font-black px-3 py-1 rounded-full bg-slate-100 text-slate-700">
+              <span className="text-xs font-black px-3 py-1 rounded-full bg-slate-100 text-gray-900">
                 Slab Rate Tax
               </span>
             </div>
@@ -104,17 +104,17 @@ export default function SmallSavingsTaxBenefits() {
             <p className="text-sm text-gray-600 leading-relaxed">
               No Section 80C deduction on deposit. Interest is taxable at your applicable slab rate:
             </p>
-            <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700">
+            <ul className="space-y-2.5 text-xs sm:text-sm text-gray-900">
               <li className="flex items-start gap-2">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-slate-400 mt-0.5" />
+                <FontAwesomeIcon icon={faCheckCircle} className="text-gray-600 mt-0.5" />
                 <span><strong>Interest Taxation:</strong> Declared under 'Income from Other Sources' at slab rates.</span>
               </li>
               <li className="flex items-start gap-2">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-slate-400 mt-0.5" />
+                <FontAwesomeIcon icon={faCheckCircle} className="text-gray-600 mt-0.5" />
                 <span><strong>Zero TDS:</strong> Department of Posts does NOT deduct TDS at source.</span>
               </li>
               <li className="flex items-start gap-2">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-slate-400 mt-0.5" />
+                <FontAwesomeIcon icon={faCheckCircle} className="text-gray-600 mt-0.5" />
                 <span><strong>Senior Citizen Relief:</strong> Interest income eligible for up to ₹50,000 deduction u/s 80TTB.</span>
               </li>
             </ul>

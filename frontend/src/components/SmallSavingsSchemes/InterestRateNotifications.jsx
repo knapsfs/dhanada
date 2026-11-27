@@ -35,7 +35,7 @@ export default function InterestRateNotifications() {
                 Small savings interest rates are linked formulaically to the secondary market yields of benchmark Government Securities (G-Secs) of comparable maturities traded over the preceding three months, plus a sovereign policy spread.
               </p>
 
-              <div className="p-4 rounded-2xl bg-white border border-slate-200 text-xs text-slate-700 space-y-2">
+              <div className="p-4 rounded-2xl bg-white border border-slate-200 text-xs text-gray-900 space-y-2">
                 <div className="font-bold text-slate-900">Quarterly Government Review Calendar:</div>
                 <div className="grid grid-cols-2 gap-2 text-xs">
                   <span className="p-2 rounded-lg bg-slate-50 border">Q1: April – June</span>
@@ -46,7 +46,7 @@ export default function InterestRateNotifications() {
               </div>
             </div>
 
-            <p className="text-xs text-slate-500 leading-relaxed">
+            <p className="text-xs text-gray-600 leading-relaxed">
               Official circulars are published by the Department of Economic Affairs, Ministry of Finance, typically in the final week before each new quarter begins.
             </p>
           </div>

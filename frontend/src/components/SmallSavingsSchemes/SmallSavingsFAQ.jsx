@@ -80,7 +80,7 @@ export default function SmallSavingsFAQ() {
           <div
             className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-300 ${isOpen
               ? 'bg-[#032e92] text-white'
-              : 'border border-slate-200 bg-white text-slate-400'
+              : 'border border-slate-200 bg-white text-gray-600'
               }`}
           >
             <FontAwesomeIcon icon={isOpen ? faMinus : faPlus} className="text-xs" />
@@ -139,25 +139,18 @@ export default function SmallSavingsFAQ() {
               <FontAwesomeIcon icon={faHeadset} />
             </div>
             <div>
-              <div className="text-sm font-bold text-slate-800">Still have questions about Post Office Schemes?</div>
-              <p className="text-xs text-gray-600 mt-0.5">Connect with our specialists for tailored guidance on POTD, KVP, NSC, and PORD.</p>
+              <div className="text-sm font-bold text-gray-900">Still have questions about Post Office Schemes?</div>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={() =>
-              openLeadModal({
-                title: 'Post Office Schemes Consultation',
-                defaultService: 'Post Office Small Savings Schemes'
-              })
-            }
+          <a
+            href="tel:+919958321220"
             className="px-5 py-2.5 rounded-xl bg-[#032e92] text-white text-xs sm:text-sm font-bold hover:bg-[#021d63] transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs shrink-0"
           >
-            <span>Ask a Specialist</span>
+            <span>Talk to Us</span>
             {/* <FontAwesomeIcon icon={faArrowRight} className="text-xs" /> */}
-          </button>
+          </a>
         </div>
       </div>
-    </section>
+    </section >
   );
 }

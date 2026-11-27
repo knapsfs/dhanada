@@ -22,7 +22,7 @@ export default function MfHero() {
   };
 
   return (
-    <section className="relative pt-32 lg:pt-36 lg:pb-10 overflow-hidden bg-gradient-to-b from-blue-50/70 via-[#f7f9fc] to-white">
+    <section className="relative pt-32 lg:pt-36 lg:pb-12 overflow-hidden bg-gradient-to-b from-blue-50/70 via-[#f7f9fc] to-white">
       {/* Decorative Blur Background Orbs */}
       <div className="absolute top-12 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-r from-blue-400/10 via-cyan-400/10 to-indigo-400/10 rounded-full blur-3xl pointer-events-none -z-10" />
 

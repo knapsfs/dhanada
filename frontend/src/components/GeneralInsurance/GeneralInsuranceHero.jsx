@@ -13,6 +13,7 @@ import {
   faShieldHalved
 } from '@fortawesome/free-solid-svg-icons';
 import { useLeadModal } from '../../context/LeadModalContext';
+import generalInsuranceImg from '../../assets/general-insurance.webp';
 
 export default function GeneralInsuranceHero() {
   const { openLeadModal } = useLeadModal();
@@ -25,7 +26,7 @@ export default function GeneralInsuranceHero() {
   };
 
   return (
-    <section className="relative pt-[120px] pb-16 lg:pt-[150px] lg:pb-24 overflow-hidden bg-gradient-to-b from-[#eef4ff] via-[#f7f9fc] to-white">
+    <section className="relative pt-[120px] pb-12 lg:pt-[150px] lg:pb-16 overflow-hidden bg-gradient-to-b from-[#eef4ff] via-[#f7f9fc] to-white">
       {/* Background Decorative Glows */}
       <div className="absolute top-0 right-0 w-[550px] h-[550px] rounded-full bg-gradient-to-bl from-sky-200/50 via-blue-100/30 to-transparent blur-3xl pointer-events-none -translate-y-1/3 translate-x-1/4" />
       <div className="absolute bottom-0 left-0 w-[450px] h-[450px] rounded-full bg-gradient-to-tr from-indigo-200/40 via-blue-100/20 to-transparent blur-3xl pointer-events-none translate-y-1/4 -translate-x-1/4" />
@@ -67,7 +68,7 @@ export default function GeneralInsuranceHero() {
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mb-10">
               <button
                 type="button"
-                onClick={scrollToFinder}
+                onClick={openLeadModal}
                 className="btn-ripple bg-gradient-to-r from-[#032e92] to-[#021d63] text-white px-6 py-3 rounded-xl text-md font-semibold hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer group"
               >
                 {/* <FontAwesomeIcon icon={faShieldHalved} className="text-xs" /> */}
@@ -75,130 +76,26 @@ export default function GeneralInsuranceHero() {
                 {/* <FontAwesomeIcon icon={faArrowRight} className="text-xs group-hover:translate-x-1 transition-transform" /> */}
               </button>
 
-              <button
-                type="button"
-                onClick={openLeadModal}
-                className="btn-ripple px-6 py-3 rounded-xl text-md font-semibold bg-white hover:bg-blue-50 text-[#032e92] border border-[#032e92]/20 shadow-md hover:shadow-lg transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <span>Speak with an Insurance Specialist</span>
-              </button>
+
             </div>
 
-            {/* Trust Highlights Strip */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 border-t border-[#e8edf7]">
-              <div className="flex items-center gap-2.5 text-xs text-gray-900 font-medium">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 text-sm flex-shrink-0" />
-                <span>Instant Digital Policy</span>
-              </div>
-              <div className="flex items-center gap-2.5 text-xs text-gray-900 font-medium">
-                <FontAwesomeIcon icon={faWrench} className="text-[#032e92] text-sm flex-shrink-0" />
-                <span>14,000+ Cashless Garages</span>
-              </div>
-              <div className="flex items-center gap-2.5 text-xs text-gray-900 font-medium">
-                <FontAwesomeIcon icon={faBuildingShield} className="text-sky-600 text-sm flex-shrink-0" />
-                <span>100% Unbiased Choice</span>
-              </div>
-              <div className="flex items-center gap-2.5 text-xs text-gray-900 font-medium">
-                <FontAwesomeIcon icon={faShieldHalved} className="text-amber-600 text-sm flex-shrink-0" />
-                <span>24/7 Claim Concierge</span>
-              </div>
-            </div>
+
           </motion.div>
 
-          {/* Right Floating Protection Illustration Card */}
+
+          {/* Right Column: Life Insurance Hero Image */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
             className="lg:col-span-5"
           >
-            <div className="bg-white/95 backdrop-blur-xl rounded-3xl p-7 sm:p-8 border border-[#e8edf7] shadow-2xl shadow-blue-900/10 relative overflow-hidden">
-              {/* Card Header */}
-              <div className="flex items-center justify-between gap-3 mb-6 pb-5 border-b border-[#e8edf7]">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl shadow-sm">
-                    <FontAwesomeIcon icon={faBuildingShield} />
-                  </div>
-                  <div>
-                    <h3 className="font-extrabold text-[#0a192f] text-base leading-tight">All-in-One Asset Shield</h3>
-                    <p className="text-xs text-gray-600 font-medium mt-0.5">Customized General Protection</p>
-                  </div>
-                </div>
-                <span className="text-xs font-bold text-sky-700 bg-sky-50 px-3 py-1 rounded-full border border-sky-200">
-                  Active Cover
-                </span>
-              </div>
-
-              {/* Cover Amount Highlight */}
-              <div className="bg-gradient-to-br from-[#032e92] to-[#021d63] text-white rounded-2xl p-5 mb-6 relative overflow-hidden shadow-md">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none" />
-                <p className="text-xs font-bold text-blue-200 uppercase mb-1">
-                  Cashless Claim Network
-                </p>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-3xl sm:text-4xl font-black tracking-tight text-white">24,000+</span>
-                  <span className="text-xs font-semibold text-blue-200">Garages & Hospitals</span>
-                </div>
-                <p className="text-xs text-blue-100/90 mt-2">
-                  Zero out-of-pocket stress with direct cashless claim settlement across India
-                </p>
-              </div>
-
-              {/* Key Cover Verticals */}
-              <div className="space-y-3 mb-6">
-                <div className="flex items-center justify-between p-3 rounded-xl bg-[#f8fafc] border border-[#e8edf7]">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-white text-[#032e92] flex items-center justify-center text-xs shadow-sm">
-                      <FontAwesomeIcon icon={faCar} />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-[#0a192f]">Motor (Car & Bike)</p>
-                      <p className="text-[10px] text-gray-600">Zero Dep + Roadside Assistance</p>
-                    </div>
-                  </div>
-                  <span className="text-xs font-bold text-emerald-600">From ₹2,094/yr*</span>
-                </div>
-
-                <div className="flex items-center justify-between p-3 rounded-xl bg-[#f8fafc] border border-[#e8edf7]">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-white text-[#032e92] flex items-center justify-center text-xs shadow-sm">
-                      <FontAwesomeIcon icon={faHouseChimney} />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-[#0a192f]">Home & Property</p>
-                      <p className="text-[10px] text-gray-600">Structure + Valuables Protection</p>
-                    </div>
-                  </div>
-                  <span className="text-xs font-bold text-emerald-600">From ₹1,200/yr*</span>
-                </div>
-
-                <div className="flex items-center justify-between p-3 rounded-xl bg-[#f8fafc] border border-[#e8edf7]">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-white text-[#032e92] flex items-center justify-center text-xs shadow-sm">
-                      <FontAwesomeIcon icon={faPlaneDeparture} />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-[#0a192f]">Travel Insurance</p>
-                      <p className="text-[10px] text-gray-600">Medical abroad + Baggage & Delay</p>
-                    </div>
-                  </div>
-                  <span className="text-xs font-bold text-emerald-600">From ₹450/trip*</span>
-                </div>
-              </div>
-
-              {/* Interactive Button */}
-              <button
-                type="button"
-                onClick={openLeadModal}
-                className="w-full py-3.5 rounded-xl bg-[#eef4ff] hover:bg-[#032e92] text-[#032e92] hover:text-white font-bold text-xs sm:text-sm transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer group"
-              >
-                <span>Get Instant Multi-Insurer Quote</span>
-                <FontAwesomeIcon icon={faArrowRight} className="text-xs group-hover:translate-x-1 transition-transform" />
-              </button>
-
-              <p className="text-[10px] text-gray-600 text-center italic mt-3">
-                *Illustrative indicative premiums. Final rate depends on vehicle make, asset value & insurer underwriting.
-              </p>
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-blue-900/10 border border-[#e8edf7] bg-white">
+              <img
+                src={generalInsuranceImg}
+                alt="KNAPS General Insurance Protection"
+                className="w-full h-auto object-cover rounded-3xl"
+              />
             </div>
           </motion.div>
         </div>

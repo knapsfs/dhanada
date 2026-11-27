@@ -29,25 +29,25 @@ export default function CompareSmallSavingsSchemes() {
             <table className="w-full text-left border-collapse min-w-[900px]">
               <thead>
                 <tr className="bg-slate-100/90 border-b border-slate-200">
-                  <th className="py-4 px-5 text-xs font-bold text-slate-500 uppercase">
+                  <th className="py-4 px-5 text-xs font-bold text-gray-600 uppercase">
                     Scheme
                   </th>
                   <th className="py-4 px-5 text-xs font-extrabold text-[#032e92] uppercase">
                     Interest Rate
                   </th>
-                  <th className="py-4 px-5 text-xs font-bold text-slate-700 uppercase">
+                  <th className="py-4 px-5 text-xs font-bold text-gray-900 uppercase">
                     Tenure
                   </th>
-                  <th className="py-4 px-5 text-xs font-bold text-slate-700 uppercase">
+                  <th className="py-4 px-5 text-xs font-bold text-gray-900 uppercase">
                     Min / Max Deposit
                   </th>
-                  <th className="py-4 px-5 text-xs font-bold text-slate-700 uppercase">
+                  <th className="py-4 px-5 text-xs font-bold text-gray-900 uppercase">
                     Payout Type
                   </th>
-                  <th className="py-4 px-5 text-xs font-bold text-slate-700 uppercase">
+                  <th className="py-4 px-5 text-xs font-bold text-gray-900 uppercase">
                     Tax Relief
                   </th>
-                  <th className="py-4 px-5 text-xs font-bold text-slate-700 uppercase">
+                  <th className="py-4 px-5 text-xs font-bold text-gray-900 uppercase">
                     Target Eligibility
                   </th>
                 </tr>
@@ -57,19 +57,19 @@ export default function CompareSmallSavingsSchemes() {
                   <tr key={item.id} className="hover:bg-blue-50/30 transition-colors">
                     <td className="py-4 px-5">
                       <strong className="text-slate-900 block">{item.name}</strong>
-                      <span className="text-xs text-slate-400">{item.shortName}</span>
+                      <span className="text-xs text-gray-600">{item.shortName}</span>
                     </td>
                     <td className="py-4 px-5 font-black text-[#032e92]">
                       {item.interestRate}% p.a.
                     </td>
-                    <td className="py-4 px-5 text-slate-700">{item.tenure}</td>
-                    <td className="py-4 px-5 text-slate-700">
+                    <td className="py-4 px-5 text-gray-900">{item.tenure}</td>
+                    <td className="py-4 px-5 text-gray-900">
                       ₹{item.minDeposit.toLocaleString('en-IN')} /{' '}
                       {item.maxDeposit > 0
                         ? `₹${item.maxDeposit.toLocaleString('en-IN')}`
                         : 'No Limit'}
                     </td>
-                    <td className="py-4 px-5 text-slate-700">{item.payoutType}</td>
+                    <td className="py-4 px-5 text-gray-900">{item.payoutType}</td>
                     <td className="py-4 px-5 font-semibold text-emerald-700">{item.taxStatus}</td>
                     <td className="py-4 px-5 text-gray-600 max-w-xs">{item.eligibility}</td>
                   </tr>
@@ -81,7 +81,7 @@ export default function CompareSmallSavingsSchemes() {
 
         {/* Statutory Note */}
         <div className="p-6 rounded-2xl bg-[#f7f9fc] border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-slate-500 leading-relaxed">
+          <p className="text-xs text-gray-600 leading-relaxed">
             * Rates and operational conditions reflect prevailing notifications from the Ministry of Finance, Government of India. Updated quarterly based on G-Sec market movements.
           </p>
         </div>

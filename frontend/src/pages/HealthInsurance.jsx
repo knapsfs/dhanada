@@ -48,7 +48,7 @@ export default function HealthInsurance() {
         <WhyHealthInsurance />
 
         {/* 3. Health Insurance Plans */}
-        <HealthInsurancePlans />
+        {/* <HealthInsurancePlans /> */}
 
         {/* 4. Key Benefits */}
         <HealthInsuranceBenefits />
@@ -63,7 +63,7 @@ export default function HealthInsurance() {
         {/* <HealthInsuranceCalculator /> */}
 
         {/* 8. Why Choose Us */}
-        <HealthInsuranceWhyChooseUs />
+        {/* <HealthInsuranceWhyChooseUs /> */}
 
         {/* 9. FAQ Section */}
         <HealthInsuranceFAQ />

@@ -63,7 +63,7 @@ export default function LifeInsurance() {
         {/* <LifeInsuranceWhoShouldBuy /> */}
 
         {/* 8. Why Choose Us */}
-        <LifeInsuranceWhyChooseUs />
+        {/* <LifeInsuranceWhyChooseUs /> */}
 
         {/* 9. FAQ Section */}
         <LifeInsuranceFAQ />

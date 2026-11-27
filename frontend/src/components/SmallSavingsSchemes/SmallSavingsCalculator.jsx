@@ -112,7 +112,7 @@ export default function SmallSavingsCalculator() {
         <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xl overflow-hidden p-6 sm:p-10">
           {/* Scheme Quick Switcher Chips */}
           <div className="mb-8 pb-6 border-b border-slate-200">
-            <label className="text-xs font-bold text-slate-500 uppercase block mb-3">
+            <label className="text-xs font-bold text-gray-600 uppercase block mb-3">
               Select Post Office Scheme to Simulate:
             </label>
             <div className="flex flex-wrap gap-2.5">
@@ -123,7 +123,7 @@ export default function SmallSavingsCalculator() {
                   onClick={() => handleSchemeChange(scheme.id)}
                   className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${selectedSchemeId === scheme.id
                     ? 'bg-[#032e92] text-white shadow-md'
-                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                    : 'bg-slate-100 text-gray-900 hover:bg-slate-200'
                     }`}
                 >
                   {scheme.shortName}
@@ -141,7 +141,7 @@ export default function SmallSavingsCalculator() {
                   <h4 className="text-base font-extrabold text-[#032e92]">
                     {currentScheme.name}
                   </h4>
-                  <span className="text-xs text-slate-500">
+                  <span className="text-xs text-gray-600">
                     Notified Rate: <strong className="text-[#032e92]">{currentScheme.interestRate}% p.a.</strong> • {currentScheme.compounding}
                   </span>
                 </div>
@@ -153,7 +153,7 @@ export default function SmallSavingsCalculator() {
               {/* POTD Tenure Selector */}
               {currentScheme.id === 'potd' && (
                 <div className="bg-[#f7f9fc] p-4 rounded-2xl border border-slate-200 space-y-2">
-                  <label className="text-xs font-bold text-slate-700 block">
+                  <label className="text-xs font-bold text-gray-900 block">
                     Choose Time Deposit Tenure:
                   </label>
                   <div className="grid grid-cols-4 gap-2">
@@ -164,11 +164,11 @@ export default function SmallSavingsCalculator() {
                         onClick={() => setPotdTenure(yr)}
                         className={`py-2 px-3 rounded-xl text-xs font-bold transition-all cursor-pointer text-center ${potdTenure === yr
                           ? 'bg-[#032e92] text-white shadow-xs'
-                          : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
+                          : 'bg-white text-gray-900 border border-slate-200 hover:bg-slate-100'
                           }`}
                       >
                         <div>{yr} Year{yr > 1 ? 's' : ''}</div>
-                        <div className={`text-[10px] ${potdTenure === yr ? 'text-blue-200' : 'text-slate-500'}`}>
+                        <div className={`text-[10px] ${potdTenure === yr ? 'text-blue-200' : 'text-gray-600'}`}>
                           {currentScheme.ratesByTenure[yr]}%
                         </div>
                       </button>
@@ -185,7 +185,7 @@ export default function SmallSavingsCalculator() {
               {/* Deposit Amount Slider */}
               <div className="bg-[#f7f9fc] p-6 rounded-2xl border border-slate-200 space-y-4">
                 <div className="flex items-center justify-between">
-                  <label className="text-sm font-bold text-slate-700 flex items-center gap-2">
+                  <label className="text-sm font-bold text-gray-900 flex items-center gap-2">
                     <FontAwesomeIcon icon={faCoins} className="text-[#032e92]" />
                     <span>
                       {currentScheme.id === 'pord'
@@ -194,7 +194,7 @@ export default function SmallSavingsCalculator() {
                     </span>
                   </label>
                   <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 font-bold text-sm">
                       ₹
                     </span>
                     <input
@@ -216,29 +216,13 @@ export default function SmallSavingsCalculator() {
                   className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#032e92]"
                 />
 
-                <div className="flex justify-between text-xs text-slate-500 font-medium">
+                <div className="flex justify-between text-xs text-gray-600 font-medium">
                   <span>₹{currentScheme.id === 'pord' ? '100' : '1,000'}</span>
-                  <span>₹{currentScheme.id === 'pord' ? '50,000' : '10 Lakh'}</span>
+                  {/* <span>₹{currentScheme.id === 'pord' ? '50,000' : '10 Lakh'}</span> */}
                   <span>₹{currentScheme.id === 'pord' ? '1 Lakh' : '25 Lakh'}</span>
                 </div>
               </div>
 
-              {/* Key Scheme Rules Bullet Strip */}
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5 text-xs text-gray-600">
-                <div className="font-bold text-slate-800 mb-1">Key Operational Highlights:</div>
-                <div className="flex items-start gap-2">
-                  <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-500 mt-0.5 shrink-0" />
-                  <span><strong>Backing:</strong> Direct sovereign guarantee from Government of India.</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-500 mt-0.5 shrink-0" />
-                  <span><strong>Liquidity:</strong> {currentScheme.liquidity}</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-500 mt-0.5 shrink-0" />
-                  <span><strong>Tax Section:</strong> {currentScheme.taxStatus}</span>
-                </div>
-              </div>
 
               {/* Apply CTA Button */}
               <button
@@ -261,10 +245,10 @@ export default function SmallSavingsCalculator() {
               <div className="space-y-4">
                 {/* Principal Invested Card */}
                 <div className="p-5 rounded-2xl bg-[#f7f9fc] border border-slate-200">
-                  <span className="text-xs text-slate-500 font-semibold block mb-1">
+                  <span className="text-xs text-gray-600 font-semibold block mb-1">
                     {currentScheme.id === 'pord' ? 'Total Deposits Over 5 Years (60 Mo)' : 'Total Principal Invested'}
                   </span>
-                  <div className="text-2xl font-extrabold text-slate-800">
+                  <div className="text-2xl font-extrabold text-gray-900">
                     ₹{formatINR(results.totalInvested)}
                   </div>
                 </div>
@@ -292,32 +276,14 @@ export default function SmallSavingsCalculator() {
                     {/* <span className="text-emerald-300 font-semibold">100% Guaranteed</span> */}
                   </div>
                 </div>
+                {/* Statutory Note */}
+                <p className="text-xs text-gray-600 text-center leading-relaxed">
+                  Calculations are based on currently notified Ministry of Finance interest rates. Post office rules, compounding conventions, and tax laws apply as notified by the Government of India.
+                </p>
 
-                {/* Visual Ratio Bar */}
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-                  <div className="flex justify-between text-xs font-semibold text-gray-600">
-                    <span>Deposit: {results.investedPct}%</span>
-                    <span>Interest: {results.interestPct}%</span>
-                  </div>
-                  <div className="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden flex">
-                    <div
-                      className="bg-[#032e92] h-full"
-                      style={{ width: `${results.investedPct}%` }}
-                      title="Principal"
-                    />
-                    <div
-                      className="bg-emerald-500 h-full"
-                      style={{ width: `${results.interestPct}%` }}
-                      title="Interest"
-                    />
-                  </div>
-                </div>
+
               </div>
 
-              {/* Statutory Note */}
-              <p className="text-xs text-slate-400 text-center leading-relaxed">
-                Calculations are based on currently notified Ministry of Finance interest rates. Post office rules, compounding conventions, and tax laws apply as notified by the Government of India.
-              </p>
             </div>
           </div>
         </div>

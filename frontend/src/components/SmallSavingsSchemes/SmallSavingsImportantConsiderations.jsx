@@ -79,7 +79,7 @@ const SmallSavingsImportantConsiderations = () => {
                 <div className="w-12 h-12 rounded-xl bg-blue-50 text-[#032e92] flex items-center justify-center text-lg shadow-xs">
                   <FontAwesomeIcon icon={item.icon} />
                 </div>
-                <span className="text-xs font-bold px-3 py-1 rounded-full bg-slate-100 text-slate-700">
+                <span className="text-xs font-bold px-3 py-1 rounded-full bg-slate-100 text-gray-900">
                   {item.badge}
                 </span>
               </div>

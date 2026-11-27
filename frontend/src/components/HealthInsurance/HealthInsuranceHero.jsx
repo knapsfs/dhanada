@@ -14,6 +14,7 @@ import {
   faStar
 } from '@fortawesome/free-solid-svg-icons';
 import { useLeadModal } from '../../context/LeadModalContext';
+import healthInsuranceImg from '../../assets/health-insurance.webp';
 
 export default function HealthInsuranceHero() {
   const { openLeadModal } = useLeadModal();
@@ -33,7 +34,7 @@ export default function HealthInsuranceHero() {
   };
 
   return (
-    <section className="relative pt-32 pb-20 lg:pt-36 lg:pb-28 overflow-hidden bg-gradient-to-b from-[#f0f4fc] via-[#f7f9fc] to-white">
+    <section className="relative pt-32 pb-12 lg:pt-36 lg:pb-16 overflow-hidden bg-gradient-to-b from-[#f0f4fc] via-[#f7f9fc] to-white">
       {/* Background Glows & Patterns */}
       <div className="absolute top-0 right-0 w-[550px] h-[550px] bg-blue-400/10 rounded-full blur-3xl pointer-events-none -mr-40 -mt-20" />
       <div className="absolute bottom-10 left-0 w-[450px] h-[450px] bg-indigo-500/10 rounded-full blur-3xl pointer-events-none -ml-32" />
@@ -71,25 +72,7 @@ export default function HealthInsuranceHero() {
               Medical expenses in India are rising at 14% every year. Safeguard your lifetime savings with 100% cashless hospitalization across 14,000+ top network hospitals, zero room-rent sub-limits, unlimited restoration, and tax savings up to ₹1,00,000 under Section 80D.
             </p>
 
-            {/* Key Value Proposition Checklist */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-              <div className="flex items-center gap-2.5">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 flex-shrink-0 text-sm" />
-                <span className="text-xs sm:text-sm font-medium text-gray-900">14,000+ Cashless Network Hospitals</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 flex-shrink-0 text-sm" />
-                <span className="text-xs sm:text-sm font-medium text-gray-900">Zero Room Rent Capping on Select Plans</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 flex-shrink-0 text-sm" />
-                <span className="text-xs sm:text-sm font-medium text-gray-900">Pre & Post Hospitalization Expenses Covered</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-600 flex-shrink-0 text-sm" />
-                <span className="text-xs sm:text-sm font-medium text-gray-900">Tax Deductions up to ₹1 Lakh u/s 80D</span>
-              </div>
-            </div>
+
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-4">
@@ -97,118 +80,28 @@ export default function HealthInsuranceHero() {
                 onClick={() => openLeadModal({ title: 'Explore Health Insurance Plans', defaultService: 'Health Insurance' })}
                 className="btn-ripple px-6 py-3 rounded-xl text-md font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer"
               >
-                <span>Compare Health Plans</span>
+                <span>Consult an Expert</span>
               </button>
 
-              <button
-                onClick={scrollToCalculator}
-                className="btn-ripple px-6 py-3 rounded-xl text-md font-semibold bg-white hover:bg-blue-50 text-[#032e92] border border-[#032e92]/20 shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
-              >
-                {/* <FontAwesomeIcon icon={faCalculator} className="text-xs text-[#032e92]" /> */}
-                <span>Calculate Needed Cover</span>
-              </button>
+
             </div>
 
 
           </motion.div>
 
-          {/* Right Column: Reassuring Healthcare/Financial Card (5 cols) */}
+          {/* Right Column: Life Insurance Hero Image */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="lg:col-span-5 relative"
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="lg:col-span-5"
           >
-            {/* Main Interactive Summary Card */}
-            <div className="bg-white/95 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-gray-200/90 shadow-2xl relative overflow-hidden">
-              {/* Subtle top gradient bar */}
-              <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#032e92] via-[#0066cc] to-[#021d63]" />
-
-              <div className="flex items-center justify-between pb-6 border-b border-gray-100">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100/80 border border-blue-200/60 flex items-center justify-center text-[#032e92] shadow-xs">
-                    <FontAwesomeIcon icon={faShieldHeart} className="text-xl" />
-                  </div>
-                  <div>
-                    <h3 className="text-base font-bold text-[#0a192f]">Health Shield Snapshot</h3>
-                    <p className="text-xs text-gray-600">Essential benchmarks for Indian families</p>
-                  </div>
-                </div>
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-200/60">
-                  <FontAwesomeIcon icon={faStar} className="text-[10px]" />
-                  Recommended
-                </span>
-              </div>
-
-              {/* Metric Highlights Grid */}
-              <div className="grid grid-cols-2 gap-3.5 my-6">
-                <div className="p-3.5 rounded-2xl bg-blue-50/50 border border-blue-100/60">
-                  <div className="flex items-center gap-2 text-[#032e92] mb-1">
-                    <FontAwesomeIcon icon={faHospital} className="text-xs" />
-                    <span className="text-xs font-semibold uppercase text-gray-600">Network</span>
-                  </div>
-                  <div className="text-lg font-extrabold text-[#0a192f]">14,000+</div>
-                  <p className="text-xs text-gray-600 leading-tight">Cashless hospitals nationwide</p>
-                </div>
-
-                <div className="p-3.5 rounded-2xl bg-emerald-50/50 border border-emerald-100/60">
-                  <div className="flex items-center gap-2 text-emerald-700 mb-1">
-                    <FontAwesomeIcon icon={faClock} className="text-xs" />
-                    <span className="text-xs font-semibold uppercase text-gray-600">Speed</span>
-                  </div>
-                  <div className="text-lg font-extrabold text-[#0a192f]">&lt; 45 Mins</div>
-                  <p className="text-xs text-gray-600 leading-tight">Avg. cashless pre-authorization</p>
-                </div>
-
-                <div className="p-3.5 rounded-2xl bg-indigo-50/50 border border-indigo-100/60">
-                  <div className="flex items-center gap-2 text-indigo-700 mb-1">
-                    <FontAwesomeIcon icon={faPercent} className="text-xs" />
-                    <span className="text-xs font-semibold uppercase text-gray-600">Settlement</span>
-                  </div>
-                  <div className="text-lg font-extrabold text-[#0a192f]">99.2%</div>
-                  <p className="text-xs text-gray-600 leading-tight">KNAPS claim assistance rate</p>
-                </div>
-
-                <div className="p-3.5 rounded-2xl bg-amber-50/50 border border-amber-100/60">
-                  <div className="flex items-center gap-2 text-amber-700 mb-1">
-                    <FontAwesomeIcon icon={faShieldHeart} className="text-xs" />
-                    <span className="text-xs font-semibold uppercase text-gray-600">Tax Saving</span>
-                  </div>
-                  <div className="text-lg font-extrabold text-[#0a192f]">₹1,00,000</div>
-                  <p className="text-xs text-gray-600 leading-tight">Max 80D deduction benefit</p>
-                </div>
-              </div>
-
-              {/* Medical Inflation Alert Box */}
-              <div className="p-4 rounded-2xl bg-gradient-to-br from-[#0a192f] to-[#021d63] text-white shadow-md space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase text-blue-300">Reality Check</span>
-                  <span className="text-xs font-semibold px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">14% Annual Rise</span>
-                </div>
-                <p className="text-xs text-blue-100 leading-relaxed">
-                  A treatment costing ₹10 Lakh today will cost ~₹20 Lakh in just 5 years. Standard savings cannot keep up without dedicated high-sum health insurance.
-                </p>
-                <div className="pt-2 flex items-center justify-between text-xs font-semibold text-blue-200">
-                  <span>Explore recommended cover</span>
-                  <button
-                    onClick={scrollToExplorer}
-                    className="text-white hover:text-blue-200 underline flex items-center gap-1 cursor-pointer"
-                  >
-                    <span>View Life-Stage Matcher</span>
-                    <FontAwesomeIcon icon={faArrowRight} className="text-[10px]" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Instant Call Prompt */}
-              <div className="mt-5 text-center">
-                <p className="text-xs text-gray-600">
-                  Need personalized guidance? Call our certified health insurance specialists at{' '}
-                  <a href="tel:+918080808080" className="font-semibold text-[#032e92] hover:underline">
-                    +91 8080808080
-                  </a>
-                </p>
-              </div>
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-blue-900/10 border border-[#e8edf7] bg-white">
+              <img
+                src={healthInsuranceImg}
+                alt="KNAPS General Insurance Protection"
+                className="w-full h-auto object-cover rounded-3xl"
+              />
             </div>
           </motion.div>
         </div>

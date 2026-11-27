@@ -38,7 +38,7 @@ export default function WhatAreSmallSavingsSchemes() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-gray-900">
             What are <span className="text-[#032e92]">Post Office Small Savings Schemes?</span>
           </h2>
           <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
@@ -57,10 +57,10 @@ export default function WhatAreSmallSavingsSchemes() {
                 {/* <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 text-[#032e92] group-hover:bg-[#032e92] group-hover:text-white flex items-center justify-center text-lg transition-all duration-300 shadow-sm mb-6">
                   <FontAwesomeIcon icon={pillar.icon} />
                 </div> */}
-                <h3 className="text-lg font-bold text-slate-900 mb-3 group-hover:text-[#032e92] transition-colors">
+                <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-[#032e92] transition-colors">
                   {pillar.title}
                 </h3>
-                <p className="text-sm text-gray-600 leading-relaxed">{pillar.description}</p>
+                <p className="text-md text-gray-600 leading-relaxed">{pillar.description}</p>
               </div>
             </div>
           ))}
@@ -72,7 +72,7 @@ export default function WhatAreSmallSavingsSchemes() {
             <h4 className="text-base sm:text-lg font-bold text-[#032e92]">
               Need Assistance Opening a Post Office Scheme?
             </h4>
-            <p className="text-xs sm:text-sm text-gray-600">
+            <p className="text-md text-gray-600">
               Our experts provide end-to-end guidance for KYC, post office processing, and certificate management.
             </p>
           </div>
@@ -86,7 +86,7 @@ export default function WhatAreSmallSavingsSchemes() {
             }
             className="px-6 py-3 rounded-xl bg-[#032e92] text-white font-bold text-xs sm:text-sm shadow-md hover:bg-[#021d63] transition-colors flex items-center gap-2 shrink-0 cursor-pointer"
           >
-            <span>Talk to an Expert</span>
+            <span>Talk to Us</span>
             {/* <FontAwesomeIcon icon={faArrowRight} className="text-xs" /> */}
           </button>
         </div>

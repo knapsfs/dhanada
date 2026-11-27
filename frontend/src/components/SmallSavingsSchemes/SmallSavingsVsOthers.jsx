@@ -79,22 +79,22 @@ export default function SmallSavingsVsOthers() {
             <table className="w-full text-left border-collapse min-w-[950px]">
               <thead>
                 <tr className="bg-slate-100/90 border-b border-slate-200">
-                  <th className="py-4 px-5 text-xs font-bold text-slate-500 uppercase w-1/6">
+                  <th className="py-4 px-5 text-xs font-bold text-gray-600 uppercase w-1/6">
                     Parameter
                   </th>
                   <th className="py-4 px-5 text-xs font-extrabold text-[#032e92] uppercase bg-blue-50/70 border-x border-blue-100 w-1/5">
                     Post Office Schemes (POTD, KVP, NSC, PORD)
                   </th>
-                  <th className="py-4 px-5 text-xs font-bold text-slate-700 uppercase w-1/6">
+                  <th className="py-4 px-5 text-xs font-bold text-gray-900 uppercase w-1/6">
                     Fixed Deposits (FD)
                   </th>
-                  <th className="py-4 px-5 text-xs font-bold text-slate-700 uppercase w-1/6">
+                  <th className="py-4 px-5 text-xs font-bold text-gray-900 uppercase w-1/6">
                     Recurring Deposits (RD)
                   </th>
-                  <th className="py-4 px-5 text-xs font-bold text-slate-700 uppercase w-1/6">
+                  <th className="py-4 px-5 text-xs font-bold text-gray-900 uppercase w-1/6">
                     Mutual Funds
                   </th>
-                  <th className="py-4 px-5 text-xs font-bold text-slate-700 uppercase w-1/6">
+                  <th className="py-4 px-5 text-xs font-bold text-gray-900 uppercase w-1/6">
                     Bonds / Debentures
                   </th>
                 </tr>
@@ -106,10 +106,10 @@ export default function SmallSavingsVsOthers() {
                     <td className="py-4 px-5 font-semibold text-[#032e92] bg-blue-50/20 border-x border-blue-100/60 leading-relaxed">
                       {row.sss}
                     </td>
-                    <td className="py-4 px-5 text-slate-700 leading-relaxed">{row.fd}</td>
-                    <td className="py-4 px-5 text-slate-700 leading-relaxed">{row.rd}</td>
-                    <td className="py-4 px-5 text-slate-700 leading-relaxed">{row.mf}</td>
-                    <td className="py-4 px-5 text-slate-700 leading-relaxed">{row.bonds}</td>
+                    <td className="py-4 px-5 text-gray-900 leading-relaxed">{row.fd}</td>
+                    <td className="py-4 px-5 text-gray-900 leading-relaxed">{row.rd}</td>
+                    <td className="py-4 px-5 text-gray-900 leading-relaxed">{row.mf}</td>
+                    <td className="py-4 px-5 text-gray-900 leading-relaxed">{row.bonds}</td>
                   </tr>
                 ))}
               </tbody>

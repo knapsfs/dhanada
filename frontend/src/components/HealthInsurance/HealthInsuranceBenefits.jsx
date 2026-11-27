@@ -78,9 +78,9 @@ export default function HealthInsuranceBenefits() {
               Health Insurance Policy
             </span>
           </h2>
-          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
+          {/* <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             Modern health insurance in India has evolved beyond basic emergency bills. Enjoy comprehensive wellness, cashless simplicity, and extensive out-of-hospital medical care.
-          </p>
+          </p> */}
         </div>
 
         {/* Benefits Grid (4x2 on lg) */}

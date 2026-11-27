@@ -22,7 +22,7 @@ export default function SmallSavingsHero() {
   };
 
   return (
-    <section className="relative pt-32 pb-20 lg:pt-36 lg:pb-28 overflow-hidden bg-gradient-to-b from-blue-50/60 via-[#f7f9fc] to-white">
+    <section className="relative pt-32 pb-12 lg:pt-36 lg:pb-16 overflow-hidden bg-gradient-to-b from-blue-50/60 via-[#f7f9fc] to-white">
       {/* Decorative Blur Orbs */}
       <div className="absolute top-10 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-r from-blue-400/10 via-teal-400/10 to-indigo-400/10 rounded-full blur-3xl pointer-events-none -z-10" />
 
@@ -41,7 +41,7 @@ export default function SmallSavingsHero() {
           <div className="lg:col-span-7 space-y-6">
 
             {/* Main Headline */}
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-slate-900 leading-tight">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold tracking-tight text-gray-900 leading-tight">
               Post Office <span className="text-[#032e92]">Small Savings Schemes</span>
             </h1>
 
@@ -51,7 +51,7 @@ export default function SmallSavingsHero() {
             </p>
 
             <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
-              Administered through India Post and backed directly by the Government of India, our core offerings include <strong>Post Office Time Deposit (POTD)</strong>, <strong>Kisan Vikas Patra (KVP)</strong>, <strong>National Savings Certificate (NSC)</strong>, and <strong>Post Office Recurring Deposit (PORD)</strong>—combining absolute sovereign security with high notified yields and tax-deductible compounding.
+              Administered through India Post and backed directly by the Government of India, our core offerings include Post Office Time Deposit (POTD), Kisan Vikas Patra (KVP), National Savings Certificate (NSC), and Post Office Recurring Deposit (PORD) combining absolute sovereign security with high notified yields and tax-deductible compounding.
             </p>
 
             {/* Action Buttons */}
@@ -70,14 +70,7 @@ export default function SmallSavingsHero() {
 
               </button>
 
-              <button
-                type="button"
-                onClick={scrollToCalculator}
-                className="btn-ripple px-6 py-3 rounded-xl text-md font-semibold bg-white hover:bg-blue-50 text-[#032e92] border border-[#032e92]/20 shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <FontAwesomeIcon icon={faCalculator} className="text-[#032e92]" />
-                <span>Calculate Scheme Returns</span>
-              </button>
+
             </div>
 
 
@@ -91,20 +84,6 @@ export default function SmallSavingsHero() {
               <div className="absolute bottom-0 left-0 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
 
               <div className="relative z-10 space-y-6">
-                <div className="flex items-center justify-between pb-4 border-b border-white/15">
-                  <div className="flex items-center gap-3">
-                    <div className="w-11 h-11 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center text-teal-300 border border-white/15">
-                      <FontAwesomeIcon icon={faShieldHalved} className="text-lg" />
-                    </div>
-                    <div>
-
-                      <div className="text-lg font-bold text-white">4 Flagship Schemes</div>
-                    </div>
-                  </div>
-                  <span className="px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-semibold">
-                    Govt. Backed
-                  </span>
-                </div>
 
                 {/* Key Metrics Grid */}
                 <div className="grid grid-cols-2 gap-3.5">

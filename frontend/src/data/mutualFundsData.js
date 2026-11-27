@@ -133,8 +133,8 @@ export const MF_CATEGORIES = [
 		shortDesc: "Equity-linked tax saving mutual funds eligible for Section 80C deduction.",
 		riskLevel: "High",
 		riskColor: "violet",
-		idealHorizon: "3+ Years (3-Year Lock-in)",
-		taxTreatment: "Sec 80C deduction up to ₹1.5L; LTCG 12.5% > ₹1.25L",
+		idealHorizon: "5+ Years",
+		taxTreatment: " LTCG tax of 12.5% on gains exceeding ₹1.25 lakh in a financial year, subject to applicable rules.",
 		icon: "faFileInvoiceDollar",
 		subcategories: [
 			{

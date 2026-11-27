@@ -37,9 +37,9 @@ export default function WhyHealthInsurance() {
               Most Critical Financial Shield
             </span>
           </h2>
-          <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
+          {/* <p className="text-sm sm:text-base text-gray-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-3.5">
             In India, over 70% of medical expenses are still paid out of pocket. A single unforeseen hospitalization can wipe out decades of equity compounding and planned family goals.
-          </p>
+          </p> */}
         </div>
 
         {/* 3 Core Financial Realities Cards */}
@@ -82,7 +82,7 @@ export default function WhyHealthInsurance() {
               Hospitalization Reality Check
             </h3>
             <p className="mt-2 text-xs sm:text-sm text-blue-200">
-              Comparing what happens when an unexpected ₹12,00,000 medical emergency hits your family.
+              Comparing what happens when an unexpected medical emergency hits your family.
             </p>
           </div>
 

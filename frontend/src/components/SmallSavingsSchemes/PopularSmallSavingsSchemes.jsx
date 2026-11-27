@@ -40,7 +40,7 @@ export default function PopularSmallSavingsSchemes() {
                   >
                     {scheme.badge}
                   </span>
-                  <span className="text-xs font-bold text-slate-500 uppercase">
+                  <span className="text-xs font-bold text-gray-600 uppercase">
                     {scheme.id.toUpperCase()}
                   </span>
                 </div> */}
@@ -49,7 +49,7 @@ export default function PopularSmallSavingsSchemes() {
                   <h3 className="text-lg font-bold text-slate-900 group-hover:text-[#032e92] transition-colors leading-snug">
                     {scheme.name}
                   </h3>
-                  <div className="text-xs text-slate-500 font-medium mt-1">
+                  <div className="text-xs text-gray-600 font-medium mt-1">
                     {scheme.category}
                   </div>
                 </div>
@@ -58,16 +58,16 @@ export default function PopularSmallSavingsSchemes() {
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-gray-600 font-medium">Interest Rate</span>
                     <span className="text-lg font-black text-[#032e92]">
-                      {scheme.interestRate}% <span className="text-xs font-normal text-slate-500">p.a.</span>
+                      {scheme.interestRate}% <span className="text-xs font-normal text-gray-600">p.a.</span>
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-xs text-gray-600">
                     <span>Tenure</span>
-                    <span className="font-semibold text-slate-800">{scheme.tenure}</span>
+                    <span className="font-semibold text-gray-900">{scheme.tenure}</span>
                   </div>
                   <div className="flex items-center justify-between text-xs text-gray-600">
                     <span>Tax Status</span>
-                    <span className="font-semibold text-slate-800">{scheme.taxSection}</span>
+                    <span className="font-semibold text-gray-900">{scheme.taxSection}</span>
                   </div>
                 </div>
 
@@ -123,25 +123,25 @@ export default function PopularSmallSavingsSchemes() {
                   <h3 className="text-2xl font-bold text-slate-900 mt-2">
                     {selectedScheme.name}
                   </h3>
-                  <p className="text-sm text-slate-500 mt-1">{selectedScheme.category}</p>
+                  <p className="text-sm text-gray-600 mt-1">{selectedScheme.category}</p>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                    <div className="text-xs text-slate-500">Notified Rate</div>
+                    <div className="text-xs text-gray-600">Notified Rate</div>
                     <div className="text-base font-bold text-[#032e92]">{selectedScheme.interestRate}% p.a.</div>
                   </div>
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                    <div className="text-xs text-slate-500">Tenure</div>
-                    <div className="text-base font-bold text-slate-800">{selectedScheme.tenure}</div>
+                    <div className="text-xs text-gray-600">Tenure</div>
+                    <div className="text-base font-bold text-gray-900">{selectedScheme.tenure}</div>
                   </div>
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                    <div className="text-xs text-slate-500">Tax Treatment</div>
-                    <div className="text-base font-bold text-slate-800">{selectedScheme.taxSection}</div>
+                    <div className="text-xs text-gray-600">Tax Treatment</div>
+                    <div className="text-base font-bold text-gray-900">{selectedScheme.taxSection}</div>
                   </div>
                 </div>
 
-                <div className="space-y-3 text-xs sm:text-sm text-slate-700">
+                <div className="space-y-3 text-xs sm:text-sm text-gray-900">
                   <div className="flex items-start gap-2">
                     <FontAwesomeIcon icon={faCheckCircle} className="text-emerald-500 mt-1" />
                     <div><strong>Min. Deposit:</strong> ₹{selectedScheme.minDeposit.toLocaleString('en-IN')}</div>

@@ -76,11 +76,11 @@ export default function WhyLifeInsurance() {
                   {pillar.highlight}
                 </span> */}
 
-                <h3 className="text-xl font-bold text-[#0a192f] mb-3 group-hover:text-[#032e92] transition-colors leading-snug">
+                <h3 className="text-lg font-bold text-[#0a192f] mb-3 group-hover:text-[#032e92] transition-colors leading-snug">
                   {pillar.title}
                 </h3>
 
-                <p className="text-gray-600 text-xs sm:text-sm leading-relaxed font-medium">
+                <p className="text-gray-600 text-xs sm:text-sm leading-relaxed font-normal">
                   {pillar.desc}
                 </p>
               </div>
@@ -109,9 +109,9 @@ export default function WhyLifeInsurance() {
             <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
               <div className="flex items-center gap-3 text-rose-400 font-bold text-base mb-4">
                 <FontAwesomeIcon icon={faCircleXmark} className="text-xl" />
-                <span>Without Adequate Life Cover</span>
+                <span>Without Life Insurance</span>
               </div>
-              <ul className="space-y-3 text-xs sm:text-sm text-gray-300 font-medium">
+              <ul className="space-y-3 text-xs sm:text-sm text-gray-300 font-normal">
                 <li className="flex items-start gap-2.5">
                   <span className="text-rose-400 font-bold">✕</span>
                   <span>Sudden cessation of household income and rapid depletion of life savings.</span>
@@ -131,9 +131,9 @@ export default function WhyLifeInsurance() {
             <div className="bg-white/10 rounded-2xl p-6 border border-white/20 shadow-inner">
               <div className="flex items-center gap-3 text-emerald-300 font-bold text-base mb-4">
                 <FontAwesomeIcon icon={faCircleCheck} className="text-xl" />
-                <span>With a KNAPS Life Shield</span>
+                <span>With Life Insurance</span>
               </div>
-              <ul className="space-y-3 text-xs sm:text-sm text-blue-50 font-medium">
+              <ul className="space-y-3 text-xs sm:text-sm text-blue-50 font-normal">
                 <li className="flex items-start gap-2.5">
                   <span className="text-emerald-300 font-bold">✓</span>
                   <span>Guaranteed tax-free lump sum corpus + monthly replacement income.</span>

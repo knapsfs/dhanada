@@ -77,7 +77,7 @@ BAND_CONFIG = {
 		"profile_color": "#15803d",
 		"card_bg": "#f0fdf4",
 		"card_border": "#bbf7d0",
-		"summary": "You are an investor who has expectations of low to moderate kind of returns with lower levels of risk in order to preserve your capital. As a conservative investor, you might expect your portfolio to be allocated approximately 15% in growth assets, with the remainder in defensive assets and an allocation to gold.",
+		"summary": "You are an investor who has expectations of low to moderate kind of returns with lower levels of risk in order to preserve your capital. ",
 		"allocations": [
 			{"label": "Defensive Assets (Debt & Fixed Income)", "pct": 80, "color": "#2563eb"},
 			{"label": "Growth Assets (Equities)", "pct": 15, "color": "#16a34a"},
@@ -107,7 +107,7 @@ BAND_CONFIG = {
 		"profile_color": "#b45309",
 		"card_bg": "#fffbeb",
 		"card_border": "#fde68a",
-		"summary": "You are an investor who would like to invest in both income and growth assets. You will be comfortable with calculated risks to achieve good returns, however, you require an investment strategy that adequately deals with the effects of inflation and tax. As a moderate investor, you might expect your portfolio to be allocated approximately 45% in growth assets, with the remainder in defensive assets and an allocation to gold.",
+		"summary": "You are an investor who would like to invest in both income and growth assets. You will be comfortable with calculated risks to achieve good returns, however, you require an investment strategy that adequately deals with the effects of inflation and tax.",
 		"allocations": [
 			{"label": "Growth Assets (Equities)", "pct": 45, "color": "#d97706"},
 			{"label": "Defensive Assets (Debt & Fixed Income)", "pct": 45, "color": "#3b82f6"},
@@ -137,7 +137,7 @@ BAND_CONFIG = {
 		"profile_color": "#b91c1c",
 		"card_bg": "#fff5f5",
 		"card_border": "#fecaca",
-		"summary": "You are an investor who is comfortable with a high volatility and high level of risk in order to achieve relatively higher returns over long term. Your objective is to accumulate assets over long term by primarily investing in growth assets. As an aggressive investor, you might expect your portfolio to be allocated up to 75% in growth assets and an allocation to gold.",
+		"summary": "You are an investor who is comfortable with a high volatility and high level of risk in order to achieve relatively higher returns over long term. Your objective is to accumulate assets over long term by primarily investing in growth assets.",
 		"allocations": [
 			{"label": "Growth Assets (Equities & High-Growth)", "pct": 75, "color": "#dc2626"},
 			{"label": "SIF (Long-Short Derivative Funds)", "pct": 20, "color": "#3b82f6"},

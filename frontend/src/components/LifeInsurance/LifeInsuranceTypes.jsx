@@ -25,7 +25,7 @@ const TYPES = [
       "Maximum life cover at nominal cost",
       "Critical illness & disability riders",
       "Lump sum or monthly income payouts",
-      "Optional Return of Premium (TROP)"
+      // "Optional Return of Premium (TROP)"
     ],
     accent: "border-blue-200 text-[#032e92] bg-blue-50"
   },
@@ -41,7 +41,7 @@ const TYPES = [
       "Dual benefit of investment & cover",
       "Free switches between equity & debt",
       "Tax-exempt returns under Sec 10(10D)",
-      "Systematic fund allocation options"
+      // "Systematic fund allocation options"
     ],
     accent: "border-purple-200 text-purple-700 bg-purple-50"
   },
@@ -57,7 +57,7 @@ const TYPES = [
       "Guaranteed maturity sum assured",
       "Life cover throughout policy tenure",
       "Bonuses and loyalty additions",
-      "Loan facility against policy value"
+      // "Loan facility against policy value"
     ],
     accent: "border-emerald-200 text-emerald-700 bg-emerald-50"
   },
@@ -73,7 +73,7 @@ const TYPES = [
       "Protection up to 99 or 100 years",
       "Generational wealth transfer",
       "Tax-free inheritance for nominees",
-      "Consistent lifelong security"
+      // "Consistent lifelong security"
     ],
     accent: "border-amber-200 text-amber-800 bg-amber-50"
   },
@@ -89,7 +89,7 @@ const TYPES = [
       "Scheduled milestone-based payouts",
       "Waiver of Premium (WOP) rider",
       "Inflation-adjusted corpus target",
-      "Disciplined long-term growth"
+      // "Disciplined long-term growth"
     ],
     accent: "border-rose-200 text-rose-700 bg-rose-50"
   },
@@ -105,7 +105,7 @@ const TYPES = [
       "Guaranteed monthly or annual payouts",
       "Single or joint-life pension options",
       "Return of purchase price to heirs",
-      "Zero market volatility post retirement"
+      // "Zero market volatility post retirement"
     ],
     accent: "border-teal-200 text-teal-700 bg-teal-50"
   }
@@ -143,7 +143,7 @@ export default function LifeInsuranceTypes() {
 
 
                 {/* Title & Subtitle */}
-                <h3 className="text-xl font-bold text-[#0a192f] group-hover:text-[#032e92] transition-colors mb-1 leading-snug">
+                <h3 className="text-lg font-bold text-[#0a192f] group-hover:text-[#032e92] transition-colors mb-1 leading-snug">
                   {item.title}
                 </h3>
                 {/* <p className="text-xs font-bold text-[#032e92] mb-3 uppercase">
@@ -151,7 +151,7 @@ export default function LifeInsuranceTypes() {
                 </p> */}
 
                 {/* Description */}
-                <p className="text-gray-600 text-sm leading-relaxed font-medium mb-5">
+                <p className="text-gray-600 text-sm leading-relaxed font-normal mb-5">
                   {item.desc}
                 </p>
 
@@ -160,7 +160,7 @@ export default function LifeInsuranceTypes() {
                 {/* Key Benefits Checklist */}
                 <div className="space-y-2.5 mb-7">
                   {item.benefits.map((b, bIdx) => (
-                    <div key={bIdx} className="flex items-center gap-2.5 text-xs text-gray-600 font-medium">
+                    <div key={bIdx} className="flex items-center gap-2.5 text-sm text-gray-600 font-normal">
                       <span className="w-4 h-4 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-[9px] flex-shrink-0">
                         <FontAwesomeIcon icon={faCheck} />
                       </span>
@@ -171,13 +171,13 @@ export default function LifeInsuranceTypes() {
               </div>
 
               {/* Action Button */}
-              <button
+              {/* <button
                 type="button"
                 onClick={openLeadModal}
                 className="btn-ripple w-full py-3 px-5 rounded-xl text-xs sm:text-sm font-semibold bg-gradient-to-r from-[#032e92] to-[#021d63] text-white shadow-md hover:shadow-lg hover:shadow-[#032e92]/30 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer group/btn"
               >
                 <span>Talk to Expert</span>
-              </button>
+              </button> */}
             </motion.div>
           ))}
         </div>
